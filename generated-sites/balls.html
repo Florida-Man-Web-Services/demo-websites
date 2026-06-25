@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balls | Bar – Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0e0e0e;
+      color: #e0e0e0;
+      line-height: 1.65;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Color Tokens ── */
+    :root {
+      --gold:     #c9a84c;
+      --gold-lt:  #e2c27a;
+      --dark:     #0e0e0e;
+      --surface:  #1a1a1a;
+      --surface2: #222222;
+      --text:     #e0e0e0;
+      --muted:    #888;
+      --radius:   6px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(14,14,14,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #2a2a2a;
+      padding: 0 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* Hamburger (mobile) */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .hamburger:hover span { background: var(--gold); }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: #111;
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid #2a2a2a;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li a {
+        display: block;
+        padding: 1rem 5vw;
+        border-top: 1px solid #1f1f1f;
+      }
+      .hamburger { display: flex; }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 5vw 80px;
+      background:
+        linear-gradient(to bottom, rgba(14,14,14,0.7) 0%, rgba(14,14,14,0.85) 60%, #0e0e0e 100%),
+        radial-gradient(ellipse at 30% 40%, #3a2600 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 60%, #1a0a00 0%, transparent 60%);
+    }
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 {
+      font-size: clamp(3.5rem, 12vw, 8rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1;
+      color: #fff;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-tagline {
+      margin-top: 1.4rem;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: var(--muted);
+      max-width: 540px;
+      letter-spacing: 0.02em;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 2.4rem;
+      padding: 0.85rem 2.4rem;
+      background: var(--gold);
+      color: #0e0e0e;
+      font-weight: 800;
+      font-size: 0.88rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      border: 2px solid var(--gold);
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn:hover { background: transparent; color: var(--gold); }
+
+    /* ── Sections shared ── */
+    section { padding: 90px 5vw; }
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1.2rem;
+    }
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    /* ── About ── */
+    #about { background: var(--surface); }
+    .about-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .about-inner .divider { margin: 0 auto 2rem; }
+    .about-inner p {
+      font-size: 1.05rem;
+      color: #bbb;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Services ── */
+    #services { background: var(--dark); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .service-card {
+      background: var(--surface2);
+      border: 1px solid #2c2c2c;
+      border-radius: var(--radius);
+      padding: 2rem 1.6rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .service-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.03em;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── Contact ── */
+    #contact { background: var(--surface); }
+    .contact-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 640px) {
+      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    .contact-info h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+    .contact-info p, .contact-info address {
+      font-style: normal;
+      font-size: 0.98rem;
+      color: #bbb;
+      margin-bottom: 1.4rem;
+    }
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: #1f1f1f;
+      border: 1px solid #2c2c2c;
+      border-radius: 50px;
+      padding: 0.5rem 1.1rem;
+      margin-bottom: 1.8rem;
+    }
+    .rating-stars { color: var(--gold); font-size: 1rem; letter-spacing: 0.05em; }
+    .rating-text { font-size: 0.88rem; color: var(--muted); }
+    .rating-text strong { color: #fff; }
+    .directions-btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: transparent;
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s;
+    }
+    .directions-btn:hover { background: var(--gold); color: #0e0e0e; }
+
+    .contact-note {
+      background: var(--surface2);
+      border: 1px solid #2c2c2c;
+      border-radius: var(--radius);
+      padding: 1.8rem;
+    }
+    .contact-note h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.7rem;
+    }
+    .contact-note p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+    .contact-note p:last-child { margin-bottom: 0; }
+    .tag {
+      display: inline-block;
+      background: #1f1400;
+      color: var(--gold-lt);
+      border: 1px solid #3a2600;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #090909;
+      border-top: 1px solid #1e1e1e;
+      padding: 2.5rem 5vw;
+      text-align: center;
+    }
+    .footer-logo {
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    footer p {
+      font-size: 0.82rem;
+      color: #444;
+    }
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      list-style: none;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    footer .footer-links a {
+      font-size: 0.82rem;
+      color: #555;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-logo">Balls</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Offer</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Toggle menu" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <p class="hero-eyebrow">Gainesville's Go-To Spot</p>
+    <h1><span>Balls</span></h1>
+    <p class="hero-tagline">Where every round is better than the last. Cold drinks, great vibes, right on University Ave.</p>
+    <a href="#contact" class="btn">Find Us</a>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about-inner">
+      <p class="section-label">About Us</p>
+      <h2 class="section-title">A Bar Built for Gainesville</h2>
+      <div class="divider"></div>
+      <p>Balls is a neighborhood bar at the heart of Gainesville's lively University Avenue corridor, serving students, locals, and anyone looking for a genuinely good time in a laid-back atmosphere. Whether you're catching a game, unwinding after a long week, or just looking for a cold drink and good company, we've got a spot for you. With a welcoming crowd and a no-frills vibe that keeps people coming back, we've become a staple of the local bar scene.</p>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">Drinks, Games & Good Times</h2>
+    <div class="divider"></div>
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-icon">🍺</span>
+        <h3>Draft Beer Selection</h3>
+        <p>A rotating lineup of domestic and craft beers on tap, always served cold.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🥃</span>
+        <h3>Cocktails & Spirits</h3>
+        <p>Classic mixed drinks and shots poured by experienced bartenders ready to keep up with the crowd.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">📺</span>
+        <h3>Game Day Viewing</h3>
+        <p>Multiple screens throughout the bar so you never miss a play. Perfect for Gator game days.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🎱</span>
+        <h3>Bar Games</h3>
+        <p>Pool tables, darts, and other games to keep the fun going all night long.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🎶</span>
+        <h3>Live Music & Events</h3>
+        <p>Periodic live music nights and special events. Contact us for details on upcoming shows.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🥂</span>
+        <h3>Private Gatherings</h3>
+        <p>Looking to host a group? Contact us for details on reserving space for your next event.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <p class="section-label">Find Us</p>
+    <h2 class="section-title">Come On In</h2>
+    <div class="divider"></div>
+    <div class="contact-inner">
+      <div class="contact-info">
+        <div class="rating-badge">
+          <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="rating-text"><strong>4.1</strong> &nbsp;·&nbsp; 128 reviews on Google</span>
+        </div>
+        <h3>Address</h3>
+        <address>
+          1716 W University Ave<br>
+          Gainesville, FL 32603
+        </address>
+        <h3>Hours</h3>
+        <p>Contact us for details on current hours.</p>
+        <a
+          class="directions-btn"
+          href="https://www.google.com/maps/search/Balls%201716%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032603"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Get Directions</a>
+      </div>
+      <div class="contact-note">
+        <span class="tag">Bar</span>
+        <h3>Plan Your Visit</h3>
+        <p>We're located right on University Avenue in the heart of Gainesville — easy to find and close to campus.</p>
+        <p>For questions about events, group reservations, or anything else, reach out via our social channels or stop by in person.</p>
+        <p>See you at the bar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Balls</div>
+    <ul class="footer-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Offer</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <p>1716 W University Ave, Gainesville, FL 32603</p>
+    <p style="margin-top:0.5rem;">&copy; 2026 Balls. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

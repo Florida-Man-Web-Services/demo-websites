@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bushel &amp; Peck Bakery + Cafe | Gainesville, FL</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: #fdf8f2;
+      color: #3b2e1e;
+      line-height: 1.7;
+    }
+
+    /* ===== Color Palette ===== */
+    /* Warm cream, deep espresso brown, dusty rose, sage green */
+    :root {
+      --cream: #fdf8f2;
+      --cream-dark: #f4eadc;
+      --espresso: #3b2e1e;
+      --caramel: #a0622a;
+      --dusty-rose: #c98b78;
+      --sage: #7a9e7e;
+      --warm-white: #fffdf9;
+      --nav-height: 70px;
+    }
+
+    /* ===== Typography ===== */
+    h1, h2, h3 {
+      font-family: 'Georgia', serif;
+      font-weight: normal;
+      letter-spacing: 0.03em;
+    }
+    p { margin-bottom: 1rem; }
+
+    /* ===== Nav ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background-color: var(--espresso);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(59,46,30,0.4);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background-color: var(--dusty-rose);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .nav-logo-text {
+      color: var(--cream);
+      font-size: 1.15rem;
+      font-family: 'Georgia', serif;
+      line-height: 1.2;
+    }
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--dusty-rose);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--cream-dark);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--dusty-rose); }
+
+    /* Hamburger (mobile) */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background-color: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ===== Hero ===== */
+    #hero {
+      margin-top: var(--nav-height);
+      min-height: calc(100vh - var(--nav-height));
+      background: linear-gradient(135deg, #c98b78 0%, #a0622a 40%, #3b2e1e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Decorative wheat motif circles */
+    #hero::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      bottom: -80px;
+      left: -60px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #ffe8d6;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: var(--warm-white);
+      line-height: 1.15;
+      margin-bottom: 0.4rem;
+    }
+    .hero-title .ampersand {
+      color: #ffe0cc;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #f0d5c4;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .hero-cta {
+      display: inline-block;
+      background-color: var(--warm-white);
+      color: var(--caramel);
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      font-family: 'Georgia', serif;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .hero-cta:hover {
+      background-color: var(--cream-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Section Base ===== */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--espresso);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: var(--dusty-rose);
+      margin-top: 0.5rem;
+    }
+
+    /* ===== About ===== */
+    #about { background-color: var(--cream); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-visual {
+      background: linear-gradient(145deg, var(--cream-dark), #e8d5c0);
+      border-radius: 16px;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      box-shadow: inset 0 2px 8px rgba(59,46,30,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(201,139,120,0.15);
+      border-radius: 50%;
+      bottom: -30px;
+      right: -30px;
+    }
+    .about-text p { color: #5a4232; }
+    .about-highlight {
+      display: inline-block;
+      background-color: var(--cream-dark);
+      border-left: 4px solid var(--dusty-rose);
+      padding: 0.8rem 1.2rem;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--caramel);
+      margin-top: 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    /* ===== Services ===== */
+    #services { background-color: var(--cream-dark); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .service-card {
+      background-color: var(--warm-white);
+      border-radius: 14px;
+      padding: 2rem 1.6rem;
+      box-shadow: 0 2px 12px rgba(59,46,30,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-bottom: 3px solid transparent;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(59,46,30,0.14);
+      border-bottom-color: var(--dusty-rose);
+    }
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--dusty-rose), var(--caramel));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--espresso);
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 0.92rem;
+      color: #6b5244;
+      margin-bottom: 0;
+    }
+
+    /* ===== Contact ===== */
+    #contact { background-color: var(--espresso); }
+    #contact .section-label { color: var(--dusty-rose); }
+    #contact .section-title { color: var(--warm-white); }
+    #contact .section-title::after { background-color: var(--dusty-rose); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .contact-info { color: #d4c0b0; }
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.8rem;
+    }
+    .contact-item-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(201,139,120,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-item-text strong {
+      display: block;
+      color: var(--warm-white);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+      font-family: 'Georgia', serif;
+    }
+    .contact-item-text a {
+      color: #d4c0b0;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-item-text a:hover { color: var(--dusty-rose); }
+
+    /* Rating badge */
+    .rating-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 1.8rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .rating-stars {
+      font-size: 1.4rem;
+      color: #f5c842;
+      letter-spacing: 3px;
+      margin-bottom: 0.4rem;
+    }
+    .rating-number {
+      font-size: 2.8rem;
+      color: var(--warm-white);
+      font-family: 'Georgia', serif;
+      line-height: 1;
+    }
+    .rating-sub {
+      font-size: 0.85rem;
+      color: #a08878;
+      margin-top: 0.3rem;
+    }
+    .rating-label {
+      display: inline-block;
+      background: rgba(201,139,120,0.2);
+      color: var(--dusty-rose);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+      margin-top: 0.8rem;
+    }
+
+    /* Directions button */
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--dusty-rose);
+      color: var(--warm-white);
+      text-decoration: none;
+      padding: 0.85rem 1.8rem;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-family: 'Georgia', serif;
+      margin-top: 1.2rem;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 16px rgba(201,139,120,0.35);
+    }
+    .btn-directions:hover {
+      background-color: #b87060;
+      transform: translateY(-2px);
+    }
+
+    /* Map placeholder */
+    .map-container {
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      height: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #a08878;
+      font-size: 0.9rem;
+      gap: 0.8rem;
+    }
+    .map-container .map-pin { font-size: 2.5rem; }
+    .map-container p { margin: 0; text-align: center; line-height: 1.5; }
+
+    /* ===== Footer ===== */
+    footer {
+      background-color: #2a2018;
+      color: #7a6656;
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.85rem;
+    }
+    footer .footer-logo {
+      font-size: 1.2rem;
+      color: var(--dusty-rose);
+      font-family: 'Georgia', serif;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    footer p { margin-bottom: 0.3rem; }
+    footer a { color: #9a8272; text-decoration: none; }
+    footer a:hover { color: var(--dusty-rose); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        background-color: var(--espresso);
+        flex-direction: column;
+        gap: 0;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .nav-links a {
+        display: block;
+        padding: 1rem 2rem;
+      }
+      .nav-toggle { display: flex; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-visual { height: 200px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .map-container { height: 220px; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 3.5rem 1.2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon">&#127858;</div>
+      <div class="nav-logo-text">
+        Bushel &amp; Peck
+        <span>Bakery + Cafe</span>
+      </div>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Offer</a></li>
+      <li><a href="#contact">Visit Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Bakery + Cafe &mdash; Gainesville, FL</div>
+      <h1 class="hero-title">
+        Bushel <span class="ampersand">&amp;</span> Peck
+      </h1>
+      <p class="hero-subtitle">Baked with care, served with warmth &mdash; every single day.</p>
+      <a href="#contact" class="hero-cta">Find Us &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-visual">
+          &#127859;
+        </div>
+        <div class="about-text">
+          <span class="section-label">Our Story</span>
+          <h2 class="section-title">A Neighborhood Gathering Place</h2>
+          <p>Bushel &amp; Peck is a beloved bakery and cafe nestled in the heart of Gainesville, crafting fresh-baked goods and specialty coffee drinks for the local community. Every item that comes out of our kitchen is made with quality ingredients and a genuine love for the craft of baking.</p>
+          <p>Whether you&rsquo;re stopping in for a morning pastry on your way to work or settling in for an afternoon with a warm drink, we believe in creating a space where everyone feels at home. Gainesville is our community, and every visit matters to us.</p>
+          <div class="about-highlight">"Good food, good coffee, good people."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services">
+    <div class="section-inner">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Fresh From Our Kitchen</h2>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#127855;</div>
+          <h3>Freshly Baked Pastries</h3>
+          <p>From flaky croissants to sweet Danish, our pastry case is stocked with handcrafted baked goods made fresh each morning.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#9749;</div>
+          <h3>Specialty Coffee &amp; Drinks</h3>
+          <p>Expertly pulled espresso, pour-overs, lattes, and seasonal drinks to complement every visit. Contact us for details on our current menu.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127856;</div>
+          <h3>Artisan Breads &amp; Loaves</h3>
+          <p>Rustic sourdoughs, whole grain loaves, and specialty breads baked throughout the week for you to enjoy or take home.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127874;</div>
+          <h3>Custom Celebration Cakes</h3>
+          <p>Special occasions deserve something special. We offer custom cakes for birthdays, gatherings, and events &mdash; contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127857;</div>
+          <h3>Seasonal &amp; Daily Specials</h3>
+          <p>Our offerings rotate with the seasons, featuring locally inspired flavors and limited-edition treats throughout the year.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128230;</div>
+          <h3>Catering &amp; Wholesale</h3>
+          <p>Bring the bakery to your next event or office. Catering and wholesale inquiries are welcome &mdash; contact us for details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="section-inner">
+      <span class="section-label">Visit Us</span>
+      <h2 class="section-title">Come Say Hello</h2>
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-text">
+              <strong>Address</strong>
+              1001 NW 5th Ave<br>Gainesville, FL 32601
+              <br>
+              <a href="https://www.google.com/maps/search/Bushel%20%26%20Peck%20bakery%20%2B%20cafe%201001%20NW%205th%20Ave%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener" class="btn-directions">
+                &#128506; Get Directions
+              </a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div class="contact-item-text">
+              <strong>Phone</strong>
+              <a href="tel:+13529002253">(352) 900-2253</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-text">
+              <strong>Hours</strong>
+              Contact us for current hours
+            </div>
+          </div>
+
+          <div class="rating-card">
+            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="rating-number">5.0</div>
+            <div class="rating-sub">Based on 21 Google reviews</div>
+            <div class="rating-label">Google Maps Rating</div>
+          </div>
+        </div>
+
+        <div class="map-container">
+          <div class="map-pin">&#128205;</div>
+          <p>
+            <strong style="color:#d4c0b0; display:block; margin-bottom:0.3rem;">Bushel &amp; Peck Bakery + Cafe</strong>
+            1001 NW 5th Ave<br>Gainesville, FL 32601
+          </p>
+          <a href="https://www.google.com/maps/search/Bushel%20%26%20Peck%20bakery%20%2B%20cafe%201001%20NW%205th%20Ave%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener" style="color:var(--dusty-rose); font-size:0.85rem; text-decoration:none;">
+            Open in Google Maps &rarr;
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <span class="footer-logo">Bushel &amp; Peck Bakery + Cafe</span>
+    <p>1001 NW 5th Ave, Gainesville, FL 32601 &nbsp;&bull;&nbsp; <a href="tel:+13529002253">(352) 900-2253</a></p>
+    <p style="margin-top:1rem;">&copy; 2026 Bushel &amp; Peck Bakery + Cafe. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    // Close nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

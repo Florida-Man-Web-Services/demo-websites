@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Main Street Detailing | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #0d0d0d;
+      --dark: #1a1a1a;
+      --charcoal: #2c2c2c;
+      --steel: #3d4a57;
+      --silver: #8a9bb0;
+      --light-silver: #c8d4e0;
+      --white: #f4f6f8;
+      --accent: #e8a020;
+      --accent-dark: #c47f10;
+      --text-muted: #9aabb8;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--charcoal);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--black);
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .nav-logo-text span:first-child {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.03em;
+    }
+
+    .nav-logo-text span:last-child {
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--light-silver);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--black) !important;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent-dark) !important;
+      color: var(--black) !important;
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #0d0d0d 0%, #1c2634 50%, #0d0d0d 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(232, 160, 32, 0.12) 0%, transparent 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 40px,
+          rgba(255,255,255,0.015) 40px,
+          rgba(255,255,255,0.015) 41px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 80px,
+          rgba(255,255,255,0.015) 80px,
+          rgba(255,255,255,0.015) 81px
+        );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(232, 160, 32, 0.15);
+      border: 1px solid rgba(232, 160, 32, 0.4);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--light-silver);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      padding: 14px 32px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--light-silver);
+      padding: 14px 32px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      border: 1px solid var(--charcoal);
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--silver);
+      color: var(--white);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* ── SECTIONS SHARED ── */
+    section {
+      padding: 80px 24px;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--dark);
+      border-top: 1px solid var(--charcoal);
+      border-bottom: 1px solid var(--charcoal);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--light-silver);
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+      line-height: 1.75;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: var(--charcoal);
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .stat-card .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--black);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .services-header .section-divider {
+      margin: 0 auto 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--dark);
+      border: 1px solid var(--charcoal);
+      border-radius: 12px;
+      padding: 32px 28px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      border-color: var(--steel);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(232, 160, 32, 0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--accent);
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .service-cta {
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--dark);
+      border-top: 1px solid var(--charcoal);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(232, 160, 32, 0.1);
+      border: 1px solid rgba(232, 160, 32, 0.25);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent);
+    }
+
+    .contact-item-body .label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .contact-item-body .value {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .contact-item-body a {
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-item-body a:hover {
+      color: var(--accent);
+    }
+
+    .rating-card {
+      background: var(--charcoal);
+      border: 1px solid #3a3a3a;
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .rating-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .rating-score {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-right .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 5px;
+    }
+
+    .star {
+      width: 18px;
+      height: 18px;
+    }
+
+    .star-full {
+      fill: var(--accent);
+    }
+
+    .star-partial {
+      fill: url(#partialGradient);
+    }
+
+    .star-empty {
+      fill: var(--charcoal);
+      stroke: var(--steel);
+      stroke-width: 1;
+    }
+
+    .rating-right .review-count {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .rating-source {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .rating-bar-bg {
+      flex: 1;
+      height: 5px;
+      background: #444;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .rating-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .contact-cta-box {
+      background: linear-gradient(135deg, var(--charcoal), var(--steel));
+      border: 1px solid var(--steel);
+      border-radius: 12px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-cta-box h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .contact-cta-box p {
+      color: var(--light-silver);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: var(--black);
+      padding: 14px 26px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+
+    .btn-directions svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--black);
+    }
+
+    .btn-directions:hover {
+      background: var(--accent-dark);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--charcoal);
+      padding: 36px 24px;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.03em;
+    }
+
+    .footer-logo span {
+      color: var(--accent);
+    }
+
+    .footer-address {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: #555;
+    }
+
+    /* ── MOBILE NAV ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(13, 13, 13, 0.98);
+        flex-direction: column;
+        padding: 20px 24px;
+        gap: 0;
+        border-bottom: 1px solid var(--charcoal);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--charcoal);
+        font-size: 1rem;
+      }
+
+      .nav-links li:last-child a {
+        border-bottom: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-stats {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 60px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Defs for partial star -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="partialGradient" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="20%" stop-color="#e8a020"/>
+        <stop offset="20%" stop-color="#444"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <a href="#" class="nav-logo" aria-label="Main Street Detailing home">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.97 9.15C20.85 8.5 20.28 8 19.6 8H4.4c-.68 0-1.25.5-1.37 1.15L2 14h20l-1.03-4.85zM3.5 16c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-.5H3.5v.5zm14 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-.5h-3v.5zM2 15h20v1H2z"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">
+        <span>Main Street Detailing</span>
+        <span>Gainesville, FL</span>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">Professional Auto Detailing &bull; Gainesville, FL</div>
+      <h1>Your Vehicle Deserves<br><span>Showroom Quality</span></h1>
+      <p class="hero-tagline">Expert detailing services that restore, protect, and transform your vehicle — inside and out.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get In Touch</a>
+        <a href="#services" class="btn-secondary">View Services</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">Detail-Driven. Results-Focused.</h2>
+          <div class="section-divider"></div>
+          <p>Main Street Detailing is a locally operated auto detailing service serving Gainesville and the surrounding North Central Florida community. We take pride in delivering thorough, attentive care for every vehicle that comes through our doors — from daily drivers to weekend classics.</p>
+          <p>Our team uses professional-grade products and proven techniques to clean, polish, and protect your vehicle's interior and exterior surfaces. Whether you're looking to refresh your daily commuter or prepare a vehicle for a special occasion, we bring the same level of dedication to every job.</p>
+          <p>Conveniently located on N Main St, we make it easy to get the detail your car deserves. Contact us to learn more about what we offer or to schedule an appointment.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-number">4.1</div>
+            <div class="stat-label">Google Rating</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">Reviews</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Commitment</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">GNV</div>
+            <div class="stat-label">Local & Proud</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ── -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Our Services</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 3H7l-4 8 4 10h10l4-10zm-5 13a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+          </div>
+          <h3>Exterior Hand Wash &amp; Dry</h3>
+          <p>A thorough hand wash using quality products to safely remove dirt, grime, and road contaminants — leaving your paint clean and streak-free.</p>
+          <p class="service-cta">Contact us for details &rarr;</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 8H4l-2 6v2h2a2 2 0 0 0 4 0h8a2 2 0 0 0 4 0h2v-2l-2-6zm-4-2H8V4h8v2z"/></svg>
+          </div>
+          <h3>Interior Detail &amp; Vacuum</h3>
+          <p>Complete interior cleaning including vacuuming of carpets and seats, surface wipe-downs, and treatment of door panels and dashboards.</p>
+          <p class="service-cta">Contact us for details &rarr;</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          </div>
+          <h3>Paint Polish &amp; Buff</h3>
+          <p>Machine or hand polishing to reduce light swirl marks, oxidation, and surface imperfections — restoring depth and gloss to your vehicle's paint.</p>
+          <p class="service-cta">Contact us for details &rarr;</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg>
+          </div>
+          <h3>Wax &amp; Paint Protection</h3>
+          <p>Application of carnauba wax or synthetic sealant to protect your clear coat from UV rays, water spots, and environmental contaminants.</p>
+          <p class="service-cta">Contact us for details &rarr;</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          </div>
+          <h3>Odor Elimination</h3>
+          <p>Targeted treatment to neutralize persistent odors from smoke, pets, food, and moisture — leaving your vehicle's interior fresh and clean.</p>
+          <p class="service-cta">Contact us for details &rarr;</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M19.07 4.93A10 10 0 0 0 4.93 19.07 10 10 0 0 0 19.07 4.93zM12 20a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-5h2v2h-2zm0-8h2v6h-2z"/></svg>
+          </div>
+          <h3>Full Detail Package</h3>
+          <p>A comprehensive top-to-bottom service combining exterior wash, interior deep clean, and paint care for a complete vehicle refresh.</p>
+          <p class="service-cta">Contact us for details &rarr;</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div>
+          <span class="section-label">Find Us</span>
+          <h2 class="section-title">Get In Touch</h2>
+          <div class="section-divider"></div>
+
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </div>
+              <div class="contact-item-body">
+                <div class="label">Address</div>
+                <div class="value">1025 N Main St A<br>Gainesville, FL</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              </div>
+              <div class="contact-item-body">
+                <div class="label">Phone</div>
+                <div class="value"><a href="tel:+13523754474">(352) 375-4474</a></div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+              </div>
+              <div class="contact-item-body">
+                <div class="label">Hours</div>
+                <div class="value">Contact us for current hours</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rating Card -->
+          <div class="rating-card" style="margin-top: 36px;">
+            <div class="rating-top">
+              <div class="rating-score">4.1</div>
+              <div class="rating-right">
+                <div class="stars">
+                  <!-- 4 full stars -->
+                  <svg class="star" viewBox="0 0 24 24"><path class="star-full" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path class="star-full" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path class="star-full" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path class="star-full" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <!-- partial star (10%) -->
+                  <svg class="star" viewBox="0 0 24 24">
+                    <defs>
+                      <linearGradient id="starPartial41" x1="0" x2="1" y1="0" y2="0">
+                        <stop offset="10%" stop-color="#e8a020"/>
+                        <stop offset="10%" stop-color="#444"/>
+                      </linearGradient>
+                    </defs>
+                    <path fill="url(#starPartial41)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                </div>
+                <div class="review-count">Based on 20 Google Reviews</div>
+                <div class="rating-source">Google Maps Rating</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-cta-box">
+          <h3>Ready to Book?</h3>
+          <p>Give us a call or stop by our location on N Main St in Gainesville. We're happy to answer any questions about our services and help you find the right detail package for your vehicle.</p>
+          <a href="tel:+13523754474" class="btn-primary" style="align-self:flex-start;">Call (352) 375-4474</a>
+          <a
+            href="https://www.google.com/maps/search/Main%20Street%20Detailing%201025%20N%20Main%20St%20A"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            <svg viewBox="0 0 24 24"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
+            Get Directions
+          </a>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">1025 N Main St A, Gainesville, FL</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Main Street <span>Detailing</span></div>
+      <div class="footer-address">1025 N Main St A &bull; Gainesville, FL &bull; (352) 375-4474</div>
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+        <a href="https://www.google.com/maps/search/Main%20Street%20Detailing%201025%20N%20Main%20St%20A" target="_blank" rel="noopener noreferrer">Directions</a>
+      </div>
+      <div class="footer-copy">&copy; 2025 Main Street Detailing. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>

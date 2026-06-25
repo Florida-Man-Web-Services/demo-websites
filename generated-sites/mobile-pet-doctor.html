@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Pet Doctor | Veterinarian in Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #2d6a4f;
+      --green-mid:    #40916c;
+      --green-light:  #74c69d;
+      --green-pale:   #d8f3dc;
+      --cream:        #f8f5ef;
+      --warm-white:   #ffffff;
+      --text-dark:    #1b2c24;
+      --text-muted:   #5a7a65;
+      --accent:       #f4a261;
+      --accent-dark:  #e76f51;
+      --shadow:       0 4px 20px rgba(45,106,79,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--warm-white);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-sub {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--green-light);
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--green-pale);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--warm-white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 24px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--accent-dark) !important; color: var(--warm-white) !important; }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 55%, var(--green-light) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='1.5' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E") repeat;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 740px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--green-pale);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 30px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      color: var(--warm-white);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      color: var(--green-pale);
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--warm-white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 32px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--warm-white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 32px;
+      border: 2px solid rgba(255,255,255,0.6);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: var(--warm-white);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(255,255,255,0.55);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid rgba(255,255,255,0.4);
+      border-bottom: 2px solid rgba(255,255,255,0.4);
+      transform: rotate(45deg);
+      animation: bounce 1.6s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(5px); }
+    }
+
+    /* ---- SECTION SHARED ---- */
+    section { padding: 5rem 2rem; }
+
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.6rem;
+      font-weight: 700;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--text-dark);
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    .divider {
+      width: 52px;
+      height: 4px;
+      background: var(--green-light);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ---- ABOUT ---- */
+    #about {
+      background: var(--warm-white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--text-dark);
+      margin-bottom: 1.1rem;
+      line-height: 1.85;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .highlight-card {
+      background: var(--green-pale);
+      border-left: 4px solid var(--green-mid);
+      padding: 1.1rem 1.4rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .highlight-card strong {
+      display: block;
+      color: var(--green-dark);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.2rem;
+    }
+
+    .highlight-card span {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    /* ---- SERVICES ---- */
+    #services {
+      background: var(--cream);
+    }
+
+    .services-header { margin-bottom: 3rem; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .service-card {
+      background: var(--warm-white);
+      border-radius: 14px;
+      padding: 2rem 1.8rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-top: 4px solid var(--green-light);
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 32px rgba(45,106,79,0.18);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--green-pale);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      margin-bottom: 0.55rem;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ---- CONTACT ---- */
+    #contact {
+      background: var(--green-dark);
+    }
+
+    #contact .section-label { color: var(--green-light); }
+    #contact .section-title { color: var(--warm-white); }
+    #contact .divider { background: var(--accent); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      color: var(--green-light);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text span,
+    .contact-item-text a {
+      color: var(--warm-white);
+      font-size: 1rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-item-text a:hover { color: var(--accent); }
+
+    .rating-block {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 1.8rem 2rem;
+    }
+
+    .rating-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.8rem;
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      color: #ffd700;
+      font-size: 1.3rem;
+    }
+
+    .star-half {
+      position: relative;
+      display: inline-block;
+      font-size: 1.3rem;
+    }
+
+    .star-half::before {
+      content: '\2605';
+      color: #444;
+    }
+
+    .star-half::after {
+      content: '\2605';
+      color: #ffd700;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50%;
+      overflow: hidden;
+    }
+
+    .rating-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--warm-white);
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--green-light);
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--warm-white);
+      text-decoration: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 28px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-directions:hover { background: var(--accent-dark); transform: translateY(-2px); }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--text-dark);
+      padding: 2.2rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .footer-name {
+      color: var(--green-light);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.2rem; }
+
+      .nav-links { display: none; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      section { padding: 3.5rem 1.2rem; }
+
+      .hero { padding: 110px 1.2rem 5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-outline { width: 100%; text-align: center; max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">&#x1F43E;</div>
+      <div>
+        <div class="nav-logo-text">Mobile Pet Doctor</div>
+        <div class="nav-logo-sub">Gainesville, FL</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Mobile Veterinary Care &bull; Gainesville, FL</div>
+      <h1>Mobile Pet Doctor</h1>
+      <p class="hero-tagline">Compassionate veterinary care that comes to you — because your pet deserves comfort at home.</p>
+      <div class="hero-actions">
+        <a href="tel:3526658454" class="btn-primary">Call (352) 665-8454</a>
+        <a href="#services" class="btn-outline">Our Services</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">About Us</div>
+          <h2 class="section-title">Veterinary Care On Your Terms</h2>
+          <div class="divider"></div>
+          <p>Mobile Pet Doctor brings professional veterinary services directly to your home in Gainesville and the surrounding North Central Florida area. We understand that traveling to a clinic can be stressful for both pets and their owners, and our mobile practice is built to change that experience entirely.</p>
+          <p>Our team is dedicated to providing thorough, attentive care in the familiar surroundings where your pet feels most at ease. From routine wellness visits to more targeted medical needs, we bring the clinic to your doorstep with the same standard of care you would expect in a traditional setting.</p>
+          <p>Serving the Gainesville community, we are committed to making quality veterinary care more accessible and less anxiety-inducing for every patient we see. Contact us for details on availability and service areas.</p>
+        </div>
+        <div class="about-highlights">
+          <div class="highlight-card">
+            <strong>Mobile Convenience</strong>
+            <span>We come to you — no more stressful car rides for your pet.</span>
+          </div>
+          <div class="highlight-card">
+            <strong>Personalized Attention</strong>
+            <span>One-on-one care in a calm, familiar environment.</span>
+          </div>
+          <div class="highlight-card">
+            <strong>Serving Gainesville &amp; Beyond</strong>
+            <span>Covering Gainesville, FL and the surrounding North Central Florida region.</span>
+          </div>
+          <div class="highlight-card">
+            <strong>Appointments Available</strong>
+            <span>Contact us for scheduling details and service availability.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <div class="section-label">What We Offer</div>
+        <h2 class="section-title">Our Services</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">&#x2695;&#xFE0F;</div>
+          <h3>Wellness Exams</h3>
+          <p>Comprehensive head-to-tail physical examinations to assess your pet's overall health and catch any concerns early.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F489;</div>
+          <h3>Vaccinations</h3>
+          <p>Core and lifestyle vaccinations administered at home to keep your pet protected according to current veterinary guidelines.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F52C;</div>
+          <h3>Diagnostics</h3>
+          <p>In-home diagnostic services including bloodwork collection and other assessments to help evaluate your pet's health status.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F48A;</div>
+          <h3>Parasite Prevention &amp; Treatment</h3>
+          <p>Recommendations and treatments for fleas, ticks, heartworm, and other parasites tailored to your pet's lifestyle and needs.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F43E;</div>
+          <h3>Sick Pet Visits</h3>
+          <p>When your pet isn't feeling well, we come to you to evaluate symptoms and provide appropriate care and guidance.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F4CB;</div>
+          <h3>Senior Pet Care</h3>
+          <p>Specialized attention for older pets who may benefit most from the comfort and reduced stress of receiving care at home.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">Contact Us</h2>
+      <div class="divider"></div>
+      <div class="contact-grid">
+        <div class="contact-info-block">
+          <div class="contact-item">
+            <div class="contact-icon">&#x1F4CD;</div>
+            <div class="contact-item-text">
+              <strong>Address</strong>
+              <span>6100 NW 4th Pl, Gainesville, FL</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">&#x1F4DE;</div>
+            <div class="contact-item-text">
+              <strong>Phone</strong>
+              <a href="tel:3526658454">(352) 665-8454</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">&#x1F552;</div>
+            <div class="contact-item-text">
+              <strong>Hours</strong>
+              <span>Contact us for details</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">&#x1F4B0;</div>
+            <div class="contact-item-text">
+              <strong>Pricing</strong>
+              <span>Contact us for details</span>
+            </div>
+          </div>
+        </div>
+        <div class="rating-block">
+          <div class="rating-label">Google Maps Rating</div>
+          <div class="stars-row">
+            <div class="stars">
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star" style="
+                background: linear-gradient(90deg, #ffd700 50%, #555 50%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              ">&#9733;</span>
+            </div>
+            <span class="rating-number">4.5</span>
+          </div>
+          <div class="rating-count">Based on 6 Google reviews</div>
+          <a
+            href="https://www.google.com/maps/search/Mobile%20Pet%20Doctor%206100%20NW%204th%20Pl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            &#x1F5FA;&#xFE0F; Get Directions
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">Mobile Pet Doctor &mdash; Gainesville, FL</div>
+      <div class="footer-copy">&copy; 2026 Mobile Pet Doctor. All rights reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>

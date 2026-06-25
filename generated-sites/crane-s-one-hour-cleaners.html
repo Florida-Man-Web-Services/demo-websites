@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crane's One Hour Cleaners | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1a2e44;
+      --sky:     #2f7fc1;
+      --ice:     #e8f4fb;
+      --white:   #ffffff;
+      --light:   #f4f8fc;
+      --mid:     #6b8ca8;
+      --dark:    #0f1e2d;
+      --accent:  #2f7fc1;
+      --gold:    #f5a623;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--sky);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hanger SVG inline */
+    .nav-logo-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: var(--white);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-name {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    .nav-name span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--mid);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #b8d0e8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, #1d3e5e 55%, #245080 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle geometric accents */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(47,127,193,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(47,127,193,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 700px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(47,127,193,0.2);
+      border: 1px solid rgba(47,127,193,0.5);
+      color: #90c8f0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: #7ec4f0;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #aac8e4;
+      max-width: 520px;
+      margin: 0 auto 2.2rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--sky);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 2.2rem;
+      border-radius: 6px;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 18px rgba(47,127,193,0.45);
+    }
+
+    .hero-cta:hover { background: #268ac8; transform: translateY(-2px); }
+
+    /* ── SECTION WRAPPER ── */
+    section { padding: 5rem 1.5rem; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--light); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--navy), var(--sky));
+      border-radius: 14px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .about-visual .big-icon {
+      font-size: 4.5rem;
+      margin-bottom: 1rem;
+      line-height: 1;
+    }
+
+    .about-visual p {
+      font-size: 1.05rem;
+      opacity: 0.85;
+      font-style: italic;
+    }
+
+    .about-text p {
+      color: #3d5568;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .highlight-chip {
+      background: var(--ice);
+      border: 1px solid #bee2f7;
+      color: var(--navy);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--white); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .service-card {
+      border: 1px solid #dceef8;
+      border-radius: 12px;
+      padding: 2rem 1.75rem;
+      background: var(--light);
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(47,127,193,0.15);
+      transform: translateY(-3px);
+      border-color: #9cd0f0;
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--ice);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .service-card p {
+      font-size: 0.93rem;
+      color: #4a6578;
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--light); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2.5rem;
+      align-items: start;
+    }
+
+    .contact-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 2.5rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid #e9f2f9;
+    }
+
+    .contact-row:last-of-type { border-bottom: none; }
+
+    .contact-row-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--ice);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-row-text strong {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--mid);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-row-text a {
+      color: var(--sky);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .contact-row-text a:hover { text-decoration: underline; }
+
+    .contact-row-text p {
+      color: var(--dark);
+      font-weight: 500;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--navy);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.8rem 1.75rem;
+      border-radius: 6px;
+      margin-top: 1.5rem;
+      width: 100%;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .btn-directions:hover { background: var(--sky); }
+
+    /* rating card */
+    .rating-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 2.5rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .rating-header {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .rating-score {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .rating-number {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .rating-details { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star { color: var(--gold); font-size: 1.25rem; }
+    .star.half { position: relative; display: inline-block; }
+
+    .rating-count {
+      font-size: 0.9rem;
+      color: var(--mid);
+      font-weight: 500;
+    }
+
+    .rating-source {
+      font-size: 0.82rem;
+      color: var(--mid);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .google-dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #4285F4;
+      flex-shrink: 0;
+    }
+
+    .rating-blurb {
+      background: var(--ice);
+      border-left: 3px solid var(--sky);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      font-size: 0.95rem;
+      color: #3d5568;
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: #7a9bb5;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer strong { color: #b8d0e8; }
+
+    footer .footer-tagline {
+      margin-top: 0.4rem;
+      font-size: 0.82rem;
+      opacity: 0.6;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--navy);
+        flex-direction: column;
+        padding: 1rem 2rem 1.5rem;
+        gap: 1.1rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .nav-links.open { display: flex; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-visual { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-icon">
+        <!-- clothes hanger icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4a2 2 0 0 1 2 2c0 1.1-.9 1.8-2 2"/>
+          <path d="M12 8L3 16h18L12 8z"/>
+          <line x1="12" y1="4" x2="12" y2="8"/>
+        </svg>
+      </div>
+      <div class="nav-name">
+        Crane's One Hour Cleaners
+        <span>Gainesville, FL</span>
+      </div>
+    </a>
+    <button class="hamburger" aria-label="Toggle menu" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="hero-badge">Dry Cleaning &amp; Garment Care</div>
+      <h1>Fresher Clothes,<br><em>One Hour.</em></h1>
+      <p>Professional dry cleaning and laundry services you can count on, right here in Gainesville, FL.</p>
+      <a href="#contact" class="hero-cta">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.05 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 5.94 5.94l1.28-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+        Get in Touch
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="big-icon">👔</div>
+          <p>"Trusted garment care for Gainesville families and professionals."</p>
+        </div>
+        <div class="about-text">
+          <div class="section-label">About Us</div>
+          <h2 class="section-title">Quality Cleaning You Can Trust</h2>
+          <p>Crane's One Hour Cleaners has been a reliable part of the Gainesville community, offering expert dry cleaning and garment care for everyday wear, formal attire, and everything in between.</p>
+          <p>Our team uses professional-grade processes to keep your clothes looking their best, handling delicate fabrics and stubborn stains with care and precision.</p>
+          <p>Whether you need a quick turnaround on a business suit or careful attention for a special-occasion garment, we treat every item as if it were our own.</p>
+          <div class="about-highlights">
+            <span class="highlight-chip">Professional Care</span>
+            <span class="highlight-chip">Quick Turnaround</span>
+            <span class="highlight-chip">Garment Experts</span>
+            <span class="highlight-chip">Trusted Locally</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">Our Services</h2>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">🧥</div>
+          <h3>Dry Cleaning</h3>
+          <p>Professional solvent-based cleaning for suits, dresses, coats, and garments that require special care beyond standard washing.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">👗</div>
+          <h3>Formal &amp; Bridal Wear</h3>
+          <p>Expert handling of wedding gowns, bridesmaid dresses, tuxedos, and other formal garments with the attention they deserve.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">👔</div>
+          <h3>Shirt Laundering &amp; Press</h3>
+          <p>Crisp, professionally pressed dress shirts and blouses — ready for the office or any occasion that calls for a polished look.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🪡</div>
+          <h3>Alterations &amp; Repairs</h3>
+          <p>Minor alterations and garment repairs to help your clothing fit perfectly and last longer. Contact us for details on availability.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🛏️</div>
+          <h3>Household Items</h3>
+          <p>Cleaning for comforters, drapes, tablecloths, and other household linens that need professional attention.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">✨</div>
+          <h3>Stain Removal</h3>
+          <p>Targeted treatment for difficult stains on a wide range of fabrics, using professional techniques to restore your garments.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-label">Find Us</div>
+      <h2 class="section-title">Contact &amp; Location</h2>
+      <div class="contact-grid">
+
+        <div class="contact-card">
+          <div class="contact-row">
+            <div class="contact-row-icon">📍</div>
+            <div class="contact-row-text">
+              <strong>Address</strong>
+              <p>411 NE 23rd Ave<br>Gainesville, FL</p>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-row-icon">📞</div>
+            <div class="contact-row-text">
+              <strong>Phone</strong>
+              <a href="tel:+13523760156">(352) 376-0156</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-row-icon">🕐</div>
+            <div class="contact-row-text">
+              <strong>Hours</strong>
+              <p>Contact us for details</p>
+            </div>
+          </div>
+          <a class="btn-directions" href="https://www.google.com/maps/search/Crane's%20One%20Hour%20Cleaners%20411%20NE%2023rd%20Ave" target="_blank" rel="noopener">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            Get Directions
+          </a>
+        </div>
+
+        <div class="rating-card">
+          <div class="rating-header">Customer Rating</div>
+          <div class="rating-score">
+            <div class="rating-number">4.3</div>
+            <div class="rating-details">
+              <div class="stars">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star" style="color:#d0cfc9;">&#9733;</span>
+              </div>
+              <div class="rating-count">Based on 100 reviews</div>
+            </div>
+          </div>
+          <div class="rating-source">
+            <span class="google-dot"></span>
+            Rated on Google Maps
+          </div>
+          <div class="rating-blurb">
+            Crane's One Hour Cleaners is highly regarded by Gainesville customers for reliable turnaround times and quality garment care.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Crane's One Hour Cleaners</strong>
+    <div>411 NE 23rd Ave &mdash; Gainesville, FL &mdash; <a href="tel:+13523760156" style="color:#7a9bb5;">(352) 376-0156</a></div>
+    <div class="footer-tagline">Professional dry cleaning &amp; garment care in Gainesville, FL.</div>
+  </footer>
+
+</body>
+</html>

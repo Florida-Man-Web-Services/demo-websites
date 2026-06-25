@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resident Coffee | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #f5f0e8;
+      --warm-white: #faf7f2;
+      --espresso:   #2c1a0e;
+      --roast:      #5c3317;
+      --caramel:    #b07d3e;
+      --gold:       #d4a45a;
+      --light-tan:  #e8dcc8;
+      --text-dark:  #1e1209;
+      --text-mid:   #4a3520;
+      --text-light: #7a6145;
+      --white:      #ffffff;
+      --radius:     6px;
+      --shadow:     0 4px 24px rgba(44, 26, 14, 0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--warm-white);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ── Typography ── */
+    h1, h2, h3 {
+      font-family: 'Georgia', serif;
+      letter-spacing: 0.02em;
+    }
+
+    p { color: var(--text-mid); }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(44, 26, 14, 0.96);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--cream);
+      font-size: 1.2rem;
+      font-weight: normal;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--light-tan);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      transition: 0.3s;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 80px;
+      background:
+        linear-gradient(160deg, rgba(44,26,14,0.72) 0%, rgba(92,51,23,0.60) 60%, rgba(180,125,62,0.30) 100%),
+        repeating-linear-gradient(
+          120deg,
+          transparent,
+          transparent 40px,
+          rgba(212,164,90,0.04) 40px,
+          rgba(212,164,90,0.04) 80px
+        ),
+        #2c1a0e;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative coffee-ring circles */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 15%;
+      right: 8%;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      border: 2px solid rgba(212, 164, 90, 0.12);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: calc(15% + 30px);
+      right: calc(8% + 30px);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 164, 90, 0.07);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      font-weight: normal;
+    }
+
+    .hero h1 span {
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--light-tan);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      font-style: italic;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 14px 40px;
+      background: var(--gold);
+      color: var(--espresso);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      font-weight: bold;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .hero-cta:hover {
+      background: var(--caramel);
+      transform: translateY(-2px);
+    }
+
+    /* ── Section Shared ── */
+    section { padding: 90px 5%; }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--espresso);
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+
+    .divider {
+      width: 52px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    /* ── About ── */
+    .about {
+      background: var(--cream);
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--espresso);
+      border-radius: 8px;
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 40px;
+    }
+
+    .about-card-icon {
+      font-size: 4rem;
+      opacity: 0.85;
+    }
+
+    .about-card-text {
+      color: var(--light-tan);
+      font-style: italic;
+      font-size: 1.05rem;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    .about-accent {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 80px;
+      height: 80px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0.25;
+    }
+
+    .about-content .section-title { margin-top: 0; }
+
+    .about-content p {
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+      color: var(--text-mid);
+    }
+
+    /* ── Services ── */
+    .services {
+      background: var(--warm-white);
+    }
+
+    .services-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .services-header {
+      max-width: 520px;
+      margin-bottom: 56px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border: 1px solid var(--light-tan);
+      border-radius: 8px;
+      padding: 36px 30px;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+
+    .service-icon {
+      font-size: 2.2rem;
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--espresso);
+      margin-bottom: 10px;
+      font-weight: normal;
+    }
+
+    .service-card p {
+      font-size: 0.93rem;
+      color: var(--text-light);
+      line-height: 1.65;
+    }
+
+    /* ── Contact ── */
+    .contact {
+      background: var(--espresso);
+      color: var(--cream);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact .section-label { color: var(--gold); }
+    .contact .section-title { color: var(--cream); }
+    .contact .divider { background: var(--gold); }
+
+    .contact-text {
+      color: var(--light-tan);
+      font-size: 1.05rem;
+      margin-bottom: 36px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .contact-detail-icon {
+      font-size: 1.2rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-body strong {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .contact-detail-body span {
+      color: var(--light-tan);
+      font-size: 1rem;
+    }
+
+    .directions-btn {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 14px 36px;
+      background: var(--gold);
+      color: var(--espresso);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: bold;
+      border-radius: var(--radius);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .directions-btn:hover {
+      background: #c4913e;
+      transform: translateY(-2px);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(212,164,90,0.25);
+      border-radius: 8px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+
+    .rating-stars {
+      font-size: 1.6rem;
+      letter-spacing: 4px;
+      color: var(--gold);
+    }
+
+    .rating-number {
+      font-size: 4rem;
+      color: var(--cream);
+      line-height: 1;
+      font-weight: normal;
+    }
+
+    .rating-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    .rating-count {
+      font-size: 0.92rem;
+      color: var(--light-tan);
+    }
+
+    .rating-source {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .rating-tagline {
+      font-style: italic;
+      color: var(--light-tan);
+      font-size: 0.95rem;
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(212,164,90,0.2);
+      width: 100%;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--text-dark);
+      padding: 32px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      color: var(--light-tan);
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+    }
+
+    .footer-brand strong { color: var(--gold); }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 820px) {
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-accent { display: none; }
+
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(30, 18, 9, 0.98);
+        padding: 24px 5%;
+        gap: 20px;
+        border-top: 1px solid rgba(212,164,90,0.2);
+      }
+
+      .nav-toggle { display: flex; }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 500px) {
+      section { padding: 64px 5%; }
+      .hero { padding: 90px 5% 64px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">&#9749;</div>
+      <span class="nav-logo-text">Resident Coffee</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Offer</a></li>
+      <li><a href="#contact">Visit Us</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="home">
+    <p class="hero-eyebrow">Gainesville, FL &bull; NW Side</p>
+    <h1>
+      Resident
+      <span>Coffee</span>
+    </h1>
+    <p class="hero-tagline">Your neighborhood cup, crafted with intention. A place to slow down, settle in, and stay awhile.</p>
+    <a href="#contact" class="hero-cta">Find Us</a>
+  </section>
+
+  <!-- ── About ── -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-card">
+          <span class="about-card-icon">&#9749;</span>
+          <p class="about-card-text">"A neighborhood cafe worth returning to."</p>
+        </div>
+        <div class="about-accent"></div>
+      </div>
+      <div class="about-content">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">More Than a Cup of Coffee</h2>
+        <div class="divider"></div>
+        <p>Resident Coffee is a neighborhood cafe rooted in the Gainesville community, dedicated to sourcing quality beans and serving every drink with care. We believe a great cafe should feel like an extension of home &mdash; a place where students, professionals, and locals alike can gather, work, or simply unwind.</p>
+        <p>From carefully pulled espresso shots to seasonal specialty drinks, our menu reflects a commitment to craft without pretension. Whether you stop in for your morning ritual or settle in for an afternoon, we're glad you're here.</p>
+        <p>We take pride in being a welcoming space on Gainesville's northwest side, and we look forward to becoming part of your daily routine.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ── -->
+  <section class="services" id="services">
+    <div class="services-inner">
+      <div class="services-header">
+        <p class="section-label">What We Offer</p>
+        <h2 class="section-title">Crafted for Every Kind of Morning</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#9749;</span>
+          <h3>Espresso Bar</h3>
+          <p>Classic and specialty espresso drinks made to order &mdash; lattes, cappuccinos, macchiatos, and more &mdash; crafted with quality beans and precise technique.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#9734;</span>
+          <h3>Specialty &amp; Seasonal Drinks</h3>
+          <p>Rotating seasonal offerings and house specialty drinks that go beyond the standard menu, keeping regulars excited and newcomers curious.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#9842;</span>
+          <h3>Drip &amp; Pour-Over Coffee</h3>
+          <p>For the purist who appreciates a clean, well-brewed cup. Daily drip options alongside carefully prepared pour-over for a more refined experience.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#10052;</span>
+          <h3>Cold Brew &amp; Iced Drinks</h3>
+          <p>Florida-ready cold brew, iced lattes, and chilled specialties to keep you cool through the Gainesville heat year-round.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127807;</span>
+          <h3>Non-Coffee Options</h3>
+          <p>Teas, matcha, and other non-coffee beverages for those who want a great cafe experience without the espresso. Contact us for current selections.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127859;</span>
+          <h3>Grab-and-Go Bites</h3>
+          <p>A curated selection of pastries and light snacks to pair with your drink, perfect for a quick morning bite or an afternoon pick-me-up.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+
+      <div>
+        <p class="section-label">Visit Us</p>
+        <h2 class="section-title">Come Find Your Spot</h2>
+        <div class="divider"></div>
+        <p class="contact-text">We're located on Gainesville's northwest side. Swing by, grab a seat, and let us make you something great.</p>
+
+        <div class="contact-detail">
+          <span class="contact-detail-icon">&#128205;</span>
+          <div class="contact-detail-body">
+            <strong>Address</strong>
+            <span>4401 NW 25th Pl. Ste J<br>Gainesville, FL 32606</span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <span class="contact-detail-icon">&#128337;</span>
+          <div class="contact-detail-body">
+            <strong>Hours</strong>
+            <span>Contact us for current hours</span>
+          </div>
+        </div>
+
+        <a
+          href="https://www.google.com/maps/search/Resident%20Coffee%204401%20NW%2025th%20Pl.%20Ste%20J%2C%20Gainesville%2C%20FL%2032606"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="directions-btn"
+        >
+          Get Directions &rarr;
+        </a>
+      </div>
+
+      <div class="rating-card">
+        <p class="rating-label">Google Maps Rating</p>
+        <p class="rating-number">4.8</p>
+        <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="rating-count">Based on 206 reviews</p>
+        <p class="rating-source">Google Maps &bull; Verified</p>
+        <p class="rating-tagline">"One of Gainesville's highest-rated neighborhood cafes &mdash; and the community agrees."</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p class="footer-brand"><strong>Resident Coffee</strong> &mdash; 4401 NW 25th Pl. Ste J, Gainesville, FL 32606</p>
+    <p class="footer-copy">&copy; 2026 Resident Coffee. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', function () {
+      links.classList.toggle('open');
+    });
+
+    // Close nav on link click (mobile)
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

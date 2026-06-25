@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>39 Nail Salon – Gainesville, FL</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #3a2a35;
+      background: #fdf8f9;
+      line-height: 1.7;
+    }
+
+    /* ===== COLOR PALETTE ===== */
+    /* Blush pink, dusty rose, champagne gold, deep plum, soft white */
+    :root {
+      --blush: #f7d6d9;
+      --rose: #d4858e;
+      --deep-rose: #b55c66;
+      --plum: #6b3040;
+      --champagne: #e8c97a;
+      --gold: #c9a84c;
+      --cream: #fdf8f9;
+      --white: #ffffff;
+      --text-dark: #3a2a35;
+      --text-mid: #6b4a55;
+      --text-light: #9a7880;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(107, 48, 64, 0.97);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 16px rgba(107, 48, 64, 0.25);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--champagne);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .nav-brand-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--champagne); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* Mobile nav */
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--plum);
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0 1rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { text-align: center; }
+      .nav-links a {
+        display: block;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+      }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 1.5rem 80px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, var(--plum) 0%, #8c3d50 45%, var(--deep-rose) 100%);
+    }
+    /* Decorative circles */
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.12;
+      background: var(--champagne);
+    }
+    .hero::before {
+      width: 600px; height: 600px;
+      top: -180px; right: -160px;
+    }
+    .hero::after {
+      width: 400px; height: 400px;
+      bottom: -120px; left: -100px;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(232,201,122,0.2);
+      border: 1px solid rgba(232,201,122,0.5);
+      color: var(--champagne);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 7vw, 4.8rem);
+      color: var(--white);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .hero h1 span {
+      color: var(--champagne);
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: rgba(255,255,255,0.82);
+      font-style: italic;
+      margin-bottom: 2.4rem;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--champagne);
+      color: var(--plum);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.9rem 2.4rem;
+      border-radius: 3rem;
+      transition: background 0.25s, transform 0.2s;
+      box-shadow: 0 4px 18px rgba(201,168,76,0.35);
+    }
+    .hero-cta:hover {
+      background: #f0d88a;
+      transform: translateY(-2px);
+    }
+
+    /* ===== SECTION SHARED ===== */
+    section { padding: 90px 1.5rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--plum);
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+    .gold-underline {
+      display: inline-block;
+      width: 56px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--champagne));
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ===== ABOUT ===== */
+    .about {
+      background: var(--white);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    @media (max-width: 780px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 1.1rem;
+    }
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .about-card {
+      background: var(--blush);
+      border-left: 4px solid var(--rose);
+      border-radius: 0.5rem;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .about-card-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .about-card-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--plum);
+      font-weight: 600;
+    }
+
+    /* ===== SERVICES ===== */
+    .services {
+      background: linear-gradient(135deg, #fdf0f2 0%, #fdf8f9 100%);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 4px 20px rgba(107, 48, 64, 0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose), var(--champagne));
+      border-radius: 1rem 1rem 0 0;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 32px rgba(107, 48, 64, 0.14);
+    }
+    .service-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.9rem;
+    }
+    .service-name {
+      font-size: 1.15rem;
+      color: var(--plum);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .service-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+    .service-note {
+      display: inline-block;
+      margin-top: 0.9rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: var(--rose);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact {
+      background: var(--plum);
+    }
+    .contact .section-label { color: var(--champagne); opacity: 0.8; }
+    .contact .section-title { color: var(--white); }
+    .contact .gold-underline { background: linear-gradient(90deg, var(--champagne), #f0d88a); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 700px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .contact-item-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(232,201,122,0.15);
+      border: 1px solid rgba(232,201,122,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-item-body {}
+    .contact-item-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(232,201,122,0.7);
+      margin-bottom: 0.2rem;
+    }
+    .contact-item-value {
+      font-family: 'Arial', sans-serif;
+      color: var(--white);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--champagne);
+      color: var(--plum);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      border-radius: 3rem;
+      margin-top: 0.5rem;
+      transition: background 0.25s, transform 0.2s;
+      box-shadow: 0 4px 14px rgba(201,168,76,0.3);
+    }
+    .directions-btn:hover {
+      background: #f0d88a;
+      transform: translateY(-2px);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(232,201,122,0.2);
+      border-radius: 1rem;
+      padding: 2rem 2rem;
+    }
+    .rating-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(232,201,122,0.7);
+      margin-bottom: 1rem;
+    }
+    .rating-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 0.6rem;
+    }
+    .star { color: var(--champagne); font-size: 1.5rem; }
+    .star-half { color: var(--champagne); font-size: 1.5rem; opacity: 0.6; }
+    .rating-score {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--champagne);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 1.2rem;
+    }
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(232,201,122,0.15);
+      border: 1px solid rgba(232,201,122,0.35);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--champagne);
+      font-weight: 600;
+    }
+    .rating-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 1.4rem 0;
+    }
+    .rating-blurb {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.65);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #2a1520;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 2.2rem 1.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.83rem;
+    }
+    footer strong {
+      color: rgba(255,255,255,0.8);
+    }
+    .footer-divider {
+      display: inline-block;
+      margin: 0 0.6rem;
+      opacity: 0.4;
+    }
+
+    /* ===== UTILITY ===== */
+    @media (max-width: 480px) {
+      section { padding: 65px 1rem; }
+      .hero { padding: 100px 1rem 70px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-icon">&#10041;</div>
+      <span class="nav-brand-name">39 Nail Salon</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" role="button" aria-label="Toggle menu" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Gainesville, FL &mdash; Suite 40</span>
+      <h1><span>39</span> Nail<br>Salon</h1>
+      <p class="hero-tagline">Where every detail is polished to perfection.</p>
+      <a href="#services" class="hero-cta">Explore Our Services</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">A Nail Experience Worth Savoring</h2>
+          <div class="gold-underline"></div>
+          <p>Nestled in northwest Gainesville, 39 Nail Salon is a welcoming destination for clients who appreciate quality nail care in a calm, clean, and stylish environment. From classic manicures to intricate nail art, every service is delivered with precision and attention to detail.</p>
+          <p>We are committed to using high-quality products and maintaining the highest sanitation standards so that every visit feels both luxurious and worry-free. Whether you are treating yourself or getting ready for a special occasion, our team is here to make you feel your best.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-card">
+            <div class="about-card-icon">&#10003;</div>
+            <div class="about-card-text">High-quality nail products &amp; finishes</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#10003;</div>
+            <div class="about-card-text">Strict sanitation &amp; hygiene standards</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#10003;</div>
+            <div class="about-card-text">Relaxing, welcoming atmosphere</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#10003;</div>
+            <div class="about-card-text">Serving the Gainesville community</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Our Services</h2>
+      <div class="gold-underline"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#128073;</div>
+          <div class="service-name">Manicure</div>
+          <p class="service-desc">Shaping, cuticle care, and polish for beautifully groomed hands. Available in classic, gel, and specialty finishes.</p>
+          <span class="service-note">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128220;</div>
+          <div class="service-name">Pedicure</div>
+          <p class="service-desc">Relaxing foot soaks, exfoliation, nail trimming, and polish to leave your feet soft and refreshed.</p>
+          <span class="service-note">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#10024;</div>
+          <div class="service-name">Gel Nails</div>
+          <p class="service-desc">Long-lasting gel polish that resists chipping and maintains a flawless glossy finish for weeks at a time.</p>
+          <span class="service-note">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128142;</div>
+          <div class="service-name">Acrylic Nails</div>
+          <p class="service-desc">Full sets and fills with acrylic extensions, customized to your desired length, shape, and style.</p>
+          <span class="service-note">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127774;</div>
+          <div class="service-name">Nail Art</div>
+          <p class="service-desc">Custom designs, ombre, French tips, and intricate nail art created to match any occasion or style preference.</p>
+          <span class="service-note">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127748;</div>
+          <div class="service-name">Dip Powder</div>
+          <p class="service-desc">A durable, odorless alternative to gels that delivers rich color and a lightweight, natural feel on the nail.</p>
+          <span class="service-note">Contact us for details</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Visit 39 Nail Salon</h2>
+      <div class="gold-underline"></div>
+      <div class="contact-grid">
+
+        <div class="contact-info-block">
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-body">
+              <div class="contact-item-label">Address</div>
+              <div class="contact-item-value">8181 NW 39th Ave, Suite 40<br>Gainesville, FL 32606</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-body">
+              <div class="contact-item-label">Hours</div>
+              <div class="contact-item-value">Contact us for current hours</div>
+            </div>
+          </div>
+          <a
+            href="https://www.google.com/maps/search/39%20NAIL%20SALON%208181%20NW%2039th%20Ave%20Ste%2040%2C%20Gainesville%2C%20FL%2032606"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >
+            &#128205; Get Directions
+          </a>
+        </div>
+
+        <div class="rating-card">
+          <div class="rating-label">Google Maps Rating</div>
+          <div class="rating-stars">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+          </div>
+          <div class="rating-score">4.7</div>
+          <div class="rating-count">Based on 90 Google reviews</div>
+          <div class="rating-badge">&#10003; Highly Rated in Gainesville</div>
+          <div class="rating-divider"></div>
+          <div class="rating-blurb">"Clients consistently praise the clean environment, friendly service, and beautiful results — reflected in our strong 4.7-star rating on Google Maps."</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>39 Nail Salon</strong>
+    <span class="footer-divider">|</span>
+    8181 NW 39th Ave, Suite 40, Gainesville, FL 32606
+    <br style="margin-bottom:0.4rem" />
+    <small>&copy; 2026 39 Nail Salon. All rights reserved.</small>
+  </footer>
+
+</body>
+</html>

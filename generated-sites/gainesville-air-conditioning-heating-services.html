@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gainesville Air Conditioning &amp; Heating Services</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue-dark: #0a2540;
+      --blue-mid: #1a4a7a;
+      --blue-accent: #2196c4;
+      --blue-light: #e8f4fb;
+      --orange: #e87722;
+      --orange-light: #fdf0e6;
+      --white: #ffffff;
+      --gray-light: #f4f7fa;
+      --gray-mid: #cbd5e1;
+      --gray-text: #4a5568;
+      --text-dark: #1a202c;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--blue-dark);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--blue-accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .nav-logo-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--gray-mid);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray-mid);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue-accent);
+    }
+
+    .nav-cta {
+      background: var(--orange);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: #c9621a !important;
+      color: var(--white) !important;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 60%, #1e6fa8 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 1.5rem 5rem;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(33,150,196,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -60px;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(232,119,34,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(33,150,196,0.2);
+      border: 1px solid rgba(33,150,196,0.4);
+      color: #7dd3f8;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--blue-accent);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.8);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #c9621a;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--white);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      margin-top: 3.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.65);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue-accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--blue-dark);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-body {
+      font-size: 1.05rem;
+      color: var(--gray-text);
+      max-width: 680px;
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      background: var(--gray-light);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--blue-mid) 0%, var(--blue-accent) 100%);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+
+    .about-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-icon svg {
+      width: 44px;
+      height: 44px;
+      fill: var(--white);
+    }
+
+    .about-visual-headline {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-visual-sub {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .about-highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .highlight-chip {
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .about-content p {
+      margin-bottom: 1rem;
+      color: var(--gray-text);
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
+
+    .about-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ─── SERVICES ─── */
+    #services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--gray-light);
+      border-radius: 14px;
+      padding: 2rem 1.5rem;
+      border: 1px solid transparent;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue-accent), var(--blue-mid));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: var(--blue-accent);
+      box-shadow: 0 8px 30px rgba(33,150,196,0.15);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--blue-light), #c5e6f5);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--blue-mid);
+    }
+
+    .service-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      line-height: 1.6;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: var(--blue-dark);
+      color: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .contact-info .section-label {
+      color: #7dd3f8;
+    }
+
+    .contact-info .section-title {
+      color: var(--white);
+    }
+
+    .contact-info .section-body {
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-detail-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(33,150,196,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--blue-accent);
+    }
+
+    .contact-detail-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail-value {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .contact-detail-value a {
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .contact-detail-value a:hover {
+      color: var(--blue-accent);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 2rem;
+    }
+
+    .rating-card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 1rem;
+    }
+
+    .rating-score {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .rating-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      width: 20px;
+      height: 20px;
+      fill: #f59e0b;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .rating-source {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 0.75rem;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-directions {
+      background: var(--blue-accent);
+      color: var(--white);
+      justify-content: center;
+    }
+
+    .btn-directions:hover {
+      background: #1a7ca8;
+    }
+
+    .btn-call {
+      background: var(--orange);
+      color: var(--white);
+      justify-content: center;
+    }
+
+    .btn-call:hover {
+      background: #c9621a;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #06192d;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 1.8rem 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--blue-accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--blue-dark);
+        flex-direction: column;
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 0.75rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1rem;
+        padding: 0.4rem 0;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-visual {
+        order: -1;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero {
+        padding: 4rem 1.5rem 3.5rem;
+      }
+
+      .hero-stats {
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-highlights {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-8 2s4.33 6.67 1 12c-2.22-2.8-3.3-6.58-3-10z"/>
+          </svg>
+        </div>
+        <div class="nav-logo-text">
+          Gainesville AC &amp; Heating
+          <span>Comfort You Can Count On</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">Gainesville, FL &bull; HVAC Specialists</div>
+    <h1>Reliable <em>Cooling &amp; Heating</em><br>When You Need It Most</h1>
+    <p class="hero-tagline">Professional HVAC installation, repair, and maintenance — keeping Gainesville homes and businesses comfortable all year long.</p>
+    <div class="hero-actions">
+      <a href="tel:+12394996663" class="btn btn-primary">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.57 21 3 13.43 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2z"/></svg>
+        Call (239) 499-6663
+      </a>
+      <a href="#services" class="btn btn-outline">
+        View Our Services
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">5.0&#9733;</div>
+        <div class="hero-stat-label">Google Rating</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">14</div>
+        <div class="hero-stat-label">Verified Reviews</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">A/C &amp; Heat</div>
+        <div class="hero-stat-label">Full-Service HVAC</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-8 2s4.33 6.67 1 12c-2.22-2.8-3.3-6.58-3-10z"/>
+            </svg>
+          </div>
+          <div class="about-visual-headline">Trusted Local HVAC</div>
+          <div class="about-visual-sub">Serving Gainesville &amp; surrounding areas</div>
+          <div class="about-highlights">
+            <div class="highlight-chip">Residential</div>
+            <div class="highlight-chip">Commercial</div>
+            <div class="highlight-chip">Installation</div>
+            <div class="highlight-chip">Repair</div>
+          </div>
+        </div>
+        <div class="about-content">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">Gainesville's HVAC Professionals</h2>
+          <p>Gainesville Air Conditioning &amp; Heating Services is a dedicated HVAC contractor serving residential and commercial customers throughout Gainesville, FL and the surrounding communities. With Florida's demanding climate, our team is committed to delivering fast, reliable comfort solutions you can depend on year-round.</p>
+          <p>From sweltering summers to the occasional winter chill, we handle everything from routine tune-ups to full system replacements, helping our customers stay comfortable and energy-efficient no matter the season.</p>
+          <p>We take pride in our 5-star reputation — built on honest assessments, quality workmanship, and attentive customer care. Contact us for details on pricing, availability, and what we can do for your specific situation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">Our HVAC Services</h2>
+        <p style="color:var(--gray-text);font-size:1.05rem;max-width:560px;margin:0 auto;">Comprehensive heating and cooling solutions for homes and businesses throughout the Gainesville area.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-8 2s4.33 6.67 1 12c-2.22-2.8-3.3-6.58-3-10z"/></svg>
+          </div>
+          <div class="service-name">AC Installation &amp; Replacement</div>
+          <div class="service-desc">New air conditioning system installation or full unit replacement — properly sized and installed for maximum efficiency in Florida's heat.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8 8 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8 8 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8 8 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8 8 0 0 1 13 19.93z"/></svg>
+          </div>
+          <div class="service-name">AC Repair</div>
+          <div class="service-desc">Fast diagnosis and repair of air conditioning issues — from refrigerant leaks and compressor problems to fan failures and thermostat malfunctions.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 14a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+          </div>
+          <div class="service-name">Heating System Services</div>
+          <div class="service-desc">Installation, repair, and maintenance of heat pumps, furnaces, and other heating systems — keeping your space warm during cooler Florida months.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          </div>
+          <div class="service-name">Preventive Maintenance</div>
+          <div class="service-desc">Scheduled tune-ups and inspections to keep your HVAC system running at peak performance, extend equipment life, and prevent costly breakdowns.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3zm0 12.5A1.5 1.5 0 1 1 13.5 14 1.5 1.5 0 0 1 12 15.5z"/></svg>
+          </div>
+          <div class="service-name">Indoor Air Quality</div>
+          <div class="service-desc">Air filtration, purification, and ventilation solutions to improve the air you breathe — important for allergy sufferers and Florida's humid environment.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-9 14H7v-2h4v2zm0-4H7v-2h4v2zm0-4H7V7h4v2zm6 8h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V7h4v2z"/></svg>
+          </div>
+          <div class="service-name">Duct Cleaning &amp; Sealing</div>
+          <div class="service-desc">Ductwork inspection, cleaning, and sealing to eliminate airflow inefficiencies, reduce energy waste, and improve system performance throughout your property.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-title">Contact Us Today</h2>
+          <p class="section-body">Ready to schedule service or have questions about your HVAC system? Reach out and our team will be happy to help.</p>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div>
+              <div class="contact-detail-label">Address</div>
+              <div class="contact-detail-value">680 Windmeadows Blvd<br>Gainesville, FL</div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.57 21 3 13.43 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2z"/></svg>
+            </div>
+            <div>
+              <div class="contact-detail-label">Phone</div>
+              <div class="contact-detail-value"><a href="tel:+12394996663">(239) 499-6663</a></div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V15a1 1 0 0 0-2 0v1.93A6 6 0 0 1 6.07 11H8a1 1 0 0 0 0-2H6.07A6 6 0 0 1 11 5.07V7a1 1 0 0 0 2 0V5.07A6 6 0 0 1 17.93 11H16a1 1 0 0 0 0 2h1.93A6 6 0 0 1 13 16.93z"/></svg>
+            </div>
+            <div>
+              <div class="contact-detail-label">Hours</div>
+              <div class="contact-detail-value">Contact us for details</div>
+            </div>
+          </div>
+
+          <div class="contact-actions">
+            <a href="https://www.google.com/maps/search/Gainesville%20Air%20Conditioning%20%26%20Heating%20Services%20680%20Windmeadows%20Blvd" target="_blank" rel="noopener" class="btn btn-directions">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Get Directions
+            </a>
+            <a href="tel:+12394996663" class="btn btn-call">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.57 21 3 13.43 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2z"/></svg>
+              Call (239) 499-6663
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="rating-card">
+            <div class="rating-card-title">Customer Rating on Google Maps</div>
+            <div class="rating-score">
+              <div class="rating-number">5.0</div>
+              <div class="rating-right">
+                <div class="stars">
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </div>
+                <div class="rating-count">Based on 14 reviews</div>
+              </div>
+            </div>
+            <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;line-height:1.6;">Our customers consistently rate us 5 stars for our professionalism, responsiveness, and quality of work. We're proud to earn that trust on every job.</p>
+            <div class="rating-source">Source: Google Maps</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 Gainesville Air Conditioning &amp; Heating Services &bull; 680 Windmeadows Blvd, Gainesville, FL &bull; <a href="tel:+12394996663">(239) 499-6663</a></p>
+  </footer>
+
+  <script>
+    // Simple hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    // Close nav on link click
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

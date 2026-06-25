@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tucker Brothers Wood Floor Specialist Inc | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --brown-dark:   #3b2010;
+      --brown-mid:    #6b3a1f;
+      --brown-warm:   #a0522d;
+      --brown-light:  #c8885a;
+      --cream:        #f5ede0;
+      --cream-dark:   #ecdcc8;
+      --tan:          #d4a87a;
+      --text-dark:    #2a1a0e;
+      --text-mid:     #5a3820;
+      --white:        #fff8f2;
+      --shadow:       rgba(59, 32, 16, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--text-dark);
+      background-color: var(--cream);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--brown-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--tan);
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream-dark);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--tan);
+    }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream-dark);
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+
+    .hamburger:hover span {
+      background: var(--tan);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      min-height: 92vh;
+      background: linear-gradient(160deg, var(--brown-dark) 0%, var(--brown-mid) 55%, var(--brown-warm) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative wood grain lines */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          170deg,
+          rgba(255,255,255,0.025) 0px,
+          rgba(255,255,255,0.025) 1px,
+          transparent 1px,
+          transparent 60px
+        );
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(200,136,90,0.5);
+      color: var(--tan);
+      font-family: Arial, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .hero h1 span {
+      color: var(--tan);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      color: var(--cream-dark);
+      margin-bottom: 2.4rem;
+      font-style: italic;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--brown-light);
+      color: var(--white);
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 3px;
+      font-size: 1rem;
+      font-family: Arial, sans-serif;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--brown-warm);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--cream-dark);
+      padding: 0.8rem 2rem;
+      border: 1.5px solid rgba(200,136,90,0.6);
+      border-radius: 3px;
+      font-size: 1rem;
+      font-family: Arial, sans-serif;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--tan);
+      color: var(--tan);
+      transform: translateY(-2px);
+    }
+
+    /* ── ABOUT ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brown-warm);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--brown-dark);
+      margin-bottom: 1.5rem;
+      line-height: 1.25;
+    }
+
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-graphic {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wood-plank-art {
+      width: 100%;
+      max-width: 400px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .plank {
+      height: 100px;
+      border-radius: 3px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plank::after {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0,0,0,0.1);
+    }
+
+    .p1 { background: linear-gradient(180deg, #8B5E3C 0%, #7a4f2f 100%); }
+    .p2 { background: linear-gradient(180deg, #a07040 0%, #8c5f30 100%); height: 130px; }
+    .p3 { background: linear-gradient(180deg, #6b4423 0%, #5c3818 100%); }
+    .p4 { background: linear-gradient(180deg, #c8885a 0%, #b0723e 100%); height: 110px; }
+    .p5 { background: linear-gradient(180deg, #7a5030 0%, #6b4020 100%); }
+    .p6 { background: linear-gradient(180deg, #9b6535 0%, #885525 100%); height: 95px; }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--cream);
+    }
+
+    .services-intro {
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+
+    .services-intro p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 2rem;
+      border-top: 4px solid var(--brown-light);
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--brown-dark);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-card p {
+      font-family: Arial, sans-serif;
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--brown-dark);
+      color: var(--cream);
+    }
+
+    #contact .section-label {
+      color: var(--tan);
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-row-text {
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      color: var(--cream-dark);
+      line-height: 1.5;
+    }
+
+    .contact-row-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--tan);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-row-text a {
+      color: var(--cream-dark);
+      text-decoration: none;
+    }
+
+    .contact-row-text a:hover {
+      color: var(--tan);
+    }
+
+    .rating-block {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(200,136,90,0.3);
+      border-radius: 4px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .rating-stars {
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: #f4c542;
+      line-height: 1;
+    }
+
+    .rating-text {
+      font-family: Arial, sans-serif;
+    }
+
+    .rating-score {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-detail {
+      font-size: 0.82rem;
+      color: var(--cream-dark);
+      margin-top: 0.15rem;
+    }
+
+    .contact-action {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .contact-action p {
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      color: var(--cream-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--brown-light);
+      color: var(--white);
+      padding: 0.9rem 2rem;
+      border-radius: 3px;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s;
+      align-self: flex-start;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+
+    .btn-directions:hover {
+      background: var(--brown-warm);
+      transform: translateY(-2px);
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: transparent;
+      color: var(--cream-dark);
+      padding: 0.9rem 2rem;
+      border-radius: 3px;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      border: 1.5px solid rgba(200,136,90,0.5);
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+
+    .btn-call:hover {
+      border-color: var(--tan);
+      color: var(--tan);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1e0e05;
+      color: rgba(245,237,224,0.6);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+    }
+
+    footer strong {
+      color: var(--tan);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--brown-dark);
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.85rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-graphic {
+        order: -1;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="2" y="14" width="32" height="6" rx="1.5" fill="#c8885a"/>
+        <rect x="2" y="22" width="32" height="6" rx="1.5" fill="#a0522d"/>
+        <rect x="2" y="6"  width="32" height="6" rx="1.5" fill="#d4a87a"/>
+        <rect x="10" y="2" width="3" height="32" rx="1" fill="#6b3a1f"/>
+        <rect x="23" y="2" width="3" height="32" rx="1" fill="#6b3a1f"/>
+      </svg>
+      <span class="nav-logo-text">Tucker Brothers<br>Wood Floor Specialist</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Gainesville, FL &mdash; Wood Flooring Experts</div>
+      <h1>Tucker Brothers <span>Wood Floor</span> Specialist Inc</h1>
+      <p class="hero-tagline">Beautiful floors, expert craftsmanship &mdash; built to last a lifetime.</p>
+      <div class="hero-cta">
+        <a href="#services" class="btn-primary">Our Services</a>
+        <a href="#contact" class="btn-outline">Get In Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Hardwood Flooring Done Right</h2>
+          <p>Tucker Brothers Wood Floor Specialist Inc has been serving homeowners and businesses across the Gainesville area with skilled hardwood floor installation, refinishing, and restoration. We take pride in delivering durable, beautiful results that enhance any space.</p>
+          <p>Whether you are transforming a single room or an entire property, our team brings hands-on expertise and an eye for detail to every project. We work with a wide variety of wood species, finishes, and styles to match your vision and your budget.</p>
+          <p>Locally rooted in Gainesville, we understand the needs of Florida homes and commercial spaces. Contact us to discuss your flooring project and get started.</p>
+        </div>
+        <div class="about-graphic" aria-hidden="true">
+          <div class="wood-plank-art">
+            <div class="plank p1"></div>
+            <div class="plank p2"></div>
+            <div class="plank p3"></div>
+            <div class="plank p4"></div>
+            <div class="plank p5"></div>
+            <div class="plank p6"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="services-intro">
+        <p class="section-label">What We Do</p>
+        <h2 class="section-title">Our Services</h2>
+        <p>From brand-new installs to full restorations, Tucker Brothers handles all aspects of wood flooring. Contact us for details on pricing and scheduling.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="4" y="20" width="40" height="8" rx="2" fill="#c8885a"/>
+            <rect x="4" y="30" width="40" height="8" rx="2" fill="#a0522d"/>
+            <rect x="4" y="10" width="40" height="8" rx="2" fill="#d4a87a"/>
+            <rect x="14" y="6" width="3" height="36" rx="1" fill="#6b3a1f"/>
+            <rect x="31" y="6" width="3" height="36" rx="1" fill="#6b3a1f"/>
+          </svg>
+          <h3>Hardwood Floor Installation</h3>
+          <p>New solid or engineered hardwood installation for residential and commercial spaces. We help you select the right species, grade, and layout for lasting beauty.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="28" width="36" height="12" rx="2" fill="#c8885a"/>
+            <path d="M6 28 L24 10 L42 28" fill="#a0522d"/>
+            <rect x="38" y="16" width="4" height="16" rx="1" fill="#6b3a1f"/>
+            <rect x="39" y="16" width="2" height="3" rx="0.5" fill="#d4a87a"/>
+          </svg>
+          <h3>Floor Sanding &amp; Refinishing</h3>
+          <p>Restore worn or scratched hardwood floors to like-new condition. Professional sanding and refinishing removes damage and applies a fresh protective coat.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="10" width="36" height="28" rx="2" fill="#d4a87a"/>
+            <rect x="12" y="16" width="10" height="16" rx="1" fill="#a0522d"/>
+            <rect x="26" y="16" width="10" height="16" rx="1" fill="#c8885a"/>
+            <rect x="6" y="22" width="36" height="2" fill="rgba(0,0,0,0.12)"/>
+          </svg>
+          <h3>Floor Repair &amp; Restoration</h3>
+          <p>Targeted repairs for squeaky boards, gaps, cupping, or water-damaged sections. We match existing wood and finish for a seamless, uniform appearance.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="30" width="36" height="10" rx="2" fill="#a0522d"/>
+            <rect x="6" y="18" width="36" height="10" rx="2" fill="#c8885a"/>
+            <rect x="6" y="8"  width="36" height="8"  rx="2" fill="#d4a87a"/>
+            <path d="M18 8 L18 40" stroke="#6b3a1f" stroke-width="1.5"/>
+            <path d="M30 8 L30 40" stroke="#6b3a1f" stroke-width="1.5"/>
+          </svg>
+          <h3>Staining &amp; Finishing</h3>
+          <p>Custom stain colors and finish options including oil-based, water-based, and matte to glossy sheens. We help you find the perfect look for your space.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="14" height="14" rx="2" fill="#c8885a"/>
+            <rect x="26" y="8" width="14" height="14" rx="2" fill="#d4a87a"/>
+            <rect x="8" y="26" width="14" height="14" rx="2" fill="#d4a87a"/>
+            <rect x="26" y="26" width="14" height="14" rx="2" fill="#c8885a"/>
+          </svg>
+          <h3>Subfloor Preparation</h3>
+          <p>Proper subfloor leveling and preparation before installation. A solid, flat foundation ensures your new hardwood floors perform and look their best for years.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="24" cy="24" r="18" fill="#a0522d" opacity="0.2"/>
+            <circle cx="24" cy="24" r="12" fill="#c8885a" opacity="0.4"/>
+            <path d="M24 10 L27 20 L38 20 L29 26 L32 37 L24 30 L16 37 L19 26 L10 20 L21 20 Z" fill="#d4a87a"/>
+          </svg>
+          <h3>Free Estimates</h3>
+          <p>Not sure where to start? We offer free on-site consultations and estimates for all flooring projects. Contact us for details and to schedule your appointment.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Contact &amp; Location</h2>
+      <div class="contact-grid">
+
+        <div class="contact-info">
+
+          <div class="contact-row">
+            <svg class="contact-icon" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M11 2C7.69 2 5 4.69 5 8c0 5.25 6 12 6 12s6-6.75 6-12c0-3.31-2.69-6-6-6z" fill="#c8885a"/>
+              <circle cx="11" cy="8" r="2.5" fill="#3b2010"/>
+            </svg>
+            <div>
+              <div class="contact-row-label">Address</div>
+              <div class="contact-row-text">1918 NE 7th St<br>Gainesville, FL</div>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <svg class="contact-icon" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 2 12.4 2 2c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" fill="#c8885a"/>
+            </svg>
+            <div>
+              <div class="contact-row-label">Phone</div>
+              <div class="contact-row-text"><a href="tel:+13522144073">(352) 214-4073</a></div>
+            </div>
+          </div>
+
+          <div class="rating-block">
+            <div>
+              <div class="rating-score">4.8</div>
+              <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+            <div>
+              <div class="rating-detail" style="color: var(--cream-dark); font-family: Arial, sans-serif;">
+                Google Maps Rating<br>
+                <strong style="color: var(--tan);">34 reviews</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="contact-action">
+          <p>Ready to transform your floors? Reach out by phone or get directions to visit us in Gainesville. We look forward to hearing from you.</p>
+          <a
+            href="https://www.google.com/maps/search/Tucker%20Brothers%20Wood%20Floor%20Specialist%20Inc%201918%20NE%207th%20St"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M9 1C5.69 1 3 3.69 3 7c0 4.69 6 10 6 10s6-5.31 6-10c0-3.31-2.69-6-6-6z" fill="rgba(255,255,255,0.8)"/>
+              <circle cx="9" cy="7" r="2" fill="#a0522d"/>
+            </svg>
+            Get Directions
+          </a>
+          <a href="tel:+13522144073" class="btn-call">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M5.4 8.8c1.1 2.2 3 4 5.3 5.2l1.8-1.8c.2-.2.5-.3.8-.2.9.3 1.8.5 2.9.5.5 0 .8.3.8.8V16c0 .5-.3.8-.8.8C8.5 16.8 1.2 9.5 1.2 1c0-.5.3-.8.8-.8H5.5c.5 0 .8.3.8.8 0 1 .2 2 .5 2.9.1.3 0 .6-.2.8L5.4 8.8z" fill="rgba(200,136,90,0.8)"/>
+            </svg>
+            Call (352) 214-4073
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Tucker Brothers Wood Floor Specialist Inc</strong> &mdash; 1918 NE 7th St, Gainesville, FL &mdash; <a href="tel:+13522144073" style="color: var(--tan); text-decoration: none;">(352) 214-4073</a></p>
+    <p style="margin-top: 0.5rem; font-size: 0.78rem;">&copy; 2024 Tucker Brothers Wood Floor Specialist Inc. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close nav when a link is clicked
+    navLinks.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

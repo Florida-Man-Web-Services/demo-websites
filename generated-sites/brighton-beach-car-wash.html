@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brighton Beach Car Wash – Self Service Car Wash in Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sky: #1b8fc2;
+      --sky-dark: #136f9e;
+      --sky-light: #d6eef9;
+      --ocean: #0a4f72;
+      --foam: #e9f7fd;
+      --sand: #f5f0e8;
+      --white: #ffffff;
+      --text: #1c2b38;
+      --text-muted: #4a6070;
+      --accent: #f0a500;
+      --accent-dark: #c98a00;
+      --radius: 10px;
+      --shadow: 0 4px 20px rgba(10, 79, 114, 0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--ocean);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--sky);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .nav-logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: var(--sky-light);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--sky-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--ocean) !important;
+      padding: 7px 18px;
+      border-radius: 6px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--accent-dark) !important; color: var(--white) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 64px;
+      background: linear-gradient(135deg, var(--ocean) 0%, var(--sky) 60%, #57b8e8 100%);
+      position: relative;
+      overflow: hidden;
+      min-height: 540px;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: var(--white);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+
+    /* Bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      pointer-events: none;
+    }
+    .bubble-1  { width: 280px; height: 280px; top: -60px;  right: -60px; }
+    .bubble-2  { width: 160px; height: 160px; bottom: 60px; right: 200px; background: rgba(255,255,255,0.06); }
+    .bubble-3  { width: 90px;  height: 90px;  top: 100px; left: 80px;  background: rgba(255,255,255,0.07); }
+    .bubble-4  { width: 50px;  height: 50px;  bottom: 120px; left: 260px; background: rgba(255,255,255,0.05); }
+
+    /* Water droplets decoration */
+    .drops {
+      position: absolute;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.18;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 24px 120px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      max-width: 640px;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.88);
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--ocean);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 30px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(240,165,0,0.4);
+    }
+
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 13px 28px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.6);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: var(--white); }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 24px; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-tag {
+      display: inline-block;
+      background: var(--sky-light);
+      color: var(--sky-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    h2.section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--ocean);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin-bottom: 48px;
+    }
+
+    /* ── ABOUT ── */
+    .about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--ocean), var(--sky));
+      border-radius: 16px;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .about-visual-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.07;
+    }
+
+    .about-icon-wrap {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .about-icon-wrap svg {
+      width: 100px;
+      height: 100px;
+      fill: rgba(255,255,255,0.9);
+    }
+
+    .about-icon-wrap p {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.85rem;
+      margin-top: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      font-size: 1.02rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .highlight-chip {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--foam);
+      border: 1px solid var(--sky-light);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ocean);
+    }
+
+    .highlight-chip svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--sky);
+      flex-shrink: 0;
+    }
+
+    /* ── SERVICES ── */
+    .services { background: var(--sand); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 30px 26px;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--sky);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(10,79,114,0.18);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--sky-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--sky-dark);
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ocean);
+      margin-bottom: 8px;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .contact-card {
+      background: var(--foam);
+      border: 1px solid var(--sky-light);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-card-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--sky);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-card-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .contact-card-body h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .contact-card-body p,
+    .contact-card-body a {
+      font-size: 1rem;
+      color: var(--ocean);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .contact-card-body a:hover { text-decoration: underline; }
+
+    .rating-wrap {
+      background: var(--ocean);
+      border-radius: var(--radius);
+      padding: 28px 28px;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .rating-stars {
+      font-size: 2rem;
+      letter-spacing: 3px;
+      margin-bottom: 6px;
+      color: var(--accent);
+    }
+
+    .rating-score {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .rating-label {
+      font-size: 0.85rem;
+      color: var(--sky-light);
+      margin-bottom: 6px;
+    }
+
+    .rating-source {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: var(--ocean);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(240,165,0,0.3);
+      width: 100%;
+      justify-content: center;
+    }
+
+    .directions-btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    .directions-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--ocean);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ocean);
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      padding: 36px 24px;
+    }
+
+    footer strong {
+      color: var(--white);
+    }
+
+    footer p {
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+    }
+
+    footer a {
+      color: var(--sky-light);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    .footer-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--sky);
+      margin: 16px auto;
+      border-radius: 2px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+      .about-visual { min-height: 220px; }
+    }
+
+    @media (max-width: 660px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--ocean);
+        padding: 16px 24px 24px;
+        gap: 16px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+      .nav-links.open a { font-size: 1rem; }
+      .hamburger { display: flex; }
+      .services-grid { grid-template-columns: 1fr; }
+      section { padding: 56px 18px; }
+      .hero-inner { padding: 60px 18px 100px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="top-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <!-- Water drop / car wash icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C9 7 5 10.5 5 14a7 7 0 0014 0C19 10.5 15 7 12 2zM9 18.5a4.5 4.5 0 01-1.5-8.74V14a4.5 4.5 0 001.5 4.5z"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">
+        Brighton Beach Car Wash
+        <span>Self Service · Gainesville, FL</span>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="bubble bubble-1"></div>
+  <div class="bubble bubble-2"></div>
+  <div class="bubble bubble-3"></div>
+  <div class="bubble bubble-4"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+      4.1 Stars on Google Maps
+    </div>
+    <h1>Your Car Deserves a <em>Fresh Start</em></h1>
+    <p>Self service bays at your own pace — the convenient way to keep your vehicle spotless right here in Gainesville.</p>
+    <div class="hero-buttons">
+      <a href="#services" class="btn-primary">See Our Services</a>
+      <a href="#contact" class="btn-outline">Get Directions</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+
+      <div class="about-visual">
+        <!-- subtle wave pattern background -->
+        <svg class="about-visual-bg" viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 80 Q100 40 200 80 T400 80V320H0Z" fill="white"/>
+          <path d="M0 140 Q100 100 200 140 T400 140V320H0Z" fill="white"/>
+          <path d="M0 200 Q100 160 200 200 T400 200V320H0Z" fill="white"/>
+        </svg>
+        <div class="about-icon-wrap">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <!-- Simple car silhouette -->
+            <rect x="6" y="30" width="52" height="16" rx="4"/>
+            <path d="M14 30 L20 18 H44 L50 30Z"/>
+            <circle cx="17" cy="46" r="5"/>
+            <circle cx="47" cy="46" r="5"/>
+            <rect x="22" y="20" width="20" height="10" rx="2" fill="rgba(0,0,0,0.3)"/>
+          </svg>
+          <p>Self Service Car Wash</p>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <div class="section-tag">About Us</div>
+        <h2 class="section-title">Clean Cars,<br>Your Way</h2>
+        <p>Brighton Beach Car Wash offers residents and commuters throughout the Gainesville area a convenient self service facility designed to put the control in your hands. With easy-to-use bays and on-site equipment, you can give your vehicle the thorough wash it deserves on your own schedule.</p>
+        <p>We are conveniently located on NW US Hwy 441, making us an easy stop whether you're heading into town or out toward the county. Our bays are kept clean and well-maintained so you always have the tools you need for a great result.</p>
+        <p>Whether you're cleaning off everyday road grime or giving your ride a full rinse-and-shine treatment, Brighton Beach Car Wash keeps it simple and affordable. Contact us for current bay availability and pricing details.</p>
+
+        <div class="about-highlights">
+          <div class="highlight-chip">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            Self Service Bays
+          </div>
+          <div class="highlight-chip">
+            <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            Convenient Location
+          </div>
+          <div class="highlight-chip">
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+            4.1-Star Rating
+          </div>
+          <div class="highlight-chip">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            NW US Hwy 441
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="services" id="services">
+  <div class="section-inner">
+    <div class="section-tag">What We Offer</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Everything you need to keep your vehicle looking its best — contact us for current pricing and bay availability.</p>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- High-pressure rinse icon -->
+          <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 01-.67-.01C7.5 20.5 4 18 4 13V6l8-3 8 3v7z"/></svg>
+        </div>
+        <h3>High-Pressure Wash</h3>
+        <p>Powerful spray removes road dirt, mud, and grime from your vehicle's body, wheels, and undercarriage.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M7 16c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1H3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h4zm7 0c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h4zm7 0c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h4zm-14-7c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1H3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h4zm7 0c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h4zm7 0c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h4zm-14-7c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1H3c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h4zm7 0c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h4zm7 0c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h4z"/></svg>
+        </div>
+        <h3>Foam Brush Scrub</h3>
+        <p>Self service foam brush lets you scrub every panel and surface by hand for a thorough, hands-on clean.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3.19l7 3.11V11c0 4.52-2.98 8.69-7 9.93C7.98 19.69 5 15.52 5 11V6.3l7-3.11M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <h3>Pre-Soak Rinse</h3>
+        <p>Loosen tough dirt and road film with a pre-soak application before your main wash cycle.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        </div>
+        <h3>Spot-Free Final Rinse</h3>
+        <p>A spot-free rinse cycle minimizes water marks and leaves your vehicle with a streak-free shine.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+        </div>
+        <h3>Tire & Wheel Cleaner</h3>
+        <p>Dedicated tire and wheel cleaning spray cuts through brake dust and road buildup for like-new wheels.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+        </div>
+        <h3>Vehicle Wax &amp; Protectant</h3>
+        <p>Apply a protective wax coating to shield your paint from UV rays, rain, and environmental contaminants.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div class="section-inner">
+    <div class="section-tag">Find Us</div>
+    <h2 class="section-title">Visit Brighton Beach Car Wash</h2>
+    <p class="section-sub">Conveniently located on NW US Hwy 441 in Gainesville. Give us a call or stop by anytime — contact us for current hours and details.</p>
+
+    <div class="contact-grid">
+
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div class="contact-card-body">
+            <h4>Address</h4>
+            <p>11202 NW US Hwy 441<br>Gainesville, FL</p>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </div>
+          <div class="contact-card-body">
+            <h4>Phone</h4>
+            <a href="tel:+13522625980">(352) 262-5980</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          </div>
+          <div class="contact-card-body">
+            <h4>Hours</h4>
+            <p>Contact us for current hours</p>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/search/Brighton%20Beach%20Car%20Wash%2011202%20NW%20US%20Hwy%20441" target="_blank" rel="noopener noreferrer" class="directions-btn">
+          <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a.996.996 0 00-1.41 0l-9 9a.996.996 0 000 1.41l9 9c.39.39 1.02.39 1.41 0l9-9a.996.996 0 000-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+          Get Directions on Google Maps
+        </a>
+      </div>
+
+      <!-- Rating + CTA -->
+      <div>
+        <div class="rating-wrap">
+          <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+          <div class="rating-score">4.1</div>
+          <div class="rating-label">out of 5 stars</div>
+          <div class="rating-source">Based on Google Maps Reviews</div>
+        </div>
+
+        <div style="margin-top: 28px; background: var(--foam); border: 1px solid var(--sky-light); border-radius: var(--radius); padding: 26px;">
+          <h3 style="color: var(--ocean); font-size: 1.05rem; margin-bottom: 10px;">Questions?</h3>
+          <p style="color: var(--text-muted); font-size: 0.93rem; margin-bottom: 16px;">Call us at <a href="tel:+13522625980" style="color: var(--sky-dark); font-weight: 700;">(352) 262-5980</a> for pricing, bay availability, and any other details about our self service facility.</p>
+          <a href="tel:+13522625980" class="directions-btn" style="background: var(--sky); color: var(--white); box-shadow: 0 4px 14px rgba(27,143,194,0.35);">
+            <svg viewBox="0 0 24 24" style="fill: white;"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            Call (352) 262-5980
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p><strong>Brighton Beach Car Wash</strong></p>
+  <p>11202 NW US Hwy 441 &mdash; Gainesville, FL</p>
+  <p><a href="tel:+13522625980">(352) 262-5980</a></p>
+  <div class="footer-divider"></div>
+  <p style="font-size: 0.8rem;">&copy; 2026 Brighton Beach Car Wash. All rights reserved.</p>
+</footer>
+
+<script>
+  // Mobile hamburger toggle
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+
+  // Close nav on link click (mobile)
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grow-N-Grace Farms | Fresh Produce Market – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #3a5a2b;
+      --green-mid:    #5a8c3e;
+      --green-light:  #8cb87a;
+      --cream:        #f7f3ea;
+      --warm-white:   #fffdf7;
+      --earth:        #c27d3a;
+      --earth-light:  #e8a85c;
+      --text-dark:    #1e2d14;
+      --text-mid:     #3d4e30;
+      --text-muted:   #6b7c60;
+      --border:       #d4e0c4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--warm-white);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--cream);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green-light);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-family: Arial, sans-serif;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      background:
+        linear-gradient(to bottom, rgba(30,45,20,0.62) 0%, rgba(30,45,20,0.38) 60%, rgba(30,45,20,0.72) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%234a7a30'/%3E%3Ccircle cx='100' cy='120' r='80' fill='%23386025' opacity='0.6'/%3E%3Ccircle cx='300' cy='200' r='120' fill='%23509535' opacity='0.5'/%3E%3Ccircle cx='600' cy='100' r='100' fill='%23386025' opacity='0.55'/%3E%3Ccircle cx='700' cy='350' r='90' fill='%23509535' opacity='0.4'/%3E%3Ccircle cx='200' cy='450' r='110' fill='%23386025' opacity='0.5'/%3E%3Ccircle cx='500' cy='500' r='130' fill='%23509535' opacity='0.45'/%3E%3Cellipse cx='400' cy='580' rx='200' ry='60' fill='%23c27d3a' opacity='0.3'/%3E%3C/svg%3E") center/cover no-repeat;
+    }
+
+    .hero-inner { max-width: 720px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--earth);
+      color: #fff;
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--earth-light);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--cream);
+      margin-bottom: 2.2rem;
+      opacity: 0.92;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--earth);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: #a96825; transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.7);
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION WRAPPER ── */
+    section { padding: 5rem 2rem; }
+
+    .container { max-width: 1060px; margin: 0 auto; }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--earth);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: var(--earth);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-illustration {
+      display: flex;
+      justify-content: center;
+    }
+
+    .about-illustration svg {
+      width: 100%;
+      max-width: 340px;
+      height: auto;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--warm-white);
+    }
+
+    .services-intro {
+      max-width: 600px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.6rem;
+      margin-top: 2.5rem;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem 1.6rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(58,90,43,0.12);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--green-dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .service-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--cream);
+    }
+
+    .service-card h3 {
+      color: var(--green-dark);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--green-dark);
+    }
+
+    #contact .section-label { color: var(--earth-light); }
+    #contact .section-title { color: var(--cream); }
+    #contact .divider { background: var(--earth-light); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info { color: var(--cream); }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .contact-detail-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .contact-detail-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--earth-light);
+    }
+
+    .contact-detail-body p {
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail-body a,
+    .contact-detail-body address {
+      color: var(--cream);
+      font-style: normal;
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    .contact-detail-body a:hover { text-decoration: underline; }
+
+    .rating-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 1.4rem 1.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.4rem;
+    }
+
+    .stars svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--earth-light);
+    }
+
+    .rating-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      color: var(--green-light);
+      margin-top: 0.3rem;
+    }
+
+    .contact-action { display: flex; flex-direction: column; gap: 1rem; }
+
+    .contact-action .btn-primary { text-align: center; }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--earth);
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .directions-btn:hover { background: #a96825; transform: translateY(-2px); }
+
+    .directions-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      flex-shrink: 0;
+    }
+
+    .call-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--cream);
+      border: 2px solid rgba(255,255,255,0.4);
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+
+    .call-btn:hover {
+      border-color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    .call-btn svg { width: 18px; height: 18px; fill: var(--earth-light); }
+
+    .hours-note {
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      color: var(--green-light);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1a2a10;
+      padding: 2rem;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--green-light); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--green-dark); padding: 1rem 2rem 1.5rem; gap: 1rem; }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: flex; }
+
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+      .about-illustration { order: -1; }
+
+      section { padding: 3.5rem 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2rem; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-outline { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#home" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="19" fill="#5a8c3e" stroke="#8cb87a" stroke-width="1.5"/>
+        <!-- Stem -->
+        <rect x="19" y="18" width="2" height="12" fill="#3a5a2b" rx="1"/>
+        <!-- Leaves -->
+        <ellipse cx="14" cy="16" rx="6" ry="3" fill="#8cb87a" transform="rotate(-30 14 16)"/>
+        <ellipse cx="26" cy="14" rx="6" ry="3" fill="#6aa057" transform="rotate(30 26 14)"/>
+        <!-- Top leaf -->
+        <ellipse cx="20" cy="10" rx="4" ry="7" fill="#8cb87a"/>
+        <!-- Ground line -->
+        <ellipse cx="20" cy="30" rx="8" ry="2" fill="#c27d3a" opacity="0.6"/>
+      </svg>
+      <div class="nav-logo-text">
+        Grow-N-Grace Farms
+        <span>Fresh Produce Market</span>
+      </div>
+    </a>
+
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Offer</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="hero-badge">Gainesville, FL Local Farm Market</div>
+      <h1>Fresh From the Farm,<br><em>Straight to Your Table</em></h1>
+      <p class="hero-tagline">
+        Grow-N-Grace Farms brings the goodness of locally grown produce to the Gainesville community — wholesome, fresh, and rooted in care.
+      </p>
+      <div class="hero-ctas">
+        <a href="#services" class="btn-primary">See What We Offer</a>
+        <a href="#contact" class="btn-outline">Visit Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Growing Goodness in North Florida</h2>
+          <div class="divider"></div>
+          <p>
+            Grow-N-Grace Farms is a community-focused produce market in Gainesville, FL, committed to bringing fresh, quality fruits and vegetables to local families. We source our offerings with care, prioritizing freshness and the natural abundance that North Florida's growing seasons make possible.
+          </p>
+          <p>
+            Whether you're stocking up for the week or discovering something new from the harvest, our market aims to make fresh, wholesome produce accessible to everyone in the Gainesville area.
+          </p>
+          <p>
+            We believe good food starts with good growing — and we're proud to be a trusted neighborhood stop for residents who value fresh, local ingredients. Contact us for details on current availability and seasonal offerings.
+          </p>
+        </div>
+        <div class="about-illustration">
+          <svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ground -->
+            <ellipse cx="160" cy="270" rx="140" ry="22" fill="#c27d3a" opacity="0.25"/>
+            <!-- Basket -->
+            <path d="M80 220 Q80 260 160 265 Q240 260 240 220 L230 180 Q160 190 90 180 Z" fill="#e8a85c" opacity="0.85"/>
+            <path d="M90 180 Q160 168 230 180" stroke="#c27d3a" stroke-width="2.5" fill="none"/>
+            <!-- Basket weave lines -->
+            <path d="M100 185 Q160 174 220 185" stroke="#c27d3a" stroke-width="1" fill="none" opacity="0.5"/>
+            <path d="M93 200 Q160 189 227 200" stroke="#c27d3a" stroke-width="1" fill="none" opacity="0.5"/>
+            <path d="M88 215 Q160 204 232 215" stroke="#c27d3a" stroke-width="1" fill="none" opacity="0.5"/>
+            <!-- Handle -->
+            <path d="M100 178 Q100 140 160 138 Q220 140 220 178" stroke="#c27d3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <!-- Tomato -->
+            <circle cx="130" cy="175" r="26" fill="#e74c3c"/>
+            <ellipse cx="130" cy="150" rx="8" ry="5" fill="#5a8c3e"/>
+            <rect x="129" y="145" width="2" height="10" fill="#3a5a2b" rx="1"/>
+            <!-- Corn -->
+            <rect x="165" y="140" width="18" height="50" rx="6" fill="#f0d060"/>
+            <rect x="165" y="140" width="18" height="50" rx="6" fill="none" stroke="#c8a820" stroke-width="1.5"/>
+            <path d="M157 140 Q165 120 183 115" stroke="#5a8c3e" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M183 140 Q191 118 200 120" stroke="#5a8c3e" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- Leafy greens -->
+            <ellipse cx="100" cy="165" rx="22" ry="12" fill="#5a8c3e" transform="rotate(-20 100 165)"/>
+            <ellipse cx="115" cy="158" rx="18" ry="10" fill="#8cb87a" transform="rotate(10 115 158)"/>
+            <!-- Orange -->
+            <circle cx="200" cy="185" r="22" fill="#e8a840"/>
+            <!-- Small green accent -->
+            <circle cx="215" cy="168" r="5" fill="#5a8c3e"/>
+            <!-- Carrot peeking -->
+            <path d="M148 168 L152 200" stroke="#e8702a" stroke-width="7" stroke-linecap="round"/>
+            <path d="M148 168 Q142 160 150 155" stroke="#5a8c3e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-intro">
+        <p class="section-label">What We Offer</p>
+        <h2 class="section-title">Fresh Selections at the Market</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Leaf icon -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 8C8 10 5.9 16.17 3.82 22H5.71C6.66 19.41 8.08 17.15 10 15.55C10.44 18.27 12 20.73 14 22H15.4C16.08 20 17 14.64 17 8Z"/></svg>
+          </div>
+          <h3>Fresh Seasonal Vegetables</h3>
+          <p>A rotating selection of in-season vegetables sourced for peak freshness and flavor. Availability varies with the growing season.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Apple/fruit icon -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10C20 16 12 22 12 22C12 22 4 16 4 10C4 6.13 7.58 3 12 3C16.42 3 20 6.13 20 10ZM12 1C11 1 10 2 10 3C10.5 3 11 3.5 12 3.5C13 3.5 13.5 3 14 3C14 2 13 1 12 1Z"/></svg>
+          </div>
+          <h3>Fresh Fruits</h3>
+          <p>Locally available fruits and tropical varieties that thrive in North Florida's climate, offered while supplies last.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Basket/shopping icon -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 2C4.67 2 4 2.67 4 3.5V5H2V7H4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V7H22V5H20V3.5C20 2.67 19.33 2 18.5 2H5.5ZM6 5H18V7H6V5ZM6 9H18V20H6V9ZM9 11V18H11V11H9ZM13 11V18H15V11H13Z"/></svg>
+          </div>
+          <h3>Market Stand Retail</h3>
+          <p>Browse and select from our market display. Contact us for current inventory and what's fresh this week.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Herb/plant icon -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22V12M12 12C12 12 6 10 6 4C6 4 9 6 12 6C15 6 18 4 18 4C18 10 12 12 12 12ZM12 12C12 12 10 14 8 16M12 12C12 12 14 14 16 16"/></svg>
+          </div>
+          <h3>Fresh Herbs &amp; Greens</h3>
+          <p>Fresh-cut herbs and leafy greens to complement your home cooking. Selection changes based on seasonal availability.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Box/bulk icon -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5ZM12 4.15L6.04 7.5L12 10.85L17.96 7.5L12 4.15ZM5 15.91L11 19.29V12.58L5 9.21V15.91ZM19 15.91V9.21L13 12.58V19.29L19 15.91Z"/></svg>
+          </div>
+          <h3>Bulk &amp; Case Quantities</h3>
+          <p>Looking to stock up for your household, restaurant, or event? Contact us for details on bulk purchasing options.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Community/handshake icon -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 14H9C9 11.33 10.33 9 13 9H17V11H13C11.9 11 11 11.9 11 14ZM15 9H19V11H15V9ZM9 17V15H15V17H9ZM13 22C10.24 22 7.82 20.53 6.46 18.34L8.26 17.43C9.19 19.07 10.97 20.17 13 20.17C16.4 20.17 19.17 17.4 19.17 14C19.17 10.6 16.4 7.83 13 7.83C9.6 7.83 6.83 10.6 6.83 14H8.83L6.17 17.33L3.5 14H5.5C5.5 9.53 9.09 5.94 13.56 6.01C18 6.08 21.5 9.62 21.5 14.07C21.5 18.53 17.9 22 13 22Z"/></svg>
+          </div>
+          <h3>Local Community Sales</h3>
+          <p>We're rooted in the Gainesville community and support local access to nutritious, fresh food. Visit us or call to learn more.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Come Visit the Farm Market</h2>
+      <div class="divider"></div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <p>Address</p>
+              <address>919 NW 31st Ave<br>Gainesville, FL 32609</address>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <p>Phone</p>
+              <a href="tel:+13525142752">(352) 514-2752</a>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.99 2C6.47 2 2 6.48 2 12C2 17.52 6.47 22 11.99 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 11.99 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20ZM12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <p>Hours</p>
+              <span style="color:var(--cream); font-size:1rem;">Contact us for current hours</span>
+            </div>
+          </div>
+
+          <div class="rating-box">
+            <div class="stars">
+              <!-- 4 full stars -->
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"/></svg>
+              <!-- Half star -->
+              <svg viewBox="0 0 24 24"><path d="M22 9.24L14.81 8.62L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27L18.18 21L16.54 13.97L22 9.24ZM12 15.4V6.1L13.71 10.14L18.09 10.52L14.77 13.39L15.76 17.67L12 15.4Z" opacity="0.5"/><path d="M12 15.4L5.82 21L7.46 13.97L2 9.24L9.19 8.63L12 2V15.4Z"/></svg>
+            </div>
+            <div class="rating-number">4.3</div>
+            <div class="rating-count">Rated 4.3 out of 5 &mdash; 6 Google reviews</div>
+          </div>
+        </div>
+
+        <div class="contact-action">
+          <p style="color:var(--cream); font-size:1.05rem; margin-bottom:0.5rem;">
+            We'd love to see you at the market. Use the button below for turn-by-turn directions, or give us a call to ask about today's fresh selections.
+          </p>
+          <p class="hours-note">Hours and availability may vary — please call ahead.</p>
+
+          <a
+            href="https://www.google.com/maps/search/Grow-N-Grace%20Farms%20919%20NW%2031st%20Ave%2C%20Gainesville%2C%20FL%2032609"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.71 11.29L12.71 2.29C12.32 1.9 11.69 1.9 11.3 2.29L2.3 11.29C1.91 11.68 1.91 12.31 2.3 12.7L11.3 21.7C11.69 22.09 12.32 22.09 12.71 21.7L21.71 12.7C22.1 12.32 22.1 11.68 21.71 11.29ZM14 14.5V12H10V15H8V11C8 10.45 8.45 10 9 10H14V7.5L17.5 11L14 14.5Z"/></svg>
+            Get Directions on Google Maps
+          </a>
+
+          <a href="tel:+13525142752" class="call-btn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z"/></svg>
+            Call (352) 514-2752
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p style="margin-bottom:0.4rem;">
+      <strong style="color:#b0c8a0;">Grow-N-Grace Farms</strong> &mdash; Fresh Produce Market
+    </p>
+    <p>919 NW 31st Ave, Gainesville, FL 32609 &nbsp;|&nbsp; <a href="tel:+13525142752">(352) 514-2752</a></p>
+    <p style="margin-top:0.8rem; opacity:0.55;">&copy; 2026 Grow-N-Grace Farms. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle accessible by keyboard too
+    document.querySelector('.nav-toggle').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.nextElementSibling.classList.toggle('open');
+      }
+    });
+
+    // Close nav when a link is clicked on mobile
+    document.querySelectorAll('.nav-links a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

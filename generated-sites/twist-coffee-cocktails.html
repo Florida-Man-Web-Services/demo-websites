@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twist Coffee &amp; Cocktails | Gainesville, FL</title>
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #f5f0e8;
+      --warm-white: #fdfaf4;
+      --espresso:   #2c1a0e;
+      --dark-roast: #3d2512;
+      --mocha:      #6b3a2a;
+      --caramel:    #c4813a;
+      --gold:       #d4a24c;
+      --sage:       #7a8c6e;
+      --text-dark:  #1e120a;
+      --text-mid:   #4a3226;
+      --text-light: #8c6f58;
+      --radius:     8px;
+      --shadow:     0 4px 24px rgba(44,26,14,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--warm-white);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(44, 26, 14, 0.96);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      background: var(--caramel);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--warm-white);
+      font-weight: bold;
+      flex-shrink: 0;
+      letter-spacing: -1px;
+    }
+
+    .nav-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(245,240,232,0.8);
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--caramel);
+      color: var(--warm-white) !important;
+      padding: 0.4rem 1.1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--gold) !important; color: var(--espresso) !important; }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--espresso) 0%, var(--dark-roast) 40%, #4e2a18 80%, #3a200f 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative circles */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,129,58,0.15);
+      top: -100px; right: -150px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,129,58,0.1);
+      bottom: -80px; left: -80px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(196,129,58,0.2);
+      border: 1px solid rgba(196,129,58,0.5);
+      color: var(--gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      margin-bottom: 1.8rem;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 7vw, 5.2rem);
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+      max-width: 800px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: rgba(245,240,232,0.72);
+      max-width: 520px;
+      margin-bottom: 2.8rem;
+      font-style: italic;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border-radius: var(--radius);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-primary {
+      background: var(--caramel);
+      color: var(--warm-white);
+      border: 2px solid var(--caramel);
+    }
+    .btn-primary:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--espresso);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(196,129,58,0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--cream);
+      border: 2px solid rgba(245,240,232,0.4);
+    }
+    .btn-outline:hover {
+      border-color: var(--cream);
+      background: rgba(245,240,232,0.08);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(245,240,232,0.45);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .hero-scroll::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(245,240,232,0.4), transparent);
+    }
+
+    /* ─── Section shared ─── */
+    section { padding: 90px 5%; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      font-family: 'Arial', sans-serif;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--espresso);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      max-width: 580px;
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+
+    /* ─── About ─── */
+    .about {
+      background: var(--cream);
+    }
+
+    .about-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--espresso);
+      border-radius: 16px;
+      padding: 3rem;
+      color: var(--cream);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .about-card-icon {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .about-card h3 {
+      font-size: 1.5rem;
+      color: var(--gold);
+    }
+
+    .about-card p {
+      font-size: 0.95rem;
+      color: rgba(245,240,232,0.8);
+      line-height: 1.75;
+    }
+
+    .about-accent {
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      background: var(--caramel);
+      border-radius: 50%;
+      opacity: 0.3;
+    }
+
+    .about-text { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(44,26,14,0.12);
+    }
+
+    .stat { display: flex; flex-direction: column; gap: 2px; }
+
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--caramel);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* ─── Services ─── */
+    .services {
+      background: var(--warm-white);
+    }
+
+    .services-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    .services-header { text-align: center; margin-bottom: 3.5rem; }
+    .services-header .section-subtitle { margin: 0 auto 0; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 2.2rem 1.8rem;
+      border: 1px solid rgba(44,26,14,0.07);
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--caramel), var(--gold));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--espresso);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* ─── Contact ─── */
+    .contact {
+      background: var(--espresso);
+      color: var(--cream);
+    }
+
+    .contact-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: start;
+    }
+
+    .contact .section-label { color: var(--gold); }
+    .contact .section-title { color: var(--cream); margin-bottom: 0.6rem; }
+
+    .contact-intro {
+      font-size: 0.98rem;
+      color: rgba(245,240,232,0.65);
+      margin-bottom: 2.4rem;
+      font-style: italic;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 1.4rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-item-icon {
+      width: 44px; height: 44px;
+      background: rgba(196,129,58,0.18);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-body { display: flex; flex-direction: column; gap: 2px; }
+
+    .contact-item-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      font-family: 'Arial', sans-serif;
+    }
+
+    .contact-item-value {
+      font-size: 1rem;
+      color: var(--cream);
+    }
+
+    .contact-item-value a {
+      color: var(--cream);
+      text-decoration: underline;
+      text-decoration-color: rgba(245,240,232,0.3);
+      transition: color 0.2s;
+    }
+    .contact-item-value a:hover { color: var(--gold); }
+
+    /* rating card */
+    .rating-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(196,129,58,0.3);
+      border-radius: 14px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .rating-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      font-family: 'Arial', sans-serif;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 1.3rem;
+    }
+
+    .rating-score {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-size: 0.88rem;
+      color: rgba(245,240,232,0.55);
+    }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(196,129,58,0.2);
+      border: 1px solid rgba(196,129,58,0.4);
+      color: var(--gold);
+      font-size: 0.78rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 50px;
+      width: fit-content;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.05em;
+    }
+
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--caramel);
+      color: var(--warm-white);
+      padding: 0.9rem 1.8rem;
+      border-radius: var(--radius);
+      font-size: 0.92rem;
+      font-weight: 600;
+      border: 2px solid var(--caramel);
+      transition: all 0.22s;
+      font-family: 'Arial', sans-serif;
+      cursor: pointer;
+    }
+    .directions-btn:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--espresso);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(196,129,58,0.35);
+    }
+
+    .map-placeholder {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(196,129,58,0.2);
+      border-radius: 14px;
+      padding: 2.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .map-placeholder .map-icon { font-size: 2.4rem; }
+
+    .map-placeholder p {
+      font-size: 0.95rem;
+      color: rgba(245,240,232,0.6);
+    }
+
+    .map-placeholder strong { color: var(--cream); }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--text-dark);
+      color: rgba(245,240,232,0.55);
+      text-align: center;
+      padding: 2.2rem 5%;
+    }
+
+    .footer-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .footer-name {
+      font-size: 1.1rem;
+      color: var(--cream);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-address { font-size: 0.88rem; }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      margin-top: 0.4rem;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-accent { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 4%; }
+
+      .nav-links { display: none; flex-direction: column; gap: 0; }
+      .nav-links.open {
+        display: flex;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: var(--espresso);
+        padding: 1rem 0 1.5rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      }
+      .nav-links.open li { padding: 0; }
+      .nav-links.open a {
+        display: block;
+        padding: 0.75rem 5%;
+        font-size: 1rem;
+      }
+      .nav-links.open .nav-cta {
+        margin: 0.5rem 5% 0;
+        text-align: center;
+        display: block;
+        border-radius: var(--radius);
+        padding: 0.65rem 1.1rem;
+      }
+
+      .nav-toggle { display: flex; }
+
+      .services-grid { grid-template-columns: 1fr; }
+
+      .about-stats { flex-wrap: wrap; gap: 1.5rem; }
+
+      .hero { padding: 90px 5% 60px; }
+
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .hero-buttons .btn { width: 100%; max-width: 300px; text-align: center; }
+
+      section { padding: 64px 5%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Nav ─── -->
+  <nav id="main-nav">
+    <div class="nav-brand">
+      <div class="nav-logo">T&amp;C</div>
+      <span class="nav-name">Twist Coffee &amp; Cocktails</span>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Offerings</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="nav-cta">Visit Us</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ─── Hero ─── -->
+  <section class="hero" id="home">
+    <span class="hero-badge">Gainesville, FL</span>
+    <h1>Where Every Sip<br>Has a <span>Twist</span></h1>
+    <p class="hero-tagline">
+      From morning espresso to evening craft cocktails — your all-day destination on University Ave.
+    </p>
+    <div class="hero-buttons">
+      <a href="#services" class="btn btn-primary">See What We Offer</a>
+      <a href="#contact" class="btn btn-outline">Find Us</a>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- ─── About ─── -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-accent"></div>
+        <div class="about-card">
+          <span class="about-card-icon">&#9749;</span>
+          <h3>Coffee &amp; Cocktails, One Roof</h3>
+          <p>
+            A rare spot where the ritual of a perfectly pulled espresso and the art of a hand-crafted cocktail share the same comfortable space — morning through night.
+          </p>
+        </div>
+      </div>
+      <div class="about-text">
+        <span class="section-label">Our Story</span>
+        <h2 class="section-title">A Little Cafe with a Lot of Character</h2>
+        <p>
+          Nestled in the heart of Gainesville's University District, Twist Coffee &amp; Cocktails is a neighborhood hangout that takes both coffee and cocktail culture seriously. Whether you need a quiet corner to work in the morning or a welcoming atmosphere to unwind in the evening, we have something crafted just for you.
+        </p>
+        <p>
+          We source quality beans and spirits to deliver drinks that go beyond the expected — always with care, always with a twist. It's the kind of place where locals linger and newcomers quickly feel at home.
+        </p>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-num">5.0</span>
+            <span class="stat-label">Google Rating</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">413</span>
+            <span class="stat-label">W University Ave</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">2-in-1</span>
+            <span class="stat-label">Cafe &amp; Bar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Services ─── -->
+  <section class="services" id="services">
+    <div class="services-inner">
+      <div class="services-header">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">Our Offerings</h2>
+        <p class="section-subtitle">From your first cup of the day to a nightcap worth savoring — contact us for seasonal details.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#9749;</span>
+          <h3>Specialty Coffee</h3>
+          <p>Espresso drinks, pour-overs, cold brew, and seasonal lattes crafted with quality beans and a careful hand.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127864;</span>
+          <h3>Craft Cocktails</h3>
+          <p>Inventive, thoughtfully made cocktails — classics done right alongside creative house originals. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127848;</span>
+          <h3>Non-Alcoholic Drinks</h3>
+          <p>Mocktails, herbal teas, fresh-made sodas, and other creative zero-proof options for every preference.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127829;</span>
+          <h3>Light Bites &amp; Snacks</h3>
+          <p>Pastries, small plates, and cafe fare to complement your drink — perfect for a quick bite or a leisurely afternoon.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128218;</span>
+          <h3>Study &amp; Work Space</h3>
+          <p>A relaxed, welcoming atmosphere with comfortable seating — ideal for students, remote workers, and anyone who needs a good vibe to get things done.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127881;</span>
+          <h3>Private Events</h3>
+          <p>Hosting a gathering? We welcome inquiries for private bookings and special event arrangements. Contact us for details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Contact ─── -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div>
+        <span class="section-label">Get In Touch</span>
+        <h2 class="section-title">Visit Us</h2>
+        <p class="contact-intro">We'd love to see you. Stop by, give us a call, or get directions below.</p>
+
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-body">
+              <span class="contact-item-label">Address</span>
+              <span class="contact-item-value">413 W University Ave<br>Gainesville, FL 32601</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div class="contact-item-body">
+              <span class="contact-item-label">Phone</span>
+              <span class="contact-item-value"><a href="tel:+13523761224">(352) 376-1224</a></span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-body">
+              <span class="contact-item-label">Hours</span>
+              <span class="contact-item-value">Contact us for current hours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-right">
+        <!-- Rating card -->
+        <div class="rating-card">
+          <span class="rating-label">Google Maps Rating</span>
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+            <span class="rating-score">5.0</span>
+            <div>
+              <div class="rating-stars">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+              </div>
+              <span class="rating-count">Based on 19 reviews</span>
+            </div>
+          </div>
+          <span class="rating-badge">&#10003;&nbsp; Highly rated on Google</span>
+        </div>
+
+        <!-- Directions -->
+        <div class="map-placeholder">
+          <span class="map-icon">&#127968;</span>
+          <p><strong>413 W University Ave</strong><br>Gainesville, FL 32601</p>
+          <a
+            href="https://www.google.com/maps/search/Twist%20Coffee%20%26%20Cocktails%20413%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >
+            &#128506;&nbsp; Get Directions
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Twist Coffee &amp; Cocktails</span>
+      <span class="footer-address">413 W University Ave, Gainesville, FL 32601 &bull; (352) 376-1224</span>
+      <span class="footer-copy">&copy; 2026 Twist Coffee &amp; Cocktails. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('nav-toggle');
+    const links  = document.getElementById('nav-links');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+    // Close on link click
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => links.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

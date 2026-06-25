@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Corner Store | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --red: #c0392b;
+      --red-dark: #96281b;
+      --cream: #fdf6ec;
+      --warm-white: #fffdf9;
+      --tan: #e8d5b7;
+      --brown: #7a5c3a;
+      --dark-brown: #3e2c1a;
+      --text: #2d1f0e;
+      --text-light: #6b5040;
+      --accent: #e67e22;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--text);
+      background-color: var(--warm-white);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: var(--dark-brown);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background-color: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--cream);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--tan);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--cream);
+      border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background-color: var(--dark-brown);
+      background-image:
+        radial-gradient(ellipse at 20% 60%, rgba(192,57,43,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 30%, rgba(230,126,34,0.12) 0%, transparent 55%);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 39px,
+        rgba(255,255,255,0.025) 39px,
+        rgba(255,255,255,0.025) 40px
+      ), repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 39px,
+        rgba(255,255,255,0.025) 39px,
+        rgba(255,255,255,0.025) 40px
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background-color: var(--red);
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 3px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .hero p {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      color: var(--tan);
+      margin-bottom: 2.2rem;
+      font-style: italic;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background-color: var(--red);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background-color 0.2s, transform 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+
+    .hero-cta:hover {
+      background-color: var(--red-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.7rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      color: var(--dark-brown);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background-color: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-light);
+      font-size: 1.05rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      background-color: var(--dark-brown);
+      border-radius: 8px;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .about-stat {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .about-stat-icon {
+      width: 42px;
+      height: 42px;
+      background-color: var(--red);
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .about-stat-body h4 {
+      color: var(--cream);
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .about-stat-body p {
+      color: var(--tan);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      background-color: var(--warm-white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background-color: var(--cream);
+      border: 1px solid var(--tan);
+      border-radius: 8px;
+      padding: 2rem 1.6rem;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+
+    .service-card-icon {
+      width: 50px;
+      height: 50px;
+      background-color: var(--dark-brown);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--dark-brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-light);
+      line-height: 1.55;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background-color: var(--dark-brown);
+      background-image: radial-gradient(ellipse at 75% 50%, rgba(192,57,43,0.15) 0%, transparent 60%);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact .section-label {
+      color: var(--accent);
+    }
+
+    .contact .section-title {
+      color: var(--cream);
+    }
+
+    .contact-intro {
+      color: var(--tan);
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .contact-item-icon {
+      width: 42px;
+      height: 42px;
+      background-color: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .contact-item-body p {
+      font-family: 'Arial', sans-serif;
+      color: var(--tan);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .contact-item-body strong {
+      display: block;
+      color: var(--cream);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--red);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 1.6rem;
+      transition: background-color 0.2s;
+    }
+
+    .directions-btn:hover {
+      background-color: var(--red-dark);
+    }
+
+    .rating-card {
+      background-color: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .star {
+      color: #f1c40f;
+      font-size: 1.6rem;
+    }
+
+    .rating-number {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .rating-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--tan);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(232,213,183,0.6);
+    }
+
+    .rating-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin: 1.8rem 0;
+    }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: rgba(241,196,15,0.12);
+      border: 1px solid rgba(241,196,15,0.25);
+      border-radius: 50px;
+      padding: 0.45rem 1rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #f1c40f;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background-color: #1e1208;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-name {
+      color: var(--cream);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .footer-address {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      color: var(--tan);
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(232,213,183,0.4);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 0 1.2rem;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background-color: var(--dark-brown);
+        flex-direction: column;
+        padding: 1.2rem;
+        gap: 0;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      section {
+        padding: 3.5rem 1.2rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo" aria-label="The Corner Store">
+      <div class="nav-logo-icon">&#127978;</div>
+      <span class="nav-logo-text">The Corner Store</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-eyebrow">Gainesville, FL</span>
+      <h1>The Corner Store</h1>
+      <p>Your neighborhood go-to for everyday essentials, right around the corner.</p>
+      <a href="#contact" class="hero-cta">Find Us</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">A Neighborhood Staple on N Main St</h2>
+          <p>The Corner Store is a community convenience shop serving the residents and visitors of North Gainesville with a friendly, no-fuss shopping experience. Whether you need a quick snack, a household staple, or a cold drink, we keep the shelves stocked so you never have to go far.</p>
+          <p>Conveniently located at 1115 N Main St, we are a familiar stop for students, locals, and anyone passing through the neighborhood who needs something in a hurry.</p>
+          <p>We take pride in keeping a welcoming atmosphere where customers feel at home. Contact us for details on any specific product availability or services.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-stat">
+            <div class="about-stat-icon">&#128205;</div>
+            <div class="about-stat-body">
+              <h4>Convenient Location</h4>
+              <p>Right on N Main St, easy to find and quick to visit.</p>
+            </div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-icon">&#128722;</div>
+            <div class="about-stat-body">
+              <h4>Everyday Essentials</h4>
+              <p>Stocked with snacks, drinks, and household basics.</p>
+            </div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-icon">&#11088;</div>
+            <div class="about-stat-body">
+              <h4>Top-Rated</h4>
+              <p>Customers give us a perfect 5-star rating on Google Maps.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Everything You Need, Right Here</h2>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-card-icon">&#127829;</div>
+          <h3>Snacks &amp; Beverages</h3>
+          <p>A wide selection of chips, candy, cold drinks, energy drinks, water, and more — perfect for a quick pick-me-up.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-icon">&#127968;</div>
+          <h3>Household Basics</h3>
+          <p>Everyday items like paper products, cleaning supplies, and personal care essentials when you need them most.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-icon">&#9749;</div>
+          <h3>Hot &amp; Cold Drinks</h3>
+          <p>Coffee, fountain drinks, and chilled beverages to keep you refreshed and energized throughout the day.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-icon">&#128230;</div>
+          <h3>Tobacco &amp; Accessories</h3>
+          <p>A selection of tobacco products and related accessories available for adult customers. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-icon">&#128179;</div>
+          <h3>Lottery &amp; Money Services</h3>
+          <p>Lottery tickets and select money services available in-store. Contact us for details on current offerings.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-icon">&#128667;</div>
+          <h3>Grab-and-Go Items</h3>
+          <p>Prepackaged ready-to-eat foods and quick meal options for when you need something fast and satisfying.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div>
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-title">Come Visit Us</h2>
+          <p class="contact-intro">We are conveniently located in the heart of North Gainesville. Stop by anytime or get directions below.</p>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-body">
+              <strong>Address</strong>
+              <p>1115 N Main St<br>Gainesville, FL</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-body">
+              <strong>Hours</strong>
+              <p>Contact us for details</p>
+            </div>
+          </div>
+
+          <a
+            href="https://www.google.com/maps/search/The%20Corner%20Store%201115%20N%20Main%20St"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >
+            &#127759; Get Directions
+          </a>
+        </div>
+
+        <div class="rating-card">
+          <div class="rating-stars">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+          </div>
+          <div class="rating-number">5.0</div>
+          <div class="rating-label">Google Maps Rating</div>
+          <div class="rating-count">Based on 1 review</div>
+          <hr class="rating-divider" />
+          <div class="rating-badge">&#11088; Perfect Score</div>
+          <p style="font-family:Arial,sans-serif;font-size:0.82rem;color:rgba(232,213,183,0.7);margin-top:1.2rem;line-height:1.5;">
+            Our customers love us. Stop by and see what the experience is about.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">The Corner Store</div>
+      <div class="footer-address">1115 N Main St, Gainesville, FL</div>
+      <div class="footer-copy">&copy; 2026 The Corner Store. All rights reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>

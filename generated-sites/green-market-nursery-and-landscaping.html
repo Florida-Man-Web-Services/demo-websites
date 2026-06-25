@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Market Nursery and Landscaping – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark:   #2d5a27;
+      --green-mid:    #4a8c3f;
+      --green-light:  #7bbf6a;
+      --green-pale:   #e8f5e3;
+      --earth-dark:   #5c3d1e;
+      --earth-mid:    #8b6040;
+      --earth-light:  #c4a882;
+      --cream:        #faf7f2;
+      --white:        #ffffff;
+      --text-dark:    #1e2d1a;
+      --text-mid:     #4a5e45;
+      --text-light:   #6b7f66;
+      --shadow:       rgba(45, 90, 39, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: var(--green-dark);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--green-light);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      margin-top: 64px;
+      min-height: 88vh;
+      background:
+        linear-gradient(160deg, rgba(30,60,24,0.72) 0%, rgba(90,130,60,0.52) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%234a8c3f'/%3E%3Ccircle cx='150' cy='400' r='120' fill='%232d5a27' opacity='0.8'/%3E%3Ccircle cx='350' cy='350' r='90' fill='%237bbf6a' opacity='0.5'/%3E%3Ccircle cx='600' cy='420' r='140' fill='%232d5a27' opacity='0.7'/%3E%3Ccircle cx='500' cy='300' r='70' fill='%237bbf6a' opacity='0.4'/%3E%3Cellipse cx='700' cy='380' rx='100' ry='80' fill='%234a8c3f' opacity='0.6'/%3E%3Ccircle cx='50' cy='500' r='80' fill='%237bbf6a' opacity='0.3'/%3E%3Crect x='0' y='520' width='800' height='80' fill='%235c3d1e' opacity='0.5'/%3E%3C/svg%3E") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative leaf elements */
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: var(--cream);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(123, 191, 106, 0.3);
+      border: 1px solid rgba(123, 191, 106, 0.6);
+      color: var(--green-light);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--white);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .hero h1 span {
+      color: var(--green-light);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: rgba(255,255,255,0.9);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--green-mid);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 6px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 6px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border: 2px solid rgba(255,255,255,0.6);
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    /* ─── SECTION COMMONS ─── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.6rem;
+      font-weight: 700;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--green-dark);
+      margin-bottom: 1rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .section-divider {
+      width: 56px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--green-mid), var(--green-light));
+      border-radius: 4px;
+      margin-bottom: 2rem;
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--green-pale);
+      border-radius: 16px;
+      padding: 2.5rem;
+      border-left: 5px solid var(--green-mid);
+    }
+
+    .about-card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .about-card h3 {
+      font-size: 1.2rem;
+      color: var(--green-dark);
+      margin-bottom: 0.6rem;
+    }
+
+    .about-card p {
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .feature-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-mid);
+    }
+
+    .feature-chip::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: var(--green-mid);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── SERVICES ─── */
+    #services {
+      background: var(--cream);
+    }
+
+    .services-intro {
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 2rem 1.75rem;
+      box-shadow: 0 2px 16px var(--shadow);
+      transition: transform 0.25s, box-shadow 0.25s;
+      border-top: 4px solid var(--green-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green-mid), var(--earth-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 28px var(--shadow);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--green-dark);
+      margin-bottom: 0.6rem;
+      font-weight: 700;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: var(--green-dark);
+      color: var(--white);
+    }
+
+    #contact .section-label {
+      color: var(--green-light);
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    #contact .section-divider {
+      background: linear-gradient(90deg, var(--green-light), rgba(255,255,255,0.3));
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(123, 191, 106, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-body h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-body p,
+    .contact-item-body a {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+    }
+
+    .contact-item-body a:hover {
+      color: var(--green-light);
+    }
+
+    .rating-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .star {
+      color: #f5c842;
+      font-size: 1.3rem;
+    }
+
+    .star.half {
+      position: relative;
+      color: rgba(245,200,66,0.3);
+    }
+
+    .star.half::before {
+      content: '★';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #f5c842;
+      width: 50%;
+      overflow: hidden;
+    }
+
+    .rating-score {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-map {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--green-mid);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.9rem 1.75rem;
+      border-radius: 8px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+
+    .btn-map:hover {
+      background: var(--green-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: transparent;
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.9rem 1.75rem;
+      border-radius: 8px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border: 2px solid rgba(255,255,255,0.4);
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+
+    .btn-call:hover {
+      border-color: var(--green-light);
+      background: rgba(255,255,255,0.07);
+      transform: translateY(-2px);
+    }
+
+    .contact-map-placeholder {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .map-pin-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .contact-map-placeholder h3 {
+      font-size: 1.15rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-map-placeholder p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .contact-detail-note {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 1.5rem;
+      font-style: italic;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-address {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      margin-top: 1.2rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--green-dark);
+        flex-direction: column;
+        gap: 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-features {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+
+      .hero {
+        min-height: 75vh;
+      }
+
+      .contact-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-cta-group {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#home">
+        <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="18" cy="18" r="17" fill="#4a8c3f" stroke="#7bbf6a" stroke-width="1.5"/>
+          <!-- Leaf shape -->
+          <path d="M18 28 C18 28 10 22 10 15 C10 10 14 7 18 7 C22 7 26 10 26 15 C26 22 18 28 18 28Z" fill="#e8f5e3" opacity="0.9"/>
+          <path d="M18 7 L18 28" stroke="#4a8c3f" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M18 14 C15 12 12 13 11 15" stroke="#4a8c3f" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+          <path d="M18 19 C21 17 24 18 25 20" stroke="#4a8c3f" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+          <!-- Ground -->
+          <rect x="11" y="29" width="14" height="3" rx="1.5" fill="#8b6040"/>
+        </svg>
+        <span class="nav-logo-text">Green Market<br>Nursery &amp; Landscaping</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <span class="hero-badge">Gainesville, Florida</span>
+      <h1>Bringing <span>Nature</span> to Your Doorstep</h1>
+      <p class="hero-tagline">Quality plants, expert advice, and beautiful landscapes — right here in North Central Florida.</p>
+      <div class="hero-cta-group">
+        <a href="#services" class="btn-primary">Explore Our Services</a>
+        <a href="#contact" class="btn-outline">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Your Local Plant and Landscape Experts</h2>
+          <div class="section-divider"></div>
+          <p>Green Market Nursery and Landscaping is a full-service plant nursery and landscaping company serving the Gainesville community and surrounding areas of Alachua County. We carry a wide selection of Florida-friendly plants, trees, shrubs, and garden supplies suited to our region's unique climate.</p>
+          <p>Our knowledgeable team is passionate about helping homeowners and businesses create beautiful, thriving outdoor spaces. Whether you are looking for the perfect specimen plant, native Florida species, or a complete landscape transformation, we are here to help.</p>
+          <p>From our convenient location on NW 8th Ave, we are proud to be a trusted resource for gardeners and landscaping professionals throughout North Central Florida. Contact us for details on availability and services.</p>
+          <div class="about-features">
+            <span class="feature-chip">Florida-Friendly Plants</span>
+            <span class="feature-chip">Expert Guidance</span>
+            <span class="feature-chip">Native Species</span>
+            <span class="feature-chip">Landscape Design</span>
+            <span class="feature-chip">Quality Materials</span>
+            <span class="feature-chip">Local Expertise</span>
+          </div>
+        </div>
+        <div class="about-visual">
+          <div class="about-card">
+            <span class="about-card-icon">🌿</span>
+            <h3>Rooted in the Community</h3>
+            <p>We take pride in offering plants and landscaping solutions tailored to Gainesville's climate, soil, and lifestyle. Our selection is curated with North Central Florida gardeners in mind — from sun-loving tropicals to shade-tolerant ferns.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-intro">
+        <p class="section-label">What We Offer</p>
+        <h2 class="section-title">Plants, Products &amp; Professional Services</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">🌱</span>
+          <h3>Plant Nursery Sales</h3>
+          <p>Browse a broad selection of annuals, perennials, shrubs, trees, and tropicals. We stock plants suited to Florida's climate and regularly refresh our inventory. Contact us for availability.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🏡</span>
+          <h3>Landscape Design</h3>
+          <p>Transform your yard into a stunning outdoor retreat. Our team can help plan and design functional, beautiful landscapes for residential and commercial properties.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🌳</span>
+          <h3>Tree &amp; Shrub Installation</h3>
+          <p>Proper installation makes all the difference. We offer professional planting services for trees, shrubs, and specimen plants to ensure healthy establishment.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🌺</span>
+          <h3>Native &amp; Florida-Friendly Plants</h3>
+          <p>Support local ecosystems with native Florida species. We carry a selection of drought-tolerant and low-maintenance plants ideal for sustainable Florida landscaping.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🪴</span>
+          <h3>Garden Supplies &amp; Soil</h3>
+          <p>Find potting mixes, mulch, fertilizers, garden tools, and other supplies to keep your plants thriving. We carry products suited for Florida's unique growing conditions.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">✂️</span>
+          <h3>Landscape Maintenance</h3>
+          <p>Keep your outdoor spaces looking their best year-round. We offer ongoing landscape maintenance and care services for residential and commercial clients. Contact us for details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Visit Green Market Nursery</h2>
+      <div class="section-divider"></div>
+
+      <div class="contact-grid">
+        <div>
+          <div class="contact-info">
+
+            <div class="contact-item">
+              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-body">
+                <h4>Address</h4>
+                <p>5402 NW 8th Ave<br>Gainesville, FL</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">📞</div>
+              <div class="contact-item-body">
+                <h4>Phone</h4>
+                <a href="tel:+13864629641">(386) 462-9641</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">🕐</div>
+              <div class="contact-item-body">
+                <h4>Hours</h4>
+                <p>Contact us for current hours</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="rating-card" style="margin-top: 2rem;">
+            <div class="rating-stars">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star half">★</span>
+            </div>
+            <div class="rating-score">4.4</div>
+            <div class="rating-count">Based on 52 Google reviews</div>
+          </div>
+
+          <div class="contact-actions">
+            <a href="https://www.google.com/maps/search/Green%20Market%20Nursery%20and%20Landscaping%205402%20NW%208th%20Ave%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer" class="btn-map">
+              <span>📍</span> Get Directions
+            </a>
+            <a href="tel:+13864629641" class="btn-call">
+              <span>📞</span> Call (386) 462-9641
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-map-placeholder">
+          <span class="map-pin-icon">🗺️</span>
+          <h3>Green Market Nursery and Landscaping</h3>
+          <p>5402 NW 8th Ave<br>Gainesville, FL</p>
+          <a href="https://www.google.com/maps/search/Green%20Market%20Nursery%20and%20Landscaping%205402%20NW%208th%20Ave%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer" class="btn-map" style="display:inline-flex; margin: 0 auto;">
+            <span>📍</span> Open in Google Maps
+          </a>
+          <p class="contact-detail-note">Call or visit for current hours, pricing, and plant availability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">Green Market Nursery and Landscaping</div>
+      <div class="footer-address">5402 NW 8th Ave, Gainesville, FL &nbsp;|&nbsp; (386) 462-9641</div>
+      <div class="footer-copy">&copy; 2026 Green Market Nursery and Landscaping. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', function() {
+      const isOpen = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close menu when a link is clicked
+    links.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+
+</body>
+</html>

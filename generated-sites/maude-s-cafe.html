@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maude's Cafe — Gainesville, FL</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      color: #2c1a0e;
+      background: #fdf6ee;
+      line-height: 1.7;
+    }
+
+    /* ===== Color Palette ===== */
+    :root {
+      --espresso:   #2c1a0e;
+      --mocha:      #6b3f1e;
+      --caramel:    #c47c2b;
+      --cream:      #fdf6ee;
+      --latte:      #e8d5bc;
+      --steam:      #f5ede1;
+      --accent:     #a0522d;
+      --text-light: #f5ede1;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: var(--espresso);
+      box-shadow: 0 2px 12px rgba(44,26,14,0.4);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 38px;
+      height: 38px;
+      background: var(--caramel);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .nav-name {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--cream);
+      letter-spacing: 0.03em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--latte);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--caramel); }
+
+    /* Mobile nav toggle */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .nav-toggle { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--espresso);
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem 0;
+        gap: 1.2rem;
+        box-shadow: 0 4px 16px rgba(44,26,14,0.3);
+      }
+      .nav-links.open { display: flex; }
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 1.5rem 4rem;
+      background:
+        linear-gradient(160deg, rgba(44,26,14,0.78) 0%, rgba(107,63,30,0.6) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%236b3f1e'/%3E%3Ccircle cx='80' cy='80' r='60' fill='%23a0522d' opacity='0.3'/%3E%3Ccircle cx='320' cy='200' r='100' fill='%23c47c2b' opacity='0.2'/%3E%3Ccircle cx='200' cy='350' r='80' fill='%234a2510' opacity='0.4'/%3E%3C/svg%3E") center/cover no-repeat;
+    }
+    .hero-inner { max-width: 680px; }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      border: 1px solid var(--caramel);
+      border-radius: 20px;
+      padding: 0.3rem 1.1rem;
+      margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .hero h1 span { color: var(--caramel); }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--latte);
+      margin-bottom: 2.2rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary {
+      background: var(--caramel);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--caramel);
+      color: var(--caramel);
+    }
+    .btn-outline:hover { background: var(--caramel); color: #fff; transform: translateY(-2px); }
+
+    /* ===== SECTIONS SHARED ===== */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--espresso);
+      margin-bottom: 1rem;
+    }
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--caramel);
+      border-radius: 2px;
+      margin-bottom: 1.6rem;
+    }
+
+    /* ===== ABOUT ===== */
+    .about { background: var(--steam); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .about-text p {
+      color: #4a2f1a;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-emblem {
+      width: 260px;
+      height: 260px;
+      background: var(--latte);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border: 6px solid var(--caramel);
+    }
+    .about-emblem .icon { font-size: 4rem; }
+    .about-emblem .label {
+      font-size: 1.1rem;
+      color: var(--mocha);
+      font-weight: bold;
+      letter-spacing: 0.04em;
+    }
+    .about-emblem .sublabel {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-visual { order: -1; }
+      .about-emblem { width: 180px; height: 180px; }
+      .about-emblem .icon { font-size: 2.8rem; }
+    }
+
+    /* ===== SERVICES ===== */
+    .services { background: var(--cream); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+    .service-card {
+      background: var(--steam);
+      border-radius: 10px;
+      padding: 2rem 1.6rem;
+      border-top: 4px solid var(--caramel);
+      transition: box-shadow 0.25s, transform 0.2s;
+    }
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(44,26,14,0.12);
+      transform: translateY(-4px);
+    }
+    .service-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--espresso);
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: #6b4c31;
+      line-height: 1.6;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact { background: var(--steam); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .contact-info h3 {
+      font-size: 1.1rem;
+      color: var(--espresso);
+      margin-bottom: 0.4rem;
+      margin-top: 1.4rem;
+    }
+    .contact-info h3:first-child { margin-top: 0; }
+    .contact-info p, .contact-info address {
+      font-style: normal;
+      color: #4a2f1a;
+      font-size: 0.97rem;
+    }
+    .rating-block {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 1.8rem;
+      padding: 1.1rem 1.4rem;
+      background: #fff7ef;
+      border-radius: 8px;
+      border: 1px solid var(--latte);
+    }
+    .rating-stars { font-size: 1.3rem; letter-spacing: 0.05em; }
+    .rating-score { font-size: 1.5rem; font-weight: bold; color: var(--mocha); }
+    .rating-meta { font-size: 0.82rem; color: #7a5030; }
+    .rating-meta span { display: block; }
+    .map-placeholder {
+      background: var(--latte);
+      border-radius: 10px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      border: 2px solid var(--caramel);
+      padding: 2rem;
+      text-align: center;
+    }
+    .map-placeholder .map-icon { font-size: 3rem; }
+    .map-placeholder p { color: var(--mocha); font-size: 0.95rem; }
+
+    @media (max-width: 700px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--espresso);
+      color: var(--latte);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+    }
+    footer .footer-brand {
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.4rem;
+    }
+    footer p { font-size: 0.85rem; color: #9a7a5a; }
+    footer .footer-tagline {
+      color: var(--caramel);
+      font-style: italic;
+      margin-bottom: 0.6rem;
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <a href="#hero" class="nav-brand">
+      <div class="nav-logo">&#9749;</div>
+      <span class="nav-name">Maude's Cafe</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Menu &amp; Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Gainesville, FL</div>
+      <h1>Your Cozy Corner<br>in <span>Downtown Gainesville</span></h1>
+      <p>Where great coffee, warm atmosphere, and good company come together — right in the heart of the city.</p>
+      <a href="#contact" class="btn btn-primary">Find Us</a>
+      &nbsp;
+      <a href="#services" class="btn btn-outline">Explore Our Menu</a>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">Our Story</p>
+          <h2 class="section-title">A Gathering Place for the Gainesville Community</h2>
+          <div class="section-divider"></div>
+          <p>Maude's Cafe is a beloved independent coffee shop tucked into the vibrant downtown Gainesville neighborhood, offering a relaxed, welcoming space for students, locals, and visitors alike.</p>
+          <p>We take pride in crafting quality espresso drinks and serving a rotating selection of house-made treats, all in an atmosphere that feels like a home away from home.</p>
+          <p>Whether you're catching up with friends, powering through a work session, or simply savoring a quiet cup, Maude's is your spot. Contact us for current hours and specials.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-emblem">
+            <div class="icon">&#9749;</div>
+            <div class="label">Maude's Cafe</div>
+            <div class="sublabel">Est. Gainesville, FL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="services" id="services">
+    <div class="container">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Menu &amp; Services</h2>
+      <div class="section-divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#9749;</div>
+          <h3>Espresso &amp; Coffee Drinks</h3>
+          <p>From classic espresso shots and lattes to specialty seasonal beverages crafted with quality beans. Contact us for our current drink menu.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127861;</div>
+          <h3>House-Made Pastries &amp; Baked Goods</h3>
+          <p>Fresh baked goods prepared in-house, perfect for pairing with your morning coffee or afternoon pick-me-up.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127827;</div>
+          <h3>Tea &amp; Non-Coffee Beverages</h3>
+          <p>A thoughtful selection of teas, steamers, and other non-coffee options for every palate and preference.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128247;</div>
+          <h3>Comfortable Work &amp; Study Space</h3>
+          <p>A cozy, low-key environment welcoming students and remote workers looking for a productive place to settle in.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127873;</div>
+          <h3>Private Events &amp; Gatherings</h3>
+          <p>Host a small group event or celebration in our intimate cafe setting. Contact us for details and availability.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128274;</div>
+          <h3>Catering &amp; Bulk Orders</h3>
+          <p>Need coffee or treats for your office or event? Reach out to discuss catering options and advance orders.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Visit Maude's Cafe</h2>
+      <div class="section-divider"></div>
+      <div class="contact-grid">
+        <div class="contact-info">
+
+          <h3>Address</h3>
+          <address>
+            101 SE 2nd Pl<br>
+            Gainesville, FL 32601
+          </address>
+
+          <h3>Hours</h3>
+          <p>Contact us for current hours and holiday schedules.</p>
+
+          <div style="margin-top:1.6rem;">
+            <a
+              href="https://www.google.com/maps/search/Maude's%20Cafe%20101%20SE%202nd%20Pl%2C%20Gainesville%2C%20FL%2032601"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary"
+            >Get Directions</a>
+          </div>
+
+          <div class="rating-block">
+            <div>
+              <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            </div>
+            <div class="rating-score">4.2</div>
+            <div class="rating-meta">
+              <span>Google Maps Rating</span>
+              <span>550 reviews</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="map-placeholder">
+          <div class="map-icon">&#128205;</div>
+          <p><strong>Maude's Cafe</strong><br>101 SE 2nd Pl, Gainesville, FL 32601</p>
+          <a
+            href="https://www.google.com/maps/search/Maude's%20Cafe%20101%20SE%202nd%20Pl%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline"
+          >Open in Google Maps</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-brand">Maude's Cafe</div>
+    <p class="footer-tagline">Your cozy corner in downtown Gainesville.</p>
+    <p>101 SE 2nd Pl, Gainesville, FL 32601</p>
+    <p style="margin-top:0.8rem;">&copy; 2026 Maude's Cafe. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+    toggle.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+    // Close nav on link click
+    links.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        links.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

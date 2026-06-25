@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Big Sun Upholstery &amp; Fabrics | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sun-gold: #D4922A;
+      --sun-amber: #E8A83E;
+      --warm-cream: #FAF5EC;
+      --deep-brown: #3B2A1A;
+      --medium-brown: #6B4C2A;
+      --light-tan: #C9A97A;
+      --charcoal: #2C2C2C;
+      --white: #FFFFFF;
+      --text-muted: #7A6A58;
+      --border-light: #E4D8C4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--warm-cream);
+      color: var(--charcoal);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--deep-brown);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--sun-amber);
+      letter-spacing: 0.03em;
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #DDD0BE;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--sun-amber); }
+
+    .nav-cta {
+      background: var(--sun-gold);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--sun-amber) !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--sun-amber);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* mobile nav */
+    @media (max-width: 700px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0; right: 0;
+        background: var(--deep-brown);
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0 1rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li a {
+        display: block;
+        padding: 0.75rem 1.5rem;
+      }
+      .nav-cta { margin: 0.5rem 1.5rem 0; border-radius: 4px; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--deep-brown) 0%, var(--medium-brown) 60%, #5A3820 100%);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative fabric-weave overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          rgba(255,255,255,0.025) 0px,
+          rgba(255,255,255,0.025) 2px,
+          transparent 2px,
+          transparent 18px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(255,255,255,0.02) 0px,
+          rgba(255,255,255,0.02) 2px,
+          transparent 2px,
+          transparent 18px
+        );
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 760px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(212,146,42,0.25);
+      border: 1px solid var(--sun-gold);
+      color: var(--sun-amber);
+      font-family: Arial, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--sun-amber);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #D4C4AA;
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--sun-gold);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--sun-amber); transform: translateY(-1px); }
+
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,0.5);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      border-color: var(--sun-amber);
+      background: rgba(212,146,42,0.15);
+    }
+
+    /* ── SECTION WRAPPER ── */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sun-gold);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--deep-brown);
+      margin-bottom: 1.2rem;
+    }
+
+    .divider {
+      width: 56px;
+      height: 3px;
+      background: var(--sun-gold);
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-features {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+
+    .feature-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: var(--sun-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .feature-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--white);
+    }
+
+    .feature-text strong {
+      display: block;
+      color: var(--deep-brown);
+      font-size: 0.95rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .feature-text span {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .about-visual {
+      background: linear-gradient(145deg, var(--deep-brown), var(--medium-brown));
+      border-radius: 8px;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px,
+          transparent 1px, transparent 24px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px,
+          transparent 1px, transparent 24px
+        );
+    }
+
+    .about-visual-inner { position: relative; z-index: 1; }
+
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .swatch {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+
+    .about-visual p {
+      color: #D4C4AA;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    @media (max-width: 800px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-visual { display: none; }
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--warm-cream); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-top: 4px solid var(--sun-gold);
+      border-radius: 6px;
+      padding: 2rem 1.75rem;
+      transition: box-shadow 0.25s, transform 0.2s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(59,42,26,0.12);
+      transform: translateY(-3px);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--sun-gold), var(--sun-amber));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--white);
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--deep-brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    .service-detail {
+      margin-top: 1rem;
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      color: var(--sun-gold);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 800px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-row-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--warm-cream);
+      border: 1px solid var(--border-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-row-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--sun-gold);
+    }
+
+    .contact-row-text strong {
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-row-text span, .contact-row-text a {
+      font-size: 1rem;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+
+    .contact-row-text a:hover { color: var(--sun-gold); }
+
+    /* rating badge */
+    .rating-badge {
+      background: var(--warm-cream);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rating-stars {
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--sun-gold);
+      line-height: 1;
+    }
+
+    .rating-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--deep-brown);
+      line-height: 1;
+    }
+
+    .rating-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* CTA card */
+    .cta-card {
+      background: linear-gradient(135deg, var(--deep-brown) 0%, var(--medium-brown) 100%);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px,
+          transparent 2px, transparent 20px
+        );
+    }
+
+    .cta-card-inner { position: relative; z-index: 1; }
+
+    .cta-card h3 {
+      color: var(--white);
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-card p {
+      color: #D4C4AA;
+      font-size: 0.95rem;
+      margin-bottom: 1.75rem;
+      font-style: italic;
+    }
+
+    .cta-card .btn-primary {
+      display: block;
+      margin-bottom: 0.85rem;
+    }
+
+    .cta-card .btn-phone {
+      display: block;
+      color: var(--sun-amber);
+      font-family: Arial, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .cta-card .btn-phone:hover { color: var(--white); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep-brown);
+      color: #B0A090;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner { max-width: 700px; margin: 0 auto; }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--sun-amber);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-address {
+      font-size: 0.88rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .footer-note {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      color: #7A6A58;
+      margin-top: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Big Sun <span>Upholstery &amp; Fabrics</span></a>
+    <button class="hamburger" aria-label="Toggle menu" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:3523712827" class="nav-cta">Call Us</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Gainesville, FL &bull; Upholstery &amp; Fabric Specialists</div>
+    <h1>Craftsmanship You Can <em>Feel</em></h1>
+    <p class="hero-tagline">Restoring, reimagining, and reupholstering — with quality fabrics and skilled hands.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Get a Free Estimate</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="section-label">About Us</p>
+        <h2 class="section-title">Quality Upholstery at the Heart of Gainesville</h2>
+        <div class="divider"></div>
+        <p>Big Sun Upholstery &amp; Fabrics is a trusted local shop dedicated to bringing new life to furniture, automotive interiors, and custom fabric projects throughout the Gainesville area. Our skilled team works with a wide selection of quality materials to match every style and budget.</p>
+        <p>Whether you have a cherished heirloom sofa in need of restoration or a boat seat ready for a fresh look, we treat every project with the same attention to detail and pride in workmanship that our customers have come to rely on.</p>
+        <div class="about-features">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <!-- checkmark -->
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <div class="feature-text">
+              <strong>Wide Fabric Selection</strong>
+              <span>Hundreds of fabrics, leathers, and vinyls to choose from</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <!-- star -->
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <div class="feature-text">
+              <strong>Highly Rated</strong>
+              <span>4.6-star rating on Google Maps from satisfied customers</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <!-- wrench/tool -->
+              <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+            </div>
+            <div class="feature-text">
+              <strong>All Types of Projects</strong>
+              <span>Residential, commercial, automotive, marine, and more</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-visual">
+        <div class="about-visual-inner">
+          <div class="swatch-grid">
+            <div class="swatch" style="background:#6B3A2A;"></div>
+            <div class="swatch" style="background:#C8A97E;"></div>
+            <div class="swatch" style="background:#2C2C2C;"></div>
+            <div class="swatch" style="background:#D4B896;"></div>
+            <div class="swatch" style="background:#8B6F47;"></div>
+            <div class="swatch" style="background:#4A3728;"></div>
+            <div class="swatch" style="background:#E0CDB4;"></div>
+            <div class="swatch" style="background:#5C4033;"></div>
+            <div class="swatch" style="background:#B08060;"></div>
+            <div class="swatch" style="background:#F2E8D8;"></div>
+            <div class="swatch" style="background:#3D2B1A;"></div>
+            <div class="swatch" style="background:#A0785A;"></div>
+          </div>
+          <p>Hundreds of quality fabrics,<br>leathers &amp; vinyls available</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="container">
+    <p class="section-label">What We Do</p>
+    <h2 class="section-title">Our Services</h2>
+    <div class="divider"></div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- sofa/furniture -->
+          <svg viewBox="0 0 24 24"><path d="M21 9V7c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v2c-1.1 0-2 .9-2 2v5h1.33L3 18h1l.67-2h12.67l.66 2h1l.67-2H21v-5c0-1.1-.9-2-2-2zm-8 0H5V7h8v2zm6 0h-4V7h2c1.1 0 2 .9 2 2z"/></svg>
+        </div>
+        <h3>Furniture Reupholstery</h3>
+        <p>Give your sofas, chairs, ottomans, and sectionals a fresh new look. We strip, repair, pad, and recover all types of residential and commercial furniture.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- car seat -->
+          <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.08 3.11H5.77L6.85 7zM19 17H5v-5h14v5z"/></svg>
+        </div>
+        <h3>Automotive Upholstery</h3>
+        <p>Restore or upgrade your vehicle's interior with seat covers, headliners, door panels, dashboards, and custom auto fabric work for cars, trucks, and vans.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- boat/wave -->
+          <svg viewBox="0 0 24 24"><path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.35 4-.99 2.52 1.29 5.48 1.29 8 0 1.26.64 2.62.99 4 .99h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.15.52-.06.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/></svg>
+        </div>
+        <h3>Marine &amp; Boat Upholstery</h3>
+        <p>Protect your watercraft's seating from the Florida sun and moisture. We use marine-grade materials designed to withstand UV rays, humidity, and water exposure.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- sewing/needle -->
+          <svg viewBox="0 0 24 24"><path d="M20.71 3.29l-4-4a1 1 0 0 0-1.42 1.42l.72.71-14.3 14.3A3 3 0 0 0 1 17.58V21a1 1 0 0 0 1 1h3.42a3 3 0 0 0 2.12-.88l14.3-14.3.71.71a1 1 0 0 0 1.42-1.42l-4-4zM6.12 19.71A1 1 0 0 1 5.42 20H3v-2.42a1 1 0 0 1 .29-.71l10-10 2.42 2.42z"/></svg>
+        </div>
+        <h3>Custom Fabric Work</h3>
+        <p>From draperies and cushions to headboards and decorative accents, our shop handles custom sewing and fabric projects tailored to your vision and space.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- repair/restore -->
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <h3>Foam &amp; Padding Replacement</h3>
+        <p>Sagging cushions and worn-out padding affect comfort and appearance. We replace and re-cut foam inserts and batting to restore the original feel and support.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- office chair -->
+          <svg viewBox="0 0 24 24"><path d="M19 12h-2V7c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v5H5c-1.1 0-2 .9-2 2v3h2v2h2v-2h6v2h2v-2h2v-3c0-1.1-.9-2-2-2zm-8 0V7h2v5h-2zm-2 0H7V7h2v5zm8 3H7v-1h12v1z"/></svg>
+        </div>
+        <h3>Commercial &amp; Office Upholstery</h3>
+        <p>Keep your business looking professional. We restore and reupholster restaurant seating, office chairs, waiting room furniture, and hospitality-industry pieces.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label">Reach Us</p>
+    <h2 class="section-title">Contact &amp; Location</h2>
+    <div class="divider"></div>
+    <div class="contact-grid">
+
+      <div>
+        <div class="contact-info-block">
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Address</strong>
+              <span>4647 NW 6th St H, Gainesville, FL</span>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Phone</strong>
+              <a href="tel:3523712827">(352) 371-2827</a>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Hours</strong>
+              <span>Contact us for current hours</span>
+            </div>
+          </div>
+
+          <div class="rating-badge">
+            <div>
+              <div class="rating-number">4.6</div>
+              <div class="rating-label">13 reviews</div>
+            </div>
+            <div>
+              <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              <div class="rating-label">Google Maps Rating</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-card">
+        <div class="cta-card-inner">
+          <h3>Ready to Transform Your Upholstery?</h3>
+          <p>Call or stop by to discuss your project. Free estimates available.</p>
+          <a href="https://www.google.com/maps/search/Big%20Sun%20Upholstery%20%26%20Fabrics%204647%20NW%206th%20St%20H%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener" class="btn-primary">Get Directions</a>
+          <a href="tel:3523712827" class="btn-phone">(352) 371-2827</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Big Sun Upholstery &amp; Fabrics</div>
+    <div class="footer-address">4647 NW 6th St H, Gainesville, FL &nbsp;&bull;&nbsp; <a href="tel:3523712827" style="color:#B0A090;text-decoration:none;">(352) 371-2827</a></div>
+    <div class="footer-note">&copy; 2026 Big Sun Upholstery &amp; Fabrics. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Warrington's Furniture Repair | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --brown-dark:   #3b2412;
+      --brown-mid:    #6b3d1e;
+      --brown-warm:   #8b5e3c;
+      --tan:          #c4a882;
+      --cream:        #f5efe6;
+      --white:        #ffffff;
+      --text-dark:    #2a1a0e;
+      --text-mid:     #4a3728;
+      --text-light:   #7a6558;
+      --accent:       #b87333;
+      --accent-hover: #9a5e28;
+      --shadow:       rgba(59, 36, 18, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--brown-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+
+    .nav-logo {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--tan);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--tan);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-mid) 60%, var(--brown-warm) 100%);
+      min-height: 560px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(180,115,51,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 30%, rgba(196,168,130,0.12) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* decorative grain overlay */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 1.2rem;
+      border-top: 1px solid var(--tan);
+      border-bottom: 1px solid var(--tan);
+      padding: 0.3rem 1.2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--cream);
+      max-width: 540px;
+      margin: 0 auto 2.4rem;
+      opacity: 0.9;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2.4rem;
+      border-radius: 3px;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      transition: background 0.25s, transform 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+
+    .hero-cta:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--brown-dark);
+      margin-bottom: 1rem;
+      line-height: 1.25;
+    }
+
+    .divider {
+      width: 52px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .about-stat {
+      background: var(--cream);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.4rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .about-stat strong {
+      display: block;
+      font-size: 1.9rem;
+      color: var(--brown-dark);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    .about-stat span {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--cream);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 2px 12px var(--shadow);
+      border-top: 4px solid var(--tan);
+      transition: box-shadow 0.25s, transform 0.2s, border-top-color 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 6px 24px var(--shadow);
+      transform: translateY(-4px);
+      border-top-color: var(--accent);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.9rem;
+      display: block;
+      line-height: 1;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--brown-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--brown-dark);
+      color: var(--cream);
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    #contact .section-label {
+      color: var(--tan);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--brown-mid);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 1.05rem;
+    }
+
+    .contact-item-text a:hover {
+      color: var(--tan);
+    }
+
+    .contact-item-text p {
+      font-size: 1.05rem;
+      color: var(--cream);
+    }
+
+    /* Rating */
+    .rating-block {
+      background: var(--brown-mid);
+      border-radius: 8px;
+      padding: 1.6rem 1.8rem;
+    }
+
+    .rating-block .rating-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 0.7rem;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-number {
+      font-size: 2.6rem;
+      font-weight: bold;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .stars svg {
+      width: 20px;
+      height: 20px;
+      fill: #f5a623;
+    }
+
+    .stars svg.half {
+      fill: url(#halfGrad);
+    }
+
+    .rating-count {
+      font-size: 0.9rem;
+      color: var(--tan);
+    }
+
+    .rating-source {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+    }
+
+    /* Map / CTA side */
+    .contact-cta-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .map-placeholder {
+      background: var(--brown-mid);
+      border-radius: 8px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .map-placeholder p {
+      color: var(--tan);
+      font-size: 0.95rem;
+      margin-top: 0.6rem;
+    }
+
+    .map-pin {
+      font-size: 2.5rem;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.95rem 2rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-align: center;
+      transition: background 0.25s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .btn-directions:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-call {
+      display: inline-block;
+      background: transparent;
+      color: var(--cream);
+      text-decoration: none;
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-align: center;
+      border: 2px solid var(--tan);
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .btn-call:hover {
+      background: var(--tan);
+      color: var(--brown-dark);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1e0f07;
+      color: var(--text-light);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--tan);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer .footer-divider {
+      margin: 0 0.6rem;
+      opacity: 0.5;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--brown-dark);
+        padding: 1.2rem 2rem 1.6rem;
+        gap: 1.2rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero {
+        min-height: 480px;
+      }
+
+      section {
+        padding: 3.5rem 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-logo {
+        font-size: 1rem;
+      }
+
+      .hero h1 {
+        font-size: 1.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">Warrington's Furniture Repair</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Gainesville, Florida</span>
+      <h1>Restoring the Furniture<br>You Love</h1>
+      <p>Quality craftsmanship and attention to detail — giving your cherished pieces a second life.</p>
+      <a href="#services" class="hero-cta">Explore Our Services</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Trusted Local Furniture Restoration</h2>
+          <div class="divider"></div>
+          <p>Warrington's Furniture Repair is a locally owned shop in Gainesville, FL, dedicated to breathing new life into worn, damaged, or outdated furniture. We take pride in combining traditional woodworking techniques with modern finishing methods to achieve lasting, beautiful results.</p>
+          <p>Whether you have a family heirloom that needs careful attention or everyday pieces that could use a fresh look, our team approaches every project with the same care and craftsmanship.</p>
+          <p>We serve residential and commercial clients throughout the Gainesville area. Contact us to discuss your piece and get an assessment.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-stat">
+            <strong>4.3 &#9733;</strong>
+            <span>Google Rating — 26 customer reviews</span>
+          </div>
+          <div class="about-stat">
+            <strong>Local</strong>
+            <span>Proudly serving Gainesville, FL &amp; surrounding areas</span>
+          </div>
+          <div class="about-stat">
+            <strong>Expert</strong>
+            <span>Traditional craftsmanship meets modern finishing techniques</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Our Services</h2>
+      <div class="divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">🪵</span>
+          <h3>Wood Repair &amp; Restoration</h3>
+          <p>Fixing cracks, splits, warps, and structural damage to restore the integrity and beauty of wooden furniture.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🎨</span>
+          <h3>Refinishing &amp; Staining</h3>
+          <p>Stripping old finishes and applying fresh stains, paints, or lacquers to match your desired look and protect the wood.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🧵</span>
+          <h3>Upholstery Repair</h3>
+          <p>Repairing torn, worn, or sagging upholstery on chairs, sofas, and other upholstered pieces — contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🔩</span>
+          <h3>Structural &amp; Joint Repair</h3>
+          <p>Re-gluing loose joints, repairing broken legs, and reinforcing frames to make furniture sturdy and safe again.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🏛️</span>
+          <h3>Antique &amp; Heirloom Restoration</h3>
+          <p>Careful, respectful restoration of antiques and family heirlooms with attention to preserving their original character.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">✨</span>
+          <h3>Touch-Up &amp; Minor Repairs</h3>
+          <p>Scratches, dents, chips, water rings — we handle smaller cosmetic repairs that make a big difference in appearance.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Get In Touch</p>
+      <h2 class="section-title">Visit or Call Us</h2>
+      <div class="divider"></div>
+
+      <div class="contact-grid">
+
+        <div class="contact-info-block">
+
+          <div class="contact-item">
+            <div class="contact-icon">&#128205;</div>
+            <div class="contact-item-text">
+              <strong>Address</strong>
+              <p>818 NW 4th St<br>Gainesville, FL</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">&#128222;</div>
+            <div class="contact-item-text">
+              <strong>Phone</strong>
+              <a href="tel:3523380535">(352) 338-0535</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">&#128337;</div>
+            <div class="contact-item-text">
+              <strong>Hours</strong>
+              <p>Contact us for current hours</p>
+            </div>
+          </div>
+
+          <!-- Rating -->
+          <div class="rating-block">
+            <p class="rating-label">Customer Rating</p>
+            <div class="rating-row">
+              <span class="rating-number">4.3</span>
+              <div>
+                <div class="stars">
+                  <!-- SVG half-star gradient -->
+                  <svg viewBox="0 0 24 24"><defs><linearGradient id="halfGrad"><stop offset="50%" stop-color="#f5a623"/><stop offset="50%" stop-color="#6b3d1e" stop-opacity="0.4"/></linearGradient></defs><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                  <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                  <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                  <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                  <svg viewBox="0 0 24 24" class="half"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                </div>
+                <p class="rating-count">Based on 26 Google reviews</p>
+              </div>
+            </div>
+            <p class="rating-source">Via Google Maps</p>
+          </div>
+
+        </div>
+
+        <div class="contact-cta-side">
+          <div class="map-placeholder">
+            <div class="map-pin">&#128205;</div>
+            <p>818 NW 4th St, Gainesville, FL</p>
+          </div>
+          <a href="https://www.google.com/maps/search/Warrington's%20Furniture%20Repair%20818%20NW%204th%20St%2C%20Gainesville%2C%20FL"
+             target="_blank" rel="noopener noreferrer" class="btn-directions">
+            &#128205;&nbsp; Get Directions
+          </a>
+          <a href="tel:3523380535" class="btn-call">
+            &#128222;&nbsp; Call (352) 338-0535
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      &copy; 2026 Warrington's Furniture Repair
+      <span class="footer-divider">|</span>
+      818 NW 4th St, Gainesville, FL
+      <span class="footer-divider">|</span>
+      <a href="tel:3523380535">(352) 338-0535</a>
+    </p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dean G Poole & Co | Accountant | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #1a2744;
+      --navy-light: #243260;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --gray-light: #f4f5f7;
+      --gray-mid: #e2e4ea;
+      --gray-text: #5a6072;
+      --white: #ffffff;
+      --text-dark: #1a2744;
+      --font-main: Georgia, 'Times New Roman', serif;
+      --font-sans: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--gold);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-main);
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--navy);
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-family: var(--font-main);
+      font-size: 1.05rem;
+      color: var(--white);
+      font-weight: normal;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--gold-light);
+      font-family: var(--font-sans);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.82);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy) !important;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-light) !important;
+      color: var(--navy) !important;
+    }
+
+    /* Hamburger */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* Mobile menu */
+    .nav-mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px;
+      left: 0;
+      right: 0;
+      background: var(--navy-light);
+      padding: 20px 5%;
+      z-index: 99;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+
+    .nav-mobile-menu.open {
+      display: block;
+    }
+
+    .nav-mobile-menu a {
+      display: block;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .nav-mobile-menu a:last-child {
+      border-bottom: none;
+      color: var(--gold-light);
+      font-weight: bold;
+    }
+
+    /* ===== HERO ===== */
+    #hero {
+      margin-top: 68px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #2a3d6e 100%);
+      color: var(--white);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 5% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Decorative grid lines */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(201,168,76,0.18);
+      border: 1px solid rgba(201,168,76,0.45);
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      font-family: var(--font-sans);
+    }
+
+    .hero-title {
+      font-family: var(--font-main);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      color: var(--white);
+    }
+
+    .hero-title em {
+      color: var(--gold-light);
+      font-style: normal;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 36px;
+      line-height: 1.6;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 14px 30px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 14px 30px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    /* ===== TRUST BAR ===== */
+    .trust-bar {
+      background: var(--gray-mid);
+      padding: 18px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--gray-text);
+      letter-spacing: 0.03em;
+    }
+
+    .trust-icon {
+      color: var(--gold);
+      font-size: 1rem;
+    }
+
+    /* ===== SECTIONS SHARED ===== */
+    section {
+      padding: 80px 5%;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: var(--font-sans);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: var(--font-main);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: normal;
+      color: var(--navy);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-bottom: 24px;
+    }
+
+    /* ===== ABOUT ===== */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-content p {
+      color: var(--gray-text);
+      font-size: 1.02rem;
+      margin-bottom: 18px;
+      line-height: 1.75;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: var(--gray-light);
+      border-radius: 8px;
+      padding: 28px 24px;
+      text-align: center;
+      border-top: 3px solid var(--gold);
+    }
+
+    .stat-number {
+      font-family: var(--font-main);
+      font-size: 2rem;
+      color: var(--navy);
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--gray-text);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ===== SERVICES ===== */
+    #services {
+      background: var(--gray-light);
+    }
+
+    .services-header {
+      max-width: 1100px;
+      margin: 0 auto 48px;
+    }
+
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 32px 28px;
+      box-shadow: 0 2px 12px rgba(26,39,68,0.07);
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      border-bottom-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(26,39,68,0.12);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(201,168,76,0.12);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 1.4rem;
+    }
+
+    .service-title {
+      font-family: var(--font-main);
+      font-size: 1.12rem;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      line-height: 1.65;
+    }
+
+    .service-detail {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .contact-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    #contact .section-label {
+      color: var(--gold-light);
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    #contact .section-divider {
+      background: var(--gold);
+    }
+
+    .contact-intro {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .contact-info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-info-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-info-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(201,168,76,0.15);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-info-text strong {
+      display: block;
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .contact-info-text span,
+    .contact-info-text a {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.97rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-info-text a:hover {
+      color: var(--gold-light);
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 36px 32px;
+    }
+
+    .contact-card-title {
+      font-family: var(--font-main);
+      font-size: 1.35rem;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .contact-card-sub {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 28px;
+    }
+
+    /* Rating widget */
+    .rating-widget {
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .rating-score {
+      font-family: var(--font-main);
+      font-size: 2.4rem;
+      color: var(--gold-light);
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .rating-details strong {
+      display: block;
+      color: var(--white);
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+
+    .rating-count {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 14px 24px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      text-align: center;
+      transition: background 0.2s;
+      display: block;
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-light);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      padding: 13px 24px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      text-align: center;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      transition: border-color 0.2s, color 0.2s;
+      display: block;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #111a2e;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 28px 5%;
+      font-size: 0.82rem;
+    }
+
+    footer strong {
+      color: rgba(255,255,255,0.7);
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      section {
+        padding: 56px 5%;
+      }
+
+      .trust-bar {
+        gap: 20px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon">DGP</div>
+      <div class="nav-logo-text">
+        Dean G Poole & Co
+        <span>Certified Public Accountant</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Open menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="document.getElementById('mobileMenu').classList.remove('open')">About</a>
+    <a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a>
+    <a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact Us</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Gainesville, Florida</div>
+      <h1 class="hero-title">
+        Trusted Accounting &amp; Tax Solutions<br>
+        for <em>Individuals &amp; Businesses</em>
+      </h1>
+      <p class="hero-tagline">
+        Professional, accurate, and personal financial guidance when it matters most.
+        Dean G Poole &amp; Co is here to help you navigate every number with confidence.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get in Touch</a>
+        <a href="#services" class="btn-outline">View Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-item">
+      <span class="trust-icon">&#9733;</span>
+      <span>5.0 Google Rating</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">&#10003;</span>
+      <span>Local Gainesville Practice</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">&#10003;</span>
+      <span>Individual &amp; Business Clients</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">&#10003;</span>
+      <span>Personalized Service</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-content">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">A Trusted Name in Gainesville Accounting</h2>
+        <div class="section-divider"></div>
+        <p>
+          Dean G Poole &amp; Co is a full-service accounting firm serving individuals, families, and businesses throughout the Gainesville area. Our approach combines meticulous attention to detail with a commitment to clear, straightforward communication so clients always understand where they stand financially.
+        </p>
+        <p>
+          Whether you need help with annual tax preparation, small business bookkeeping, or longer-term financial planning, our team provides reliable guidance tailored to your unique situation. We take pride in building lasting relationships built on trust and accuracy.
+        </p>
+        <p>
+          Located conveniently in northwest Gainesville, we welcome clients to schedule a consultation to discuss how we can best serve their accounting needs.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <span class="stat-number">5.0</span>
+          <span class="stat-label">Google Rating</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">&#10003;</span>
+          <span class="stat-label">Verified Reviews</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">NW</span>
+          <span class="stat-label">Gainesville Location</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">&#128222;</span>
+          <span class="stat-label">Call Anytime</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">Our Accounting Services</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">&#128196;</div>
+        <div class="service-title">Tax Preparation &amp; Filing</div>
+        <p class="service-desc">
+          Accurate and timely preparation of federal and state income tax returns for individuals and businesses, ensuring compliance and maximizing allowable deductions.
+        </p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128200;</div>
+        <div class="service-title">Bookkeeping &amp; Accounting</div>
+        <p class="service-desc">
+          Ongoing bookkeeping services to keep your financial records organized, up to date, and ready for tax season or any business decision.
+        </p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128181;</div>
+        <div class="service-title">Payroll Services</div>
+        <p class="service-desc">
+          Reliable payroll processing for small and mid-size businesses, including calculation, reporting, and compliance with federal and Florida state requirements.
+        </p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128202;</div>
+        <div class="service-title">Financial Statement Preparation</div>
+        <p class="service-desc">
+          Preparation of clear, professional financial statements including income statements, balance sheets, and cash flow reports to inform your business decisions.
+        </p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128203;</div>
+        <div class="service-title">Tax Planning &amp; Strategy</div>
+        <p class="service-desc">
+          Proactive tax planning throughout the year to identify opportunities, minimize liability, and help you reach your financial goals more efficiently.
+        </p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128188;</div>
+        <div class="service-title">Business Advisory Services</div>
+        <p class="service-desc">
+          Guidance on business structure, entity formation, budgeting, and cash flow management to support growth and long-term financial health.
+        </p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-grid">
+      <div>
+        <div class="section-label">Reach Out</div>
+        <h2 class="section-title">Contact Dean G Poole &amp; Co</h2>
+        <div class="section-divider"></div>
+        <p class="contact-intro">
+          Ready to get started or have a question? We'd love to hear from you. Reach out by phone or stop by our office in northwest Gainesville.
+        </p>
+        <ul class="contact-info-list">
+          <li class="contact-info-item">
+            <div class="contact-info-icon">&#128205;</div>
+            <div class="contact-info-text">
+              <strong>Address</strong>
+              <span>2531 NW 41 St Ste D<br>Gainesville, FL</span>
+            </div>
+          </li>
+          <li class="contact-info-item">
+            <div class="contact-info-icon">&#128222;</div>
+            <div class="contact-info-text">
+              <strong>Phone</strong>
+              <a href="tel:+13523777905">(352) 377-7905</a>
+            </div>
+          </li>
+          <li class="contact-info-item">
+            <div class="contact-info-icon">&#128337;</div>
+            <div class="contact-info-text">
+              <strong>Hours</strong>
+              <span>Contact us for details</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-card-title">Visit or Call Us Today</div>
+        <div class="contact-card-sub">We're here to help with all your accounting needs.</div>
+
+        <div class="rating-widget">
+          <div class="rating-score">5.0</div>
+          <div class="rating-details">
+            <strong>Google Maps Rating</strong>
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="rating-count">Based on 2 reviews</div>
+          </div>
+        </div>
+
+        <div class="contact-actions">
+          <a href="https://www.google.com/maps/search/Dean%20G%20Poole%20%26%20Co%202531%20NW%2041%20St%20Ste%20D" target="_blank" rel="noopener" class="btn-gold">
+            &#128205; Get Directions
+          </a>
+          <a href="tel:+13523777905" class="btn-ghost">
+            &#128222; Call (352) 377-7905
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <strong>Dean G Poole &amp; Co</strong> &mdash; Accountant &mdash; Gainesville, FL
+      </div>
+      <div>
+        2531 NW 41 St Ste D &nbsp;|&nbsp;
+        <a href="tel:+13523777905">(352) 377-7905</a>
+      </div>
+      <div>&copy; 2026 Dean G Poole &amp; Co. All rights reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kelly's Kwik Stop | Convenience Store - Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --red: #d32f2f;
+      --red-dark: #b71c1c;
+      --red-light: #ef5350;
+      --yellow: #fdd835;
+      --yellow-light: #fff9c4;
+      --white: #ffffff;
+      --off-white: #fafafa;
+      --gray-light: #f5f5f5;
+      --gray: #9e9e9e;
+      --gray-dark: #424242;
+      --black: #212121;
+      --text: #1a1a1a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--red-dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--yellow);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--red-dark);
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-logo-text span {
+      color: var(--yellow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--yellow);
+    }
+
+    .nav-cta {
+      background: var(--yellow);
+      color: var(--red-dark) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: #ffe082 !important;
+      color: var(--red-dark) !important;
+    }
+
+    /* ===== HAMBURGER ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    .mobile-menu {
+      display: none;
+      background: var(--red-dark);
+      padding: 1rem 1.5rem 1.5rem;
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 60%, #e53935 100%);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 30px,
+          rgba(255,255,255,0.03) 30px,
+          rgba(255,255,255,0.03) 60px
+        );
+    }
+
+    .hero-badge {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: var(--yellow);
+      color: var(--red-dark);
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.1;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    .hero-badge .badge-big {
+      font-size: 1.7rem;
+    }
+
+    .hero-badge .badge-small {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--red-dark);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.9rem;
+      border-radius: 3px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .hero h1 .accent {
+      color: var(--yellow);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      color: rgba(255,255,255,0.9);
+      max-width: 540px;
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--red-dark);
+      border: none;
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-primary:hover {
+      background: #ffe082;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.7);
+      padding: 0.83rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--yellow);
+      color: var(--yellow);
+      transform: translateY(-2px);
+    }
+
+    /* ===== STRIP ===== */
+    .strip {
+      background: var(--yellow);
+      padding: 0.9rem 1.5rem;
+    }
+
+    .strip-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--red-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .strip-item .icon {
+      font-size: 1.1rem;
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      font-weight: 900;
+      color: var(--black);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title span {
+      color: var(--red);
+    }
+
+    /* ===== ABOUT ===== */
+    .about {
+      background: var(--off-white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--gray-dark);
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--red-dark), var(--red));
+      border-radius: 12px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(211,47,47,0.25);
+    }
+
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255,255,255,0.04) 20px,
+        rgba(255,255,255,0.04) 40px
+      );
+    }
+
+    .store-icon-large {
+      font-size: 5rem;
+      position: relative;
+    }
+
+    .about-visual-text {
+      position: relative;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .about-visual-text strong {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 900;
+      margin-bottom: 0.3rem;
+    }
+
+    .about-visual-text span {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .about-highlights {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .highlight-chip {
+      background: var(--yellow-light);
+      border: 2px solid var(--yellow);
+      color: var(--red-dark);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+    }
+
+    /* ===== SERVICES ===== */
+    .services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--gray-light);
+      border-radius: 10px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.25s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+      border-color: rgba(211,47,47,0.15);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      font-size: 2.6rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact {
+      background: var(--gray-light);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-item-icon {
+      background: var(--red);
+      color: var(--white);
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-item-text span {
+      font-size: 1rem;
+      color: var(--black);
+      font-weight: 600;
+    }
+
+    .rating-block {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 1.5rem;
+      border: 2px solid var(--yellow);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .rating-score {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    .rating-details {
+      flex: 1;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.3rem;
+    }
+
+    .star {
+      color: var(--yellow);
+      font-size: 1.25rem;
+    }
+
+    .star.half {
+      position: relative;
+      color: var(--gray);
+    }
+
+    .star.half::before {
+      content: '★';
+      position: absolute;
+      left: 0;
+      color: var(--yellow);
+      width: 50%;
+      overflow: hidden;
+    }
+
+    .rating-label {
+      font-size: 0.82rem;
+      color: var(--gray);
+      font-weight: 600;
+    }
+
+    .rating-source {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 0.2rem;
+    }
+
+    .contact-cta-box {
+      background: var(--red-dark);
+      border-radius: 12px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .contact-cta-box h3 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--white);
+    }
+
+    .contact-cta-box p {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.97rem;
+      line-height: 1.6;
+    }
+
+    .btn-directions {
+      background: var(--yellow);
+      color: var(--red-dark);
+      border: none;
+      padding: 0.9rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s, transform 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-directions:hover {
+      background: #ffe082;
+      transform: translateY(-2px);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--black);
+      color: rgba(255,255,255,0.65);
+      padding: 2.5rem 1.5rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .footer-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--yellow);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--red-dark);
+    }
+
+    .footer-logo-text {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .footer-logo-text span {
+      color: var(--yellow);
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      text-align: right;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--yellow);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .about-visual {
+        min-height: 220px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-badge {
+        width: 80px;
+        height: 80px;
+        top: 1rem;
+        right: 1rem;
+      }
+
+      .hero-badge .badge-big {
+        font-size: 1.2rem;
+      }
+
+      .hero-badge .badge-small {
+        font-size: 0.6rem;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-copy {
+        text-align: left;
+      }
+
+      .strip-inner {
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Kelly's Kwik Stop Home">
+        <div class="nav-logo-icon">K</div>
+        <span class="nav-logo-text"><span>Kelly's</span> Kwik Stop</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">What We Offer</a></li>
+        <li><a href="#contact" class="nav-cta">Find Us</a></li>
+      </ul>
+      <button class="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about" onclick="toggleMenu()">About</a>
+      <a href="#services" onclick="toggleMenu()">What We Offer</a>
+      <a href="#contact" onclick="toggleMenu()">Find Us</a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-badge" aria-label="4.0 star rating on Google">
+      <span class="badge-big">4.0★</span>
+      <span class="badge-small">Google Rated</span>
+    </div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">Gainesville, FL · SW 34th St</span>
+      <h1>Kelly's <span class="accent">Kwik Stop</span></h1>
+      <p class="hero-tagline">Your neighborhood convenience stop — stocked, quick, and always there when you need it most.</p>
+      <div class="hero-actions">
+        <a href="#services" class="btn-primary">See What We Carry</a>
+        <a href="#contact" class="btn-outline">Get Directions</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STRIP ===== -->
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="strip-item"><span class="icon">⚡</span> Quick In & Out</div>
+      <div class="strip-item"><span class="icon">🛒</span> Everyday Essentials</div>
+      <div class="strip-item"><span class="icon">📍</span> SW 34th St, Gainesville</div>
+      <div class="strip-item"><span class="icon">⭐</span> 4.0 Stars on Google</div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">A Gainesville <span>Neighborhood</span> Staple</h2>
+          <p>Kelly's Kwik Stop is a convenient, no-fuss stop on SW 34th Street in Gainesville, serving the everyday needs of students, commuters, and residents in the surrounding community. Whether you need a quick snack, a cold drink, or a few household staples, we keep the shelves stocked so you're never left empty-handed.</p>
+          <p>We pride ourselves on a fast, friendly experience — no long lines, no hassle. When you're in a hurry or just need to grab something on the go, Kelly's Kwik Stop is the spot to count on.</p>
+          <div class="about-highlights">
+            <span class="highlight-chip">Fast Service</span>
+            <span class="highlight-chip">Cold Beverages</span>
+            <span class="highlight-chip">Daily Essentials</span>
+          </div>
+        </div>
+        <div class="about-visual" aria-hidden="true">
+          <div class="store-icon-large">🏪</div>
+          <div class="about-visual-text">
+            <strong>Kelly's Kwik Stop</strong>
+            <span>SW 34th St · Gainesville, FL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <p class="section-label">What We Offer</p>
+        <h2 class="section-title">Everything You Need, <span>Right Now</span></h2>
+        <p style="color: var(--gray-dark); font-size: 1rem;">From cold drinks to daily essentials, we keep the things you reach for most always within reach.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">🥤</span>
+          <h3>Cold Beverages</h3>
+          <p>Sodas, waters, sports drinks, energy drinks, juices, and more — always chilled and ready to go.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🍫</span>
+          <h3>Snacks & Candy</h3>
+          <p>Chips, candy bars, nuts, crackers, and grab-and-go snacks to satisfy any craving, any time of day.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🧴</span>
+          <h3>Household Essentials</h3>
+          <p>Paper products, personal care basics, and everyday household items when you need them right away.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">☕</span>
+          <h3>Hot Beverages</h3>
+          <p>Fresh-brewed coffee and hot drink options to kick off your morning or power through the afternoon.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🧊</span>
+          <h3>Ice & Frozen Items</h3>
+          <p>Bagged ice, frozen novelties, and select frozen convenience foods available in-store.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">📦</span>
+          <h3>Tobacco & Accessories</h3>
+          <p>A selection of tobacco products and related accessories. Valid ID required for all age-restricted items.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+
+        <div>
+          <p class="section-label">Find Us</p>
+          <h2 class="section-title">Come <span>See Us</span> Today</h2>
+          <div class="contact-info-block">
+
+            <div class="contact-item">
+              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-text">
+                <strong>Address</strong>
+                <span>SW 34th St, Gainesville, FL</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">🕐</div>
+              <div class="contact-item-text">
+                <strong>Hours</strong>
+                <span>Contact us for details</span>
+              </div>
+            </div>
+
+            <div class="rating-block">
+              <div class="rating-score">4.0</div>
+              <div class="rating-details">
+                <div class="stars" aria-label="4 out of 5 stars">
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star" style="color: #ddd;">★</span>
+                </div>
+                <div class="rating-label">Based on 13 reviews</div>
+                <div class="rating-source">Google Maps · Kelly's Kwik Stop</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="contact-cta-box">
+          <h3>Ready to Stop By?</h3>
+          <p>We're conveniently located on SW 34th Street in Gainesville. Swing by whenever you need a quick run — we make it easy.</p>
+          <a
+            href="https://www.google.com/maps/search/Kelly's%20Kwik%20Stop%20SW%2034th%20St"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            <span>📍</span> Get Directions
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">K</div>
+        <span class="footer-logo-text"><span>Kelly's</span> Kwik Stop</span>
+      </div>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#services">What We Offer</a>
+        <a href="#contact">Find Us</a>
+      </div>
+      <div class="footer-copy">
+        &copy; 2026 Kelly's Kwik Stop &mdash; Gainesville, FL<br>
+        SW 34th St
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      var menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('open');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('mobileMenu');
+      var hamburger = document.querySelector('.hamburger');
+      if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

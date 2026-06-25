@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miraculously Loc | Hair Salon — Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:     #f9f4ee;
+      --warm-off:  #f2ebe0;
+      --gold:      #c8974a;
+      --gold-dark: #a8742e;
+      --brown:     #4a2e1a;
+      --brown-mid: #6e4528;
+      --text:      #2c1a0e;
+      --text-muted:#7a5c42;
+      --white:     #ffffff;
+      --nav-h:     68px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--brown);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: normal;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    @media (max-width: 680px) {
+      .nav-toggle { display: flex; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: var(--brown);
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding-bottom: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-links.open { display: flex; }
+
+      .nav-links li { width: 100%; text-align: center; }
+
+      .nav-links a {
+        display: block;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      background: var(--brown);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative radial accent */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 60%, rgba(200,151,74,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Pattern overlay */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          rgba(200,151,74,0.04) 0px,
+          rgba(200,151,74,0.04) 1px,
+          transparent 1px,
+          transparent 18px
+        );
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding: 4rem 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      border-radius: 40px;
+      padding: 0.3rem 1.1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 8vw, 5rem);
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.8vw, 1.3rem);
+      color: rgba(249,244,238,0.8);
+      margin-bottom: 2.4rem;
+      font-style: italic;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 0 auto 2.4rem;
+      border: none;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--brown);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.9rem 2.4rem;
+      border-radius: 40px;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── Section base ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 0.6rem;
+      text-align: center;
+    }
+
+    .section-heading {
+      font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+      text-align: center;
+      color: var(--brown);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-rule {
+      width: 52px;
+      height: 2px;
+      background: var(--gold);
+      border: none;
+      margin: 0 auto 2.6rem;
+    }
+
+    /* ── About ── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .about-graphic {
+      background: var(--warm-off);
+      border-radius: 12px;
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      border: 2px solid rgba(200,151,74,0.25);
+    }
+
+    .about-graphic-icon {
+      font-size: 4rem;
+      line-height: 1;
+    }
+
+    .about-graphic-caption {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 1.1rem;
+      font-size: 1.02rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    /* ── Services ── */
+    #services {
+      background: var(--warm-off);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 2rem 1.6rem;
+      border: 1px solid rgba(200,151,74,0.2);
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(74,46,26,0.12);
+      transform: translateY(-4px);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.12rem;
+      color: var(--brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Contact ── */
+    #contact {
+      background: var(--white);
+    }
+
+    .contact-box {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--brown);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(74,46,26,0.22);
+    }
+
+    .contact-box h3 {
+      font-size: 1.5rem;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+
+    .contact-tagline {
+      color: rgba(249,244,238,0.7);
+      font-style: italic;
+      margin-bottom: 2rem;
+      font-size: 0.97rem;
+    }
+
+    .contact-info-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .contact-info-row .ci-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-info-row .ci-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.92rem;
+      color: var(--cream);
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .contact-info-row .ci-text strong {
+      display: block;
+      color: var(--gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.15rem;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--brown);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 40px;
+      margin-top: 0.5rem;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-directions:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--text);
+      color: rgba(249,244,238,0.55);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      line-height: 1.8;
+    }
+
+    footer strong { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ── -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon">&#x1F9B1;</div>
+      <div class="nav-logo-text">
+        Miraculously Loc
+        <span>Hair Salon · Gainesville, FL</span>
+      </div>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Gainesville, Florida</div>
+      <h1>Miraculously<br><em>Loc</em></h1>
+      <hr class="hero-divider" />
+      <p class="hero-tagline">Where every loc tells your story — crafted with care, worn with pride.</p>
+      <a href="#services" class="btn-primary">Explore Our Services</a>
+    </div>
+  </section>
+
+  <!-- ── About ── -->
+  <section id="about">
+    <div class="section-inner">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-heading">Rooted in the Art of Locs</h2>
+      <hr class="section-rule" />
+      <div class="about-grid">
+        <div class="about-graphic" aria-hidden="true">
+          <div class="about-graphic-icon">&#x1F9B1;</div>
+          <div class="about-graphic-caption">Natural Hair Specialists</div>
+        </div>
+        <div class="about-text">
+          <p>Miraculously Loc is a dedicated locs and natural hair salon serving the Gainesville community with specialized expertise in locking techniques, maintenance, and styling for all hair types and textures.</p>
+          <p>Nestled in the heart of Gainesville on NW 13th Street, our salon provides a welcoming, affirming space where clients can embrace their natural beauty and receive personalized attention from start to finish.</p>
+          <p>Whether you are beginning your loc journey or maintaining a mature set, we tailor every appointment to your unique hair goals. Contact us for details on scheduling and what to expect at your visit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ── -->
+  <section id="services">
+    <div class="section-inner">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-heading">Our Services</h2>
+      <hr class="section-rule" />
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#x1F331;</span>
+          <h3>Loc Installation</h3>
+          <p>Start your loc journey with a professional installation using your preferred method — freeform, interlocking, or two-strand twists. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#x2728;</span>
+          <h3>Loc Maintenance &amp; Retwist</h3>
+          <p>Keep your locs neat, healthy, and thriving with routine retwist and maintenance appointments tailored to your hair's growth cycle.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#x1F48E;</span>
+          <h3>Loc Styling</h3>
+          <p>From updos and pinned styles to loc extensions and decorative accessories, we create looks that reflect your personal expression.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#x1F6C1;</span>
+          <h3>Scalp Treatments</h3>
+          <p>Nourish and refresh your scalp with targeted treatments designed to promote healthy hair growth and relieve dryness or buildup.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#x1F9F9;</span>
+          <h3>Loc Repair &amp; Fusing</h3>
+          <p>Restore locs that have experienced thinning, breakage, or unraveling with our professional repair and fusing techniques.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#x1F4CB;</span>
+          <h3>Natural Hair Consultations</h3>
+          <p>Not sure where to start? Book a one-on-one consultation to discuss your hair goals, texture, and the best path forward for your loc journey.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section id="contact">
+    <div class="section-inner">
+      <span class="section-label">Find Us</span>
+      <h2 class="section-heading">Visit Miraculously Loc</h2>
+      <hr class="section-rule" />
+      <div class="contact-box">
+        <h3>Come See Us in Gainesville</h3>
+        <p class="contact-tagline">We would love to welcome you to our chair.</p>
+
+        <div class="contact-info-row">
+          <span class="ci-icon">&#x1F4CD;</span>
+          <div class="ci-text">
+            <strong>Address</strong>
+            1109 NW 13th St, Suite H<br>
+            Gainesville, FL 32601
+          </div>
+        </div>
+
+        <div class="contact-info-row">
+          <span class="ci-icon">&#x1F4C5;</span>
+          <div class="ci-text">
+            <strong>Hours</strong>
+            Contact us for current hours and availability
+          </div>
+        </div>
+
+        <a
+          href="https://www.google.com/maps/search/Miraculously%20Loc%201109%20NW%2013th%20St%2C%20Suite%20H%2C%20Gainesville%2C%20FL%2032601"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-directions"
+        >
+          &#x1F5FA; Get Directions
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p><strong>Miraculously Loc</strong></p>
+    <p>1109 NW 13th St, Suite H &mdash; Gainesville, FL 32601</p>
+    <p style="margin-top:0.5rem;">&copy; 2026 Miraculously Loc. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+    // Close on link click
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => links.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

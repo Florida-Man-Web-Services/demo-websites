@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Only Nails | Nail Salon — Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blush:     #f7d6e0;
+      --rose:      #e8a0b4;
+      --deep-rose: #c0637e;
+      --mauve:     #8b3a55;
+      --cream:     #fdf6f0;
+      --dark:      #2e1a22;
+      --text:      #4a2c38;
+      --white:     #ffffff;
+      --gold:      #c9972b;
+      --shadow:    rgba(192, 99, 126, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--white);
+      border-bottom: 2px solid var(--blush);
+      z-index: 1000;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--deep-rose), var(--mauve));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .nav-logo-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      color: var(--mauve);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--deep-rose);
+    }
+
+    .nav-cta {
+      background: var(--deep-rose);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 30px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--mauve) !important;
+      color: var(--white) !important;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--mauve);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* Mobile nav */
+    .mobile-menu {
+      display: none;
+      background: var(--white);
+      border-top: 1px solid var(--blush);
+      padding: 1rem 1.5rem 1.5rem;
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--blush);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--deep-rose);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      margin-top: 64px;
+      background: linear-gradient(145deg, var(--mauve) 0%, var(--deep-rose) 50%, var(--rose) 100%);
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.07) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+    }
+
+    /* Decorative petals */
+    .petal {
+      position: absolute;
+      border-radius: 50% 0 50% 0;
+      opacity: 0.08;
+      background: var(--white);
+    }
+
+    .petal-1 { width: 200px; height: 200px; top: -60px; left: -60px; transform: rotate(30deg); }
+    .petal-2 { width: 300px; height: 300px; bottom: -100px; right: -80px; transform: rotate(-20deg); }
+    .petal-3 { width: 120px; height: 120px; top: 30%; right: 10%; transform: rotate(15deg); }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      color: var(--white);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.3);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 9vw, 6rem);
+      font-weight: bold;
+      color: var(--white);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1.05;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: rgba(255,255,255,0.88);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      background: var(--white);
+      color: var(--mauve);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.9rem 2.5rem;
+      border-radius: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    /* ── SECTION COMMON ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--deep-rose);
+      display: block;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--mauve);
+      text-align: center;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose), var(--deep-rose));
+      border-radius: 2px;
+      margin: 0 auto 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 1.1rem;
+      line-height: 1.8;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .about-card {
+      background: var(--cream);
+      border-left: 4px solid var(--rose);
+      padding: 1.2rem 1.5rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .about-card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .about-card h3 {
+      font-size: 0.95rem;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--mauve);
+      margin-bottom: 0.25rem;
+    }
+
+    .about-card p {
+      font-size: 0.9rem;
+      color: var(--text);
+      opacity: 0.85;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--cream);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform 0.25s, box-shadow 0.25s;
+      border-top: 4px solid var(--rose);
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 35px var(--shadow);
+    }
+
+    .service-icon {
+      width: 62px;
+      height: 62px;
+      background: linear-gradient(135deg, var(--blush), var(--rose));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 1.7rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--mauve);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.03em;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .service-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deep-rose);
+      background: var(--blush);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--white);
+    }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      background: linear-gradient(145deg, var(--mauve), var(--deep-rose));
+      color: var(--white);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+
+    .contact-info h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    .contact-info .tagline {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-detail-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .contact-detail-text strong {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail-text span {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .contact-detail-text a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .contact-detail-text a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      background: var(--white);
+      color: var(--mauve);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .btn-directions:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Rating panel */
+    .rating-panel {
+      background: var(--cream);
+      border: 2px solid var(--blush);
+      border-radius: 16px;
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 2rem;
+    }
+
+    .rating-number {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: var(--mauve);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      opacity: 0.7;
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-source {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--deep-rose);
+    }
+
+    .rating-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--rose);
+      border-radius: 2px;
+      margin: 1.2rem auto;
+    }
+
+    .rating-testimonial {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+      opacity: 0.85;
+    }
+
+    .rating-hours {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--blush);
+    }
+
+    .rating-hours h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--deep-rose);
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-hours p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .footer-logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-address {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--rose);
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      opacity: 0.45;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #hero {
+        min-height: 75vh;
+      }
+
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#hero">
+        <div class="nav-logo-icon">
+          <!-- Simple nail/sparkle SVG -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C9.24 2 7 4.24 7 7c0 2.05 1.23 3.81 3 4.58V21h4V11.58c1.77-.77 3-2.53 3-4.58 0-2.76-2.24-5-5-5zm0 2c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3z"/>
+          </svg>
+        </div>
+        <span class="nav-logo-text">Only Nails</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about" onclick="closeMobile()">About</a>
+      <a href="#services" onclick="closeMobile()">Services</a>
+      <a href="#contact" onclick="closeMobile()">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <div class="petal petal-1"></div>
+    <div class="petal petal-2"></div>
+    <div class="petal petal-3"></div>
+    <div class="hero-content">
+      <span class="hero-badge">Nail Salon &mdash; Gainesville, FL</span>
+      <h1 class="hero-title">Only Nails</h1>
+      <p class="hero-subtitle">Where every detail matters &mdash; beautiful nails, every time.</p>
+      <a href="#services" class="hero-btn">Explore Services</a>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="container">
+      <span class="section-label">Who We Are</span>
+      <h2 class="section-title">Crafted with Care</h2>
+      <div class="section-divider"></div>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Only Nails is a full-service nail salon serving the Gainesville community, dedicated to delivering high-quality nail care in a welcoming and relaxing environment. From classic manicures to intricate nail art, every visit is tailored to help you look and feel your best.</p>
+          <p>Our skilled technicians stay current with the latest trends and techniques, using professional-grade products to ensure lasting results. Whether you are treating yourself or preparing for a special occasion, we take pride in the precision and artistry behind every service.</p>
+          <p>Conveniently located on SW Archer Road, Only Nails is your go-to destination for polished, professional nail care right here in Gainesville. Walk-ins are welcome and appointments are encouraged.</p>
+        </div>
+
+        <div class="about-visual">
+          <div class="about-card">
+            <div class="about-card-icon">&#10024;</div>
+            <h3>Quality Products</h3>
+            <p>Professional-grade polishes and products for results that last.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#128149;</div>
+            <h3>Skilled Technicians</h3>
+            <p>Experienced nail artists dedicated to your satisfaction.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#127774;</div>
+            <h3>Relaxing Atmosphere</h3>
+            <p>A calm, clean, and comfortable space designed for you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ── -->
+  <section id="services">
+    <div class="container">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Our Services</h2>
+      <div class="section-divider"></div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#128145;</div>
+          <h3>Manicure</h3>
+          <p>Classic and gel manicures with shaping, cuticle care, and your choice of polish for a flawless finish.</p>
+          <span class="service-tag">Hands</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128166;</div>
+          <h3>Pedicure</h3>
+          <p>Relaxing foot soaks, exfoliation, nail shaping, and polish to leave your feet feeling refreshed and smooth.</p>
+          <span class="service-tag">Feet</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#10024;</div>
+          <h3>Acrylic Nails</h3>
+          <p>Full sets and fills in a variety of shapes and lengths to give you a durable, sculpted look.</p>
+          <span class="service-tag">Enhancements</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127775;</div>
+          <h3>Gel Nails</h3>
+          <p>Long-lasting gel applications that deliver a high-gloss shine and chip-free wear for weeks.</p>
+          <span class="service-tag">Enhancements</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127912;</div>
+          <h3>Nail Art &amp; Design</h3>
+          <p>Creative designs, ombre, chrome powder, and custom nail art to express your unique style.</p>
+          <span class="service-tag">Design</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128142;</div>
+          <h3>Dip Powder</h3>
+          <p>A lightweight and odor-free alternative to acrylics, offering vibrant color and natural-looking strength.</p>
+          <span class="service-tag">Enhancements</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-label">Find Us</span>
+      <h2 class="section-title">Visit Only Nails</h2>
+      <div class="section-divider"></div>
+
+      <div class="contact-wrapper">
+
+        <div class="contact-info">
+          <h2>Only Nails</h2>
+          <p class="tagline">Your neighborhood nail salon in Gainesville</p>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128205;</div>
+            <div class="contact-detail-text">
+              <strong>Address</strong>
+              <span>3841 SW Archer Rd Suite. E<br>Gainesville, FL 32608</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128222;</div>
+            <div class="contact-detail-text">
+              <strong>Phone</strong>
+              <a href="tel:+13525546088">(352) 554-6088</a>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128336;</div>
+            <div class="contact-detail-text">
+              <strong>Hours</strong>
+              <span>Contact us for current hours</span>
+            </div>
+          </div>
+
+          <a
+            class="btn-directions"
+            href="https://www.google.com/maps/search/ONLY%20NAILS%203841%20SW%20Archer%20Rd%20Suite.%20E%2C%20Gainesville%2C%20FL%2032608"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            &#9193; Get Directions
+          </a>
+        </div>
+
+        <div class="rating-panel">
+          <div class="rating-stars">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+          </div>
+          <div class="rating-number">4.8</div>
+          <div class="rating-count">Based on 189 reviews</div>
+          <div class="rating-source">Google Maps Rating</div>
+
+          <div class="rating-divider"></div>
+
+          <p class="rating-testimonial">"Customers consistently praise the skilled technicians, relaxing atmosphere, and attention to detail that keeps them coming back."</p>
+
+          <div class="rating-hours">
+            <h4>Ready to Book?</h4>
+            <p>Walk-ins welcome &mdash; appointments encouraged.<br>Call us at <a href="tel:+13525546088" style="color: var(--deep-rose); text-decoration:none;">(352) 554-6088</a></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-logo">Only Nails</div>
+    <div class="footer-address">
+      3841 SW Archer Rd Suite. E &mdash; Gainesville, FL 32608<br>
+      <a href="tel:+13525546088" style="color: rgba(255,255,255,0.6); text-decoration: none;">(352) 554-6088</a>
+    </div>
+    <div class="footer-links">
+      <a href="#hero">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.google.com/maps/search/ONLY%20NAILS%203841%20SW%20Archer%20Rd%20Suite.%20E%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener noreferrer">Directions</a>
+    </div>
+    <div class="footer-copy">&copy; 2025 Only Nails. All rights reserved.</div>
+  </footer>
+
+  <script>
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', function () {
+      mobileMenu.classList.toggle('open');
+    });
+
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

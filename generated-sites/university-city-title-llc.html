@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>University City Title LLC | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #1a2b4a;
+      --navy-light: #243660;
+      --gold: #c9a84c;
+      --gold-light: #e2c27a;
+      --cream: #f7f4ef;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --gray-light: #f1f0ee;
+      --text-dark: #1c1c1c;
+      --text-mid: #3d3d3d;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--gold);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--navy);
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .nav-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-sub {
+      font-size: 0.7rem;
+      color: var(--gold-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px;
+      left: 0;
+      right: 0;
+      background: var(--navy-light);
+      z-index: 99;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .mobile-menu a {
+      color: var(--cream);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      display: block;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 68px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #1e3a5f 100%);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 1.5rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 1;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(201, 168, 76, 0.2);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .hero h1 span {
+      color: var(--gold);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(247, 244, 239, 0.85);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+      font-style: italic;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--gold);
+      color: var(--navy);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 0.85rem 2rem;
+      border-radius: 3px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .hero-cta:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 1.5rem auto 0;
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--navy);
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .section-rule {
+      width: 50px;
+      height: 3px;
+      background: var(--gold);
+      margin-bottom: 1.75rem;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .about-card {
+      background: var(--white);
+      border-top: 3px solid var(--gold);
+      padding: 1.5rem 1.25rem;
+      border-radius: 2px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .about-card-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .about-card-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--gold);
+    }
+
+    .about-card h4 {
+      font-size: 0.9rem;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+
+    .about-card p {
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .services-header .section-rule {
+      margin: 0 auto 1.75rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border-radius: 3px;
+      padding: 2rem 1.75rem;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.1);
+      border-bottom-color: var(--gold);
+    }
+
+    .service-number {
+      font-family: Arial, sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--navy);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--gold);
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-card p {
+      font-family: Arial, sans-serif;
+      font-size: 0.875rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .contact .section-title {
+      color: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      font-family: Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--gold);
+    }
+
+    .contact-item-text {
+      padding-top: 0.4rem;
+    }
+
+    .contact-item-text .label {
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text .value {
+      font-size: 1rem;
+      color: var(--cream);
+    }
+
+    .contact-item-text .value a {
+      color: var(--cream);
+      text-decoration: none;
+    }
+
+    .contact-item-text .value a:hover {
+      color: var(--gold);
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      background: var(--gold);
+      color: var(--navy);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.7rem 1.5rem;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+
+    .btn-directions:hover {
+      background: var(--gold-light);
+    }
+
+    .btn-directions svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--navy);
+    }
+
+    .rating-box {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      padding: 2rem;
+    }
+
+    .rating-box h3 {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .rating-score {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.5rem;
+    }
+
+    .star {
+      font-size: 1.3rem;
+    }
+
+    .star.full { color: var(--gold); }
+    .star.half { color: var(--gold); opacity: 0.5; }
+    .star.empty { color: rgba(255,255,255,0.2); }
+
+    .rating-count {
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 1.5rem;
+    }
+
+    .rating-source {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: Arial, sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .rating-source svg {
+      width: 14px;
+      height: 14px;
+      fill: rgba(255,255,255,0.4);
+    }
+
+    .contact-cta-box {
+      margin-top: 2rem;
+      background: rgba(201,168,76,0.1);
+      border-left: 3px solid var(--gold);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .contact-cta-box p {
+      font-family: Arial, sans-serif;
+      font-size: 0.875rem;
+      color: rgba(247,244,239,0.75);
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #111a2e;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+    }
+
+    footer strong {
+      color: rgba(255,255,255,0.65);
+    }
+
+    footer .footer-divider {
+      display: inline-block;
+      margin: 0 0.5rem;
+      opacity: 0.3;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-cards {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+
+      .hero {
+        padding: 3rem 1.25rem;
+        min-height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 3H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">
+        <span class="nav-name">University City Title</span>
+        <span class="nav-sub">LLC &mdash; Gainesville, FL</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+      <li><a href="#services" onclick="closeMobileMenu()">Services</a></li>
+      <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Title &amp; Closing Services &mdash; Gainesville, FL</div>
+      <h1>Trusted Title Solutions<br>for <span>Alachua County</span></h1>
+      <p>Protecting property ownership and facilitating smooth real estate closings for buyers, sellers, and lenders across North Central Florida.</p>
+      <a href="#contact" class="hero-cta">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        Get in Touch
+      </a>
+      <div class="hero-divider"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">About Us</div>
+          <h2 class="section-title">Your Local Title &amp; Closing Partner</h2>
+          <div class="section-rule"></div>
+          <p>University City Title LLC serves the Gainesville community and surrounding Alachua County area, providing comprehensive title search, examination, and closing services for residential and commercial real estate transactions.</p>
+          <p>Our team works closely with buyers, sellers, real estate agents, and mortgage lenders to ensure every transaction is handled with thoroughness and attention to detail, helping protect your most important investment.</p>
+          <p>Whether you are purchasing a home near campus, refinancing a commercial property, or navigating a complex transaction, we are here to guide you through the closing process from start to finish.</p>
+        </div>
+        <div class="about-cards">
+          <div class="about-card">
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            </div>
+            <h4>Title Protection</h4>
+            <p>Thorough title searches and owner's title insurance to safeguard your property rights.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </div>
+            <h4>Expert Closings</h4>
+            <p>Coordinating all documentation to ensure a seamless settlement experience.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <h4>Local Expertise</h4>
+            <p>Deep knowledge of Gainesville and Alachua County real estate markets and regulations.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+            <h4>Client Focused</h4>
+            <p>Committed to clear communication and personalized service for every client.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <div class="section-label">What We Offer</div>
+        <h2 class="section-title">Our Title Services</h2>
+        <div class="section-rule"></div>
+        <p style="color:var(--gray);max-width:540px;margin:0 auto;font-family:Arial,sans-serif;font-size:0.95rem;">From title search through closing day, we provide the essential services that protect buyers, sellers, and lenders in every real estate transaction.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-number">01</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          </div>
+          <h3>Title Search &amp; Examination</h3>
+          <p>A thorough review of public records to identify any liens, encumbrances, or defects affecting your property's title history.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-number">02</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+          </div>
+          <h3>Owner's Title Insurance</h3>
+          <p>A one-time policy that protects your investment against covered title defects discovered after closing — for as long as you own the property.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-number">03</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          </div>
+          <h3>Lender's Title Insurance</h3>
+          <p>Required by most mortgage lenders, this policy protects the lender's interest in the property for the duration of the loan.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-number">04</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H18V0h-2v2H8V0H6v2H4.5C3.12 2 2 3.12 2 4.5v15C2 20.88 3.12 22 4.5 22h15c1.38 0 2.5-1.12 2.5-2.5v-15C22 3.12 20.88 2 19.5 2zm0 17.5h-15V7h15v12.5z"/></svg>
+          </div>
+          <h3>Real Estate Closings</h3>
+          <p>Full-service settlement coordination for residential and commercial transactions, including document preparation, signing, and disbursement of funds.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-number">05</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+          </div>
+          <h3>Deed Preparation</h3>
+          <p>Accurate preparation and recordation of warranty deeds, quitclaim deeds, and other documents needed to transfer property ownership.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-number">06</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          </div>
+          <h3>Refinance Closings</h3>
+          <p>Efficient handling of refinance transactions, including title updates and lender-required title insurance to facilitate your new loan.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div>
+          <div class="section-label">Reach Us</div>
+          <h2 class="section-title">Contact &amp; Location</h2>
+          <div class="section-rule"></div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <div class="label">Address</div>
+              <div class="value">309 NE 1st St<br>Gainesville, FL</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <div class="label">Phone</div>
+              <div class="value"><a href="tel:+13523164214">(352) 316-4214</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <div class="label">Hours</div>
+              <div class="value">Contact us for details</div>
+            </div>
+          </div>
+
+          <a
+            href="https://www.google.com/maps/search/University%20City%20Title%20LLC%20309%20NE%201st%20St%2C%20Gainesville%2C%20FL"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+            Get Directions
+          </a>
+
+          <div class="contact-cta-box">
+            <p>Ready to start your transaction or have questions about title services? Call us or stop by our Gainesville office — we are here to help.</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="rating-box">
+            <h3>Google Maps Rating</h3>
+            <div class="rating-score">2.8</div>
+            <div class="rating-stars">
+              <!-- 2.8 stars: 2 full, 1 partial, 2 empty -->
+              <span class="star full">&#9733;</span>
+              <span class="star full">&#9733;</span>
+              <span class="star half">&#9733;</span>
+              <span class="star empty">&#9733;</span>
+              <span class="star empty">&#9733;</span>
+            </div>
+            <div class="rating-count">Based on 6 Google reviews</div>
+            <div class="rating-source">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Verified on Google Maps
+            </div>
+
+            <div style="margin-top:2rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,0.1);">
+              <p style="font-family:Arial,sans-serif;font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.6;">University City Title LLC is located at 309 NE 1st St in downtown Gainesville, conveniently accessible for clients throughout Alachua County and surrounding North Central Florida communities.</p>
+            </div>
+
+            <div style="margin-top:1.5rem;background:rgba(201,168,76,0.12);border-radius:4px;padding:1.25rem 1.5rem;">
+              <p style="font-family:Arial,sans-serif;font-size:0.82rem;color:rgba(247,244,239,0.7);line-height:1.6;font-style:italic;">For questions about title fees, services, or to schedule a closing, please contact us directly. We look forward to working with you.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <strong>University City Title LLC</strong>
+      <span class="footer-divider">&bull;</span>
+      309 NE 1st St, Gainesville, FL
+      <span class="footer-divider">&bull;</span>
+      <a href="tel:+13523164214" style="color:inherit;text-decoration:none;">(352) 316-4214</a>
+    </p>
+    <p style="margin-top:0.75rem;">&copy; 2026 University City Title LLC. All rights reserved.</p>
+  </footer>
+
+  <script>
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', function() {
+      mobileMenu.classList.toggle('open');
+    });
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>

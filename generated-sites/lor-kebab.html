@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lor Kebab — Persian Restaurant | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #1a0e08;
+      color: #f2e8d9;
+      line-height: 1.7;
+    }
+
+    /* ── Palette ──
+       Deep saffron: #e8a020
+       Warm ivory:   #f2e8d9
+       Rich crimson: #8b1a1a
+       Dark earth:   #1a0e08
+       Mid earth:    #2d1a0e
+       Accent copper:#c47c2b
+    */
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(26, 14, 8, 0.95);
+      border-bottom: 2px solid #c47c2b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 2rem;
+      backdrop-filter: blur(6px);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: #e8a020;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .nav-logo-text {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #f2e8d9;
+      letter-spacing: 0.04em;
+    }
+    .nav-logo-text span {
+      color: #e8a020;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav ul li a {
+      color: #d4c4a8;
+      text-decoration: none;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav ul li a:hover { color: #e8a020; }
+
+    /* ── Hamburger ── */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #f2e8d9;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .nav-toggle:hover span { background: #e8a020; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      background:
+        linear-gradient(to bottom, rgba(26,14,8,0.55) 0%, rgba(26,14,8,0.75) 60%, #1a0e08 100%),
+        repeating-linear-gradient(
+          135deg,
+          #2d1a0e 0px, #2d1a0e 2px,
+          transparent 2px, transparent 28px
+        ),
+        radial-gradient(ellipse at 30% 60%, #5a2a0a 0%, #1a0e08 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.5rem 4rem;
+    }
+    .hero-ornament {
+      font-size: 2.8rem;
+      margin-bottom: 1.2rem;
+      opacity: 0.85;
+    }
+    .hero-eyebrow {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 1rem;
+    }
+    #hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      color: #f2e8d9;
+      letter-spacing: 0.06em;
+      line-height: 1.05;
+      margin-bottom: 1.2rem;
+    }
+    #hero h1 em {
+      color: #e8a020;
+      font-style: normal;
+    }
+    .hero-divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #c47c2b, transparent);
+      margin: 0 auto 1.4rem;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #d4c4a8;
+      max-width: 540px;
+      margin: 0 auto 2.4rem;
+      font-style: italic;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background: #e8a020;
+      color: #1a0e08;
+      text-decoration: none;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.25s, transform 0.15s;
+    }
+    .hero-cta:hover { background: #c47c2b; transform: translateY(-2px); }
+
+    /* ── Section Base ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      color: #f2e8d9;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+    .section-rule {
+      width: 60px;
+      height: 2px;
+      background: #c47c2b;
+      margin-bottom: 2rem;
+    }
+
+    /* ── About ── */
+    #about {
+      background: #2d1a0e;
+    }
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    #about .about-text p {
+      color: #d4c4a8;
+      margin-bottom: 1.1rem;
+      font-size: 1.05rem;
+    }
+    .about-badge {
+      background: #1a0e08;
+      border: 1px solid #c47c2b;
+      border-radius: 4px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .about-badge-star {
+      font-size: 2.2rem;
+      margin-bottom: 0.6rem;
+    }
+    .about-badge-rating {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #e8a020;
+      line-height: 1;
+    }
+    .about-badge-label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.8rem;
+      color: #a89070;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+    .about-badge-sub {
+      font-size: 0.9rem;
+      color: #d4c4a8;
+      margin-top: 0.5rem;
+    }
+    .stars {
+      color: #e8a020;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      margin: 0.5rem 0;
+    }
+
+    /* ── Menu / Services ── */
+    #services {
+      background: #1a0e08;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .service-card {
+      background: #2d1a0e;
+      border: 1px solid #3d2515;
+      border-radius: 4px;
+      padding: 1.8rem;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: #e8a020;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .service-card:hover {
+      border-color: #c47c2b;
+      transform: translateY(-3px);
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: #f2e8d9;
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 0.92rem;
+      color: #a89070;
+      font-family: 'Helvetica Neue', sans-serif;
+      line-height: 1.55;
+    }
+
+    /* ── Contact ── */
+    #contact {
+      background: #2d1a0e;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    .contact-info-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.8rem;
+    }
+    .contact-info-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #c47c2b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .contact-info-text strong {
+      display: block;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 0.3rem;
+    }
+    .contact-info-text p, .contact-info-text a {
+      color: #d4c4a8;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-info-text a:hover { color: #e8a020; }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.6rem;
+      background: #e8a020;
+      color: #1a0e08;
+      text-decoration: none;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.25s, transform 0.15s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #c47c2b; transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.6rem;
+      background: transparent;
+      color: #f2e8d9;
+      text-decoration: none;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      border: 1px solid #c47c2b;
+      transition: background 0.25s, color 0.25s, transform 0.15s;
+    }
+    .btn-outline:hover {
+      background: rgba(196, 124, 43, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .contact-card {
+      background: #1a0e08;
+      border: 1px solid #3d2515;
+      border-radius: 4px;
+      padding: 2.2rem;
+    }
+    .contact-card h3 {
+      font-size: 1.3rem;
+      color: #f2e8d9;
+      margin-bottom: 0.4rem;
+    }
+    .contact-card p {
+      color: #a89070;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .rating-display {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #2d1a0e;
+      border: 1px solid #3d2515;
+      border-radius: 4px;
+      padding: 1rem 1.3rem;
+      margin-top: 1.5rem;
+    }
+    .rating-number {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #e8a020;
+      line-height: 1;
+    }
+    .rating-details {
+      flex: 1;
+    }
+    .rating-details .stars { font-size: 1rem; margin: 0 0 0.2rem; }
+    .rating-details small {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.78rem;
+      color: #a89070;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #0f0804;
+      border-top: 1px solid #2d1a0e;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+    .footer-logo {
+      font-size: 1.4rem;
+      color: #e8a020;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+    .footer-tagline {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.82rem;
+      color: #6b5040;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+    }
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: #3d2515;
+      margin: 0 auto 1.4rem;
+    }
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+    .footer-nav a {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.8rem;
+      color: #6b5040;
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: #e8a020; }
+    .footer-copy {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.78rem;
+      color: #4a3020;
+    }
+
+    /* ── Persian ornament dividers ── */
+    .ornament-row {
+      text-align: center;
+      color: #c47c2b;
+      font-size: 1.2rem;
+      opacity: 0.5;
+      margin: 1rem 0;
+      letter-spacing: 0.4em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      nav ul.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(26, 14, 8, 0.98);
+        padding: 1rem 2rem 1.5rem;
+        gap: 1.2rem;
+        border-bottom: 2px solid #c47c2b;
+      }
+      .nav-toggle { display: flex; }
+
+      #about .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .about-badge { max-width: 280px; margin: 0 auto; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 3.5rem 1rem; }
+      .service-card { padding: 1.4rem; }
+      .contact-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon">&#x1F525;</div>
+      <span class="nav-logo-text"><span>Lor</span> Kebab</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" onclick="
+      var ul = document.querySelector('nav ul');
+      ul.classList.toggle('open');
+    ">
+      <span></span><span></span><span></span>
+    </button>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Menu</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-ornament">&#x2741;</div>
+    <p class="hero-eyebrow">Persian Cuisine &bull; Gainesville, FL</p>
+    <h1><em>Lor</em> Kebab</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">Ancient flavors, lovingly prepared &mdash; where the aromas of saffron and sumac bring Persia to your table.</p>
+    <a href="#contact" class="hero-cta">Visit Us</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">Our Story</p>
+          <h2 class="section-title">A Taste of Persian Tradition</h2>
+          <div class="section-rule"></div>
+          <p>Lor Kebab brings the rich culinary heritage of Persia to the heart of downtown Gainesville. Every dish is crafted with time-honored spice blends and slow-cooked techniques that honor the depth and warmth of Iranian home cooking.</p>
+          <p>From fragrant rice dishes layered with saffron to charcoal-grilled skewers marinated overnight, our kitchen is devoted to authenticity and freshness. We source quality ingredients and prepare each plate with the care it deserves.</p>
+          <p>Whether you are a longtime lover of Persian food or discovering it for the first time, Lor Kebab offers a welcoming table and a menu that speaks for itself. Contact us for current availability and details.</p>
+          <div class="ornament-row">&#x2665; &nbsp; &#x2665; &nbsp; &#x2665;</div>
+        </div>
+        <div>
+          <div class="about-badge">
+            <div class="about-badge-star">&#x2B50;</div>
+            <div class="about-badge-rating">4.9</div>
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="about-badge-label">Google Maps Rating</div>
+            <div class="about-badge-sub">Based on 271 reviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES / MENU HIGHLIGHTS -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Menu Highlights</h2>
+      <div class="section-rule"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#x1F356;</div>
+          <h3>Grilled Kebabs</h3>
+          <p>Tender skewers of seasoned lamb, beef, and chicken, charcoal-grilled to perfection and served with saffron rice and grilled tomatoes.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#x1F372;</div>
+          <h3>Persian Stews (Khoresht)</h3>
+          <p>Slow-simmered stews such as ghormeh sabzi and fesenjan, rich with herbs, pomegranate, and warming spices &mdash; the heart of Persian cuisine.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#x1F35A;</div>
+          <h3>Saffron Rice Dishes</h3>
+          <p>Fluffy basmati rice preparations including chelo and polo varieties, infused with golden saffron and topped with a crispy tahdig crust.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#x1F96B;</div>
+          <h3>Mezze &amp; Appetizers</h3>
+          <p>A selection of Persian starters including hummus, kashk-e bademjan (eggplant dip), fresh herbs, and warm flatbread.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#x1F9C5;</div>
+          <h3>Soups &amp; Ash</h3>
+          <p>Hearty Persian soups like ash reshteh &mdash; thick, herb-laden, and deeply nourishing, served as a traditional starter or standalone meal.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#x1F36E;</div>
+          <h3>Persian Desserts &amp; Drinks</h3>
+          <p>Finish with rosewater-scented sweets, baklava, or a refreshing glass of doogh. Dessert selections vary &mdash; contact us for current offerings.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div>
+          <p class="section-label">Find Us</p>
+          <h2 class="section-title">Come Visit</h2>
+          <div class="section-rule"></div>
+
+          <div class="contact-info-item">
+            <div class="contact-info-icon">&#x1F4CD;</div>
+            <div class="contact-info-text">
+              <strong>Address</strong>
+              <p>12 SW 1st Ave<br>Gainesville, FL 32601</p>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-info-icon">&#x1F4DE;</div>
+            <div class="contact-info-text">
+              <strong>Phone</strong>
+              <a href="tel:+13058464506">(305) 846-4506</a>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-info-icon">&#x1F55B;</div>
+            <div class="contact-info-text">
+              <strong>Hours</strong>
+              <p>Contact us for current hours and availability.</p>
+            </div>
+          </div>
+
+          <div class="contact-actions">
+            <a href="https://www.google.com/maps/search/Lor%20Kebab%2012%20SW%201st%20Ave%2C%20Gainesville%2C%20FL%2032601"
+               target="_blank" rel="noopener" class="btn-primary">
+              &#x1F5FA; Get Directions
+            </a>
+            <a href="tel:+13058464506" class="btn-outline">
+              &#x1F4DE; Call Us Now
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="contact-card">
+            <h3>Reservations &amp; Inquiries</h3>
+            <p>For table reservations, catering inquiries, or any questions about our menu, give us a call or stop by.</p>
+            <div style="margin-bottom: 0.8rem;">
+              <strong style="display:block; font-family:'Helvetica Neue',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:#e8a020; margin-bottom:0.4rem;">Phone</strong>
+              <a href="tel:+13058464506" style="color:#f2e8d9; font-size:1.25rem; text-decoration:none; font-weight:bold;">(305) 846-4506</a>
+            </div>
+            <div>
+              <strong style="display:block; font-family:'Helvetica Neue',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:#e8a020; margin-bottom:0.4rem;">Catering</strong>
+              <p style="color:#a89070; font-family:'Helvetica Neue',sans-serif; font-size:0.9rem;">Contact us for details on private events and catering packages.</p>
+            </div>
+            <div class="rating-display">
+              <div class="rating-number">4.9</div>
+              <div class="rating-details">
+                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <small>271 reviews on Google Maps</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Lor Kebab</div>
+      <div class="footer-tagline">Persian Cuisine &bull; Gainesville, FL</div>
+      <div class="footer-divider"></div>
+      <ul class="footer-nav">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Menu</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="tel:+13058464506">(305) 846-4506</a></li>
+      </ul>
+      <p class="footer-copy">12 SW 1st Ave, Gainesville, FL 32601 &nbsp;&bull;&nbsp; &copy; Lor Kebab. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

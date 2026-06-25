@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Florida Electric Co Inc | Licensed Electrician — Gainesville, FL</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #1a1a2e;
+      background: #f5f7fa;
+      line-height: 1.6;
+    }
+
+    /* ===== Color Palette ===== */
+    /* Primary: deep navy #1a1a2e
+       Accent:  electric yellow #f5c518
+       Mid:     steel blue #2d6a8f
+       Light:   off-white #f5f7fa
+       Dark bg: #12121f                   */
+
+    /* ===== Nav ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.45);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo .bolt {
+      width: 36px;
+      height: 36px;
+      background: #f5c518;
+      clip-path: polygon(60% 0%, 40% 45%, 70% 45%, 40% 100%, 60% 55%, 30% 55%);
+      flex-shrink: 0;
+    }
+    .nav-logo span {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .nav-logo span em {
+      color: #f5c518;
+      font-style: normal;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #d0d8e4;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #f5c518; }
+    .nav-cta {
+      background: #f5c518;
+      color: #1a1a2e !important;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-weight: 700 !important;
+    }
+    .nav-cta:hover { background: #e0b200; color: #1a1a2e !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: #f5c518;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #12121f 0%, #1a1a2e 55%, #2d3a5e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* decorative circuit lines */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(245,197,24,0.06) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(245,197,24,0.06) 60px);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 720px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(245,197,24,0.15);
+      border: 1px solid rgba(245,197,24,0.4);
+      color: #f5c518;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: #f5c518; }
+    .hero p {
+      font-size: clamp(1rem, 2.2vw, 1.22rem);
+      color: #b0bcd4;
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: #f5c518;
+      color: #1a1a2e;
+      padding: 14px 32px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #e0b200; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: #ffffff;
+      padding: 14px 32px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.35);
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: #f5c518; color: #f5c518; }
+
+    /* ===== Sections ===== */
+    section { padding: 80px 5%; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #f5c518;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: #1a1a2e;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: #5a6475;
+      font-size: 1.05rem;
+      max-width: 600px;
+    }
+
+    /* ===== About ===== */
+    #about { background: #ffffff; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .about-text .section-sub { margin-top: 16px; line-height: 1.8; }
+    .about-visual {
+      background: linear-gradient(135deg, #1a1a2e, #2d6a8f);
+      border-radius: 12px;
+      padding: 48px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      box-shadow: 0 8px 40px rgba(26,26,46,0.18);
+    }
+    .about-stat {
+      text-align: center;
+      color: #fff;
+    }
+    .about-stat .num {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #f5c518;
+      line-height: 1;
+    }
+    .about-stat .lbl {
+      font-size: 0.88rem;
+      color: #b0bcd4;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+    .about-divider {
+      width: 60%;
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* ===== Services ===== */
+    #services { background: #f5f7fa; }
+    .services-inner { max-width: 1100px; margin: 0 auto; }
+    .services-header { margin-bottom: 48px; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .service-card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 32px 28px;
+      box-shadow: 0 2px 16px rgba(26,26,46,0.07);
+      border-top: 4px solid #f5c518;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(26,26,46,0.13);
+    }
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(245,197,24,0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .service-icon svg { width: 26px; height: 26px; fill: none; stroke: #f5c518; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .service-card h3 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+    .service-card p {
+      font-size: 0.92rem;
+      color: #5a6475;
+      line-height: 1.65;
+    }
+
+    /* ===== Contact ===== */
+    #contact { background: #1a1a2e; }
+    #contact .section-title { color: #ffffff; }
+    #contact .section-sub { color: #8899b0; }
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-header { margin-bottom: 48px; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .contact-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 36px;
+    }
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .contact-item:last-child { margin-bottom: 0; }
+    .ci-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(245,197,24,0.12);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ci-icon svg { width: 20px; height: 20px; fill: none; stroke: #f5c518; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ci-text .label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8899b0;
+      margin-bottom: 4px;
+    }
+    .ci-text .value {
+      color: #e8edf5;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .ci-text a { color: #f5c518; text-decoration: none; }
+    .ci-text a:hover { text-decoration: underline; }
+    .rating-block {
+      background: rgba(245,197,24,0.08);
+      border: 1px solid rgba(245,197,24,0.25);
+      border-radius: 10px;
+      padding: 28px 32px;
+      text-align: center;
+    }
+    .rating-block .stars {
+      font-size: 1.8rem;
+      letter-spacing: 4px;
+      color: #f5c518;
+      margin-bottom: 8px;
+    }
+    .rating-block .score {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #f5c518;
+      line-height: 1;
+    }
+    .rating-block .out-of {
+      font-size: 1rem;
+      color: #8899b0;
+      margin-bottom: 10px;
+    }
+    .rating-block .source {
+      font-size: 0.82rem;
+      color: #8899b0;
+      letter-spacing: 0.05em;
+    }
+    .rating-block .rating-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #d0d8e4;
+      margin-bottom: 16px;
+    }
+    .btn-directions {
+      display: inline-block;
+      margin-top: 24px;
+      background: #f5c518;
+      color: #1a1a2e;
+      padding: 13px 28px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.97rem;
+      text-decoration: none;
+      transition: background 0.2s;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-directions:hover { background: #e0b200; }
+
+    /* ===== Footer ===== */
+    footer {
+      background: #12121f;
+      padding: 36px 5%;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    footer .foot-logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    footer .foot-logo span { color: #f5c518; }
+    footer p {
+      font-size: 0.84rem;
+      color: #5a6475;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 900px) {
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: #1a1a2e;
+        padding: 20px 5% 28px;
+        gap: 18px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      }
+      .nav-links.open a { font-size: 1.05rem; }
+      .hamburger { display: flex; }
+      .services-grid { grid-template-columns: 1fr; }
+      section { padding: 60px 5%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="bolt"></div>
+      <span><em>All Florida</em> Electric Co Inc</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="hero-badge">Licensed Electricians &mdash; Gainesville, FL</div>
+      <h1>Powering <span>Gainesville</span><br>One Circuit at a Time</h1>
+      <p>Reliable residential and commercial electrical services you can trust. Safety-first workmanship, professional results.</p>
+      <div class="hero-buttons">
+        <a href="tel:3523786014" class="btn-primary">Call (352) 378-6014</a>
+        <a href="#services" class="btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-label">About Us</span>
+        <h2 class="section-title">Your Local Electrical Experts in Gainesville</h2>
+        <p class="section-sub">
+          All Florida Electric Co Inc is a trusted electrical contractor serving homeowners and businesses throughout the Gainesville area. Our licensed electricians bring the knowledge and attention to detail needed to handle everything from routine repairs to complete electrical system installations.
+        </p>
+        <p class="section-sub" style="margin-top:14px;">
+          We are committed to delivering safe, code-compliant work on every job — whether it's a simple outlet replacement or a full-panel upgrade. Contact us to discuss your project and get a professional assessment.
+        </p>
+      </div>
+      <div class="about-visual">
+        <div class="about-stat">
+          <div class="num">4.7&#9733;</div>
+          <div class="lbl">Google Maps Rating</div>
+        </div>
+        <div class="about-divider"></div>
+        <div class="about-stat">
+          <div class="num">FL</div>
+          <div class="lbl">Licensed &amp; Insured</div>
+        </div>
+        <div class="about-divider"></div>
+        <div class="about-stat">
+          <div class="num">100%</div>
+          <div class="lbl">Safety-First Approach</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-inner">
+      <div class="services-header">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">Electrical Services</h2>
+        <p class="section-sub">From small repairs to large installations, we handle a wide range of electrical needs for residential and commercial clients.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- House icon -->
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <h3>Residential Electrical Services</h3>
+          <p>Wiring, outlets, switches, lighting, and general electrical repairs for homes and apartments throughout the Gainesville area.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Building icon -->
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="16" y2="21"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+          </div>
+          <h3>Commercial Electrical Services</h3>
+          <p>Dependable electrical solutions for offices, retail spaces, warehouses, and other commercial properties — installed to code.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Zap/panel icon -->
+            <svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3>Panel Upgrades &amp; Replacements</h3>
+          <p>Outdated or overloaded electrical panels upgraded to modern, higher-capacity breaker boxes for improved safety and performance.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Light bulb icon -->
+            <svg viewBox="0 0 24 24"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          </div>
+          <h3>Lighting Installation</h3>
+          <p>Indoor and outdoor lighting installation including recessed lighting, ceiling fans, exterior fixtures, and energy-efficient LED upgrades.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Tool/wrench icon -->
+            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>Electrical Repairs &amp; Troubleshooting</h3>
+          <p>Diagnosis and repair of tripping breakers, faulty outlets, flickering lights, and other electrical problems to restore safe operation.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Plug/EV icon -->
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+          </div>
+          <h3>New Construction &amp; Rewiring</h3>
+          <p>Complete electrical wiring for new builds, additions, and full-home rewiring projects — designed to meet current NEC and Florida building codes.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-header">
+        <span class="section-label" style="color:#f5c518;">Get In Touch</span>
+        <h2 class="section-title">Contact Us</h2>
+        <p class="section-sub">Ready to start your project? Give us a call or stop by — we're here to help with all your electrical needs.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+
+          <div class="contact-item">
+            <div class="ci-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6.09 6.09l1.09-.93a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="ci-text">
+              <div class="label">Phone</div>
+              <div class="value"><a href="tel:3523786014">(352) 378-6014</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="ci-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="ci-text">
+              <div class="label">Address</div>
+              <div class="value">2606 NE 17th Ter<br>Gainesville, FL</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="ci-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="ci-text">
+              <div class="label">Hours</div>
+              <div class="value">Contact us for details</div>
+            </div>
+          </div>
+
+          <a href="https://www.google.com/maps/search/All%20Florida%20Electric%20Co%20Inc%202606%20NE%2017th%20Ter" target="_blank" rel="noopener" class="btn-directions">
+            Get Directions &rarr;
+          </a>
+        </div>
+
+        <div>
+          <div class="rating-block">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="score">4.7</div>
+            <div class="out-of">out of 5</div>
+            <div class="rating-label">Rated on Google Maps</div>
+            <div class="source">Based on customer reviews &mdash; Google Maps</div>
+          </div>
+          <div class="contact-card" style="margin-top:24px; border-color:rgba(245,197,24,0.2);">
+            <p style="color:#b0bcd4; font-size:0.95rem; line-height:1.7;">
+              <strong style="color:#f5c518;">Ready for a quote?</strong><br>
+              Give us a call at <a href="tel:3523786014" style="color:#f5c518;">(352) 378-6014</a> to discuss your electrical project. We serve residential and commercial clients throughout the Gainesville area.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-logo"><span>All Florida</span> Electric Co Inc</div>
+    <p>2606 NE 17th Ter &mdash; Gainesville, FL &mdash; <a href="tel:3523786014" style="color:#f5c518;">(352) 378-6014</a></p>
+    <p style="margin-top:8px;">&copy; 2025 All Florida Electric Co Inc. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    // Close menu on link click
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

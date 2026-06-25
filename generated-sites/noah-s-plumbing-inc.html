@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noah's Plumbing Inc. | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #1a2e4a;
+      --blue: #2563a8;
+      --sky: #3b9fd4;
+      --light-blue: #e8f4fc;
+      --white: #ffffff;
+      --gray-light: #f4f6f9;
+      --gray-mid: #d1dce8;
+      --gray-text: #4a5568;
+      --accent: #f0a500;
+      --text-dark: #1a2e4a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      background: var(--navy);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--sky);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .nav-logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray-mid);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--sky);
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--navy) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: #e09400 !important;
+      color: var(--navy) !important;
+    }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #224070 60%, #1e5fa8 100%);
+      padding: 6rem 1.5rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: rgba(59,159,212,0.12);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: -60px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(59,159,212,0.08);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(59,159,212,0.2);
+      border: 1px solid rgba(59,159,212,0.4);
+      color: var(--sky);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 0.9rem;
+      border-radius: 50px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span {
+      color: var(--sky);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--gray-mid);
+      max-width: 560px;
+      margin: 0 auto 2.2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--navy);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.45);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--sky);
+      color: var(--sky);
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      color: var(--gray-text);
+      max-width: 600px;
+      font-size: 1.05rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--gray-light);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      background: linear-gradient(145deg, var(--navy), var(--blue));
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      box-shadow: 0 12px 36px rgba(26,46,74,0.18);
+    }
+
+    .about-icon-wrap {
+      width: 90px;
+      height: 90px;
+      background: rgba(59,159,212,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-icon-wrap svg {
+      width: 48px;
+      height: 48px;
+      fill: var(--sky);
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-item strong {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stat-item span {
+      font-size: 0.8rem;
+      color: var(--gray-mid);
+      margin-top: 0.2rem;
+      display: block;
+    }
+
+    .about-text p {
+      color: var(--gray-text);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--gray-light);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      border-top: 4px solid var(--sky);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(26,46,74,0.1);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--light-blue);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--blue);
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--navy);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    #contact .section-label {
+      color: var(--sky);
+    }
+
+    .contact-desc {
+      color: var(--gray-mid);
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .contact-details {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+    }
+
+    .contact-item-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(59,159,212,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--sky);
+    }
+
+    .contact-item-text strong {
+      display: block;
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .contact-item-text span,
+    .contact-item-text a {
+      color: var(--gray-mid);
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+
+    .contact-item-text a:hover {
+      color: var(--sky);
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+
+    .rating-block {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(59,159,212,0.1);
+      border: 1px solid rgba(59,159,212,0.25);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent);
+    }
+
+    .rating-score {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--gray-mid);
+      margin-top: 1px;
+    }
+
+    .rating-label {
+      font-size: 0.8rem;
+      color: var(--sky);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .contact-card h3 {
+      color: var(--white);
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .contact-card p {
+      color: var(--gray-mid);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-map {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--sky);
+      color: var(--white);
+      padding: 0.85rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: background 0.2s, transform 0.15s;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .btn-map:hover {
+      background: #2e8cbd;
+      transform: translateY(-2px);
+    }
+
+    .btn-map svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--white);
+      flex-shrink: 0;
+    }
+
+    .btn-call {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--navy);
+      padding: 0.85rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: background 0.2s, transform 0.15s;
+      justify-content: center;
+    }
+
+    .btn-call:hover {
+      background: #e09400;
+      transform: translateY(-2px);
+    }
+
+    .btn-call svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--navy);
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #101d2e;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .footer-address {
+      font-size: 0.85rem;
+      color: var(--gray-text);
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: #3a4f66;
+      margin-top: 0.3rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        width: 100%;
+        background: var(--navy);
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 1rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        gap: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.7 16.3l-3-3c-.4-.4-1-.4-1.4 0l-1.1 1.1-2.6-2.6 1.1-1.1c.4-.4.4-1 0-1.4l-3-3C11.3 5.9 10.7 5.9 10.3 6.3L8.8 7.8C7.1 9.5 7 12.1 8.6 13.9l.1.1 2.4 2.4.1.1c1.8 1.6 4.4 1.5 6.1-.2l1.4-1.4c.5-.4.5-1 0-1.6zM6 2C3.8 2 2 3.8 2 6c0 1.7 1 3.1 2.5 3.7V20c0 1.1.9 2 2 2s2-.9 2-2V9.7C9 9.1 10 7.7 10 6c0-2.2-1.8-4-4-4z"/>
+          </svg>
+        </div>
+        <span class="nav-logo-text">Noah's Plumbing Inc.</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact" class="nav-cta">Call Us</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/></svg>
+        Gainesville, FL
+      </div>
+      <h1>Your Trusted <span>Plumbing</span> Professionals</h1>
+      <p>From leaky faucets to full pipe replacements — Noah's Plumbing Inc. keeps your home and business flowing smoothly in Gainesville and the surrounding area.</p>
+      <div class="hero-buttons">
+        <a href="tel:3523168005" class="btn btn-primary">Call (352) 316-8005</a>
+        <a href="#services" class="btn btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-icon-wrap">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.7 16.3l-3-3c-.4-.4-1-.4-1.4 0l-1.1 1.1-2.6-2.6 1.1-1.1c.4-.4.4-1 0-1.4l-3-3C11.3 5.9 10.7 5.9 10.3 6.3L8.8 7.8C7.1 9.5 7 12.1 8.6 13.9l.1.1 2.4 2.4.1.1c1.8 1.6 4.4 1.5 6.1-.2l1.4-1.4c.5-.4.5-1 0-1.6zM6 2C3.8 2 2 3.8 2 6c0 1.7 1 3.1 2.5 3.7V20c0 1.1.9 2 2 2s2-.9 2-2V9.7C9 9.1 10 7.7 10 6c0-2.2-1.8-4-4-4z"/>
+            </svg>
+          </div>
+          <div class="about-stats">
+            <div class="stat-item">
+              <strong>4.7</strong>
+              <span>Google Rating</span>
+            </div>
+            <div class="stat-item">
+              <strong>43+</strong>
+              <span>Reviews</span>
+            </div>
+            <div class="stat-item">
+              <strong>GNV</strong>
+              <span>Local &amp; Trusted</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Reliable Plumbing in Gainesville</h2>
+          <p>Noah's Plumbing Inc. is a locally operated plumbing company serving residential and commercial customers throughout Gainesville, FL and the surrounding communities. We take pride in showing up on time, diagnosing problems accurately, and delivering lasting repairs at fair prices.</p>
+          <p>Whether you're dealing with an unexpected emergency, planning a renovation, or simply need routine maintenance, our licensed plumbers bring the knowledge and equipment needed to get the job done right the first time.</p>
+          <p>Proudly serving the Gainesville area — because every home and business deserves reliable plumbing they can count on.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <p class="section-label">What We Do</p>
+        <h2 class="section-title">Our Plumbing Services</h2>
+        <p class="section-sub" style="margin: 0 auto;">We handle a full range of plumbing needs for homes and businesses in Gainesville. Contact us for details on any service.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.34A1 1 0 004.7 21C8.47 21 9 18 9 18c0 3 2 3 3 3s3 0 3-3c0 0 .53 3 4.3 3a1 1 0 00.88-1.66C18.09 18.18 16 12 17 8z"/></svg>
+          </div>
+          <h3>Leak Detection &amp; Repair</h3>
+          <p>Fast identification and repair of hidden or visible leaks in pipes, fixtures, and fittings throughout your property.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 5.5C21 14.1 14.1 21 5.5 21L3 18.5c-.78-.78-.23-2.12.86-2.12h2.6c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1H4c-1.1 0-2-.9-2-2v-1C2 4.9 2.9 4 4 4h1c1.38 0 2.5 1.12 2.5 2.5v1.5h1C10.1 8 11 7.1 11 6V4c0-.55.45-1 1-1h2c.55 0 1 .45 1 1v2c0 1.1.9 2 2 2h1c1.1 0 2 .9 2 2v.5z"/></svg>
+          </div>
+          <h3>Drain Cleaning &amp; Unclogging</h3>
+          <p>Professional clearing of slow or blocked drains in sinks, showers, tubs, and main sewer lines.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          </div>
+          <h3>Water Heater Services</h3>
+          <p>Installation, repair, and maintenance of traditional tank and tankless water heaters to keep hot water flowing reliably.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M18.92 5.01L16 3H8L5.08 5.01 3 7v5c0 3.55 2.44 6.96 6 8.58 1.11.49 2.26.84 3 .84s1.89-.35 3-.84C18.56 18.96 21 15.55 21 12V7l-2.08-1.99zM12 19.85c-.42-.11-1.16-.43-1.94-.87C7.67 17.5 5 14.47 5 12V7.78L8.24 5H15.77L19 7.78V12c0 2.47-2.67 5.5-5.06 6.98-.78.44-1.52.76-1.94.87z"/></svg>
+          </div>
+          <h3>Pipe Repair &amp; Replacement</h3>
+          <p>Repair and full replacement of damaged, corroded, or aging pipes — including copper, PVC, and PEX systems.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M9.5 6.5v3h-3v-3h3M11 5H5v6h6V5zm-1.5 9.5v3h-3v-3h3M11 13H5v6h6v-6zm6.5-6.5v3h-3v-3h3M19 5h-6v6h6V5zm-6 8h1.5v1.5H13V13zm1.5 1.5H16V16h-1.5v-1.5zM16 13h1.5v1.5H16V13zm-3 3h1.5v1.5H13V16zm1.5 1.5H16V19h-1.5v-1.5zM16 16h1.5v1.5H16V16zm1.5-1.5H19V16h-1.5v-1.5zm0 3H19V19h-1.5v-1.5zM22 7h-2V4h-3V2h-2v2h-2V2H11v2H9V2H7v2H4v3H2v2h2v2H2v2h2v3h3v2h2v-2h2v2h2v-2h2v2h2v-2h3v-3h2v-2h-2v-2h2V7z"/></svg>
+          </div>
+          <h3>Toilet &amp; Fixture Installation</h3>
+          <p>Installation and replacement of toilets, faucets, sinks, garbage disposals, and other plumbing fixtures.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          </div>
+          <h3>Emergency Plumbing</h3>
+          <p>Prompt response to urgent plumbing issues when you need help fast. Contact us to learn about availability.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div>
+          <p class="section-label">Get In Touch</p>
+          <h2 class="section-title">Ready to Help</h2>
+          <p class="contact-desc">Reach out today for expert plumbing service in Gainesville and the surrounding area.</p>
+
+          <div class="contact-details">
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/></svg>
+              </div>
+              <div class="contact-item-text">
+                <strong>Address</strong>
+                <span>Gainesville, FL 32607</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+              </div>
+              <div class="contact-item-text">
+                <strong>Phone</strong>
+                <a href="tel:3523168005">(352) 316-8005</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              </div>
+              <div class="contact-item-text">
+                <strong>Hours</strong>
+                <span>Contact us for details</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="rating-block">
+            <div>
+              <div class="rating-label">Google Rating</div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.3rem;">
+                <span class="rating-score">4.7</span>
+                <div class="rating-stars">
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24" style="fill:#c0a050"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>
+                </div>
+              </div>
+              <div class="rating-count">Based on 43 Google reviews</div>
+            </div>
+          </div>
+
+          <h3>Visit or Call Us Today</h3>
+          <p>Located in Gainesville, FL 32607. We serve the greater Gainesville area for all your plumbing needs.</p>
+
+          <a
+            href="https://www.google.com/maps/search/Noah's%20Plumbing%20Inc.%20Gainesville%2C%20FL%2032607"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-map"
+          >
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/></svg>
+            Get Directions
+          </a>
+
+          <a href="tel:3523168005" class="btn-call">
+            <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+            Call (352) 316-8005
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">Noah's Plumbing Inc.</div>
+      <div class="footer-address">Gainesville, FL 32607 &nbsp;|&nbsp; (352) 316-8005</div>
+      <div class="footer-copy">&copy; 2025 Noah's Plumbing Inc. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var btn = document.getElementById('hamburger');
+      var links = document.getElementById('navLinks');
+      if (btn && links) {
+        btn.addEventListener('click', function() {
+          links.classList.toggle('open');
+        });
+        links.querySelectorAll('a').forEach(function(a) {
+          a.addEventListener('click', function() {
+            links.classList.remove('open');
+          });
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

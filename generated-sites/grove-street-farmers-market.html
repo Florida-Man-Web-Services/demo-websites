@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grove Street Farmers Market | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      color: #2c1f0e;
+      background: #fdf8f0;
+      line-height: 1.7;
+    }
+
+    /* ── Color Palette ──
+       Earthy greens, warm ambers, creamy off-whites
+    */
+    :root {
+      --green-dark:  #2d5016;
+      --green-mid:   #4a7c2f;
+      --green-light: #7db856;
+      --amber:       #c97d20;
+      --amber-light: #e8a94e;
+      --cream:       #fdf8f0;
+      --cream-dark:  #f0e6d0;
+      --brown:       #5a3820;
+      --brown-light: #8b5e3c;
+      --text-dark:   #2c1f0e;
+      --text-mid:    #5a4030;
+      --white:       #ffffff;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .nav-logo-text {
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+    .nav-logo-sub {
+      color: var(--amber-light);
+      font-size: 0.72rem;
+      font-weight: normal;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--amber-light); }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      margin-top: 68px;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 5%;
+      background:
+        linear-gradient(160deg, rgba(45,80,22,0.82) 0%, rgba(90,56,32,0.65) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600'%3E%3Crect width='900' height='600' fill='%23a8c070'/%3E%3Ccircle cx='200' cy='150' r='90' fill='%234a7c2f' opacity='0.5'/%3E%3Ccircle cx='650' cy='420' r='120' fill='%232d5016' opacity='0.4'/%3E%3Ccircle cx='450' cy='300' r='180' fill='%237db856' opacity='0.2'/%3E%3Cellipse cx='100' cy='500' rx='130' ry='80' fill='%23c97d20' opacity='0.3'/%3E%3Cellipse cx='800' cy='100' rx='90' ry='60' fill='%23e8a94e' opacity='0.3'/%3E%3C/svg%3E")
+        center/cover no-repeat;
+    }
+    .hero-inner { max-width: 750px; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--white);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+      font-family: sans-serif;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--cream);
+      margin-bottom: 36px;
+      font-style: italic;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--white);
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 4px;
+      font-family: sans-serif;
+      font-size: 0.95rem;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+    .hero-cta:hover { background: var(--amber-light); transform: translateY(-2px); }
+
+    /* ── Section shared ── */
+    section { padding: 80px 5%; }
+    .section-label {
+      font-family: sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      color: var(--green-dark);
+      margin-bottom: 18px;
+      line-height: 1.2;
+    }
+    .divider {
+      width: 56px;
+      height: 3px;
+      background: var(--amber);
+      margin-bottom: 28px;
+      border-radius: 2px;
+    }
+
+    /* ── About ── */
+    .about {
+      background: var(--white);
+    }
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+    }
+    .about-graphic {
+      background: var(--cream-dark);
+      border-radius: 12px;
+      padding: 48px 36px;
+      text-align: center;
+    }
+    .about-graphic-icon { font-size: 4rem; margin-bottom: 16px; }
+    .about-graphic-tagline {
+      font-size: 1.1rem;
+      color: var(--brown);
+      font-style: italic;
+    }
+    .about-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+      background: var(--cream-dark);
+      border-radius: 8px;
+      padding: 16px 24px;
+      flex: 1;
+      min-width: 100px;
+    }
+    .stat-val {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--green-dark);
+    }
+    .stat-lbl {
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      font-family: sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* ── Services ── */
+    .services {
+      background: var(--cream-dark);
+    }
+    .services-inner { max-width: 1100px; margin: 0 auto; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 8px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 32px 28px;
+      border-top: 4px solid var(--green-light);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .service-icon { font-size: 2.2rem; margin-bottom: 14px; }
+    .service-name {
+      font-size: 1.15rem;
+      color: var(--green-dark);
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .service-desc {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      font-family: sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ── Contact ── */
+    .contact {
+      background: var(--green-dark);
+      color: var(--cream);
+    }
+    .contact-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .contact .section-label { color: var(--amber-light); }
+    .contact .section-title { color: var(--white); }
+    .contact .divider { background: var(--amber); }
+    .contact-info p {
+      font-family: sans-serif;
+      font-size: 0.97rem;
+      color: var(--cream-dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .contact-info p span.ico { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+    .contact-info p a {
+      color: var(--amber-light);
+      text-decoration: none;
+    }
+    .directions-btn {
+      display: inline-block;
+      margin-top: 22px;
+      background: var(--amber);
+      color: var(--white);
+      text-decoration: none;
+      padding: 13px 30px;
+      border-radius: 4px;
+      font-family: sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    .directions-btn:hover { background: var(--amber-light); }
+
+    .contact-rating-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 32px;
+    }
+    .rating-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .rating-number {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: var(--white);
+      line-height: 1;
+    }
+    .rating-stars {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stars {
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--amber);
+    }
+    .rating-count {
+      font-family: sans-serif;
+      font-size: 0.82rem;
+      color: var(--cream-dark);
+      letter-spacing: 0.04em;
+    }
+    .rating-source {
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      color: var(--cream-dark);
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .rating-quote {
+      font-size: 1rem;
+      color: var(--cream);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #1a2e0a;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 28px 5%;
+      font-family: sans-serif;
+      font-size: 0.82rem;
+    }
+    footer strong { color: rgba(255,255,255,0.8); }
+    footer .footer-links { margin-top: 8px; }
+    footer .footer-links a {
+      color: var(--amber-light);
+      text-decoration: none;
+      margin: 0 8px;
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 68px; left: 0; right: 0; background: var(--green-dark); padding: 12px 0; }
+      .nav-links.open { display: flex; }
+      .nav-links li { border-top: 1px solid rgba(255,255,255,0.08); }
+      .nav-links a { display: block; padding: 13px 5%; font-size: 0.95rem; }
+      .nav-toggle { display: flex; }
+      .about-inner { grid-template-columns: 1fr; gap: 32px; }
+      .about-graphic { display: none; }
+      .contact-inner { grid-template-columns: 1fr; gap: 36px; }
+    }
+    @media (max-width: 500px) {
+      section { padding: 56px 5%; }
+      .about-stats { flex-direction: column; gap: 14px; }
+      .stat { flex: none; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-icon">&#127807;</div>
+      <div>
+        <div class="nav-logo-text">Grove Street</div>
+        <div class="nav-logo-sub">Farmers Market</div>
+      </div>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" onclick="this.parentNode.querySelector('.nav-links').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#offerings">Offerings</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="hero-badge">Gainesville, FL</div>
+      <h1>Grove Street Farmers Market</h1>
+      <p>Fresh from the farm to your table — locally grown, locally loved.</p>
+      <a href="#contact" class="hero-cta">Visit Us Today</a>
+    </div>
+  </section>
+
+  <!-- ── About ── -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title">A Gathering Place for the Gainesville Community</h2>
+        <div class="divider"></div>
+        <p>Grove Street Farmers Market is a vibrant community hub where North Central Florida farmers, artisans, and food makers come together to offer the freshest seasonal produce, handcrafted goods, and locally sourced products.</p>
+        <p>Nestled in the heart of Gainesville, the market brings neighbors together and supports the region's hardworking growers and makers, making it easy to eat well and shop local all in one place.</p>
+        <p>Whether you're stocking up on seasonal vegetables, picking up fresh baked goods, or discovering something new, Grove Street Farmers Market offers a welcoming, open-air experience that keeps the community connected to its food and its roots.</p>
+        <div class="about-stats">
+          <div class="stat"><span class="stat-val">4.7</span><span class="stat-lbl">Google Rating</span></div>
+          <div class="stat"><span class="stat-val">59</span><span class="stat-lbl">Reviews</span></div>
+          <div class="stat"><span class="stat-val">Local</span><span class="stat-lbl">Growers &amp; Makers</span></div>
+        </div>
+      </div>
+      <div class="about-graphic">
+        <div class="about-graphic-icon">&#127809;</div>
+        <div class="about-graphic-tagline">"Where Gainesville shops fresh and shops local."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Offerings / Services ── -->
+  <section class="services" id="offerings">
+    <div class="services-inner">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">Fresh Finds at Every Visit</h2>
+      <div class="divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#127807;</div>
+          <div class="service-name">Fresh Seasonal Produce</div>
+          <p class="service-desc">Locally grown fruits and vegetables harvested at peak ripeness by North Central Florida farmers — straight to you without the middleman.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127822;</div>
+          <div class="service-name">Artisan &amp; Specialty Foods</div>
+          <p class="service-desc">Discover small-batch jams, preserves, honey, sauces, and specialty food products crafted by local makers using Florida-grown ingredients.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127838;</div>
+          <div class="service-name">Baked Goods &amp; Pastries</div>
+          <p class="service-desc">Fresh-baked breads, pastries, pies, and treats from local bakers who bring something homemade and delicious to every market day.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127810;</div>
+          <div class="service-name">Plants &amp; Herbs</div>
+          <p class="service-desc">Seedlings, potted herbs, native plants, and garden starts for home growers looking to bring a bit of green into their own space.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#129514;</div>
+          <div class="service-name">Local Dairy &amp; Eggs</div>
+          <p class="service-desc">Fresh eggs, cheeses, and dairy products from regional farms committed to humane, sustainable practices and quality you can taste.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127981;</div>
+          <div class="service-name">Handcrafted Goods &amp; Gifts</div>
+          <p class="service-desc">Unique handmade crafts, artwork, candles, soaps, and one-of-a-kind gifts from talented Gainesville-area artisans and makers.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div>
+        <div class="section-label">Find Us</div>
+        <h2 class="section-title">Come Visit the Market</h2>
+        <div class="divider"></div>
+        <div class="contact-info">
+          <p>
+            <span class="ico">&#128205;</span>
+            <span>1001 NW 4th St<br>Gainesville, FL 32601</span>
+          </p>
+          <p>
+            <span class="ico">&#128337;</span>
+            <span>Market hours: Contact us for details</span>
+          </p>
+          <p>
+            <span class="ico">&#128140;</span>
+            <span>Vendor inquiries &amp; event info: Contact us for details</span>
+          </p>
+        </div>
+        <a
+          href="https://www.google.com/maps/search/Grove%20Street%20Farmers%20Market%201001%20NW%204th%20St%2C%20Gainesville%2C%20FL%2032601"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="directions-btn"
+        >Get Directions &#8599;</a>
+      </div>
+
+      <div class="contact-rating-box">
+        <div class="rating-top">
+          <div class="rating-number">4.7</div>
+          <div class="rating-stars">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="rating-count">Based on 59 reviews</div>
+          </div>
+        </div>
+        <div class="rating-source">Rated on Google Maps</div>
+        <div class="rating-quote">
+          "A beloved Gainesville fixture — shoppers and vendors alike keep coming back for the fresh finds, friendly faces, and true community spirit Grove Street Farmers Market delivers."
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div><strong>Grove Street Farmers Market</strong> &mdash; 1001 NW 4th St, Gainesville, FL 32601</div>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#offerings">Offerings</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div style="margin-top:10px;">&copy; 2026 Grove Street Farmers Market. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>

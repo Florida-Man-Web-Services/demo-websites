@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tower Square Cleaners | Laundry Service – Gainesville, FL</title>
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f8fc;
+      color: #2c3e50;
+      line-height: 1.7;
+    }
+
+    /* Color Palette – clean, fresh, professional */
+    :root {
+      --blue:       #1a73b8;
+      --blue-dark:  #124f85;
+      --blue-light: #e8f2fb;
+      --teal:       #0e9a83;
+      --teal-light: #e0f5f1;
+      --white:      #ffffff;
+      --gray-soft:  #f0f4f8;
+      --gray-mid:   #b0bec5;
+      --text:       #2c3e50;
+      --text-light: #607d8b;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--white);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 66px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-icon svg { width: 22px; height: 22px; fill: var(--white); }
+    .nav-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+      letter-spacing: 0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-light);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta {
+      background: var(--blue);
+      color: var(--white) !important;
+      padding: 8px 20px;
+      border-radius: 6px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--blue-dark) !important; color: var(--white) !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      background: var(--blue-dark);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      margin-top: 66px;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 55%, var(--teal) 100%);
+      color: var(--white);
+      padding: 100px 5% 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 480px;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.06) 0%, transparent 50%);
+    }
+    .hero-content { position: relative; max-width: 700px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .hero-title span { color: #a8d8f5; }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.22rem);
+      opacity: 0.9;
+      max-width: 540px;
+      margin: 0 auto 36px;
+    }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 13px 30px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.97rem;
+      text-decoration: none;
+      transition: transform 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+    .btn-primary {
+      background: var(--white);
+      color: var(--blue-dark);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.7);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    /* ── WAVE DIVIDER ── */
+    .wave {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      margin-bottom: -2px;
+    }
+    .wave svg { display: block; width: 100%; }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 5%; }
+    .section-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin-bottom: 14px;
+    }
+    .section-divider {
+      width: 52px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--white); }
+    .about-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--text-light);
+      font-size: 1.05rem;
+      margin-bottom: 16px;
+    }
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .about-card {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .about-card-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .about-card-icon svg { width: 22px; height: 22px; fill: var(--white); }
+    .about-card-text { font-weight: 600; color: var(--blue-dark); font-size: 0.97rem; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--gray-soft); }
+    .services-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 30px 24px;
+      box-shadow: 0 2px 12px rgba(26,115,184,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(26,115,184,0.14);
+    }
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--blue-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .service-icon svg { width: 28px; height: 28px; fill: var(--blue); }
+    .service-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+    }
+    .service-desc {
+      font-size: 0.93rem;
+      color: var(--text-light);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--white); }
+    .contact-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 22px; }
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .contact-row-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--teal-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-row-icon svg { width: 20px; height: 20px; fill: var(--teal); }
+    .contact-row-text strong { display: block; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-light); margin-bottom: 2px; }
+    .contact-row-text span, .contact-row-text a {
+      font-size: 1rem;
+      color: var(--text);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .contact-row-text a:hover { color: var(--blue); text-decoration: underline; }
+
+    /* Rating badge */
+    .rating-box {
+      background: var(--gray-soft);
+      border-radius: 12px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .rating-stars { font-size: 1.3rem; letter-spacing: 2px; color: #f4a800; }
+    .rating-text strong { font-size: 1.2rem; color: var(--blue-dark); }
+    .rating-text span { display: block; font-size: 0.84rem; color: var(--text-light); }
+
+    /* Map CTA card */
+    .map-card {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--teal) 100%);
+      border-radius: 14px;
+      padding: 36px 30px;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .map-card h3 { font-size: 1.3rem; font-weight: 800; }
+    .map-card p { opacity: 0.88; font-size: 0.97rem; }
+    .btn-map {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      color: var(--blue-dark);
+      padding: 12px 26px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: box-shadow 0.2s, transform 0.18s;
+      align-self: flex-start;
+    }
+    .btn-map:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.2); transform: translateY(-2px); }
+    .btn-map svg { width: 18px; height: 18px; fill: var(--blue); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--blue-dark);
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      padding: 32px 5%;
+      font-size: 0.9rem;
+    }
+    footer strong { color: var(--white); }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    footer a:hover { color: var(--white); text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 66px; left: 0; right: 0; background: var(--white); padding: 20px 5%; gap: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      .about-inner { grid-template-columns: 1fr; gap: 32px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 32px; }
+      #hero { padding: 70px 5% 60px; min-height: 380px; }
+    }
+    @media (max-width: 480px) {
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="#hero">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <!-- washing machine icon -->
+        <path d="M18 2H6C4.9 2 4 2.9 4 4v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm4-11H8V5h8v1zm-4 9c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>
+      </svg>
+    </div>
+    <span class="nav-name">Tower Square Cleaners</span>
+  </a>
+
+  <button class="hamburger" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Gainesville, FL Laundry Service</div>
+    <h1 class="hero-title">Fresh &amp; Clean,<br /><span>Every Time.</span></h1>
+    <p class="hero-tagline">Dependable laundry and dry cleaning services in southwest Gainesville — making clean simple for your home and business.</p>
+    <div class="hero-buttons">
+      <a href="#services" class="btn btn-primary">Our Services</a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<div class="wave">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <p class="section-label">About Us</p>
+      <h2 class="section-title">Your Neighborhood<br />Laundry Experts</h2>
+      <div class="section-divider"></div>
+      <p>Tower Square Cleaners has been a trusted laundry destination for residents and businesses throughout the Gainesville area. Conveniently located at 5737 SW 75th St, we make it easy to keep your clothes and linens looking their best.</p>
+      <p>We handle everything from everyday wash-and-fold to professional dry cleaning, using modern equipment and quality products to deliver consistently fresh results. Whether you need a quick turnaround or specialized garment care, our team is here to help.</p>
+      <p>We take pride in reliable, courteous service for our local community. Contact us for hours, pricing, or any questions about what we can do for you.</p>
+    </div>
+    <div class="about-visual">
+      <div class="about-card">
+        <div class="about-card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        </div>
+        <span class="about-card-text">Fast, reliable turnaround times</span>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        </div>
+        <span class="about-card-text">Careful garment handling &amp; quality care</span>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 100-8 4 4 0 000 8z"/></svg>
+        </div>
+        <span class="about-card-text">Serving homes &amp; businesses in Gainesville</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div style="max-width:1000px;margin:0 auto;">
+    <p class="section-label" style="text-align:center;">What We Offer</p>
+    <h2 class="section-title" style="text-align:center;">Our Services</h2>
+    <div class="section-divider" style="margin:0 auto 40px;"></div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2zm-6 15a5 5 0 110-10 5 5 0 010 10zm4-11H8V5h8v1zm-4 9a3 3 0 100-6 3 3 0 000 6z"/></svg>
+        </div>
+        <div class="service-name">Wash &amp; Fold Laundry</div>
+        <div class="service-desc">Drop off your laundry and pick it up clean, dried, and neatly folded — ready to go straight to your drawers.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.49 3.51a5 5 0 00-7.07 0L12 4.93l-1.42-1.42a5 5 0 00-7.07 7.07L12 19.07l8.49-8.49a5 5 0 000-7.07zM12 16.24L4.93 9.17a3 3 0 014.24-4.24L12 7.76l2.83-2.83a3 3 0 014.24 4.24L12 16.24z"/></svg>
+        </div>
+        <div class="service-name">Dry Cleaning</div>
+        <div class="service-desc">Professional dry cleaning for delicate fabrics, suits, dresses, and garments that require special solvent-based care.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 3a4 4 0 110 8 4 4 0 010-8zm-1 13H7v-1a5 5 0 015-5h.09A5 5 0 0117 19v1h-5z"/></svg>
+        </div>
+        <div class="service-name">Shirt &amp; Garment Pressing</div>
+        <div class="service-desc">Crisp, wrinkle-free results for dress shirts, blouses, trousers, and other items that need a professional press.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 6.5A4.5 4.5 0 0016.5 2H8a1 1 0 000 2h8.5A2.5 2.5 0 0119 6.5v11a2.5 2.5 0 01-2.5 2.5H8a1 1 0 000 2h8.5A4.5 4.5 0 0021 17.5v-11zM3 8v8l4-4-4-4z"/></svg>
+        </div>
+        <div class="service-name">Comforter &amp; Bedding Cleaning</div>
+        <div class="service-desc">Full-size cleaning for comforters, duvets, blankets, and pillows — too large for a standard home machine.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.35C18 2.53 15.69 1 13.5 1c-1.31 0-2.51.5-3.5 1.31C9.01 1.5 7.81 1 6.5 1 4.31 1 2 2.53 2 4.65c0 .47.11.91.18 1.35H0v2h1l1 13h20l1-13h1V6h-4zm-6.5-3c1.16 0 2.5.72 2.5 1.65 0 .97-.47 1.35-1 1.35H13V4.17c.15-.11.33-.17.5-.17zM6.5 3c.17 0 .35.06.5.17V6H5.5c-.53 0-1-.38-1-1.35C4.5 3.72 5.84 3 6.5 3zM4.1 19L3.16 8h17.68L19.9 19H4.1z"/></svg>
+        </div>
+        <div class="service-name">Commercial &amp; Business Laundry</div>
+        <div class="service-desc">Bulk laundry solutions for local businesses, including uniforms, linens, towels, and other commercial textile needs.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+        </div>
+        <div class="service-name">Alterations &amp; Repairs</div>
+        <div class="service-desc">Minor clothing repairs and alterations to help extend the life of your favorite garments. Contact us for details.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div style="max-width:860px;margin:0 auto;">
+    <p class="section-label">Find Us</p>
+    <h2 class="section-title">Get in Touch</h2>
+    <div class="section-divider"></div>
+    <div class="contact-inner">
+
+      <div class="contact-info">
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          </div>
+          <div class="contact-row-text">
+            <strong>Address</strong>
+            <span>5737 SW 75th St<br />Gainesville, FL</span>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.32.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.01l-2.2 2.21z"/></svg>
+          </div>
+          <div class="contact-row-text">
+            <strong>Phone</strong>
+            <a href="tel:+13523770865">(352) 377-0865</a>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          </div>
+          <div class="contact-row-text">
+            <strong>Hours</strong>
+            <span>Contact us for current hours</span>
+          </div>
+        </div>
+
+        <div class="rating-box">
+          <div>
+            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+          <div class="rating-text">
+            <strong>4.2 / 5</strong>
+            <span>Google Maps Rating</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="map-card">
+        <h3>Ready to visit?</h3>
+        <p>We're located at 5737 SW 75th St in southwest Gainesville. Use the button below to open directions in Google Maps.</p>
+        <a href="https://www.google.com/maps/search/Tower%20Square%20Cleaners%205737%20SW%2075th%20St" target="_blank" rel="noopener noreferrer" class="btn-map">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          Get Directions
+        </a>
+        <p style="font-size:0.85rem;opacity:0.75;margin-top:4px;">Opens Google Maps in a new tab</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p><strong>Tower Square Cleaners</strong> &nbsp;|&nbsp; 5737 SW 75th St, Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13523770865">(352) 377-0865</a></p>
+  <p style="margin-top:8px;font-size:0.82rem;opacity:0.6;">&copy; 2026 Tower Square Cleaners. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

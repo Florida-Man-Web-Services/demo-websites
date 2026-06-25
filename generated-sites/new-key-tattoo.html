@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Key Tattoo | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #0a0a0a;
+      --dark: #141414;
+      --card-bg: #1c1c1c;
+      --border: #2a2a2a;
+      --red: #c0392b;
+      --red-hover: #a93226;
+      --gold: #d4a843;
+      --text: #e8e8e8;
+      --muted: #999;
+      --white: #ffffff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--text);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      line-height: 1.7;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.95);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--red);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 2px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--red-hover);
+      color: var(--white) !important;
+    }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      transition: 0.3s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: var(--dark);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      z-index: 999;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(192, 57, 43, 0.12) 0%, transparent 70%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 40px,
+          rgba(255,255,255,0.012) 40px,
+          rgba(255,255,255,0.012) 41px
+        );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--red);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      font-family: 'Arial', sans-serif;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 2px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--red-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 2px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--muted);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+
+    .hero-scroll {
+      margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--red), transparent);
+    }
+
+    /* ---- DIVIDER ---- */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--red);
+      margin: 0 auto 2rem;
+    }
+
+    /* ---- SECTIONS ---- */
+    section {
+      padding: 6rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      text-align: center;
+      color: var(--white);
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-family: 'Arial', sans-serif;
+      max-width: 560px;
+      margin: 0 auto 3.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* ---- ABOUT ---- */
+    #about {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-family: 'Arial', sans-serif;
+      margin-bottom: 1.25rem;
+      font-size: 0.975rem;
+      line-height: 1.8;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 1.75rem 1.5rem;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--red);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ---- SERVICES ---- */
+    #services {
+      background: var(--black);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2rem 1.75rem;
+      border-radius: 4px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      border-color: #3a3a3a;
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .service-detail {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--red);
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- CONTACT ---- */
+    #contact {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .contact-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-value {
+      color: var(--text);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.975rem;
+    }
+
+    .contact-value a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-value a:hover {
+      color: var(--white);
+    }
+
+    /* rating */
+    .rating-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .rating-header {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+    }
+
+    .rating-score {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--red);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.9rem 1.75rem;
+      border-radius: 2px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.15s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .directions-btn:hover {
+      background: var(--red-hover);
+      transform: translateY(-1px);
+    }
+
+    /* map placeholder */
+    .map-placeholder {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--muted);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .map-pin {
+      font-size: 2.5rem;
+    }
+
+    .map-address {
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .footer-logo span {
+      color: var(--red);
+    }
+
+    .footer-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 900px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      section {
+        padding: 4rem 1.25rem;
+      }
+
+      nav {
+        padding: 0 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">New <span>Key</span> Tattoo</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:+13522780509" class="nav-cta">Call Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#about" onclick="closeMobileMenu()">About</a>
+    <a href="#services" onclick="closeMobileMenu()">Services</a>
+    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+    <a href="tel:+13522780509">(352) 278-0509</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Gainesville, Florida</p>
+      <h1>Your Story,<br/><em>Inked for Life</em></h1>
+      <p class="hero-tagline">
+        Professional tattoo artistry in the heart of downtown Gainesville. Every piece is crafted with precision, care, and a commitment to lasting quality.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Book a Consultation</a>
+        <a href="#services" class="btn-outline">View Services</a>
+      </div>
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <p class="section-label">Our Studio</p>
+      <h2 class="section-title">Art You Can Wear</h2>
+      <div class="divider"></div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            New Key Tattoo is a professional tattoo studio located in downtown Gainesville, FL, dedicated to delivering exceptional custom tattoo work in a clean, welcoming environment. Whether you arrive with a fully formed vision or just a spark of an idea, our artists work closely with you to bring meaningful, lasting artwork to life.
+          </p>
+          <p>
+            We take pride in maintaining the highest standards of cleanliness, safety, and artistic integrity. Every client is treated with individual attention, and every piece is approached with the care it deserves — from the initial consultation through the final line.
+          </p>
+          <p>
+            Located at 111 SW 3rd St in Gainesville, we serve clients from across North Central Florida. Contact us to discuss your project and schedule a consultation.
+          </p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <span class="stat-value">5.0</span>
+            <span class="stat-label">Google Rating</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">&#10003;</span>
+            <span class="stat-label">Custom Work</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">&#10003;</span>
+            <span class="stat-label">Walk-ins Welcome</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">&#10003;</span>
+            <span class="stat-label">Safe &amp; Clean</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Our Services</h2>
+      <div class="divider"></div>
+      <p class="section-sub">From bold traditional work to fine-line detail, we offer a full range of tattoo styles and services.</p>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#9998;</span>
+          <div class="service-name">Custom Tattoos</div>
+          <p class="service-desc">Original designs created specifically for you. We collaborate with you from concept to final stencil to ensure the artwork is exactly what you envisioned.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128444;</span>
+          <div class="service-name">Flash Tattoos</div>
+          <p class="service-desc">Pre-drawn designs ready to be tattooed, spanning a wide variety of themes and styles. Great for walk-in appointments and same-day ink.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127775;</span>
+          <div class="service-name">Cover-Ups</div>
+          <p class="service-desc">Transform an old or unwanted tattoo into something new. Our artists assess your existing work and design a custom solution to cover or rework it.</p>
+          <span class="service-detail">Consultation required</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128137;</span>
+          <div class="service-name">Touch-Ups</div>
+          <p class="service-desc">Keep your existing tattoos looking their best. Whether faded or in need of refinement, we can restore and revitalize your ink.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128396;</span>
+          <div class="service-name">Fine Line &amp; Detail Work</div>
+          <p class="service-desc">Delicate, precise linework and intricate detail for minimalist, portrait, or illustrative styles that demand a steady hand and trained eye.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128221;</span>
+          <div class="service-name">Consultations</div>
+          <p class="service-desc">Not sure where to start? Sit down with one of our artists to discuss placement, sizing, style, and design before committing to anything.</p>
+          <span class="service-detail">Contact us to schedule</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="divider"></div>
+      <p class="section-sub">Ready to start your next piece? Reach out to discuss your idea or stop by the studio.</p>
+      <div class="contact-grid">
+
+        <div>
+          <div class="rating-card">
+            <div class="rating-header">Google Reviews</div>
+            <div class="rating-stars">
+              <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              <span class="rating-score">5.0</span>
+            </div>
+            <div class="rating-count">Based on 2 Google reviews</div>
+          </div>
+
+          <div class="contact-info-block">
+            <div class="contact-item">
+              <span class="contact-icon">&#128205;</span>
+              <div>
+                <div class="contact-label">Address</div>
+                <div class="contact-value">111 SW 3rd St<br/>Gainesville, FL 32601</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">&#128222;</span>
+              <div>
+                <div class="contact-label">Phone</div>
+                <div class="contact-value"><a href="tel:+13522780509">(352) 278-0509</a></div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">&#128336;</span>
+              <div>
+                <div class="contact-label">Hours</div>
+                <div class="contact-value">Contact us for current hours</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="map-placeholder">
+            <span class="map-pin">&#128205;</span>
+            <div class="map-address">
+              <strong style="color: var(--white);">New Key Tattoo</strong><br/>
+              111 SW 3rd St, Gainesville, FL 32601
+            </div>
+          </div>
+          <br/>
+          <a
+            href="https://www.google.com/maps/search/New%20Key%20Tattoo%20111%20SW%203rd%20St%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >
+            &#128205; Get Directions on Google Maps
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">New <span>Key</span> Tattoo</div>
+      <div class="footer-divider"></div>
+      <div class="footer-text">111 SW 3rd St, Gainesville, FL 32601 &nbsp;|&nbsp; <a href="tel:+13522780509" style="color: var(--muted); text-decoration: none;">(352) 278-0509</a></div>
+      <div class="footer-text">&copy; 2026 New Key Tattoo. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', function () {
+      mobileMenu.classList.toggle('open');
+    });
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+    }
+  </script>
+</body>
+</html>

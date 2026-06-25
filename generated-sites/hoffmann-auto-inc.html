@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hoffmann Auto Inc – Auto Repair Shop | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1a2233;
+      --steel:   #2c3e55;
+      --red:     #c0392b;
+      --red-dk:  #962d22;
+      --silver:  #bdc3c7;
+      --light:   #f4f6f8;
+      --white:   #ffffff;
+      --text:    #2d3436;
+      --muted:   #636e72;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.4);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--white);
+    }
+
+    .nav-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .5px;
+      line-height: 1.2;
+    }
+
+    .nav-name span {
+      display: block;
+      font-size: .7rem;
+      font-weight: 400;
+      color: var(--silver);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--silver);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .4px;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: 8px 18px;
+      border-radius: 4px;
+      transition: background .2s !important;
+    }
+
+    .nav-cta:hover { background: var(--red-dk) !important; color: var(--white) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all .25s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--navy);
+      z-index: 999;
+      padding: 20px 5%;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+
+    .mobile-menu.open { display: block; }
+
+    .mobile-menu a {
+      display: block;
+      color: var(--silver);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      transition: color .2s;
+    }
+
+    .mobile-menu a:hover { color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 100px 5% 80px;
+      display: flex;
+      align-items: center;
+      min-height: 520px;
+    }
+
+    .hero-bg-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 40px,
+          rgba(255,255,255,.025) 40px,
+          rgba(255,255,255,.025) 41px
+        );
+    }
+
+    .hero-accent {
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 420px;
+      height: 420px;
+      background: var(--red);
+      opacity: .12;
+      border-radius: 50%;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 640px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 3px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--white);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--red);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--silver);
+      margin-bottom: 36px;
+      max-width: 500px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 30px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .btn-primary:hover { background: var(--red-dk); transform: translateY(-1px); }
+
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,.4);
+      color: var(--white);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,.08);
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 80px 5%; }
+
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 620px;
+      margin-bottom: 48px;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--white);
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+    }
+
+    .about-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--light);
+      border-left: 3px solid var(--red);
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .badge svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--red);
+      flex-shrink: 0;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--navy), var(--steel));
+      border-radius: 12px;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .about-visual-icon svg {
+      width: 70px;
+      height: 70px;
+      fill: rgba(255,255,255,.15);
+    }
+
+    .about-visual-stat {
+      color: var(--white);
+    }
+
+    .about-visual-stat .big {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+    }
+
+    .about-visual-stat p {
+      color: var(--silver);
+      font-size: .9rem;
+      margin-top: 6px;
+    }
+
+    .about-visual-divider {
+      width: 40px;
+      height: 2px;
+      background: rgba(255,255,255,.2);
+      border-radius: 2px;
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      background: var(--light);
+    }
+
+    .services-header {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 32px 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      border-top: 4px solid var(--red);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.1);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(192,57,43,.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--red);
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      font-size: .92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--white);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .contact-info p.lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 36px;
+    }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .info-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .info-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(192,57,43,.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--red);
+    }
+
+    .info-text {
+      padding-top: 2px;
+    }
+
+    .info-text strong {
+      display: block;
+      font-size: .8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .info-text a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: color .2s;
+    }
+
+    .info-text a:hover { color: var(--red); }
+
+    .info-text span {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .rating-box {
+      background: var(--light);
+      border-radius: 10px;
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .rating-stars svg {
+      width: 20px;
+      height: 20px;
+      fill: #f39c12;
+    }
+
+    .rating-stars svg.half { fill: url(#halfGrad); }
+
+    .rating-detail strong {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--navy);
+    }
+
+    .rating-detail p {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--red);
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+
+    .directions-btn:hover {
+      background: var(--red-dk);
+      transform: translateY(-1px);
+    }
+
+    .directions-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--white);
+    }
+
+    .contact-card {
+      background: linear-gradient(145deg, var(--navy), var(--steel));
+      border-radius: 12px;
+      padding: 40px 36px;
+      color: var(--white);
+    }
+
+    .contact-card h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .contact-card p {
+      color: var(--silver);
+      font-size: .97rem;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .contact-card .cta-phone {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .contact-card .cta-phone:hover { background: rgba(255,255,255,.14); }
+
+    .contact-card .cta-phone svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--red);
+      flex-shrink: 0;
+    }
+
+    .contact-card .cta-phone span {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .contact-card .note {
+      font-size: .8rem;
+      color: rgba(255,255,255,.4);
+      text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: var(--silver);
+      padding: 40px 5%;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-logo svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .footer-brand-text {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .footer-brand-text span {
+      display: block;
+      font-size: .72rem;
+      font-weight: 400;
+      color: var(--silver);
+      letter-spacing: 1px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--silver);
+      text-decoration: none;
+      font-size: .88rem;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: .78rem;
+      color: rgba(255,255,255,.3);
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 20px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 820px) {
+      .about-inner, .contact-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .about-visual { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero { padding: 70px 5% 60px; min-height: 420px; }
+
+      section { padding: 60px 5%; }
+
+      .footer-links { flex-wrap: wrap; gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="#hero">
+    <div class="nav-logo-icon">
+      <!-- wrench icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+      </svg>
+    </div>
+    <div class="nav-name">
+      Hoffmann Auto Inc
+      <span>Auto Repair Shop</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about"    onclick="toggleMenu()">About</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#contact"  onclick="toggleMenu()">Contact Us</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Gainesville, FL</div>
+    <h1>Keeping <em>Gainesville</em><br>Moving Forward</h1>
+    <p>Trusted auto repair and maintenance for cars, trucks, and SUVs. Quality work, honest service — every time.</p>
+    <div class="hero-actions">
+      <a href="tel:+13523360530" class="btn btn-primary">Call (352) 336-0530</a>
+      <a href="#services" class="btn btn-outline">Our Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="section-label">About Us</div>
+      <h2 class="section-title">Your Local Auto Repair Specialists</h2>
+      <p>Hoffmann Auto Inc is a full-service auto repair shop serving the Gainesville, FL community and surrounding areas. Our skilled technicians are committed to providing reliable, high-quality repairs and maintenance you can count on.</p>
+      <p>We work on a wide range of makes and models, using quality parts and up-to-date diagnostic equipment to get your vehicle running right. Whether it's a routine oil change or a complex repair, we treat every car like our own.</p>
+      <p>Transparency and trust are at the heart of everything we do. We'll explain what your vehicle needs before we begin, so you always know what to expect. Contact us for details on scheduling and current availability.</p>
+
+      <div class="about-badges">
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Honest Estimates
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Experienced Technicians
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Quality Parts
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Locally Owned
+        </div>
+      </div>
+    </div>
+
+    <div class="about-visual">
+      <div class="about-visual-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+        </svg>
+      </div>
+      <div class="about-visual-stat">
+        <div class="big">4.8</div>
+        <p>Average Google Rating<br>based on 65 reviews</p>
+      </div>
+      <div class="about-visual-divider"></div>
+      <div class="about-visual-stat">
+        <div class="big" style="font-size:2.4rem;">Gainesville</div>
+        <p>Proudly serving Gainesville, FL<br>and surrounding communities</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="services" id="services">
+  <div class="services-header">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Full-Service Auto Repair &amp; Maintenance</h2>
+    <p class="section-intro">From routine upkeep to complex repairs, our team handles it all. Contact us for details on availability and scheduling.</p>
+  </div>
+
+  <div class="services-grid">
+
+    <!-- Oil Change -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M19.5 12c0-1.93-1.57-3.5-3.5-3.5h-1V5h-2v1H7V5H5v1H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3.32c1.14-.41 2-1.52 2-2.68zm-9.5 5H6v-2h4v2zm4 0h-3v-2h3v2zm-.5-6c-.83 0-1.5-.67-1.5-1.5S12.67 8 13.5 8s1.5.67 1.5 1.5S14.33 11 13.5 11z"/></svg>
+      </div>
+      <h3>Oil Change &amp; Fluid Service</h3>
+      <p>Regular oil changes and fluid top-offs to keep your engine protected and running efficiently. Contact us for details on service intervals.</p>
+    </div>
+
+    <!-- Brakes -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+      </div>
+      <h3>Brake Inspection &amp; Repair</h3>
+      <p>Full brake system inspections, pad and rotor replacement, and brake fluid service to ensure safe stopping performance.</p>
+    </div>
+
+    <!-- Diagnostics -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+      </div>
+      <h3>Engine Diagnostics</h3>
+      <p>Advanced computer diagnostics to pinpoint check-engine lights, fault codes, and performance issues accurately before any repair begins.</p>
+    </div>
+
+    <!-- Tires -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm-1-9h2v4h-2zm0 6h2v2h-2z"/></svg>
+      </div>
+      <h3>Tire Services</h3>
+      <p>Tire rotation, balancing, and inflation checks to extend tire life and improve fuel economy and handling on Gainesville roads.</p>
+    </div>
+
+    <!-- A/C -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11h-4.17l3.24-3.24-1.41-1.42L15 11h-2V9l4.66-4.66-1.42-1.41L13 6.17V2h-2v4.17L7.76 2.93 6.34 4.34 11 9v2H9L4.34 6.34 2.93 7.76 6.17 11H2v2h4.17l-3.24 3.24 1.41 1.42L9 13h2v2l-4.66 4.66 1.42 1.41L11 17.83V22h2v-4.17l3.24 3.24 1.42-1.41L13 15v-2h2l4.66 4.66 1.41-1.42L17.83 13H22v-2z"/></svg>
+      </div>
+      <h3>A/C &amp; Heating System Repair</h3>
+      <p>Inspection, recharge, and repair of your vehicle's air conditioning and heating systems — essential in Florida's climate year-round.</p>
+    </div>
+
+    <!-- Suspension -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+      </div>
+      <h3>Suspension &amp; Steering</h3>
+      <p>Shocks, struts, tie rods, and alignment services to restore smooth handling and even tire wear on your vehicle.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <div class="section-label">Find Us</div>
+      <h2>Get in Touch</h2>
+      <p class="lead">Ready to schedule service or have a question about your vehicle? Reach out — we're here to help.</p>
+
+      <!-- Rating -->
+      <div class="rating-box">
+        <svg style="display:none"><defs>
+          <linearGradient id="halfGrad" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="50%" stop-color="#f39c12"/>
+            <stop offset="50%" stop-color="#ccc"/>
+          </linearGradient>
+        </defs></svg>
+        <div class="rating-stars">
+          <!-- 4 full stars + 1 star (4.8 rounds to 5 visually but we'll show 4 full + partial) -->
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="fill:#f39c12;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </div>
+        <div class="rating-detail">
+          <strong>4.8</strong>
+          <p>Google Maps Rating &mdash; 65 reviews</p>
+        </div>
+      </div>
+
+      <ul class="info-list">
+        <li>
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div class="info-text">
+            <strong>Address</strong>
+            <span>3020 N Main St #4, Gainesville, FL</span>
+          </div>
+        </li>
+        <li>
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </div>
+          <div class="info-text">
+            <strong>Phone</strong>
+            <a href="tel:+13523360530">(352) 336-0530</a>
+          </div>
+        </li>
+        <li>
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          </div>
+          <div class="info-text">
+            <strong>Hours</strong>
+            <span>Contact us for details</span>
+          </div>
+        </li>
+      </ul>
+
+      <a
+        class="directions-btn"
+        href="https://www.google.com/maps/search/Hoffmann%20Auto%20Inc%203020%20N%20Main%20St%20%234%2C%20Gainesville%2C%20FL"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Get Directions
+      </a>
+    </div>
+
+    <div class="contact-card">
+      <h3>Ready to Schedule?</h3>
+      <p>Give us a call to discuss your vehicle's needs. Our team will walk you through what we find and what it takes to get you back on the road.</p>
+
+      <a href="tel:+13523360530" class="cta-phone">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        <span>(352) 336-0530</span>
+      </a>
+
+      <p class="note">Tap to call directly from your phone</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+      </div>
+      <div class="footer-brand-text">
+        Hoffmann Auto Inc
+        <span>3020 N Main St #4, Gainesville, FL</span>
+      </div>
+    </div>
+
+    <ul class="footer-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:+13523360530">(352) 336-0530</a></li>
+    </ul>
+
+    <p class="footer-copy">&copy; 2024 Hoffmann Auto Inc &mdash; Gainesville, FL. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Close mobile menu on outside click
+  document.addEventListener('click', function(e) {
+    var menu = document.getElementById('mobileMenu');
+    var hamburger = document.querySelector('.hamburger');
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+
+  // Smooth scroll offset for fixed nav
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({ top: target.offsetTop - 64, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

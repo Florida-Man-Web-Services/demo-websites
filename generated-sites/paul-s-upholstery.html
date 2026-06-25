@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paul's Upholstery | Auto Upholstery | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy:    #1a2236;
+      --leather: #8b5e3c;
+      --leather-light: #a97142;
+      --cream:   #f5f0e8;
+      --gold:    #c9933a;
+      --text:    #2c2c2c;
+      --text-muted: #5a5a5a;
+      --white:   #ffffff;
+      --shadow:  0 4px 24px rgba(0,0,0,0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.03em;
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #ccd0db;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 3px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--leather-light) !important;
+      color: var(--white) !important;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(26,34,54,0.88) 0%, rgba(139,94,60,0.72) 100%),
+        repeating-linear-gradient(
+          45deg,
+          #2a3248 0px,
+          #2a3248 2px,
+          #1e2940 2px,
+          #1e2940 20px
+        );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative stitching lines */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border: 2px solid rgba(201,147,58,0.25);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 28px;
+      border: 1px dashed rgba(201,147,58,0.15);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .hero-title em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .hero-tagline {
+      font-family: 'Arial', sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #c8ccdb;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-stars {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+    }
+
+    .hero-stars-label {
+      color: #ccd0db;
+      font-size: 0.9rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border-radius: 3px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.22s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .btn-primary:hover {
+      background: #e0a840;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(201,147,58,0.45);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.55);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 80px 5%;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      color: var(--navy);
+      margin-bottom: 1.2rem;
+      line-height: 1.25;
+    }
+
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .about-card {
+      background: var(--white);
+      border-top: 3px solid var(--gold);
+      border-radius: 4px;
+      padding: 1.4rem 1.2rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .about-card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .about-card h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--white);
+    }
+
+    .services-intro {
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .service-card {
+      border: 1px solid #e4ddd4;
+      border-radius: 6px;
+      padding: 2rem;
+      transition: all 0.22s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+      border-color: #d4c5b0;
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: #fdf3e3;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-item {
+      margin-bottom: 2rem;
+    }
+
+    .contact-item p {
+      color: #c8ccdb;
+      font-size: 1rem;
+    }
+
+    .contact-item a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .contact-item a:hover {
+      color: #e0a840;
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,147,58,0.3);
+      border-radius: 6px;
+      padding: 1.8rem 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-number {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .rating-stars {
+      color: var(--gold);
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+    }
+
+    .rating-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      color: #9aa0b5;
+      margin-top: 0.3rem;
+    }
+
+    /* Map card */
+    .map-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 2rem;
+    }
+
+    .map-placeholder {
+      background: rgba(255,255,255,0.05);
+      border: 1px dashed rgba(201,147,58,0.3);
+      border-radius: 4px;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: #9aa0b5;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      gap: 0.5rem;
+    }
+
+    .map-pin-icon {
+      font-size: 2rem;
+    }
+
+    .map-card h3 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .map-card p {
+      font-family: 'Arial', sans-serif;
+      color: #c8ccdb;
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #10172a;
+      color: #6b7494;
+      text-align: center;
+      padding: 2rem 5%;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+    }
+
+    footer .footer-name {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    footer .footer-divider {
+      margin: 0 0.6rem;
+      opacity: 0.4;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--navy);
+        flex-direction: column;
+        padding: 1.5rem 5%;
+        gap: 1.2rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1rem;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      section {
+        padding: 60px 5%;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-visual {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a class="nav-logo" href="#hero">Paul's <span>Upholstery</span></a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:3523780535" class="nav-cta">Call Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, FL Auto Upholstery</div>
+      <h1 class="hero-title">
+        Crafted Interiors.<br><em>Built to Last.</em>
+      </h1>
+      <p class="hero-tagline">
+        Professional auto upholstery work you can see, feel, and trust — right here in Gainesville.
+      </p>
+      <div class="hero-stars">
+        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="hero-stars-label">5.0 Rating on Google</span>
+      </div>
+      <div class="hero-actions">
+        <a href="tel:3523780535" class="btn btn-primary">Call (352) 378-0535</a>
+        <a href="#services" class="btn btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Quality Craftsmanship You Can Count On</h2>
+          <div class="divider"></div>
+          <p>
+            Paul's Upholstery is a trusted auto upholstery shop serving Gainesville, FL and the surrounding area. We specialize in restoring, repairing, and customizing vehicle interiors with quality materials and careful attention to detail.
+          </p>
+          <p>
+            Whether your seats need repair after everyday wear or you want a full custom interior upgrade, our shop is equipped to handle jobs of all sizes. We work on cars, trucks, boats, and more — bringing interiors back to life.
+          </p>
+          <p>
+            Our 5.0-star Google rating reflects the consistent quality and honest service we provide to every customer who walks through our door.
+          </p>
+        </div>
+        <div class="about-visual">
+          <div class="about-card">
+            <span class="about-card-icon">&#9733;</span>
+            <h4>5.0 Star Rated</h4>
+          </div>
+          <div class="about-card">
+            <span class="about-card-icon">&#9874;</span>
+            <h4>Expert Craftsmanship</h4>
+          </div>
+          <div class="about-card">
+            <span class="about-card-icon">&#128663;</span>
+            <h4>Auto &amp; Marine</h4>
+          </div>
+          <div class="about-card">
+            <span class="about-card-icon">&#128197;</span>
+            <h4>Local &amp; Trusted</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-intro">
+        <p class="section-label">What We Do</p>
+        <h2 class="section-title">Auto Upholstery Services</h2>
+        <div class="divider"></div>
+        <p style="font-family:'Arial',sans-serif; color:var(--text-muted); font-size:0.95rem;">
+          From minor repairs to full custom interiors, we offer a complete range of upholstery services. Contact us for a quote on your specific project.
+        </p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#128664;</div>
+          <h3>Seat Repair &amp; Restoration</h3>
+          <p>Torn, worn, or faded seats restored to their original look and feel using premium materials matched to your vehicle's interior.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127775;</div>
+          <h3>Custom Seat Covers</h3>
+          <p>Professionally fitted custom covers made from leather, vinyl, cloth, or specialty fabrics — tailored to your style and specifications.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128268;</div>
+          <h3>Headliner Replacement</h3>
+          <p>Sagging or stained headliners replaced cleanly and professionally, restoring the look of your vehicle's interior ceiling.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128736;</div>
+          <h3>Door Panel Upholstery</h3>
+          <p>Door panel fabric or vinyl replacement to match or complement your existing interior, giving your vehicle a refreshed finish.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#9875;</div>
+          <h3>Boat &amp; Marine Upholstery</h3>
+          <p>UV-resistant and waterproof marine-grade upholstery for boat seats, benches, and cushions built to withstand the Florida sun.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127775;</div>
+          <h3>Full Custom Interiors</h3>
+          <p>Complete interior overhauls for classic cars, trucks, and specialty vehicles. Contact us for details and to discuss your vision.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Get In Touch</p>
+      <h2 class="section-title">Visit or Call Us Today</h2>
+      <div class="divider"></div>
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <h3>Phone</h3>
+            <a href="tel:3523780535">(352) 378-0535</a>
+            <p>Call to schedule a consultation or ask about your project.</p>
+          </div>
+          <div class="contact-item">
+            <h3>Address</h3>
+            <p>5230 SW 56th Terrace<br>Gainesville, FL</p>
+          </div>
+          <div class="contact-item">
+            <h3>Hours</h3>
+            <p>Contact us for current hours and availability.</p>
+          </div>
+          <div class="rating-card">
+            <div class="rating-row">
+              <span class="rating-number">5.0</span>
+              <div>
+                <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div class="rating-label">Google Maps Rating</div>
+              </div>
+            </div>
+            <p style="font-family:'Arial',sans-serif; font-size:0.85rem; color:#9aa0b5; margin-top:0.4rem;">
+              Consistently rated 5 stars by our Gainesville customers.
+            </p>
+          </div>
+        </div>
+
+        <div class="map-card">
+          <div class="map-placeholder">
+            <span class="map-pin-icon">&#128205;</span>
+            <span>5230 SW 56th Terrace, Gainesville, FL</span>
+          </div>
+          <h3>Find Us</h3>
+          <p>Located in Gainesville, FL. Use the button below to open directions in Google Maps.</p>
+          <a
+            href="https://www.google.com/maps/search/Paul's%20Upholstery%205230%20SW%2056th%20Terrace%2C%20Gainesville%2C%20FL"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+            style="display:inline-block; width:100%; text-align:center;"
+          >
+            &#128205; Get Directions
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <span class="footer-name">Paul's Upholstery</span>
+      <span class="footer-divider">|</span>
+      5230 SW 56th Terrace, Gainesville, FL
+      <span class="footer-divider">|</span>
+      <a href="tel:3523780535" style="color:var(--gold); text-decoration:none;">(352) 378-0535</a>
+    </p>
+    <p style="margin-top:0.5rem; opacity:0.6;">
+      &copy; 2026 Paul's Upholstery. All rights reserved.
+    </p>
+  </footer>
+
+  <script>
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+    // Close menu when a link is clicked
+    navLinks.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

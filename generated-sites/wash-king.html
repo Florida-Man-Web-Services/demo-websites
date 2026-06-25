@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wash King | Laundromat in Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue-dark: #0d3b6e;
+      --blue-mid: #1565c0;
+      --blue-light: #e3f2fd;
+      --blue-accent: #29b6f6;
+      --white: #ffffff;
+      --gray-light: #f5f7fa;
+      --gray-mid: #cfd8dc;
+      --text-main: #1a2332;
+      --text-muted: #607d8b;
+      --bubble: #e0f7ff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text-main);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--blue-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--blue-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue-accent);
+    }
+
+    .nav-phone {
+      color: var(--blue-accent);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-phone:hover {
+      color: var(--white);
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, #0e4d8a 55%, #1976d2 100%);
+      color: var(--white);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(41, 182, 246, 0.1);
+    }
+
+    .hero::before {
+      width: 400px;
+      height: 400px;
+      top: -100px;
+      right: -80px;
+    }
+
+    .hero::after {
+      width: 260px;
+      height: 260px;
+      bottom: -60px;
+      left: -60px;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(41, 182, 246, 0.2);
+      border: 1px solid rgba(41, 182, 246, 0.5);
+      color: var(--blue-accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero h1 span {
+      color: var(--blue-accent);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.82);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--blue-accent);
+      color: var(--blue-dark);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: #4fc3f7;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blue-mid);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin-bottom: 1.25rem;
+      line-height: 1.2;
+    }
+
+    /* ABOUT */
+    .about {
+      background: var(--gray-light);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--blue-light), var(--bubble));
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      border: 1px solid var(--gray-mid);
+    }
+
+    .about-visual-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .about-visual p {
+      font-size: 1rem;
+      color: var(--blue-dark);
+      font-weight: 600;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--blue-mid);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* SERVICES */
+    .services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--gray-light);
+      border: 1px solid var(--gray-mid);
+      border-radius: 14px;
+      padding: 2rem 1.75rem;
+      transition: box-shadow 0.25s, transform 0.2s, border-color 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 30px rgba(21, 101, 192, 0.13);
+      transform: translateY(-3px);
+      border-color: var(--blue-accent);
+    }
+
+    .service-icon {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+    }
+
+    /* CONTACT */
+    .contact {
+      background: var(--blue-dark);
+      color: var(--white);
+    }
+
+    .contact .section-label {
+      color: var(--blue-accent);
+    }
+
+    .contact .section-title {
+      color: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .contact-info-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .contact-detail strong {
+      display: block;
+      font-size: 0.82rem;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--blue-accent);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail span,
+    .contact-detail a {
+      color: rgba(255,255,255,0.88);
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    .contact-detail a:hover {
+      color: var(--blue-accent);
+    }
+
+    .rating-box {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      margin-top: 2rem;
+    }
+
+    .rating-label {
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue-accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .rating-number {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stars {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .stars-icons {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star-full {
+      color: #ffc107;
+      font-size: 1.1rem;
+    }
+
+    .star-empty {
+      color: rgba(255, 193, 7, 0.3);
+      font-size: 1.1rem;
+    }
+
+    .review-count {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .rating-source {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 0.4rem;
+    }
+
+    .contact-action {
+      margin-top: 1.5rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--blue-accent);
+      color: var(--blue-dark);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-directions:hover {
+      background: #4fc3f7;
+      transform: translateY(-2px);
+    }
+
+    .contact-map-block {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .map-pin-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .contact-map-block h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-map-block p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #07253f;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.88rem;
+    }
+
+    footer strong {
+      color: rgba(255,255,255,0.75);
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-visual {
+        padding: 2rem 1.5rem;
+      }
+
+      .stats-row {
+        justify-content: center;
+      }
+
+      .hero {
+        min-height: 420px;
+        padding: 3rem 1.5rem;
+      }
+
+      .section {
+        padding: 3.5rem 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav {
+        padding: 0 1rem;
+      }
+
+      .nav-phone {
+        font-size: 0.85rem;
+      }
+
+      .hero-cta {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary,
+      .btn-outline {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon">&#9780;</div>
+      <span class="nav-logo-text">Wash King</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="nav-phone" href="tel:3528723856">(352) 872-3856</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Gainesville, FL Laundromat</div>
+      <h1>Your Laundry, Done <span>Right</span></h1>
+      <p>Clean machines, a welcoming space, and everything you need to get your laundry done quickly and easily on NE 16th Ave.</p>
+      <div class="hero-cta">
+        <a href="#services" class="btn-primary">Our Services</a>
+        <a href="#contact" class="btn-outline">Find Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">About Us</div>
+          <h2 class="section-title">Serving the Gainesville Community</h2>
+          <p>Wash King is a convenient, full-service laundromat located in Gainesville, FL, providing residents with clean and reliable self-service washing and drying facilities. Our location on NE 16th Ave is easily accessible and equipped with a range of machine sizes to handle any load — from everyday clothes to bulky comforters and bedding.</p>
+          <p>We are committed to keeping our facility clean, safe, and comfortable so you can get in, get your laundry done, and get on with your day. Whether you visit us weekly or just need a one-time solution, Wash King is here to make laundry day simpler.</p>
+          <p>Centrally located in northeast Gainesville, we serve UF students, families, and local residents looking for an efficient and straightforward laundry experience. Contact us for details on current hours and availability.</p>
+          <div class="stats-row">
+            <div class="stat-item">
+              <span class="stat-num">128</span>
+              <span class="stat-label">Google Reviews</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">3.3&#9733;</span>
+              <span class="stat-label">Google Rating</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">GNV</span>
+              <span class="stat-label">Locally Located</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual">
+          <span class="about-visual-icon">&#9780;</span>
+          <p>Clean machines. Simple process. Fresh results.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section services" id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <div class="section-label">What We Offer</div>
+        <h2 class="section-title">Laundry Made Easy</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">&#129529;</span>
+          <h3>Self-Service Washers</h3>
+          <p>A range of front-load and top-load washers available for self-service use in multiple load sizes. Contact us for details on machine availability.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#128167;</span>
+          <h3>High-Capacity Dryers</h3>
+          <p>Get your clothes fully dry in one go with our commercial dryers — ideal for large and small loads alike.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#128230;</span>
+          <h3>Large-Load Machines</h3>
+          <p>Oversized washers and dryers for bulky items like comforters, blankets, sleeping bags, and rugs. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#128176;</span>
+          <h3>Coin-Operated Equipment</h3>
+          <p>Convenient coin-operated machines to keep the laundry process quick and hassle-free. Contact us for current pricing details.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#10024;</span>
+          <h3>Multiple Wash Cycles</h3>
+          <p>Choose from a variety of wash settings including hot, warm, and cold water cycles to properly care for all fabric types.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#128274;</span>
+          <h3>Clean &amp; Safe Facility</h3>
+          <p>A well-maintained, comfortable environment so you can do your laundry with confidence. Contact us for hours and availability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact" id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div>
+          <div class="section-label">Get In Touch</div>
+          <h2 class="section-title">Visit Wash King Today</h2>
+          <ul class="contact-info-list">
+            <li class="contact-info-item">
+              <span class="contact-icon">&#128205;</span>
+              <div class="contact-detail">
+                <strong>Address</strong>
+                <span>210 NE 16th Ave, Gainesville, FL</span>
+              </div>
+            </li>
+            <li class="contact-info-item">
+              <span class="contact-icon">&#128222;</span>
+              <div class="contact-detail">
+                <strong>Phone</strong>
+                <a href="tel:3528723856">(352) 872-3856</a>
+              </div>
+            </li>
+            <li class="contact-info-item">
+              <span class="contact-icon">&#128337;</span>
+              <div class="contact-detail">
+                <strong>Hours</strong>
+                <span>Contact us for details</span>
+              </div>
+            </li>
+          </ul>
+
+          <div class="rating-box">
+            <div class="rating-label">Google Maps Rating</div>
+            <div class="rating-row">
+              <span class="rating-number">3.3</span>
+              <div class="stars">
+                <div class="stars-icons">
+                  <span class="star-full">&#9733;</span>
+                  <span class="star-full">&#9733;</span>
+                  <span class="star-full">&#9733;</span>
+                  <span class="star-empty">&#9733;</span>
+                  <span class="star-empty">&#9733;</span>
+                </div>
+                <span class="review-count">Based on 128 reviews</span>
+              </div>
+            </div>
+            <div class="rating-source">Source: Google Maps</div>
+          </div>
+
+          <div class="contact-action">
+            <a
+              href="https://www.google.com/maps/search/Wash%20King%20210%20NE%2016th%20Ave"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-directions"
+            >
+              &#9654; Get Directions
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-map-block">
+          <span class="map-pin-icon">&#128205;</span>
+          <h3>Wash King</h3>
+          <p>210 NE 16th Ave<br>Gainesville, FL</p>
+          <a
+            href="https://www.google.com/maps/search/Wash%20King%20210%20NE%2016th%20Ave"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            &#9654; Open in Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Wash King</strong> &mdash; 210 NE 16th Ave, Gainesville, FL &mdash; <a href="tel:3528723856">(352) 872-3856</a></p>
+    <p style="margin-top:0.5rem;">&copy; 2026 Wash King. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

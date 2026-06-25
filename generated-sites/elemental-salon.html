@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elemental Salon | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #f5f0e8;
+      --sand:     #e8dcc8;
+      --taupe:    #b5a48a;
+      --espresso: #3a2e26;
+      --bark:     #5c4a38;
+      --gold:     #c9a84c;
+      --gold-lt:  #e0c278;
+      --white:    #ffffff;
+      --text:     #2e2721;
+      --text-lt:  #6b5e52;
+      --nav-h:    68px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Typography helpers ── */
+    .sans {
+      font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    h1, h2, h3 { font-weight: normal; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--espresso);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .nav-name {
+      color: var(--gold-lt);
+      font-size: 1.25rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--sand);
+      text-decoration: none;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--gold-lt); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--sand);
+      transition: background 0.25s;
+    }
+    .hamburger:hover span { background: var(--gold-lt); }
+
+    /* Mobile nav overlay */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: var(--espresso);
+      padding: 1.5rem 2rem 2rem;
+      z-index: 999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu ul { list-style: none; }
+    .mobile-menu ul li { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .mobile-menu ul li:last-child { border-bottom: none; }
+    .mobile-menu a {
+      display: block;
+      padding: 0.85rem 0;
+      color: var(--sand);
+      text-decoration: none;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .mobile-menu a:hover { color: var(--gold-lt); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--espresso) 0%, var(--bark) 50%, #7a6248 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: calc(var(--nav-h) + 3rem) 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative circles */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 560px; height: 560px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.12);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero-icon {
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-icon svg {
+      width: 64px;
+      height: 64px;
+      opacity: 0.85;
+    }
+
+    .hero h1 {
+      color: var(--cream);
+      font-size: clamp(2.6rem, 6vw, 4.5rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-weight: 300;
+      line-height: 1.15;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1.4rem auto;
+    }
+
+    .hero p {
+      color: var(--sand);
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      max-width: 500px;
+      font-style: italic;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-cta {
+      margin-top: 2.4rem;
+      display: inline-block;
+      padding: 0.85rem 2.4rem;
+      border: 1px solid var(--gold);
+      color: var(--gold-lt);
+      text-decoration: none;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+    }
+    .hero-cta:hover {
+      background: var(--gold);
+      color: var(--espresso);
+    }
+
+    /* ── Section shared ── */
+    section { scroll-margin-top: var(--nav-h); }
+
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--espresso);
+      margin-bottom: 1rem;
+      letter-spacing: 0.04em;
+    }
+
+    .gold-bar {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    /* ── About ── */
+    #about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-lt);
+      margin-bottom: 1.1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      height: 340px;
+    }
+
+    .av-block {
+      border-radius: 4px;
+    }
+    .av-block:nth-child(1) { background: var(--espresso); grid-row: span 2; }
+    .av-block:nth-child(2) { background: var(--taupe); }
+    .av-block:nth-child(3) { background: var(--gold); }
+
+    .av-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .av-inner svg { opacity: 0.25; }
+
+    /* ── Services ── */
+    #services { background: var(--cream); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 2rem 1.8rem;
+      border-top: 3px solid var(--gold);
+      box-shadow: 0 2px 14px rgba(58,46,38,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(58,46,38,0.13);
+    }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--sand);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--espresso);
+      margin-bottom: 0.5rem;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-lt);
+    }
+
+    /* ── Contact ── */
+    #contact { background: var(--espresso); }
+
+    #contact .section-title { color: var(--cream); }
+    #contact .section-label { color: var(--gold-lt); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info { color: var(--sand); }
+    .contact-info p { margin-bottom: 0.4rem; font-size: 0.95rem; }
+
+    .contact-block {
+      margin-bottom: 1.8rem;
+    }
+
+    .contact-block .clabel {
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-block a {
+      color: var(--sand);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-block a:hover { color: var(--gold-lt); }
+
+    .directions-btn {
+      display: inline-block;
+      margin-top: 0.6rem;
+      padding: 0.7rem 1.8rem;
+      background: var(--gold);
+      color: var(--espresso);
+      text-decoration: none;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      font-weight: bold;
+      transition: background 0.25s;
+    }
+    .directions-btn:hover { background: var(--gold-lt); }
+
+    /* Rating card */
+    .rating-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 6px;
+      padding: 2rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 0.8rem;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .rating-score {
+      font-size: 3rem;
+      color: var(--cream);
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .rating-label {
+      color: var(--taupe);
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+
+    .rating-source {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--taupe);
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      letter-spacing: 0.06em;
+    }
+
+    .google-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 0.3rem 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .google-g {
+      font-size: 0.85rem;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+    }
+    .g-blue   { color: #4285F4; }
+    .g-red    { color: #EA4335; }
+    .g-yellow { color: #FBBC05; }
+    .g-green  { color: #34A853; }
+
+    /* ── Footer ── */
+    footer {
+      background: #261e18;
+      color: var(--taupe);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.82rem;
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      letter-spacing: 0.06em;
+    }
+
+    footer span { color: var(--gold); }
+
+    /* ── Responsive ── */
+    @media (max-width: 820px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-visual { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <!-- Scissors logo mark -->
+      <svg class="nav-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="17" stroke="#c9a84c" stroke-width="1"/>
+        <line x1="10" y1="10" x2="26" y2="26" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="10" y1="26" x2="26" y2="10" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="10" cy="10" r="3" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+        <circle cx="10" cy="26" r="3" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+      </svg>
+      <span class="nav-name">Elemental Salon</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#services" class="mobile-link">Services</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-icon">
+      <!-- Abstract leaf/element icon -->
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 8 C48 16 56 28 50 46 C44 58 24 58 16 46 C8 34 16 16 32 8Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+        <path d="M32 8 L32 56" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3 3"/>
+        <circle cx="32" cy="32" r="3" fill="#c9a84c" opacity="0.7"/>
+      </svg>
+    </div>
+    <h1>Elemental Salon</h1>
+    <div class="hero-divider"></div>
+    <p>Where artistry meets intention — hair care rooted in craft, confidence, and care.</p>
+    <a href="#services" class="hero-cta">Explore Services</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label sans">Our Story</p>
+          <h2 class="section-title">A Salon Built on Connection</h2>
+          <div class="gold-bar"></div>
+          <p>Elemental Salon is a boutique hair salon nestled in Gainesville, FL, dedicated to delivering personalized, high-quality hair services in a relaxed and welcoming environment.</p>
+          <p>Our stylists take pride in listening to each client's vision and bringing it to life with skill and intention — whether you're after a clean cut, a bold color transformation, or a nourishing treatment.</p>
+          <p>We believe great hair begins with great relationships. From your first visit, you'll feel the difference that genuine care and attention to detail makes.</p>
+        </div>
+        <div class="about-visual" aria-hidden="true">
+          <div class="av-block" style="background: var(--espresso);">
+            <div class="av-inner">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <path d="M24 6 C34 12 40 22 36 34 C32 42 16 42 12 34 C8 26 14 12 24 6Z" stroke="#e8dcc8" stroke-width="1" fill="none"/>
+                <line x1="24" y1="6" x2="24" y2="42" stroke="#e8dcc8" stroke-width="0.8" stroke-dasharray="2 2"/>
+              </svg>
+            </div>
+          </div>
+          <div class="av-block" style="background: var(--taupe);"></div>
+          <div class="av-block" style="background: var(--gold); opacity: 0.8;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label sans">What We Offer</p>
+      <h2 class="section-title">Our Services</h2>
+      <div class="gold-bar"></div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Scissors icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5c4a38" stroke-width="1.6" stroke-linecap="round">
+              <circle cx="6" cy="6" r="3"/>
+              <circle cx="6" cy="18" r="3"/>
+              <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+              <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+              <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <h3>Haircuts & Styling</h3>
+          <p>Precision cuts tailored to your face shape, hair type, and personal style — finished with expert blow-out and styling.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Color drop icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5c4a38" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+          </div>
+          <h3>Color & Highlights</h3>
+          <p>Full color, balayage, highlights, and color corrections — crafted to complement your complexion and lifestyle. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Sparkle / treatment icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5c4a38" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3>Deep Conditioning Treatments</h3>
+          <p>Restore moisture, strength, and shine with professional conditioning treatments suited to your hair's specific needs.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Curl/wave icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5c4a38" stroke-width="1.6" stroke-linecap="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1"/>
+              <path d="M4 9s1-1 4-1 5 2 8 2 4-1 4-1"/>
+            </svg>
+          </div>
+          <h3>Perms & Texture Services</h3>
+          <p>Add lasting curl, wave, or texture to your look with professional perming and straightening services. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Wand / blowout icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5c4a38" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </div>
+          <h3>Blowouts & Finishing</h3>
+          <p>Leave the salon looking polished and put-together with a professional blowout and finishing service for any occasion.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Keratin / smoothing icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5c4a38" stroke-width="1.6" stroke-linecap="round">
+              <path d="M4 6h16M4 12h10M4 18h6"/>
+            </svg>
+          </div>
+          <h3>Smoothing & Keratin Treatments</h3>
+          <p>Tame frizz and achieve smooth, manageable hair with professional keratin and smoothing treatment options.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label sans">Find Us</p>
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="gold-bar"></div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+
+          <div class="contact-block">
+            <span class="clabel">Address</span>
+            <p>490 NW 60th St #21</p>
+            <p>Gainesville, FL 32607</p>
+            <a href="https://www.google.com/maps/search/Elemental%20Salon%20490%20NW%2060th%20St%20%2321%2C%20Gainesville%2C%20FL%2032607"
+               target="_blank" rel="noopener noreferrer" class="directions-btn">
+              Get Directions
+            </a>
+          </div>
+
+          <div class="contact-block">
+            <span class="clabel">Phone</span>
+            <a href="tel:+19546755534">(954) 675-5534</a>
+          </div>
+
+          <div class="contact-block">
+            <span class="clabel">Hours</span>
+            <p>Contact us for current hours.</p>
+          </div>
+
+          <div class="contact-block">
+            <span class="clabel">Appointments</span>
+            <p>Contact us for details on booking your appointment.</p>
+          </div>
+
+        </div>
+
+        <!-- Rating card -->
+        <div class="rating-card">
+          <div class="rating-stars" aria-label="5 out of 5 stars">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+          </div>
+          <div class="rating-score">5.0</div>
+          <p class="rating-label">Perfect rating from our valued guests</p>
+          <p class="rating-source">Rated on</p>
+          <div class="google-badge">
+            <span class="google-g g-blue">G</span><span class="google-g g-red">o</span><span class="google-g g-yellow">o</span><span class="google-g g-blue">g</span><span class="google-g g-green">l</span><span class="google-g g-red">e</span>
+            <span style="color: var(--taupe); font-size: 0.78rem; margin-left: 0.3rem; font-family: Arial, sans-serif;">Maps</span>
+          </div>
+          <p style="color: var(--taupe); font-size: 0.78rem; margin-top: 1.2rem; font-style: italic; font-family: 'Trebuchet MS', Arial, sans-serif;">
+            "Where artistry meets intention" — as experienced by our clients.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 <span>Elemental Salon</span> &mdash; 490 NW 60th St #21, Gainesville, FL 32607 &mdash; <a href="tel:+19546755534" style="color: var(--taupe); text-decoration: none;">(954) 675-5534</a></p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    var btn = document.getElementById('hamburgerBtn');
+    var menu = document.getElementById('mobileMenu');
+    btn.addEventListener('click', function() {
+      menu.classList.toggle('open');
+    });
+    // Close on link click
+    document.querySelectorAll('.mobile-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        menu.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prins Commercial Laundry Equipment – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1a2b4a;
+      --steel:   #2e5180;
+      --sky:     #4a90c4;
+      --ice:     #e8f3fc;
+      --white:   #ffffff;
+      --gray:    #f4f7fb;
+      --muted:   #5a6a7e;
+      --text:    #1c2b3a;
+      --accent:  #f0a500;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo svg {
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: .75rem;
+      font-weight: 400;
+      color: var(--sky);
+      letter-spacing: .04em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.8rem;
+    }
+
+    nav ul a {
+      color: #cddcef;
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .03em;
+      transition: color .2s;
+    }
+
+    nav ul a:hover { color: var(--accent); }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px; height: 3px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: .3s;
+    }
+
+    @media (max-width: 700px) {
+      .hamburger { display: flex; }
+      nav ul {
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--navy);
+        flex-direction: column;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .35s ease;
+      }
+      nav ul.open { max-height: 300px; }
+      nav ul li a {
+        display: block;
+        padding: .85rem 2rem;
+        border-top: 1px solid rgba(255,255,255,.08);
+      }
+    }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      padding-top: 64px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(150deg, var(--navy) 0%, var(--steel) 55%, #1e3f6b 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle machine-gear pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(74,144,196,.18) 0%, transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 720px;
+      padding: 3rem 2rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(74,144,196,.25);
+      color: var(--sky);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 2rem;
+      border: 1px solid rgba(74,144,196,.4);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #b8cfe8;
+      max-width: 540px;
+      margin: 0 auto 2.2rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--accent);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: .85rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 14px rgba(240,165,0,.4);
+    }
+
+    .hero-cta:hover {
+      background: #fbb92a;
+      transform: translateY(-2px);
+    }
+
+    /* scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      color: rgba(255,255,255,.35);
+      font-size: .75rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .scroll-hint svg {
+      animation: bounce 1.6s infinite;
+    }
+
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+
+    /* ── SECTION BASE ────────────────────────────────── */
+    section { scroll-margin-top: 64px; }
+
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: .5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-lead {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    /* ── ABOUT ───────────────────────────────────────── */
+    #about {
+      padding: 6rem 2rem;
+      background: var(--gray);
+    }
+
+    .about-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 800px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual svg {
+      width: 160px;
+      height: 160px;
+      opacity: .85;
+    }
+
+    .about-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(255,255,255,.07), transparent 60%);
+    }
+
+    .about-content .section-lead {
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-item .num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--steel);
+      display: block;
+    }
+
+    .stat-item .label {
+      font-size: .8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* ── SERVICES ────────────────────────────────────── */
+    #services {
+      padding: 6rem 2rem;
+      background: var(--white);
+    }
+
+    .services-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .services-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      border: 1px solid #dce8f5;
+      border-radius: 8px;
+      padding: 2rem 1.75rem;
+      transition: box-shadow .25s, transform .2s;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--sky);
+      border-radius: 4px 0 0 4px;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 32px rgba(46,81,128,.12);
+      transform: translateY(-4px);
+    }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      background: var(--ice);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-icon svg {
+      width: 24px; height: 24px;
+      stroke: var(--steel);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: .5rem;
+    }
+
+    .service-card p {
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ─────────────────────────────────────── */
+    #contact {
+      padding: 6rem 2rem;
+      background: var(--gray);
+    }
+
+    .contact-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 800px) {
+      .contact-wrapper { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.4rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-item-icon {
+      width: 44px; height: 44px;
+      background: var(--navy);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg {
+      width: 20px; height: 20px;
+      stroke: var(--white);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .contact-item-body strong {
+      display: block;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+
+    .contact-item-body a {
+      color: var(--steel);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .contact-item-body a:hover { text-decoration: underline; }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--white);
+      border: 1px solid #dce8f5;
+      border-radius: 6px;
+      padding: .7rem 1.1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      margin-top: 1.5rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .rating-stars svg {
+      width: 18px; height: 18px;
+    }
+
+    .rating-text {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .rating-sub {
+      font-size: .78rem;
+      color: var(--muted);
+    }
+
+    .cta-card {
+      background: var(--navy);
+      border-radius: 10px;
+      padding: 2.5rem 2rem;
+      color: var(--white);
+    }
+
+    .cta-card h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: .75rem;
+    }
+
+    .cta-card p {
+      color: #b8cfe8;
+      font-size: .95rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 700;
+      font-size: .95rem;
+      padding: .8rem 1.75rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+      cursor: pointer;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: var(--navy);
+      box-shadow: 0 4px 14px rgba(240,165,0,.35);
+    }
+
+    .btn-accent:hover {
+      background: #fbb92a;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,.3);
+      margin-top: .75rem;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,.08);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      color: #7a98bc;
+      padding: 2.5rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .footer-brand span {
+      font-weight: 400;
+      color: #7a98bc;
+    }
+
+    footer p {
+      font-size: .82rem;
+    }
+
+    footer a { color: var(--sky); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="#home">
+    <!-- washing machine icon -->
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="28" height="28" rx="4" stroke="#4a90c4" stroke-width="2"/>
+      <circle cx="18" cy="20" r="7" stroke="#ffffff" stroke-width="2"/>
+      <circle cx="18" cy="20" r="3" stroke="#4a90c4" stroke-width="1.5"/>
+      <rect x="8" y="8" width="4" height="4" rx="1" fill="#4a90c4"/>
+      <rect x="14" y="8" width="4" height="4" rx="1" fill="#f0a500"/>
+    </svg>
+    <div class="nav-logo-text">
+      Prins Laundry
+      <span>Commercial Equipment</span>
+    </div>
+  </a>
+  <button class="hamburger" id="ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge">Commercial Laundry Equipment &middot; Gainesville, FL</div>
+    <h1>Built to <em>Handle</em> the Heavy Loads</h1>
+    <p>Professional-grade commercial laundry solutions for businesses, facilities, and laundromats throughout North Central Florida.</p>
+    <a class="hero-cta" href="#contact">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 12.1 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.36h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.84 16.92z"/></svg>
+      Get in Touch
+    </a>
+  </div>
+  <div class="scroll-hint">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    Scroll
+  </div>
+</section>
+
+<!-- ── ABOUT ────────────────────────────────────────── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual">
+      <!-- large washing machine illustration -->
+      <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="120" height="120" rx="12" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.2)" stroke-width="2"/>
+        <circle cx="80" cy="88" r="38" stroke="rgba(255,255,255,.35)" stroke-width="3"/>
+        <circle cx="80" cy="88" r="26" stroke="#4a90c4" stroke-width="2.5"/>
+        <path d="M68 82 Q80 96 92 82" stroke="rgba(255,255,255,.6)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <circle cx="45" cy="42" r="8" fill="#4a90c4" fill-opacity=".7"/>
+        <circle cx="68" cy="42" r="8" fill="#f0a500" fill-opacity=".8"/>
+        <line x1="90" y1="38" x2="130" y2="38" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="90" y1="46" x2="120" y2="46" stroke="rgba(255,255,255,.15)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="about-content">
+      <p class="section-label">Who We Are</p>
+      <h2 class="section-title">Reliable Equipment for Demanding Environments</h2>
+      <p class="section-lead">
+        Prins Commercial Laundry Equipment serves businesses and facilities across the Gainesville area with dependable commercial-grade washers, dryers, and supporting equipment. Whether you operate a multi-unit laundromat, a hospitality property, or an industrial facility, we understand the reliability and capacity demands of high-volume laundering operations.
+      </p>
+      <p class="section-lead" style="margin-top:1rem;">
+        Locally rooted in Gainesville, we work with clients who need equipment that keeps pace with daily demand — minimizing downtime and maximizing efficiency. Contact us for details on availability and service options.
+      </p>
+      <div class="stat-row">
+        <div class="stat-item">
+          <span class="num">4.0</span>
+          <span class="label">Google Rating</span>
+        </div>
+        <div class="stat-item">
+          <span class="num">NE</span>
+          <span class="label">Gainesville, FL</span>
+        </div>
+        <div class="stat-item">
+          <span class="num">B2B</span>
+          <span class="label">Commercial Focus</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ──────────────────────────────────────── -->
+<section id="services">
+  <div class="services-wrapper">
+    <div class="services-header">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Commercial Laundry Solutions</h2>
+      <p class="section-lead">From equipment sales to ongoing support, we provide the full range of services that keep your laundry operation running.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="3"/><circle cx="12" cy="13" r="4"/><circle cx="7" cy="7" r="1" fill="#2e5180"/></svg>
+        </div>
+        <h3>Commercial Washer Sales</h3>
+        <p>Heavy-duty front-load and top-load commercial washing machines sized for high-volume, continuous-use environments.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="3"/><circle cx="12" cy="13" r="4"/><path d="M12 9v4l3 2"/></svg>
+        </div>
+        <h3>Commercial Dryer Sales</h3>
+        <p>High-capacity commercial dryers — stack, single, and coin-operated — built for rapid cycle times and energy efficiency.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <h3>Equipment Repair &amp; Service</h3>
+        <p>On-site repair and maintenance services to diagnose and resolve mechanical or electrical issues on commercial laundry equipment. Contact us for details.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Preventive Maintenance Plans</h3>
+        <p>Scheduled maintenance programs to extend equipment life, reduce unexpected breakdowns, and keep your facility operating smoothly.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <h3>Coin &amp; Card Payment Systems</h3>
+        <p>Integration and installation of coin-operated or card-based payment systems for self-service laundromats and shared laundry facilities.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <h3>Parts &amp; Supplies</h3>
+        <p>Replacement parts and accessories for a wide range of commercial laundry equipment brands to support quick turnaround repairs. Contact us for availability.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ───────────────────────────────────────── -->
+<section id="contact">
+  <div class="contact-wrapper">
+    <div>
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Get in Touch</h2>
+      <p class="section-lead" style="margin-bottom:2rem;">Have questions about equipment options, service calls, or maintenance plans? Reach out — we're here to help.</p>
+
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-item-body">
+            <strong>Address</strong>
+            3008 NE 19th Dr<br>Gainesville, FL
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 12.1 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.36h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.84 16.92z"/></svg>
+          </div>
+          <div class="contact-item-body">
+            <strong>Phone</strong>
+            <a href="tel:+13523776827">(352) 377-6827</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rating badge -->
+      <div class="rating-badge">
+        <div class="rating-stars">
+          <!-- 4 full stars, 1 empty -->
+          <svg viewBox="0 0 24 24" fill="#f0a500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="#f0a500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="#f0a500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="#f0a500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="rating-text">4.0 / 5</div>
+          <div class="rating-sub">Google Maps Rating</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-card">
+      <h3>Ready to Talk Equipment?</h3>
+      <p>Whether you need a new machine, a repair visit, or a maintenance plan, our team is ready to help you find the right solution for your operation.</p>
+      <a class="btn btn-accent" href="tel:+13523776827">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 12.1 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.36h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.84 16.92z"/></svg>
+        Call (352) 377-6827
+      </a>
+      <br>
+      <a class="btn btn-outline"
+         href="https://www.google.com/maps/search/Prins%20Commercial%20Laundry%20Equipment%203008%20NE%2019th%20Dr%2C%20Gainesville%2C%20FL"
+         target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Get Directions
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Prins Commercial Laundry Equipment <span>&mdash; Gainesville, FL</span></div>
+      <p style="margin-top:.4rem;">3008 NE 19th Dr, Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13523776827">(352) 377-6827</a></p>
+    </div>
+    <p>&copy; 2026 Prins Commercial Laundry Equipment. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  const ham = document.getElementById('ham');
+  const links = document.getElementById('nav-links');
+  ham.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+</script>
+</body>
+</html>

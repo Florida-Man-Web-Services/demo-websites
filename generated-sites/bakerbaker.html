@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BakerBaker | Artisan Bakery in Gainesville, FL</title>
+  <style>
+    /* ---------- Reset & Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #fdf6ec;
+      --warm-50: #fef9f3;
+      --warm-100:#faebd7;
+      --amber:   #c8832a;
+      --amber-dk:#a3651c;
+      --brown:   #5a3a1a;
+      --brown-lt:#7a5230;
+      --red-acc: #b94040;
+      --text:    #3b2412;
+      --muted:   #7a6352;
+      --white:   #ffffff;
+      --radius:  10px;
+      --shadow:  0 4px 24px rgba(90,58,26,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ---------- Nav ---------- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--brown);
+      box-shadow: 0 2px 12px rgba(0,0,0,.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .nav-logo-text {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: var(--cream);
+      letter-spacing: .5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--warm-100);
+      text-decoration: none;
+      font-size: .95rem;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: .4px;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--amber); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: .3s;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0; right: 0;
+      background: var(--brown);
+      padding: 20px 5% 28px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--warm-100);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-family: 'Arial', sans-serif;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      padding-bottom: 10px;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      margin-top: 64px;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 5% 80px;
+      background:
+        linear-gradient(160deg, rgba(90,58,26,.72) 0%, rgba(200,131,42,.55) 100%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 18px,
+          rgba(255,255,255,.03) 18px,
+          rgba(255,255,255,.03) 36px
+        ),
+        var(--brown);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative wheat-like circles */
+    .hero::before, .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: .07;
+      background: var(--cream);
+    }
+    .hero::before { width: 560px; height: 560px; top: -180px; right: -140px; }
+    .hero::after  { width: 380px; height: 380px; bottom: -120px; left: -80px; }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 680px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--white);
+      font-family: 'Arial', sans-serif;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 18px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      color: var(--white);
+      line-height: 1.1;
+      text-shadow: 0 2px 18px rgba(0,0,0,.35);
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+      color: var(--warm-100);
+      margin-bottom: 36px;
+      font-style: italic;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--white);
+      padding: 14px 38px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: .5px;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 18px rgba(200,131,42,.45);
+    }
+    .hero-cta:hover { background: var(--amber-dk); transform: translateY(-2px); }
+
+    /* ---------- Section base ---------- */
+    section { padding: 80px 5%; }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      color: var(--brown);
+      margin-bottom: 18px;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 52px;
+      height: 3px;
+      background: var(--amber);
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    /* ---------- About ---------- */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+    }
+
+    .about-illustration {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bread-svg-wrap {
+      background: var(--warm-100);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* Simple inline SVG bread loaf */
+    .bread-svg-wrap svg {
+      width: 68%;
+      height: auto;
+    }
+
+    /* ---------- Services ---------- */
+    #services {
+      background: var(--warm-50);
+    }
+
+    .services-header { max-width: 1100px; margin: 0 auto 48px; }
+
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--amber);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 32px rgba(90,58,26,.16);
+    }
+
+    .service-icon {
+      font-size: 2.2rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.18rem;
+      color: var(--brown);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      font-size: .95rem;
+      color: var(--muted);
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ---------- Contact ---------- */
+    #contact {
+      background: var(--brown);
+      color: var(--cream);
+    }
+
+    .contact-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    #contact .section-label { color: var(--amber); }
+    #contact .section-title { color: var(--cream); }
+    #contact .section-divider { background: var(--amber); }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .contact-detail-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(200,131,42,.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-detail-text h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 4px;
+    }
+
+    .contact-detail-text p {
+      color: var(--warm-100);
+      font-size: 1rem;
+    }
+
+    .directions-btn {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--white);
+      padding: 13px 32px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: background .2s, transform .15s;
+      margin-top: 8px;
+    }
+    .directions-btn:hover { background: var(--amber-dk); transform: translateY(-2px); }
+
+    /* Rating box */
+    .rating-box {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+    }
+
+    .rating-box h3 {
+      font-family: 'Arial', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 14px;
+    }
+
+    .rating-stars {
+      font-size: 1.7rem;
+      letter-spacing: 3px;
+      color: #f5c518;
+      margin-bottom: 8px;
+    }
+
+    .rating-score {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: .9rem;
+      color: var(--warm-100);
+      margin-bottom: 18px;
+    }
+
+    .rating-source {
+      font-family: 'Arial', sans-serif;
+      font-size: .82rem;
+      color: rgba(255,255,255,.45);
+    }
+
+    .rating-bar-wrap {
+      margin-top: 18px;
+    }
+
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-family: 'Arial', sans-serif;
+      font-size: .82rem;
+      color: var(--warm-100);
+    }
+
+    .rating-bar-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .rating-bar-fill {
+      height: 100%;
+      background: #f5c518;
+      border-radius: 4px;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: #2e1a08;
+      color: var(--muted);
+      text-align: center;
+      padding: 30px 5%;
+      font-family: 'Arial', sans-serif;
+      font-size: .88rem;
+    }
+
+    footer strong { color: var(--warm-100); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 800px) {
+      .about-grid, .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .about-illustration { order: -1; }
+
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 60px 6%; }
+      .rating-score { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <a class="nav-logo" href="#hero">
+      <span class="nav-logo-icon">🍞</span>
+      <span class="nav-logo-text">BakerBaker</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Our Baked Goods</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <button class="hamburger" aria-label="Toggle menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about"    onclick="closeMenu()">About</a>
+    <a href="#services" onclick="closeMenu()">Our Baked Goods</a>
+    <a href="#contact"  onclick="closeMenu()">Contact</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero" class="hero">
+    <div class="hero-inner">
+      <span class="hero-badge">Gainesville's Artisan Bakery</span>
+      <h1>BakerBaker</h1>
+      <p class="hero-tagline">Baked with care, shared with love — fresh from our oven to your table.</p>
+      <a href="#services" class="hero-cta">See What We Bake</a>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="section-label">About Us</p>
+        <h2 class="section-title">Handcrafted Goodness in the Heart of Gainesville</h2>
+        <div class="section-divider"></div>
+        <p>BakerBaker is a neighborhood artisan bakery tucked into Gainesville's vibrant southwest side, bringing handcrafted breads, pastries, and sweets to the local community every day.</p>
+        <p>Every item that leaves our kitchen is made in small batches using quality ingredients, time-honored techniques, and a genuine passion for the craft of baking.</p>
+        <p>Whether you're stopping in for a morning treat or planning a special order for an event, we're here to make it delicious. Contact us for details on custom orders and availability.</p>
+      </div>
+      <div class="about-illustration">
+        <div class="bread-svg-wrap">
+          <!-- Simple hand-drawn style bread loaf SVG -->
+          <svg viewBox="0 0 220 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Bread loaf illustration">
+            <!-- loaf body -->
+            <ellipse cx="110" cy="105" rx="88" ry="38" fill="#c8832a"/>
+            <!-- loaf dome -->
+            <path d="M35 108 Q55 48 110 44 Q165 48 185 108 Z" fill="#e0a055"/>
+            <!-- crust top line -->
+            <path d="M50 98 Q80 62 110 58 Q140 62 170 98" stroke="#a3651c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <!-- score marks -->
+            <path d="M90 68 Q95 74 90 80"  stroke="#a3651c" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M110 62 Q115 70 110 76" stroke="#a3651c" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M130 68 Q135 74 130 80" stroke="#a3651c" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <!-- shadow under -->
+            <ellipse cx="110" cy="142" rx="80" ry="10" fill="rgba(90,58,26,.18)"/>
+            <!-- steam lines -->
+            <path d="M88 38 Q84 28 88 20" stroke="#c8832a" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
+            <path d="M110 34 Q106 22 110 13" stroke="#c8832a" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
+            <path d="M132 38 Q136 28 132 20" stroke="#c8832a" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services">
+    <div class="services-header">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Fresh From the Oven</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-icon">🍞</span>
+        <h3>Artisan Breads</h3>
+        <p>Crusty sourdoughs, rustic loaves, and hearty whole-grain breads baked fresh and ready for any table. Contact us for today's selection.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">🥐</span>
+        <h3>Pastries &amp; Croissants</h3>
+        <p>Buttery, flaky pastries crafted in the French tradition — perfect alongside your morning coffee or afternoon break.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">🎂</span>
+        <h3>Custom Cakes &amp; Celebrations</h3>
+        <p>Special occasion cakes made to order for birthdays, weddings, and community events. Contact us for details on custom designs.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">🍪</span>
+        <h3>Cookies &amp; Bars</h3>
+        <p>Classic cookies, brownies, and dessert bars baked in small batches so every bite is as good as the first.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">🧁</span>
+        <h3>Muffins &amp; Cupcakes</h3>
+        <p>Seasonal flavors and everyday favorites — from blueberry muffins to frosted cupcakes — made fresh throughout the week.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">📦</span>
+        <h3>Wholesale &amp; Catering</h3>
+        <p>We partner with local cafes, offices, and event planners to supply fresh-baked goods in bulk. Contact us for details on wholesale inquiries.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div>
+        <p class="section-label">Find Us</p>
+        <h2 class="section-title">Come Visit Us</h2>
+        <div class="section-divider"></div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div class="contact-detail-text">
+            <h4>Address</h4>
+            <p>407 SW 4th Ave<br>Gainesville, FL 32601</p>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">🕐</div>
+          <div class="contact-detail-text">
+            <h4>Hours</h4>
+            <p>Contact us for current hours and availability.</p>
+          </div>
+        </div>
+
+        <a
+          class="directions-btn"
+          href="https://www.google.com/maps/search/BakerBaker%20407%20SW%204th%20Ave%2C%20Gainesville%2C%20FL%2032601"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Get Directions
+        </a>
+      </div>
+
+      <div>
+        <div class="rating-box">
+          <h3>Customer Reviews</h3>
+          <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="rating-score">4.7</div>
+          <div class="rating-count">Based on 145 reviews</div>
+          <div class="rating-source">Google Maps Rating</div>
+
+          <div class="rating-bar-wrap">
+            <div class="rating-bar-row">
+              <span>5★</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:78%"></div></div>
+              <span>78%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>4★</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:14%"></div></div>
+              <span>14%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>3★</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:5%"></div></div>
+              <span>5%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>2★</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:2%"></div></div>
+              <span>2%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>1★</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:1%"></div></div>
+              <span>1%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p><strong>BakerBaker</strong> &mdash; 407 SW 4th Ave, Gainesville, FL 32601</p>
+    <p style="margin-top:6px;">&copy; 2026 BakerBaker. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('mobileMenu');
+      var btn = document.querySelector('.hamburger');
+      if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

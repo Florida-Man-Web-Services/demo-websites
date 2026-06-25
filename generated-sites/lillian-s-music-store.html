@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lillian's Music Store | Gainesville, FL</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-dark:      #0f0e11;
+      --bg-section:   #16151a;
+      --bg-card:      #1e1c24;
+      --accent:       #c9a84c;
+      --accent-light: #e8c96a;
+      --text-primary: #f0eee8;
+      --text-muted:   #9b9490;
+      --border:       #2e2b36;
+      --nav-height:   64px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: rgba(15, 14, 17, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+
+    .nav-logo-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--bg-dark);
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-light);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: calc(var(--nav-height) + 2rem) 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-dark);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(201, 168, 76, 0.12) 0%, transparent 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 60px,
+          rgba(201, 168, 76, 0.03) 60px,
+          rgba(201, 168, 76, 0.03) 61px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 60px,
+          rgba(201, 168, 76, 0.03) 60px,
+          rgba(201, 168, 76, 0.03) 61px
+        );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 760px;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 2.4rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg-dark);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.2rem;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .hero-cta:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    /* ===== SECTION SHARED ===== */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      margin-bottom: 2rem;
+    }
+
+    /* ===== ABOUT ===== */
+    #about {
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 1.02rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .about-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.2rem 1.5rem;
+      border-radius: 2px;
+    }
+
+    .about-stat-value {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    .about-stat-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ===== SERVICES ===== */
+    #services {
+      background: var(--bg-dark);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 1.8rem;
+      transition: border-color 0.25s, transform 0.2s;
+    }
+
+    .service-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-item-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-value {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.8rem;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 0.4rem;
+    }
+
+    .btn-directions:hover {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .rating-card-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .rating-score {
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 4px;
+    }
+
+    .star {
+      color: var(--accent);
+      font-size: 1.3rem;
+    }
+
+    .star.half {
+      color: var(--accent);
+      opacity: 0.55;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(201, 168, 76, 0.12);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .rating-source {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0a090c;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-address {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 0.4rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        background: rgba(15, 14, 17, 0.98);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 0;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li {
+        padding: 0;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 0.85rem 2rem;
+        font-size: 0.9rem;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        padding: 0 1.2rem;
+      }
+
+      section {
+        padding: 3.5rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon">&#9835;</div>
+      Lillian's Music Store
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Gainesville, FL &mdash; Downtown</p>
+      <h1 class="hero-title">Lillian's<br /><span>Music Store</span></h1>
+      <p class="hero-tagline">Where the music never stops and every night has its own rhythm.</p>
+      <a href="#about" class="hero-cta">Discover More</a>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">Our Story</p>
+          <h2 class="section-title">A Live Music Bar in the Heart of Gainesville</h2>
+          <div class="section-divider"></div>
+          <p>Lillian's Music Store is a beloved fixture of Gainesville's vibrant downtown scene, serving as a gathering place for locals and visitors who share a passion for live music and good drinks. Nestled on SE 1st St, our stage has hosted an eclectic mix of local talent and touring acts spanning every genre imaginable.</p>
+          <p>Whether you're unwinding after a long day or dancing into the early hours, Lillian's offers a warm, intimate atmosphere that keeps people coming back. We take pride in being a true community bar where the music is always the main event.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-stat">
+            <div class="about-stat-value">4.4</div>
+            <div class="about-stat-label">Google Maps Rating</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">148+</div>
+            <div class="about-stat-label">Community Reviews</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">Live</div>
+            <div class="about-stat-label">Music Venue &amp; Full Bar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services">
+    <div class="container">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Everything You'd Expect from a Great Bar</h2>
+      <div class="section-divider"></div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">&#127917;</span>
+          <div class="service-name">Live Music Performances</div>
+          <p class="service-desc">Regular live acts on our intimate stage featuring local and regional artists across multiple genres. Contact us for the current lineup.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#127867;</span>
+          <div class="service-name">Full Bar Service</div>
+          <p class="service-desc">A well-stocked bar with draft beers, craft cocktails, wine, and spirits to keep the night going. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#127911;</span>
+          <div class="service-name">DJ Nights</div>
+          <p class="service-desc">When the bands take a break, our DJs keep the dance floor alive with curated sets spanning classic rock, indie, and more.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#127881;</span>
+          <div class="service-name">Private Events &amp; Buyouts</div>
+          <p class="service-desc">Host your next birthday, work event, or private party in our unique venue. Contact us for availability and details.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#127897;</span>
+          <div class="service-name">Open Mic Nights</div>
+          <p class="service-desc">We welcome emerging local talent to take the stage during our regularly scheduled open mic events. All genres welcome.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#127939;</span>
+          <div class="service-name">Happy Hour Specials</div>
+          <p class="service-desc">Kick off your evening with happy hour drink specials. Contact us for current hours and featured offerings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Come See Us in Downtown Gainesville</h2>
+      <div class="section-divider"></div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">&#128205;</div>
+            <div>
+              <div class="contact-item-label">Address</div>
+              <div class="contact-item-value">112 SE 1st St<br />Gainesville, FL 32601</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">&#128337;</div>
+            <div>
+              <div class="contact-item-label">Hours</div>
+              <div class="contact-item-value">Contact us for current hours</div>
+            </div>
+          </div>
+          <a
+            href="https://www.google.com/maps/search/Lillian's%20Music%20Store%20112%20SE%201st%20St%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            &#128506; Get Directions
+          </a>
+        </div>
+        <div class="rating-card">
+          <div class="rating-card-title">Community Rating</div>
+          <div class="rating-score">4.4</div>
+          <div class="rating-stars">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star half">&#9733;</span>
+          </div>
+          <div class="rating-count">Based on 148 reviews</div>
+          <div>
+            <span class="rating-badge">&#10003; Highly Rated Local Bar</span>
+          </div>
+          <div class="rating-source">Rating sourced from Google Maps</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">&#9835; Lillian's Music Store</div>
+      <div class="footer-address">112 SE 1st St, Gainesville, FL 32601</div>
+      <div class="footer-copy">&copy; 2026 Lillian's Music Store. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+    // Close nav on link click
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => links.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

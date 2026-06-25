@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New York Nails | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #fdf8f5;
+      color: #2c1a2e;
+      line-height: 1.7;
+    }
+
+    /* ── Color Palette ──
+       Rose gold / blush / deep plum — classic nail salon elegance
+    */
+    :root {
+      --rose-gold: #c9956a;
+      --blush:     #f2d4d7;
+      --blush-light: #fdf0f2;
+      --plum:      #6b2d5e;
+      --plum-dark: #4a1a40;
+      --warm-white:#fdf8f5;
+      --text-dark: #2c1a2e;
+      --text-mid:  #6b4c5e;
+      --gold:      #b8976a;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(74, 26, 64, 0.97);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(74,26,64,0.3);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--rose-gold), var(--gold));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .nav-logo-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--rose-gold); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--plum-dark);
+      z-index: 999;
+      padding: 1.5rem 2rem;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 0.8rem;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--plum-dark) 0%, var(--plum) 50%, #9e4e7e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(201,149,106,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(242,212,215,0.12) 0%, transparent 50%);
+    }
+    /* Decorative circles */
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      pointer-events: none;
+    }
+    .hero-circle-1 { width: 500px; height: 500px; top: -100px; right: -100px; }
+    .hero-circle-2 { width: 300px; height: 300px; bottom: -50px; left: -50px; }
+    .hero-circle-3 { width: 200px; height: 200px; top: 30%; left: 10%; }
+
+    .hero-content { position: relative; z-index: 1; max-width: 680px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(201,149,106,0.2);
+      border: 1px solid rgba(201,149,106,0.5);
+      color: var(--rose-gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .hero h1 span { color: var(--rose-gold); }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--rose-gold), var(--gold));
+      color: #fff;
+      padding: 0.9rem 2.4rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 600;
+      box-shadow: 0 6px 24px rgba(201,149,106,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(201,149,106,0.5);
+    }
+
+    /* ── Section Shared ── */
+    section { padding: 6rem 2rem; }
+    .section-inner { max-width: 1060px; margin: 0 auto; }
+    .section-eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--rose-gold);
+      margin-bottom: 0.6rem;
+      font-family: 'Arial', sans-serif;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--plum-dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .divider {
+      width: 56px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose-gold), var(--gold));
+      border-radius: 2px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── About ── */
+    .about { background: var(--warm-white); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 1.1rem;
+    }
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .about-stat {
+      background: linear-gradient(135deg, var(--plum-dark), var(--plum));
+      border-radius: 16px;
+      padding: 1.6rem 2rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .about-stat-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    .about-stat-label {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 0.2rem;
+      font-family: 'Arial', sans-serif;
+    }
+    .about-stat-value {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    /* ── Services ── */
+    .services { background: var(--blush-light); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 2rem 1.6rem;
+      text-align: center;
+      border: 1px solid rgba(201,149,106,0.15);
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose-gold), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(107,45,94,0.12);
+      border-color: rgba(201,149,106,0.35);
+    }
+    .service-icon {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .service-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--plum-dark);
+      margin-bottom: 0.5rem;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ── Contact ── */
+    .contact { background: var(--warm-white); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-info-block {
+      background: linear-gradient(135deg, var(--plum-dark), var(--plum));
+      border-radius: 24px;
+      padding: 2.5rem;
+      color: #fff;
+    }
+    .contact-info-block .section-title { color: #fff; }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+    .contact-detail-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-detail-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 0.25rem;
+      font-family: 'Arial', sans-serif;
+    }
+    .contact-detail-value {
+      font-size: 0.98rem;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--rose-gold), var(--gold));
+      color: #fff;
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.92rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(201,149,106,0.35);
+    }
+    .directions-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,149,106,0.5);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(201,149,106,0.2);
+      box-shadow: 0 4px 24px rgba(107,45,94,0.07);
+      text-align: center;
+    }
+    .rating-card-title {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-bottom: 1rem;
+      font-family: 'Arial', sans-serif;
+    }
+    .rating-number {
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--plum-dark);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 0.6rem;
+    }
+    .star {
+      width: 22px;
+      height: 22px;
+      position: relative;
+      display: inline-block;
+    }
+    .star svg { width: 100%; height: 100%; }
+    .rating-count {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      margin-bottom: 1.2rem;
+    }
+    .rating-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.05em;
+    }
+    .google-dot {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+    .google-dot span {
+      width: 7px; height: 7px; border-radius: 50%;
+    }
+
+    .testimonial-blurb {
+      background: var(--blush-light);
+      border-left: 3px solid var(--rose-gold);
+      border-radius: 0 12px 12px 0;
+      padding: 1.2rem 1.4rem;
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+    .testimonial-blurb p {
+      font-style: italic;
+      color: var(--text-mid);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .testimonial-blurb cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--rose-gold);
+      font-style: normal;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--plum-dark);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.85rem;
+      font-family: 'Arial', sans-serif;
+    }
+    footer strong { color: #fff; }
+    footer .footer-divider {
+      margin: 0.5rem auto;
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    footer a {
+      color: var(--rose-gold);
+      text-decoration: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      .services-grid { grid-template-columns: 1fr 1fr; }
+
+      section { padding: 4rem 1.2rem; }
+    }
+    @media (max-width: 500px) {
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-icon">&#10022;</div>
+      <span class="nav-logo-text">New York Nails</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#services" onclick="closeMenu()">Services</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </div>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="home">
+    <div class="hero-circle hero-circle-1"></div>
+    <div class="hero-circle hero-circle-2"></div>
+    <div class="hero-circle hero-circle-3"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, FL</div>
+      <h1>New York <span>Nails</span></h1>
+      <p class="hero-tagline">Where every detail matters — flawless nails, every visit.</p>
+      <a href="#services" class="hero-cta">View Services</a>
+    </div>
+  </section>
+
+  <!-- ── About ── -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-eyebrow">About Us</p>
+          <h2 class="section-title">Thoughtful Care for Your Nails</h2>
+          <div class="divider"></div>
+          <p>New York Nails is a full-service nail salon conveniently located in southwest Gainesville, dedicated to delivering polished results in a clean, welcoming environment.</p>
+          <p>Our skilled technicians take pride in precise, attentive work — whether you're looking for a classic manicure or an elaborate nail design, we treat every client with care and professionalism.</p>
+          <p>Serving the Gainesville community, we are committed to maintaining high standards of hygiene, using quality products, and ensuring every guest leaves feeling refreshed and confident.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-stat">
+            <div class="about-stat-icon">&#10022;</div>
+            <div>
+              <div class="about-stat-label">Rated on Google</div>
+              <div class="about-stat-value">4.2 Stars &mdash; 117 Reviews</div>
+            </div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-icon">&#9679;</div>
+            <div>
+              <div class="about-stat-label">Location</div>
+              <div class="about-stat-value">SW Gainesville &mdash; Suite C</div>
+            </div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-icon">&#9733;</div>
+            <div>
+              <div class="about-stat-label">Commitment</div>
+              <div class="about-stat-value">Clean Tools &amp; Quality Products</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ── -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <p class="section-eyebrow">What We Offer</p>
+      <h2 class="section-title">Our Services</h2>
+      <div class="divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#128084;</span>
+          <div class="service-name">Manicure</div>
+          <p class="service-desc">Classic nail shaping, cuticle care, and a fresh coat of polish for perfectly groomed hands.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128149;</span>
+          <div class="service-name">Pedicure</div>
+          <p class="service-desc">Relaxing foot soak, exfoliation, nail trimming, and polish to keep your feet looking their best.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#10024;</span>
+          <div class="service-name">Gel Nails</div>
+          <p class="service-desc">Long-lasting gel polish application that stays chip-free and glossy for weeks.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128176;</span>
+          <div class="service-name">Acrylic Nails</div>
+          <p class="service-desc">Full sets and fills crafted with precision for durable, beautifully shaped acrylic extensions.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127912;</span>
+          <div class="service-name">Nail Art &amp; Design</div>
+          <p class="service-desc">Custom designs, patterns, and accents to make your nails a true expression of your style.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#9786;</span>
+          <div class="service-name">Waxing</div>
+          <p class="service-desc">Gentle, effective waxing services for brows, lip, and more — contact us for details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+
+        <div class="contact-info-block">
+          <p class="section-eyebrow" style="color: var(--rose-gold);">Find Us</p>
+          <h2 class="section-title">Visit New York Nails</h2>
+          <div class="divider"></div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128205;</div>
+            <div>
+              <div class="contact-detail-label">Address</div>
+              <div class="contact-detail-value">3550 SW 34th St, Suite C<br>Gainesville, FL 32608</div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128337;</div>
+            <div>
+              <div class="contact-detail-label">Hours</div>
+              <div class="contact-detail-value">Contact us for current hours</div>
+            </div>
+          </div>
+
+          <a
+            href="https://www.google.com/maps/search/New%20York%20Nails%203550%20SW%2034th%20St%20Suite%20C%2C%20Gainesville%2C%20FL%2032608"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+            Get Directions
+          </a>
+        </div>
+
+        <div>
+          <div class="rating-card">
+            <div class="rating-card-title">Customer Rating on Google</div>
+            <div class="rating-number">4.2</div>
+            <div class="stars">
+              <!-- 4 full stars + partial -->
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#c9956a"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </span>
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#c9956a"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </span>
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#c9956a"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </span>
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#c9956a"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </span>
+              <span class="star">
+                <svg viewBox="0 0 24 24">
+                  <defs>
+                    <linearGradient id="partial">
+                      <stop offset="20%" stop-color="#c9956a"/>
+                      <stop offset="20%" stop-color="#e0e0e0"/>
+                    </linearGradient>
+                  </defs>
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="url(#partial)"/>
+                </svg>
+              </span>
+            </div>
+            <div class="rating-count">Based on 117 Google reviews</div>
+            <div class="rating-source">
+              <div class="google-dot">
+                <span style="background:#4285F4;"></span>
+                <span style="background:#EA4335;"></span>
+                <span style="background:#FBBC05;"></span>
+                <span style="background:#34A853;"></span>
+              </div>
+              Verified on Google Maps
+            </div>
+
+            <div class="testimonial-blurb">
+              <p>"Great nail salon — clean, professional, and attentive. I always leave happy with my nails."</p>
+              <cite>Google Reviewer</cite>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <strong>New York Nails</strong>
+    <div class="footer-divider"></div>
+    <p>3550 SW 34th St, Suite C &mdash; Gainesville, FL 32608</p>
+    <p style="margin-top:0.4rem;">
+      <a href="https://www.google.com/maps/search/New%20York%20Nails%203550%20SW%2034th%20St%20Suite%20C%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener noreferrer">View on Google Maps</a>
+    </p>
+    <p style="margin-top:1rem; font-size:0.78rem; opacity:0.5;">&copy; 2026 New York Nails. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+    // Close menu on outside click
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('mobileMenu');
+      var btn = document.querySelector('.hamburger');
+      if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

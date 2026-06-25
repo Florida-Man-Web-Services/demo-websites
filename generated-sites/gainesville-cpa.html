@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gainesville CPA | Certified Public Accountant</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1a2744;
+      --blue:    #2c4a8a;
+      --accent:  #4a7fd4;
+      --light:   #eef2fa;
+      --white:   #ffffff;
+      --gray:    #6b7280;
+      --dark:    #111827;
+      --border:  #d1d9ed;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: var(--dark);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      font-family: 'Arial', sans-serif;
+      flex-shrink: 0;
+    }
+
+    .nav-brand-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #c8d4f0;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--white) !important;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: #3a6abf !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #3560a8 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 6rem 1.5rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 39px,
+          rgba(255,255,255,0.03) 39px,
+          rgba(255,255,255,0.03) 40px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 39px,
+          rgba(255,255,255,0.03) 39px,
+          rgba(255,255,255,0.03) 40px
+        );
+    }
+
+    .hero-inner { position: relative; max-width: 760px; margin: 0 auto; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(74,127,212,0.3);
+      border: 1px solid rgba(74,127,212,0.5);
+      color: #a8c4f0;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #b0c4e8;
+      max-width: 560px;
+      margin: 0 auto 2.4rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      padding: 0.8rem 2rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #3a6abf; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 0.8rem 2rem;
+      border-radius: 5px;
+      border: 2px solid rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      background: var(--light);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.4rem 1.5rem;
+    }
+
+    .trust-bar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .trust-item .icon {
+      font-size: 1.1rem;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 1.5rem; }
+
+    .section-inner { max-width: 960px; margin: 0 auto; }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      color: var(--navy);
+      margin-bottom: 1rem;
+      line-height: 1.25;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 1.6rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: #374151;
+      margin-bottom: 1rem;
+      font-size: 1.02rem;
+    }
+
+    .about-visual {
+      background: linear-gradient(145deg, var(--navy), var(--blue));
+      border-radius: 12px;
+      padding: 2.5rem;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .about-visual .cpa-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .about-visual h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-visual p {
+      font-size: 0.9rem;
+      color: #a8c4f0;
+    }
+
+    .credential-tag {
+      display: inline-block;
+      margin-top: 1.2rem;
+      background: rgba(74,127,212,0.35);
+      border: 1px solid rgba(74,127,212,0.5);
+      color: #c8dcf8;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--light); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem 1.6rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 24px rgba(26,39,68,0.12);
+      transform: translateY(-3px);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      margin-top: 2.5rem;
+      align-items: start;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-body h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-body p, .contact-item-body a {
+      font-size: 1rem;
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .contact-item-body a:hover { color: var(--accent); }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+      background: var(--navy);
+      color: var(--white);
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .directions-btn:hover { background: var(--blue); }
+
+    .rating-card {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem 1.8rem;
+    }
+
+    .rating-card h3 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .rating-display {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .rating-score {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .rating-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .stars {
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .rating-source {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .rating-note {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    .contact-cta {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 10px;
+      padding: 2rem 1.8rem;
+      color: var(--white);
+    }
+
+    .contact-cta h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .contact-cta p {
+      font-size: 0.9rem;
+      color: #a8c4f0;
+      font-family: 'Arial', sans-serif;
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-cta a {
+      display: inline-block;
+      background: var(--white);
+      color: var(--navy);
+      padding: 0.65rem 1.4rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .contact-cta a:hover { background: #eef2fa; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: #8ea8d8;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    footer strong {
+      color: var(--white);
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+    }
+
+    footer p { margin-top: 0.3rem; }
+
+    footer .footer-divider {
+      margin: 1.2rem auto;
+      width: 48px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; }
+      .nav-links.open {
+        display: flex;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--navy);
+        padding: 1rem 2rem 1.5rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        gap: 1rem;
+      }
+      .hamburger { display: flex; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-visual { order: -1; }
+
+      .services-grid { grid-template-columns: 1fr 1fr; }
+
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+      .trust-bar-inner { gap: 1.5rem; }
+    }
+
+    @media (max-width: 500px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .trust-bar-inner { flex-direction: column; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-icon">CPA</div>
+      <span class="nav-brand-text">Gainesville CPA</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-badge">Certified Public Accountant &mdash; Gainesville, FL</span>
+      <h1>Trusted Accounting &amp;<br>Tax Services</h1>
+      <p>Professional financial guidance for individuals, small businesses, and organizations in the Gainesville community.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Schedule a Consultation</a>
+        <a href="#services" class="btn-outline">View Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="trust-item"><span class="icon">&#10003;</span> CPA Licensed &amp; Certified</div>
+      <div class="trust-item"><span class="icon">&#10003;</span> Individual &amp; Business Clients</div>
+      <div class="trust-item"><span class="icon">&#10003;</span> IRS Representation</div>
+      <div class="trust-item"><span class="icon">&#10003;</span> Gainesville, FL Based</div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Your Financial Partner in Gainesville</h2>
+          <div class="section-divider"></div>
+          <p>Gainesville CPA is a full-service accounting firm dedicated to helping individuals and businesses in the Gainesville area make confident, well-informed financial decisions. Our team brings deep expertise in tax preparation, compliance, and strategic planning tailored to the unique needs of Florida residents and business owners.</p>
+          <p>We believe in building lasting relationships with our clients by providing clear, practical advice and accurate, timely work. Whether you are navigating personal tax obligations or managing the financials of a growing business, we are here to provide professional support every step of the way.</p>
+          <p>Contact us to learn how we can help you stay organized, minimize your tax liability, and plan for long-term financial success.</p>
+        </div>
+        <div class="about-visual">
+          <span class="cpa-icon">&#128200;</span>
+          <h3>Professional Accounting Services</h3>
+          <p>Providing accurate, reliable financial services to the Gainesville community.</p>
+          <span class="credential-tag">Certified Public Accountant</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Our Services</h2>
+      <div class="section-divider"></div>
+      <p style="font-family:'Arial',sans-serif; color:var(--gray); max-width:580px;">We offer a comprehensive range of accounting and tax services to meet the needs of individuals, families, and businesses. Contact us for details on any service.</p>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#128196;</div>
+          <h3>Tax Preparation &amp; Filing</h3>
+          <p>Accurate preparation and filing of individual and business federal and state tax returns, ensuring full compliance and maximizing eligible deductions.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128202;</div>
+          <h3>Bookkeeping &amp; Accounting</h3>
+          <p>Ongoing bookkeeping services to keep your financial records organized, up-to-date, and ready for reporting or decision-making at any time.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128184;</div>
+          <h3>Tax Planning &amp; Strategy</h3>
+          <p>Proactive tax planning strategies designed to reduce your liability throughout the year, not just at tax time. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128203;</div>
+          <h3>Business Financial Consulting</h3>
+          <p>Expert financial consulting for small and mid-size businesses, covering budgeting, forecasting, and structure recommendations.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128273;</div>
+          <h3>IRS Representation</h3>
+          <p>Representation and advocacy before the IRS in the event of an audit, notice, or tax dispute, protecting your rights as a taxpayer.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128176;</div>
+          <h3>Payroll Services</h3>
+          <p>Reliable payroll processing and compliance support to help businesses meet their obligations accurately and on schedule.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">Contact Us</h2>
+      <div class="section-divider"></div>
+
+      <div class="contact-grid">
+
+        <div class="contact-details">
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-body">
+              <h4>Address</h4>
+              <p>726 NW 8th Ave<br>Gainesville, FL</p>
+              <a href="https://www.google.com/maps/search/Gainesville%20CPA%20726%20NW%208th%20Ave" target="_blank" rel="noopener" class="directions-btn">
+                &#128506; Get Directions
+              </a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div class="contact-item-body">
+              <h4>Phone</h4>
+              <a href="tel:+13523773000">(352) 377-3000</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-body">
+              <h4>Hours</h4>
+              <p>Contact us for details</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+          <div class="rating-card">
+            <h3>Google Maps Listing</h3>
+            <div class="rating-display">
+              <div class="rating-score" style="font-size:1.6rem; color:var(--gray);">No reviews yet</div>
+            </div>
+            <p class="rating-note">Be one of the first to leave a review on Google Maps and help others in the Gainesville community find reliable accounting services.</p>
+          </div>
+
+          <div class="contact-cta">
+            <h3>Ready to Get Started?</h3>
+            <p>Call us or visit our office to schedule a consultation and discuss your accounting and tax needs.</p>
+            <a href="tel:+13523773000">(352) 377-3000</a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Gainesville CPA</strong>
+    <p>726 NW 8th Ave, Gainesville, FL &nbsp;&bull;&nbsp; (352) 377-3000</p>
+    <div class="footer-divider"></div>
+    <p>Certified Public Accountant serving individuals and businesses in Gainesville and the surrounding area.</p>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

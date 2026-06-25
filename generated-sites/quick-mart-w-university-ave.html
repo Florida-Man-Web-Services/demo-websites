@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Mart – W University Ave | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:     #e03030;
+      --red-dk:  #b81f1f;
+      --yellow:  #f5c518;
+      --dark:    #1a1a1a;
+      --dark2:   #2b2b2b;
+      --mid:     #444;
+      --light:   #f7f7f5;
+      --white:   #ffffff;
+      --border:  #ddd;
+      --radius:  6px;
+      --shadow:  0 4px 18px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 62px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.4);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      width: 36px; height: 36px;
+      background: var(--red);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--white);
+      letter-spacing: -.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .3px;
+    }
+
+    .nav-name span {
+      color: var(--yellow);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav ul a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .3px;
+      transition: color .2s;
+    }
+
+    nav ul a:hover { color: var(--yellow); }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      margin-top: 62px;
+      background: linear-gradient(135deg, var(--dark) 55%, var(--dark2) 100%);
+      color: var(--white);
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(255,255,255,.025) 18px,
+        rgba(255,255,255,.025) 36px
+      );
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: .3rem .85rem;
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -.5px;
+      line-height: 1.15;
+      position: relative;
+    }
+
+    .hero h1 span { color: var(--yellow); }
+
+    .hero p {
+      margin-top: 1rem;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: #bbb;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+
+    .hero-cta {
+      margin-top: 2rem;
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: .8rem 2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+      position: relative;
+    }
+
+    .hero-cta:hover {
+      background: var(--red-dk);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION BASE ────────────────────────────────── */
+    section { padding: 5rem 1.5rem; }
+
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: .5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── ABOUT ───────────────────────────────────────── */
+    #about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--mid);
+      margin-bottom: 1rem;
+    }
+
+    .about-visual {
+      background: var(--dark);
+      border-radius: 10px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .about-stat {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .about-stat-icon {
+      width: 48px; height: 48px;
+      background: var(--red);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .about-stat-text strong {
+      display: block;
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .about-stat-text span {
+      color: #888;
+      font-size: .85rem;
+    }
+
+    /* ── SERVICES ────────────────────────────────────── */
+    #services { background: var(--light); }
+
+    .services-intro {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+    }
+
+    .services-intro .section-title { margin-bottom: .5rem; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.14);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: .8rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: .4rem;
+    }
+
+    .service-card p {
+      font-size: .88rem;
+      color: var(--mid);
+    }
+
+    /* ── CONTACT ─────────────────────────────────────── */
+    #contact { background: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .contact-icon {
+      font-size: 1.2rem;
+      margin-top: .1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-row p { color: var(--mid); font-size: .95rem; }
+    .contact-row strong { color: var(--dark); display: block; margin-bottom: .1rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .8px; }
+
+    .btn-directions {
+      display: inline-block;
+      margin-top: 1.4rem;
+      background: var(--red);
+      color: var(--white);
+      font-weight: 700;
+      font-size: .95rem;
+      padding: .75rem 1.6rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+
+    .btn-directions:hover {
+      background: var(--red-dk);
+      transform: translateY(-2px);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .rating-card .r-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: .6rem;
+    }
+
+    .rating-number {
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .rating-stars {
+      font-size: 1.6rem;
+      color: var(--yellow);
+      margin: .4rem 0;
+      letter-spacing: 2px;
+    }
+
+    .rating-count {
+      font-size: .85rem;
+      color: var(--mid);
+    }
+
+    .rating-source {
+      margin-top: .8rem;
+      font-size: .75rem;
+      color: #999;
+      font-style: italic;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      color: #999;
+      text-align: center;
+      padding: 2.2rem 1.5rem;
+      font-size: .85rem;
+    }
+
+    footer strong { color: var(--white); }
+
+    footer .footer-address {
+      margin-top: .35rem;
+      font-size: .8rem;
+    }
+
+    /* ── HAMBURGER (mobile) ──────────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #ccc;
+      border-radius: 2px;
+      transition: .25s;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 760px) {
+      nav ul {
+        display: none;
+        position: absolute;
+        top: 62px; left: 0; right: 0;
+        background: var(--dark2);
+        flex-direction: column;
+        padding: 1rem 2rem 1.5rem;
+        gap: 1rem;
+      }
+
+      nav ul.open { display: flex; }
+
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; }
+
+      .hero { padding: 4rem 1.5rem 3.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="#hero">
+      <div class="nav-logo">QM</div>
+      <span class="nav-name">Quick <span>Mart</span></span>
+    </a>
+    <ul id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">Gainesville, FL</div>
+    <h1>Your Neighborhood <span>Quick Mart</span></h1>
+    <p>Fast, friendly, and fully stocked — everything you need, right on W University Ave.</p>
+    <a class="hero-cta" href="#contact">Find Us</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container about-grid">
+      <div class="about-text">
+        <span class="section-label">About Us</span>
+        <h2 class="section-title">Your Go-To Stop on University Ave</h2>
+        <p>Quick Mart on W University Ave is a convenient neighborhood stop serving the Gainesville community with everyday essentials, snacks, beverages, and more. Whether you're a student, a local resident, or just passing through, we aim to make your quick stop as easy and efficient as possible.</p>
+        <p>Conveniently located at 1800 W University Ave, we stock a wide selection of products so you can grab what you need and get on with your day. Our friendly staff is ready to help — no matter how big or small your request.</p>
+        <p>From cold drinks to household basics, we keep our shelves well-stocked so the things you reach for most are always within easy reach.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-stat">
+          <div class="about-stat-icon">&#128338;</div>
+          <div class="about-stat-text">
+            <strong>Quick &amp; Convenient</strong>
+            <span>In and out in minutes</span>
+          </div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-icon">&#128230;</div>
+          <div class="about-stat-text">
+            <strong>Well-Stocked Shelves</strong>
+            <span>Everyday essentials always available</span>
+          </div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-icon">&#128205;</div>
+          <div class="about-stat-text">
+            <strong>Prime Location</strong>
+            <span>Right on W University Ave</span>
+          </div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-icon">&#128516;</div>
+          <div class="about-stat-text">
+            <strong>Friendly Service</strong>
+            <span>Here to help, every visit</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-intro">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Everything You Need, All in One Place</h2>
+        <p style="color:#666;font-size:.95rem;">A well-rounded selection of convenience items to keep your day moving.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">&#127868;</div>
+          <h3>Snacks &amp; Packaged Foods</h3>
+          <p>A wide variety of chips, crackers, candy, nuts, and on-the-go snacks for any craving.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#129380;</div>
+          <h3>Cold Beverages</h3>
+          <p>Soft drinks, energy drinks, water, juices, and more — chilled and ready to grab.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#9749;</div>
+          <h3>Hot Drinks &amp; Coffee</h3>
+          <p>Start your morning right with hot coffee and other warm beverage options. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#127968;</div>
+          <h3>Household Essentials</h3>
+          <p>Everyday household staples including cleaning supplies, paper goods, and personal care items.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#128182;</div>
+          <h3>Lottery &amp; Prepaid Cards</h3>
+          <p>Lottery tickets, prepaid calling cards, and phone top-up options available in store.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#128664;</div>
+          <h3>Tobacco &amp; Accessories</h3>
+          <p>A selection of tobacco products and accessories. Valid ID required. Contact us for availability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-label">Contact &amp; Location</span>
+      <h2 class="section-title">Come Visit Us</h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Store Information</h3>
+          <div class="contact-row">
+            <div class="contact-icon">&#128205;</div>
+            <div>
+              <strong>Address</strong>
+              <p>1800 W University Ave #120<br>Gainesville, FL</p>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon">&#128336;</div>
+            <div>
+              <strong>Hours</strong>
+              <p>Contact us for current hours.</p>
+            </div>
+          </div>
+          <a
+            class="btn-directions"
+            href="https://www.google.com/maps/search/Quick%20Mart%20(W%20University%20Ave)%201800%20W%20University%20Ave%20%23120"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            &#128506; Get Directions
+          </a>
+        </div>
+
+        <div class="rating-card">
+          <div class="r-label">Google Maps Rating</div>
+          <div class="rating-number">5.0</div>
+          <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="rating-count">Based on 2 reviews</div>
+          <div class="rating-source">Source: Google Maps</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Quick Mart – W University Ave</strong>
+    <div class="footer-address">1800 W University Ave #120, Gainesville, FL</div>
+    <div style="margin-top:.8rem;font-size:.78rem;">&copy; 2026 Quick Mart. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    // Close menu when a link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

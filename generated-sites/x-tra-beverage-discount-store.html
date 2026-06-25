@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X Tra Beverage Discount Store | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1a3a5c;
+      --accent: #e84d1c;
+      --light-accent: #f5a623;
+      --bg: #f4f6f8;
+      --white: #ffffff;
+      --text: #222222;
+      --text-light: #555555;
+      --nav-height: 68px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: #b0c4de;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #ccd9e8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--light-accent);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: var(--nav-height);
+      background: linear-gradient(135deg, var(--primary) 0%, #0d2440 60%, #1a1a2e 100%);
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.015) 40px,
+        rgba(255,255,255,0.015) 80px
+      );
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .hero h1 .highlight {
+      color: var(--light-accent);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: #b0c4de;
+      max-width: 580px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.15s;
+      position: relative;
+    }
+
+    .hero-cta:hover {
+      background: #c73d10;
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION BASICS ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 1.75rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-content p {
+      color: var(--text-light);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--primary), #0d2440);
+      border-radius: 12px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .stat-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .stat-text strong {
+      display: block;
+      color: var(--white);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .stat-text span {
+      color: #8eacc8;
+      font-size: 0.85rem;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--bg);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 2rem 1.75rem;
+      border-left: 4px solid var(--accent);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      color: var(--white);
+    }
+
+    .contact-item-body strong {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-body a,
+    .contact-item-body p {
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-item-body a:hover {
+      color: var(--accent);
+    }
+
+    .rating-box {
+      background: linear-gradient(135deg, var(--primary), #0d2440);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .rating-box p {
+      color: #8eacc8;
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 0.5rem;
+    }
+
+    .star {
+      font-size: 1.5rem;
+    }
+
+    .star.full { color: var(--light-accent); }
+    .star.half { color: var(--light-accent); opacity: 0.6; }
+    .star.empty { color: #3a5a7a; }
+
+    .rating-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-count {
+      color: #8eacc8;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 1.75rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-top: 1.5rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-directions:hover {
+      background: #c73d10;
+      transform: translateY(-2px);
+    }
+
+    .contact-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .hours-note {
+      background: #fef9f0;
+      border: 1px solid #f5e0b0;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .hours-note strong {
+      display: block;
+      color: var(--primary);
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .hours-note p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--primary);
+      color: #8eacc8;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer strong {
+      color: var(--white);
+    }
+
+    footer .footer-divider {
+      display: inline-block;
+      margin: 0 0.5rem;
+      opacity: 0.4;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        background: var(--primary);
+        padding: 1.5rem 2rem;
+        gap: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1rem;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hero {
+        padding: 4rem 1.5rem 3.5rem;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-visual {
+        order: -1;
+      }
+
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-logo-text {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">
+      <div class="nav-logo-icon">X</div>
+      <div class="nav-logo-text">
+        X Tra Beverage
+        <span>Discount Store &bull; Gainesville, FL</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Products</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-badge">Gainesville's Discount Beverage Destination</div>
+    <h1>More Drinks.<br /><span class="highlight">Less Spending.</span></h1>
+    <p>Your neighborhood stop for a wide selection of beverages, snacks, and everyday convenience items — all at prices that keep more money in your pocket.</p>
+    <a class="hero-cta" href="#contact">
+      &#128205; Find Us
+    </a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-content">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">Your Go-To Beverage &amp; Convenience Stop</h2>
+          <div class="section-divider"></div>
+          <p>X Tra Beverage Discount Store serves the Gainesville community with a broad selection of beverages, snacks, and household convenience items at competitive discount prices. Whether you need a quick refreshment, a case of your favorite drinks, or everyday essentials, we aim to make every trip worth it.</p>
+          <p>Conveniently located on NE 16th Ave, we are easily accessible for residents, students, and visitors across Gainesville. We are proud to offer variety and value under one roof without the big-box hassle.</p>
+          <p>Stop in to browse our selection — we are here to make stocking up simple, fast, and affordable.</p>
+        </div>
+        <div class="about-visual">
+          <div class="stat-card">
+            <div class="stat-icon">&#127863;</div>
+            <div class="stat-text">
+              <strong>Wide Beverage Selection</strong>
+              <span>Soft drinks, water, energy drinks &amp; more</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">&#128179;</div>
+            <div class="stat-text">
+              <strong>Discount Pricing</strong>
+              <span>Competitive prices on your everyday favorites</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">&#128205;</div>
+            <div class="stat-text">
+              <strong>Convenient Location</strong>
+              <span>119 NE 16th Ave, Gainesville, FL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <span class="section-label">What We Carry</span>
+      <h2 class="section-title">Products &amp; Services</h2>
+      <div class="section-divider"></div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">&#127868;</span>
+          <h3>Soft Drinks &amp; Sodas</h3>
+          <p>A wide variety of name-brand and value-brand sodas, sparkling waters, and flavored drinks available in single cans, bottles, and bulk packs.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#9889;</span>
+          <h3>Energy &amp; Sports Drinks</h3>
+          <p>Stocked with popular energy drinks and sports beverages to keep you going — available by the single or by the case for extra savings.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#128167;</span>
+          <h3>Water &amp; Juices</h3>
+          <p>Bottled water, gallon jugs, fruit juices, and drink mixes to cover all your hydration needs at everyday low prices.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#127839;</span>
+          <h3>Snacks &amp; Candy</h3>
+          <p>Grab chips, crackers, candy bars, and other snack favorites to go with your beverage of choice.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#127968;</span>
+          <h3>Household Essentials</h3>
+          <p>Pick up everyday convenience items alongside your drinks — because sometimes one quick stop should cover it all.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">&#128230;</span>
+          <h3>Bulk &amp; Case Purchases</h3>
+          <p>Buying in bulk? We stock cases and larger quantities so you can stock up and save even more on your favorite beverages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-label">Get In Touch</span>
+      <h2 class="section-title">Visit Us Today</h2>
+      <div class="section-divider"></div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-body">
+              <strong>Address</strong>
+              <p>119 NE 16th Ave<br />Gainesville, FL</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div class="contact-item-body">
+              <strong>Phone</strong>
+              <a href="tel:+13523724114">(352) 372-4114</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-body">
+              <strong>Hours</strong>
+              <p>Contact us for details</p>
+            </div>
+          </div>
+          <a class="btn-directions" href="https://www.google.com/maps/search/X%20Tra%20Beverage%20Discount%20Store%20119%20NE%2016th%20Ave" target="_blank" rel="noopener noreferrer">
+            &#128506; Get Directions
+          </a>
+        </div>
+        <div class="contact-aside">
+          <div class="rating-box">
+            <div class="rating-stars">
+              <span class="star full">&#9733;</span>
+              <span class="star full">&#9733;</span>
+              <span class="star full">&#9733;</span>
+              <span class="star half">&#9733;</span>
+              <span class="star empty">&#9733;</span>
+            </div>
+            <div class="rating-number">3.2</div>
+            <div class="rating-count">Based on 9 Google reviews</div>
+            <p>Rated on Google Maps</p>
+          </div>
+          <div class="hours-note">
+            <strong>&#128204; Quick Tip</strong>
+            <p>Call ahead at <a href="tel:+13523724114" style="color: var(--accent); font-weight: 600;">(352) 372-4114</a> to confirm hours or check product availability before your visit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <strong>X Tra Beverage Discount Store</strong>
+      <span class="footer-divider">|</span>
+      119 NE 16th Ave, Gainesville, FL
+      <span class="footer-divider">|</span>
+      <a href="tel:+13523724114" style="color: #8eacc8; text-decoration: none;">(352) 372-4114</a>
+    </p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.6;">&copy; 2024 X Tra Beverage Discount Store. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hayes Jewelry Ltd | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e2c97e;
+      --gold-dark: #9c7b2e;
+      --cream: #fdf8f0;
+      --charcoal: #1e1e1e;
+      --dark-brown: #2c1f0e;
+      --mid-brown: #4a3728;
+      --text-main: #2c1f0e;
+      --text-muted: #6b5744;
+      --white: #ffffff;
+      --section-alt: #f5efe3;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      color: var(--text-main);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(28, 20, 10, 0.97);
+      backdrop-filter: blur(6px);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .nav-brand .brand-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--gold-light);
+      letter-spacing: 0.06em;
+    }
+
+    .nav-brand .brand-sub {
+      font-size: 0.68rem;
+      color: rgba(201, 168, 76, 0.6);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: rgba(255,255,255,0.82);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--gold-light);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #1a1108 0%, #2c1f0e 40%, #1a1108 100%);
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero-diamonds {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-diamonds::before,
+    .hero-diamonds::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    }
+
+    .hero-diamonds::before {
+      width: 700px;
+      height: 700px;
+      top: -200px;
+      right: -100px;
+    }
+
+    .hero-diamonds::after {
+      width: 500px;
+      height: 500px;
+      bottom: -150px;
+      left: -80px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 0.4rem 1.2rem;
+      border-radius: 2px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      color: var(--cream);
+      line-height: 1.15;
+      font-weight: normal;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1.4rem auto;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.2vw, 1.22rem);
+      color: rgba(253,248,240,0.75);
+      max-width: 540px;
+      margin: 0 auto 2.4rem;
+      font-style: italic;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-dark));
+      color: var(--dark-brown);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      font-weight: bold;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--gold-light);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      font-weight: bold;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 2px;
+      border: 1px solid rgba(201,168,76,0.5);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold-light);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+
+    /* ORNAMENTAL SECTION HEADER */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+      font-weight: normal;
+      color: var(--dark-brown);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-rule {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto;
+    }
+
+    /* ABOUT */
+    .about {
+      background: var(--cream);
+      padding: 6rem 2rem;
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .highlight-card {
+      background: var(--white);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-top: 3px solid var(--gold);
+      padding: 1.4rem 1.2rem;
+      border-radius: 3px;
+    }
+
+    .highlight-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-card h4 {
+      font-size: 0.92rem;
+      color: var(--dark-brown);
+      margin-bottom: 0.3rem;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+    }
+
+    .highlight-card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* SERVICES */
+    .services {
+      background: var(--section-alt);
+      padding: 6rem 2rem;
+    }
+
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 2.2rem 1.8rem;
+      border: 1px solid rgba(201,168,76,0.15);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(44,31,14,0.1);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .service-number {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      margin-bottom: 1rem;
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.12rem;
+      color: var(--dark-brown);
+      margin-bottom: 0.7rem;
+      font-weight: normal;
+    }
+
+    .service-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* CONTACT */
+    .contact {
+      background: var(--dark-brown);
+      padding: 6rem 2rem;
+    }
+
+    .contact .section-header h2 {
+      color: var(--cream);
+    }
+
+    .contact .section-eyebrow {
+      color: var(--gold);
+    }
+
+    .contact-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.3rem;
+      color: var(--gold-light);
+      margin-bottom: 1.8rem;
+      font-weight: normal;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 38px;
+      height: 38px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+
+    .contact-item-text label {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text p,
+    .contact-item-text a {
+      font-size: 0.97rem;
+      color: rgba(253,248,240,0.85);
+      text-decoration: none;
+      line-height: 1.5;
+    }
+
+    .contact-item-text a:hover {
+      color: var(--gold-light);
+    }
+
+    .rating-card {
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 4px;
+      padding: 1.6rem;
+      margin-top: 2rem;
+    }
+
+    .rating-stars {
+      color: var(--gold);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.4rem;
+    }
+
+    .rating-score {
+      font-size: 2.4rem;
+      font-weight: bold;
+      color: var(--cream);
+      line-height: 1;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .rating-count {
+      font-size: 0.82rem;
+      color: rgba(253,248,240,0.55);
+      margin-top: 0.2rem;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .contact-action {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-action h3 {
+      font-size: 1.3rem;
+      color: var(--gold-light);
+      margin-bottom: 1rem;
+      font-weight: normal;
+    }
+
+    .contact-action p {
+      color: rgba(253,248,240,0.7);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--dark-brown);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 3px;
+      transition: opacity 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+
+    .directions-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+    }
+
+    .directions-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .contact-hours {
+      margin-top: 2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 4px;
+      padding: 1.4rem;
+    }
+
+    .contact-hours h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .contact-hours p {
+      font-size: 0.88rem;
+      color: rgba(253,248,240,0.6);
+      font-style: italic;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #110d06;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .footer-brand {
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-address {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 0.3rem;
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.22);
+      margin-top: 1rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: rgba(28,20,10,0.98);
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        gap: 1.5rem;
+        border-bottom: 1px solid rgba(201,168,76,0.2);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-highlights {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-cta-group {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">
+      <span class="brand-name">Hayes Jewelry Ltd</span>
+      <span class="brand-sub">Gainesville, Florida</span>
+    </div>
+    <button class="nav-toggle" onclick="this.nextElementSibling.classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-diamonds"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">Gainesville's Trusted Jeweler</span>
+      <h1>Where Every Piece Tells<br><em>Your Story</em></h1>
+      <div class="hero-divider"></div>
+      <p class="hero-tagline">Fine jewelry, expert craftsmanship, and personalized service — right in the heart of Gainesville, FL.</p>
+      <div class="hero-cta-group">
+        <a href="#services" class="btn-primary">Explore Our Services</a>
+        <a href="#contact" class="btn-outline">Find Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <div class="section-header" style="text-align:left; margin-bottom:2rem;">
+          <span class="section-eyebrow">Our Story</span>
+          <h2>Craftsmanship You Can Trust</h2>
+          <div class="section-rule" style="margin-left:0;"></div>
+        </div>
+        <p>Hayes Jewelry Ltd is a full-service jewelry store proudly serving the Gainesville, FL community. We offer an exceptional selection of fine jewelry, engagement rings, and custom pieces crafted to suit every style and occasion.</p>
+        <p>Our team is committed to helping each customer find exactly what they are looking for, whether it is a timeless gift, a one-of-a-kind custom design, or expert repair work on a cherished heirloom.</p>
+        <p>With a perfect 5-star rating from hundreds of satisfied customers, we take pride in combining quality merchandise with attentive, personalized service that keeps our community coming back.</p>
+      </div>
+      <div class="about-highlights">
+        <div class="highlight-card">
+          <div class="highlight-icon">&#10022;</div>
+          <h4>Fine Jewelry</h4>
+          <p>Curated collections of diamonds, gemstones, gold, and silver for every occasion.</p>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">&#9775;</div>
+          <h4>Custom Design</h4>
+          <p>Bring your vision to life with bespoke pieces crafted to your exact specifications.</p>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">&#10038;</div>
+          <h4>Expert Repairs</h4>
+          <p>Trusted restoration and repair services to renew the jewelry you love most.</p>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">&#11835;</div>
+          <h4>5-Star Rated</h4>
+          <p>Rated 5.0 stars by our loyal Gainesville community — your satisfaction is our priority.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-header">
+      <span class="section-eyebrow">What We Offer</span>
+      <h2>Our Services</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-number">01</div>
+        <div class="service-icon">&#128141;</div>
+        <h3>Engagement &amp; Bridal Rings</h3>
+        <p>Celebrate your love story with a stunning engagement ring or wedding band. We offer a wide selection of styles and can create custom designs tailored to your vision.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">02</div>
+        <div class="service-icon">&#10052;</div>
+        <h3>Diamond &amp; Gemstone Jewelry</h3>
+        <p>From certified diamonds to vibrant colored gemstones, our collection spans necklaces, earrings, bracelets, and rings for every taste and budget.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">03</div>
+        <div class="service-icon">&#128296;</div>
+        <h3>Custom Jewelry Design</h3>
+        <p>Work with our experienced team to design a piece that is entirely your own. Contact us for details on our custom design process and consultation.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">04</div>
+        <div class="service-icon">&#128736;</div>
+        <h3>Jewelry Repair &amp; Restoration</h3>
+        <p>We offer professional ring resizing, stone replacement, prong retipping, chain repair, and full restoration to bring your cherished pieces back to their original beauty.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">05</div>
+        <div class="service-icon">&#9878;</div>
+        <h3>Jewelry Appraisal</h3>
+        <p>Receive a professional written appraisal for insurance, estate, or personal purposes. Contact us for details on our appraisal services and scheduling.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-number">06</div>
+        <div class="service-icon">&#127873;</div>
+        <h3>Gifts &amp; Estate Jewelry</h3>
+        <p>Find the perfect gift for any occasion, or explore our selection of estate and antique jewelry — each piece with its own unique history and character.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-header">
+      <span class="section-eyebrow">Get In Touch</span>
+      <h2>Visit Us Today</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="contact-inner">
+      <div class="contact-info">
+        <h3>Contact Information</h3>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">&#128205;</div>
+          <div class="contact-item-text">
+            <label>Address</label>
+            <p>5753 SW 75th St<br>Gainesville, FL 32608</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">&#128222;</div>
+          <div class="contact-item-text">
+            <label>Phone</label>
+            <a href="tel:+13523724106">(352) 372-4106</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">&#9200;</div>
+          <div class="contact-item-text">
+            <label>Hours</label>
+            <p>Contact us for current business hours.</p>
+          </div>
+        </div>
+
+        <div class="rating-card">
+          <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="rating-score">5.0</div>
+          <div class="rating-count">Based on 419 Google reviews</div>
+        </div>
+      </div>
+
+      <div class="contact-action">
+        <h3>Find Our Location</h3>
+        <p>We are conveniently located at 5753 SW 75th St in Gainesville. Stop in to browse our collections or speak with our team — we would love to help you find the perfect piece.</p>
+        <a
+          href="https://www.google.com/maps/search/Hayes%20Jewelry%20Ltd%205753%20SW%2075th%20St%2C%20Gainesville%2C%20FL%2032608"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="directions-btn"
+        >
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+          Get Directions
+        </a>
+        <div class="contact-hours">
+          <h4>Planning Your Visit</h4>
+          <p>Contact us at (352) 372-4106 to confirm current hours and availability before stopping by.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Hayes Jewelry Ltd</div>
+    <div class="footer-address">5753 SW 75th St, Gainesville, FL 32608 &nbsp;|&nbsp; (352) 372-4106</div>
+    <div class="footer-copy">&copy; 2026 Hayes Jewelry Ltd. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cutz by Dray — Barber Shop | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:        #0a0a0a;
+      --charcoal:     #141414;
+      --dark:         #1e1e1e;
+      --mid:          #2c2c2c;
+      --steel:        #4a4a4a;
+      --light-gray:   #a8a8a8;
+      --off-white:    #f0ece6;
+      --cream:        #f9f6f1;
+      --red:          #c0392b;
+      --red-light:    #e74c3c;
+      --red-dark:     #922b21;
+      --text-dark:    #141414;
+      --text-light:   #f0ece6;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* ── Utility ── */
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: var(--black);
+      border-bottom: 2px solid var(--red);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+      width: 90%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Scissors SVG inline */
+    .nav-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--off-white);
+    }
+
+    .nav-name {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      line-height: 1;
+    }
+
+    .nav-name span {
+      color: var(--red-light);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--red-light); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--off-white);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    .mobile-menu {
+      display: none;
+      background: var(--charcoal);
+      border-top: 1px solid var(--mid);
+    }
+
+    .mobile-menu.open { display: block; }
+
+    .mobile-menu ul {
+      list-style: none;
+      padding: 1rem 0;
+    }
+
+    .mobile-menu li a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .mobile-menu li a:hover {
+      color: var(--red-light);
+      background: rgba(192,57,43,0.08);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 62px;
+    }
+
+    /* Diagonal stripe background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 40px,
+          rgba(192,57,43,0.04) 40px,
+          rgba(192,57,43,0.04) 41px
+        );
+      pointer-events: none;
+    }
+
+    /* Red accent slab on right */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 38%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 25%, rgba(192,57,43,0.12) 100%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 4rem 0;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--red-light);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.95;
+      text-transform: uppercase;
+      color: var(--off-white);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.2rem;
+    }
+
+    .hero-title .highlight {
+      color: var(--red);
+      display: block;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--red);
+      margin: 1.6rem 0;
+    }
+
+    .hero-tagline {
+      font-family: 'Georgia', serif;
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      color: var(--light-gray);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--red);
+      color: var(--off-white);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2.2rem;
+      border: 2px solid var(--red);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .hero-cta:hover {
+      background: transparent;
+      color: var(--red-light);
+      border-color: var(--red-light);
+    }
+
+    /* Barber pole accent */
+    .pole-wrap {
+      position: absolute;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      opacity: 0.18;
+    }
+
+    .pole {
+      width: 28px;
+      height: 260px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--off-white);
+      position: relative;
+    }
+
+    .pole-stripe {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 36px;
+    }
+
+    .pole-stripe.red  { background: var(--red); }
+    .pole-stripe.white { background: var(--off-white); }
+    .pole-stripe.blue { background: #2456a4; }
+
+    /* ── ABOUT ── */
+    .about {
+      padding: 6rem 0;
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .about-text h2 span { color: var(--red); }
+
+    .about-text p {
+      font-size: 1rem;
+      color: var(--steel);
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+
+    .about-badge {
+      background: var(--black);
+      color: var(--off-white);
+      padding: 2rem 2.4rem;
+      border-left: 4px solid var(--red);
+    }
+
+    .about-badge p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      margin-bottom: 0.8rem;
+    }
+
+    .about-badge .badge-text {
+      font-family: 'Georgia', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--off-white);
+      line-height: 1.5;
+    }
+
+    .about-badge .badge-location {
+      margin-top: 1rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--red-light);
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      padding: 6rem 0;
+      background: var(--dark);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .services-header .section-label { color: var(--red-light); }
+
+    .services-header h2 {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--off-white);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .services-header h2 span { color: var(--red); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--mid);
+    }
+
+    .service-card {
+      background: var(--charcoal);
+      padding: 2.2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 0;
+      background: var(--red);
+      transition: height 0.3s;
+    }
+
+    .service-card:hover { background: var(--mid); }
+    .service-card:hover::before { height: 100%; }
+
+    .service-num {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(192,57,43,0.12);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .service-name {
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.875rem;
+      color: var(--light-gray);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      padding: 6rem 0;
+      background: var(--cream);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .contact-info h2 span { color: var(--red); }
+
+    .contact-info p {
+      font-size: 1rem;
+      color: var(--steel);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--red);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--off-white);
+    }
+
+    .contact-detail-text {
+      font-size: 0.9rem;
+      color: var(--steel);
+      line-height: 1.5;
+    }
+
+    .contact-detail-text strong {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.2rem;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      margin-top: 1rem;
+      background: var(--red);
+      color: var(--off-white);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.9rem 2rem;
+      border: 2px solid var(--red);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-directions:hover {
+      background: transparent;
+      color: var(--red);
+    }
+
+    /* Map embed area */
+    .map-container {
+      background: var(--dark);
+      border: 2px solid var(--mid);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .map-placeholder {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: linear-gradient(135deg, var(--charcoal) 0%, var(--dark) 100%);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .map-placeholder svg {
+      width: 48px;
+      height: 48px;
+      fill: var(--red);
+      opacity: 0.7;
+    }
+
+    .map-placeholder p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+    }
+
+    .map-placeholder a {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red-light);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 2px solid var(--red);
+      padding: 3rem 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--off-white);
+    }
+
+    .footer-brand span { color: var(--red-light); }
+
+    .footer-address {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: var(--light-gray);
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      color: var(--steel);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pole-wrap { display: none; }
+
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-address { text-align: left; }
+    }
+
+    @media (max-width: 560px) {
+      .services-grid { grid-template-columns: 1fr; }
+
+      .hero-title { font-size: clamp(2.4rem, 13vw, 3.8rem); }
+
+      .about,
+      .services,
+      .contact { padding: 4rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="top">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top">
+        <div class="nav-icon">
+          <!-- Scissors icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.64 7.64A3.5 3.5 0 1 0 6 11.5c.63 0 1.22-.18 1.72-.48L10 13.28l-2.28 2.2A3.5 3.5 0 1 0 9.64 17.36L12 15.05l5.59 5.4 1.41-1.45L9.64 7.64zM6 14.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm0-9a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm8.71 1.21L12 9.27l1.41 1.46 1.3-1.26 3.7 3.57L19.82 11l-5.11-4.29z"/>
+          </svg>
+        </div>
+        <span class="nav-name"><span>Cutz</span> by Dray</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <button class="hamburger" id="hambtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobilemenu">
+      <ul>
+        <li><a href="#about"    onclick="closeMobile()">About</a></li>
+        <li><a href="#services" onclick="closeMobile()">Services</a></li>
+        <li><a href="#contact"  onclick="closeMobile()">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Gainesville, FL &mdash; Professional Barbershop</p>
+        <h1 class="hero-title">
+          Cutz<br>
+          <span class="highlight">by Dray</span>
+        </h1>
+        <div class="hero-divider"></div>
+        <p class="hero-tagline">Sharp cuts. Clean fades. Every time, no excuses.</p>
+        <a href="#services" class="hero-cta">View Services</a>
+      </div>
+    </div>
+
+    <!-- Decorative barber pole -->
+    <div class="pole-wrap" aria-hidden="true">
+      <div class="pole">
+        <div class="pole-stripe red"  style="top:0px"></div>
+        <div class="pole-stripe white" style="top:36px"></div>
+        <div class="pole-stripe blue"  style="top:72px"></div>
+        <div class="pole-stripe red"  style="top:108px"></div>
+        <div class="pole-stripe white" style="top:144px"></div>
+        <div class="pole-stripe blue"  style="top:180px"></div>
+        <div class="pole-stripe red"  style="top:216px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About the Shop</p>
+          <h2>Precision Cuts in the <span>Heart of Gainesville</span></h2>
+          <p>Cutz by Dray brings a focused, no-nonsense approach to barbering in Gainesville. Whether you are a first-time visitor or a regular client, you can count on consistent quality and attention to detail that keeps you looking sharp.</p>
+          <p>Located in the NW 6th Street corridor, the shop serves the broader Gainesville community with a welcoming atmosphere and a commitment to craft. Every visit is treated as an opportunity to deliver a clean, confident look tailored to you.</p>
+          <p>From classic taper fades to modern line-up work, the focus is always on the cut — done right, every time. For details on availability or specific services, contact us directly.</p>
+        </div>
+        <div class="about-badge">
+          <p>Our Commitment</p>
+          <div class="badge-text">"Every client deserves a great cut and a great experience — no rush, no compromise."</div>
+          <div class="badge-location">Gainesville, FL 32601</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header">
+        <p class="section-label">What We Offer</p>
+        <h2>Our <span>Services</span></h2>
+      </div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-num">01</div>
+          <div class="service-name">Haircut &amp; Style</div>
+          <p class="service-desc">A full cut tailored to your preferred length and shape, finished with styling product to hold the look all day.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">02</div>
+          <div class="service-name">Taper &amp; Fade</div>
+          <p class="service-desc">Smooth, seamless fade work from skin to full length — low, mid, or high — blended to perfection.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">03</div>
+          <div class="service-name">Beard Trim &amp; Shape</div>
+          <p class="service-desc">Crisp beard shaping, edging, and trimming to define your facial hair and frame your look.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">04</div>
+          <div class="service-name">Line-Up &amp; Edge-Up</div>
+          <p class="service-desc">Razor-sharp edges along the hairline, temples, and beard for a clean, polished finish.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">05</div>
+          <div class="service-name">Kids' Cut</div>
+          <p class="service-desc">Patient, careful cuts for younger clients — keeping it fun and stress-free for kids and parents alike.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">06</div>
+          <div class="service-name">Shave &amp; Hot Towel</div>
+          <p class="service-desc">A classic straight-razor shave paired with a hot towel treatment for a smooth, refreshed finish.</p>
+        </div>
+
+      </div>
+
+      <p style="text-align:center; margin-top:2rem; font-family:'Arial',sans-serif; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--light-gray);">
+        Contact us for current pricing &amp; availability
+      </p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <p class="section-label">Find Us</p>
+          <h2>Visit <span>Cutz by Dray</span></h2>
+          <p>Stop by the shop on NW 6th Street in Gainesville. Reach out directly for hours, walk-in availability, or appointment inquiries.</p>
+
+          <div class="contact-detail">
+            <div class="contact-icon">
+              <!-- Location pin -->
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/>
+              </svg>
+            </div>
+            <div class="contact-detail-text">
+              <strong>Address</strong>
+              1411 NW 6th St, Ste 120<br>
+              Gainesville, FL 32601
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-icon">
+              <!-- Info / hours -->
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+              </svg>
+            </div>
+            <div class="contact-detail-text">
+              <strong>Hours</strong>
+              Contact us for current hours
+            </div>
+          </div>
+
+          <a
+            class="btn-directions"
+            href="https://www.google.com/maps/search/Cutz%20by%20Dray%201411%20NW%206th%20St%2C%20Ste%20120%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Get Directions
+          </a>
+        </div>
+
+        <div class="map-container">
+          <div class="map-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/>
+            </svg>
+            <p>1411 NW 6th St, Ste 120<br>Gainesville, FL 32601</p>
+            <a
+              href="https://www.google.com/maps/search/Cutz%20by%20Dray%201411%20NW%206th%20St%2C%20Ste%20120%2C%20Gainesville%2C%20FL%2032601"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Open in Google Maps</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand"><span>Cutz</span> by Dray</div>
+        <div class="footer-address">1411 NW 6th St, Ste 120 &mdash; Gainesville, FL 32601</div>
+        <div class="footer-copy">&copy; 2026 Cutz by Dray</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const btn  = document.getElementById('hambtn');
+    const menu = document.getElementById('mobilemenu');
+    btn.addEventListener('click', () => menu.classList.toggle('open'));
+    function closeMobile() { menu.classList.remove('open'); }
+  </script>
+
+</body>
+</html>

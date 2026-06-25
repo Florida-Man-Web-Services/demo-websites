@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kutters | Barber Shop – Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #0f0f0f;
+      color: #e8e0d4;
+      line-height: 1.7;
+    }
+
+    /* ── Color Tokens ── */
+    :root {
+      --ink:        #0f0f0f;
+      --charcoal:   #1a1a1a;
+      --graphite:   #2b2b2b;
+      --gold:       #c8a96e;
+      --gold-light: #dfc08a;
+      --cream:      #e8e0d4;
+      --muted:      #a09080;
+      --white:      #f5f0ea;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(15, 15, 15, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--graphite);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+    }
+    .nav-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-family: 'Georgia', serif;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--ink) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 2px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--ink) !important; }
+
+    /* Hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      overflow: hidden;
+      background: var(--ink);
+    }
+    /* Subtle geometric background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 40px,
+          rgba(200, 169, 110, 0.03) 40px,
+          rgba(200, 169, 110, 0.03) 41px
+        );
+    }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 0.35rem 1.1rem;
+      margin-bottom: 1.8rem;
+      font-family: Arial, sans-serif;
+    }
+    .hero-title {
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      line-height: 1;
+      position: relative;
+    }
+    .hero-title span {
+      color: var(--gold);
+    }
+    .hero-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1.8rem auto;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--muted);
+      max-width: 520px;
+      font-style: italic;
+      margin-bottom: 2.8rem;
+      font-family: Georgia, serif;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--ink);
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-family: Arial, sans-serif;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-outline {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-family: Arial, sans-serif;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-outline:hover { background: var(--gold); color: var(--ink); transform: translateY(-1px); }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 6rem 1.5rem; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-rule {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    .about { background: var(--charcoal); }
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+      font-family: Georgia, serif;
+    }
+    .about-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .barber-emblem {
+      width: 220px;
+      height: 220px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+    }
+    .barber-emblem::before {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 169, 110, 0.3);
+    }
+    .emblem-icon { font-size: 3.5rem; line-height: 1; }
+    .emblem-text {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+    }
+    .emblem-sub {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── SERVICES ── */
+    .services { background: var(--ink); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      margin-top: 3rem;
+      border: 1.5px solid var(--graphite);
+    }
+    .service-card {
+      background: var(--charcoal);
+      padding: 2.2rem 2rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+    .service-card:hover { background: var(--graphite); }
+    .service-card:hover::after { width: 100%; }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .service-name {
+      font-size: 1.05rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      font-family: Arial, sans-serif;
+      font-weight: 700;
+    }
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-family: Georgia, serif;
+    }
+    .service-detail {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--charcoal); }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-details { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .contact-item-icon {
+      font-size: 1.2rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+    .contact-item-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+      margin-bottom: 0.25rem;
+    }
+    .contact-item-value {
+      font-size: 1rem;
+      color: var(--cream);
+      font-family: Georgia, serif;
+    }
+    .contact-map-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .rating-card {
+      background: var(--graphite);
+      border: 1px solid rgba(200, 169, 110, 0.25);
+      padding: 1.6rem;
+      border-radius: 3px;
+    }
+    .rating-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+    .rating-score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      font-family: Georgia, serif;
+    }
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+    }
+    .star { color: var(--gold); font-size: 1.1rem; }
+    .star-empty { color: var(--graphite); filter: brightness(2); }
+    .rating-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+    }
+    .rating-count {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+    }
+    .rating-source {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      margin-top: 0.4rem;
+      opacity: 0.7;
+    }
+    .directions-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: var(--gold);
+      color: var(--ink);
+      text-decoration: none;
+      padding: 1rem 2rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-family: Arial, sans-serif;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+      text-align: center;
+    }
+    .directions-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid var(--graphite);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .footer-brand {
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: Georgia, serif;
+      font-weight: 700;
+    }
+    .footer-address {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.6;
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.2rem; }
+      .nav-links { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; background: var(--ink); padding: 1.5rem 1.5rem 2rem; gap: 1.2rem; border-bottom: 1px solid var(--graphite); }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: flex; }
+
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .about-visual { order: -1; }
+      .barber-emblem { width: 160px; height: 160px; }
+      .emblem-icon { font-size: 2.6rem; }
+
+      section { padding: 4rem 1.2rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { letter-spacing: 0.08em; }
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-brand">
+      <!-- Inline scissor SVG icon -->
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="10" cy="10" r="5" stroke="#c8a96e" stroke-width="1.8" fill="none"/>
+        <circle cx="10" cy="26" r="5" stroke="#c8a96e" stroke-width="1.8" fill="none"/>
+        <line x1="14.2" y1="12.8" x2="29" y2="24" stroke="#c8a96e" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="14.2" y1="23.2" x2="29" y2="12" stroke="#c8a96e" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="10" cy="10" r="2" fill="#c8a96e"/>
+        <circle cx="10" cy="26" r="2" fill="#c8a96e"/>
+      </svg>
+      <span class="nav-name">Kutters</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Get Directions</a></li>
+    </ul>
+    <div class="nav-toggle" id="navToggle" aria-label="Toggle menu" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">Gainesville, FL &mdash; Established Barber Shop</div>
+    <h1 class="hero-title">Kutt<span>ers</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">Sharp cuts. Clean fades. The kind of craft that keeps you coming back.</p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">Our Services</a>
+      <a href="#contact" class="btn-outline">Find Us</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">A Cut Above the Rest</h2>
+          <div class="section-rule"></div>
+          <p>
+            Kutters is a neighborhood barber shop rooted in the Gainesville community, delivering
+            precision cuts and classic grooming services in a relaxed, no-frills environment that
+            keeps clients looking their best.
+          </p>
+          <p>
+            Whether you're a longtime regular or stepping into the chair for the first time, our
+            barbers take pride in understanding exactly what you want and executing it with care —
+            every single visit.
+          </p>
+          <p>
+            Conveniently located on NE Waldo Rd, Kutters is the go-to spot for Gainesville locals
+            who value a great cut without the wait or the fuss.
+          </p>
+        </div>
+        <div class="about-visual">
+          <div class="barber-emblem">
+            <!-- Barber pole SVG centered -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+              <rect x="20" y="4" width="12" height="44" rx="6" fill="#1a1a1a" stroke="#c8a96e" stroke-width="1.5"/>
+              <path d="M20 12 Q26 16 32 12 Q26 8 20 12Z" fill="#c8a96e" opacity="0.85"/>
+              <path d="M20 22 Q26 26 32 22 Q26 18 20 22Z" fill="#e8e0d4" opacity="0.7"/>
+              <path d="M20 32 Q26 36 32 32 Q26 28 20 32Z" fill="#c8a96e" opacity="0.85"/>
+              <path d="M20 42 Q26 46 32 42 Q26 38 20 42Z" fill="#e8e0d4" opacity="0.7"/>
+              <rect x="18" y="2" width="16" height="5" rx="2" fill="#c8a96e"/>
+              <rect x="18" y="45" width="16" height="5" rx="2" fill="#c8a96e"/>
+            </svg>
+            <span class="emblem-text">Kutters</span>
+            <span class="emblem-sub">Barber Shop</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Services</h2>
+      <div class="section-rule"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#9988;</span>
+          <p class="service-name">Haircut</p>
+          <p class="service-desc">A clean, precise cut tailored to your style — from classic taper to modern texture cuts.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128146;</span>
+          <p class="service-name">Fade</p>
+          <p class="service-desc">Low, mid, or high — our barbers deliver smooth, seamless fades that hold their shape.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128248;</span>
+          <p class="service-name">Beard Trim &amp; Shape</p>
+          <p class="service-desc">Crisp lines and balanced shaping to keep your beard looking intentional and well-groomed.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#10024;</span>
+          <p class="service-name">Hot Towel Shave</p>
+          <p class="service-desc">A traditional straight-razor shave with hot towel treatment for a close, comfortable finish.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128119;</span>
+          <p class="service-name">Kids' Cut</p>
+          <p class="service-desc">Patient, friendly service for younger clients — helping kids look sharp from an early age.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127775;</span>
+          <p class="service-name">Lineup &amp; Edge Up</p>
+          <p class="service-desc">Sharp, defined edges along the hairline, beard, and temples for a polished, finished look.</p>
+          <span class="service-detail">Contact us for details</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Visit Kutters</h2>
+      <div class="section-rule"></div>
+      <div class="contact-inner">
+
+        <div class="contact-details">
+          <div class="contact-item">
+            <span class="contact-item-icon">&#128205;</span>
+            <div>
+              <p class="contact-item-label">Address</p>
+              <p class="contact-item-value">1916 NE Waldo Rd<br>Gainesville, FL 32609</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item-icon">&#128337;</span>
+            <div>
+              <p class="contact-item-label">Hours</p>
+              <p class="contact-item-value">Contact us for current hours</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item-icon">&#9993;</span>
+            <div>
+              <p class="contact-item-label">Booking</p>
+              <p class="contact-item-value">Walk-ins welcome — contact us for details</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-map-area">
+          <div class="rating-card">
+            <div class="rating-top">
+              <span class="rating-score">4.8</span>
+              <div>
+                <div class="rating-stars">
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                </div>
+                <p class="rating-label">Google Rating</p>
+              </div>
+            </div>
+            <p class="rating-count">Based on 87 reviews</p>
+            <p class="rating-source">Google Maps &mdash; Kutters, Gainesville FL</p>
+          </div>
+
+          <a
+            href="https://www.google.com/maps/search/Kutters%201916%20NE%20Waldo%20Rd%2C%20Gainesville%2C%20FL%2032609"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+            </svg>
+            Get Directions
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-brand">Kutters</p>
+      <p class="footer-address">1916 NE Waldo Rd, Gainesville, FL 32609</p>
+      <p class="footer-copy">&copy; 2026 Kutters Barber Shop. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+    toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') links.classList.toggle('open'); });
+    // Close nav when a link is clicked
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+  </script>
+
+</body>
+</html>

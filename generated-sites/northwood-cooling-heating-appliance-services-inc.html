@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northwood Cooling Heating & Appliance Services Inc | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue-dark: #0b2d4e;
+      --blue-mid: #155a8a;
+      --blue-light: #1e87c8;
+      --sky: #d6edf9;
+      --ice: #f0f8ff;
+      --white: #ffffff;
+      --gray: #555e68;
+      --gray-light: #eef2f6;
+      --accent: #e8a020;
+      --text: #1a2530;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: var(--blue-dark);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--blue-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Snowflake / AC icon using CSS */
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--white);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-brand {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-brand span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: #9ec8e8;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: #c8dff0;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-cta {
+      background: var(--blue-light);
+      color: var(--white) !important;
+      padding: 8px 18px;
+      border-radius: 6px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent) !important;
+      color: var(--white) !important;
+    }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      width: 100%;
+      background: var(--blue-dark);
+      z-index: 999;
+      padding: 16px 5% 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .mobile-nav.open {
+      display: block;
+    }
+
+    .mobile-nav a {
+      display: block;
+      color: #c8dff0;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .mobile-nav a:last-child {
+      border-bottom: none;
+      margin-top: 10px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 64px;
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--blue-dark) 0%, var(--blue-mid) 55%, var(--blue-light) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background geometric shapes for texture */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -100px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      padding: 40px 24px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(30,135,200,0.35);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #d6edf9;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: #b8d8f0;
+      margin-bottom: 36px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: #cf8c18;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 13px 30px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.45);
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Snowflake decorative icons in hero */
+    .hero-icons {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 50px;
+      opacity: 0.22;
+    }
+
+    .hero-icons svg {
+      width: 48px;
+      height: 48px;
+      fill: none;
+      stroke: var(--white);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+    }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      background: var(--accent);
+      padding: 14px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      color: var(--blue-dark);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trust-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--blue-dark);
+      border-radius: 50%;
+      opacity: 0.4;
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section {
+      padding: 90px 5%;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue-light);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      color: var(--blue-dark);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--gray);
+      max-width: 580px;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--ice);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--gray);
+      margin-bottom: 18px;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+      border-radius: 16px;
+      padding: 48px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 20px 24px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #9ec8e8;
+      margin-top: 4px;
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      background: var(--white);
+    }
+
+    .services-header {
+      max-width: 1100px;
+      margin: 0 auto 52px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: var(--gray-light);
+      border-radius: 14px;
+      padding: 32px 28px;
+      border-top: 4px solid var(--blue-light);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(11,45,78,0.12);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--blue-dark);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: var(--white);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--ice);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-icon-wrap {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      background: var(--blue-dark);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-icon-wrap svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--white);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .contact-detail strong {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-light);
+      margin-bottom: 4px;
+    }
+
+    .contact-detail p,
+    .contact-detail a {
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .contact-detail a:hover {
+      color: var(--blue-light);
+    }
+
+    /* Rating block */
+    .rating-block {
+      background: var(--blue-dark);
+      border-radius: 16px;
+      padding: 36px 32px;
+      color: var(--white);
+    }
+
+    .rating-block h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9ec8e8;
+      margin-bottom: 18px;
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 4px;
+    }
+
+    .star {
+      width: 22px;
+      height: 22px;
+      fill: var(--accent);
+    }
+
+    .rating-num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-size: 0.9rem;
+      color: #9ec8e8;
+      margin-bottom: 22px;
+    }
+
+    .rating-src {
+      font-size: 0.78rem;
+      color: #7aafc8;
+      letter-spacing: 0.04em;
+    }
+
+    .directions-btn {
+      display: inline-block;
+      margin-top: 22px;
+      background: var(--blue-light);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 13px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+      width: 100%;
+      text-align: center;
+    }
+
+    .directions-btn:hover {
+      background: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--blue-dark);
+      color: #9ec8e8;
+      padding: 44px 5% 28px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .footer-tagline {
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .footer-links a {
+      color: #9ec8e8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: #5a7f99;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-grid,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-bar {
+        gap: 18px;
+      }
+
+      .trust-dot {
+        display: none;
+      }
+
+      section {
+        padding: 64px 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <!-- Snowflake -->
+        <line x1="12" y1="2" x2="12" y2="22"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <line x1="5.64" y1="5.64" x2="18.36" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="5.64" y2="18.36"/>
+        <circle cx="12" cy="12" r="2"/>
+      </svg>
+    </div>
+    <div class="nav-brand">
+      Northwood Cooling
+      <span>Heating &amp; Appliance Services</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tel:3523782829" class="nav-cta">Call Now</a></li>
+  </ul>
+
+  <button class="hamburger" aria-label="Open menu" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#about" onclick="document.getElementById('mobileNav').classList.remove('open')">About</a>
+  <a href="#services" onclick="document.getElementById('mobileNav').classList.remove('open')">Services</a>
+  <a href="#contact" onclick="document.getElementById('mobileNav').classList.remove('open')">Contact</a>
+  <a href="tel:3523782829">(352) 378-2829</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge">Gainesville, FL Heating &amp; Cooling Experts</div>
+    <h1>Stay Comfortable<br>All Year Round — <em>Guaranteed</em></h1>
+    <p class="hero-tagline">
+      Northwood Cooling Heating &amp; Appliance Services keeps North Central Florida homes and businesses cool in summer and warm all winter long.
+    </p>
+    <div class="hero-actions">
+      <a href="tel:3523782829" class="btn-primary">Call (352) 378-2829</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+
+    <!-- Decorative icons -->
+    <div class="hero-icons" aria-hidden="true">
+      <!-- Snowflake -->
+      <svg viewBox="0 0 24 24">
+        <line x1="12" y1="2" x2="12" y2="22" stroke-width="1.5"/>
+        <line x1="2" y1="12" x2="22" y2="12" stroke-width="1.5"/>
+        <line x1="5.64" y1="5.64" x2="18.36" y2="18.36" stroke-width="1.5"/>
+        <line x1="18.36" y1="5.64" x2="5.64" y2="18.36" stroke-width="1.5"/>
+        <circle cx="12" cy="12" r="2" stroke-width="1.5"/>
+      </svg>
+      <!-- Flame -->
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2s-6 5.686-6 10a6 6 0 0012 0c0-4.314-6-10-6-10z" stroke-width="1.5"/>
+        <path d="M12 12s-2 1.895-2 3.333A2 2 0 0014 15.333C14 13.895 12 12 12 12z" stroke-width="1.5"/>
+      </svg>
+      <!-- Wrench -->
+      <svg viewBox="0 0 24 24">
+        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST BAR ── -->
+<div class="trust-bar" role="complementary" aria-label="Trust indicators">
+  <div class="trust-item">Licensed &amp; Insured</div>
+  <div class="trust-dot" aria-hidden="true"></div>
+  <div class="trust-item">Residential &amp; Commercial</div>
+  <div class="trust-dot" aria-hidden="true"></div>
+  <div class="trust-item">Heating, Cooling &amp; Appliances</div>
+  <div class="trust-dot" aria-hidden="true"></div>
+  <div class="trust-item">Serving Gainesville, FL</div>
+</div>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <p class="section-label">Who We Are</p>
+      <h2 class="section-title">Northwood Cooling Heating &amp; Appliance Services</h2>
+      <p>
+        Northwood Cooling Heating &amp; Appliance Services Inc is a trusted HVAC and appliance service provider serving the Gainesville area and surrounding communities throughout North Central Florida. We specialize in keeping homes and businesses comfortable year-round with reliable heating, cooling, and appliance solutions tailored to Florida's unique climate demands.
+      </p>
+      <p>
+        Our team of experienced technicians is committed to prompt, professional service — whether you need routine maintenance, an emergency repair, or a full system replacement. We work with all major brands and equipment types to ensure every job is done right the first time.
+      </p>
+      <p>
+        From NW Gainesville to the broader region, we take pride in honest workmanship, transparent service, and lasting relationships with our customers. Contact us for details on scheduling and available services.
+      </p>
+    </div>
+    <div class="about-visual" aria-hidden="true">
+      <div class="stat-card">
+        <div class="stat-num">4.8 &#9733;</div>
+        <div class="stat-label">Average Google Rating (27 reviews)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">HVAC</div>
+        <div class="stat-label">Heating, Cooling &amp; Air Quality Specialists</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">FL</div>
+        <div class="stat-label">Locally Operated — Gainesville, North Central Florida</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="services" id="services">
+  <div class="services-header">
+    <p class="section-label">What We Do</p>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">We handle the full range of HVAC and home appliance needs — from quick tune-ups to complete system installs.</p>
+  </div>
+
+  <div class="services-grid">
+
+    <!-- Service 1: AC Installation & Replacement -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <!-- AC unit shape -->
+          <rect x="2" y="6" width="20" height="12" rx="2"/>
+          <line x1="2" y1="11" x2="22" y2="11"/>
+          <circle cx="17" cy="14.5" r="1.5"/>
+          <line x1="6" y1="14" x2="10" y2="14"/>
+        </svg>
+      </div>
+      <h3>AC Installation &amp; Replacement</h3>
+      <p>Full installation and replacement of central air conditioning systems, ductless mini-splits, and packaged units sized right for your space.</p>
+    </div>
+
+    <!-- Service 2: AC Repair -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <h3>Air Conditioning Repair</h3>
+      <p>Diagnosis and repair of all AC problems including refrigerant leaks, compressor issues, electrical faults, and poor cooling performance.</p>
+    </div>
+
+    <!-- Service 3: Heating -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2s-6 5.686-6 10a6 6 0 0012 0c0-4.314-6-10-6-10z"/>
+          <path d="M12 12s-2 1.895-2 3.333A2 2 0 0014 15.333C14 13.895 12 12 12 12z"/>
+        </svg>
+      </div>
+      <h3>Heating System Services</h3>
+      <p>Installation, repair, and maintenance of heat pumps, electric furnaces, and gas heating systems to keep you warm through Florida's cooler months.</p>
+    </div>
+
+    <!-- Service 4: Preventive Maintenance -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h3>Preventive Maintenance</h3>
+      <p>Scheduled tune-ups and seasonal maintenance plans that extend equipment life, improve efficiency, and catch small issues before they become costly repairs.</p>
+    </div>
+
+    <!-- Service 5: Indoor Air Quality -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/>
+        </svg>
+      </div>
+      <h3>Indoor Air Quality</h3>
+      <p>Air filtration, UV purifiers, humidity control, and duct cleaning solutions to improve the air you breathe inside your home or business.</p>
+    </div>
+
+    <!-- Service 6: Appliance Repair -->
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="18" rx="2"/>
+          <line x1="2" y1="9" x2="22" y2="9"/>
+          <circle cx="7" cy="6" r="1"/>
+          <circle cx="12" cy="6" r="1"/>
+          <path d="M7 13h4v5H7z"/>
+          <path d="M15 13h2v2h-2zM15 17h2v1h-2z"/>
+        </svg>
+      </div>
+      <h3>Appliance Repair &amp; Service</h3>
+      <p>Service and repair of major household appliances. Contact us for details on the makes, models, and appliance types we currently service.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <p class="section-label">Get In Touch</p>
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-sub" style="margin-bottom:36px;">Ready to schedule service or have a question? Reach out — we're here to help.</p>
+
+      <div class="contact-info-block">
+
+        <div class="contact-item">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+            </svg>
+          </div>
+          <div class="contact-detail">
+            <strong>Phone</strong>
+            <a href="tel:3523782829">(352) 378-2829</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="contact-detail">
+            <strong>Address</strong>
+            <p>4605 NW 6th St STE E<br>Gainesville, FL</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="contact-detail">
+            <strong>Hours</strong>
+            <p>Contact us for current hours and availability.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rating-block">
+      <h3>Customer Rating</h3>
+      <div class="stars-row">
+        <div class="stars" aria-label="4.8 out of 5 stars">
+          <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg class="star" viewBox="0 0 24 24" aria-hidden="true" style="fill:var(--accent);opacity:0.45;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <span class="rating-num">4.8</span>
+      </div>
+      <p class="rating-count">Based on 27 Google reviews</p>
+      <p class="rating-src">via Google Maps</p>
+      <a
+        href="https://www.google.com/maps/search/Northwood%20Cooling%20Heating%20%26%20Appliance%20Services%20Inc%2C%204605%20NW%206th%20St%20STE%20E"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="directions-btn"
+      >
+        Get Directions
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">Northwood Cooling Heating &amp; Appliance Services Inc</div>
+  <div class="footer-tagline">4605 NW 6th St STE E &mdash; Gainesville, FL &mdash; (352) 378-2829</div>
+  <nav class="footer-links" aria-label="Footer navigation">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+    <a href="tel:3523782829">Call Now</a>
+  </nav>
+  <hr class="footer-divider"/>
+  <p class="footer-copy">&copy; 2026 Northwood Cooling Heating &amp; Appliance Services Inc. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

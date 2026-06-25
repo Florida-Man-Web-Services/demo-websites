@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gainesville Spa Center by Voupre</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blush: #f2d8d0;
+      --rose: #c9856a;
+      --deep-rose: #a05a45;
+      --cream: #faf5f2;
+      --soft-taupe: #e8ddd7;
+      --dark: #3a2a24;
+      --text: #5a3e35;
+      --light-text: #8a6a5e;
+      --white: #ffffff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--text);
+      background-color: var(--cream);
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(250, 245, 242, 0.96);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--soft-taupe);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--rose);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .nav-logo-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--light-text);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .nav-links a:hover {
+      color: var(--rose);
+    }
+
+    .nav-cta {
+      background: var(--rose);
+      color: white !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 30px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--deep-rose) !important;
+      color: white !important;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      background: linear-gradient(160deg, var(--blush) 0%, var(--cream) 55%, var(--soft-taupe) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,133,106,0.18) 0%, transparent 70%);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: -60px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(242,216,208,0.5) 0%, transparent 70%);
+    }
+
+    .hero-inner {
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--blush);
+      color: var(--rose);
+      border: 1px solid var(--rose);
+      border-radius: 30px;
+      padding: 0.3rem 1rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--light-text);
+      margin-bottom: 2.2rem;
+      font-style: italic;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--rose);
+      color: white;
+      text-decoration: none;
+      padding: 0.75rem 2rem;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--deep-rose);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--rose);
+      color: var(--rose);
+      text-decoration: none;
+      padding: 0.73rem 2rem;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background: var(--rose);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* SECTION SHARED */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-label {
+      display: block;
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 0.6rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      color: var(--dark);
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .section-divider {
+      width: 50px;
+      height: 2px;
+      background: var(--rose);
+      margin: 0 auto 2.5rem;
+      border-radius: 2px;
+    }
+
+    /* ABOUT */
+    .about {
+      background: var(--white);
+    }
+
+    .about-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .about-inner p {
+      font-size: 1.05rem;
+      color: var(--light-text);
+      margin-bottom: 1.1rem;
+      line-height: 1.85;
+    }
+
+    .about-inner p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-highlights {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .highlight-item {
+      text-align: center;
+    }
+
+    .highlight-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .highlight-label {
+      font-size: 0.82rem;
+      color: var(--light-text);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* SERVICES */
+    .services {
+      background: var(--cream);
+    }
+
+    .services-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--soft-taupe);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: box-shadow 0.25s, transform 0.2s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 30px rgba(160, 90, 69, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--blush);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--light-text);
+      line-height: 1.6;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .service-card .service-detail {
+      margin-top: 0.9rem;
+      font-size: 0.8rem;
+      color: var(--rose);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    /* CONTACT */
+    .contact {
+      background: var(--white);
+    }
+
+    .contact-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.35rem;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .contact-detail-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--blush);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-detail-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .contact-detail-text a {
+      color: var(--rose);
+      text-decoration: none;
+    }
+
+    .contact-detail-text a:hover {
+      text-decoration: underline;
+    }
+
+    .contact-detail-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--light-text);
+      margin-bottom: 0.2rem;
+    }
+
+    /* RATING */
+    .rating-box {
+      background: var(--cream);
+      border: 1px solid var(--soft-taupe);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .rating-box h3 {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+    }
+
+    .star svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .rating-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--light-text);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      margin-bottom: 1.2rem;
+    }
+
+    .rating-source {
+      font-size: 0.78rem;
+      color: var(--light-text);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-style: italic;
+    }
+
+    .directions-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      background: var(--rose);
+      color: white;
+      text-decoration: none;
+      padding: 0.65rem 1.5rem;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.04em;
+      transition: background 0.2s;
+      width: 100%;
+      text-align: center;
+    }
+
+    .directions-btn:hover {
+      background: var(--deep-rose);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+    }
+
+    footer .footer-name {
+      color: var(--blush);
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+      font-family: Georgia, serif;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--blush);
+    }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--dark);
+      border-radius: 2px;
+      display: block;
+      transition: 0.3s;
+    }
+
+    /* MOBILE NAV */
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: var(--cream);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid var(--soft-taupe);
+        padding: 0.5rem 0;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li {
+        width: 100%;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 0.85rem 2rem;
+        border-radius: 0;
+        font-size: 0.95rem;
+      }
+
+      .nav-cta {
+        margin: 0.4rem 1.5rem;
+        border-radius: 30px;
+        text-align: center;
+        background: var(--rose) !important;
+        color: white !important;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">&#10022;</div>
+      <span class="nav-logo-text">Gainesville Spa Center</span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:3527882401" class="nav-cta">Call Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <span class="hero-badge">Facial Spa &mdash; Gainesville, FL</span>
+      <h1>Restore Your Skin,<br /><em>Renew Your Glow</em></h1>
+      <p class="hero-tagline">Professional facial treatments designed to nurture, refresh, and reveal your natural radiance.</p>
+      <div class="hero-buttons">
+        <a href="#services" class="btn-primary">Explore Services</a>
+        <a href="#contact" class="btn-outline">Find Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <span class="section-label">Who We Are</span>
+    <h2 class="section-title">A Sanctuary for Your Skin</h2>
+    <div class="section-divider"></div>
+    <div class="about-inner">
+      <p>Gainesville Spa Center by Voupre is a dedicated facial spa serving the Gainesville community, offering a thoughtful range of skin care treatments in a calm and welcoming environment. Our focus is on personalized care — every visit is tailored to your skin's unique needs, whether you're looking to address specific concerns or simply unwind with a rejuvenating facial experience.</p>
+      <p>Located conveniently on West Newberry Road, we strive to make high-quality facial services accessible to everyone in the area. We use professional-grade products and techniques designed to support healthy, glowing skin for all skin types and tones.</p>
+      <p>From first-time guests to returning clients, we are committed to providing attentive, professional service in a relaxing space where your comfort always comes first.</p>
+      <div class="about-highlights">
+        <div class="highlight-item">
+          <div class="highlight-icon">&#9786;</div>
+          <div class="highlight-label">Personalized Care</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-icon">&#10022;</div>
+          <div class="highlight-label">Professional Results</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-icon">&#9737;</div>
+          <div class="highlight-label">All Skin Types</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <span class="section-label">What We Offer</span>
+    <h2 class="section-title">Our Facial Services</h2>
+    <div class="section-divider"></div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">&#10024;</div>
+        <h3>Classic Facial</h3>
+        <p>A foundational treatment that cleanses, exfoliates, and deeply hydrates the skin, leaving your complexion refreshed and balanced.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#127774;</div>
+        <h3>Deep Cleansing Facial</h3>
+        <p>Targets congested pores and buildup with thorough extraction and purifying treatments, ideal for oily or acne-prone skin types.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128167;</div>
+        <h3>Hydrating Facial</h3>
+        <p>An intensive moisture treatment designed to restore radiance and smooth texture, perfect for dry or dehydrated skin.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#9672;</div>
+        <h3>Anti-Aging Facial</h3>
+        <p>Focuses on firmness, fine lines, and skin tone using targeted techniques and nourishing formulas to support a more youthful appearance.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#127752;</div>
+        <h3>Brightening Facial</h3>
+        <p>Addresses uneven skin tone and dullness with brightening ingredients and gentle exfoliation for a luminous, even complexion.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128142;</div>
+        <h3>Sensitive Skin Facial</h3>
+        <p>A gentle, calming treatment formulated for reactive or sensitive skin, using soothing techniques and non-irritating products.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <span class="section-label">Get in Touch</span>
+    <h2 class="section-title">Visit Us</h2>
+    <div class="section-divider"></div>
+    <div class="contact-inner">
+
+      <div class="contact-info">
+        <h3>Contact &amp; Location</h3>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">&#128205;</div>
+          <div class="contact-detail-text">
+            <div class="contact-detail-label">Address</div>
+            6419 W Newberry Rd, Suite d0001<br />Gainesville, FL 32605
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">&#128222;</div>
+          <div class="contact-detail-text">
+            <div class="contact-detail-label">Phone</div>
+            <a href="tel:3527882401">(352) 788-2401</a>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">&#128336;</div>
+          <div class="contact-detail-text">
+            <div class="contact-detail-label">Hours</div>
+            Contact us for current hours
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/search/Gainesville%2BSpa%2BCenter%2Bby%2BVoupre%206419%20W%20Newberry%20Rd%20d0001%2C%20Gainesville%2C%20FL%2032605" target="_blank" rel="noopener noreferrer" class="directions-btn">
+          &#9657; Get Directions
+        </a>
+      </div>
+
+      <div>
+        <div class="rating-box">
+          <h3>Customer Rating</h3>
+          <div class="rating-number">3.2</div>
+          <div class="stars-row">
+            <div class="stars">
+              <!-- Star 1: full -->
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#c9856a"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              </span>
+              <!-- Star 2: full -->
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#c9856a"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              </span>
+              <!-- Star 3: full -->
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#c9856a"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              </span>
+              <!-- Star 4: partial (0.2 fill) -->
+              <span class="star">
+                <svg viewBox="0 0 24 24">
+                  <defs>
+                    <linearGradient id="partial4">
+                      <stop offset="20%" stop-color="#c9856a"/>
+                      <stop offset="20%" stop-color="#e0c8bf"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" fill="url(#partial4)"/>
+                </svg>
+              </span>
+              <!-- Star 5: empty -->
+              <span class="star">
+                <svg viewBox="0 0 24 24" fill="#e0c8bf"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="rating-count">Based on 32 reviews</div>
+          <div class="rating-source">Rating sourced from Google Maps</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Gainesville Spa Center by Voupre</div>
+    <p>6419 W Newberry Rd, Suite d0001 &mdash; Gainesville, FL 32605</p>
+    <p style="margin-top:0.3rem;"><a href="tel:3527882401">(352) 788-2401</a></p>
+    <p style="margin-top:1rem; font-size:0.78rem; opacity:0.6;">&copy; 2026 Gainesville Spa Center by Voupre. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+
+    hamburger.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

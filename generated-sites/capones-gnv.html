@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capones GNV | Bar – Gainesville, FL</title>
+  <style>
+    /* =====================
+       Reset & Base
+    ===================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black:      #0d0d0d;
+      --dark:       #161616;
+      --surface:    #1e1e1e;
+      --surface-2:  #252525;
+      --border:     #2e2e2e;
+      --gold:       #c9a84c;
+      --gold-light: #e2c47a;
+      --red:        #b22234;
+      --red-light:  #d63b50;
+      --white:      #f5f0e8;
+      --muted:      #9a9287;
+      --font-sans:  'Segoe UI', Arial, sans-serif;
+      --font-serif: Georgia, 'Times New Roman', serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    /* =====================
+       Utility
+    ===================== */
+    .container {
+      width: 92%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.1rem;
+    }
+
+    .divider {
+      width: 52px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      border-radius: 2px;
+      margin-bottom: 1.6rem;
+    }
+
+    /* =====================
+       Navigation
+    ===================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: rgba(13, 13, 13, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 66px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red) 0%, var(--gold) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--black);
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    /* Hamburger */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* Mobile nav drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: 66px;
+      left: 0;
+      right: 0;
+      background: var(--dark);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 5%;
+      z-index: 998;
+    }
+
+    .nav-drawer.open {
+      display: block;
+    }
+
+    .nav-drawer ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .nav-drawer ul a {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-drawer ul a:hover {
+      color: var(--gold);
+    }
+
+    /* =====================
+       Hero
+    ===================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 120px 5% 80px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(178, 34, 52, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 75% 30%, rgba(201, 168, 76, 0.12) 0%, transparent 55%),
+        var(--black);
+      z-index: 0;
+    }
+
+    /* Decorative grid lines */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.18;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--red-light) 0%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.22rem);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.4rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, var(--red) 0%, var(--red-light) 100%);
+      color: var(--white);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 24px rgba(178, 34, 52, 0.35);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 1;
+    }
+
+    .hero-scroll span {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 42px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 1; }
+    }
+
+    /* =====================
+       About
+    ===================== */
+    .about {
+      padding: 100px 5%;
+      background: var(--dark);
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .about-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red) 0%, var(--gold) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.4rem;
+      font-size: 2rem;
+    }
+
+    .about-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-card-sub {
+      color: var(--gold);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-card-desc {
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.7;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* =====================
+       Services
+    ===================== */
+    .services {
+      padding: 100px 5%;
+      background: var(--black);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .services-header .divider {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem 1.75rem;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.1rem;
+      border: 1px solid var(--border);
+    }
+
+    .service-name {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* =====================
+       Contact
+    ===================== */
+    .contact {
+      padding: 100px 5%;
+      background: var(--dark);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      /* left column */
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .contact-detail-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .contact-detail-text {
+      padding-top: 0.1rem;
+    }
+
+    .contact-detail-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail-value {
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      margin-top: 0.6rem;
+      background: linear-gradient(135deg, var(--red) 0%, var(--red-light) 100%);
+      color: var(--white);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(178, 34, 52, 0.3);
+    }
+
+    .directions-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+    }
+
+    .rating-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .rating-label-text {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .google-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .google-g {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #4285F4;
+    }
+
+    .rating-score {
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.6rem;
+    }
+
+    .star {
+      color: #f5c518;
+      font-size: 1.2rem;
+    }
+
+    .star.half {
+      position: relative;
+      display: inline-block;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .rating-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 1.2rem 0;
+    }
+
+    .rating-quote {
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* =====================
+       Footer
+    ===================== */
+    .footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 3rem 5%;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red) 0%, var(--gold) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .footer-name {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .footer-nav a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-nav a:hover {
+      color: var(--gold);
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* =====================
+       Responsive
+    ===================== */
+    @media (max-width: 900px) {
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links, .nav-cta {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-copy {
+        text-align: left;
+      }
+
+      .stats-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================
+       Navigation
+  ======================== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo" aria-label="Capones GNV Home">
+        <div class="nav-logo-badge">C</div>
+        <span class="nav-logo-text">Capones GNV</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">What We Offer</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <a href="#contact" class="nav-cta">Find Us</a>
+
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <ul>
+      <li><a href="#about" class="drawer-link">About</a></li>
+      <li><a href="#services" class="drawer-link">What We Offer</a></li>
+      <li><a href="#contact" class="drawer-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ========================
+       Hero
+  ======================== -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Downtown Gainesville, FL</div>
+      <h1 class="hero-title">
+        <span class="highlight">Capones</span><br />GNV
+      </h1>
+      <p class="hero-sub">
+        Where Gainesville comes to unwind. A bold neighborhood bar serving up great drinks,
+        good vibes, and the kind of atmosphere that keeps you coming back.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get Directions</a>
+        <a href="#services" class="btn-ghost">What We Offer</a>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ========================
+       About
+  ======================== -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <span class="section-label">About Us</span>
+        <h2 class="section-title">A Gainesville<br />Staple</h2>
+        <div class="divider"></div>
+        <p>
+          Capones GNV is a beloved bar nestled in the heart of downtown Gainesville on South Main Street — a go-to destination for locals and visitors looking for a relaxed but lively atmosphere.
+        </p>
+        <p>
+          Whether you're stopping in after work, catching a game, or settling in for a late night with friends, Capones delivers the kind of welcoming energy that makes every visit feel like home.
+        </p>
+        <p>
+          With a curated selection of drinks and a space designed for great conversation, Capones GNV stands out as one of Gainesville's most highly rated neighborhood bars. Contact us for current hours and specials.
+        </p>
+      </div>
+      <div class="about-visual">
+        <div class="about-card">
+          <div class="about-icon" aria-hidden="true">&#127867;</div>
+          <div class="about-card-title">Capones GNV</div>
+          <div class="about-card-sub">Bar &mdash; Gainesville, FL</div>
+          <p class="about-card-desc">
+            104 S Main St, Gainesville, FL 32601<br />
+            Downtown location &mdash; easy to find, hard to leave.
+          </p>
+          <div class="stats-row">
+            <div class="stat-box">
+              <span class="stat-number">4.9</span>
+              <span class="stat-label">Google Rating</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-number">13</span>
+              <span class="stat-label">Reviews</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================
+       Services
+  ======================== -->
+  <section class="services" id="services">
+    <div class="services-header">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Drinks, Vibes &amp; More</h2>
+      <div class="divider"></div>
+      <p style="color: var(--muted); font-size: 0.95rem;">
+        Everything you'd expect from a top-rated neighborhood bar in the heart of Gainesville.
+      </p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">&#127867;</div>
+        <div class="service-name">Craft Cocktails</div>
+        <p class="service-desc">
+          A rotating selection of handcrafted cocktails and mixed drinks, made to order by knowledgeable bartenders. Contact us for current menu details.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">&#127866;</div>
+        <div class="service-name">Draft &amp; Bottled Beer</div>
+        <p class="service-desc">
+          A solid lineup of domestic favorites, local craft beers, and imported brews available on tap and in the bottle.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">&#127863;</div>
+        <div class="service-name">Wine Selection</div>
+        <p class="service-desc">
+          A carefully chosen range of wines by the glass or bottle to suit any taste and occasion.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">&#127942;</div>
+        <div class="service-name">Happy Hour Specials</div>
+        <p class="service-desc">
+          Regular drink specials and happy hour deals to kick off your evening right. Contact us for current happy hour times and pricing.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">&#127951;</div>
+        <div class="service-name">Live Music &amp; Events</div>
+        <p class="service-desc">
+          Occasional live music, themed nights, and special events that bring the Gainesville community together. Contact us for the event calendar.
+        </p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">&#127253;</div>
+        <div class="service-name">Sports &amp; Game Nights</div>
+        <p class="service-desc">
+          Catch your favorite games on the screens throughout the bar in a lively, communal atmosphere great for groups and solo fans alike.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================
+       Contact
+  ======================== -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div class="contact-info">
+        <span class="section-label">Find Us</span>
+        <h2 class="section-title">Visit<br />Capones GNV</h2>
+        <div class="divider"></div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon" aria-hidden="true">&#128205;</div>
+          <div class="contact-detail-text">
+            <div class="contact-detail-label">Address</div>
+            <div class="contact-detail-value">104 S Main St<br />Gainesville, FL 32601</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon" aria-hidden="true">&#128336;</div>
+          <div class="contact-detail-text">
+            <div class="contact-detail-label">Hours</div>
+            <div class="contact-detail-value">Contact us for current hours</div>
+          </div>
+        </div>
+
+        <a
+          href="https://www.google.com/maps/search/Capones%20GNV%20104%20S%20Main%20St%2C%20Gainesville%2C%20FL%2032601"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="directions-btn"
+          aria-label="Get directions to Capones GNV on Google Maps"
+        >
+          <span aria-hidden="true">&#128205;</span>
+          Get Directions
+        </a>
+      </div>
+
+      <div>
+        <div class="rating-card">
+          <div class="rating-header">
+            <span class="rating-label-text">Customer Reviews</span>
+            <div class="google-badge">
+              <span class="google-g" aria-hidden="true">G</span>
+              Google Maps
+            </div>
+          </div>
+
+          <div class="rating-score" aria-label="Rating: 4.9 out of 5">4.9</div>
+          <div class="stars" aria-hidden="true">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+          </div>
+          <div class="rating-count">Based on 13 Google reviews</div>
+
+          <div class="rating-divider"></div>
+
+          <p class="rating-quote">
+            "One of the most highly rated bars in downtown Gainesville &mdash; stop in and see what all the buzz is about."
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================
+       Footer
+  ======================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-badge" aria-hidden="true">C</div>
+        <span class="footer-name">Capones GNV</span>
+      </div>
+
+      <ul class="footer-nav">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">What We Offer</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="footer-copy">
+        104 S Main St, Gainesville, FL 32601<br />
+        &copy; 2026 Capones GNV. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================
+       Minimal JS: mobile nav only
+  ======================== -->
+  <script>
+    (function () {
+      var btn = document.getElementById('hamburger');
+      var drawer = document.getElementById('navDrawer');
+      var links = document.querySelectorAll('.drawer-link');
+
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+
+      btn.addEventListener('click', function () {
+        var isOpen = drawer.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        drawer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+
+      links.forEach(function (link) {
+        link.addEventListener('click', closeDrawer);
+      });
+    })();
+  </script>
+
+</body>
+</html>

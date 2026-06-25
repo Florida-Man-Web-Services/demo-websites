@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moring-San Martial Arts | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --dark:    #111318;
+      --card:    #1a1d24;
+      --border:  #2a2d36;
+      --red:     #c0392b;
+      --red-light: #e74c3c;
+      --gold:    #d4a017;
+      --gold-light: #f0c040;
+      --white:   #f5f5f5;
+      --muted:   #9aa0b0;
+      --radius:  6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-sub {
+      font-size: 0.7rem;
+      color: var(--gold);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--red-light) !important; color: var(--white) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(192,57,43,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(212,160,23,0.08) 0%, transparent 60%),
+        linear-gradient(160deg, #0a0a0a 0%, #111318 50%, #0d0d0d 100%);
+    }
+
+    .hero-deco {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-deco::before,
+    .hero-deco::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(192,57,43,0.12);
+    }
+
+    .hero-deco::before {
+      width: 600px; height: 600px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .hero-deco::after {
+      width: 900px; height: 900px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(192,57,43,0.15);
+      border: 1px solid rgba(192,57,43,0.4);
+      color: var(--red-light);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--red-light) 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--muted);
+      margin-bottom: 40px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--red-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold-light); transform: translateY(-2px); }
+
+    /* ── SECTIONS ── */
+    section { padding: 90px 5%; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--red-light);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 580px;
+      line-height: 1.7;
+    }
+
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      border-radius: 2px;
+      margin: 20px 0 36px;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-emblem {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .about-emblem::before {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px solid rgba(192,57,43,0.2);
+    }
+
+    .about-emblem-icon {
+      font-size: 64px;
+      line-height: 1;
+    }
+
+    .about-emblem-text {
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--red-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .services-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 90px 5%;
+    }
+
+    .services-header { margin-bottom: 48px; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: rgba(192,57,43,0.5);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .service-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      margin-bottom: 28px;
+    }
+
+    .contact-info-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .contact-info-value {
+      font-size: 1.05rem;
+      color: var(--white);
+    }
+
+    .contact-info-value a {
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-info-value a:hover { color: var(--gold-light); }
+
+    .rating-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-bottom: 28px;
+    }
+
+    .rating-stars {
+      color: var(--gold);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+    }
+
+    .rating-text {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .rating-score {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-right: 4px;
+    }
+
+    .contact-form-side {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+    }
+
+    .contact-form-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .contact-form-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--white);
+      font-size: 0.95rem;
+      font-family: inherit;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--red);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      padding: 13px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover { background: var(--red-light); }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--gold-light);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 11px 22px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .directions-btn:hover {
+      background: rgba(212,160,23,0.12);
+      color: var(--gold);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808;
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .footer-address {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .footer-phone a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-phone a:hover { color: var(--gold-light); }
+
+    .footer-copy {
+      margin-top: 24px;
+      font-size: 0.75rem;
+      color: #444;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .about-grid,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-visual { order: -1; }
+
+      .about-emblem { width: 220px; height: 220px; }
+      .about-emblem-icon { font-size: 48px; }
+    }
+
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+
+      nav { padding: 0 4%; }
+
+      section { padding: 64px 4%; }
+
+      .services-grid { grid-template-columns: 1fr; }
+
+      .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 420px) {
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .about-stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">
+      <div class="nav-logo-icon">&#127954;</div>
+      <div>
+        <div class="nav-logo-text">Moring-San</div>
+        <div class="nav-logo-sub">Martial Arts</div>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Programs</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+
+    <button class="hamburger" aria-label="Open menu" onclick="this.parentElement.querySelector('.nav-links').style.display = this.parentElement.querySelector('.nav-links').style.display === 'flex' ? 'none' : 'flex'">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-deco"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, Florida</div>
+      <h1 class="hero-title">
+        Train Hard.<br>
+        <span>Build Character.</span>
+      </h1>
+      <p class="hero-tagline">
+        Moring-San Martial Arts offers world-class instruction for all skill levels — developing discipline, confidence, and fitness through the martial arts.
+      </p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn-primary">Get Started</a>
+        <a href="#services" class="btn-outline">Our Programs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">A Community Built on <em>Tradition</em></h2>
+        <div class="divider"></div>
+        <p class="section-desc">
+          Moring-San Martial Arts is a dedicated training center serving the Gainesville community, offering structured martial arts instruction rooted in time-honored principles of respect, perseverance, and self-improvement. Our programs welcome students of all ages and experience levels, from complete beginners to seasoned practitioners seeking to refine their skills.
+        </p>
+        <br>
+        <p class="section-desc">
+          Whether you are looking to improve fitness, learn self-defense, or grow personally through disciplined practice, our instructors provide a focused and supportive environment to help every student reach their goals.
+        </p>
+
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-value">5.0</div>
+            <div class="stat-label">Google Rating</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">All</div>
+            <div class="stat-label">Ages Welcome</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">GNV</div>
+            <div class="stat-label">Gainesville, FL</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">&#9733;&#9733;&#9733;</div>
+            <div class="stat-label">All Skill Levels</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-visual">
+        <div class="about-emblem">
+          <div class="about-emblem-icon">&#127954;</div>
+          <div class="about-emblem-text">Moring-San Dojo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <div style="background: var(--black);">
+    <div class="services-wrapper" id="services">
+      <div class="services-header">
+        <div class="section-label">Our Programs</div>
+        <h2 class="section-title">Classes for <em>Every Level</em></h2>
+        <div class="divider"></div>
+        <p class="section-desc">We offer a wide range of martial arts disciplines and class formats. Contact us for current scheduling and enrollment details.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">&#129354;</span>
+          <div class="service-name">Beginner Foundations</div>
+          <p class="service-desc">A welcoming introduction to martial arts covering basic stances, strikes, and etiquette. Perfect for those stepping onto the mat for the first time.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127987;</span>
+          <div class="service-name">Belt Ranking &amp; Advancement</div>
+          <p class="service-desc">Structured curriculum guiding students through progressive belt levels, with testing and recognition of achievement at every stage of their journey.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128170;</span>
+          <div class="service-name">Self-Defense Training</div>
+          <p class="service-desc">Practical, real-world self-defense techniques designed to build awareness, confidence, and the ability to protect yourself in everyday situations.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128118;</span>
+          <div class="service-name">Youth &amp; Kids Classes</div>
+          <p class="service-desc">Age-appropriate martial arts instruction that builds focus, respect, and physical coordination in children while keeping sessions engaging and fun.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127939;</span>
+          <div class="service-name">Fitness &amp; Conditioning</div>
+          <p class="service-desc">High-energy training sessions combining martial arts fundamentals with cardio and strength work to improve overall physical fitness and endurance.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127942;</span>
+          <div class="service-name">Advanced &amp; Sparring</div>
+          <p class="service-desc">Competitive and advanced training for experienced students, focusing on technique refinement, sparring strategy, and tournament preparation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div>
+        <div class="section-label">Contact Us</div>
+        <h2 class="section-title">Ready to <em>Begin?</em></h2>
+        <div class="divider"></div>
+        <p class="section-desc" style="margin-bottom: 36px;">
+          Reach out to learn more about our programs, schedule, and enrollment. We look forward to welcoming you to the dojo.
+        </p>
+
+        <div class="rating-block">
+          <div>
+            <div style="display:flex; align-items: baseline; gap: 6px;">
+              <span class="rating-score">5.0</span>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            </div>
+            <div class="rating-text">Google Maps Rating &mdash; 2 reviews</div>
+          </div>
+        </div>
+
+        <div class="contact-info-block">
+          <div class="contact-info-label">Address</div>
+          <div class="contact-info-value">6710 NW 126th Ave, Gainesville, FL</div>
+        </div>
+
+        <div class="contact-info-block">
+          <div class="contact-info-label">Phone</div>
+          <div class="contact-info-value">
+            <a href="tel:3524481439">(352) 448-1439</a>
+          </div>
+        </div>
+
+        <div class="contact-info-block">
+          <div class="contact-info-label">Hours</div>
+          <div class="contact-info-value" style="color: var(--muted);">Contact us for current schedule details</div>
+        </div>
+
+        <a
+          class="directions-btn"
+          href="https://www.google.com/maps/search/Moring-San%20Martial%20Arts%206710%20NW%20126th%20Ave%2C%20Gainesville%2C%20FL"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          &#128205; Get Directions
+        </a>
+      </div>
+
+      <div class="contact-form-side">
+        <div class="contact-form-title">Send Us a Message</div>
+        <div class="contact-form-sub">We will get back to you as soon as possible.</div>
+
+        <form onsubmit="event.preventDefault(); this.innerHTML='<p style=\'color:var(--gold);font-weight:600;text-align:center;padding:24px 0;\'>Thank you! We will be in touch soon.</p>';">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input id="name" type="text" placeholder="Jane Smith" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone (optional)</label>
+            <input id="phone" type="tel" placeholder="(352) 555-0100" />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Tell us about your goals or questions..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Moring-San Martial Arts</div>
+    <div class="footer-address">6710 NW 126th Ave, Gainesville, FL</div>
+    <div class="footer-phone"><a href="tel:3524481439">(352) 448-1439</a></div>
+    <div class="footer-copy">&copy; 2026 Moring-San Martial Arts. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>

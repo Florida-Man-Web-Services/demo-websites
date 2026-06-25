@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iLawn &amp; Landscaping | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark: #2d5016;
+      --green-mid: #4a7c21;
+      --green-light: #6ea832;
+      --green-pale: #d4ebb5;
+      --earth: #7a5c2e;
+      --earth-light: #b8945a;
+      --cream: #f7f3ed;
+      --white: #ffffff;
+      --text-dark: #1c2b10;
+      --text-mid: #3d4f2a;
+      --text-light: #6b7c58;
+      --shadow: rgba(45, 80, 22, 0.18);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 68px;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .nav-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--green-pale);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.92rem;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-cta {
+      background: var(--green-light);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--earth) !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 68px;
+      min-height: 88vh;
+      background:
+        linear-gradient(160deg, rgba(45,80,22,0.82) 0%, rgba(74,124,33,0.65) 60%, rgba(110,168,50,0.45) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600'%3E%3Crect width='900' height='600' fill='%234a7c21'/%3E%3Ccircle cx='200' cy='400' r='180' fill='%232d5016' opacity='.4'/%3E%3Ccircle cx='700' cy='200' r='220' fill='%236ea832' opacity='.3'/%3E%3Ccircle cx='450' cy='550' r='120' fill='%232d5016' opacity='.3'/%3E%3Cellipse cx='100' cy='580' rx='160' ry='80' fill='%237a5c2e' opacity='.2'/%3E%3Cellipse cx='850' cy='560' rx='130' ry='70' fill='%237a5c2e' opacity='.25'/%3E%3C/svg%3E") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .hero-content {
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: var(--green-pale);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .hero h1 span {
+      color: var(--green-pale);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: rgba(255,255,255,0.88);
+      font-family: 'Arial', sans-serif;
+      font-weight: 300;
+      margin-bottom: 2.2rem;
+      line-height: 1.5;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 5px;
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--earth);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 5px;
+      border: 2px solid rgba(255,255,255,0.6);
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ── RATING STRIP ── */
+    .rating-strip {
+      background: var(--green-dark);
+      padding: 1.1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .rating-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--green-pale);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .rating-item svg {
+      width: 18px;
+      height: 18px;
+      fill: #f5c842;
+      flex-shrink: 0;
+    }
+
+    .rating-score {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title em {
+      color: var(--green-mid);
+      font-style: normal;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      margin-bottom: 1.1rem;
+      line-height: 1.75;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      background: var(--green-pale);
+      border-radius: 12px;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 2.5rem;
+      border: 2px solid rgba(110,168,50,0.25);
+    }
+
+    .about-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--green-mid);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-icon svg {
+      width: 44px;
+      height: 44px;
+      fill: var(--white);
+    }
+
+    .about-stat {
+      text-align: center;
+    }
+
+    .about-stat-num {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1;
+    }
+
+    .about-stat-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 0.2rem;
+    }
+
+    .about-divider {
+      width: 2px;
+      height: 60px;
+      background: rgba(74,124,33,0.3);
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--cream);
+    }
+
+    .services-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.6rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 2rem 1.6rem;
+      border: 1px solid rgba(110,168,50,0.2);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--green-mid), var(--green-light));
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px var(--shadow);
+      border-color: rgba(110,168,50,0.45);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--green-pale);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--green-dark);
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--green-dark);
+      margin-bottom: 0.55rem;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    .service-detail {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      color: var(--green-mid);
+      margin-top: 0.8rem;
+      font-style: italic;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--green-dark);
+    }
+
+    .contact-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info .section-label {
+      color: var(--green-light);
+    }
+
+    .contact-info .section-title {
+      color: var(--white);
+    }
+
+    .contact-info .section-title em {
+      color: var(--green-pale);
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-detail-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(110,168,50,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-detail-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--green-light);
+    }
+
+    .contact-detail-body {
+      flex: 1;
+    }
+
+    .contact-detail-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green-pale);
+      margin-bottom: 0.2rem;
+      font-weight: 600;
+    }
+
+    .contact-detail-value {
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.4;
+    }
+
+    .contact-detail-value a {
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-detail-value a:hover {
+      color: var(--green-pale);
+    }
+
+    .contact-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 2.2rem;
+    }
+
+    .contact-card h3 {
+      font-size: 1.25rem;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.92rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.55;
+    }
+
+    .directions-btn {
+      display: block;
+      background: var(--green-mid);
+      color: var(--white);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: 7px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: center;
+      transition: background 0.2s, transform 0.15s;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .directions-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--white);
+    }
+
+    .directions-btn:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+    }
+
+    .call-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--green-mid);
+      text-decoration: none;
+      padding: 0.9rem 1.5rem;
+      border-radius: 7px;
+      border: 2px solid var(--green-mid);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .call-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--green-mid);
+      transition: fill 0.2s;
+    }
+
+    .call-btn:hover {
+      background: var(--green-mid);
+      color: var(--white);
+    }
+
+    .call-btn:hover svg {
+      fill: var(--white);
+    }
+
+    .rating-display {
+      margin-top: 1.4rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .stars svg {
+      width: 16px;
+      height: 16px;
+      fill: #f5c842;
+    }
+
+    .rating-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .rating-text strong {
+      color: var(--text-dark);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text-dark);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-address {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.9rem;
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-visual {
+        min-height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 2rem;
+      }
+
+      .about-divider {
+        width: 60px;
+        height: 2px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 0 1.2rem;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: var(--green-dark);
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0 1rem;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.75rem 1.5rem;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rating-strip {
+        gap: 1.2rem;
+      }
+
+      section {
+        padding: 3.5rem 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-13 6 0 0 3-2 7-2 0 0-5 3-6 8 0 0 2.5-4 6-5"/>
+        </svg>
+      </div>
+      <span class="nav-name">iLawn &amp; Landscaping</span>
+    </a>
+    <button class="hamburger" onclick="this.nextElementSibling.classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, FL &mdash; 5-Star Rated</div>
+      <h1>Your Lawn,<br><span>Perfectly Maintained</span></h1>
+      <p class="hero-tagline">
+        Professional lawn care and landscaping that keeps your property looking its best — all year round in North Central Florida.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get a Free Quote</a>
+        <a href="#services" class="btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RATING STRIP -->
+  <div class="rating-strip">
+    <div class="rating-item">
+      <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      <span><span class="rating-score">5.0</span> &nbsp;Google Rating</span>
+    </div>
+    <div class="rating-item">
+      <svg viewBox="0 0 24 24" style="fill:var(--green-pale)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 14.5v-9l6 4.5z"/></svg>
+      <span>Serving Gainesville &amp; surrounding areas</span>
+    </div>
+    <div class="rating-item">
+      <svg viewBox="0 0 24 24" style="fill:var(--green-pale)"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+      <span>Dependable, scheduled service</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Dedicated to <em>Beautiful Lawns</em> in Gainesville</h2>
+        <p>iLawn &amp; Landscaping provides dependable, high-quality lawn care and landscaping services to homeowners and businesses throughout the Gainesville area. We understand the unique challenges of Florida's climate and tailor our approach to help your property thrive in the heat and humidity of North Central Florida.</p>
+        <p>From routine mowing and edging to full landscape design and installation, our team handles every job with care and attention to detail. We take pride in punctual, professional service that keeps your outdoor spaces healthy and looking their best season after season.</p>
+        <p>Ready to transform your lawn? Contact us for a consultation — we'll walk through your property and put together a plan that fits your needs and budget.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-13 6 0 0 3-2 7-2 0 0-5 3-6 8 0 0 2.5-4 6-5"/></svg>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-num">5.0</div>
+          <div class="about-stat-label">Google Rating</div>
+        </div>
+        <div class="about-divider"></div>
+        <div class="about-stat">
+          <div class="about-stat-num">GNV</div>
+          <div class="about-stat-label">Gainesville, FL</div>
+        </div>
+        <div class="about-divider"></div>
+        <div class="about-stat">
+          <div class="about-stat-num">100%</div>
+          <div class="about-stat-label">Local &amp; Trusted</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-inner">
+      <div class="services-header">
+        <div class="section-label">What We Do</div>
+        <h2 class="section-title">Full-Service <em>Lawn &amp; Landscape</em> Care</h2>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M19.5 12c0-1.93-1.07-3.61-2.65-4.5H19a.5.5 0 0 0 0-1h-5.5a.5.5 0 0 0 0 1H15c-2.57 0-4.71 1.71-5.36 4.05C8.5 11.21 7.5 10.5 6.5 10.5c-1.1 0-2 .9-2 2 0 .44.14.84.38 1.17C3.72 14.34 3 15.34 3 16.5c0 1.66 1.34 3 3 3h13c1.66 0 3-1.34 3-3 0-1.27-.76-2.35-1.84-2.85.22-.5.34-1.06.34-1.65z"/></svg>
+          </div>
+          <h3>Lawn Mowing &amp; Edging</h3>
+          <p>Reliable, regularly scheduled mowing, trimming, and clean edging along drives, walks, and beds to keep your lawn looking sharp.</p>
+          <div class="service-detail">Contact us for details</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          </div>
+          <h3>Weed Control &amp; Fertilization</h3>
+          <p>Targeted weed management and seasonal fertilization programs to promote thick, healthy turf that crowds out unwanted growth.</p>
+          <div class="service-detail">Contact us for details</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-13 6 0 0 3-2 7-2 0 0-5 3-6 8 0 0 2.5-4 6-5"/></svg>
+          </div>
+          <h3>Shrub &amp; Hedge Trimming</h3>
+          <p>Precise shaping and trimming of shrubs, hedges, and ornamental plants to enhance your property's curb appeal and structure.</p>
+          <div class="service-detail">Contact us for details</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+          </div>
+          <h3>Mulching &amp; Bed Maintenance</h3>
+          <p>Fresh mulch application and landscape bed cleanups to retain moisture, suppress weeds, and give planted areas a polished, finished look.</p>
+          <div class="service-detail">Contact us for details</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 15.2a7.2 7.2 0 0 1-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 0 1-6 3.22z"/></svg>
+          </div>
+          <h3>Sod Installation &amp; Lawn Restoration</h3>
+          <p>Professional sod laying and lawn renovation services to repair bare or damaged areas and establish a lush, uniform turf.</p>
+          <div class="service-detail">Contact us for details</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm1 13h-2v-6h2v6zm0-8h-2V6h2v2z"/></svg>
+          </div>
+          <h3>Cleanup &amp; Debris Removal</h3>
+          <p>Seasonal yard cleanups including leaf removal, branch clearing, and hauling away of organic debris to leave your property neat and tidy.</p>
+          <div class="service-detail">Contact us for details</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-info">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">Ready for a <em>Better Lawn?</em></h2>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div class="contact-detail-body">
+            <div class="contact-detail-label">Address</div>
+            <div class="contact-detail-value">3633 NW 30th Pl<br>Gainesville, FL</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </div>
+          <div class="contact-detail-body">
+            <div class="contact-detail-label">Phone</div>
+            <div class="contact-detail-value">
+              <a href="tel:3524153340">(352) 415-3340</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+          </div>
+          <div class="contact-detail-body">
+            <div class="contact-detail-label">Google Rating</div>
+            <div class="contact-detail-value">5.0 / 5.0 &mdash; Highly Rated on Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <h3>Find Us &amp; Get Directions</h3>
+        <p>We serve Gainesville and the surrounding North Central Florida area. Reach out to schedule service or get a free quote.</p>
+
+        <a href="https://www.google.com/maps/search/iLawn%20%26%20Landscaping%203633%20NW%2030th%20Pl" target="_blank" rel="noopener noreferrer" class="directions-btn">
+          <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+          Get Directions on Google Maps
+        </a>
+
+        <a href="tel:3524153340" class="call-btn">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          Call (352) 415-3340
+        </a>
+
+        <div class="rating-display">
+          <div class="stars">
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </div>
+          <div class="rating-text"><strong>5.0 out of 5</strong> &mdash; Google Maps Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">iLawn &amp; Landscaping</div>
+    <div class="footer-address">3633 NW 30th Pl &bull; Gainesville, FL &bull; (352) 415-3340</div>
+    <div class="footer-copy">&copy; 2026 iLawn &amp; Landscaping. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>

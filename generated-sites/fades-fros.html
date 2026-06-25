@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fades &amp; Fros — Barber Shop | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #0d0d0d;
+      --charcoal:    #1a1a1a;
+      --dark-gray:   #2b2b2b;
+      --mid-gray:    #3d3d3d;
+      --light-gray:  #b0aba4;
+      --off-white:   #f4f0eb;
+      --cream:       #faf7f3;
+      --gold:        #c8963e;
+      --gold-light:  #e5b35a;
+      --gold-dark:   #a07430;
+      --text-dark:   #1a1a1a;
+      --text-light:  #f4f0eb;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ── Typography helpers ── */
+    .section-label {
+      display: block;
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: normal;
+      line-height: 1.2;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: var(--black);
+      border-bottom: 1px solid var(--mid-gray);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--black);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-family: 'Georgia', serif;
+      font-size: 1.15rem;
+      color: var(--off-white);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-logo-text span {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 0.4rem 1.1rem;
+      border-radius: 2px;
+      font-weight: bold;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--black) !important; }
+
+    /* ── Hamburger (mobile) ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--off-white);
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background-color: var(--black);
+      background-image:
+        radial-gradient(ellipse at 20% 60%, rgba(200,150,62,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(200,150,62,0.07) 0%, transparent 45%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 40px,
+          rgba(255,255,255,0.012) 40px,
+          rgba(255,255,255,0.012) 41px
+        );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative scissors SVG */
+    .hero-deco {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-deco::before,
+    .hero-deco::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(200,150,62,0.12);
+    }
+
+    .hero-deco::before {
+      width: 600px; height: 600px;
+      top: -150px; right: -150px;
+    }
+
+    .hero-deco::after {
+      width: 400px; height: 400px;
+      bottom: -100px; left: -100px;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(200,150,62,0.15);
+      border: 1px solid rgba(200,150,62,0.4);
+      color: var(--gold-light);
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: normal;
+      color: var(--off-white);
+      line-height: 1.05;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-tagline {
+      font-family: 'Arial', sans-serif;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      color: var(--light-gray);
+      max-width: 480px;
+      margin: 0 auto 2.4rem;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 2px;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--off-white);
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      border: 1px solid rgba(244,240,235,0.35);
+      border-radius: 2px;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--mid-gray);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, transparent, var(--gold));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--cream);
+      padding: 6rem 2rem;
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--charcoal);
+      border-radius: 4px;
+      padding: 3rem 2.5rem;
+      color: var(--off-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+    }
+
+    .about-card-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.2rem;
+      display: block;
+      line-height: 1;
+    }
+
+    .about-card-quote {
+      font-size: 1.35rem;
+      line-height: 1.5;
+      color: var(--off-white);
+      margin-bottom: 1rem;
+    }
+
+    .about-card-quote em {
+      font-style: normal;
+      color: var(--gold-light);
+    }
+
+    .about-card-sub {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: var(--light-gray);
+    }
+
+    .about-text h2 {
+      color: var(--text-dark);
+      margin-bottom: 1.4rem;
+    }
+
+    .about-text p {
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      color: #4a4a4a;
+      margin-bottom: 1rem;
+    }
+
+    .about-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.6rem;
+    }
+
+    .pill {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--gold);
+      color: var(--gold-dark);
+      border-radius: 999px;
+      background: rgba(200,150,62,0.06);
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--charcoal);
+      padding: 6rem 2rem;
+    }
+
+    .services-header {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 4rem;
+    }
+
+    .services-header h2 { color: var(--off-white); }
+
+    .services-header p {
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      color: var(--light-gray);
+      margin-top: 0.8rem;
+    }
+
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--mid-gray);
+      border: 1.5px solid var(--mid-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .service-card {
+      background: var(--dark-gray);
+      padding: 2.2rem 2rem;
+      transition: background 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--gold);
+      transition: width 0.35s ease;
+    }
+
+    .service-card:hover { background: #323232; }
+    .service-card:hover::after { width: 100%; }
+
+    .service-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.9rem;
+      line-height: 1;
+    }
+
+    .service-name {
+      font-size: 1.15rem;
+      color: var(--off-white);
+      margin-bottom: 0.55rem;
+    }
+
+    .service-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      color: var(--light-gray);
+      line-height: 1.55;
+    }
+
+    .service-cta {
+      margin-top: 1rem;
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover .service-cta { opacity: 1; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--black);
+      padding: 6rem 2rem;
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-left h2 { color: var(--off-white); margin-bottom: 1.2rem; }
+
+    .contact-left p {
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      color: var(--light-gray);
+      margin-bottom: 2rem;
+    }
+
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-item-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--dark-gray);
+      border: 1px solid var(--mid-gray);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .contact-item-label {
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-value {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      color: var(--off-white);
+    }
+
+    .contact-item-value a {
+      color: var(--off-white);
+      text-decoration: none;
+    }
+
+    .contact-item-value a:hover { color: var(--gold-light); }
+
+    .rating-block {
+      background: var(--dark-gray);
+      border: 1px solid var(--mid-gray);
+      border-radius: 4px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
+
+    .star-half {
+      position: relative;
+      display: inline-block;
+      font-size: 1.2rem;
+      color: var(--mid-gray);
+    }
+
+    .star-half::before {
+      content: '★';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--gold);
+      width: 50%;
+      overflow: hidden;
+    }
+
+    .rating-text {
+      font-family: 'Arial', sans-serif;
+    }
+
+    .rating-score {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--off-white);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-size: 0.82rem;
+      color: var(--light-gray);
+      margin-top: 0.1rem;
+    }
+
+    .rating-source {
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+    }
+
+    .contact-right {
+      position: sticky;
+      top: 80px;
+    }
+
+    .map-box {
+      background: var(--dark-gray);
+      border: 1px solid var(--mid-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .map-placeholder {
+      background: linear-gradient(135deg, var(--dark-gray) 0%, var(--mid-gray) 100%);
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.6rem;
+      color: var(--light-gray);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 40px);
+    }
+
+    .map-pin {
+      font-size: 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .map-label {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .map-box-footer {
+      padding: 1.2rem 1.5rem;
+    }
+
+    .btn-directions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      background: var(--gold);
+      color: var(--black);
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      border-radius: 2px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-directions:hover { background: var(--gold-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--dark-gray);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Georgia', serif;
+      font-size: 1.3rem;
+      color: var(--off-white);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-logo span { color: var(--gold); }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: var(--mid-gray);
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem 0 1.6rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        width: 100%;
+        background: var(--charcoal);
+        border-top: 1px solid var(--mid-gray);
+        padding: 1.2rem 2rem;
+        gap: 1rem;
+      }
+      .hamburger { display: flex; }
+
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-visual { order: -1; }
+
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-right { position: static; }
+    }
+
+    @media (max-width: 560px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .footer-links { flex-direction: column; gap: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">
+      <div class="nav-logo-icon">F</div>
+      <span class="nav-logo-text">Fades <span>&amp;</span> Fros</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:+13523841008" class="nav-cta">Call Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-deco"></div>
+    <div class="hero-inner">
+      <div class="hero-badge">&#9986; Gainesville, FL &nbsp;&bull;&nbsp; NW 5th Ave</div>
+      <h1 class="hero-title">Fades<br/><em>&amp; Fros</em></h1>
+      <p class="hero-tagline">Sharp cuts. Clean lines. A barbershop experience built for every texture and style.</p>
+      <div class="hero-actions">
+        <a href="tel:+13523841008" class="btn-primary">Call to Book</a>
+        <a href="#services" class="btn-ghost">See Services</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-card">
+          <span class="about-card-icon">&#9986;</span>
+          <p class="about-card-quote">"Every cut tells a story. We make sure <em>yours</em> looks flawless."</p>
+          <p class="about-card-sub">Serving the Gainesville community with precision and pride.</p>
+        </div>
+      </div>
+      <div class="about-text">
+        <span class="section-label">Our Story</span>
+        <h2>Precision Cuts for Every Style</h2>
+        <div class="divider"></div>
+        <p>Fades &amp; Fros is a Gainesville barbershop dedicated to delivering top-quality cuts for men and boys of all hair types — from tight coils and natural textures to straight and wavy hair. We take pride in a welcoming atmosphere where attention to detail and client satisfaction come first.</p>
+        <p>Rooted in the Gainesville community, our barbers bring skill and artistry to every chair, whether you're coming in for a classic fade, a shape-up, or a full style refresh. No two heads of hair are the same, and we treat every client as an individual.</p>
+        <div class="about-pills">
+          <span class="pill">All Hair Textures</span>
+          <span class="pill">Men &amp; Boys</span>
+          <span class="pill">Gainesville, FL</span>
+          <span class="pill">Walk-ins Welcome</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header">
+      <span class="section-label">What We Offer</span>
+      <h2>Our Services</h2>
+      <p>Classic cuts, fresh fades, and everything in between. Contact us for current pricing and availability.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-icon">&#9986;</span>
+        <h3 class="service-name">Haircut &amp; Fade</h3>
+        <p class="service-desc">Skin fades, low fades, mid fades, and high fades executed with precision clippers and a sharp eye for detail.</p>
+        <p class="service-cta">Contact us for details &#8594;</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#128146;</span>
+        <h3 class="service-name">Natural &amp; Afro Styling</h3>
+        <p class="service-desc">Expert shaping and styling for natural textures, afros, and curly hair types — honoring every pattern.</p>
+        <p class="service-cta">Contact us for details &#8594;</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#128247;</span>
+        <h3 class="service-name">Beard Trim &amp; Line-Up</h3>
+        <p class="service-desc">Clean edge-ups, beard sculpting, and neck shaping to keep your look crisp from every angle.</p>
+        <p class="service-cta">Contact us for details &#8594;</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#10024;</span>
+        <h3 class="service-name">Shape-Up &amp; Edge-Up</h3>
+        <p class="service-desc">Defined hairline and temple work using straight razor and precision trimmer for razor-sharp edges.</p>
+        <p class="service-cta">Contact us for details &#8594;</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#128116;</span>
+        <h3 class="service-name">Kids&#39; Haircut</h3>
+        <p class="service-desc">Patient, friendly cuts for boys of all ages in a comfortable, welcoming environment they'll enjoy.</p>
+        <p class="service-cta">Contact us for details &#8594;</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#10071;</span>
+        <h3 class="service-name">Hot Towel Shave</h3>
+        <p class="service-desc">A classic straight-razor shave with hot towel treatment — the full traditional barbershop experience.</p>
+        <p class="service-cta">Contact us for details &#8594;</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-left">
+        <span class="section-label">Find Us</span>
+        <h2>Get in Touch</h2>
+        <div class="divider"></div>
+        <p>Ready for a fresh cut? Give us a call or stop by. We look forward to having you in the chair.</p>
+
+        <div class="rating-block">
+          <div>
+            <div class="rating-stars">
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star-half">&#9733;</span>
+            </div>
+            <div class="rating-source" style="margin-top:4px;">Google Reviews</div>
+          </div>
+          <div class="rating-text">
+            <div class="rating-score">4.5</div>
+            <div class="rating-count">Based on 194 reviews</div>
+          </div>
+        </div>
+
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div>
+              <span class="contact-item-label">Address</span>
+              <div class="contact-item-value">600 NW 5th Ave<br/>Gainesville, FL 32601</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div>
+              <span class="contact-item-label">Phone</span>
+              <div class="contact-item-value"><a href="tel:+13523841008">(352) 384-1008</a></div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div>
+              <span class="contact-item-label">Hours</span>
+              <div class="contact-item-value">Contact us for current hours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-right">
+        <div class="map-box">
+          <div class="map-placeholder">
+            <div class="map-pin">&#128205;</div>
+            <div class="map-label">
+              <strong style="color:var(--off-white);">Fades &amp; Fros</strong><br/>
+              <span>600 NW 5th Ave, Gainesville, FL</span>
+            </div>
+          </div>
+          <div class="map-box-footer">
+            <a
+              href="https://www.google.com/maps/search/Fades%20%26%20Fros%20600%20NW%205th%20Ave%2C%20Gainesville%2C%20FL%2032601"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-directions"
+            >
+              &#128205;&nbsp; Get Directions
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Fades <span>&amp;</span> Fros</div>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="tel:+13523841008">Call Us</a></li>
+      </ul>
+      <p class="footer-copy">600 NW 5th Ave, Gainesville, FL 32601 &nbsp;&bull;&nbsp; (352) 384-1008</p>
+      <p class="footer-copy">&copy; 2026 Fades &amp; Fros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    // Close nav on link click (mobile)
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

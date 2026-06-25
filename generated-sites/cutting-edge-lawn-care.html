@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cutting Edge Lawn Care – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #2d5a1b;
+      --green-mid:    #4a7c2f;
+      --green-light:  #6fa84a;
+      --green-pale:   #e8f5e0;
+      --earth-brown:  #7a5c3a;
+      --earth-light:  #c4a06a;
+      --cream:        #f9f5ee;
+      --text-dark:    #1e2a14;
+      --text-mid:     #3d4f2a;
+      --white:        #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg { display: block; }
+
+    .nav-brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .nav-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-sub {
+      font-size: 0.68rem;
+      color: var(--earth-light);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--green-light); }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* mobile menu */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--green-dark);
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      z-index: 99;
+      padding: 1rem 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      transition: background 0.2s;
+    }
+
+    .mobile-menu a:hover { background: rgba(255,255,255,0.07); }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-light) 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+    }
+
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          var(--white) 0,
+          var(--white) 1px,
+          transparent 0,
+          transparent 50%
+        );
+      background-size: 18px 18px;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      color: var(--earth-light);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--white);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.88);
+      max-width: 540px;
+      margin: 0 auto 2.2rem;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.22s;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-primary {
+      background: var(--earth-brown);
+      color: var(--white);
+      border-color: var(--earth-brown);
+    }
+
+    .btn-primary:hover {
+      background: var(--earth-light);
+      border-color: var(--earth-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border-color: rgba(255,255,255,0.65);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--green-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-body {
+      font-size: 1.02rem;
+      color: var(--text-mid);
+      max-width: 700px;
+    }
+
+    /* ── ABOUT ── */
+    .about { background: var(--white); }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      background: linear-gradient(145deg, var(--green-pale), var(--green-light));
+      border-radius: 16px;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(45,90,27,0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual-icon { opacity: 0.55; }
+
+    .about-visual-accent {
+      position: absolute;
+      bottom: -30px; right: -30px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+    }
+
+    .about-text p { margin-bottom: 1rem; }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-highlights {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    .highlight-chip {
+      background: var(--green-pale);
+      border: 1px solid rgba(74,124,47,0.25);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--green-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ── SERVICES ── */
+    .services { background: var(--cream); }
+
+    .services-header { text-align: center; margin-bottom: 3rem; }
+    .services-header .section-body { margin: 0 auto; text-align: center; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.8rem;
+      border: 1px solid rgba(74,124,47,0.15);
+      box-shadow: 0 2px 12px rgba(45,90,27,0.07);
+      transition: transform 0.22s, box-shadow 0.22s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(45,90,27,0.14);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--green-pale);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.55;
+    }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--green-dark); }
+
+    .contact .section-label { color: var(--earth-light); }
+    .contact .section-title { color: var(--white); }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info { }
+
+    .contact-info p {
+      color: rgba(255,255,255,0.78);
+      margin-bottom: 0.4rem;
+      font-size: 0.98rem;
+    }
+
+    .contact-block {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 1.6rem;
+      margin-top: 2rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-row:last-child { margin-bottom: 0; }
+
+    .contact-row-icon {
+      width: 38px;
+      height: 38px;
+      background: rgba(111,168,74,0.25);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-row-text strong {
+      display: block;
+      color: var(--white);
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.18rem;
+    }
+
+    .contact-row-text span,
+    .contact-row-text a {
+      color: rgba(255,255,255,0.82);
+      font-size: 0.98rem;
+      text-decoration: none;
+    }
+
+    .contact-row-text a:hover { color: var(--earth-light); }
+
+    /* rating */
+    .rating-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rating-stars {
+      font-size: 1.3rem;
+      color: #f4b942;
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .rating-detail strong {
+      display: block;
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .rating-detail span {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* contact CTA side */
+    .contact-cta-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .contact-cta-side .cta-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 1.8rem;
+      text-align: center;
+    }
+
+    .cta-card h3 {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-card p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-green {
+      background: var(--green-light);
+      color: var(--white);
+      border-color: var(--green-light);
+    }
+
+    .btn-green:hover {
+      background: var(--green-mid);
+      border-color: var(--green-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    .btn-tan {
+      background: var(--earth-brown);
+      color: var(--white);
+      border-color: var(--earth-brown);
+    }
+
+    .btn-tan:hover {
+      background: var(--earth-light);
+      border-color: var(--earth-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    .btn-full { width: 100%; text-align: center; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1a3310;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    footer strong { color: rgba(255,255,255,0.8); }
+
+    footer a {
+      color: var(--earth-light);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-visual { height: 220px; }
+
+      .hero { padding: 4rem 1.5rem 3.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 3.5rem 1.25rem; }
+      .hero-cta-group { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 280px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-brand">
+    <div class="nav-logo-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 21c3-3 9-9 18-9"/>
+        <path d="M3 21c0-6 4-12 9-15"/>
+        <line x1="3" y1="21" x2="21" y2="21"/>
+      </svg>
+    </div>
+    <div class="nav-brand-text">
+      <span class="nav-name">Cutting Edge Lawn Care</span>
+      <span class="nav-sub">Gainesville, FL</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about"    onclick="closeMobile()">About</a>
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#contact"  onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Lawn &amp; Landscape Professionals</div>
+    <h1>Cutting Edge Lawn Care</h1>
+    <p class="hero-tagline">Keeping Gainesville yards sharp, green, and looking their absolute best — season after season.</p>
+    <div class="hero-cta-group">
+      <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
+      <a href="#services" class="btn btn-outline">Our Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-visual-icon">
+          <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21c3-3 9-9 18-9"/>
+            <path d="M3 21c0-6 4-12 9-15"/>
+            <line x1="3" y1="21" x2="21" y2="21"/>
+          </svg>
+        </div>
+        <div class="about-visual-accent"></div>
+      </div>
+
+      <div class="about-text">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Reliable Lawn Care in Gainesville, FL</h2>
+        <p class="section-body">Cutting Edge Lawn Care is a dedicated lawn maintenance company serving residential and commercial properties throughout the Gainesville area. Our team takes pride in delivering consistent, detail-oriented service that keeps your outdoor spaces healthy and well-manicured through every season.</p>
+        <p class="section-body">Florida's climate demands expertise — from managing warm-season grasses to addressing the challenges of heat and humidity. We bring the know-how and equipment to handle it all, so you don't have to.</p>
+
+        <div class="about-highlights">
+          <div class="highlight-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Residential &amp; Commercial
+          </div>
+          <div class="highlight-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Local Gainesville Experts
+          </div>
+          <div class="highlight-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            5-Star Rated
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-header">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-body">From routine mowing to complete lawn makeovers, we offer a full range of lawn care solutions tailored to North Central Florida's unique environment. Contact us for details on scheduling and pricing.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <h3>Lawn Mowing &amp; Edging</h3>
+        <p>Regular mowing and clean edging along sidewalks, driveways, and garden beds keeps your lawn looking crisp and well-maintained.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <h3>Trimming &amp; Pruning</h3>
+        <p>Shrub trimming and tree pruning to maintain a tidy, healthy landscape and prevent overgrowth from affecting your property.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 1 0 10 10"/>
+            <path d="M12 2v10l6.4 6.4"/>
+          </svg>
+        </div>
+        <h3>Mulching &amp; Bed Maintenance</h3>
+        <p>Fresh mulch application and routine flower bed care to suppress weeds, retain moisture, and enhance curb appeal.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22V12M12 12C12 7 7 3 3 3s4 6 9 9M12 12c0-5 5-9 9-9s-4 6-9 9"/>
+          </svg>
+        </div>
+        <h3>Fertilization &amp; Lawn Treatment</h3>
+        <p>Targeted fertilization programs and lawn treatments to promote thick, lush growth suited to Florida's warm-season grasses.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <h3>Weed Control</h3>
+        <p>Pre- and post-emergent weed control treatments to keep unwanted growth from competing with your grass and plants.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 17 10 11 4 5"/>
+            <line x1="12" y1="19" x2="20" y2="19"/>
+          </svg>
+        </div>
+        <h3>Cleanup &amp; Debris Removal</h3>
+        <p>Seasonal cleanups including leaf removal, storm debris clearing, and general yard tidying to keep your property pristine.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-inner">
+
+      <div class="contact-info">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">Contact Us</h2>
+        <p style="color:rgba(255,255,255,0.7); margin-bottom: 0;">Ready for a greener yard? Reach out today for a free quote or to schedule service.</p>
+
+        <div class="contact-block">
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Location</strong>
+              <span>Gainesville, FL</span>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.87-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Phone</strong>
+              <a href="tel:+13523720430">(352) 372-0430</a>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Hours</strong>
+              <span>Contact us for details</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rating-card">
+          <div>
+            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+          <div class="rating-detail">
+            <strong>5.0 out of 5</strong>
+            <span>Rated on Google Maps &bull; 1 review</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta-side">
+        <div class="cta-card">
+          <h3>Get Directions</h3>
+          <p>Find us on Google Maps and get turn-by-turn directions to our location in Gainesville.</p>
+          <a href="https://www.google.com/maps/search/Cutting%20Edge%20Lawn%20Care%20Gainesville%2C%20FL"
+             target="_blank" rel="noopener noreferrer"
+             class="btn btn-green btn-full">
+            Open in Google Maps
+          </a>
+        </div>
+
+        <div class="cta-card">
+          <h3>Request a Quote</h3>
+          <p>Give us a call and we'll discuss your lawn care needs and provide a no-obligation estimate.</p>
+          <a href="tel:+13523720430" class="btn btn-tan btn-full">
+            Call (352) 372-0430
+          </a>
+        </div>
+
+        <div class="cta-card">
+          <h3>Service Area</h3>
+          <p>We proudly serve Gainesville and the surrounding Alachua County area. Contact us to confirm service availability at your address.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Cutting Edge Lawn Care</strong> &mdash; Gainesville, FL</p>
+  <p style="margin-top:0.4rem;">
+    <a href="tel:+13523720430">(352) 372-0430</a>
+    &nbsp;&bull;&nbsp;
+    <a href="https://www.google.com/maps/search/Cutting%20Edge%20Lawn%20Care%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer">Google Maps</a>
+  </p>
+  <p style="margin-top:0.8rem; font-size:0.78rem;">&copy; 2026 Cutting Edge Lawn Care. All rights reserved.</p>
+</footer>
+
+<script>
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', function() {
+    mobileMenu.classList.toggle('open');
+  });
+
+  function closeMobile() {
+    mobileMenu.classList.remove('open');
+  }
+</script>
+
+</body>
+</html>

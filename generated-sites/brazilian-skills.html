@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brazilian Skills | Soccer Club — Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #009C3B;
+      --green-dark: #007a2e;
+      --yellow: #FFDF00;
+      --yellow-dark: #e6c800;
+      --blue:   #002776;
+      --blue-mid: #003da0;
+      --white:  #ffffff;
+      --gray-light: #f5f5f5;
+      --gray-mid: #e0e0e0;
+      --gray-text: #444444;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      color: var(--gray-text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo .ball {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo span {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--yellow);
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+    }
+
+    .nav-logo span em {
+      display: block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* CSS-only mobile nav toggle */
+    #nav-toggle { display: none; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+
+    #nav-toggle:checked ~ .hamburger span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    #nav-toggle:checked ~ .hamburger span:nth-child(2) {
+      opacity: 0;
+    }
+    #nav-toggle:checked ~ .hamburger span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 0.25rem 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--yellow);
+      border-bottom-color: var(--yellow);
+    }
+
+    @media (max-width: 680px) {
+      .hamburger { display: flex; }
+
+      .nav-links {
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        flex-direction: column;
+        background: var(--blue);
+        padding: 1rem 2rem 1.5rem;
+        gap: 0;
+        border-top: 1px solid rgba(255,255,255,0.12);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+      }
+
+      #nav-toggle:checked ~ .nav-links {
+        max-height: 400px;
+        padding: 1rem 2rem 1.5rem;
+      }
+
+      .nav-links li { border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .nav-links li:last-child { border-bottom: none; }
+
+      .nav-links a {
+        display: block;
+        padding: 0.65rem 0;
+        border-bottom: none;
+      }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      background:
+        linear-gradient(160deg, rgba(0,39,118,0.88) 0%, rgba(0,39,118,0.55) 50%, rgba(0,156,59,0.72) 100%),
+        radial-gradient(ellipse at 30% 70%, var(--green) 0%, transparent 60%),
+        radial-gradient(ellipse at 75% 30%, var(--blue-mid) 0%, transparent 60%),
+        linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
+    }
+
+    .hero-inner {
+      max-width: 760px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,223,0,0.15);
+      border: 1px solid rgba(255,223,0,0.4);
+      color: var(--yellow);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .hero h1 span { color: var(--yellow); }
+
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 2.2rem;
+      font-weight: 300;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: var(--yellow-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      border: 2px solid rgba(255,255,255,0.6);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--yellow);
+      color: var(--yellow);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      margin-top: 3rem;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 5rem 1.5rem; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: #666;
+      max-width: 620px;
+      margin-bottom: 0;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--gray-light); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+    .about-text p {
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      color: #555;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-graphic {
+      width: 100%;
+      max-width: 340px;
+    }
+
+    @media (max-width: 720px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .about-visual { order: -1; }
+      .about-graphic { max-width: 220px; }
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--white); }
+
+    .services-header { margin-bottom: 3rem; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--gray-light);
+      border-radius: 12px;
+      padding: 1.8rem 1.6rem;
+      border-top: 4px solid var(--green);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.55;
+    }
+
+    .service-detail {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--blue); }
+
+    #contact .section-label { color: var(--yellow); }
+    #contact .section-title { color: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 700px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .contact-info { color: rgba(255,255,255,0.9); }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-item:last-child { margin-bottom: 0; }
+
+    .contact-item-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text span {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .contact-item-text a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+    }
+
+    .contact-item-text a:hover { color: var(--yellow); }
+
+    /* Rating card */
+    .rating-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rating-stars {
+      font-size: 1.4rem;
+      line-height: 1;
+      color: var(--yellow);
+    }
+
+    .rating-text strong {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-text span {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* CTA box */
+    .contact-cta-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-cta-box h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .contact-cta-box p {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.97rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--yellow);
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      width: fit-content;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-directions:hover {
+      background: var(--yellow-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--green);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      width: fit-content;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-call:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #010f30;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.88rem;
+    }
+
+    footer strong { color: var(--yellow); }
+
+    .footer-flag {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .flag-stripe {
+      width: 18px;
+      height: 10px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="#home">
+    <!-- Soccer ball SVG -->
+    <svg class="ball" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="17" fill="white" stroke="#ccc" stroke-width="0.5"/>
+      <polygon points="18,5 22,13 30,13 24,18 26,26 18,21 10,26 12,18 6,13 14,13" fill="#222"/>
+      <circle cx="18" cy="18" r="6" fill="none" stroke="#222" stroke-width="1"/>
+      <circle cx="18" cy="18" r="17" fill="none" stroke="#bbb" stroke-width="1"/>
+    </svg>
+    <span>Brazilian Skills<em>Soccer Club · Gainesville, FL</em></span>
+  </a>
+
+  <input type="checkbox" id="nav-toggle">
+  <label class="hamburger" for="nav-toggle" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </label>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Programs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <!-- Star -->
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><polygon points="6.5,1 8,5 12,5 9,7.5 10,12 6.5,9 3,12 4,7.5 1,5 5,5"/></svg>
+      5.0 Rated on Google
+    </div>
+    <h1>Elevate Your<br><span>Brazilian Skills</span></h1>
+    <p class="hero-tagline">World-class soccer training rooted in Brazilian technique — for players of all ages and levels in Gainesville, FL.</p>
+    <div class="hero-ctas">
+      <a href="#services" class="btn-primary">Explore Programs</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+    <p class="hero-scroll">&#8595; Scroll to learn more</p>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="container">
+    <div>
+      <span class="section-label">Who We Are</span>
+      <h2 class="section-title">Brazilian Flair, Local Heart</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Brazilian Skills is a Gainesville-based soccer club dedicated to developing technically gifted, tactically sharp players through the beautiful game's most celebrated style of play. Our programs blend the creativity and flair of Brazilian futebol with disciplined coaching methods proven to elevate players at every level.</p>
+        <p>Whether you're picking up a soccer ball for the first time or looking to sharpen the skills that set you apart, our coaches provide a positive, high-energy environment built on passion, precision, and teamwork.</p>
+        <p>We proudly serve the Gainesville community and surrounding areas, offering a range of training options tailored to individual goals. Contact us for details on current program availability and enrollment.</p>
+      </div>
+      <div class="about-visual">
+        <!-- Inline SVG illustration: Brazilian diamond + ball -->
+        <svg class="about-graphic" viewBox="0 0 340 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Green background circle -->
+          <circle cx="170" cy="150" r="130" fill="#009C3B" opacity="0.12"/>
+          <!-- Field lines -->
+          <ellipse cx="170" cy="150" rx="110" ry="80" stroke="#009C3B" stroke-width="2.5" opacity="0.35"/>
+          <line x1="170" y1="70" x2="170" y2="230" stroke="#009C3B" stroke-width="1.5" opacity="0.3"/>
+          <!-- Diamond rhombus shape (Brazilian flag) -->
+          <polygon points="170,30 300,150 170,270 40,150" fill="#FFDF00" opacity="0.18" stroke="#FFDF00" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Blue circle inside diamond -->
+          <circle cx="170" cy="150" r="55" fill="#002776" opacity="0.2" stroke="#002776" stroke-width="2"/>
+          <!-- Soccer ball center -->
+          <circle cx="170" cy="150" r="30" fill="white" stroke="#ccc" stroke-width="1"/>
+          <polygon points="170,125 176,139 192,139 179,148 184,163 170,154 156,163 161,148 148,139 164,139" fill="#111"/>
+          <!-- Stars scattered like Brazilian flag -->
+          <text x="135" y="95" font-size="12" fill="#FFDF00" opacity="0.8">&#9733;</text>
+          <text x="195" y="80" font-size="10" fill="#FFDF00" opacity="0.7">&#9733;</text>
+          <text x="230" y="115" font-size="14" fill="#FFDF00" opacity="0.8">&#9733;</text>
+          <text x="95" y="130" font-size="9" fill="#FFDF00" opacity="0.6">&#9733;</text>
+          <text x="240" y="170" font-size="11" fill="#FFDF00" opacity="0.7">&#9733;</text>
+          <text x="105" y="175" font-size="13" fill="#FFDF00" opacity="0.75">&#9733;</text>
+          <text x="155" y="225" font-size="9" fill="#FFDF00" opacity="0.65">&#9733;</text>
+          <!-- Label -->
+          <text x="170" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#002776" letter-spacing="2">GAINESVILLE, FL</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="container">
+    <div class="services-header">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Training Programs</h2>
+      <p class="section-sub">From youth development to advanced technical drills, we offer programs designed to bring out the best in every player.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <!-- Boot / youth icon -->
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="10" fill="#009C3B" opacity="0.12"/>
+          <circle cx="24" cy="22" r="9" fill="#009C3B" opacity="0.85"/>
+          <circle cx="24" cy="22" r="4" fill="white"/>
+          <rect x="16" y="33" width="16" height="5" rx="2.5" fill="#002776" opacity="0.7"/>
+        </svg>
+        <h3>Youth Development</h3>
+        <p>Age-appropriate soccer programs for young players focusing on foundational skills, coordination, and a love of the game in a fun, supportive setting.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="10" fill="#FFDF00" opacity="0.18"/>
+          <polygon points="24,12 28,20 38,21 31,28 33,38 24,33 15,38 17,28 10,21 20,20" fill="#FFDF00" stroke="#e6c800" stroke-width="1"/>
+        </svg>
+        <h3>Technical Skills Training</h3>
+        <p>Deep-dive sessions into the hallmarks of Brazilian football: dribbling, close ball control, quick passing combinations, and creative 1v1 play.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="10" fill="#002776" opacity="0.1"/>
+          <rect x="12" y="18" width="24" height="16" rx="3" fill="#002776" opacity="0.75"/>
+          <line x1="24" y1="18" x2="24" y2="34" stroke="white" stroke-width="1.5"/>
+          <line x1="12" y1="26" x2="36" y2="26" stroke="white" stroke-width="1.5"/>
+        </svg>
+        <h3>Group Clinics &amp; Camps</h3>
+        <p>Structured group clinics and seasonal camps that create a team environment for players to compete, learn together, and develop game intelligence.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="10" fill="#009C3B" opacity="0.12"/>
+          <circle cx="24" cy="18" r="7" fill="#009C3B" opacity="0.8"/>
+          <path d="M14 38 C14 30 34 30 34 38" fill="#009C3B" opacity="0.5"/>
+          <circle cx="24" cy="18" r="3" fill="white"/>
+        </svg>
+        <h3>Private &amp; Semi-Private Coaching</h3>
+        <p>One-on-one or small-group sessions tailored to the individual athlete's position, strengths, and development goals for accelerated improvement.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="10" fill="#FFDF00" opacity="0.18"/>
+          <rect x="10" y="14" width="28" height="20" rx="2" fill="none" stroke="#002776" stroke-width="2"/>
+          <circle cx="24" cy="24" r="5" fill="#009C3B" opacity="0.8"/>
+          <line x1="24" y1="14" x2="24" y2="34" stroke="#002776" stroke-width="1.2" opacity="0.5"/>
+        </svg>
+        <h3>Futsal &amp; Small-Sided Games</h3>
+        <p>Fast-paced futsal and small-sided play that builds touch, decision-making speed, and confidence on the ball — core elements of the Brazilian style.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="10" fill="#002776" opacity="0.1"/>
+          <circle cx="24" cy="24" r="12" fill="none" stroke="#002776" stroke-width="2"/>
+          <polygon points="24,16 26,21 32,21 27,24.5 29,30 24,26.5 19,30 21,24.5 16,21 22,21" fill="#002776" opacity="0.75"/>
+        </svg>
+        <h3>Adult &amp; Recreational Leagues</h3>
+        <p>Competitive and recreational league play for adults who want to stay active, sharpen their game, and enjoy the sport alongside a passionate community.</p>
+        <div class="service-detail">Contact us for details</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="container">
+    <span class="section-label">Find Us</span>
+    <h2 class="section-title">Contact &amp; Location</h2>
+    <div class="contact-grid">
+
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <!-- Pin icon -->
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 2C7.24 2 5 4.24 5 7c0 4.5 5 11 5 11s5-6.5 5-11c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 1 1 10 5a1.5 1.5 0 0 1 0 3z" fill="#FFDF00"/>
+            </svg>
+          </div>
+          <div class="contact-item-text">
+            <strong>Address</strong>
+            <span>3832 Newberry Rd, Gainesville, FL</span>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <!-- Phone icon -->
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 3h3.5l1.5 3.5-2 1.5a10 10 0 0 0 4.5 4.5l1.5-2L16.5 12 17 15.5A1.5 1.5 0 0 1 15.5 17C8.6 17 3 11.4 3 4.5A1.5 1.5 0 0 1 4 3z" fill="#FFDF00"/>
+            </svg>
+          </div>
+          <div class="contact-item-text">
+            <strong>Phone</strong>
+            <a href="tel:+17862362442"><span>(786) 236-2442</span></a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <!-- Clock icon -->
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="7" stroke="#FFDF00" stroke-width="1.8"/>
+              <path d="M10 6v4l3 2" stroke="#FFDF00" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="contact-item-text">
+            <strong>Hours</strong>
+            <span>Contact us for details</span>
+          </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="rating-card">
+          <div>
+            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+          <div class="rating-text">
+            <strong>5.0</strong>
+            <span>Google Rating &middot; 12 reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta-box">
+        <h3>Ready to Train with Us?</h3>
+        <p>Give us a call or get directions to our location on Newberry Road. We'd love to talk about the right program for you or your player.</p>
+        <a href="https://www.google.com/maps/search/Brazilian%20Skills%203832%20Newberry%20Rd%2C%20Gainesville%2C%20FL"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="btn-directions">
+          <!-- Map pin -->
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2C7.24 2 5 4.24 5 7c0 4.5 5 11 5 11s5-6.5 5-11c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 1 1 10 5a1.5 1.5 0 0 1 0 3z"/></svg>
+          Get Directions
+        </a>
+        <a href="tel:+17862362442" class="btn-call">
+          <!-- Phone -->
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M4 3h3.5l1.5 3.5-2 1.5a10 10 0 0 0 4.5 4.5l1.5-2L16.5 12 17 15.5A1.5 1.5 0 0 1 15.5 17C8.6 17 3 11.4 3 4.5A1.5 1.5 0 0 1 4 3z"/></svg>
+          Call (786) 236-2442
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-flag">
+    <div class="flag-stripe" style="background:#009C3B;"></div>
+    <div class="flag-stripe" style="background:#FFDF00;"></div>
+    <div class="flag-stripe" style="background:#002776;"></div>
+  </div>
+  <p><strong>Brazilian Skills</strong> &mdash; 3832 Newberry Rd, Gainesville, FL &middot; <a href="tel:+17862362442" style="color:rgba(255,255,255,0.6);text-decoration:none;">(786) 236-2442</a></p>
+  <p style="margin-top:0.4rem;">&copy; 2026 Brazilian Skills Soccer Club. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gainesville Beach Tattoo Parlor | 15 SW 2nd St, Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #0a0a0a;
+      --dark: #111111;
+      --dark-mid: #1a1a1a;
+      --mid: #222222;
+      --accent: #c8a45a;
+      --accent-light: #e0bb7a;
+      --accent-dark: #a07c38;
+      --teal: #3a8c8c;
+      --teal-light: #4db3b3;
+      --white: #f5f3ef;
+      --gray: #aaaaaa;
+      --gray-light: #cccccc;
+      --text: #e8e4dc;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--text);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(200, 164, 90, 0.25);
+      padding: 0 2rem;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+      transition: all 0.3s;
+    }
+
+    @media (max-width: 680px) {
+      .nav-toggle { display: flex; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--dark);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid rgba(200, 164, 90, 0.2);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    /* geometric tattoo flash background pattern */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 40px,
+          rgba(200, 164, 90, 0.03) 40px,
+          rgba(200, 164, 90, 0.03) 41px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 40px,
+          rgba(58, 140, 140, 0.03) 40px,
+          rgba(58, 140, 140, 0.03) 41px
+        );
+      pointer-events: none;
+    }
+
+    /* radial glow */
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(ellipse, rgba(200, 164, 90, 0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      margin-bottom: 1.2rem;
+      padding: 0.35rem 1rem;
+      border: 1px solid rgba(58, 140, 140, 0.4);
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      margin: 1.4rem auto;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--gray-light);
+      margin-bottom: 2.4rem;
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(200, 164, 90, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .btn-outline:hover {
+      background: rgba(200, 164, 90, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .title-bar {
+      width: 50px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--dark-mid);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    .about-text p {
+      color: var(--gray-light);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-art {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* decorative SVG tattoo-flash diamond */
+    .flash-ornament {
+      width: 260px;
+      height: 260px;
+      opacity: 0.75;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--black);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-header .title-bar {
+      margin: 0 auto 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--dark-mid);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 2rem 1.8rem;
+      position: relative;
+      transition: border-color 0.25s, transform 0.25s;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent), var(--teal));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: rgba(200, 164, 90, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-name {
+      font-size: 1.15rem;
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ── RATING BANNER ── */
+    #rating-banner {
+      background: linear-gradient(135deg, var(--accent-dark), var(--accent) 60%, var(--teal));
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .rating-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .stars {
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+      color: var(--black);
+    }
+
+    .rating-score {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    .rating-meta {
+      font-size: 0.9rem;
+      color: rgba(0,0,0,0.65);
+      margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    .rating-quote {
+      margin-top: 1.2rem;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: rgba(0,0,0,0.75);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--dark-mid);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.8rem;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(200, 164, 90, 0.12);
+      border: 1px solid rgba(200, 164, 90, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .contact-detail-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail-value {
+      color: var(--white);
+      font-size: 1rem;
+    }
+
+    .contact-detail-value a {
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-detail-value a:hover {
+      color: var(--accent);
+    }
+
+    .contact-cta-box {
+      background: var(--mid);
+      border: 1px solid rgba(200,164,90,0.15);
+      padding: 2.5rem;
+    }
+
+    .contact-cta-box h3 {
+      font-size: 1.4rem;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+    }
+
+    .contact-cta-box p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-address {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.2);
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#hero">Gainesville Beach Tattoo</a>
+      <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-content">
+      <span class="hero-eyebrow">Gainesville, Florida</span>
+      <h1 class="hero-title">
+        Gainesville Beach
+        <span>Tattoo Parlor</span>
+      </h1>
+      <div class="hero-divider"></div>
+      <p class="hero-tagline">Custom ink with coastal soul &mdash; where artistry meets permanence.</p>
+      <div class="hero-cta-group">
+        <a href="#contact" class="btn btn-primary">Book a Consultation</a>
+        <a href="#services" class="btn btn-outline">Explore Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">Our Story</p>
+          <h2 class="section-title">Permanent Art,<br />Lasting Impressions</h2>
+          <div class="title-bar"></div>
+          <p>
+            Gainesville Beach Tattoo Parlor is a dedicated fine-art tattoo studio serving the Gainesville community from our upstairs studio on SW 2nd Street. Our artists bring a passion for quality craftsmanship to every piece, working closely with each client to bring their vision to life with precision and care.
+          </p>
+          <p>
+            Whether you arrive with a fully formed concept or just a spark of an idea, our team is committed to creating tattoos that are as unique as the people who wear them. We work across a wide range of styles, from bold traditional flash to delicate fine-line and everything in between.
+          </p>
+          <p>
+            Client comfort, safety, and satisfaction are our highest priorities. Every session is conducted in a clean, welcoming environment where you can relax and trust the process.
+          </p>
+        </div>
+        <div class="about-art">
+          <!-- Decorative SVG tattoo flash ornament -->
+          <svg class="flash-ornament" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- outer diamond -->
+            <polygon points="130,10 250,130 130,250 10,130" stroke="#c8a45a" stroke-width="1.5" fill="none" opacity="0.6"/>
+            <!-- inner diamond -->
+            <polygon points="130,40 220,130 130,220 40,130" stroke="#3a8c8c" stroke-width="1" fill="none" opacity="0.5"/>
+            <!-- small center diamond -->
+            <polygon points="130,95 165,130 130,165 95,130" stroke="#c8a45a" stroke-width="1.5" fill="none" opacity="0.8"/>
+            <!-- cross hair lines -->
+            <line x1="130" y1="10" x2="130" y2="250" stroke="#c8a45a" stroke-width="0.5" opacity="0.2"/>
+            <line x1="10" y1="130" x2="250" y2="130" stroke="#c8a45a" stroke-width="0.5" opacity="0.2"/>
+            <!-- corner accents -->
+            <circle cx="130" cy="10" r="4" fill="#c8a45a" opacity="0.7"/>
+            <circle cx="250" cy="130" r="4" fill="#c8a45a" opacity="0.7"/>
+            <circle cx="130" cy="250" r="4" fill="#c8a45a" opacity="0.7"/>
+            <circle cx="10" cy="130" r="4" fill="#c8a45a" opacity="0.7"/>
+            <!-- center dot -->
+            <circle cx="130" cy="130" r="6" fill="#3a8c8c" opacity="0.8"/>
+            <!-- decorative small diamonds at mid-edges -->
+            <polygon points="130,58 140,68 130,78 120,68" stroke="#3a8c8c" stroke-width="1" fill="none" opacity="0.6"/>
+            <polygon points="202,130 212,140 202,150 192,140" stroke="#3a8c8c" stroke-width="1" fill="none" opacity="0.6"/>
+            <polygon points="130,182 140,192 130,202 120,192" stroke="#3a8c8c" stroke-width="1" fill="none" opacity="0.6"/>
+            <polygon points="58,130 68,140 58,150 48,140" stroke="#3a8c8c" stroke-width="1" fill="none" opacity="0.6"/>
+            <!-- fine detail lines radiating from center -->
+            <line x1="130" y1="130" x2="130" y2="95" stroke="#c8a45a" stroke-width="0.5" opacity="0.5"/>
+            <line x1="130" y1="130" x2="165" y2="130" stroke="#c8a45a" stroke-width="0.5" opacity="0.5"/>
+            <line x1="130" y1="130" x2="130" y2="165" stroke="#c8a45a" stroke-width="0.5" opacity="0.5"/>
+            <line x1="130" y1="130" x2="95" y2="130" stroke="#c8a45a" stroke-width="0.5" opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <p class="section-label">What We Do</p>
+        <h2 class="section-title">Our Services</h2>
+        <div class="title-bar"></div>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#9998;</span>
+          <div class="service-name">Custom Tattoos</div>
+          <p class="service-desc">Fully original designs created in collaboration with you. Bring your ideas, references, or concept and we will craft a one-of-a-kind piece built around your vision.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#11088;</span>
+          <div class="service-name">Traditional &amp; Neo-Traditional</div>
+          <p class="service-desc">Bold lines, rich color, and timeless imagery. Classic American traditional and modern neo-traditional styles with clean, lasting results.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#10022;</span>
+          <div class="service-name">Fine Line &amp; Blackwork</div>
+          <p class="service-desc">Delicate single-needle fine-line work, intricate geometric patterns, and bold blackwork for a clean, precise aesthetic.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#9670;</span>
+          <div class="service-name">Cover-Ups &amp; Reworks</div>
+          <p class="service-desc">Breathing new life into old or unwanted tattoos. Our artists can assess your existing ink and design a cover-up that truly works.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#9775;</span>
+          <div class="service-name">Flash Tattoos</div>
+          <p class="service-desc">Ready-to-tattoo flash designs available in-studio. A great option if you want something beautiful without a long design consultation.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#10070;</span>
+          <div class="service-name">Touch-Ups &amp; Consultations</div>
+          <p class="service-desc">Free consultations to plan your next piece, plus touch-up appointments to keep your existing tattoos looking their best. Contact us for details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RATING BANNER -->
+  <div id="rating-banner">
+    <div class="rating-inner">
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="rating-score">4.8</div>
+      <div class="rating-meta">Based on 19 Google reviews</div>
+      <p class="rating-quote">"Consistently outstanding work and a welcoming studio experience &mdash; trusted by the Gainesville community."</p>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div>
+          <p class="section-label">Get in Touch</p>
+          <h2 class="section-title">Visit Us</h2>
+          <div class="title-bar"></div>
+
+          <div class="contact-item">
+            <div class="contact-icon">&#9679;</div>
+            <div>
+              <div class="contact-detail-label">Address</div>
+              <div class="contact-detail-value">15 SW 2nd St (Upstairs)<br />Gainesville, FL 32601</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">&#9743;</div>
+            <div>
+              <div class="contact-detail-label">Phone</div>
+              <div class="contact-detail-value">
+                <a href="tel:+13525540039">(352) 554-0039</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">&#9200;</div>
+            <div>
+              <div class="contact-detail-label">Hours</div>
+              <div class="contact-detail-value">Contact us for current hours</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">&#9733;</div>
+            <div>
+              <div class="contact-detail-label">Google Rating</div>
+              <div class="contact-detail-value">4.8 out of 5 &mdash; 19 reviews</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-cta-box">
+          <h3>Ready to Get Started?</h3>
+          <p>
+            Call us or stop by our upstairs studio on SW 2nd Street to schedule a consultation. We will walk you through the process, discuss your design ideas, and answer any questions you have before you commit to anything.
+          </p>
+          <a class="btn btn-primary" href="tel:+13525540039" style="display:inline-block; margin-bottom: 1rem;">
+            Call (352) 554-0039
+          </a>
+          <br />
+          <a
+            class="btn btn-outline directions-btn"
+            href="https://www.google.com/maps/search/Gainesville%20Beach%20Tattoo%20Parlor%2015%20SW%202nd%20St%20upstairs%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            &#9656; Get Directions
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Gainesville Beach Tattoo Parlor</div>
+      <p class="footer-address">15 SW 2nd St (Upstairs) &bull; Gainesville, FL 32601 &bull; <a href="tel:+13525540039" style="color:var(--gray); text-decoration:none;">(352) 554-0039</a></p>
+      <p class="footer-copy">&copy; 2026 Gainesville Beach Tattoo Parlor. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

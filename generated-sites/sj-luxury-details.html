@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SJ Luxury Details – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #0a0a0a;
+      --dark:        #111318;
+      --card:        #181c24;
+      --border:      #252a34;
+      --gold:        #c9a84c;
+      --gold-light:  #e2c06b;
+      --gold-dim:    #9b7a2f;
+      --white:       #f5f5f0;
+      --muted:       #9ba3af;
+      --radius:      6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+
+    .nav-logo-text span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: var(--radius);
+      font-weight: 600 !important;
+      font-size: 0.85rem !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--black) !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: rgba(10,10,10,0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      flex-direction: column;
+      gap: 1.2rem;
+      z-index: 99;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, #1a1506 0%, var(--black) 70%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle 400px at 20% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        radial-gradient(circle 300px at 80% 60%, rgba(201,168,76,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* decorative lines */
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-lines::before,
+    .hero-lines::after {
+      content: '';
+      position: absolute;
+      border: 1px solid rgba(201,168,76,0.08);
+      border-radius: 50%;
+    }
+
+    .hero-lines::before {
+      width: 700px; height: 700px;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+    }
+
+    .hero-lines::after {
+      width: 1100px; height: 1100px;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+    }
+
+    .hero-content { position: relative; max-width: 780px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-badge::before { content: '✦'; font-size: 0.6rem; }
+
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      color: var(--white);
+    }
+
+    h1 .accent { color: var(--gold); }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.4rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      color: var(--black);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.8rem 2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.8rem 2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── DIVIDER ─────────────────────────────────────────── */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+      border-radius: 2px;
+      margin: 0 auto 1.6rem;
+    }
+
+    /* ── SECTIONS ────────────────────────────────────────── */
+    section {
+      padding: 5.5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: block;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 3.5rem;
+      font-size: 1rem;
+    }
+
+    /* ── ABOUT ───────────────────────────────────────────── */
+    #about {
+      background: var(--dark);
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.8rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+    }
+
+    .about-icon {
+      font-size: 3rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .about-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: var(--gold);
+    }
+
+    .about-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .about-text h2 { text-align: left; }
+    .about-text .divider { margin: 0 0 1.4rem; }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2.2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-num {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 0.25rem;
+    }
+
+    /* ── SERVICES ────────────────────────────────────────── */
+    #services {
+      background: var(--black);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .service-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem 1.8rem;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::after { opacity: 1; }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.55rem;
+      color: var(--white);
+    }
+
+    .service-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .service-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ── CONTACT ─────────────────────────────────────────── */
+    #contact {
+      background: var(--dark);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .contact-info > p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+    }
+
+    .contact-list .ci {
+      width: 38px;
+      height: 38px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-list .cl {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cl-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .cl-value {
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    .cl-value a {
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .cl-value a:hover { color: var(--gold); }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      color: var(--black);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-directions:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* rating card */
+    .rating-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2.4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rating-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+    }
+
+    .rating-card h4 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 1.4rem;
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      font-size: 1.4rem;
+      color: var(--gold);
+    }
+
+    .star.half {
+      position: relative;
+      color: var(--border);
+    }
+
+    .star.half::before {
+      content: '★';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      width: 50%;
+      overflow: hidden;
+    }
+
+    .rating-num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    .rating-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 1.2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+    }
+
+    .rating-source .dot {
+      width: 6px; height: 6px;
+      background: #4285F4;
+      border-radius: 50%;
+    }
+
+    .testimonial-quote {
+      margin-top: 1.8rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .testimonial-quote p {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .testimonial-quote cite {
+      display: block;
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 2.8rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.1rem;
+    }
+
+    .footer-logo {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-logo span { color: var(--gold); }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: #444c5a;
+      margin-top: 0.4rem;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-text h2 { text-align: center; }
+      .about-text .divider { margin: 0 auto 1.4rem; }
+
+      .stat-row { justify-content: center; }
+
+      section { padding: 4rem 1.2rem; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 1.2rem; }
+      h1 { font-size: 2.2rem; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn-primary, .btn-outline { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon">✦</div>
+      <span class="nav-logo-text">SJ <span>Luxury</span> Details</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:7542849793" class="nav-cta">Call Us</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu">
+    <a href="#about" onclick="this.closest('.mobile-menu').classList.remove('open')">About</a>
+    <a href="#services" onclick="this.closest('.mobile-menu').classList.remove('open')">Services</a>
+    <a href="#contact" onclick="this.closest('.mobile-menu').classList.remove('open')">Contact</a>
+    <a href="tel:7542849793">(754) 284-9793</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-lines"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, FL &mdash; Premium Auto Care</div>
+      <h1>Your Vehicle Deserves<br><span class="accent">Luxury Treatment</span></h1>
+      <p class="hero-tagline">Professional car detailing that restores, protects, and elevates every inch of your vehicle &mdash; inside and out.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Book a Detail</a>
+        <a href="#services" class="btn-outline">View Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div class="about-visual">
+          <div class="about-card">
+            <span class="about-icon">🚗</span>
+            <h3>Attention to Every Detail</h3>
+            <p>From a deep interior shampoo to a glass-smooth exterior polish, we treat every vehicle with the precision and care it deserves. No shortcuts, no rushing &mdash; just results you can see and feel.</p>
+          </div>
+        </div>
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2>Gainesville's <span style="color:var(--gold)">Premium</span> Detail Shop</h2>
+          <div class="divider"></div>
+          <p>SJ Luxury Details brings meticulous, high-end car detailing services to Gainesville, FL, delivering showroom-quality results for everyday drivers and vehicle enthusiasts alike. We use professional-grade products and proven techniques to clean, restore, and protect your vehicle from the inside out.</p>
+          <p>Whether your car needs a thorough deep clean after a long Florida summer or a paint correction to bring back that factory shine, our team takes pride in exceeding expectations on every job. Your vehicle is a significant investment &mdash; we treat it that way.</p>
+          <p>Serving Gainesville and the surrounding area. Contact us to find a time that works for you.</p>
+          <div class="stat-row">
+            <div class="stat">
+              <span class="stat-num">4.4★</span>
+              <span class="stat-label">Google Rating</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">100%</span>
+              <span class="stat-label">Satisfaction Focus</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">GNV</span>
+              <span class="stat-label">Local & Proud</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <span class="section-label">What We Offer</span>
+      <h2>Our <span style="color:var(--gold)">Services</span></h2>
+      <p class="section-sub">Professional detailing packages tailored to give your vehicle the care it deserves. Contact us for details and availability.</p>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">✨</span>
+          <h3>Exterior Detail</h3>
+          <p>Full hand wash, clay bar treatment, paint decontamination, and a protective finish to leave your exterior gleaming and shielded from the elements.</p>
+          <span class="service-tag">Contact for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🪑</span>
+          <h3>Interior Detail</h3>
+          <p>Deep vacuum, surface wipe-down, dashboard and door panel cleaning, and fabric or leather conditioning to refresh every inch of your cabin.</p>
+          <span class="service-tag">Contact for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">💎</span>
+          <h3>Full Detail</h3>
+          <p>Our comprehensive inside-and-out treatment combines a thorough exterior finish with a complete interior restoration for a true showroom result.</p>
+          <span class="service-tag">Contact for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🔵</span>
+          <h3>Paint Correction</h3>
+          <p>Multi-stage machine polishing to remove swirl marks, light scratches, and oxidation, restoring depth and clarity to your vehicle's paint finish.</p>
+          <span class="service-tag">Contact for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🛡️</span>
+          <h3>Ceramic Coating</h3>
+          <p>Long-lasting nano-ceramic protection that bonds to the paint surface, providing superior hydrophobic properties and gloss for years of durability.</p>
+          <span class="service-tag">Contact for details</span>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🚿</span>
+          <h3>Maintenance Wash</h3>
+          <p>A regular upkeep wash to keep your detailed vehicle looking its best between full service appointments &mdash; quick, thorough, and consistent.</p>
+          <span class="service-tag">Contact for details</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-label">Get In Touch</span>
+      <h2>Visit or <span style="color:var(--gold)">Call Us</span></h2>
+      <p class="section-sub">Ready to give your vehicle the treatment it deserves? Reach out to schedule your detail today.</p>
+
+      <div class="contact-inner">
+        <div class="contact-info">
+          <h3>Contact Information</h3>
+          <p>We're local to Gainesville, FL and happy to answer any questions about our services.</p>
+
+          <ul class="contact-list">
+            <li>
+              <div class="ci">📍</div>
+              <div class="cl">
+                <span class="cl-label">Address</span>
+                <span class="cl-value">205 SE 16th Ave Apt 33X<br>Gainesville, FL</span>
+              </div>
+            </li>
+            <li>
+              <div class="ci">📞</div>
+              <div class="cl">
+                <span class="cl-label">Phone</span>
+                <span class="cl-value"><a href="tel:7542849793">(754) 284-9793</a></span>
+              </div>
+            </li>
+            <li>
+              <div class="ci">🕐</div>
+              <div class="cl">
+                <span class="cl-label">Hours</span>
+                <span class="cl-value">Contact us for availability</span>
+              </div>
+            </li>
+          </ul>
+
+          <a href="https://www.google.com/maps/search/SJ%20Luxury%20Details%20205%20SE%2016th%20Ave%20Apt%2033X" target="_blank" rel="noopener noreferrer" class="btn-directions">
+            ↗ Get Directions
+          </a>
+        </div>
+
+        <div class="rating-card">
+          <h4>Customer Reviews</h4>
+          <div class="stars-row">
+            <div class="stars">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star" style="position:relative; color: var(--border);">
+                <span style="position:absolute;left:0;overflow:hidden;width:40%;color:var(--gold);">★</span>★
+              </span>
+            </div>
+            <span class="rating-num">4.4</span>
+          </div>
+          <p class="rating-meta">Based on 7 Google Reviews</p>
+          <div class="rating-source">
+            <span class="dot"></span>
+            Verified on Google Maps
+          </div>
+          <div class="testimonial-quote">
+            <p>"Great attention to detail and a true commitment to quality. My car looked incredible when they were done &mdash; inside and out."</p>
+            <cite>— Google Reviewer</cite>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">SJ <span>Luxury</span> Details</div>
+      <p class="footer-tagline">Professional Car Detailing &mdash; Gainesville, FL</p>
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+        <a href="tel:7542849793">(754) 284-9793</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 SJ Luxury Details. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theo's Lawn Maintenance – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:  #1e4d2b;
+      --green-mid:   #2e7d3e;
+      --green-light: #4caf60;
+      --green-pale:  #e8f5eb;
+      --accent:      #8bc34a;
+      --accent-dark: #689f38;
+      --earth:       #5d4037;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #3d3d3d;
+      --text-light:  #ffffff;
+      --border:      #c8e6c9;
+      --shadow:      0 4px 18px rgba(0,0,0,0.10);
+      --radius:      8px;
+      --nav-h:       68px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text-dark);
+      background: #fff;
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--green-dark);
+    }
+
+    .nav-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-light);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-name span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--green-dark) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 50px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--accent-dark) !important; color: #fff !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      margin-top: var(--nav-h);
+      min-height: calc(100vh - var(--nav-h));
+      background:
+        linear-gradient(160deg, rgba(30,77,43,0.88) 0%, rgba(46,125,62,0.75) 60%, rgba(139,195,74,0.55) 100%),
+        /* Layered grass/nature SVG pattern */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%232e5e2e'/%3E%3Cellipse cx='60' cy='380' rx='60' ry='30' fill='%231e4d1e' opacity='.6'/%3E%3Cellipse cx='180' cy='390' rx='80' ry='25' fill='%23256325' opacity='.5'/%3E%3Cellipse cx='320' cy='375' rx='70' ry='28' fill='%231e4d1e' opacity='.55'/%3E%3Crect x='0' y='340' width='400' height='60' fill='%231a3d1a' opacity='.45'/%3E%3Cline x1='40' y1='340' x2='30' y2='280' stroke='%234caf60' stroke-width='3' opacity='.4'/%3E%3Cline x1='80' y1='340' x2='95' y2='270' stroke='%234caf60' stroke-width='2.5' opacity='.35'/%3E%3Cline x1='160' y1='340' x2='148' y2='260' stroke='%234caf60' stroke-width='3' opacity='.4'/%3E%3Cline x1='240' y1='340' x2='252' y2='275' stroke='%234caf60' stroke-width='2.5' opacity='.35'/%3E%3Cline x1='310' y1='340' x2='298' y2='265' stroke='%234caf60' stroke-width='3' opacity='.4'/%3E%3Cline x1='370' y1='340' x2='380' y2='278' stroke='%234caf60' stroke-width='2.5' opacity='.35'/%3E%3C/svg%3E") center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .hero-content { max-width: 720px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--green-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .hero-content h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-content p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 2rem;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--green-dark);
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--accent-dark); color: #fff; transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.7);
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: rgba(139,195,74,0.15);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 5rem 1.5rem; }
+
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    .section-label {
+      display: inline-block;
+      color: var(--green-mid);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      font-weight: 800;
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      max-width: 580px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--green-pale); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      background: var(--green-dark);
+      border-radius: 16px;
+      padding: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 18px,
+        rgba(139,195,74,0.06) 18px,
+        rgba(139,195,74,0.06) 36px
+      );
+    }
+
+    .about-icon-wrap {
+      position: relative;
+      text-align: center;
+    }
+
+    .about-icon-wrap svg {
+      width: 100px;
+      height: 100px;
+      fill: var(--accent);
+      opacity: 0.9;
+    }
+
+    .about-icon-wrap p {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .star-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1.5rem;
+    }
+
+    .stars { color: #f9a825; font-size: 1.2rem; letter-spacing: 1px; }
+
+    .star-label {
+      font-weight: 700;
+      color: var(--green-dark);
+      font-size: 1rem;
+    }
+
+    .star-sub {
+      color: var(--text-mid);
+      font-size: 0.85rem;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: #fff; }
+
+    .services-intro { margin-bottom: 3rem; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem 1.75rem;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      background: #fff;
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--green-pale);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--green-mid);
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.93rem;
+      color: var(--text-mid);
+    }
+
+    .service-card .cfd {
+      display: inline-block;
+      margin-top: 0.85rem;
+      font-size: 0.8rem;
+      color: var(--green-mid);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--green-pale); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contact-block {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-block-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--green-dark);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-block-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent);
+    }
+
+    .contact-block-text strong {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-block-text a {
+      color: var(--green-dark);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .contact-block-text a:hover { color: var(--green-mid); text-decoration: underline; }
+
+    .contact-block-text p {
+      font-size: 1rem;
+      color: var(--text-mid);
+    }
+
+    .rating-card {
+      background: var(--green-dark);
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      color: #fff;
+    }
+
+    .rating-card .r-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .rating-big {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .rating-big span {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .rating-stars { color: #f9a825; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 0.5rem; }
+
+    .rating-note {
+      font-size: 0.87rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .map-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .map-placeholder {
+      background: var(--green-dark);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      min-height: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(139,195,74,0.07) 30px, rgba(139,195,74,0.07) 31px),
+        repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(139,195,74,0.07) 30px, rgba(139,195,74,0.07) 31px);
+    }
+
+    .map-placeholder svg {
+      width: 56px;
+      height: 56px;
+      fill: var(--accent);
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    }
+
+    .btn-directions {
+      display: block;
+      text-align: center;
+      background: var(--green-mid);
+      color: #fff;
+      padding: 0.9rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-directions:hover { background: var(--green-dark); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-dark);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-size: 0.88rem;
+    }
+
+    footer .f-name {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    footer .f-links {
+      margin: 0.75rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    footer .f-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+      max-width: 400px;
+      margin: 1rem auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: var(--nav-h); left: 0; right: 0; background: var(--green-dark); padding: 1.25rem 1.5rem; gap: 1rem; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; }
+
+      .about-visual { min-height: 200px; padding: 2rem; }
+
+      section { padding: 3.5rem 1.25rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-outline { width: 100%; max-width: 280px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#hero">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 8C8 10 5.9 16.17 3.82 21h1.67L7 15c.5 0 1 .09 1.5.21L6.89 21h1.67l1.36-4.72C11.07 16.09 12 16 12 16c3 0 5-2 5-2s-1.5.5-3 .5c-.5 0-1-.05-1.45-.14L14 8z"/>
+      </svg>
+    </div>
+    <div class="nav-name">
+      Theo's Lawn Maintenance
+      <span>Gainesville, FL</span>
+    </div>
+  </a>
+
+  <button class="hamburger" aria-label="Menu" onclick="this.nextElementSibling.classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Serving Gainesville &amp; surrounding areas</div>
+    <h1>Lawn Care You Can<br><em>Count On</em></h1>
+    <p>Professional lawn maintenance that keeps your property looking its best — season after season, rain or shine.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Get a Free Quote</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="about-icon-wrap">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 8C8 10 5.9 16.17 3.82 21h1.67L7 15c.5 0 1 .09 1.5.21L6.89 21h1.67l1.36-4.72C11.07 16.09 12 16 12 16c3 0 5-2 5-2s-1.5.5-3 .5c-.5 0-1-.05-1.45-.14L14 8z"/>
+          </svg>
+          <p>Proudly rooted in Gainesville</p>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Local Lawn Care, Done Right</h2>
+        <p>Theo's Lawn Maintenance is a locally owned and operated lawn care company serving the Gainesville, FL community. We take pride in delivering reliable, high-quality service tailored to the unique landscape needs of North Central Florida's climate.</p>
+        <p>From routine mowing to seasonal clean-ups, our team approaches every property with attention to detail and a commitment to consistent results. Whether you're a homeowner or a business, we keep your outdoor spaces healthy, tidy, and inviting year-round.</p>
+        <p>We build long-term relationships with our clients by showing up on time, communicating clearly, and doing the job right the first time. Contact us today to learn how we can help with your lawn.</p>
+
+        <div class="star-row">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="star-label">4.9</span>
+          <span class="star-sub">on Google Maps</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="services-intro">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-sub">We offer a full range of lawn and landscape maintenance services to keep your property in top shape throughout the year.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- mowing icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 17h18v2H3zM5 12l2-7h10l2 7H5zm2.5-2h9l-1.14-4H8.64L7.5 10z"/>
+          </svg>
+        </div>
+        <h3>Lawn Mowing &amp; Edging</h3>
+        <p>Regular mowing cuts, precision edging along driveways and walkways, and clean blow-down of hard surfaces to keep your lawn looking sharp.</p>
+        <span class="cfd">Contact us for details &rsaquo;</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- trimming scissors -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.64 7.64A3.5 3.5 0 0 0 12 6.5a3.5 3.5 0 1 0-3.36 4.64l1.41 1.41-4.95 4.95 1.41 1.41 4.95-4.95 4.95 4.95 1.41-1.41L12 12l1.41-1.41A3.5 3.5 0 0 0 16.5 12a3.5 3.5 0 1 0-2.86-5.5L12 8.06l-.77-.77c.26-.37.41-.81.41-1.29zM7 7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm10 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/>
+          </svg>
+        </div>
+        <h3>Shrub &amp; Hedge Trimming</h3>
+        <p>Shaping and pruning of shrubs, hedges, and ornamental plants to maintain clean lines and promote healthy growth throughout your landscape.</p>
+        <span class="cfd">Contact us for details &rsaquo;</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- leaf / cleanup -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 8C8 10 5.9 16.17 3.82 21h1.67L7 15c.5 0 1 .09 1.5.21L6.89 21h1.67l1.36-4.72C11.07 16.09 12 16 12 16c3 0 5-2 5-2s-1.5.5-3 .5c-.5 0-1-.05-1.45-.14L14 8z"/>
+          </svg>
+        </div>
+        <h3>Yard Clean-Up &amp; Debris Removal</h3>
+        <p>Seasonal and one-time clean-up services including leaf removal, debris hauling, and general yard tidying after storms or heavy growth periods.</p>
+        <span class="cfd">Contact us for details &rsaquo;</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- grass / ground -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 3c0 5.25 3.75 9.1 9 9.92V21h2v-7.5c1.28-.96 3-1.5 5-1.5v-2c-1.7 0-3.26.45-4.6 1.25C15.4 7.9 11.51 5 5 3z"/>
+          </svg>
+        </div>
+        <h3>Weed Control &amp; Bed Maintenance</h3>
+        <p>Hand-pulling and treatment of weeds in lawn areas and planting beds, keeping your flower beds and garden borders clean and well-defined.</p>
+        <span class="cfd">Contact us for details &rsaquo;</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- sprinkler/water drop -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2C20 10.48 17.33 6.55 12 2zm0 16.33c-2.76 0-5-2.12-5-5.04 0-1.77 1.33-4.2 5-7.93 3.67 3.73 5 6.16 5 7.93 0 2.92-2.24 5.04-5 5.04z"/>
+          </svg>
+        </div>
+        <h3>Mulching &amp; Ground Cover</h3>
+        <p>Application of fresh mulch to landscape beds to retain moisture, suppress weed growth, and give your property a polished, finished appearance.</p>
+        <span class="cfd">Contact us for details &rsaquo;</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- recurring / refresh -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+          </svg>
+        </div>
+        <h3>Recurring Maintenance Plans</h3>
+        <p>Flexible weekly, bi-weekly, or monthly service agreements so your lawn always looks its best without having to think about scheduling each visit.</p>
+        <span class="cfd">Contact us for details &rsaquo;</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title" style="margin-bottom:2.5rem;">Contact Us</h2>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+
+        <div class="contact-block">
+          <div class="contact-block-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div class="contact-block-text">
+            <strong>Address</strong>
+            <p>3118 NE 13th St<br>Gainesville, FL</p>
+          </div>
+        </div>
+
+        <div class="contact-block">
+          <div class="contact-block-icon">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79A15.053 15.053 0 0 0 13.21 17.38l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.61 21 3 14.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.02l-2.21 2.2z"/></svg>
+          </div>
+          <div class="contact-block-text">
+            <strong>Phone</strong>
+            <a href="tel:+13526826898">(352) 682-6898</a>
+          </div>
+        </div>
+
+        <div class="contact-block">
+          <div class="contact-block-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          </div>
+          <div class="contact-block-text">
+            <strong>Hours</strong>
+            <p>Contact us for current availability</p>
+          </div>
+        </div>
+
+        <div class="rating-card">
+          <div class="r-label">Google Maps Rating</div>
+          <div class="rating-big">4.9 <span>/ 5</span></div>
+          <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="rating-note">Highly rated by customers in the Gainesville community</div>
+        </div>
+
+      </div>
+
+      <div class="map-area">
+        <div class="map-placeholder">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <a
+          class="btn-directions"
+          href="https://www.google.com/maps/search/Theos%20Lawn%20Maintenance%203118%20NE%2013th%20St%2C%20Gainesville%2C%20FL"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Get Directions on Google Maps
+        </a>
+        <p style="font-size:0.85rem;color:var(--text-mid);text-align:center;">3118 NE 13th St, Gainesville, FL</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-name">Theo's Lawn Maintenance</div>
+  <div class="f-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="tel:+13526826898">(352) 682-6898</a>
+    <a href="https://www.google.com/maps/search/Theos%20Lawn%20Maintenance%203118%20NE%2013th%20St%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer">Directions</a>
+  </div>
+  <div class="f-divider"></div>
+  <p>3118 NE 13th St, Gainesville, FL &nbsp;&bull;&nbsp; &copy; 2026 Theo's Lawn Maintenance. All rights reserved.</p>
+</footer>
+
+<script>
+  // Close mobile nav when a link is clicked
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

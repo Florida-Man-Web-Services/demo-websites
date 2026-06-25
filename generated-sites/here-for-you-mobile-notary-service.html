@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Here For You Mobile Notary Service | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #1a2e4a;
+      --navy-light: #243d61;
+      --gold: #c9a84c;
+      --gold-light: #e0bf7a;
+      --cream: #f8f5ef;
+      --white: #ffffff;
+      --gray-light: #eef0f3;
+      --gray-mid: #8a95a3;
+      --gray-dark: #4a5568;
+      --text: #2d3748;
+      --shadow: 0 4px 20px rgba(26, 46, 74, 0.12);
+      --shadow-lg: 0 8px 40px rgba(26, 46, 74, 0.18);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--text);
+      background-color: var(--white);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--navy);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--navy);
+    }
+
+    .nav-logo-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      font-family: 'Georgia', serif;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--gold-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy) !important;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-light) !important;
+      color: var(--navy) !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 68px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #2a4a7a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(201, 168, 76, 0.04) 40px,
+        rgba(201, 168, 76, 0.04) 80px
+      );
+    }
+
+    .hero-seal {
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 420px;
+      height: 420px;
+      opacity: 0.06;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 90px 24px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201, 168, 76, 0.2);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-family: Arial, sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--gold-light);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      color: var(--white);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      max-width: 680px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold-light);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,0.78);
+      max-width: 540px;
+      margin-bottom: 40px;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 14px 30px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 700;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 13px 28px;
+      border-radius: 5px;
+      border: 2px solid rgba(255,255,255,0.45);
+      text-decoration: none;
+      font-weight: 600;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: left;
+    }
+
+    .hero-stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-family: Arial, sans-serif;
+      margin-top: 4px;
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 80px 24px;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-family: Arial, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--navy);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-dark);
+      max-width: 580px;
+      font-family: Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-top: 48px;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--gray-dark);
+      font-family: Arial, sans-serif;
+      line-height: 1.75;
+      margin-bottom: 18px;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .about-card {
+      background: var(--white);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .about-card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--navy);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .about-card-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--gold-light);
+    }
+
+    .about-card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--navy);
+      font-family: Arial, sans-serif;
+      margin-bottom: 3px;
+    }
+
+    .about-card-desc {
+      font-size: 0.85rem;
+      color: var(--gray-mid);
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .services-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 36px 28px;
+      border: 1px solid rgba(26, 46, 74, 0.07);
+      transition: box-shadow 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--navy);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--gold-light);
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .service-card p {
+      font-size: 0.88rem;
+      color: var(--gray-dark);
+      font-family: Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .contact .section-title {
+      color: var(--white);
+    }
+
+    .contact .section-label {
+      color: var(--gold-light);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      margin-top: 48px;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(201, 168, 76, 0.15);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--gold-light);
+    }
+
+    .contact-item-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-light);
+      font-family: Arial, sans-serif;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .contact-item-value {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+      font-family: Arial, sans-serif;
+    }
+
+    .contact-item-value a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-item-value a:hover {
+      color: var(--gold-light);
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .btn-directions {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 14px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-directions:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-directions svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--navy);
+    }
+
+    .btn-call {
+      background: transparent;
+      color: var(--white);
+      padding: 13px 24px;
+      border-radius: 6px;
+      border: 2px solid rgba(255,255,255,0.3);
+      text-decoration: none;
+      font-weight: 600;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-call:hover {
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+    }
+
+    .btn-call svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .rating-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .rating-box-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-light);
+      font-family: Arial, sans-serif;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .rating-stars svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--gold);
+    }
+
+    .rating-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .rating-out-of {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      font-family: Arial, sans-serif;
+    }
+
+    .rating-source {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      font-family: Arial, sans-serif;
+    }
+
+    .rating-source svg {
+      width: 16px;
+      height: 16px;
+      fill: rgba(255,255,255,0.4);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0f1e32;
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-name {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-family: Georgia, serif;
+    }
+
+    .footer-location {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.4);
+      font-family: Arial, sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--gold);
+      margin: 16px auto;
+      border-radius: 2px;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: var(--navy);
+        flex-direction: column;
+        padding: 16px 24px 20px;
+        gap: 14px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding: 60px 20px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        gap: 28px;
+      }
+
+      .hero-inner {
+        padding: 70px 20px 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+          </svg>
+        </div>
+        <div class="nav-logo-text">
+          Here For You
+          <span>Mobile Notary Service</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <svg class="hero-seal" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="95" fill="none" stroke="white" stroke-width="4"/>
+      <circle cx="100" cy="100" r="80" fill="none" stroke="white" stroke-width="2"/>
+      <path d="M100 20 L110 50 L140 50 L118 68 L128 98 L100 80 L72 98 L82 68 L60 50 L90 50 Z" fill="white"/>
+    </svg>
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5"/></svg>
+        Certified Notary Public &mdash; Gainesville, FL
+      </div>
+      <h1>We Come To <em>You</em> — Professional Notary Services at Your Door</h1>
+      <p class="hero-tagline">Convenient, reliable, and professional mobile notary services throughout Gainesville and the surrounding North Central Florida area. We make the process simple so you can focus on what matters.</p>
+      <div class="hero-actions">
+        <a href="tel:3522627391" class="btn-primary">Call (352) 262-7391</a>
+        <a href="#services" class="btn-outline">View Services</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">5.0</div>
+          <div class="hero-stat-label">Google Rating</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">Mobile</div>
+          <div class="hero-stat-label">We Come to You</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">Fast</div>
+          <div class="hero-stat-label">Flexible Scheduling</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <span class="section-label">About Us</span>
+      <h2 class="section-title">Trusted Notary Services, Delivered to Your Location</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Here For You Mobile Notary Service is a dedicated mobile notary provider serving individuals, families, businesses, and legal professionals throughout Gainesville, Florida and the surrounding communities. We understand that your time is valuable, which is why we travel to your home, office, hospital, care facility, or any other convenient location.</p>
+          <p>Whether you need a simple document notarized or require assistance with loan signings and complex legal paperwork, our goal is to make the notarization process as smooth and stress-free as possible. We work around your schedule to ensure documents are handled accurately and promptly.</p>
+          <p>With a perfect 5-star rating on Google, our commitment to professionalism, accuracy, and customer care speaks for itself. Contact us for availability and scheduling details.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-card">
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-8 2l3 2-8 4c3.14.5 5.85 2.5 7 5L8 12c2.16 4 4 6.88 3.73 10L8 21c0-2-1-4.07-1.73-6.34L4 15"/></svg>
+            </div>
+            <div>
+              <div class="about-card-title">We Come to You</div>
+              <div class="about-card-desc">Home, office, hospital, assisted living — we travel to your location throughout Gainesville.</div>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="about-card-title">Certified &amp; Commission-Verified</div>
+              <div class="about-card-desc">Fully commissioned Florida Notary Public with current state certification and E&amp;O insurance.</div>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-14v4l3 3"/></svg>
+            </div>
+            <div>
+              <div class="about-card-title">Flexible Scheduling</div>
+              <div class="about-card-desc">We work around your schedule. Contact us for current appointment availability.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Mobile Notary Services</h2>
+        <p class="section-subtitle">From routine personal documents to complex loan closings, we handle a wide range of notarization needs throughout the Gainesville area.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 13h8v1.5H8V13zm0 3h8v1.5H8V16zm0-6h5v1.5H8V10z"/></svg>
+          </div>
+          <h3>General Document Notarization</h3>
+          <p>Affidavits, powers of attorney, wills, contracts, and other personal or business documents requiring a licensed notary signature and seal.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <h3>Loan Signing Services</h3>
+          <p>Certified signing agent services for real estate closings, refinances, home equity loans, and mortgage document packages.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Power of Attorney</h3>
+          <p>Notarization of durable, medical, financial, and limited power of attorney documents to ensure they are legally recognized.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.47A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.1a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <h3>Hospital &amp; Care Facility Visits</h3>
+          <p>Compassionate in-person visits to hospitals, nursing homes, and assisted living facilities for patients who cannot travel.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <h3>Business Document Services</h3>
+          <p>Notarization of corporate resolutions, business agreements, vendor contracts, and other commercial documents for local businesses.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Other Notarization Needs</h3>
+          <p>Need something not listed? Contact us to discuss your specific notarization requirements. We handle a wide variety of documents and can advise on what you need.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <span class="section-label">Get In Touch</span>
+      <h2 class="section-title">Ready to Schedule? We Make It Easy.</h2>
+      <div class="contact-grid">
+        <div>
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Location</div>
+                <div class="contact-item-value">Gainesville, FL<br/>Serving North Central Florida</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.47A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.1a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Phone</div>
+                <div class="contact-item-value"><a href="tel:3522627391">(352) 262-7391</a></div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Availability</div>
+                <div class="contact-item-value">Contact us for current scheduling details</div>
+              </div>
+            </div>
+          </div>
+          <div class="contact-actions" style="margin-top: 36px;">
+            <a href="https://www.google.com/maps/search/Here%20For%20You%20Mobile%20Notary%20Service%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer" class="btn-directions">
+              <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              Get Directions on Google Maps
+            </a>
+            <a href="tel:3522627391" class="btn-call">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.47A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.1a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call (352) 262-7391
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="rating-box">
+            <div class="rating-box-title">Customer Rating</div>
+            <div class="rating-stars">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="rating-number">5.0</div>
+            <div class="rating-out-of">out of 5.0 &mdash; Perfect Rating</div>
+            <div class="rating-source">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Verified on Google Maps
+            </div>
+          </div>
+
+          <div style="margin-top: 24px; padding: 24px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;">
+            <p style="font-size: 0.92rem; color: rgba(255,255,255,0.75); font-family: Arial, sans-serif; line-height: 1.65; font-style: italic;">"We come to you — making notary services convenient, professional, and stress-free for every client throughout the Gainesville community."</p>
+            <p style="font-size: 0.78rem; color: var(--gold-light); font-family: Arial, sans-serif; margin-top: 12px; font-weight: 700; letter-spacing: 0.04em;">HERE FOR YOU MOBILE NOTARY SERVICE</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">Here For You Mobile Notary Service</div>
+      <div class="footer-location">Gainesville, FL &mdash; Serving North Central Florida</div>
+      <div class="footer-divider"></div>
+      <div class="footer-copy">&copy; 2026 Here For You Mobile Notary Service. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    var hamburger = document.getElementById('hamburger');
+    var navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

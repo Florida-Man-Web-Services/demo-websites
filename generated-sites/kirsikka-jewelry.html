@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kirsikka Jewelry | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #faf8f5;
+      color: #2c2118;
+      line-height: 1.7;
+    }
+
+    /* ── Palette ────────────────────────────────────────────── */
+    /* Champagne gold: #c9a96e  |  Deep rose: #8b4f60  |  Ivory: #faf8f5
+       Dark mocha: #2c2118  |  Blush: #f0e4d8  |  Soft gold: #e8d5b0 */
+
+    /* ── Typography ─────────────────────────────────────────── */
+    h1, h2, h3 {
+      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Navigation ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(44, 33, 24, 0.96);
+      backdrop-filter: blur(6px);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      border-bottom: 1px solid rgba(201, 169, 110, 0.3);
+    }
+    .nav-brand {
+      color: #c9a96e;
+      font-size: 1.25rem;
+      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+    .nav-brand span {
+      color: #e8d5b0;
+      font-size: 0.7rem;
+      display: block;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-top: -2px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #e8d5b0;
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'Georgia', serif;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #c9a96e; }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #c9a96e;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #2c2118 0%, #4a3020 55%, #3a2518 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 2rem 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* decorative gold ring motif */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(600px, 90vw);
+      height: min(600px, 90vw);
+      border-radius: 50%;
+      border: 1px solid rgba(201, 169, 110, 0.12);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(440px, 70vw);
+      height: min(440px, 70vw);
+      border-radius: 50%;
+      border: 1px solid rgba(201, 169, 110, 0.08);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 700px; }
+    .hero-eyebrow {
+      display: inline-block;
+      color: #c9a96e;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      border-top: 1px solid rgba(201, 169, 110, 0.5);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.5);
+      padding: 6px 16px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      color: #faf8f5;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 400;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .hero h1 em {
+      color: #c9a96e;
+      font-style: italic;
+    }
+    .hero-tagline {
+      color: #c8b89a;
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid #c9a96e;
+      color: #c9a96e;
+      text-decoration: none;
+      padding: 14px 36px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      font-family: 'Georgia', serif;
+      transition: background 0.25s, color 0.25s;
+    }
+    .hero-cta:hover {
+      background: #c9a96e;
+      color: #2c2118;
+    }
+
+    /* ── Section Shared ─────────────────────────────────────── */
+    section { padding: 90px 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      display: block;
+      color: #8b4f60;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 400;
+      color: #2c2118;
+      margin-bottom: 1rem;
+    }
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: #c9a96e;
+      margin: 0 0 2rem;
+    }
+    .divider-center { margin: 0 auto 2rem; }
+
+    /* ── About ──────────────────────────────────────────────── */
+    .about { background: #faf8f5; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-text p {
+      color: #4a3730;
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+    }
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* SVG ornament placeholder */
+    .ornament-ring {
+      width: 280px;
+      height: 280px;
+      position: relative;
+    }
+    .ornament-ring svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Services ───────────────────────────────────────────── */
+    .services { background: #f0e4d8; }
+    .services .section-title,
+    .services .section-label { text-align: center; }
+    .services .divider { margin: 0 auto 3rem; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: #faf8f5;
+      border: 1px solid #e8d5b0;
+      padding: 2rem 1.6rem;
+      text-align: center;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .service-card:hover {
+      box-shadow: 0 8px 32px rgba(44, 33, 24, 0.1);
+      transform: translateY(-4px);
+    }
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 1rem;
+      color: #c9a96e;
+    }
+    .service-card h3 {
+      font-size: 1.05rem;
+      color: #2c2118;
+      margin-bottom: 0.6rem;
+      font-weight: 400;
+    }
+    .service-card p {
+      color: #6b5548;
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    /* ── Contact ────────────────────────────────────────────── */
+    .contact { background: #2c2118; color: #e8d5b0; }
+    .contact .section-label { color: #c9a96e; }
+    .contact .section-title { color: #faf8f5; }
+    .contact .divider { background: #c9a96e; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-info-block { display: flex; flex-direction: column; gap: 1.6rem; }
+    .contact-item h4 {
+      color: #c9a96e;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+      font-family: 'Georgia', serif;
+    }
+    .contact-item p, .contact-item a {
+      color: #c8b89a;
+      font-size: 1rem;
+      text-decoration: none;
+    }
+    .contact-item a:hover { color: #c9a96e; }
+    .rating-block {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 0.4rem;
+    }
+    .stars {
+      color: #c9a96e;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+    .rating-text {
+      color: #c8b89a;
+      font-size: 0.9rem;
+    }
+    .btn-directions {
+      display: inline-block;
+      background: #c9a96e;
+      color: #2c2118;
+      text-decoration: none;
+      padding: 14px 30px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      transition: background 0.25s;
+      margin-top: 1rem;
+    }
+    .btn-directions:hover { background: #b8904f; }
+    .contact-map-placeholder {
+      background: rgba(201, 169, 110, 0.08);
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      padding: 2.5rem;
+      border-radius: 2px;
+    }
+    .contact-map-placeholder p {
+      color: #a08060;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .contact-detail-note {
+      color: #a08060;
+      font-size: 0.85rem;
+      font-style: italic;
+      margin-top: 0.4rem;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: #1a120b;
+      color: #6b5548;
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+    }
+    footer a { color: #a08060; text-decoration: none; }
+    footer a:hover { color: #c9a96e; }
+    footer .footer-brand {
+      color: #c9a96e;
+      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-visual { display: none; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        width: 100%;
+        background: rgba(44, 33, 24, 0.98);
+        padding: 1.5rem 2rem;
+        gap: 1.2rem;
+        border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+      }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: flex; }
+      section { padding: 60px 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────── -->
+  <nav>
+    <a class="nav-brand" href="#hero">
+      Kirsikka Jewelry
+      <span>Gainesville, FL</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="this.classList.toggle('active'); document.querySelector('.nav-links').classList.toggle('open');">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Artisan Jewelry Design</span>
+      <h1>Crafted with <em>Care,</em><br>Worn with Intention</h1>
+      <p class="hero-tagline">
+        Thoughtfully designed jewelry for life's most meaningful moments,<br>
+        right here in Gainesville, Florida.
+      </p>
+      <a class="hero-cta" href="#services">Explore Our Work</a>
+    </div>
+  </section>
+
+  <!-- ── About ──────────────────────────────────────────────── -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">Our Story</span>
+          <h2 class="section-title">Jewelry That Speaks for You</h2>
+          <div class="divider"></div>
+          <p>
+            Kirsikka Jewelry is a boutique jewelry design studio serving Gainesville and the surrounding North Central Florida community. We specialize in handcrafted and custom-designed pieces that reflect individual style, story, and sentiment.
+          </p>
+          <p>
+            Every piece we create is approached with an artisan's attention to detail, from initial concept through final finish. Whether you are looking for a one-of-a-kind custom creation or a beautifully curated selection of finished jewelry, we bring creativity and craftsmanship to every commission.
+          </p>
+          <p>
+            We take pride in building lasting relationships with our clients, offering a personalized experience that goes beyond the ordinary jewelry transaction. Contact us to begin your journey toward the perfect piece.
+          </p>
+        </div>
+        <div class="about-visual">
+          <div class="ornament-ring">
+            <!-- Decorative SVG ring / gem motif -->
+            <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- Outer ring -->
+              <circle cx="140" cy="140" r="130" stroke="#c9a96e" stroke-width="1" opacity="0.4"/>
+              <!-- Mid ring -->
+              <circle cx="140" cy="140" r="100" stroke="#c9a96e" stroke-width="0.5" opacity="0.3"/>
+              <!-- Inner ring -->
+              <circle cx="140" cy="140" r="68" stroke="#c9a96e" stroke-width="0.5" opacity="0.2"/>
+              <!-- Diamond shape center -->
+              <polygon points="140,72 180,140 140,208 100,140" stroke="#c9a96e" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <!-- Inner diamond facets -->
+              <line x1="140" y1="72" x2="140" y2="208" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/>
+              <line x1="100" y1="140" x2="180" y2="140" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/>
+              <line x1="100" y1="140" x2="140" y2="116" stroke="#c9a96e" stroke-width="0.5" opacity="0.3"/>
+              <line x1="180" y1="140" x2="140" y2="116" stroke="#c9a96e" stroke-width="0.5" opacity="0.3"/>
+              <line x1="100" y1="140" x2="140" y2="164" stroke="#c9a96e" stroke-width="0.5" opacity="0.3"/>
+              <line x1="180" y1="140" x2="140" y2="164" stroke="#c9a96e" stroke-width="0.5" opacity="0.3"/>
+              <!-- Corner dots -->
+              <circle cx="140" cy="72" r="3" fill="#c9a96e" opacity="0.7"/>
+              <circle cx="180" cy="140" r="3" fill="#c9a96e" opacity="0.7"/>
+              <circle cx="140" cy="208" r="3" fill="#c9a96e" opacity="0.7"/>
+              <circle cx="100" cy="140" r="3" fill="#c9a96e" opacity="0.7"/>
+              <!-- Tick marks on outer ring -->
+              <line x1="140" y1="10" x2="140" y2="20" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+              <line x1="140" y1="260" x2="140" y2="270" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+              <line x1="10" y1="140" x2="20" y2="140" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+              <line x1="260" y1="140" x2="270" y2="140" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ───────────────────────────────────────────── -->
+  <section class="services" id="services">
+    <div class="container">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Our Services</h2>
+      <div class="divider divider-center"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Ring icon -->
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="26" cy="26" r="18" stroke="currentColor" stroke-width="2"/>
+              <circle cx="26" cy="26" r="11" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+              <polygon points="26,14 30,22 26,26 22,22" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <h3>Custom Jewelry Design</h3>
+          <p>Work with us one-on-one to bring your vision to life. From initial sketch to finished piece, every custom creation is uniquely yours.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Pendant / necklace icon -->
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M26 6 C26 6 10 20 10 32 a16 16 0 0 0 32 0 C42 20 26 6 26 6Z" stroke="currentColor" stroke-width="1.8" fill="none"/>
+              <circle cx="26" cy="34" r="6" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="26" y1="6" x2="26" y2="10" stroke="currentColor" stroke-width="2"/>
+              <line x1="14" y1="8" x2="38" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Necklaces &amp; Pendants</h3>
+          <p>Elegant necklaces and artisan pendants crafted to complement any style, from delicate everyday wear to bold statement pieces.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Earring icon -->
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="18" cy="12" r="5" stroke="currentColor" stroke-width="1.8"/>
+              <circle cx="34" cy="12" r="5" stroke="currentColor" stroke-width="1.8"/>
+              <line x1="18" y1="17" x2="18" y2="28" stroke="currentColor" stroke-width="1.8"/>
+              <line x1="34" y1="17" x2="34" y2="28" stroke="currentColor" stroke-width="1.8"/>
+              <polygon points="18,28 22,40 18,44 14,40" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <polygon points="34,28 38,40 34,44 30,40" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <h3>Earrings</h3>
+          <p>Handcrafted earrings in a variety of styles — from simple studs to intricate drop designs — made with quality materials.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Bracelet / bangle icon -->
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <ellipse cx="26" cy="28" rx="18" ry="10" stroke="currentColor" stroke-width="1.8"/>
+              <ellipse cx="26" cy="22" rx="18" ry="10" stroke="currentColor" stroke-width="1.8" fill="#f0e4d8"/>
+              <ellipse cx="26" cy="22" rx="18" ry="10" stroke="currentColor" stroke-width="1.8"/>
+              <line x1="8" y1="22" x2="8" y2="28" stroke="currentColor" stroke-width="1.8"/>
+              <line x1="44" y1="22" x2="44" y2="28" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <h3>Bracelets &amp; Bangles</h3>
+          <p>Beautiful bracelets and bangles, from slim stacking bands to bold cuffs, designed to layer effortlessly or stand alone.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Gem / repair icon -->
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="26,6 42,18 36,44 16,44 10,18" stroke="currentColor" stroke-width="1.8" fill="none"/>
+              <polygon points="26,6 42,18 26,24 10,18" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.6"/>
+              <line x1="10" y1="18" x2="16" y2="44" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+              <line x1="42" y1="18" x2="36" y2="44" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+              <line x1="26" y1="24" x2="16" y2="44" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+              <line x1="26" y1="24" x2="36" y2="44" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+            </svg>
+          </div>
+          <h3>Jewelry Repair &amp; Restoration</h3>
+          <p>Breathe new life into cherished heirloom or damaged pieces. Contact us for details on our repair and restoration services.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Gift / consultation icon -->
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="8" y="22" width="36" height="24" rx="1" stroke="currentColor" stroke-width="1.8"/>
+              <line x1="26" y1="22" x2="26" y2="46" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="12" y="16" width="28" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M20 16 C20 16 20 10 26 10 C32 10 32 16 32 16" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M26 10 C26 6 22 4 20 8" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.6"/>
+            </svg>
+          </div>
+          <h3>Gift &amp; Bridal Consultations</h3>
+          <p>Planning a proposal, wedding, or searching for the perfect gift? We offer personalized consultations to match any occasion and budget.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ─────────────────────────────────────────────── -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <span class="section-label">Find Us</span>
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="divider"></div>
+      <div class="contact-grid">
+        <div class="contact-info-block">
+
+          <div class="contact-item">
+            <h4>Address</h4>
+            <p>5750 SW 75th Ct #48<br>Gainesville, FL 32608</p>
+          </div>
+
+          <div class="contact-item">
+            <h4>Phone</h4>
+            <a href="tel:+13523536968">(352) 353-6968</a>
+          </div>
+
+          <div class="contact-item">
+            <h4>Hours</h4>
+            <p>Contact us for details</p>
+          </div>
+
+          <div class="contact-item">
+            <h4>Customer Rating</h4>
+            <div class="rating-block">
+              <span class="stars" aria-label="4 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+              <span class="rating-text">4.2 &nbsp;·&nbsp; 57 reviews on Google</span>
+            </div>
+          </div>
+
+          <div>
+            <a
+              class="btn-directions"
+              href="https://www.google.com/maps/search/Kirsikka%20Jewelry%205750%20SW%2075th%20Ct%20%2348%2C%20Gainesville%2C%20FL%2032608"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Get Directions
+            </a>
+          </div>
+
+        </div>
+
+        <div class="contact-map-placeholder">
+          <p style="color:#c9a96e; font-family:'Palatino Linotype','Book Antiqua',Palatino,serif; font-size:1.1rem; margin-bottom:1rem;">Visit Our Studio</p>
+          <p>We are located at <strong style="color:#e8d5b0;">5750 SW 75th Ct, Suite 48</strong> in Gainesville, FL. We invite you to stop by and experience our collection in person.</p>
+          <p class="contact-detail-note" style="margin-top:1rem;">Call ahead or reach out to schedule a consultation — we would love to meet you.</p>
+          <p style="margin-top:1.5rem;">
+            <a href="tel:+13523536968" style="color:#c9a96e; font-size:1.05rem; letter-spacing:0.06em;">(352) 353-6968</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-brand">Kirsikka Jewelry</span>
+    <p>5750 SW 75th Ct #48, Gainesville, FL 32608 &nbsp;|&nbsp; <a href="tel:+13523536968">(352) 353-6968</a></p>
+    <p style="margin-top:0.6rem;">&copy; 2026 Kirsikka Jewelry. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

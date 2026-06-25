@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Honey & Hearth Professional Services | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --warm-amber: #C17F3B;
+      --deep-amber: #8B5E1A;
+      --honey-gold: #E8A83A;
+      --cream: #FAF3E7;
+      --warm-white: #FFFDF7;
+      --charcoal: #2C2C2C;
+      --medium-gray: #5A5A5A;
+      --light-gray: #E8E0D4;
+      --rust: #A04C2A;
+      --sage: #7A8C6E;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background-color: var(--warm-white);
+      color: var(--charcoal);
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--honey-gold);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .nav-name {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-name span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: normal;
+      color: var(--honey-gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--light-gray);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      font-family: Arial, sans-serif;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--honey-gold);
+    }
+
+    .nav-cta {
+      background-color: var(--warm-amber);
+      color: #fff !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      transition: background-color 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background-color: var(--deep-amber) !important;
+      color: #fff !important;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background-color: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px;
+      left: 0;
+      right: 0;
+      background-color: var(--charcoal);
+      padding: 1rem 2rem 1.5rem;
+      z-index: 999;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      color: var(--light-gray);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      letter-spacing: 0.03em;
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--honey-gold);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background-color: var(--charcoal);
+      background-image:
+        radial-gradient(ellipse at 70% 40%, rgba(193,127,59,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(139,94,26,0.12) 0%, transparent 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(193,127,59,0.03) 40px,
+        rgba(193,127,59,0.03) 41px
+      );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background-color: rgba(232,168,58,0.15);
+      border: 1px solid rgba(232,168,58,0.4);
+      color: var(--honey-gold);
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.1rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      color: var(--cream);
+      font-weight: bold;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--honey-gold);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #B8AFA0;
+      margin-bottom: 2.5rem;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background-color: var(--warm-amber);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 0.92rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      transition: background-color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--deep-amber);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      border: 2px solid rgba(232,168,58,0.5);
+      color: var(--honey-gold);
+      text-decoration: none;
+      padding: 0.83rem 2rem;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 0.92rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--honey-gold);
+      color: #fff;
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      height: 4px;
+      background: linear-gradient(90deg, var(--deep-amber), var(--honey-gold), var(--warm-amber));
+    }
+
+    /* ABOUT */
+    .about {
+      padding: 5rem 2rem;
+      background-color: var(--cream);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--warm-amber);
+      margin-bottom: 0.6rem;
+      font-weight: bold;
+    }
+
+    .section-heading {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--charcoal);
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .section-heading em {
+      font-style: normal;
+      color: var(--warm-amber);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--medium-gray);
+      font-size: 1.05rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      background-color: var(--charcoal);
+      border-radius: 10px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background-color: rgba(232,168,58,0.15);
+      border: 1px solid rgba(232,168,58,0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .feature-text h4 {
+      color: var(--cream);
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .feature-text p {
+      color: #8A8A8A;
+      font-size: 0.82rem;
+      font-family: Arial, sans-serif;
+      line-height: 1.4;
+    }
+
+    /* SERVICES */
+    .services {
+      padding: 5rem 2rem;
+      background-color: var(--warm-white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background-color: var(--cream);
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+      padding: 2rem 1.8rem;
+      transition: box-shadow 0.25s, transform 0.2s, border-color 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--warm-amber), var(--honey-gold));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+      border-color: rgba(193,127,59,0.35);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      margin-bottom: 0.6rem;
+      font-weight: bold;
+    }
+
+    .service-card p {
+      color: var(--medium-gray);
+      font-size: 0.88rem;
+      font-family: Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    /* CONTACT */
+    .contact {
+      padding: 5rem 2rem;
+      background-color: var(--charcoal);
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .contact-header .section-label {
+      color: var(--honey-gold);
+    }
+
+    .contact-header .section-heading {
+      color: var(--cream);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .contact-card {
+      background-color: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 2rem;
+    }
+
+    .contact-card h3 {
+      color: var(--honey-gold);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+      font-size: 0.82rem;
+    }
+
+    .contact-info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .contact-info-row:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .info-icon {
+      width: 38px;
+      height: 38px;
+      background-color: rgba(232,168,58,0.12);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .info-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #7A7A7A;
+      margin-bottom: 0.2rem;
+    }
+
+    .info-value {
+      color: var(--cream);
+      font-size: 0.97rem;
+      font-family: Arial, sans-serif;
+    }
+
+    .info-value a {
+      color: var(--cream);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .info-value a:hover {
+      color: var(--honey-gold);
+    }
+
+    .rating-display {
+      background-color: rgba(232,168,58,0.1);
+      border: 1px solid rgba(232,168,58,0.25);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .rating-stars {
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .rating-text {
+      font-family: Arial, sans-serif;
+      font-size: 0.82rem;
+      color: #9A9A9A;
+    }
+
+    .rating-text strong {
+      color: var(--cream);
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--warm-amber);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 1.6rem;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      transition: background-color 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-directions:hover {
+      background-color: var(--deep-amber);
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: transparent;
+      color: var(--honey-gold);
+      text-decoration: none;
+      padding: 0.83rem 1.6rem;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      border: 2px solid rgba(232,168,58,0.4);
+      transition: border-color 0.2s, background-color 0.2s;
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.75rem;
+    }
+
+    .btn-call:hover {
+      border-color: var(--honey-gold);
+      background-color: rgba(232,168,58,0.08);
+    }
+
+    .service-area-card {
+      background-color: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 2rem;
+    }
+
+    .service-area-card h3 {
+      color: var(--honey-gold);
+      font-family: Arial, sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-area-card p {
+      color: #9A9A9A;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .quick-services {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .quick-services li {
+      font-family: Arial, sans-serif;
+      font-size: 0.82rem;
+      color: #8A8A8A;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .quick-services li::before {
+      content: '✓';
+      color: var(--warm-amber);
+      font-weight: bold;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: #1A1A1A;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer-name {
+      color: var(--honey-gold);
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-tagline {
+      color: #6A6A6A;
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-copy {
+      color: #4A4A4A;
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 5rem 1.5rem 3rem;
+      }
+
+      .about, .services, .contact {
+        padding: 3.5rem 1.5rem;
+      }
+
+      .quick-services {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-icon">🔨</div>
+      <div class="nav-name">
+        Honey &amp; Hearth
+        <span>Professional Services</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#services" onclick="closeMobile()">Services</a>
+    <a href="#contact" onclick="closeMobile()">Get in Touch</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, FL &nbsp;|&nbsp; Handyperson Services</div>
+      <h1>Skilled Hands,<br><em>Dependable Work</em></h1>
+      <p class="hero-tagline">From small repairs to bigger projects, Honey &amp; Hearth brings craftsmanship and care to every job in your home.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get a Free Estimate</a>
+        <a href="#services" class="btn-outline">See What We Do</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">About Us</div>
+          <h2 class="section-heading">Your Trusted<br><em>Local Handyperson</em></h2>
+          <p>Honey &amp; Hearth Professional Services is a locally owned handyperson business serving homeowners and renters throughout Gainesville and the surrounding Alachua County area. We handle the repairs and improvements that keep your home running smoothly and looking its best.</p>
+          <p>We take pride in arriving on time, communicating clearly, and leaving every job site cleaner than we found it. No project is too small, and we bring the same level of care to a leaky faucet as we do to a full room renovation.</p>
+          <p>Whether you need a quick fix or a multi-day project completed, contact us to discuss your needs and we will work with your schedule and budget.</p>
+        </div>
+        <div class="about-visual">
+          <div class="feature-item">
+            <div class="feature-icon">🏠</div>
+            <div class="feature-text">
+              <h4>Locally Rooted</h4>
+              <p>Based right here in Gainesville — we know the neighborhoods and we care about our community.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔧</div>
+            <div class="feature-text">
+              <h4>Wide Range of Skills</h4>
+              <p>From carpentry to plumbing repairs, we bring versatile expertise to tackle nearly any household task.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📋</div>
+            <div class="feature-text">
+              <h4>Clear Communication</h4>
+              <p>We explain the work upfront, provide honest timelines, and keep you in the loop throughout.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">✅</div>
+            <div class="feature-text">
+              <h4>Job Done Right</h4>
+              <p>We stand behind our work and won't call a project finished until you're satisfied.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header">
+        <div class="section-label">What We Do</div>
+        <h2 class="section-heading">Our <em>Services</em></h2>
+        <p style="color: var(--medium-gray); font-family: Arial, sans-serif; font-size: 0.95rem; max-width: 520px; margin: 0 auto;">We handle a wide variety of home repair and improvement tasks. Contact us for details on any service or to describe a project not listed here.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">🔨</div>
+          <h3>General Carpentry &amp; Repairs</h3>
+          <p>Door and window adjustments, trim work, shelving installation, cabinet repairs, and general wood repairs throughout your home.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🚿</div>
+          <h3>Plumbing Fixture Repairs</h3>
+          <p>Faucet and toilet repairs, showerhead replacement, minor leak fixes, and other household plumbing tasks that don't require a licensed plumber.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">💡</div>
+          <h3>Minor Electrical Tasks</h3>
+          <p>Outlet and light switch replacement, ceiling fan installation, light fixture swaps, and similar small electrical jobs within handyperson scope.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🎨</div>
+          <h3>Painting &amp; Patching</h3>
+          <p>Interior wall painting, drywall patching and repair, caulking, touch-up work, and prep for larger paint projects.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🏗️</div>
+          <h3>Assembly &amp; Installation</h3>
+          <p>Furniture assembly, TV and shelf mounting, blinds and curtain rod installation, and general mounting and hanging tasks.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🛠️</div>
+          <h3>Odd Jobs &amp; Seasonal Upkeep</h3>
+          <p>Weather stripping, gutter cleaning, caulk replacement, screen repair, and the miscellaneous tasks that keep your home in good shape year-round.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-header">
+        <div class="section-label">Contact Us</div>
+        <h2 class="section-heading">Ready to Get Started?</h2>
+        <p style="color: #8A8A8A; font-family: Arial, sans-serif; font-size: 0.95rem;">Give us a call or stop by — we're happy to talk through your project.</p>
+      </div>
+      <div class="contact-grid">
+
+        <div class="contact-card">
+          <h3>Contact Information</h3>
+
+          <div class="contact-info-row">
+            <div class="info-icon">📍</div>
+            <div>
+              <div class="info-label">Address</div>
+              <div class="info-value">1035 SW 60 Terrace<br>Gainesville, FL</div>
+            </div>
+          </div>
+
+          <div class="contact-info-row">
+            <div class="info-icon">📞</div>
+            <div>
+              <div class="info-label">Phone</div>
+              <div class="info-value"><a href="tel:+13522694024">(352) 269-4024</a></div>
+            </div>
+          </div>
+
+          <div class="contact-info-row">
+            <div class="info-icon">🕐</div>
+            <div>
+              <div class="info-label">Hours</div>
+              <div class="info-value">Contact us for details</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <a href="https://www.google.com/maps/search/Honey%20%26%20Hearth%20Professional%20Services%201035%20SW%2060%20Terrace" target="_blank" rel="noopener noreferrer" class="btn-directions">
+              <span>🗺️</span> Get Directions
+            </a>
+            <a href="tel:+13522694024" class="btn-call">
+              <span>📞</span> Call Now
+            </a>
+          </div>
+        </div>
+
+        <div class="service-area-card">
+          <h3>Google Maps</h3>
+
+          <div class="rating-display">
+            <div>
+              <div class="rating-stars">☆☆☆☆☆</div>
+            </div>
+            <div class="rating-text">
+              <strong>No reviews yet</strong>
+              Be the first to leave a review on Google Maps
+            </div>
+          </div>
+
+          <h3 style="margin-top: 1.5rem;">Service Area</h3>
+          <p>Serving Gainesville and the greater Alachua County area. Contact us to confirm availability for your location.</p>
+          <ul class="quick-services">
+            <li>Gainesville</li>
+            <li>Alachua</li>
+            <li>Newberry</li>
+            <li>Jonesville</li>
+            <li>Archer</li>
+            <li>High Springs</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Honey &amp; Hearth Professional Services</div>
+    <div class="footer-tagline">Skilled hands for every home — Gainesville, FL</div>
+    <div class="footer-copy">&copy; 2026 Honey &amp; Hearth Professional Services &nbsp;|&nbsp; 1035 SW 60 Terrace, Gainesville, FL &nbsp;|&nbsp; (352) 269-4024</div>
+  </footer>
+
+  <script>
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', function() {
+      mobileMenu.classList.toggle('open');
+    });
+
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+    }
+  </script>
+
+</body>
+</html>

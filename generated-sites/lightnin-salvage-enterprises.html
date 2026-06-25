@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lightnin' Salvage Enterprises | Live Music · Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-dark:      #0d0d0d;
+      --bg-mid:       #161616;
+      --bg-card:      #1e1b17;
+      --amber:        #e8a020;
+      --amber-light:  #f5c050;
+      --amber-dim:    #b07010;
+      --rust:         #c0440a;
+      --cream:        #f2e8d0;
+      --muted:        #9a8c7a;
+      --border:       #2e2820;
+      --white:        #ffffff;
+      --radius:       6px;
+      --font-head:    'Georgia', 'Times New Roman', serif;
+      --font-body:    'Trebuchet MS', 'Segoe UI', Arial, sans-serif;
+      --nav-h:        68px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { display: block; max-width: 100%; }
+
+    /* ── Utility ─────────────────────────────────────── */
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      height: var(--nav-h);
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .nav-bolt {
+      font-size: 1.5rem;
+      line-height: 1;
+      color: var(--amber);
+    }
+
+    .nav-name {
+      font-family: var(--font-head);
+      font-size: 1.15rem;
+      color: var(--cream);
+      font-style: italic;
+    }
+
+    .nav-name span {
+      color: var(--amber);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--amber); }
+
+    /* Hamburger (mobile) */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* Mobile nav overlay */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: rgba(13,13,13,0.98);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 5%;
+      z-index: 899;
+    }
+
+    .nav-drawer.open { display: block; }
+
+    .nav-drawer ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .nav-drawer a {
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-drawer a:hover { color: var(--amber); }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: calc(var(--nav-h) + 2rem) 5% 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Textured background using CSS only */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,160,32,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 20% 70%, rgba(192,68,10,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 30%, rgba(232,160,32,0.07) 0%, transparent 55%);
+    }
+
+    /* Subtle grain effect */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border: 1px solid var(--amber-dim);
+      padding: 0.35rem 1rem;
+      border-radius: 99px;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '⚡';
+      font-size: 0.9rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-title .accent { color: var(--amber); }
+
+    .hero-tagline {
+      font-family: var(--font-head);
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      margin-top: 0.6rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--amber);
+      color: var(--bg-dark);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.2rem;
+      border-radius: var(--radius);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .hero-cta:hover {
+      background: var(--amber-light);
+      transform: translateY(-2px);
+    }
+
+    /* Decorative divider wave */
+    .wave-divider {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      margin-top: -2px;
+    }
+
+    .wave-divider svg { display: block; }
+
+    /* ── ABOUT ────────────────────────────────────────── */
+    .about {
+      background: var(--bg-mid);
+      padding: 6rem 0;
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .about-badge {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+    }
+
+    .about-badge-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+
+    .about-badge-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      color: var(--cream);
+      margin-bottom: 0.2rem;
+    }
+
+    .about-badge-text {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* ── SERVICES ─────────────────────────────────────── */
+    .services {
+      background: var(--bg-dark);
+      padding: 6rem 0;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.6rem;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rust), var(--amber));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      border-color: var(--amber-dim);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-name {
+      font-family: var(--font-head);
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ──────────────────────────────────────── */
+    .contact {
+      background: var(--bg-mid);
+      padding: 6rem 0;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .contact-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-detail-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail-value {
+      color: var(--cream);
+      font-size: 0.95rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--amber);
+      border: 2px solid var(--amber);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.8rem;
+      border-radius: var(--radius);
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .btn-directions:hover {
+      background: var(--amber);
+      color: var(--bg-dark);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+
+    .rating-heading {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .rating-score {
+      font-family: var(--font-head);
+      font-size: 4rem;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.6rem;
+    }
+
+    .star { color: var(--amber); font-size: 1.2rem; }
+    .star-half { color: var(--amber-dim); font-size: 1.2rem; }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .rating-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .rating-bar-label { width: 28px; text-align: right; flex-shrink: 0; }
+
+    .rating-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .rating-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rust), var(--amber));
+      border-radius: 99px;
+    }
+
+    .rating-bar-pct { width: 36px; text-align: left; flex-shrink: 0; }
+
+    /* Google badge */
+    .google-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.4rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .google-g {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #4285F4;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      color: var(--cream);
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-logo span { color: var(--amber); }
+
+    .footer-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: #444;
+    }
+
+    /* ── SCROLL REVEAL ANIMATION ──────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 900px) {
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+    }
+
+    @media (max-width: 560px) {
+      .services-grid { grid-template-columns: 1fr; }
+
+      .hero-title { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ────────────────────────────────────────────── -->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" aria-label="Lightnin' Salvage Enterprises home">
+        <span class="nav-bolt" aria-hidden="true">⚡</span>
+        <span class="nav-name"><span>Lightnin'</span> Salvage Enterprises</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <button class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav" onclick="toggleNav(this)">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-drawer" id="mobile-nav" role="dialog" aria-label="Mobile navigation">
+    <ul role="list">
+      <li><a href="#about"    onclick="closeNav()">About</a></li>
+      <li><a href="#services" onclick="closeNav()">Services</a></li>
+      <li><a href="#contact"  onclick="closeNav()">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ── HERO ───────────────────────────────────────────── -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Live Music · Gainesville, FL</div>
+      <h1 class="hero-title">
+        <span class="accent">Lightnin'</span><br>
+        Salvage Enterprises
+      </h1>
+      <p class="hero-tagline">Where raw sound meets the soul of North Florida.</p>
+      <a href="#contact" class="hero-cta">
+        <span aria-hidden="true">⚡</span> Find Us
+      </a>
+    </div>
+  </section>
+
+  <!-- wave transition -->
+  <div class="wave-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" width="100%" height="48">
+      <path d="M0,48 L0,24 Q180,0 360,24 T720,24 T1080,24 T1440,24 L1440,48 Z" fill="#161616"/>
+    </svg>
+  </div>
+
+  <!-- ── ABOUT ───────────────────────────────────────────── -->
+  <section class="about" id="about" aria-label="About">
+    <div class="container">
+      <div class="about-inner">
+
+        <div class="about-text reveal">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">The Spirit of Live Music in Gainesville</h2>
+          <p>Lightnin' Salvage Enterprises is a beloved fixture in Gainesville's vibrant live music scene, bringing together local artists, touring acts, and music lovers in an atmosphere charged with energy and authenticity. Rooted in the eclectic spirit of North Central Florida, we celebrate every genre — from blues and roots rock to indie, folk, and beyond.</p>
+          <p>Whether you're catching a hometown hero or discovering a traveling band passing through, every show here is an experience worth remembering. Contact us for details on upcoming events, bookings, and more.</p>
+        </div>
+
+        <div class="about-visual reveal">
+          <div class="about-badge">
+            <div class="about-badge-icon" aria-hidden="true">🎸</div>
+            <div class="about-badge-title">Live Performances</div>
+            <div class="about-badge-text">Local acts, regional headliners, and touring artists sharing the same stage.</div>
+          </div>
+          <div class="about-badge">
+            <div class="about-badge-icon" aria-hidden="true">🎶</div>
+            <div class="about-badge-title">Multiple Genres</div>
+            <div class="about-badge-text">Blues, rock, folk, Americana, indie — a sound for every ear.</div>
+          </div>
+          <div class="about-badge">
+            <div class="about-badge-icon" aria-hidden="true">📍</div>
+            <div class="about-badge-title">Heart of Gainesville</div>
+            <div class="about-badge-text">Conveniently located on NE 23rd Ave in Gainesville's NE corridor.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ─────────────────────────────────────────── -->
+  <section class="services" id="services" aria-label="Services">
+    <div class="container">
+      <div class="services-header reveal">
+        <p class="section-label">What We Offer</p>
+        <h2 class="section-title">Live Music, Your Way</h2>
+      </div>
+
+      <div class="services-grid">
+
+        <article class="service-card reveal">
+          <div class="service-icon" aria-hidden="true">🎤</div>
+          <h3 class="service-name">Live Concerts &amp; Shows</h3>
+          <p class="service-desc">Regular live performances featuring local, regional, and touring artists across a broad range of musical styles.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon" aria-hidden="true">🥁</div>
+          <h3 class="service-name">Open Mic Nights</h3>
+          <p class="service-desc">A welcoming stage for emerging musicians and seasoned performers to share their craft with a supportive crowd.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon" aria-hidden="true">🎷</div>
+          <h3 class="service-name">Jam Sessions</h3>
+          <p class="service-desc">Collaborative, spontaneous music-making sessions where players of all skill levels are encouraged to jump in.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon" aria-hidden="true">🎼</div>
+          <h3 class="service-name">Private Event Bookings</h3>
+          <p class="service-desc">Host your private event with live music as the backdrop — contact us for details on availability and packages.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon" aria-hidden="true">📻</div>
+          <h3 class="service-name">Artist Showcases</h3>
+          <p class="service-desc">Curated showcase events spotlighting up-and-coming talent from Gainesville and the surrounding region.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon" aria-hidden="true">🎟️</div>
+          <h3 class="service-name">Ticketed Special Events</h3>
+          <p class="service-desc">Seasonal and themed live music events with advance ticketing — check with us for the current lineup.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ───────────────────────────────────────────── -->
+  <section class="contact" id="contact" aria-label="Contact">
+    <div class="container">
+      <div class="contact-inner">
+
+        <div class="reveal">
+          <p class="section-label">Find Us</p>
+          <h2 class="section-title">Come See Us Live</h2>
+
+          <div class="contact-info-block">
+
+            <div class="contact-row">
+              <span class="contact-icon" aria-hidden="true">📍</span>
+              <div>
+                <div class="contact-detail-label">Address</div>
+                <div class="contact-detail-value">
+                  1800 NE 23rd Ave<br>
+                  Gainesville, FL 32609
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-row">
+              <span class="contact-icon" aria-hidden="true">✉️</span>
+              <div>
+                <div class="contact-detail-label">Inquiries</div>
+                <div class="contact-detail-value">Contact us for details on shows, bookings, and events.</div>
+              </div>
+            </div>
+
+            <div>
+              <a
+                class="btn-directions"
+                href="https://www.google.com/maps/search/Lightnin'%20Salvage%20Enterprises%201800%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Get directions to Lightnin' Salvage Enterprises on Google Maps"
+              >
+                <span aria-hidden="true">🗺️</span> Get Directions
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Rating card -->
+        <div class="rating-card reveal" aria-label="Google Maps rating">
+          <p class="rating-heading">Google Maps Rating</p>
+          <div class="rating-score" aria-label="4.9 out of 5 stars">4.9</div>
+
+          <div class="stars" aria-hidden="true">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+          </div>
+
+          <p class="rating-count">Based on <strong>58 reviews</strong></p>
+
+          <!-- Illustrative bar breakdown -->
+          <div class="rating-bar-wrap" aria-hidden="true">
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">5</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:87%"></div></div>
+              <span class="rating-bar-pct">87%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">4</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:10%"></div></div>
+              <span class="rating-bar-pct">10%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">3</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:2%"></div></div>
+              <span class="rating-bar-pct">2%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">2</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:1%"></div></div>
+              <span class="rating-bar-pct">1%</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">1</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:0%"></div></div>
+              <span class="rating-bar-pct">0%</span>
+            </div>
+          </div>
+
+          <div class="google-badge">
+            <div class="google-g" aria-hidden="true">G</div>
+            <span>Rating sourced from Google Maps</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo"><span>Lightnin'</span> Salvage Enterprises</div>
+      <p class="footer-sub">Live Music · 1800 NE 23rd Ave, Gainesville, FL 32609</p>
+      <p class="footer-copy">&copy; 2026 Lightnin' Salvage Enterprises. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ── SCRIPTS (inline, no external deps) ────────────────── -->
+  <script>
+    /* Mobile nav toggle */
+    function toggleNav(btn) {
+      const drawer = document.getElementById('mobile-nav');
+      const isOpen = drawer.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    }
+
+    function closeNav() {
+      const drawer = document.getElementById('mobile-nav');
+      drawer.classList.remove('open');
+      const btn = document.querySelector('.hamburger');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+
+    /* Close drawer when clicking outside */
+    document.addEventListener('click', function(e) {
+      const drawer = document.getElementById('mobile-nav');
+      const hamburger = document.querySelector('.hamburger');
+      if (drawer.classList.contains('open') && !drawer.contains(e.target) && !hamburger.contains(e.target)) {
+        closeNav();
+      }
+    });
+
+    /* Scroll reveal */
+    (function() {
+      const els = document.querySelectorAll('.reveal');
+      if (!window.IntersectionObserver) {
+        els.forEach(function(el) { el.classList.add('visible'); });
+        return;
+      }
+      const obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function(el) { obs.observe(el); });
+    })();
+  </script>
+
+</body>
+</html>

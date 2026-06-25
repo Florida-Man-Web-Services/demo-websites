@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeff Williams Lawn Service Inc – Gainesville, FL</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #2d2d1f;
+      background: #f8f5ee;
+      line-height: 1.7;
+    }
+
+    /* ===== Color Palette (Earthy / Lawn Care) ===== */
+    :root {
+      --green-dark:   #2e5c1a;
+      --green-mid:    #4a8c2a;
+      --green-light:  #7bbf4a;
+      --earth-brown:  #7a5c2e;
+      --earth-tan:    #c9a96e;
+      --cream:        #f8f5ee;
+      --off-white:    #eef5e8;
+      --text-dark:    #2d2d1f;
+      --text-mid:     #4a4a35;
+      --text-light:   #fefdf8;
+    }
+
+    /* ===== Nav ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--green-dark);
+    }
+    .nav-logo-text {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: normal;
+      color: var(--earth-tan);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.8rem;
+    }
+    nav ul li a {
+      color: #d9f0c4;
+      text-decoration: none;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav ul li a:hover { color: #fff; }
+
+    /* ===== Hamburger (mobile) ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: #d9f0c4;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--green-dark);
+      z-index: 999;
+      padding: 1rem 2rem 1.5rem;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu ul { list-style: none; }
+    .mobile-menu ul li { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .mobile-menu ul li a {
+      display: block;
+      padding: 0.75rem 0;
+      color: #d9f0c4;
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      margin-top: 64px;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #1e3d0e 0%, #2e5c1a 45%, #4a8c2a 100%);
+      padding: 4rem 1.5rem;
+    }
+    /* Decorative grass blades */
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 90px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 90' preserveAspectRatio='none'%3E%3Cpath d='M0 90 Q30 30 60 70 Q90 30 120 70 Q150 20 180 70 Q210 35 240 70 Q270 15 300 70 Q330 30 360 70 Q390 20 420 70 Q450 35 480 70 Q510 10 540 70 Q570 30 600 70 Q630 20 660 70 Q690 35 720 70 Q750 15 780 70 Q810 30 840 70 Q870 20 900 70 Q930 35 960 70 Q990 10 1020 70 Q1050 30 1080 70 Q1110 20 1140 70 Q1170 35 1200 70 L1200 90 Z' fill='%23f8f5ee'/%3E%3C/svg%3E") bottom/cover no-repeat;
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(123, 191, 74, 0.25);
+      border: 1px solid var(--green-light);
+      color: #b4e07a;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .hero h1 em {
+      color: var(--green-light);
+      font-style: normal;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: #cde8a8;
+      max-width: 520px;
+      margin: 0 auto 2rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--earth-tan);
+      color: var(--green-dark);
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .hero-cta:hover {
+      background: #dbc07e;
+      transform: translateY(-2px);
+    }
+
+    /* ===== Sections Shared ===== */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    h2 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .divider {
+      width: 56px;
+      height: 4px;
+      background: var(--green-light);
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+
+    /* ===== About ===== */
+    #about { background: var(--cream); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-icon-box {
+      width: 280px;
+      height: 280px;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-dark));
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      box-shadow: 0 8px 32px rgba(46, 92, 26, 0.3);
+    }
+    .about-icon-box svg {
+      width: 80px;
+      height: 80px;
+      fill: rgba(255,255,255,0.9);
+    }
+    .about-icon-box p {
+      color: #cde8a8;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    /* ===== Services ===== */
+    #services { background: var(--off-white); }
+    .services-intro {
+      max-width: 580px;
+      margin-bottom: 3rem;
+    }
+    .services-intro p { color: var(--text-mid); font-size: 1.05rem; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      border-top: 4px solid var(--green-light);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--off-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--green-mid);
+    }
+    .service-card h3 {
+      font-size: 1.05rem;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+    }
+
+    /* ===== Contact ===== */
+    #contact { background: var(--cream); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .contact-info h2 { margin-bottom: 0.6rem; }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1.4rem;
+    }
+    .contact-detail-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--off-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-detail-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--green-mid);
+    }
+    .contact-detail-body strong {
+      display: block;
+      color: var(--green-dark);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.1rem;
+    }
+    .contact-detail-body a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .contact-detail-body a:hover { color: var(--green-mid); }
+    .contact-detail-body p { color: var(--text-dark); font-size: 1rem; }
+
+    /* Rating badge */
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #fff;
+      border: 1px solid #e0e0cc;
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      margin-top: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .stars { display: flex; gap: 2px; }
+    .star {
+      width: 18px;
+      height: 18px;
+    }
+    .star-filled { fill: #f5a623; }
+    .star-empty { fill: #ddd; }
+    .rating-text strong { color: var(--green-dark); font-size: 1.1rem; }
+    .rating-text span { color: var(--text-mid); font-size: 0.85rem; display: block; line-height: 1.2; }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--green-dark);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      margin-top: 1.5rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-directions:hover {
+      background: var(--green-mid);
+      transform: translateY(-2px);
+    }
+    .btn-directions svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
+
+    /* Contact panel */
+    .contact-panel {
+      background: linear-gradient(135deg, var(--green-dark), #1e3d0e);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      color: #fff;
+    }
+    .contact-panel h3 {
+      font-size: 1.3rem;
+      color: var(--green-light);
+      margin-bottom: 0.7rem;
+    }
+    .contact-panel p {
+      color: #cde8a8;
+      font-size: 0.98rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .panel-phone {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .panel-phone:hover { background: rgba(255,255,255,0.18); }
+    .panel-phone svg { width: 22px; height: 22px; fill: var(--green-light); }
+    .panel-note {
+      margin-top: 1.2rem;
+      font-size: 0.82rem;
+      color: #9dc878;
+      font-style: italic;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: #1a2e0d;
+      color: #7aaa5a;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.88rem;
+    }
+    footer a { color: var(--earth-tan); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    footer .footer-name {
+      font-size: 1rem;
+      color: #cde8a8;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .about-visual { order: -1; }
+      .about-icon-box { width: 220px; height: 220px; }
+
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 520px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero { min-height: 75vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Nav ===== -->
+  <nav>
+    <a href="#" class="nav-logo" aria-label="Jeff Williams Lawn Service Inc home">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 8C8 10 5.9 16.17 3.82 21H5.71C5.92 20.41 6.14 19.83 6.38 19.27C8.42 19.73 10.61 20 13 20C13 20 21 14 21 7C21 7 19 8 17 8ZM5.03 17.15C5.17 16.72 5.32 16.3 5.49 15.9C6.16 16.08 6.84 16.24 7.54 16.37C6.61 16.6 5.77 16.86 5.03 17.15Z"/></svg>
+      </div>
+      <div class="nav-logo-text">
+        Jeff Williams Lawn Service
+        <span>Gainesville, FL</span>
+      </div>
+    </a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about" onclick="toggleMenu()">About</a></li>
+      <li><a href="#services" onclick="toggleMenu()">Services</a></li>
+      <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">Serving Gainesville, FL</div>
+      <h1>Jeff Williams<br><em>Lawn Service Inc</em></h1>
+      <p>Professional lawn care that keeps your property looking its best — season after season.</p>
+      <a href="#contact" class="hero-cta">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C9.38 21 3 14.62 3 7a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg>
+        Get In Touch
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">Who We Are</span>
+          <h2>Trusted Lawn Care in Gainesville</h2>
+          <div class="divider"></div>
+          <p>Jeff Williams Lawn Service Inc has been a dependable name in the Gainesville community, providing reliable and thorough lawn maintenance for residential and commercial properties throughout the area.</p>
+          <p>We take pride in treating every yard with the same attention to detail, using professional-grade equipment to deliver results that enhance curb appeal and keep outdoor spaces healthy year-round.</p>
+          <p>Whether you need routine upkeep or more specialized lawn care, our team is committed to responsive service and quality you can count on. Contact us for details on scheduling and availability.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-icon-box">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M32 4C18 4 8 18 8 30c0 8 4 14 10 18h28c6-4 10-10 10-18C56 18 46 4 32 4zm0 40c-8.8 0-16-7.2-16-16S23.2 12 32 12s16 7.2 16 16-7.2 16-16 16z"/>
+              <path d="M20 56h24v4H20z"/>
+              <path d="M28 50h8v8h-8z"/>
+            </svg>
+            <p>Gainesville's Lawn Care Professionals</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Services ===== -->
+  <section id="services">
+    <div class="container">
+      <div class="services-intro">
+        <span class="section-label">What We Offer</span>
+        <h2>Our Services</h2>
+        <div class="divider"></div>
+        <p>From routine mowing to seasonal cleanup, we offer a range of professional lawn care services to keep your property in top shape. Contact us for details on pricing and scheduling.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
+          </div>
+          <h3>Lawn Mowing &amp; Edging</h3>
+          <p>Regular mowing and crisp edging to maintain a neat, well-groomed lawn throughout the growing season.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 8C8 10 5.9 16.17 3.82 21H5.71C5.92 20.41 6.14 19.83 6.38 19.27C8.42 19.73 10.61 20 13 20C13 20 21 14 21 7C21 7 19 8 17 8Z"/></svg>
+          </div>
+          <h3>Trimming &amp; Pruning</h3>
+          <p>Shrub trimming and bush pruning to keep hedges shaped and landscaping looking tidy and maintained.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm1-11h-2v3H8v2h3v3h2v-3h3v-2h-3z"/></svg>
+          </div>
+          <h3>Fertilization &amp; Weed Control</h3>
+          <p>Targeted fertilization and weed management programs to promote a lush, healthy lawn free of unwanted growth.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+          </div>
+          <h3>Leaf &amp; Debris Cleanup</h3>
+          <p>Seasonal cleanup services to clear leaves, clippings, and yard debris, leaving your property clean and presentable.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+          </div>
+          <h3>Mulching</h3>
+          <p>Professional mulch installation around beds and trees to retain moisture, suppress weeds, and enhance landscape appearance.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          </div>
+          <h3>General Lawn Maintenance</h3>
+          <p>Ongoing, scheduled maintenance plans tailored to your property's needs — contact us for details on available packages.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <span class="section-label">Reach Us</span>
+          <h2>Contact &amp; Location</h2>
+          <div class="divider"></div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <strong>Address</strong>
+              <p>4010 NW 26th Ter<br>Gainesville, FL</p>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C9.38 21 3 14.62 3 7a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <strong>Phone</strong>
+              <a href="tel:+13523734145">(352) 373-4145</a>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <strong>Google Rating</strong>
+              <div class="rating-badge">
+                <div class="stars" aria-label="4 out of 5 stars">
+                  <!-- 4 filled stars -->
+                  <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path class="star-filled" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path class="star-filled" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path class="star-filled" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path class="star-filled" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  <!-- 1 empty star -->
+                  <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path class="star-empty" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4L8.24 17.67l1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>
+                </div>
+                <div class="rating-text">
+                  <strong>4.0</strong>
+                  <span>4 Google reviews</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a
+            href="https://www.google.com/maps/search/Jeff%20Williams%20Lawn%20Service%20Inc%204010%20NW%2026th%20Ter"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+            Get Directions
+          </a>
+        </div>
+
+        <div class="contact-panel">
+          <h3>Ready to Schedule?</h3>
+          <p>Give us a call to discuss your lawn care needs and set up a service appointment. We serve residential and commercial properties throughout the Gainesville area.</p>
+          <a href="tel:+13523734145" class="panel-phone">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C9.38 21 3 14.62 3 7a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg>
+            (352) 373-4145
+          </a>
+          <p class="panel-note">Contact us for details on scheduling, availability, and service packages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <p class="footer-name">Jeff Williams Lawn Service Inc</p>
+    <p>4010 NW 26th Ter, Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13523734145">(352) 373-4145</a></p>
+    <p style="margin-top:0.5rem; font-size:0.8rem; color:#4a7a30;">Professional Lawn Care Services in Gainesville, FL</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      var menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('open');
+    }
+    // Close mobile menu on outside click
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('mobileMenu');
+      var nav = document.querySelector('nav');
+      if (menu.classList.contains('open') && !nav.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

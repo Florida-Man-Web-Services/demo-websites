@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AAA Refrigeration | HVAC Contractor – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #0d1f3c;
+      --blue: #1a3a6b;
+      --sky: #2a7dc9;
+      --ice: #cce8f4;
+      --light: #eaf5fb;
+      --white: #ffffff;
+      --gray: #f4f7fa;
+      --text: #1c2b3a;
+      --muted: #5a6e80;
+      --accent: #e8f4fc;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--sky);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-name {
+      color: var(--white);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--ice);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-cta {
+      background: var(--sky);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: #1f6ab0 !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--ice);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── MOBILE NAV ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--navy);
+        padding: 1.5rem 2rem;
+        gap: 1.2rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1rem;
+      }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #1a5490 100%);
+      min-height: 86vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 60%, rgba(42,125,201,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 30%, rgba(204,232,244,0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Decorative snowflake/wind lines */
+    .hero-decor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-decor svg {
+      position: absolute;
+      opacity: 0.06;
+    }
+
+    .hero-decor svg:nth-child(1) { top: 8%; left: 5%; width: 180px; }
+    .hero-decor svg:nth-child(2) { bottom: 12%; right: 6%; width: 220px; transform: rotate(30deg); }
+    .hero-decor svg:nth-child(3) { top: 50%; left: 60%; width: 140px; transform: rotate(-15deg); }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(42,125,201,0.25);
+      border: 1px solid rgba(204,232,244,0.3);
+      color: var(--ice);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      color: var(--white);
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 span {
+      color: var(--ice);
+    }
+
+    .hero-tagline {
+      color: rgba(204,232,244,0.85);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 400;
+      margin-bottom: 2.4rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--sky);
+      color: var(--white);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 16px rgba(42,125,201,0.35);
+    }
+
+    .btn-primary:hover {
+      background: #1f6ab0;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--ice);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 2px solid rgba(204,232,244,0.4);
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--ice);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      color: var(--sky);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 600px;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--white);
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-top: 1.2rem;
+      line-height: 1.75;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      border-radius: 16px;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding: 2.5rem;
+    }
+
+    .about-visual svg {
+      width: 80px;
+      height: 80px;
+      fill: none;
+      stroke: var(--ice);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.9;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--ice);
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.2rem;
+    }
+
+    @media (max-width: 768px) {
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-visual {
+        min-height: 220px;
+      }
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      background: var(--gray);
+    }
+
+    .services-header {
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.8rem;
+      border: 1px solid #dce8f0;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(13,31,60,0.1);
+    }
+
+    .service-icon {
+      flex-shrink: 0;
+      width: 50px;
+      height: 50px;
+      background: var(--light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: none;
+      stroke: var(--sky);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-body h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.45rem;
+    }
+
+    .service-body p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--white);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--sky);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text span,
+    .contact-item-text a {
+      font-size: 1rem;
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-item-text a:hover {
+      color: var(--sky);
+    }
+
+    .rating-block {
+      background: var(--light);
+      border: 1px solid var(--ice);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .stars svg {
+      width: 22px;
+      height: 22px;
+      fill: #f5a623;
+      stroke: #f5a623;
+      stroke-width: 1;
+    }
+
+    .rating-text strong {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .rating-text span {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: block;
+    }
+
+    .contact-card {
+      background: var(--navy);
+      border-radius: 16px;
+      padding: 2.5rem;
+      color: var(--white);
+    }
+
+    .contact-card h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 0.6rem;
+    }
+
+    .contact-card p {
+      color: var(--ice);
+      font-size: 0.95rem;
+      margin-bottom: 1.8rem;
+      opacity: 0.85;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--sky);
+      color: var(--white);
+      padding: 0.85rem 1.6rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-directions:hover {
+      background: #1f6ab0;
+    }
+
+    .btn-directions svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--ice);
+      padding: 0.85rem 1.6rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid rgba(204,232,244,0.3);
+      transition: border-color 0.2s, color 0.2s;
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.8rem;
+    }
+
+    .btn-call:hover {
+      border-color: var(--ice);
+      color: var(--white);
+    }
+
+    .btn-call svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: rgba(204,232,244,0.7);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.88rem;
+    }
+
+    footer strong {
+      color: var(--ice);
+    }
+
+    footer .footer-divider {
+      margin: 0 0.5rem;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="#">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24">
+          <!-- snowflake icon -->
+          <line x1="12" y1="2" x2="12" y2="22"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <line x1="5" y1="5" x2="19" y2="19"/>
+          <line x1="19" y1="5" x2="5" y2="19"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+      </div>
+      <span class="nav-name">AAA Refrigeration</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-decor">
+      <!-- Large decorative snowflake shapes -->
+      <svg viewBox="0 0 100 100" style="top:8%;left:5%;width:180px;">
+        <line x1="50" y1="5" x2="50" y2="95" stroke="white" stroke-width="3"/>
+        <line x1="5" y1="50" x2="95" y2="50" stroke="white" stroke-width="3"/>
+        <line x1="18" y1="18" x2="82" y2="82" stroke="white" stroke-width="3"/>
+        <line x1="82" y1="18" x2="18" y2="82" stroke="white" stroke-width="3"/>
+        <circle cx="50" cy="50" r="6" fill="white"/>
+        <circle cx="50" cy="12" r="4" fill="white"/>
+        <circle cx="50" cy="88" r="4" fill="white"/>
+        <circle cx="12" cy="50" r="4" fill="white"/>
+        <circle cx="88" cy="50" r="4" fill="white"/>
+      </svg>
+      <svg viewBox="0 0 100 100" style="bottom:12%;right:6%;width:220px;transform:rotate(30deg);">
+        <line x1="50" y1="5" x2="50" y2="95" stroke="white" stroke-width="3"/>
+        <line x1="5" y1="50" x2="95" y2="50" stroke="white" stroke-width="3"/>
+        <line x1="18" y1="18" x2="82" y2="82" stroke="white" stroke-width="3"/>
+        <line x1="82" y1="18" x2="18" y2="82" stroke="white" stroke-width="3"/>
+        <circle cx="50" cy="50" r="6" fill="white"/>
+        <circle cx="50" cy="12" r="4" fill="white"/>
+        <circle cx="50" cy="88" r="4" fill="white"/>
+        <circle cx="12" cy="50" r="4" fill="white"/>
+        <circle cx="88" cy="50" r="4" fill="white"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, FL &mdash; HVAC Contractor</div>
+      <h1>AAA <span>Refrigeration</span></h1>
+      <p class="hero-tagline">Keeping Gainesville cool — reliable HVAC and refrigeration services you can count on year-round.</p>
+      <div class="hero-actions">
+        <a href="tel:3523730501" class="btn-primary">Call (352) 373-0501</a>
+        <a href="#services" class="btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">North Central Florida's Trusted HVAC Experts</h2>
+          <p>AAA Refrigeration is a Gainesville-based HVAC contractor serving homeowners and businesses across north central Florida. We specialize in heating, cooling, and refrigeration systems — providing honest, dependable service in a climate where comfort is non-negotiable.</p>
+          <p>Our technicians are experienced with all major makes and models, from residential air conditioners to commercial refrigeration units. Whether you need a quick repair, a full system installation, or routine maintenance, we approach every job with professionalism and care.</p>
+          <p>We're proud to have earned the trust of our community through consistent quality and straightforward communication. Contact us for details on how we can help with your specific needs.</p>
+        </div>
+        <div class="about-visual">
+          <svg viewBox="0 0 64 64">
+            <!-- AC unit icon -->
+            <rect x="4" y="16" width="56" height="32" rx="4"/>
+            <line x1="4" y1="26" x2="60" y2="26"/>
+            <circle cx="48" cy="36" r="6"/>
+            <line x1="20" y1="33" x2="34" y2="33"/>
+            <line x1="20" y1="38" x2="30" y2="38"/>
+            <line x1="20" y1="43" x2="26" y2="43"/>
+            <line x1="48" y1="48" x2="48" y2="54"/>
+            <line x1="16" y1="48" x2="16" y2="54"/>
+          </svg>
+          <div class="about-stats">
+            <div class="stat">
+              <div class="stat-number">5.0</div>
+              <div class="stat-label">Google Rating</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">24/7</div>
+              <div class="stat-label">Availability</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">GNV</div>
+              <div class="stat-label">Local &amp; Trusted</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">Our Services</h2>
+        <p class="section-subtitle">From installation to emergency repairs, we handle all aspects of HVAC and refrigeration for residential and commercial customers.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <!-- thermometer / cooling -->
+              <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+            </svg>
+          </div>
+          <div class="service-body">
+            <h3>AC Installation &amp; Replacement</h3>
+            <p>Professional installation of new central air conditioning systems, ductless mini-splits, and heat pumps sized right for your space.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/>
+            </svg>
+          </div>
+          <div class="service-body">
+            <h3>AC Repair &amp; Diagnostics</h3>
+            <p>Fast, accurate troubleshooting and repair of malfunctioning air conditioners — keeping your home or business comfortable when it matters most.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div class="service-body">
+            <h3>Residential HVAC Services</h3>
+            <p>Complete heating and cooling solutions for homes — including system tune-ups, filter changes, and ductwork inspections.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="7" width="20" height="14" rx="2"/>
+              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+              <line x1="12" y1="12" x2="12" y2="16"/>
+              <line x1="10" y1="14" x2="14" y2="14"/>
+            </svg>
+          </div>
+          <div class="service-body">
+            <h3>Commercial Refrigeration</h3>
+            <p>Installation, maintenance, and repair of commercial refrigerators, freezers, and walk-in cooler systems for restaurants and businesses.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <div class="service-body">
+            <h3>Preventive Maintenance</h3>
+            <p>Scheduled inspections and tune-ups that extend equipment life, improve efficiency, and help prevent costly breakdowns before they happen.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="service-body">
+            <h3>Refrigerant Services</h3>
+            <p>Certified refrigerant recovery, recharge, and leak detection services performed in compliance with EPA regulations.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div>
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-title">Contact Us</h2>
+          <p class="section-subtitle" style="margin-bottom:2rem;">Ready to schedule service or have a question? Reach out — we're here to help.</p>
+
+          <div class="contact-info">
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div class="contact-item-text">
+                <strong>Address</strong>
+                <span>2854 NE 21 Way, Gainesville, FL</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </div>
+              <div class="contact-item-text">
+                <strong>Phone</strong>
+                <a href="tel:3523730501">(352) 373-0501</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div class="contact-item-text">
+                <strong>Hours</strong>
+                <span>Contact us for details</span>
+              </div>
+            </div>
+
+            <div class="rating-block">
+              <div class="stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div class="rating-text">
+                <strong>5.0</strong>
+                <span>Google Maps Rating &mdash; 2 reviews</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <h3>Find Us &amp; Get Directions</h3>
+          <p>Located at 2854 NE 21 Way in Gainesville, FL. Use the button below to open Google Maps and get turn-by-turn directions to our location.</p>
+          <a href="https://www.google.com/maps/search/AAA%20Refrigeration%202854%20NE%2021%20Way" target="_blank" rel="noopener" class="btn-directions">
+            <svg viewBox="0 0 24 24">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+            </svg>
+            Get Directions
+          </a>
+          <a href="tel:3523730501" class="btn-call">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            Call (352) 373-0501
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <strong>AAA Refrigeration</strong>
+      <span class="footer-divider">|</span>
+      2854 NE 21 Way, Gainesville, FL
+      <span class="footer-divider">|</span>
+      <a href="tel:3523730501" style="color:var(--ice);text-decoration:none;">(352) 373-0501</a>
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.8rem;opacity:0.55;">&copy; 2026 AAA Refrigeration. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

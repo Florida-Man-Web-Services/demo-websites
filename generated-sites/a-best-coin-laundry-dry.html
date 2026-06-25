@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-Best Coin Laundry &amp; Dry | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #1a2e4a;
+      --sky: #4a90b8;
+      --light-blue: #e8f4fb;
+      --white: #ffffff;
+      --off-white: #f5f8fa;
+      --gray: #6b7c8d;
+      --light-gray: #d4dde6;
+      --text: #2c3e50;
+      --accent: #2eaae1;
+      --accent-dark: #1a8bbf;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--white);
+    }
+
+    .nav-brand-text {
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-brand-text span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--light-gray);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--light-gray);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #2a4a6e 50%, var(--sky) 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 2rem 4.5rem;
+      text-align: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: rgba(46, 170, 225, 0.12);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -40px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(46, 170, 225, 0.25);
+      color: #a8d8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.2rem;
+      border: 1px solid rgba(46,170,225,0.35);
+    }
+
+    .hero h1 {
+      color: var(--white);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-tagline {
+      color: #b8d9ee;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      font-weight: 400;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 16px rgba(46,170,225,0.35);
+    }
+
+    .hero-cta:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    /* SECTION BASE */
+    section {
+      padding: 4.5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+
+    /* ABOUT */
+    #about {
+      background: var(--off-white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--gray);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+
+    .about-visual {
+      background: linear-gradient(145deg, var(--light-blue), #d0eaf8);
+      border-radius: 16px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .about-stat {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .about-stat-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--white);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(74,144,184,0.15);
+    }
+
+    .about-stat-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--accent);
+    }
+
+    .about-stat-text {
+      font-size: 0.92rem;
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    /* SERVICES */
+    #services {
+      background: var(--white);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--off-white);
+      border: 1px solid var(--light-gray);
+      border-radius: 12px;
+      padding: 1.8rem 1.5rem;
+      transition: box-shadow 0.25s, transform 0.2s, border-color 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(26,46,74,0.1);
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--light-blue);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--sky);
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* CONTACT */
+    #contact {
+      background: var(--off-white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-row-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--light-blue);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-row-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--sky);
+    }
+
+    .contact-row-text {
+      padding-top: 0.1rem;
+    }
+
+    .contact-row-text strong {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-row-text span,
+    .contact-row-text a {
+      font-size: 0.97rem;
+      color: var(--navy);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .contact-row-text a:hover {
+      color: var(--accent);
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 3px 12px rgba(46,170,225,0.3);
+    }
+
+    .directions-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--white);
+    }
+
+    .directions-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: 14px;
+      padding: 2rem 2rem 1.8rem;
+      box-shadow: 0 4px 18px rgba(26,46,74,0.07);
+    }
+
+    .rating-card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .rating-score {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-number {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .rating-max {
+      font-size: 1.1rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.5rem;
+    }
+
+    .star {
+      width: 22px;
+      height: 22px;
+    }
+
+    .star svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .star.full svg { fill: #f5a623; }
+    .star.empty svg { fill: #d4dde6; }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-bottom: 1.2rem;
+    }
+
+    .rating-source {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--light-gray);
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .google-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy);
+      color: var(--light-gray);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+    }
+
+    footer strong {
+      color: var(--white);
+    }
+
+    footer p + p {
+      margin-top: 0.4rem;
+      color: #6b8099;
+      font-size: 0.78rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--navy);
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.85rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="#hero">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 2v3H6V4h12zM6 20V9h12v11H6zm6-9a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
+        </svg>
+      </div>
+      <div class="nav-brand-text">
+        A-Best Coin Laundry &amp; Dry
+        <span>Gainesville, FL</span>
+      </div>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Coin Laundry &amp; Dry Cleaning &bull; Gainesville, FL</div>
+      <h1>A-Best Coin Laundry &amp; Dry</h1>
+      <p class="hero-tagline">Fresh, clean, and ready — convenient laundry and dry cleaning services right in your neighborhood.</p>
+      <a href="#services" class="hero-cta">See Our Services</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">About Us</div>
+          <h2 class="section-title">Your Local Laundry &amp; Dry Cleaning Stop</h2>
+          <div class="section-divider"></div>
+          <p>A-Best Coin Laundry &amp; Dry serves the Gainesville community with accessible coin-operated laundry facilities and professional dry cleaning solutions. Whether you need a quick everyday wash or careful attention for your delicate garments, we have the equipment to get the job done.</p>
+          <p>Conveniently located on SW 13th St, we make it easy for residents across Gainesville to tackle their laundry needs without the hassle. Our facility is designed to accommodate everything from standard loads to specialty items that require extra care.</p>
+          <p>We take pride in offering a clean, straightforward environment where you can manage your laundry efficiently — all at a location that fits your schedule.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-stat">
+            <div class="about-stat-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="about-stat-text">Coin-operated machines for your convenience</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-icon">
+              <svg viewBox="0 0 24 24"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1zm0-3H6V4h13v12z"/></svg>
+            </div>
+            <div class="about-stat-text">Professional dry cleaning for delicate items</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="about-stat-text">Located at 2411 SW 13th St, Gainesville</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-icon">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+            </div>
+            <div class="about-stat-text">Reviewed by local Gainesville customers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">Our Services</h2>
+      <div class="section-divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 2v3H6V4h12zM6 20V9h12v11H6zm6-9a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+          </div>
+          <h3>Self-Service Coin Laundry</h3>
+          <p>Use our coin-operated washers and dryers to handle everyday laundry loads quickly and affordably. Contact us for details on machine availability.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1zm0-3H6V4h13v12z"/><path d="M9 7h6v2H9zm0 4h6v2H9z"/></svg>
+          </div>
+          <h3>Dry Cleaning</h3>
+          <p>Professional dry cleaning for garments that require gentle, solvent-based care. Great for suits, dresses, coats, and other delicate fabrics.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 17h18l-2-8H5l-2 8zm1.5-1.5L6 9h12l1.5 6.5H4.5zM2 19v2h20v-2H2zm9-16c-3.31 0-6 2.69-6 6h2c0-2.21 1.79-4 4-4s4 1.79 4 4h2c0-3.31-2.69-6-6-6z"/></svg>
+          </div>
+          <h3>Pressing &amp; Ironing</h3>
+          <p>Get your garments looking crisp and wrinkle-free with our pressing and ironing services. Ideal for dress shirts, slacks, and formal wear.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.87.18-1.33C18 2.54 16.46 1 14.58 1c-.96 0-1.82.39-2.43 1.02L12 2.17l-.15-.15C11.24 1.39 10.38 1 9.42 1 7.54 1 6 2.54 6 4.33c0 .46.11.89.18 1.33H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM9.42 3c.74 0 1.33.6 1.33 1.33 0 .74-.59 1.34-1.33 1.34-.74 0-1.33-.6-1.33-1.34C8.09 3.6 8.68 3 9.42 3zm4.83 1.33c0-.73.59-1.33 1.33-1.33.74 0 1.33.6 1.33 1.33 0 .74-.59 1.34-1.33 1.34-.74 0-1.33-.6-1.33-1.34zM20 19H4V8h16v11z"/></svg>
+          </div>
+          <h3>Drop-Off Laundry Service</h3>
+          <p>Short on time? Drop off your laundry and let us handle the washing and drying. Contact us for details on turnaround times and availability.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 9V7H3v2h1v11h16V9h1zM5 9h14v9H5V9zm3 2v5h8v-5H8zm2 2h4v1h-4v-1zM3 3h18v2H3z"/></svg>
+          </div>
+          <h3>Comforters &amp; Bedding</h3>
+          <p>Washing oversized items at home can be a challenge. Bring your comforters, duvets, and blankets to our large-capacity machines for a thorough clean.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm-1.5-5.5l-2.5-2.5 1.06-1.06 1.44 1.44 3.44-3.44 1.06 1.06-4.5 4.5z"/></svg>
+          </div>
+          <h3>Stain Treatment</h3>
+          <p>Tough stains require targeted care. Ask us about pre-treatment options to help restore your garments before the cleaning process begins.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="section-label">Find Us</div>
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="section-divider"></div>
+      <div class="contact-grid">
+        <div class="contact-info-block">
+
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Address</strong>
+              <span>2411 SW 13th St, Gainesville, FL</span>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <div class="contact-row-icon">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+            </div>
+            <div class="contact-row-text">
+              <strong>Hours</strong>
+              <span>Contact us for details</span>
+            </div>
+          </div>
+
+          <a class="directions-btn" href="https://www.google.com/maps/search/A-Best%20Coin%20Laundry%20%26%20Dry%202411%20SW%2013th%20St" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+            Get Directions on Google Maps
+          </a>
+        </div>
+
+        <!-- Rating Card -->
+        <div class="rating-card">
+          <div class="rating-card-label">Customer Rating</div>
+          <div class="rating-score">
+            <div class="rating-number">2.8</div>
+            <div class="rating-max">/ 5</div>
+          </div>
+          <div class="stars">
+            <!-- 2.8 stars: 2 full, 1 partial(80%), 2 empty -->
+            <div class="star full">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <div class="star full">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <div class="star">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="partialStar" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="80%" stop-color="#f5a623"/>
+                    <stop offset="80%" stop-color="#d4dde6"/>
+                  </linearGradient>
+                </defs>
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="url(#partialStar)"/>
+              </svg>
+            </div>
+            <div class="star empty">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <div class="star empty">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+          </div>
+          <div class="rating-count">Based on 45 Google reviews</div>
+          <div class="rating-source">
+            <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Verified rating from Google Maps
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>A-Best Coin Laundry &amp; Dry</strong> &mdash; 2411 SW 13th St, Gainesville, FL</p>
+    <p>&copy; 2026 A-Best Coin Laundry &amp; Dry. All rights reserved.</p>
+  </footer>
+
+  <script>
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    toggle.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+    links.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() { links.classList.remove('open'); });
+    });
+  </script>
+
+</body>
+</html>

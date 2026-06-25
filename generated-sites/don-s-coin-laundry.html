@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Don's Coin Laundry | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue-deep: #1a3a5c;
+      --blue-mid: #2563a8;
+      --blue-light: #4a90d9;
+      --aqua: #48c9b0;
+      --aqua-light: #a8e6da;
+      --white: #ffffff;
+      --off-white: #f4f8fb;
+      --gray-light: #e8eef4;
+      --gray-mid: #8fa5bb;
+      --gray-dark: #4a5f72;
+      --text-dark: #1c2d3e;
+      --text-mid: #3d5166;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--blue-deep);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--aqua);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--blue-deep);
+    }
+
+    .nav-brand-text {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    .nav-brand-sub {
+      color: var(--aqua-light);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--aqua);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.25rem;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 60%, var(--blue-light) 100%);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 2rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='28' stroke='rgba(255,255,255,0.04)' stroke-width='2' fill='none'/%3E%3Ccircle cx='30' cy='30' r='18' stroke='rgba(255,255,255,0.04)' stroke-width='2' fill='none'/%3E%3C/svg%3E") repeat;
+      background-size: 60px 60px;
+    }
+
+    .hero-bubbles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(72, 201, 176, 0.12);
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .bubble:nth-child(1) { width: 180px; height: 180px; top: -40px; right: 10%; animation-delay: 0s; }
+    .bubble:nth-child(2) { width: 100px; height: 100px; top: 60%; left: 5%; animation-delay: 2s; }
+    .bubble:nth-child(3) { width: 60px;  height: 60px;  top: 20%; left: 15%; animation-delay: 4s; }
+    .bubble:nth-child(4) { width: 140px; height: 140px; bottom: -20px; right: 30%; animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      max-width: 680px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(72, 201, 176, 0.2);
+      color: var(--aqua);
+      border: 1px solid rgba(72, 201, 176, 0.4);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      color: var(--white);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 span {
+      color: var(--aqua);
+    }
+
+    .hero-tagline {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      max-width: 480px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--aqua);
+      color: var(--blue-deep);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--aqua-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.5);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* SECTIONS SHARED */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--aqua);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+      font-weight: 800;
+      color: var(--blue-deep);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-line {
+      width: 48px;
+      height: 4px;
+      background: var(--aqua);
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ABOUT */
+    #about {
+      background: var(--off-white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .about-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(26, 58, 92, 0.08);
+      border-top: 3px solid var(--aqua);
+    }
+
+    .about-card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-card h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+    }
+
+    .about-card p {
+      font-size: 0.8rem;
+      color: var(--gray-mid);
+      margin-top: 0.25rem;
+    }
+
+    /* SERVICES */
+    #services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-header .section-line {
+      margin: 0 auto 1.5rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--off-white);
+      border-radius: 14px;
+      padding: 2rem 1.75rem;
+      border: 1px solid var(--gray-light);
+      transition: box-shadow 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue-mid), var(--aqua));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(26, 58, 92, 0.12);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      font-size: 1.4rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--gray-dark);
+      line-height: 1.65;
+    }
+
+    /* CONTACT */
+    #contact {
+      background: var(--blue-deep);
+      color: var(--white);
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .contact-header .section-label {
+      color: var(--aqua);
+    }
+
+    .contact-header .section-title {
+      color: var(--white);
+    }
+
+    .contact-header .section-line {
+      margin: 0 auto 1.5rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+
+    .contact-info-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+    }
+
+    .contact-info-card h3 {
+      color: var(--aqua);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .contact-row:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(72, 201, 176, 0.18);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .contact-detail strong {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-mid);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail span, .contact-detail a {
+      font-size: 1rem;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-detail a:hover {
+      color: var(--aqua);
+    }
+
+    .rating-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .rating-block h3 {
+      color: var(--aqua);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      font-size: 1.3rem;
+    }
+
+    .star.full  { color: #f5a623; }
+    .star.half  { color: #f5a623; opacity: 0.55; }
+    .star.empty { color: rgba(255,255,255,0.2); }
+
+    .rating-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--gray-mid);
+      margin-top: 0.25rem;
+    }
+
+    .rating-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--gray-mid);
+      margin-top: 0.5rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--aqua);
+      color: var(--blue-deep);
+      padding: 0.9rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-directions:hover {
+      background: var(--aqua-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.35);
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-call:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #0f2238;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .footer-brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.35rem;
+    }
+
+    .footer-sub {
+      font-size: 0.85rem;
+      color: var(--gray-mid);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--gray-mid);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--aqua);
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.25);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 1.25rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-visual {
+        max-width: 480px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--blue-deep);
+        flex-direction: column;
+        padding: 1.5rem 2rem;
+        gap: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1rem;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .about-visual {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .about-visual {
+        grid-template-columns: 1fr;
+        max-width: 240px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="#hero">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 2H6C4.9 2 4 2.9 4 4v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 16c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM8 4h8v2H8V4z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="nav-brand-text">Don's Coin Laundry</div>
+        <div class="nav-brand-sub">Gainesville, FL</div>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bubbles">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+    <div class="hero-content">
+      <span class="hero-badge">Gainesville's Neighborhood Laundromat</span>
+      <h1>Don's Coin <span>Laundry</span></h1>
+      <p class="hero-tagline">Clean clothes, convenient location &mdash; your go-to self-service laundromat on NW 34th Blvd.</p>
+      <div class="hero-cta">
+        <a href="#services" class="btn-primary">Our Services</a>
+        <a href="#contact" class="btn-outline">Find Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">A Community Laundromat You Can Count On</h2>
+          <div class="section-line"></div>
+          <p>Don's Coin Laundry is a dependable self-service laundromat serving the Gainesville community from its convenient location at 5001 NW 34th Blvd. We offer a clean, accessible space with multiple washer and dryer options to handle loads of all sizes.</p>
+          <p>Whether you're a student, a busy family, or just need a reliable spot to get your laundry done, our facility is designed to make the process as quick and hassle-free as possible.</p>
+          <p>We take pride in maintaining well-functioning equipment and a tidy environment so every visit is a comfortable one. Contact us for details on current availability and pricing.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-card">
+            <div class="about-card-icon">&#x1F4A7;</div>
+            <h4>Self-Service</h4>
+            <p>Coin-operated machines</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#x1F9FA;</div>
+            <h4>All Load Sizes</h4>
+            <p>Small to extra-large</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#x1F4CD;</div>
+            <h4>Convenient</h4>
+            <p>NW Gainesville location</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">&#x2728;</div>
+            <h4>Clean Space</h4>
+            <p>Well-maintained facility</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Laundry Services</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">&#x1F9FA;</div>
+          <h3>Self-Service Washing</h3>
+          <p>Coin-operated top-load and front-load washers in multiple size options to handle any laundry load efficiently.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F32C;&#xFE0F;</div>
+          <h3>Self-Service Drying</h3>
+          <p>High-efficiency dryers that get your clothes thoroughly dry in minimal time. Contact us for details on pricing.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F6C1;</div>
+          <h3>Large-Capacity Machines</h3>
+          <p>Oversized washers and dryers perfect for comforters, blankets, rugs, and bulky items that won't fit in home machines.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F9F9;</div>
+          <h3>Clean Facility</h3>
+          <p>A regularly cleaned and maintained laundromat environment so you can do your laundry in comfort and peace of mind.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F4B3;</div>
+          <h3>Coin &amp; Payment Options</h3>
+          <p>Convenient payment options to get your machines running quickly. Contact us for details on accepted payment methods.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#x1F4E6;</div>
+          <h3>Laundry Supplies</h3>
+          <p>On-site vending for detergent, fabric softener, and other laundry essentials when you need them. Contact us for details.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-header">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="section-title">Visit Us Today</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info-card">
+          <h3>Location &amp; Contact</h3>
+
+          <div class="contact-row">
+            <div class="contact-icon">&#x1F4CD;</div>
+            <div class="contact-detail">
+              <strong>Address</strong>
+              <span>5001 NW 34th Blvd A<br>Gainesville, FL</span>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <div class="contact-icon">&#x1F4DE;</div>
+            <div class="contact-detail">
+              <strong>Phone</strong>
+              <a href="tel:+13523766997">(352) 376-6997</a>
+            </div>
+          </div>
+
+          <div class="contact-row">
+            <div class="contact-icon">&#x23F0;</div>
+            <div class="contact-detail">
+              <strong>Hours</strong>
+              <span>Contact us for details</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rating-card">
+          <div class="rating-block">
+            <h3>Google Rating</h3>
+            <div class="stars-row">
+              <div class="stars">
+                <span class="star full">&#x2605;</span>
+                <span class="star full">&#x2605;</span>
+                <span class="star full">&#x2605;</span>
+                <span class="star half">&#x2605;</span>
+                <span class="star empty">&#x2605;</span>
+              </div>
+              <span class="rating-number">3.4</span>
+            </div>
+            <p class="rating-count">Based on 170 Google reviews</p>
+            <span class="rating-source">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              Verified on Google Maps
+            </span>
+          </div>
+
+          <div class="contact-actions">
+            <a
+              href="https://www.google.com/maps/search/Don's%20Coin%20Laundry%205001%20NW%2034th%20Blvd%20A"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-directions"
+            >
+              &#x1F5FA;&#xFE0F; Get Directions
+            </a>
+            <a href="tel:+13523766997" class="btn-call">
+              &#x1F4DE; Call (352) 376-6997
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">Don's Coin Laundry</div>
+      <div class="footer-sub">5001 NW 34th Blvd A &mdash; Gainesville, FL &mdash; (352) 376-6997</div>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+        <a href="tel:+13523766997">Call Us</a>
+      </div>
+      <div class="footer-copy">&copy; 2026 Don's Coin Laundry. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    var toggle = document.getElementById('navToggle');
+    var links  = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+
+    links.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        links.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

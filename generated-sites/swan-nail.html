@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swan Nail | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:       #e8a0b4;
+      --rose-dark:  #c9718f;
+      --blush:      #f7e6ed;
+      --cream:      #fdf5f8;
+      --charcoal:   #3a2d32;
+      --muted:      #7a6370;
+      --white:      #ffffff;
+      --shadow:     0 4px 24px rgba(58,45,50,0.10);
+      --radius:     14px;
+      --transition: 0.25s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.7;
+    }
+
+    /* ── Typography helpers ─────────────────────────────────────── */
+    h1, h2, h3 { font-family: 'Georgia', serif; letter-spacing: 0.03em; }
+
+    .sans { font-family: 'Helvetica Neue', Arial, sans-serif; }
+
+    /* ── Nav ────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 66px;
+      background: rgba(253,245,248,0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(200,150,175,0.20);
+      box-shadow: 0 2px 12px rgba(58,45,50,0.07);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--charcoal);
+    }
+
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--rose-dark), var(--rose));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .nav-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--rose-dark);
+      letter-spacing: 0.06em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+
+    nav ul a {
+      text-decoration: none;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color var(--transition);
+    }
+
+    nav ul a:hover { color: var(--rose-dark); }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--rose-dark);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 6% 80px;
+      background:
+        linear-gradient(160deg, rgba(232,160,180,0.18) 0%, rgba(247,230,237,0.55) 60%, var(--cream) 100%),
+        var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative circles */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 560px; height: 560px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,160,180,0.25) 0%, transparent 70%);
+      top: -120px; right: -120px;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,113,143,0.13) 0%, transparent 70%);
+      bottom: -80px; left: -80px;
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; max-width: 700px; }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+      background: rgba(232,160,180,0.18);
+      border: 1px solid rgba(201,113,143,0.30);
+      border-radius: 50px;
+      padding: 6px 20px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      color: var(--charcoal);
+      margin-bottom: 22px;
+      line-height: 1.1;
+    }
+
+    .hero h1 span { color: var(--rose-dark); }
+
+    .hero-tagline {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 42px;
+      line-height: 1.65;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, var(--rose-dark), #b05a7a);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 50px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.92rem;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      box-shadow: 0 6px 24px rgba(201,113,143,0.35);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(201,113,143,0.45);
+    }
+
+    /* ── Section wrapper ────────────────────────────────────────── */
+    section { padding: 90px 6%; }
+
+    .section-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+      margin-bottom: 12px;
+    }
+
+    .section-heading {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose-dark), var(--rose));
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    /* ── About ──────────────────────────────────────────────────── */
+    .about {
+      background: var(--white);
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .about-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .about-card {
+      background: var(--blush);
+      border-radius: var(--radius);
+      padding: 28px 22px;
+      text-align: center;
+    }
+
+    .about-card-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .about-card h4 {
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+    }
+
+    .about-card p {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* ── Services ───────────────────────────────────────────────── */
+    .services {
+      background: var(--blush);
+    }
+
+    .services-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .services-header .divider { margin: 0 auto 0; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 36px 30px;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      border-top: 4px solid transparent;
+      border-image: linear-gradient(90deg, var(--rose-dark), var(--rose)) 1;
+      border-image-slice: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose-dark), var(--rose));
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(58,45,50,0.14);
+    }
+
+    .service-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .service-tag {
+      display: inline-block;
+      margin-top: 16px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--rose-dark);
+      background: rgba(232,160,180,0.15);
+      border-radius: 50px;
+      padding: 4px 14px;
+    }
+
+    /* ── Contact ────────────────────────────────────────────────── */
+    .contact {
+      background: var(--white);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-info p {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .contact-detail-icon {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-text strong {
+      display: block;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+      margin-bottom: 3px;
+    }
+
+    .contact-detail-text span {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.95rem;
+      color: var(--charcoal);
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--rose-dark), #b05a7a);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 50px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.90rem;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(201,113,143,0.30);
+      transition: transform var(--transition), box-shadow var(--transition);
+      margin-top: 8px;
+    }
+    .btn-directions:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(201,113,143,0.40);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: var(--blush);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .star {
+      width: 32px; height: 32px;
+      background: #f5a623;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+    .star.half {
+      background: linear-gradient(90deg, #f5a623 60%, #ddd 60%);
+    }
+
+    .rating-score {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .rating-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      box-shadow: 0 2px 10px rgba(58,45,50,0.08);
+    }
+
+    .rating-badge strong { color: var(--charcoal); }
+
+    .google-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #4285F4;
+      display: inline-block;
+    }
+
+    .rating-reviews {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      padding: 48px 6%;
+    }
+
+    .footer-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--rose);
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+
+    .footer-sub {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 28px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.50);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--rose); }
+
+    .footer-copy {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.30);
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      nav ul { display: none; }
+      nav ul.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 66px; left: 0; right: 0;
+        background: var(--cream);
+        border-bottom: 1px solid rgba(200,150,175,0.20);
+        padding: 18px 5% 24px;
+        gap: 18px;
+        box-shadow: 0 8px 24px rgba(58,45,50,0.08);
+      }
+      .nav-toggle { display: flex; }
+
+      .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .about-visual { grid-template-columns: 1fr 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      section { padding: 70px 5%; }
+    }
+
+    @media (max-width: 520px) {
+      .about-visual { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-brand" href="#hero">
+    <div class="nav-logo">&#10022;</div>
+    <span class="nav-name">Swan Nail</span>
+  </a>
+  <ul id="navMenu">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────────── -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Nail Salon &mdash; Gainesville, FL</div>
+    <h1>Beauty at Your<br /><span>Fingertips</span></h1>
+    <p class="hero-tagline">
+      Thoughtful nail care and creative artistry in a calm, welcoming environment — because you deserve a little luxury.
+    </p>
+    <a href="#services" class="hero-cta">Explore Our Services</a>
+  </div>
+</section>
+
+<!-- ── About ────────────────────────────────────────────────────── -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <p class="section-label">About Us</p>
+      <h2 class="section-heading">A Serene Escape in the Heart of Gainesville</h2>
+      <div class="divider"></div>
+      <p>
+        Swan Nail is a full-service nail salon committed to providing high-quality care in a clean, relaxing atmosphere. Whether you're stopping in for a quick polish refresh or a pampering gel treatment, our skilled technicians give every visit the attention it deserves.
+      </p>
+      <p>
+        Conveniently located on NW 23rd Ave, we serve Gainesville's residents and visitors alike — from students and professionals to families looking for a little self-care. We take pride in maintaining a hygienic, welcoming space where every client feels at ease.
+      </p>
+      <p>
+        Contact us for current availability, specials, or any questions about our services — we look forward to welcoming you.
+      </p>
+    </div>
+    <div class="about-visual">
+      <div class="about-card">
+        <span class="about-card-icon">&#10022;</span>
+        <h4>Expert Care</h4>
+        <p>Skilled technicians focused on quality results</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon">&#10024;</span>
+        <h4>Clean &amp; Safe</h4>
+        <p>Rigorous sanitation standards every visit</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon">&#9754;</span>
+        <h4>Relaxing</h4>
+        <p>A calm environment built for your comfort</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon">&#9786;</span>
+        <h4>Welcoming</h4>
+        <p>Friendly service for every client</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Services ──────────────────────────────────────────────────── -->
+<section class="services" id="services">
+  <div class="services-inner">
+    <div class="services-header">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-heading">Our Services</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <span class="service-icon">&#10022;</span>
+        <h3>Manicure</h3>
+        <p>Classic nail shaping, cuticle care, and polish application to keep your hands looking their best.</p>
+        <span class="service-tag">Contact us for details</span>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#10024;</span>
+        <h3>Pedicure</h3>
+        <p>Relaxing foot soak, exfoliation, nail grooming, and polish for happy, healthy feet.</p>
+        <span class="service-tag">Contact us for details</span>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#9670;</span>
+        <h3>Gel Nails</h3>
+        <p>Long-lasting gel polish with a glossy, chip-resistant finish that stays beautiful for weeks.</p>
+        <span class="service-tag">Contact us for details</span>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#9753;</span>
+        <h3>Acrylic Nails</h3>
+        <p>Full sets and fills using quality acrylic for added length, strength, and stunning nail art potential.</p>
+        <span class="service-tag">Contact us for details</span>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#9825;</span>
+        <h3>Nail Art &amp; Design</h3>
+        <p>Creative designs, ombre effects, and custom nail art to express your unique personal style.</p>
+        <span class="service-tag">Contact us for details</span>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#9786;</span>
+        <h3>Waxing Services</h3>
+        <p>Professional waxing treatments to complement your nail care routine and keep skin smooth.</p>
+        <span class="service-tag">Contact us for details</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ───────────────────────────────────────────────────── -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-heading">Visit Swan Nail</h2>
+      <div class="divider"></div>
+      <p>We're conveniently located in Gainesville. Stop in or reach out — we'd love to help you look and feel your best.</p>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">&#9737;</div>
+        <div class="contact-detail-text">
+          <strong>Address</strong>
+          <span>1515 NW 23rd Ave, Gainesville, FL 32605</span>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">&#9749;</div>
+        <div class="contact-detail-text">
+          <strong>Hours</strong>
+          <span>Contact us for current hours</span>
+        </div>
+      </div>
+
+      <a
+        class="btn-directions"
+        href="https://www.google.com/maps/search/Swan%20Nail%201515%20NW%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032605"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        &#9654;&nbsp; Get Directions
+      </a>
+    </div>
+
+    <div class="rating-card">
+      <div class="rating-stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star half"></div>
+      </div>
+      <div class="rating-score">4.3</div>
+      <div class="rating-label">Average Google Rating</div>
+      <div class="rating-badge">
+        <span class="google-dot"></span>
+        <strong>212 reviews</strong>&nbsp;on Google Maps
+      </div>
+      <p class="rating-reviews">Highly rated by the Gainesville community</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">Swan Nail</div>
+  <div class="footer-sub">1515 NW 23rd Ave, Gainesville, FL 32605</div>
+  <nav class="footer-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+    <a
+      href="https://www.google.com/maps/search/Swan%20Nail%201515%20NW%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032605"
+      target="_blank" rel="noopener noreferrer"
+    >Get Directions</a>
+  </nav>
+  <div class="footer-copy">&copy; 2026 Swan Nail. All rights reserved.</div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const toggle = document.getElementById('navToggle');
+  const menu   = document.getElementById('navMenu');
+  toggle.addEventListener('click', () => {
+    menu.classList.toggle('open');
+  });
+  // Close menu when a link is clicked
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => menu.classList.remove('open'));
+  });
+</script>
+
+</body>
+</html>

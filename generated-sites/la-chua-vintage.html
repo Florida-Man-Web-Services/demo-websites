@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Chua Vintage | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: #f7f2eb;
+      color: #2c2218;
+      line-height: 1.7;
+    }
+
+    /* ── Color Palette (warm, nostalgic, earthy vintage) ── */
+    /* Cream:      #f7f2eb */
+    /* Brown:      #2c2218 */
+    /* Rust:       #a84d2e */
+    /* Sand:       #c9a97a */
+    /* Muted olive:#6b6847 */
+    /* Off-white:  #fdf8f2 */
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background-color: #2c2218;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background-color: #a84d2e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #fdf8f2;
+    }
+    .nav-logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #fdf8f2;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #c9a97a;
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'Arial', sans-serif;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fdf8f2; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: #c9a97a;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background-color: #2c2218;
+      z-index: 999;
+      padding: 1rem 2rem 1.5rem;
+      border-top: 1px solid #a84d2e;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      color: #c9a97a;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #3d3020;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ── Hero ── */
+    .hero {
+      margin-top: 64px;
+      min-height: 90vh;
+      background-color: #2c2218;
+      background-image:
+        radial-gradient(ellipse at 20% 60%, rgba(168,77,46,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 30%, rgba(201,169,122,0.15) 0%, transparent 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Decorative texture lines */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(201,169,122,0.04) 40px,
+        rgba(201,169,122,0.04) 41px
+      );
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      max-width: 700px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background-color: #a84d2e;
+      color: #fdf8f2;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      color: #fdf8f2;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 em {
+      color: #c9a97a;
+      font-style: italic;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: #c9a97a;
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+    .hero-cta {
+      display: inline-block;
+      background-color: #a84d2e;
+      color: #fdf8f2;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.9rem 2.2rem;
+      border-radius: 2px;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .hero-cta:hover {
+      background-color: #8a3d22;
+      transform: translateY(-2px);
+    }
+
+    /* ── Section shared ── */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #a84d2e;
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: #2c2218;
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+    .divider {
+      width: 48px;
+      height: 3px;
+      background-color: #a84d2e;
+      margin-bottom: 2rem;
+    }
+
+    /* ── About ── */
+    .about { background-color: #fdf8f2; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-text p {
+      font-size: 1.05rem;
+      color: #3d3020;
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-card {
+      background-color: #2c2218;
+      border-radius: 4px;
+      padding: 2.5rem;
+      color: #fdf8f2;
+      position: relative;
+    }
+    .about-card::before {
+      content: '\201C';
+      font-size: 6rem;
+      color: #a84d2e;
+      position: absolute;
+      top: -0.5rem;
+      left: 1.5rem;
+      line-height: 1;
+      font-family: Georgia, serif;
+    }
+    .about-card blockquote {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: #c9a97a;
+      line-height: 1.7;
+      margin-top: 2rem;
+    }
+    .about-accent {
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(to right, #a84d2e, #c9a97a, #6b6847);
+      border-radius: 0 0 4px 4px;
+    }
+
+    /* ── Services ── */
+    .services { background-color: #f7f2eb; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .service-card {
+      background-color: #fdf8f2;
+      border: 1px solid #ddd4c4;
+      border-radius: 4px;
+      padding: 2rem 1.8rem;
+      transition: box-shadow 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #a84d2e;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .service-card:hover {
+      box-shadow: 0 6px 24px rgba(44,34,24,0.12);
+      transform: translateY(-3px);
+    }
+    .service-card:hover::after { transform: scaleX(1); }
+    .service-icon {
+      width: 46px;
+      height: 46px;
+      background-color: #f0e8da;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+    .service-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: #a84d2e;
+    }
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #2c2218;
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: #6b5a43;
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ── Contact ── */
+    .contact { background-color: #2c2218; }
+    .contact .section-label { color: #c9a97a; }
+    .contact .section-title { color: #fdf8f2; }
+    .contact .divider { background-color: #a84d2e; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-info p {
+      color: #c9a97a;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+    .contact-detail-icon {
+      width: 38px;
+      height: 38px;
+      background-color: rgba(168,77,46,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-detail-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: #c9a97a;
+    }
+    .contact-detail-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      color: #fdf8f2;
+      line-height: 1.5;
+    }
+    .contact-detail-text span {
+      display: block;
+      font-size: 0.75rem;
+      color: #c9a97a;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.2rem;
+    }
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #a84d2e;
+      color: #fdf8f2;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.8rem;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .btn-directions svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .btn-directions:hover {
+      background-color: #8a3d22;
+      transform: translateY(-2px);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background-color: #fdf8f2;
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+    }
+    .rating-title {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #6b5a43;
+      margin-bottom: 1rem;
+    }
+    .rating-score {
+      font-size: 4rem;
+      font-weight: 700;
+      color: #2c2218;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.5rem;
+    }
+    .stars svg {
+      width: 20px;
+      height: 20px;
+    }
+    .star-full { fill: #c9a97a; }
+    .star-partial { fill: url(#partialStar); }
+    .star-empty { fill: #ddd4c4; }
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: #6b5a43;
+      margin-bottom: 1.5rem;
+    }
+    .rating-source {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      color: #a89070;
+      letter-spacing: 0.05em;
+    }
+    .rating-divider {
+      width: 100%;
+      height: 1px;
+      background-color: #ddd4c4;
+      margin: 1.5rem 0;
+    }
+    .rating-tagline {
+      font-size: 0.95rem;
+      color: #3d3020;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background-color: #1a140d;
+      color: #6b5a43;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    footer strong { color: #c9a97a; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      section { padding: 3.5rem 1.2rem; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SVG defs for partial star gradient -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="partialStar" x1="0" x2="100%" y1="0" y2="0">
+      <stop offset="30%" stop-color="#c9a97a"/>
+      <stop offset="30%" stop-color="#ddd4c4"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-icon">
+      <!-- Hanger icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l8 6H3l8-6V6.73A2 2 0 0 1 12 3zm-9 13h18l-1.5 2H4.5L3 16z"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">La Chua Vintage</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Shop</a></li>
+    <li><a href="#contact">Visit Us</a></li>
+  </ul>
+
+  <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu">
+  <a href="#about" onclick="document.querySelector('.mobile-menu').classList.remove('open')">About</a>
+  <a href="#services" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Shop</a>
+  <a href="#contact" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Visit Us</a>
+</div>
+
+<!-- ── Hero ── -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Gainesville, FL &mdash; Vintage Clothing</div>
+    <h1>La Chua <em>Vintage</em></h1>
+    <p class="hero-tagline">Curated threads with a story worth wearing.</p>
+    <a href="#services" class="hero-cta">Explore the Collection</a>
+  </div>
+</section>
+
+<!-- ── About ── -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">More Than Just Clothes</h2>
+        <div class="divider"></div>
+        <p>La Chua Vintage is a locally loved clothing shop nestled in Northwest Gainesville, offering a carefully curated selection of pre-loved and vintage garments from across the decades. Every piece on the floor has been hand-picked for its quality, character, and style.</p>
+        <p>Serving the Gainesville community, the shop celebrates the art of sustainable fashion — giving remarkable garments a second life while keeping your wardrobe uniquely yours. Whether you are hunting for a standout statement piece or everyday vintage essentials, the collection has something for every taste and budget.</p>
+        <p>Stop in and browse at your own pace. Contact us for details on current inventory or special finds.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-card">
+          <blockquote>
+            "Every garment has its own history. We just help it find its next chapter."
+          </blockquote>
+        </div>
+        <div class="about-accent"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Services ── -->
+<section class="services" id="services">
+  <div class="container">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">The Collection</h2>
+    <div class="divider"></div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- Shirt icon -->
+          <svg viewBox="0 0 24 24"><path d="M16 4l4 4-2 2-2-2v12H8V8L6 10 4 8l4-4h2a2 2 0 0 0 4 0h2z"/></svg>
+        </div>
+        <h3>Vintage Tops &amp; Tees</h3>
+        <p>Graphic tees, band shirts, blouses, and button-downs spanning multiple eras — all sourced for their authenticity and condition.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- Pants/layers icon -->
+          <svg viewBox="0 0 24 24"><path d="M5 2h14l-2 10H7L5 2zm2 11h10l1 9H6l1-9z"/></svg>
+        </div>
+        <h3>Denim &amp; Bottoms</h3>
+        <p>A rotating selection of vintage jeans, trousers, skirts, and shorts in a variety of cuts, washes, and sizes.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- Coat/outerwear icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 2l4 3h4v4l-2 1v10H6V10L4 9V5h4l4-3zm0 3L9 7H7v1.5l2 1V18h6V9.5l2-1V7h-2l-3-2z"/></svg>
+        </div>
+        <h3>Jackets &amp; Outerwear</h3>
+        <p>Denim jackets, leather-look coats, flannels, and vintage windbreakers perfect for Florida's cooler months.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- Dress icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1l3 4H7l3-4V4a2 2 0 0 1 2-2zm-4 8h8l2 12H6L8 10z"/></svg>
+        </div>
+        <h3>Dresses &amp; Formalwear</h3>
+        <p>From flowy boho sundresses to retro cocktail dresses, find unique occasion wear that no one else will be wearing.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- Accessories/hat icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 6 3 9h18c0-3-4-6-9-6zM3 10v1a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-1H3zm3 3l-1 8h14l-1-8H6z"/></svg>
+        </div>
+        <h3>Accessories &amp; Hats</h3>
+        <p>Belts, scarves, vintage hats, bags, and jewelry to complete your look with the perfect retro finishing touch.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <!-- Recycle/thrift icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+        </div>
+        <h3>Sell &amp; Trade</h3>
+        <p>Refresh your wardrobe by bringing in your pre-loved pieces. Contact us for details on our buying and trade-in process.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ── -->
+<section class="contact" id="contact">
+  <div class="container">
+    <p class="section-label">Find Us</p>
+    <h2 class="section-title">Visit the Shop</h2>
+    <div class="divider"></div>
+    <div class="contact-grid">
+
+      <div class="contact-info">
+        <p>We would love to see you in person. Stop by our Northwest Gainesville location and browse the latest arrivals.</p>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Address</span>
+            2029 NW 6th St<br>Gainesville, FL 32609
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Hours</span>
+            Contact us for current hours
+          </div>
+        </div>
+
+        <a
+          href="https://www.google.com/maps/search/La%20Chua%20Vintage%202029%20NW%206th%20St%2C%20Gainesville%2C%20FL%2032609"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-directions"
+        >
+          <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+          Get Directions
+        </a>
+      </div>
+
+      <div>
+        <div class="rating-card">
+          <p class="rating-title">Customer Rating &mdash; Google Maps</p>
+          <div class="rating-score">4.3</div>
+
+          <!-- 4 full stars + 1 partial -->
+          <div class="stars">
+            <svg viewBox="0 0 24 24"><polygon class="star-full" points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24"><polygon class="star-full" points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24"><polygon class="star-full" points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24"><polygon class="star-full" points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24"><polygon class="star-partial" points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          </div>
+
+          <p class="rating-count">Based on 12 reviews</p>
+          <p class="rating-source">via Google Maps</p>
+
+          <div class="rating-divider"></div>
+          <p class="rating-tagline">Shoppers love the unique finds and welcoming atmosphere at La Chua Vintage.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>&copy; 2026 <strong>La Chua Vintage</strong> &mdash; 2029 NW 6th St, Gainesville, FL 32609</p>
+</footer>
+
+</body>
+</html>

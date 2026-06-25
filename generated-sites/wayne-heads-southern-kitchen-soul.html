@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wayne Heads Southern Kitchen | Soul – Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #f5efe0;
+      --warm-white: #fdf8f0;
+      --rust:       #b94a2c;
+      --rust-dark:  #8c3520;
+      --amber:      #d4811a;
+      --amber-light:#f0a832;
+      --brown:      #4a2e1a;
+      --brown-mid:  #6b4226;
+      --charcoal:   #2a1f16;
+      --text-body:  #3d2b1a;
+      --text-muted: #7a5c40;
+      --shadow:     rgba(42, 20, 10, 0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--warm-white);
+      color: var(--text-body);
+      line-height: 1.7;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
+      background: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--rust);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--cream);
+    }
+
+    .nav-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-name span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--amber-light);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      color: var(--amber-light);
+    }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: var(--charcoal);
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding: 1rem 0;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; text-align: center; }
+      .nav-links a { display: block; padding: 0.75rem 1rem; }
+      .nav-toggle { display: flex; }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      margin-top: 64px;
+      min-height: 88vh;
+      background:
+        linear-gradient(160deg, rgba(42,20,10,0.72) 0%, rgba(90,38,14,0.55) 60%, rgba(180,80,20,0.35) 100%),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 30px,
+          rgba(255,255,255,0.015) 30px,
+          rgba(255,255,255,0.015) 60px
+        ),
+        var(--brown);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* decorative texture shapes */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 20% 80%, rgba(212,129,26,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 20%, rgba(185,74,44,0.22) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      text-align: center;
+      padding: 4rem 2rem;
+      max-width: 820px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber-light);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 7vw, 4.4rem);
+      color: var(--cream);
+      line-height: 1.12;
+      font-weight: 700;
+      text-shadow: 0 3px 18px rgba(0,0,0,0.55);
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-title .accent {
+      color: var(--amber-light);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: var(--cream);
+      opacity: 0.88;
+      font-style: italic;
+      margin-bottom: 2.4rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0,0,0,0.28); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: var(--rust);
+      color: #fff;
+      border: 2px solid var(--rust);
+    }
+    .btn-primary:hover { background: var(--rust-dark); border-color: var(--rust-dark); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--cream);
+      border: 2px solid rgba(245,239,224,0.6);
+    }
+    .btn-outline:hover { background: rgba(245,239,224,0.1); border-color: var(--cream); }
+
+    .btn-amber {
+      background: var(--amber);
+      color: #fff;
+      border: 2px solid var(--amber);
+    }
+    .btn-amber:hover { background: #b96d10; border-color: #b96d10; }
+
+    /* scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(245,239,224,0.55);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: bounce 2.2s infinite;
+    }
+
+    .scroll-hint svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(7px); }
+    }
+
+    /* ── Section commons ── */
+    section { padding: 5rem 2rem; }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--brown);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .divider {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rust), var(--amber));
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── About ── */
+    #about {
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.08rem;
+      color: var(--text-body);
+      margin-bottom: 1.2rem;
+      line-height: 1.8;
+    }
+
+    .about-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .about-plate {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rust) 0%, var(--amber) 60%, var(--brown-mid) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 48px rgba(90,30,10,0.28);
+      position: relative;
+    }
+
+    .about-plate::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 2px dashed rgba(245,239,224,0.4);
+    }
+
+    .about-plate svg {
+      width: 80px;
+      height: 80px;
+      fill: var(--cream);
+      opacity: 0.92;
+    }
+
+    .about-plate-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,239,224,0.75);
+      margin-top: 0.8rem;
+    }
+
+    .badge-strip {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
+    }
+
+    .badge-val {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--rust);
+      line-height: 1;
+    }
+
+    .badge-lbl {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 760px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-visual { order: -1; }
+      .about-plate { width: 200px; height: 200px; }
+    }
+
+    /* ── Menu / Services ── */
+    #services {
+      background: var(--warm-white);
+    }
+
+    .services-intro {
+      max-width: 580px;
+      margin-bottom: 3rem;
+    }
+
+    .services-intro p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 2rem 1.6rem;
+      border-left: 5px solid var(--rust);
+      box-shadow: 0 3px 16px rgba(90,40,10,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(212,129,26,0.07);
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(90,40,10,0.13);
+    }
+
+    .service-icon {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, var(--rust), var(--amber));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── Contact ── */
+    #contact {
+      background: var(--brown);
+      color: var(--cream);
+    }
+
+    #contact .section-label { color: var(--amber-light); }
+    #contact .section-title { color: var(--cream); }
+    #contact .divider { background: linear-gradient(90deg, var(--amber-light), var(--rust)); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(240,168,50,0.18);
+      border: 1px solid rgba(240,168,50,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--amber-light);
+    }
+
+    .contact-item-body h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber-light);
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-item-body p, .contact-item-body a {
+      font-size: 1rem;
+      color: var(--cream);
+      line-height: 1.55;
+    }
+
+    .contact-item-body a:hover { color: var(--amber-light); }
+
+    /* rating card */
+    .rating-card {
+      background: rgba(245,239,224,0.07);
+      border: 1px solid rgba(245,239,224,0.15);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .rating-card h3 {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber-light);
+      margin-bottom: 1.2rem;
+    }
+
+    .rating-big {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .rating-number {
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .rating-max {
+      font-size: 1.2rem;
+      color: rgba(245,239,224,0.5);
+      padding-bottom: 0.5rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 0.7rem;
+    }
+
+    .stars svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .stars .full { fill: var(--amber-light); }
+    .stars .half { fill: url(#halfStar); }
+    .stars .empty { fill: rgba(245,239,224,0.22); }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(245,239,224,0.6);
+      margin-bottom: 1.5rem;
+    }
+
+    .rating-bar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(245,239,224,0.65);
+    }
+
+    .rating-bar-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(245,239,224,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .rating-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--amber-light));
+      border-radius: 3px;
+    }
+
+    .directions-btn {
+      margin-top: 2rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--charcoal);
+      color: rgba(245,239,224,0.55);
+      text-align: center;
+      padding: 2.4rem 2rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.8;
+    }
+
+    footer .foot-brand {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+      font-family: 'Georgia', serif;
+    }
+
+    footer a { color: var(--amber-light); }
+    footer a:hover { color: var(--cream); }
+
+    /* ── Utilities ── */
+    .text-center { text-align: center; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SVG defs for half star gradient -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="halfStar" x1="0" x2="100%" y1="0" y2="0">
+      <stop offset="50%" stop-color="#f0a832"/>
+      <stop offset="50%" stop-color="rgba(245,239,224,0.22)"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ── NAV ── -->
+<nav aria-label="Main navigation">
+  <div class="nav-brand">
+    <div class="nav-logo-icon" aria-hidden="true">
+      <!-- fork & plate icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 3v18M8 3v5a3 3 0 006 0V3M18 3v18M16 3c0 0 2.5 2 2.5 5s-2.5 5-2.5 5" stroke="#f5efe0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="nav-name">
+      Wayne Heads
+      <span>Southern Kitchen &amp; Soul</span>
+    </div>
+  </div>
+
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Menu &amp; Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Gainesville, Florida</p>
+    <h1 class="hero-title">
+      Wayne Heads<br>
+      <span class="accent">Southern Kitchen</span>
+    </h1>
+    <p class="hero-sub">Real Soul Food, Cooked with Love &amp; Tradition</p>
+    <div class="hero-cta-group">
+      <a href="#services" class="btn btn-primary">See Our Menu</a>
+      <a href="#contact" class="btn btn-outline">Find Us</a>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">Where Southern Comfort Meets Soul</h2>
+        <div class="divider"></div>
+        <p>
+          Wayne Heads Southern Kitchen &amp; Soul is a Gainesville institution committed to serving
+          the rich, hearty flavors of authentic Southern and soul food. From crispy fried chicken
+          to slow-cooked collard greens, every plate is prepared with the care and seasoning that
+          only true Southern cooking can deliver.
+        </p>
+        <p>
+          Nestled on NE Waldo Road, the restaurant brings neighbors together over food that
+          feels like home — generous portions, familiar recipes, and a warm atmosphere that
+          keeps the Gainesville community coming back time and time again.
+        </p>
+        <p>
+          Whether you're dropping in for a quick lunch or sitting down for a full Southern spread,
+          you'll find the kind of honest, made-with-love cooking that reminds you good food
+          doesn't need to be complicated.
+        </p>
+        <div class="badge-strip">
+          <div class="badge">
+            <span class="badge-val">4.8</span>
+            <span class="badge-lbl">Google Rating</span>
+          </div>
+          <div class="badge">
+            <span class="badge-val">Soul</span>
+            <span class="badge-lbl">Food Tradition</span>
+          </div>
+          <div class="badge">
+            <span class="badge-val">GNV</span>
+            <span class="badge-lbl">Gainesville, FL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-visual">
+        <div class="about-plate" aria-hidden="true">
+          <!-- pot / steam icon -->
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="28" width="44" height="24" rx="5" fill="rgba(245,239,224,0.95)"/>
+            <rect x="6" y="28" width="52" height="6" rx="3" fill="rgba(245,239,224,0.7)"/>
+            <rect x="22" y="22" width="20" height="6" rx="3" fill="rgba(245,239,224,0.6)"/>
+            <path d="M22 20 Q22 14 26 14 Q30 14 30 20" stroke="rgba(245,239,224,0.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M34 20 Q34 14 38 14 Q42 14 42 20" stroke="rgba(245,239,224,0.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <rect x="4" y="46" width="56" height="6" rx="3" fill="rgba(245,239,224,0.5)"/>
+          </svg>
+          <span class="about-plate-label">Southern Soul</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES / MENU ── -->
+<section id="services">
+  <div class="container">
+    <div class="services-intro">
+      <p class="section-label">What We Serve</p>
+      <h2 class="section-title">Soul Food Done Right</h2>
+      <div class="divider"></div>
+      <p>Expect generous helpings, bold seasoning, and the honest Southern cooking that Gainesville loves. Contact us for current offerings and daily specials.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">
+          <!-- drumstick/chicken icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 2c-1.1 0-2 .9-2 2v1H8a4 4 0 00-4 4v2a4 4 0 004 4h1v6a1 1 0 002 0v-6h2v6a1 1 0 002 0v-6h1a4 4 0 004-4V9a4 4 0 00-4-4h-2V4c0-1.1-.9-2-2-2z"/></svg>
+        </div>
+        <h3>Fried Chicken</h3>
+        <p>Hand-seasoned and cooked to crispy, golden perfection — the cornerstone of Southern soul food, made fresh to order.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">
+          <!-- leaf / greens icon -->
+          <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.98c2.28.69 4.75.29 6.45-1 1.08-.81 1.98-1.86 2.61-3.07.19-.37.34-.75.46-1.13C14.37 14.14 17 11.36 17 8z"/><path d="M21 3c0 0-9 2-11 11" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Collard Greens &amp; Sides</h3>
+        <p>Slow-simmered greens, black-eyed peas, candied yams, and classic Southern sides that complete every plate.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">
+          <!-- bread / cornbread icon -->
+          <svg viewBox="0 0 24 24"><path d="M3 17V7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M7 15V9M12 15V9M17 15V9" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Cornbread &amp; Biscuits</h3>
+        <p>Baked in-house, our cornbread and buttermilk biscuits are the perfect accompaniment to any soul food plate.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">
+          <!-- bowl icon -->
+          <svg viewBox="0 0 24 24"><path d="M4 11C4 15.42 7.58 19 12 19s8-3.58 8-8H4z"/><path d="M12 5v2M8 6l1 2M16 6l-1 2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Mac &amp; Cheese</h3>
+        <p>Rich, creamy, and baked until bubbly — our mac &amp; cheese is a crowd favorite that pairs with everything on the menu.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">
+          <!-- fish icon -->
+          <svg viewBox="0 0 24 24"><path d="M21 12c0 0-4-7-9-7-3 0-6 3-6 7s3 7 6 7c5 0 9-7 9-7z"/><circle cx="15" cy="10" r="1.2" fill="#fff"/><path d="M3 12l3-3M3 12l3 3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Catfish &amp; Seafood</h3>
+        <p>Southern-fried catfish and seasonal seafood offerings — a beloved staple of the soul food tradition, seasoned just right.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon" aria-hidden="true">
+          <!-- dessert / pie icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 3L2 20h20L12 3z"/><path d="M12 8v7M9 15h6" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Desserts &amp; Sweets</h3>
+        <p>Finish your meal with a slice of sweet potato pie, banana pudding, or another classic Southern dessert. Contact us for today's offerings.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <p class="section-label">Come Visit</p>
+        <h2 class="section-title">Find Us in Gainesville</h2>
+        <div class="divider"></div>
+
+        <div class="contact-info-list">
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+            </div>
+            <div class="contact-item-body">
+              <h4>Address</h4>
+              <p>1602 NE Waldo Rd<br>Gainesville, FL 32609</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            </div>
+            <div class="contact-item-body">
+              <h4>Phone</h4>
+              <a href="tel:+13523014190">(352) 301-4190</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm1-10V7h-2v6l5.25 3.15.75-1.23L13 12z"/></svg>
+            </div>
+            <div class="contact-item-body">
+              <h4>Hours</h4>
+              <p>Contact us for current hours</p>
+            </div>
+          </div>
+        </div>
+
+        <a
+          href="https://www.google.com/maps/search/Wayne%20Heads%20Southern%20Kitchen%20%7C%20Soul%201602%20NE%20Waldo%20Rd%2C%20Gainesville%2C%20FL%2032609"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-amber"
+          style="display:inline-flex;align-items:center;gap:0.5rem;"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white" style="flex-shrink:0"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          Get Directions
+        </a>
+      </div>
+
+      <!-- Rating Card -->
+      <div>
+        <div class="rating-card">
+          <h3>Google Maps Rating</h3>
+
+          <div class="rating-big">
+            <span class="rating-number">4.8</span>
+            <span class="rating-max">/ 5</span>
+          </div>
+
+          <div class="stars" aria-label="4.8 out of 5 stars">
+            <svg viewBox="0 0 24 24" class="full"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" class="full"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" class="full"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" class="full"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+
+          <p class="rating-count">Based on 10 Google reviews</p>
+
+          <div class="rating-bar-group">
+            <div class="rating-bar-row">
+              <span>5</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:80%"></div></div>
+              <span>8</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>4</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:20%"></div></div>
+              <span>2</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>3</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:0%"></div></div>
+              <span>0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>2</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:0%"></div></div>
+              <span>0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>1</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:0%"></div></div>
+              <span>0</span>
+            </div>
+          </div>
+
+          <div style="margin-top:1.8rem;padding-top:1.4rem;border-top:1px solid rgba(245,239,224,0.12);">
+            <p style="font-family:'Arial',sans-serif;font-size:0.8rem;color:rgba(245,239,224,0.55);line-height:1.6;">
+              Customers love the authentic soul food, generous portions, and the welcoming atmosphere that Wayne Heads Southern Kitchen brings to Gainesville.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p class="foot-brand">Wayne Heads Southern Kitchen | Soul</p>
+  <p>1602 NE Waldo Rd, Gainesville, FL 32609 &nbsp;|&nbsp; <a href="tel:+13523014190">(352) 301-4190</a></p>
+  <p style="margin-top:0.8rem;">
+    <a href="https://www.google.com/maps/search/Wayne%20Heads%20Southern%20Kitchen%20%7C%20Soul%201602%20NE%20Waldo%20Rd%2C%20Gainesville%2C%20FL%2032609" target="_blank" rel="noopener noreferrer">Get Directions on Google Maps</a>
+  </p>
+  <p style="margin-top:1rem;font-size:0.75rem;opacity:0.45;">&copy; 2026 Wayne Heads Southern Kitchen | Soul. All rights reserved.</p>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const toggle = document.getElementById('navToggle');
+  const links  = document.getElementById('navLinks');
+
+  toggle.addEventListener('click', function () {
+    const open = links.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  // Close nav on link click (mobile)
+  links.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      links.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
+</body>
+</html>

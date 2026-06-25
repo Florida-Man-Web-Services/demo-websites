@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ellianos Coffee – Gainesville, FL</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #fdf8f3;
+      color: #3b2a1a;
+      line-height: 1.7;
+    }
+
+    /* ===== Color Palette ===== */
+    :root {
+      --espresso:  #3b2a1a;
+      --dark-roast: #5c3d1e;
+      --medium-roast: #8b5e3c;
+      --latte: #c8956c;
+      --cream: #f5e6d3;
+      --warm-white: #fdf8f3;
+      --gold: #c9a84c;
+      --text-light: #7a5c3e;
+    }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2rem;
+      background: rgba(59, 42, 26, 0.97);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+    }
+
+    .nav-logo-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #f5e6d3;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #c8956c;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: #f5e6d3; }
+
+    /* Hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #c8956c;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 1.5rem 4rem;
+      background:
+        linear-gradient(
+          160deg,
+          rgba(59, 42, 26, 0.82) 0%,
+          rgba(92, 61, 30, 0.72) 50%,
+          rgba(139, 94, 60, 0.60) 100%
+        ),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect width='600' height='600' fill='%235c3d1e'/%3E%3Ccircle cx='150' cy='150' r='120' fill='%238b5e3c' opacity='0.4'/%3E%3Ccircle cx='450' cy='300' r='160' fill='%233b2a1a' opacity='0.5'/%3E%3Ccircle cx='300' cy='480' r='100' fill='%23c8956c' opacity='0.2'/%3E%3C/svg%3E") center / cover no-repeat;
+    }
+
+    .hero-inner { max-width: 720px; }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      border-radius: 30px;
+      padding: 0.3rem 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      color: #fdf8f3;
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #e8d5be;
+      max-width: 520px;
+      margin: 0 auto 2.2rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--espresso);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.2rem;
+      border-radius: 4px;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-primary:hover { background: #e0bc5c; transform: translateY(-2px); }
+
+    /* ===== Section Shared ===== */
+    section { padding: 5rem 1.5rem; }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--latte);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      color: var(--espresso);
+      margin-bottom: 1.4rem;
+      line-height: 1.2;
+    }
+
+    .divider {
+      width: 52px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ===== About ===== */
+    .about { background: var(--warm-white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-light);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .coffee-illustration {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 40px rgba(139, 94, 60, 0.25);
+    }
+
+    /* ===== Services ===== */
+    .services { background: var(--cream); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
+
+    .service-card {
+      background: var(--warm-white);
+      border-radius: 8px;
+      padding: 2rem 1.8rem;
+      border-bottom: 3px solid transparent;
+      box-shadow: 0 2px 16px rgba(59, 42, 26, 0.08);
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(59, 42, 26, 0.14);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--espresso);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--text-light);
+    }
+
+    /* ===== Contact ===== */
+    .contact { background: var(--warm-white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.1rem;
+      color: var(--espresso);
+      margin-bottom: 0.4rem;
+      margin-top: 1.6rem;
+    }
+
+    .contact-info h3:first-child { margin-top: 0; }
+
+    .contact-info p, .contact-info address {
+      color: var(--text-light);
+      font-style: normal;
+      font-size: 0.97rem;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      margin-top: 1.6rem;
+      background: var(--dark-roast);
+      color: #fdf8f3;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.8rem 1.8rem;
+      border-radius: 4px;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-directions:hover { background: var(--medium-roast); transform: translateY(-2px); }
+
+    .rating-badge {
+      background: var(--cream);
+      border: 1px solid #e0c9a8;
+      border-radius: 10px;
+      padding: 1.4rem 1.8rem;
+      margin-top: 2.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rating-score {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--espresso);
+      line-height: 1;
+    }
+
+    .rating-stars {
+      color: var(--gold);
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .rating-count {
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+
+    .contact-map-placeholder {
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--cream);
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      border: 1px solid #e0c9a8;
+    }
+
+    .map-pin-svg { opacity: 0.45; }
+
+    .contact-map-placeholder p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--espresso);
+      color: #c8956c;
+      text-align: center;
+      padding: 2.4rem 1.5rem;
+    }
+
+    footer .footer-logo {
+      font-size: 1.3rem;
+      color: var(--cream);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.6rem;
+    }
+
+    footer p {
+      font-size: 0.82rem;
+      opacity: 0.7;
+    }
+
+    footer a {
+      color: var(--latte);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--espresso);
+        padding: 1rem 0;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a {
+        display: block;
+        padding: 0.75rem 2rem;
+      }
+      .nav-toggle { display: flex; }
+
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; }
+
+      .about-visual { display: none; }
+
+      .contact-map-placeholder { height: 220px; }
+
+      .rating-badge { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="top">
+    <a href="#top" class="nav-logo" aria-label="Ellianos Coffee home">
+      <svg class="nav-logo-icon" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="19" cy="19" r="19" fill="#8b5e3c"/>
+        <ellipse cx="19" cy="22" rx="10" ry="7" fill="#fdf8f3" opacity="0.15"/>
+        <path d="M11 16 Q13 10 19 10 Q25 10 27 16" stroke="#c9a84c" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <ellipse cx="19" cy="22" rx="9" ry="6" stroke="#f5e6d3" stroke-width="1.4" fill="none"/>
+        <path d="M28 14 Q32 12 31 18" stroke="#c8956c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span class="nav-logo-text">Ellianos Coffee</span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Menu</a></li>
+      <li><a href="#contact">Visit Us</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Gainesville, Florida</span>
+      <h1>Your Perfect Cup,<br>Every Time.</h1>
+      <p>Handcrafted espresso drinks, freshly brewed coffee, and warm hospitality — right here in Gainesville.</p>
+      <a href="#contact" class="btn-primary">Find Us</a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="section-inner about-grid">
+      <div class="about-text">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">More Than Just Coffee</h2>
+        <div class="divider"></div>
+        <p>Ellianos Coffee is a beloved local coffeehouse serving the Gainesville community with expertly crafted espresso beverages and specialty drinks made from premium beans. Nestled on SW 74th Dr, we are a welcoming spot for students, professionals, and neighbors alike to slow down and savor the moment.</p>
+        <p>From your morning pick-me-up to an afternoon retreat, our team is dedicated to delivering a consistently exceptional experience in every cup — because great coffee is about more than what is in the cup; it is about how it makes you feel.</p>
+      </div>
+      <div class="about-visual" aria-hidden="true">
+        <div class="coffee-illustration">
+          <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="80" r="72" fill="#f5e6d3"/>
+            <!-- Cup body -->
+            <path d="M48 70 L56 120 Q80 128 104 120 L112 70 Z" fill="#8b5e3c"/>
+            <!-- Cup rim -->
+            <rect x="44" y="64" width="72" height="10" rx="5" fill="#5c3d1e"/>
+            <!-- Handle -->
+            <path d="M112 78 Q130 78 130 95 Q130 112 112 112" stroke="#5c3d1e" stroke-width="7" fill="none" stroke-linecap="round"/>
+            <!-- Saucer -->
+            <ellipse cx="80" cy="126" rx="42" ry="8" fill="#c8956c"/>
+            <!-- Steam -->
+            <path d="M65 56 Q67 44 65 36" stroke="#c9a84c" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+            <path d="M80 52 Q82 38 80 28" stroke="#c9a84c" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+            <path d="M95 56 Q97 44 95 36" stroke="#c9a84c" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+            <!-- Foam swirl -->
+            <ellipse cx="80" cy="76" rx="26" ry="6" fill="#fdf8f3" opacity="0.5"/>
+            <path d="M58 76 Q68 70 80 76 Q92 82 102 76" stroke="#fdf8f3" stroke-width="1.5" fill="none" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Crafted with Care</h2>
+      <div class="divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">☕</span>
+          <h3>Espresso Drinks</h3>
+          <p>Classic lattes, cappuccinos, macchiatos, and cortados — all pulled fresh to order with premium espresso.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">🧊</span>
+          <h3>Iced &amp; Blended Beverages</h3>
+          <p>Refreshing iced coffees, cold brews, and blended drinks perfect for Florida's warm weather year-round.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">🍵</span>
+          <h3>Hot &amp; Specialty Drinks</h3>
+          <p>From smooth hot chocolates to seasonal specialty creations, there is always something new to enjoy.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">🥤</span>
+          <h3>Non-Coffee Options</h3>
+          <p>Smoothies, teas, and other non-coffee beverages so every guest can find their perfect drink.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">🚗</span>
+          <h3>Drive-Thru Service</h3>
+          <p>Quick and convenient drive-thru available so you can grab your favorite drink without missing a beat.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">🎁</span>
+          <h3>Custom &amp; Seasonal Specials</h3>
+          <p>Rotating seasonal menus and customizable drinks to match your mood. Contact us for current offerings.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="section-inner contact-grid">
+      <div class="contact-info">
+        <p class="section-label">Come Visit</p>
+        <h2 class="section-title">Find Us in Gainesville</h2>
+        <div class="divider"></div>
+
+        <h3>Address</h3>
+        <address>1521 SW 74th Dr<br>Gainesville, FL 32607</address>
+
+        <h3>Hours</h3>
+        <p>Contact us for current hours of operation.</p>
+
+        <a
+          href="https://www.google.com/maps/search/Ellianos%20Coffee%201521%20SW%2074th%20Dr%2C%20Gainesville%2C%20FL%2032607"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-directions"
+        >Get Directions</a>
+
+        <div class="rating-badge" aria-label="Google Maps rating: 4.7 out of 5 from 494 reviews">
+          <div class="rating-score">4.7</div>
+          <div>
+            <span class="rating-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="rating-count">Based on 494 Google reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-map-placeholder" aria-label="Map placeholder">
+        <svg class="map-pin-svg" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="28" cy="24" r="14" fill="#8b5e3c"/>
+          <circle cx="28" cy="24" r="6" fill="#fdf8f3"/>
+          <path d="M28 38 L28 52" stroke="#8b5e3c" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="28" cy="52" rx="10" ry="3" fill="#8b5e3c" opacity="0.25"/>
+        </svg>
+        <p>1521 SW 74th Dr<br>Gainesville, FL 32607</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Ellianos Coffee</div>
+    <p>1521 SW 74th Dr, Gainesville, FL 32607</p>
+    <p style="margin-top:0.6rem;">
+      &copy; 2026 Ellianos Coffee &nbsp;|&nbsp;
+      <a href="https://www.google.com/maps/search/Ellianos%20Coffee%201521%20SW%2074th%20Dr%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">View on Google Maps</a>
+    </p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('nav-toggle');
+    const links  = document.getElementById('nav-links');
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+    // Close nav on link click
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+
+</body>
+</html>

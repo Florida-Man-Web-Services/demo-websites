@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capoeira Massapê Gainesville</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:    #1a6b3a;
+      --green-dk: #124a28;
+      --yellow:   #f5c842;
+      --gold:     #c89e2a;
+      --cream:    #faf6ee;
+      --tan:      #e8dfc8;
+      --brown:    #5c3d1e;
+      --text:     #2a1f0e;
+      --light-text: #6b5c3a;
+      --white:    #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--green-dk);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-sub {
+      color: var(--yellow);
+      font-size: 0.72rem;
+      font-weight: normal;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--tan);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--yellow); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      background:
+        linear-gradient(160deg, rgba(18,74,40,0.88) 0%, rgba(26,107,58,0.75) 50%, rgba(92,61,30,0.80) 100%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 40px,
+          rgba(245,200,66,0.06) 40px,
+          rgba(245,200,66,0.06) 80px
+        ),
+        radial-gradient(ellipse at 30% 60%, #1a6b3a 0%, #124a28 60%, #0a2e18 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative cord pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          -30deg,
+          rgba(245,200,66,0.04) 0px,
+          rgba(245,200,66,0.04) 1px,
+          transparent 1px,
+          transparent 60px
+        ),
+        repeating-linear-gradient(
+          60deg,
+          rgba(245,200,66,0.04) 0px,
+          rgba(245,200,66,0.04) 1px,
+          transparent 1px,
+          transparent 60px
+        );
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; max-width: 760px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--brown);
+      font-size: 0.75rem;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 1.1rem;
+      border-radius: 2rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 18px rgba(0,0,0,0.45);
+    }
+
+    .hero h1 span { color: var(--yellow); }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.88);
+      max-width: 560px;
+      margin: 0 auto 2.2rem;
+      font-style: italic;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border-radius: 3px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--brown);
+      border-color: var(--yellow);
+    }
+
+    .btn-primary:hover { background: #ffd530; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border-color: rgba(255,255,255,0.55);
+    }
+
+    .btn-outline:hover { border-color: var(--white); }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2rem; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: bold;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.6rem;
+    }
+
+    h2 {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      color: var(--brown);
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    /* ── ABOUT ── */
+    .about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--light-text);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--green-dk) 0%, var(--green) 60%, var(--gold) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-visual-inner {
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .about-visual-glyph {
+      font-size: 6rem;
+      line-height: 1;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .about-visual-inner p {
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: bold;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+      background: var(--cream);
+      border-radius: 6px;
+      padding: 1rem 1.4rem;
+      border-bottom: 3px solid var(--green);
+    }
+
+    .stat-num {
+      display: block;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--green-dk);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--light-text);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.3rem;
+    }
+
+    /* ── SERVICES ── */
+    .services { background: var(--cream); }
+
+    .services-intro {
+      max-width: 600px;
+      color: var(--light-text);
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 1.8rem;
+      border-left: 4px solid var(--green);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--light-text);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--green-dk); color: var(--white); }
+
+    .contact .section-label { color: var(--yellow); }
+    .contact h2 { color: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info p {
+      color: rgba(255,255,255,0.78);
+      font-size: 1.02rem;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(245,200,66,0.18);
+      border: 1.5px solid rgba(245,200,66,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-detail strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail span, .contact-detail a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+
+    .contact-detail a:hover { color: var(--yellow); }
+
+    .rating-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(245,200,66,0.3);
+      border-radius: 8px;
+      padding: 1.6rem;
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .rating-num {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .stars {
+      font-size: 1.3rem;
+      display: block;
+      color: var(--yellow);
+      letter-spacing: 2px;
+    }
+
+    .rating-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      margin-top: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .contact-cta {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 2rem;
+    }
+
+    .contact-cta h3 {
+      color: var(--yellow);
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .contact-cta p {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.95rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--yellow);
+      color: var(--brown);
+      padding: 0.9rem 1.8rem;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-directions:hover { background: #ffd530; transform: translateY(-2px); }
+
+    .call-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.45);
+      padding: 0.9rem 1.8rem;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      margin-top: 1rem;
+      display: block;
+      text-align: center;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .call-btn:hover { border-color: var(--white); color: var(--yellow); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0a1f10;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    footer strong { color: rgba(255,255,255,0.78); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        position: absolute;
+        top: 64px;
+        left: 0; right: 0;
+        background: var(--green-dk);
+        padding: 0.5rem 0 1rem;
+      }
+
+      .nav-links.open { display: flex; }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.75rem 2rem;
+        border-top: 1px solid rgba(255,255,255,0.07);
+      }
+
+      .nav-toggle { display: flex; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-visual { order: -1; }
+
+      .about-stats { justify-content: center; }
+
+      section { padding: 3.5rem 1.2rem; }
+
+      .hero { min-height: 80vh; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-logo-text { font-size: 0.9rem; }
+      .rating-box { flex-direction: column; gap: 0.6rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="top">
+  <a class="nav-logo" href="#top">
+    <div class="nav-logo-icon">&#9876;</div>
+    <div>
+      <div class="nav-logo-text">Capoeira Massapê</div>
+      <div class="nav-logo-sub">Gainesville, FL</div>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Classes</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-toggle" id="navToggle" aria-label="Menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Martial Arts &amp; Brazilian Culture</div>
+    <h1>Move. Flow. <span>Fight.</span><br>Capoeira Massapê</h1>
+    <p>Where the ancient rhythm of Brazil meets the spirit of Gainesville — discover capoeira, the art that dances and fights at once.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#services">Explore Classes</a>
+      <a class="btn btn-outline" href="#contact">Find Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-label">About Us</span>
+        <h2>Authentic Capoeira in the Heart of Gainesville</h2>
+        <p>Capoeira Massapê Gainesville is a dedicated academy bringing the vibrant art of capoeira — Brazil's unique blend of martial arts, acrobatics, and music — to the Gainesville community. Our classes are open to students of all backgrounds and experience levels, from curious beginners to seasoned practitioners.</p>
+        <p>Training at Massapê means more than learning kicks and dodges; it means immersing yourself in the music, the Portuguese vocabulary, the rich Afro-Brazilian history, and the deep sense of camaraderie that capoeira inspires.</p>
+        <p>Whether you're seeking a creative way to get fit, develop self-defense awareness, or connect with a welcoming community, our school offers a safe and energetic environment to grow. Contact us for details on current schedules and enrollment.</p>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-num">4.9</span>
+            <div class="stat-label">Google Rating</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">31</span>
+            <div class="stat-label">Reviews</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">All</span>
+            <div class="stat-label">Skill Levels</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-visual-inner">
+          <span class="about-visual-glyph">&#9876;</span>
+          <p>Ginga &bull; Jogo &bull; Axé</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <span class="section-label">What We Offer</span>
+    <h2>Classes &amp; Programs</h2>
+    <p class="services-intro">We offer structured programs for every stage of the capoeira journey. Contact us for current schedules, class times, and registration information.</p>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <span class="service-icon">&#127939;</span>
+        <h3>Beginner Capoeira Classes</h3>
+        <p>Start your journey with foundational movements, the ginga, basic kicks, and an introduction to the music and culture that make capoeira unique.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#127996;</span>
+        <h3>Intermediate &amp; Advanced Training</h3>
+        <p>Deepen your game with advanced techniques, complex sequences, play strategy, and preparation for batizado events and belt progressions.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#127938;</span>
+        <h3>Kids Capoeira Program</h3>
+        <p>A fun, structured program designed to build coordination, discipline, and confidence in younger students through the playful art of capoeira.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#127929;</span>
+        <h3>Music &amp; Instruments</h3>
+        <p>Learn to play the berimbau, atabaque, and pandeiro — the instruments that form the heartbeat of the capoeira roda and the living tradition behind it.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#127937;</span>
+        <h3>Open Roda Sessions</h3>
+        <p>Practice your game in an authentic roda setting alongside fellow students and instructors. A core part of capoeira development and community.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">&#127775;</span>
+        <h3>Workshops &amp; Special Events</h3>
+        <p>Periodic intensives, guest instructor workshops, and cultural events celebrating Afro-Brazilian art, history, and capoeira traditions. Contact us for upcoming dates.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <span class="section-label">Find Us</span>
+        <h2>Come Train With Us</h2>
+        <p>We'd love to welcome you to the roda. Reach out to learn about class schedules, drop-in policies, and how to get started.</p>
+
+        <div class="contact-item">
+          <div class="contact-icon">&#128205;</div>
+          <div class="contact-detail">
+            <strong>Address</strong>
+            <span>2512 NE 1st Blvd STE 400<br>Gainesville, FL</span>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">&#128222;</div>
+          <div class="contact-detail">
+            <strong>Phone</strong>
+            <a href="tel:+13525756790">(352) 575-6790</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">&#128337;</div>
+          <div class="contact-detail">
+            <strong>Hours</strong>
+            <span>Contact us for current schedule</span>
+          </div>
+        </div>
+
+        <div class="rating-box">
+          <div class="rating-num">4.9</div>
+          <div>
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <div class="rating-label">31 Reviews &mdash; Google Maps</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta">
+        <h3>Ready to Begin?</h3>
+        <p>Whether you're brand new to capoeira or looking to continue your journey, we welcome all levels. Get directions to our studio or give us a call to learn more.</p>
+        <a class="btn-directions"
+           href="https://www.google.com/maps/search/Capoeira%20Massap%C3%AA%20Gainesville%202512%20NE%201st%20Blvd%20STE%20400"
+           target="_blank" rel="noopener">
+          &#128205; Get Directions
+        </a>
+        <a class="call-btn" href="tel:+13525756790">&#128222; Call (352) 575-6790</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Capoeira Massapê Gainesville</strong></p>
+  <p style="margin-top:0.4rem;">2512 NE 1st Blvd STE 400 &bull; Gainesville, FL &bull; <a href="tel:+13525756790" style="color:rgba(255,255,255,0.5); text-decoration:none;">(352) 575-6790</a></p>
+  <p style="margin-top:0.8rem;">&copy; 2026 Capoeira Massapê Gainesville. All rights reserved.</p>
+</footer>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links  = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  toggle.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') links.classList.toggle('open'); });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Egyptian Cafe | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:        #C8922A;
+      --gold-light:  #E8B84B;
+      --sand:        #F5EDD6;
+      --sand-dark:   #E8D9B5;
+      --brown:       #4A2C0A;
+      --brown-mid:   #7A4A1A;
+      --charcoal:    #2B2118;
+      --white:       #FEFAF3;
+      --text:        #3A2510;
+      --text-light:  #6B4E2A;
+      --radius:      8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background-color: var(--white);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Utility ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background 0.25s, color 0.25s, transform 0.15s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+    }
+
+    .btn-primary:hover { background: var(--gold-light); color: var(--brown); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-light);
+      border: 2px solid var(--gold-light);
+    }
+
+    .btn-outline:hover {
+      background: var(--gold-light);
+      color: var(--charcoal);
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      background: rgba(43, 33, 24, 0.97);
+      backdrop-filter: blur(6px);
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--gold-light);
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-sub {
+      font-size: 0.7rem;
+      color: var(--sand-dark);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--sand);
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* Hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--gold-light);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--charcoal);
+    }
+
+    /* Decorative geometric background */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 60%, rgba(200,146,42,0.18) 0%, transparent 70%),
+        linear-gradient(160deg, #1a0f05 0%, #2B2118 50%, #1a0f05 100%);
+    }
+
+    /* SVG pattern overlay */
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.07;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpolygon points='30,2 58,58 2,58' fill='none' stroke='%23C8922A' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-size: 60px 60px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      color: var(--sand);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    }
+
+    .hero-title span {
+      color: var(--gold-light);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--sand-dark);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      font-style: italic;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Decorative divider */
+    .divider {
+      text-align: center;
+      margin: 0 auto;
+      color: var(--gold);
+      font-size: 1.5rem;
+      letter-spacing: 0.4em;
+      line-height: 1;
+    }
+
+    /* ── Section Shared ── */
+    section { padding: 88px 0; }
+
+    .section-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    /* ── About ── */
+    #about {
+      background: var(--sand);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-light);
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+    }
+
+    .about-art {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* SVG illustration stand-in */
+    .about-illustration {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    /* ── Services ── */
+    #services {
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .service-card {
+      background: var(--sand);
+      border: 1px solid var(--sand-dark);
+      border-top: 4px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(74, 44, 10, 0.12);
+    }
+
+    .service-icon {
+      font-size: 2.2rem;
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--brown);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    /* ── Contact ── */
+    #contact {
+      background: var(--charcoal);
+      color: var(--sand);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-info .section-title { color: var(--sand); }
+
+    .contact-detail {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .contact-detail-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-detail-body strong {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .contact-detail-body span,
+    .contact-detail-body a {
+      color: var(--sand-dark);
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .contact-detail-body a:hover { color: var(--gold-light); }
+
+    /* Rating badge */
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(200,146,42,0.15);
+      border: 1px solid rgba(200,146,42,0.35);
+      border-radius: 40px;
+      padding: 10px 20px;
+      margin-top: 28px;
+    }
+
+    .rating-stars {
+      color: var(--gold-light);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+
+    .rating-score {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--gold-light);
+    }
+
+    .rating-count {
+      font-size: 0.88rem;
+      color: var(--sand-dark);
+    }
+
+    /* Map card */
+    .map-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(200,146,42,0.2);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+
+    .map-card h3 {
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      margin-bottom: 16px;
+    }
+
+    .map-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: rgba(255,255,255,0.04);
+      border: 1px dashed rgba(200,146,42,0.3);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .map-placeholder svg {
+      opacity: 0.3;
+    }
+
+    .map-card .btn { width: 100%; text-align: center; margin-top: 8px; }
+
+    /* ── Footer ── */
+    footer {
+      background: #160d04;
+      border-top: 2px solid var(--gold);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-size: 1.3rem;
+      color: var(--gold-light);
+      margin-bottom: 10px;
+    }
+
+    .footer-tagline {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: #6B4E2A;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(43, 33, 24, 0.99);
+        border-top: 1px solid var(--gold);
+        padding: 8px 0;
+      }
+
+      .nav-links.open { display: flex; }
+
+      .nav-links a {
+        display: block;
+        padding: 14px 24px;
+        border-bottom: 1px solid rgba(200,146,42,0.1);
+      }
+
+      .nav-toggle { display: flex; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-art { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 64px 0; }
+      .hero-content { padding: 100px 16px 64px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" aria-label="The Egyptian Cafe home">
+        <!-- Pyramid icon -->
+        <svg class="nav-logo-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <polygon points="21,4 38,36 4,36" fill="none" stroke="#C8922A" stroke-width="2" stroke-linejoin="round"/>
+          <line x1="4" y1="36" x2="38" y2="36" stroke="#C8922A" stroke-width="2"/>
+          <polygon points="21,13 29,30 13,30" fill="#C8922A" opacity="0.3"/>
+        </svg>
+        <span class="nav-logo-text">
+          The Egyptian Cafe
+          <span class="nav-logo-sub">Gainesville, FL</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Menu &amp; Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">&#11835; Gainesville, Florida &#11835;</p>
+      <h1 class="hero-title">
+        <span>The Egyptian</span><br>Cafe
+      </h1>
+      <p class="hero-tagline">
+        Ancient flavors, warmly brewed &mdash; a taste of the Nile in the heart of North Central Florida.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Find Us</a>
+        <a href="#services" class="btn btn-outline">Explore the Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── About ── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">Our Story</span>
+          <h2 class="section-title">A Corner of Egypt in Gainesville</h2>
+          <p>
+            The Egyptian Cafe brings the rich culinary traditions of the Middle East and North Africa to downtown Gainesville, offering a welcoming space where students, locals, and visitors can slow down and savor something extraordinary.
+          </p>
+          <p>
+            From aromatic coffees and freshly brewed loose-leaf teas to hearty savory dishes and sweet pastries, every item on the menu reflects a deep respect for authentic Egyptian flavors and warm hospitality.
+          </p>
+          <p>
+            Whether you are stopping in for a quiet afternoon coffee or sharing a meal with friends, The Egyptian Cafe offers a genuinely distinctive dining experience unlike anything else in Gainesville.
+          </p>
+          <a href="#contact" class="btn btn-primary" style="margin-top:10px;">Visit Us Today</a>
+        </div>
+        <div class="about-art">
+          <!-- Decorative SVG illustration -->
+          <svg class="about-illustration" viewBox="0 0 380 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Background circle -->
+            <circle cx="190" cy="160" r="148" fill="#E8D9B5" opacity="0.5"/>
+            <!-- Large pyramid -->
+            <polygon points="190,30 330,270 50,270" fill="#C8922A" opacity="0.18" stroke="#C8922A" stroke-width="2"/>
+            <!-- Smaller pyramid -->
+            <polygon points="190,80 280,255 100,255" fill="#C8922A" opacity="0.13" stroke="#C8922A" stroke-width="1.5"/>
+            <!-- Ground line -->
+            <line x1="30" y1="270" x2="350" y2="270" stroke="#7A4A1A" stroke-width="2" opacity="0.4"/>
+            <!-- Sun -->
+            <circle cx="190" cy="62" r="22" fill="#E8B84B" opacity="0.5"/>
+            <!-- Sun rays -->
+            <g stroke="#E8B84B" stroke-width="1.5" opacity="0.4">
+              <line x1="190" y1="30" x2="190" y2="18"/>
+              <line x1="212" y1="38" x2="221" y2="29"/>
+              <line x1="222" y1="62" x2="234" y2="62"/>
+              <line x1="212" y1="86" x2="221" y2="95"/>
+              <line x1="190" y1="94" x2="190" y2="106"/>
+              <line x1="168" y1="86" x2="159" y2="95"/>
+              <line x1="158" y1="62" x2="146" y2="62"/>
+              <line x1="168" y1="38" x2="159" y2="29"/>
+            </g>
+            <!-- Cup of coffee / tea -->
+            <rect x="155" y="180" width="70" height="52" rx="4" fill="#7A4A1A" opacity="0.7"/>
+            <ellipse cx="190" cy="180" rx="35" ry="10" fill="#4A2C0A" opacity="0.7"/>
+            <ellipse cx="190" cy="175" rx="30" ry="8" fill="#C8922A" opacity="0.5"/>
+            <!-- Steam lines -->
+            <path d="M178 168 Q182 158 178 150" stroke="#C8922A" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
+            <path d="M190 165 Q194 155 190 147" stroke="#C8922A" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
+            <path d="M202 168 Q206 158 202 150" stroke="#C8922A" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ── -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Menu &amp; Services</h2>
+        <p style="color:var(--text-light); max-width:560px; margin:0 auto; font-size:1.02rem;">
+          From morning coffee to a full midday spread, The Egyptian Cafe has something for everyone. Contact us for current offerings and details.
+        </p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">&#9749;</div>
+          <h3>Egyptian &amp; Middle Eastern Coffee</h3>
+          <p>Rich, aromatic coffees prepared in traditional style, from strong Turkish brews to spiced specialty drinks. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#127861;</div>
+          <h3>Loose-Leaf Teas &amp; Herbal Infusions</h3>
+          <p>A curated selection of teas including classic Egyptian black teas, hibiscus karkade, and soothing herbal blends. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#127859;</div>
+          <h3>Savory Dishes &amp; Platters</h3>
+          <p>Hearty, flavorful entrees drawing on North African and Middle Eastern tradition, perfect for a satisfying lunch or early dinner. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#127848;</div>
+          <h3>Pastries &amp; Sweet Treats</h3>
+          <p>Freshly prepared pastries and sweets inspired by Egyptian and regional recipes, ideal alongside any hot or cold beverage. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#127862;</div>
+          <h3>Hookah &amp; Shisha (Lounge)</h3>
+          <p>A relaxed lounge atmosphere for guests looking to unwind. Availability and flavors vary &mdash; contact us for current offerings.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">&#127881;</div>
+          <h3>Private Events &amp; Catering</h3>
+          <p>Available for small gatherings, celebrations, and catering inquiries. Reach out to discuss how we can accommodate your group. Contact us for details.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-title">Visit The Egyptian Cafe</h2>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128205;</div>
+            <div class="contact-detail-body">
+              <strong>Address</strong>
+              <span>21 SE 2nd Pl<br>Gainesville, FL 32601</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128222;</div>
+            <div class="contact-detail-body">
+              <strong>Phone</strong>
+              <a href="tel:+13524514386">(352) 451-4386</a>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128336;</div>
+            <div class="contact-detail-body">
+              <strong>Hours</strong>
+              <span>Contact us for current hours</span>
+            </div>
+          </div>
+
+          <div class="rating-badge" aria-label="Google Maps rating: 4.8 out of 5 based on 40 reviews">
+            <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="rating-score">4.8</span>
+            <span class="rating-count">/ 5 &nbsp;&bull;&nbsp; 40 Google Reviews</span>
+          </div>
+        </div>
+
+        <div class="map-card">
+          <h3>&#128205; Find Us on the Map</h3>
+          <div class="map-placeholder" aria-hidden="true">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="34" r="16" stroke="#C8922A" stroke-width="3"/>
+              <circle cx="40" cy="34" r="5" fill="#C8922A"/>
+              <path d="M40 50 C30 60 18 68 18 68" stroke="#C8922A" stroke-width="2" stroke-linecap="round"/>
+              <path d="M40 50 C50 60 62 68 62 68" stroke="#C8922A" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p style="color: #9a7a56; font-size:0.9rem; margin-bottom:18px; font-style:italic;">
+            Conveniently located in downtown Gainesville, just steps from the center of the city.
+          </p>
+          <a
+            href="https://www.google.com/maps/search/The%20Egyptian%20Cafe%2021%20SE%202nd%20Pl%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            &#127758; Get Directions
+          </a>
+          <a href="tel:+13524514386" class="btn btn-outline" style="margin-top:12px; width:100%; text-align:center; display:block;">
+            &#128222; Call (352) 451-4386
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">&#9651; The Egyptian Cafe</div>
+      <p class="footer-tagline">Ancient flavors, warmly brewed &mdash; Gainesville, FL</p>
+      <p class="footer-copy">
+        21 SE 2nd Pl, Gainesville, FL 32601 &nbsp;&bull;&nbsp; (352) 451-4386<br>
+        &copy; The Egyptian Cafe. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

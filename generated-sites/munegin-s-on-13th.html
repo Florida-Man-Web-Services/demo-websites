@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Munegin's On 13th | Bar – Gainesville, FL</title>
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:      #0d0d0d;
+      --dark:       #141414;
+      --card-bg:    #1c1c1c;
+      --border:     #2a2a2a;
+      --gold:       #c9a84c;
+      --gold-light: #e2c06e;
+      --text:       #e8e2d9;
+      --muted:      #9a9490;
+      --white:      #ffffff;
+      --nav-h:      68px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--black);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ===================== NAV ===================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(13,13,13,0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--black);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    /* mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: rgba(13,13,13,0.98);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      z-index: 999;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ===================== HERO ===================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 1.5rem 5rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    /* subtle radial glow */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 60%, rgba(201,168,76,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 100% 60% at 50% 100%, rgba(201,168,76,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* decorative horizontal lines */
+    .hero::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.4;
+    }
+
+    .hero-content { position: relative; max-width: 780px; }
+
+    .hero-eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: bold;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-title span { color: var(--gold); }
+
+    .hero-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1.4rem auto;
+      opacity: 0.7;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      color: var(--muted);
+      font-style: italic;
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--black);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 0.9rem 2.4rem;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .hero-cta:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* ===================== SECTIONS COMMON ===================== */
+    section { padding: 6rem 1.5rem; }
+
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: bold;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .gold-rule {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 2rem;
+      opacity: 0.65;
+    }
+
+    /* ===================== ABOUT ===================== */
+    #about { background: var(--dark); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .badge-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.4rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+    }
+
+    .badge-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .badge-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .badge-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* ===================== SERVICES ===================== */
+    #services { background: var(--black); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: 2px;
+      padding: 2rem 1.8rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .service-card:hover {
+      border-top-color: var(--gold-light);
+      transform: translateY(-4px);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-name {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.03em;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ===================== CONTACT ===================== */
+    #contact { background: var(--dark); }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info { }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .contact-detail-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-detail-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-detail-value {
+      color: var(--text);
+      font-size: 0.98rem;
+    }
+
+    .directions-btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      background: var(--gold);
+      color: var(--black);
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 0.75rem 1.8rem;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .directions-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* rating card */
+    .rating-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .rating-top {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .rating-number {
+      font-size: 3.2rem;
+      font-weight: bold;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .rating-stars {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .rating-source {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .rating-quote {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.6rem;
+    }
+
+    .footer-address {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-bottom: 1.4rem;
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 1.4rem;
+      opacity: 0.4;
+    }
+
+    .footer-copy {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      section { padding: 4rem 1.2rem; }
+
+      .hero { padding: 7rem 1.2rem 4rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2.4rem; }
+      .rating-number { font-size: 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <a class="nav-logo" href="#home">
+      <div class="nav-logo-icon">M</div>
+      <span class="nav-logo-text">Munegin's On 13th</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Offer</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about"    onclick="closeMenu()">About</a>
+    <a href="#services" onclick="closeMenu()">What We Offer</a>
+    <a href="#contact"  onclick="closeMenu()">Contact</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Gainesville, Florida</p>
+      <h1 class="hero-title">Munegin's<br><span>On 13th</span></h1>
+      <div class="hero-divider"></div>
+      <p class="hero-tagline">Your neighborhood bar where good drinks, great company, and good times meet on NW 13th Street.</p>
+      <a class="hero-cta" href="#contact">Find Us</a>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About</span>
+          <h2 class="section-title">A Local Bar with Character</h2>
+          <div class="gold-rule"></div>
+          <p>Munegin's On 13th is a laid-back neighborhood bar situated on NW 13th Street in the heart of Gainesville. Whether you're unwinding after work, watching the game with friends, or just looking for a familiar spot with a cold drink in hand, this is the kind of place that feels like home.</p>
+          <p>Serving the Gainesville community, Munegin's offers a relaxed atmosphere where regulars and newcomers alike are welcome. The vibe is easy, the drinks are honest, and the crowd is always good.</p>
+          <p>Located conveniently at 4005 NW 13th St, Munegin's On 13th is easy to find and even easier to enjoy. Stop by and see what keeps our guests coming back.</p>
+        </div>
+        <div class="about-badges">
+          <div class="badge-item">
+            <div class="badge-icon">🍺</div>
+            <div>
+              <div class="badge-title">Cold Drinks</div>
+              <div class="badge-desc">A solid selection of beers, spirits, and mixed drinks to suit every taste.</div>
+            </div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">📺</div>
+            <div>
+              <div class="badge-title">Sports &amp; Entertainment</div>
+              <div class="badge-desc">Catch your favorite teams on the screens in a comfortable bar setting.</div>
+            </div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">🎶</div>
+            <div>
+              <div class="badge-title">Great Atmosphere</div>
+              <div class="badge-desc">Good music, friendly faces, and a neighborhood feel that Gainesville loves.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services">
+    <div class="container">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Drinks &amp; More</h2>
+      <div class="gold-rule"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">🍻</span>
+          <div class="service-name">Draft &amp; Bottled Beer</div>
+          <div class="service-desc">A rotating selection of domestic and craft beers on draft and in bottles — always cold, always ready.</div>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🥃</span>
+          <div class="service-name">Spirits &amp; Cocktails</div>
+          <div class="service-desc">From classic cocktails to straight pours, our bar is stocked with a wide range of spirits. Contact us for details.</div>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🍷</span>
+          <div class="service-name">Wine &amp; Seltzers</div>
+          <div class="service-desc">House wines and hard seltzers for those who prefer something lighter on a Florida evening.</div>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">📺</span>
+          <div class="service-name">Sports Viewing</div>
+          <div class="service-desc">Multiple screens showing live sports so you never miss the game. Gator season? We're the place to be.</div>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🎉</span>
+          <div class="service-name">Private Events &amp; Gatherings</div>
+          <div class="service-desc">Looking to host a group? Contact us for details on private bar events and reservations.</div>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">🎶</span>
+          <div class="service-name">Live Entertainment</div>
+          <div class="service-desc">Occasional live music and entertainment nights. Contact us to learn about upcoming events.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-label">Contact &amp; Location</span>
+      <h2 class="section-title">Come Visit Us</h2>
+      <div class="gold-rule"></div>
+      <div class="contact-wrapper">
+
+        <div class="contact-info">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div>
+              <div class="contact-detail-label">Address</div>
+              <div class="contact-detail-value">
+                4005 NW 13th St<br>
+                Gainesville, FL 32609
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">🕐</div>
+            <div>
+              <div class="contact-detail-label">Hours</div>
+              <div class="contact-detail-value">Contact us for current hours and availability.</div>
+            </div>
+          </div>
+
+          <a class="directions-btn"
+             href="https://www.google.com/maps/search/Munegin's%20On%2013th%204005%20NW%2013th%20St%2C%20Gainesville%2C%20FL%2032609"
+             target="_blank" rel="noopener noreferrer">
+            Get Directions
+          </a>
+        </div>
+
+        <div class="rating-card">
+          <div class="rating-top">
+            <div class="rating-number">4.3</div>
+            <div class="rating-stars">
+              <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+              <div class="rating-count">Based on 152 reviews</div>
+            </div>
+          </div>
+          <p class="rating-quote">"A dependable neighborhood bar with a welcoming crowd — one of Gainesville's go-to spots on NW 13th."</p>
+          <div class="rating-source">Verified Rating &nbsp;&bull;&nbsp; Google Maps</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-logo">Munegin's On 13th</div>
+    <div class="footer-address">4005 NW 13th St &nbsp;&bull;&nbsp; Gainesville, FL 32609</div>
+    <div class="footer-divider"></div>
+    <div class="footer-copy">&copy; 2026 Munegin's On 13th. All rights reserved.</div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+    // Close mobile menu on outside click
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('mobileMenu');
+      var btn = document.querySelector('.hamburger');
+      if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

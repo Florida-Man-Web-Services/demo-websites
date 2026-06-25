@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AK's Kwik Stop | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --red: #c0392b;
+      --red-dark: #96281b;
+      --yellow: #f39c12;
+      --yellow-light: #fde68a;
+      --dark: #1a1a1a;
+      --charcoal: #2c2c2c;
+      --mid: #444;
+      --light-gray: #f5f5f5;
+      --white: #ffffff;
+      --text-dark: #222;
+      --text-mid: #555;
+      --radius: 6px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--white);
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.6rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--yellow);
+    }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 60px;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--charcoal) 60%, var(--red-dark) 100%);
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative stripes */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(192, 57, 43, 0.06) 40px,
+        rgba(192, 57, 43, 0.06) 80px
+      );
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .hero h1 span {
+      color: var(--yellow);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: #ddd;
+      max-width: 560px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 2.2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(243,156,18,0.4);
+    }
+
+    .hero-cta:hover {
+      background: #e67e22;
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTIONS SHARED ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-tag {
+      display: inline-block;
+      background: var(--yellow-light);
+      color: var(--red-dark);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0.25rem 0.85rem;
+      border-radius: 20px;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-title span {
+      color: var(--red);
+    }
+
+    .section-lead {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      max-width: 620px;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--light-gray);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      margin-top: 2.5rem;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 1rem;
+      font-size: 1.02rem;
+    }
+
+    .about-visual {
+      background: var(--dark);
+      border-radius: 12px;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+    }
+
+    .about-icon {
+      font-size: 3.5rem;
+      line-height: 1;
+    }
+
+    .about-visual p {
+      color: #aaa;
+      font-size: 0.9rem;
+      max-width: 220px;
+    }
+
+    .about-visual strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--white);
+    }
+
+    .services-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--light-gray);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 1.8rem 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--red);
+      border-radius: 4px 0 0 4px;
+    }
+
+    .service-card:hover {
+      border-color: var(--red);
+      box-shadow: 0 6px 20px rgba(192,57,43,0.12);
+      transform: translateY(-3px);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--charcoal);
+      color: var(--white);
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    #contact .section-lead {
+      color: #bbb;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2.5rem;
+    }
+
+    .contact-info h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--yellow);
+      margin-bottom: 1.4rem;
+      letter-spacing: 0.5px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-item-icon {
+      width: 38px;
+      height: 38px;
+      background: rgba(192,57,43,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-item-text {
+      flex: 1;
+    }
+
+    .contact-item-text span {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .contact-item-text a:hover {
+      color: var(--yellow);
+    }
+
+    .contact-item-text p {
+      color: var(--white);
+      font-size: 1rem;
+    }
+
+    /* rating */
+    .rating-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .rating-stars {
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: var(--yellow);
+    }
+
+    .rating-text strong {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-text small {
+      color: #999;
+      font-size: 0.82rem;
+    }
+
+    /* CTA panel */
+    .contact-cta {
+      background: rgba(192,57,43,0.15);
+      border: 1px solid rgba(192,57,43,0.35);
+      border-radius: 12px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .contact-cta h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .contact-cta p {
+      color: #bbb;
+      font-size: 0.97rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--red);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      width: fit-content;
+    }
+
+    .btn-directions:hover {
+      background: var(--red-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: 2px solid var(--yellow);
+      color: var(--yellow);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.8rem 1.8rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      width: fit-content;
+    }
+
+    .btn-call:hover {
+      background: var(--yellow);
+      color: var(--dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    footer p {
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--yellow);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: var(--dark);
+        padding: 1rem 2rem 1.5rem;
+        gap: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-visual {
+        min-height: 200px;
+      }
+
+      section {
+        padding: 3.5rem 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 3rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-icon">AK</div>
+      <span class="nav-logo-text">AK's Kwik Stop</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div>
+      <div class="hero-badge">Gainesville, FL</div>
+      <h1>AK's <span>Kwik Stop</span></h1>
+      <p>Your neighborhood convenience destination on NW 6th St — quick, easy, and always stocked with what you need.</p>
+      <a href="#contact" class="hero-cta">Find Us Today</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div>
+        <span class="section-tag">About Us</span>
+        <h2 class="section-title">Serving the <span>Gainesville</span> Community</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>AK's Kwik Stop is a locally operated convenience store serving the NW Gainesville area, committed to offering a reliable selection of everyday essentials at a moment's notice. Whether you're grabbing a quick snack, stocking up on household basics, or picking up a beverage on the go, we keep our shelves ready for the community we serve.</p>
+          <p>We pride ourselves on a clean, friendly environment where customers can get in and out quickly without hassle. As a neighborhood staple, we understand the importance of convenience and consistent availability for residents and passersby alike.</p>
+          <p>Stop in and see why locals choose AK's Kwik Stop for their everyday needs. We're here to make life a little easier — one quick trip at a time.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-icon">🏪</div>
+          <div>
+            <strong>Neighborhood Convenience</strong>
+            <p>Stocked and ready for your everyday on-the-go needs in Gainesville, FL</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-tag">What We Offer</span>
+        <h2 class="section-title">Everyday <span>Essentials</span></h2>
+        <p class="section-lead">From snacks to household staples, we carry a wide range of products to keep you moving. Contact us for specific availability details.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">🥤</span>
+          <h3>Beverages &amp; Drinks</h3>
+          <p>Cold sodas, waters, juices, energy drinks, and more — grab one for the road whenever you need a refresher.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🍫</span>
+          <h3>Snacks &amp; Packaged Foods</h3>
+          <p>Chips, candy, nuts, crackers, and other quick-grab packaged foods for any time of day.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🧴</span>
+          <h3>Household Basics</h3>
+          <p>Everyday household and personal care essentials stocked so you don't have to make a big-box run for small needs.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🗞️</span>
+          <h3>Tobacco &amp; Accessories</h3>
+          <p>A selection of tobacco products and accessories available for adult customers.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">💳</span>
+          <h3>Lottery &amp; Prepaid Cards</h3>
+          <p>Lottery tickets and a variety of prepaid phone cards to keep you connected. Contact us for details.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🛒</span>
+          <h3>Grab-and-Go Items</h3>
+          <p>Quick-grab options for busy people on the move — stop in and we'll have what you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-tag">Get In Touch</span>
+      <h2 class="section-title">Visit <span>AK's Kwik Stop</span></h2>
+      <p class="section-lead">Come see us on NW 6th St — we're conveniently located and easy to find.</p>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Store Information</h3>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">📍</div>
+            <div class="contact-item-text">
+              <span>Address</span>
+              <p>2206 NW 6th St<br>Gainesville, FL</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">📞</div>
+            <div class="contact-item-text">
+              <span>Phone</span>
+              <a href="tel:+13523788404">(352) 378-8404</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">🕐</div>
+            <div class="contact-item-text">
+              <span>Hours</span>
+              <p>Contact us for current store hours</p>
+            </div>
+          </div>
+
+          <div class="rating-box">
+            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            <div class="rating-text">
+              <strong>4.0</strong>
+              <small>Google Maps Rating &mdash; 17 reviews</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-cta">
+          <h3>Ready to Visit?</h3>
+          <p>Use the button below to get turn-by-turn directions to our store, or give us a call if you have any questions.</p>
+          <a
+            href="https://www.google.com/maps/search/AK's%20Kwik%20Stop%202206%20NW%206th%20St"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            &#9654; Get Directions
+          </a>
+          <a href="tel:+13523788404" class="btn-call">
+            &#128222; Call (352) 378-8404
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 AK's Kwik Stop &mdash; 2206 NW 6th St, Gainesville, FL &mdash; <a href="tel:+13523788404">(352) 378-8404</a></p>
+  </footer>
+
+  <script>
+    (function() {
+      var toggle = document.getElementById('navToggle');
+      var links = document.getElementById('navLinks');
+      toggle.addEventListener('click', function() {
+        links.classList.toggle('open');
+      });
+      links.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+          links.classList.remove('open');
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

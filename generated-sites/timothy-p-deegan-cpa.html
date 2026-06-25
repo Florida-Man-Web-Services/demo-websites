@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timothy P. Deegan, CPA | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #1a2b4a;
+      --navy-dark: #0f1c32;
+      --gold: #c9a84c;
+      --gold-light: #e0c068;
+      --slate: #4a5568;
+      --light-gray: #f7f8fa;
+      --mid-gray: #e2e6ed;
+      --text-dark: #1a2b4a;
+      --text-muted: #6b7a8d;
+      --white: #ffffff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--navy-dark);
+      border-bottom: 3px solid var(--gold);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--gold);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--navy-dark);
+      flex-shrink: 0;
+    }
+
+    .nav-brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .nav-brand-name {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-brand-cpa {
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      font-family: 'Arial', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #b0bec5;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy-dark) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      font-weight: bold !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-light) !important;
+      color: var(--navy-dark) !important;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 68px;
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, #1e3a6e 100%);
+      min-height: 540px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(201, 168, 76, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(201, 168, 76, 0.06) 0%, transparent 50%);
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 720px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 0.3rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 span {
+      color: var(--gold);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #b0c4de;
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy-dark);
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 2px solid rgba(255,255,255,0.4);
+      transition: border-color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .hero-trust {
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      color: #8fa8c8;
+    }
+
+    .hero-trust-item .check {
+      color: var(--gold);
+      font-size: 1rem;
+    }
+
+    /* ── SECTION COMMONS ── */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--navy);
+      line-height: 1.25;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-line {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--slate);
+      margin-bottom: 1.1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--light-gray);
+      border-left: 4px solid var(--gold);
+      padding: 1.5rem 1.25rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .stat-card .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-card .stat-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--light-gray);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-header .section-line {
+      margin: 0 auto 1.5rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem 1.75rem;
+      border-top: 4px solid var(--gold);
+      box-shadow: 0 2px 12px rgba(26, 43, 74, 0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(26, 43, 74, 0.12);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--navy);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      font-size: 1.4rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--navy-dark);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-left .section-title {
+      color: var(--white);
+    }
+
+    .contact-left .section-label {
+      color: var(--gold);
+    }
+
+    .contact-left .section-line {
+      background: var(--gold);
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-detail-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(201, 168, 76, 0.15);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-body {
+      flex: 1;
+    }
+
+    .contact-detail-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-detail-value {
+      font-size: 1rem;
+      color: #cdd8e8;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .contact-detail-value a {
+      color: #cdd8e8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-detail-value a:hover {
+      color: var(--gold);
+    }
+
+    .contact-right {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 2.5rem 2rem;
+    }
+
+    .rating-block {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--light-gray);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .rating-stars {
+      font-size: 1.4rem;
+      color: #f5a623;
+      letter-spacing: 0.05em;
+    }
+
+    .rating-text {
+      flex: 1;
+    }
+
+    .rating-score {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .rating-badge {
+      background: var(--navy);
+      color: var(--gold);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+    }
+
+    .contact-right h3 {
+      font-size: 1.25rem;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-right p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--gold);
+      color: var(--navy-dark);
+      padding: 0.9rem 1.75rem;
+      border-radius: 6px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-directions:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--navy);
+      padding: 0.9rem 1.75rem;
+      border-radius: 6px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 2px solid var(--navy);
+      transition: all 0.2s;
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.75rem;
+    }
+
+    .btn-call:hover {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080f1c;
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(201, 168, 76, 0.2);
+    }
+
+    footer p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      color: #5a6a80;
+    }
+
+    footer .footer-name {
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    footer .footer-divider {
+      margin: 0 0.5rem;
+      color: #2a3a50;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 0 1.25rem;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: var(--navy-dark);
+        flex-direction: column;
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 0.5rem;
+        border-bottom: 2px solid var(--gold);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 0.6rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      section {
+        padding: 3.5rem 1.25rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero {
+        padding: 3rem 1.25rem;
+        min-height: 480px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-icon">TD</div>
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Timothy P. Deegan</span>
+        <span class="nav-brand-cpa">Certified Public Accountant</span>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Gainesville, Florida &bull; CPA</div>
+      <h1>Trusted Accounting.<br /><span>Exceptional Results.</span></h1>
+      <p class="hero-tagline">Professional tax, accounting, and financial guidance for individuals and businesses in the Gainesville area.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get in Touch</a>
+        <a href="#services" class="btn-outline">View Services</a>
+      </div>
+      <div class="hero-trust">
+        <div class="hero-trust-item"><span class="check">&#10003;</span> Licensed CPA</div>
+        <div class="hero-trust-item"><span class="check">&#10003;</span> 5.0 Google Rating</div>
+        <div class="hero-trust-item"><span class="check">&#10003;</span> Local Gainesville Practice</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About the Firm</span>
+          <h2 class="section-title">A CPA Practice Built on Integrity</h2>
+          <div class="section-line"></div>
+          <p>Timothy P. Deegan, CPA is a full-service accounting practice serving individuals, families, and small businesses throughout Gainesville and the surrounding North Central Florida region.</p>
+          <p>The firm is dedicated to delivering accurate, personalized financial and tax services that help clients navigate complex regulations with confidence and peace of mind.</p>
+          <p>Whether you need assistance with tax preparation, business accounting, or financial planning support, the practice brings professional expertise and a commitment to client success to every engagement.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-value">5.0</div>
+            <div class="stat-label">Google Rating</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">CPA</div>
+            <div class="stat-label">Licensed &amp; Certified</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">FL</div>
+            <div class="stat-label">Gainesville, Local</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">&#10003;</div>
+            <div class="stat-label">Personalized Service</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Accounting &amp; Financial Services</h2>
+        <div class="section-line"></div>
+        <p style="color: var(--text-muted); font-family: 'Arial', sans-serif; font-size: 0.95rem; max-width: 560px; margin: 0 auto;">From individual tax returns to comprehensive business accounting, we provide the full range of CPA services your financial life requires.</p>
+      </div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#128196;</div>
+          <h3>Tax Preparation &amp; Filing</h3>
+          <p>Accurate preparation and filing of individual, business, and corporate tax returns in compliance with current federal and state regulations.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128200;</div>
+          <h3>Tax Planning</h3>
+          <p>Proactive strategies to minimize your tax liability throughout the year, helping individuals and businesses keep more of what they earn.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128218;</div>
+          <h3>Bookkeeping &amp; Accounting</h3>
+          <p>Reliable day-to-day bookkeeping and financial recordkeeping services that keep your business organized and audit-ready year-round.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128202;</div>
+          <h3>Financial Statement Preparation</h3>
+          <p>Professional preparation of balance sheets, income statements, and cash flow reports for business owners, lenders, and stakeholders.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128188;</div>
+          <h3>Small Business Accounting</h3>
+          <p>Comprehensive accounting support tailored to the needs of local small businesses, from entity setup through ongoing financial management.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128270;</div>
+          <h3>IRS Representation</h3>
+          <p>Professional representation before the IRS during audits, notices, and disputes, providing guidance and advocacy on your behalf. Contact us for details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="contact-left">
+          <span class="section-label">Find Us</span>
+          <h2 class="section-title">Get in Touch</h2>
+          <div class="section-line"></div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128205;</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label">Office Address</div>
+              <div class="contact-detail-value">9200 NW 36th Pl A<br />Gainesville, FL</div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128222;</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label">Phone</div>
+              <div class="contact-detail-value">
+                <a href="tel:+13523370020">(352) 337-0020</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128336;</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label">Hours</div>
+              <div class="contact-detail-value">Contact us for details</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-right">
+          <div class="rating-block">
+            <div>
+              <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+            <div class="rating-text">
+              <div class="rating-score">5.0</div>
+              <div class="rating-count">Based on 4 Google reviews</div>
+            </div>
+            <div class="rating-badge">Google</div>
+          </div>
+
+          <h3>Visit Our Office</h3>
+          <p>Located in Gainesville, FL. Use the button below for turn-by-turn directions, or call us to schedule an appointment.</p>
+
+          <a
+            href="https://www.google.com/maps/search/Timothy%20P.%20Deegan%2C%20CPA%209200%20NW%2036th%20Pl%20A"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            &#128205; Get Directions
+          </a>
+
+          <a href="tel:+13523370020" class="btn-call">
+            &#128222; Call (352) 337-0020
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <span class="footer-name">Timothy P. Deegan, CPA</span>
+      <span class="footer-divider">|</span>
+      9200 NW 36th Pl A, Gainesville, FL
+      <span class="footer-divider">|</span>
+      (352) 337-0020
+    </p>
+    <p style="margin-top: 0.5rem;">
+      &copy; 2026 Timothy P. Deegan, CPA. All rights reserved.
+    </p>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', function () {
+      links.classList.toggle('open');
+    });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

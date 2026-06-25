@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TeeTok Supply | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1a1a2e;
+      --secondary: #16213e;
+      --accent: #e94560;
+      --accent-light: #ff6b6b;
+      --text-light: #f0f0f0;
+      --text-muted: #a0a0b0;
+      --surface: #0f3460;
+      --card-bg: #1e2a45;
+      --white: #ffffff;
+      --border: rgba(233, 69, 96, 0.3);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--primary);
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-light);
+      letter-spacing: 0.5px;
+    }
+
+    .nav-logo-text span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent-light) !important;
+      color: var(--white) !important;
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-light);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      padding: 100px 1.5rem 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 70% 40%, rgba(233,69,96,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 80%, rgba(15,52,96,0.6) 0%, transparent 50%),
+        var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          rgba(233,69,96,0.03) 0px,
+          rgba(233,69,96,0.03) 1px,
+          transparent 1px,
+          transparent 40px
+        );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 760px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(233,69,96,0.15);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 7vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 .accent {
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    .hero-scroll svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── SECTIONS SHARED ── */
+    section {
+      padding: 90px 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--secondary);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .about-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 1.5rem 1.2rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .about-card:hover {
+      border-color: var(--border);
+      transform: translateY(-3px);
+    }
+
+    .about-card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .about-card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .about-card-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--primary);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .services-header .section-sub {
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 2rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.2s;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: var(--border);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(233,69,96,0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: var(--text-light);
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--secondary);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(233,69,96,0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-body strong {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-item-body span,
+    .contact-item-body a {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      text-decoration: none;
+      line-height: 1.5;
+    }
+
+    .contact-item-body a:hover {
+      color: var(--accent);
+    }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 0.75rem 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .rating-badge .stars {
+      color: #f5c518;
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+
+    .rating-badge .rating-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .contact-map-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .map-placeholder {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .map-placeholder-icon {
+      font-size: 2.5rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.15s;
+      text-align: center;
+    }
+
+    .btn-directions:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-directions svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0d0d1a;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .footer-logo-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: var(--white);
+    }
+
+    .footer-logo-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-light);
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .contact-map-side {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(26,26,46,0.98);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid var(--border);
+        padding: 0.5rem 0;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 0.85rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 0;
+      }
+
+      .nav-cta {
+        margin: 0.5rem 1.5rem;
+        display: block;
+        text-align: center;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .about-visual {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 440px) {
+      section {
+        padding: 70px 1.25rem;
+      }
+
+      .about-visual {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">TT</div>
+      <span class="nav-logo-text">TeeTok <span>Supply</span></span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">Gainesville, FL Clothing Store</div>
+      <h1>Your Style,<br><span class="accent">Your Statement.</span></h1>
+      <p>Fresh threads and on-trend apparel for the Gainesville community — from everyday essentials to statement pieces you'll wear on repeat.</p>
+      <div class="hero-buttons">
+        <a href="#services" class="btn-primary">Browse Offerings</a>
+        <a href="#contact" class="btn-outline">Find Us</a>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">More Than Just Clothing</h2>
+          <p>TeeTok Supply is a clothing boutique located in the heart of Gainesville on W University Ave, serving students, locals, and anyone who wants to look good without the hassle. We carry a curated mix of casual and streetwear-inspired apparel suited for Florida's relaxed lifestyle.</p>
+          <p>Whether you're shopping for everyday staples or hunting for something with a bit more personality, our selection is refreshed regularly to keep things interesting. We believe good style should be accessible, comfortable, and uniquely yours.</p>
+          <p>Stop by the store or reach out to learn more about what we currently have in stock. We're happy to help you find the right fit.</p>
+        </div>
+
+        <div class="about-visual">
+          <div class="about-card">
+            <span class="about-card-icon">&#128507;</span>
+            <div class="about-card-title">Curated Selection</div>
+            <div class="about-card-sub">Fresh styles, updated often</div>
+          </div>
+          <div class="about-card">
+            <span class="about-card-icon">&#127968;</span>
+            <div class="about-card-title">Local Shop</div>
+            <div class="about-card-sub">Right on University Ave</div>
+          </div>
+          <div class="about-card">
+            <span class="about-card-icon">&#128084;</span>
+            <div class="about-card-title">All Styles</div>
+            <div class="about-card-sub">Casual to streetwear</div>
+          </div>
+          <div class="about-card">
+            <span class="about-card-icon">&#127774;</span>
+            <div class="about-card-title">Florida Ready</div>
+            <div class="about-card-sub">Comfort-first apparel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Our Product Categories</h2>
+        <p class="section-sub">From laid-back basics to eye-catching streetwear — we stock a range of clothing and accessories to fit your everyday needs.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">&#128083;</div>
+          <h3>Graphic Tees &amp; Tops</h3>
+          <p>A rotating collection of graphic tees, crew necks, and casual tops across a range of fits and styles for men and women.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#129485;</div>
+          <h3>Bottoms &amp; Shorts</h3>
+          <p>Joggers, shorts, and pants built for comfort and style — perfect for Gainesville's warm climate and active campus lifestyle.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#129507;</div>
+          <h3>Outerwear &amp; Hoodies</h3>
+          <p>Hoodies, zip-ups, and lightweight jackets for those cooler Florida evenings or air-conditioned classrooms and offices.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127921;</div>
+          <h3>Hats &amp; Headwear</h3>
+          <p>Snapbacks, beanies, bucket hats, and more to complete your look and keep the sun off during those Florida afternoons.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128156;</div>
+          <h3>Accessories</h3>
+          <p>Bags, socks, and lifestyle accessories to round out your wardrobe and add the finishing touch to any outfit.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127873;</div>
+          <h3>Gift-Ready Items</h3>
+          <p>Looking for something for a friend or loved one? Our team can help you pick out the perfect piece. Contact us for details.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-title">Visit Us in Gainesville</h2>
+          <p class="section-sub" style="margin-bottom: 2.5rem;">We're conveniently located on W University Ave. Swing by the shop or give us a call — we'd love to see you.</p>
+
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-item-icon">&#128205;</div>
+              <div class="contact-item-body">
+                <strong>Address</strong>
+                <span>1642 W University Ave<br>Gainesville, FL 32603</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">&#128222;</div>
+              <div class="contact-item-body">
+                <strong>Phone</strong>
+                <a href="tel:+12075519593">(207) 551-9593</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">&#128337;</div>
+              <div class="contact-item-body">
+                <strong>Hours</strong>
+                <span>Contact us for current hours</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">&#11088;</div>
+              <div class="contact-item-body">
+                <strong>Google Rating</strong>
+                <div class="rating-badge">
+                  <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                  <span class="rating-text">No reviews yet — be the first!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-map-side">
+          <div class="map-placeholder" aria-label="Map placeholder">
+            <span class="map-placeholder-icon">&#127757;</span>
+            <span>1642 W University Ave, Gainesville, FL</span>
+          </div>
+
+          <a
+            href="https://www.google.com/maps/search/TeeTok%20Supply%201642%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032603"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+            </svg>
+            Get Directions on Google Maps
+          </a>
+
+          <a href="tel:+12075519593" class="btn-outline" style="text-align:center; padding: 1rem 2rem; border-radius: 10px;">
+            Call (207) 551-9593
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-icon">TT</div>
+        <span class="footer-logo-text">TeeTok Supply</span>
+      </a>
+
+      <p class="footer-copy">&copy; 2026 TeeTok Supply. All rights reserved. &middot; Gainesville, FL</p>
+
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close nav on link click (mobile)
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

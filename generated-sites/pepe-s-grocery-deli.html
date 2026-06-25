@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pepe's Grocery & Deli | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark: #2d5a27;
+      --green-mid: #4a8c3f;
+      --green-light: #7aba6e;
+      --cream: #f7f3e9;
+      --warm-white: #fefcf7;
+      --red-accent: #c0392b;
+      --gold: #d4a017;
+      --text-dark: #1e2a1a;
+      --text-mid: #3d4f38;
+      --text-light: #6b7c65;
+      --border: #d8e8d2;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background-color: var(--warm-white);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: var(--green-dark);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background-color: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: normal;
+      color: var(--green-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.8rem;
+    }
+
+    .nav-links a {
+      color: #d4edd0;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      min-height: 92vh;
+      background: linear-gradient(155deg, var(--green-dark) 0%, #3a7a30 55%, var(--green-mid) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(122,186,110,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(212,160,23,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Decorative produce icons (pure CSS) */
+    .hero-deco {
+      position: absolute;
+      font-size: 5rem;
+      opacity: 0.07;
+      user-select: none;
+      pointer-events: none;
+    }
+    .hero-deco-1 { top: 8%; left: 5%;  font-size: 7rem; }
+    .hero-deco-2 { top: 12%; right: 4%; font-size: 6rem; }
+    .hero-deco-3 { bottom: 10%; left: 3%; font-size: 8rem; }
+    .hero-deco-4 { bottom: 8%; right: 6%; font-size: 6.5rem; }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background-color: rgba(212,160,23,0.2);
+      border: 1px solid rgba(212,160,23,0.5);
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 2rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: #c8e6c2;
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background-color: var(--gold);
+      color: var(--text-dark);
+      padding: 0.85rem 2.2rem;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      font-size: 0.92rem;
+      font-weight: bold;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background-color: #e8b520;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: #fff;
+      padding: 0.85rem 2.2rem;
+      border-radius: 4px;
+      border: 2px solid rgba(255,255,255,0.5);
+      font-family: Arial, sans-serif;
+      font-size: 0.92rem;
+      font-weight: bold;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: #fff;
+      background-color: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(255,255,255,0.5);
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid rgba(255,255,255,0.4);
+      border-bottom: 2px solid rgba(255,255,255,0.4);
+      transform: rotate(45deg);
+      animation: bounce 1.6s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(5px); }
+    }
+
+    /* ── SECTION COMMONS ── */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-divider {
+      width: 52px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green-mid), var(--gold));
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background-color: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 1.1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 40px solid rgba(255,255,255,0.05);
+      top: -60px;
+      right: -60px;
+    }
+
+    .about-visual::after {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 30px solid rgba(255,255,255,0.05);
+      bottom: -40px;
+      left: -40px;
+    }
+
+    .about-icon-big {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-visual-text {
+      color: #fff;
+      font-size: 1.3rem;
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+      line-height: 1.4;
+    }
+
+    .about-visual-sub {
+      color: var(--green-light);
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background-color: var(--warm-white);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem 1.6rem;
+      transition: box-shadow 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--green-mid), var(--gold));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(45,90,39,0.12);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background-color: var(--cream);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--green-dark);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .contact-item-body strong {
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-item-body p,
+    .contact-item-body a {
+      font-size: 1rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-item-body a:hover {
+      color: var(--green-mid);
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--green-dark);
+      color: #fff;
+      padding: 0.8rem 1.8rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+    }
+
+    .directions-btn:hover {
+      background-color: var(--green-mid);
+      transform: translateY(-2px);
+    }
+
+    /* Rating card */
+    .rating-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.2rem;
+      text-align: center;
+      box-shadow: 0 4px 18px rgba(45,90,39,0.08);
+    }
+
+    .rating-number {
+      font-size: 4rem;
+      font-weight: bold;
+      color: var(--green-dark);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 0.6rem;
+    }
+
+    .star {
+      width: 22px;
+      height: 22px;
+      position: relative;
+    }
+
+    .star svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .rating-count {
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+    }
+
+    .rating-source {
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      letter-spacing: 0.04em;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .rating-source strong {
+      color: var(--text-mid);
+    }
+
+    .rating-bar-wrap {
+      margin: 1.4rem 0;
+    }
+
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-mid);
+    }
+
+    .rating-bar-label {
+      width: 2.5rem;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .rating-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .rating-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-mid), var(--gold));
+      border-radius: 4px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background-color: var(--green-dark);
+      color: #b8d8b4;
+      padding: 3rem 1.5rem 1.8rem;
+    }
+
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .footer-brand-name {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 0.6rem;
+    }
+
+    .footer-brand-desc {
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #90b88c;
+    }
+
+    .footer-col h4 {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-col ul li a {
+      color: #90b88c;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+
+    .footer-col ul li a:hover {
+      color: #fff;
+    }
+
+    .footer-col address {
+      font-style: normal;
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+      color: #90b88c;
+      line-height: 1.7;
+    }
+
+    .footer-bottom {
+      max-width: 1060px;
+      margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .footer-bottom p {
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      color: #6a9066;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background-color: var(--green-dark);
+        flex-direction: column;
+        gap: 0;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 3.5rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">&#127820;</div>
+        <div class="nav-logo-text">
+          Pepe's Grocery &amp; Deli
+          <span>Gainesville, FL</span>
+        </div>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-deco hero-deco-1">&#127809;</div>
+    <div class="hero-deco hero-deco-2">&#127821;</div>
+    <div class="hero-deco hero-deco-3">&#127815;</div>
+    <div class="hero-deco hero-deco-4">&#127822;</div>
+
+    <div class="hero-content">
+      <div class="hero-badge">&#127808; Fresh &amp; Local &mdash; Gainesville, FL</div>
+      <h1>Pepe's <em>Grocery</em><br>&amp; Deli</h1>
+      <p class="hero-tagline">Your neighborhood market for fresh produce, quality meats, and deli favorites.</p>
+      <div class="hero-cta-group">
+        <a href="#contact" class="btn-primary">Get in Touch</a>
+        <a href="#services" class="btn-outline">What We Offer</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">A Familiar Market in the Heart of Gainesville</h2>
+          <div class="section-divider"></div>
+          <p>Pepe's Grocery &amp; Deli is a neighborhood grocery store serving the southwest Gainesville community with a full selection of fresh produce, pantry staples, and ready-to-eat deli items. We strive to make everyday shopping convenient and welcoming for families, students, and longtime residents alike.</p>
+          <p>Our deli counter is stocked with freshly prepared options to make mealtime easy, while our grocery aisles carry a thoughtful mix of everyday essentials and specialty goods. Whether you are stopping in for a quick lunch or a full weekly shop, you will find what you need at Pepe's.</p>
+          <p>Located on SW 42nd Dr, we are proud to be a convenient, community-focused market where friendly service and quality selection come together.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-icon-big">&#127820;</div>
+          <div class="about-visual-text">"Fresh food, friendly faces, and everything you need."</div>
+          <div class="about-visual-sub">Serving SW Gainesville</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Products &amp; Services</h2>
+      <div class="section-divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">&#127807;</div>
+          <h3>Fresh Produce</h3>
+          <p>A rotating selection of fresh fruits and vegetables sourced to meet everyday cooking and snacking needs.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#129385;</div>
+          <h3>Deli Counter</h3>
+          <p>Freshly sliced meats, cheeses, and prepared deli items ready for quick lunches and easy dinners.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#129392;</div>
+          <h3>Butcher &amp; Meats</h3>
+          <p>Quality cuts of beef, pork, poultry, and other proteins to suit a wide range of meals and occasions.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#127856;</div>
+          <h3>Grocery Staples</h3>
+          <p>Stocked aisles with pantry essentials, canned goods, dairy, bread, snacks, and household products.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#129380;</div>
+          <h3>International &amp; Specialty Foods</h3>
+          <p>A curated selection of specialty and international grocery items to serve the diverse Gainesville community.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">&#128717;</div>
+          <h3>Beverages &amp; Snacks</h3>
+          <p>A wide variety of cold drinks, juices, water, and snack options for grab-and-go convenience.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Visit Pepe's Grocery &amp; Deli</h2>
+      <div class="section-divider"></div>
+      <div class="contact-grid">
+
+        <div class="contact-details">
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-body">
+              <strong>Address</strong>
+              <p>1888 SW 42nd Dr<br>Gainesville, FL 32607</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div class="contact-item-body">
+              <strong>Phone</strong>
+              <a href="tel:+13524215251">(352) 421-5251</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-body">
+              <strong>Hours</strong>
+              <p>Contact us for current store hours.</p>
+            </div>
+          </div>
+
+          <a href="https://www.google.com/maps/search/Pepe's%20Grocery%20%26%20Deli%201888%20SW%2042nd%20Dr%2C%20Gainesville%2C%20FL%2032607"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="directions-btn">
+            &#128506; Get Directions
+          </a>
+
+        </div>
+
+        <!-- Rating Card -->
+        <div class="rating-card">
+          <div class="rating-number">4.3</div>
+          <div class="rating-stars">
+            <!-- 4 full stars -->
+            <div class="star">
+              <svg viewBox="0 0 24 24" fill="#f4b400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="star">
+              <svg viewBox="0 0 24 24" fill="#f4b400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="star">
+              <svg viewBox="0 0 24 24" fill="#f4b400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="star">
+              <svg viewBox="0 0 24 24" fill="#f4b400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <!-- partial star (0.3 fill) -->
+            <div class="star">
+              <svg viewBox="0 0 24 24">
+                <defs>
+                  <linearGradient id="partial">
+                    <stop offset="30%" stop-color="#f4b400"/>
+                    <stop offset="30%" stop-color="#ddd"/>
+                  </linearGradient>
+                </defs>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#partial)"/>
+              </svg>
+            </div>
+          </div>
+          <div class="rating-count">Based on 56 Google reviews</div>
+
+          <div class="rating-bar-wrap">
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">5 &#9733;</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:55%"></div></div>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">4 &#9733;</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:30%"></div></div>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">3 &#9733;</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:8%"></div></div>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">2 &#9733;</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:4%"></div></div>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">1 &#9733;</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:3%"></div></div>
+            </div>
+          </div>
+
+          <div class="rating-source">
+            <strong>Google Maps</strong> &mdash; Verified customer ratings
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <h3 class="footer-brand-name">Pepe's Grocery &amp; Deli</h3>
+        <p class="footer-brand-desc">A neighborhood grocery store and deli serving the southwest Gainesville community with fresh products and friendly service.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <address>
+          1888 SW 42nd Dr<br>
+          Gainesville, FL 32607<br><br>
+          <a href="tel:+13524215251" style="color:#90b88c;">(352) 421-5251</a>
+        </address>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Pepe's Grocery &amp; Deli. All rights reserved.</p>
+      <p>Gainesville, FL 32607</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('nav-toggle');
+    const links = document.getElementById('nav-links');
+    toggle.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+    // Close nav on link click
+    links.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        links.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

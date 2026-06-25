@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walkers OneStopShop | Custom T-Shirts in Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #e63946;
+      --primary-dark: #b52a35;
+      --accent: #f4a261;
+      --dark: #1a1a2e;
+      --dark-mid: #16213e;
+      --light: #f8f9fa;
+      --text-muted: #6c757d;
+      --white: #ffffff;
+      --card-bg: #ffffff;
+      --border: #dee2e6;
+      --shadow: 0 4px 24px rgba(0,0,0,0.10);
+      --radius: 10px;
+      --transition: 0.3s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: var(--dark);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+
+    .nav-brand-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+    }
+
+    .nav-brand-name span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.6rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-cta {
+      background: var(--primary);
+      color: var(--white) !important;
+      padding: 0.4rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 700 !important;
+      transition: background var(--transition) !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--primary-dark) !important;
+      color: var(--white) !important;
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all var(--transition);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 60%, #0f3460 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(230,57,70,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #fff 0,
+        #fff 1px,
+        transparent 0,
+        transparent 50%
+      );
+      background-size: 30px 30px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 740px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(244,162,97,0.15);
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--accent);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #adb5bd;
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.1rem, 3vw, 1.55rem);
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all var(--transition);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(230,57,70,0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(230,57,70,0.45);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.35);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+    }
+
+    /* ABOUT */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-graphic {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 100%);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-graphic::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 30%, rgba(230,57,70,0.2) 0%, transparent 60%);
+    }
+
+    .about-graphic-icon {
+      width: 90px;
+      height: 90px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 8px 32px rgba(230,57,70,0.4);
+    }
+
+    .about-graphic-icon svg {
+      width: 50px;
+      height: 50px;
+      fill: var(--white);
+    }
+
+    .about-graphic-text {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-graphic-sub {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: var(--light);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1.2rem;
+      text-align: center;
+    }
+
+    .stat-pill strong {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .stat-pill span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .about-text p {
+      color: #444;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    /* SERVICES */
+    #services {
+      background: var(--light);
+    }
+
+    .services-header {
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem 1.75rem;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition);
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow);
+      border-color: rgba(230,57,70,0.2);
+      transform: translateY(-4px);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(230,57,70,0.10);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--primary);
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* CONTACT */
+    #contact {
+      background: var(--dark);
+      color: var(--white);
+    }
+
+    #contact .section-title {
+      color: var(--white);
+    }
+
+    #contact .section-desc {
+      color: #adb5bd;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin: 2rem 0;
+    }
+
+    .contact-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-info-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(230,57,70,0.18);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-info-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--primary);
+    }
+
+    .contact-info-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-info-value {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .contact-info-value a {
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .contact-info-value a:hover {
+      color: var(--accent);
+    }
+
+    .rating-block {
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .rating-stars svg {
+      width: 20px;
+      height: 20px;
+      fill: #ffc107;
+    }
+
+    .rating-score {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-meta {
+      font-size: 0.85rem;
+      color: #adb5bd;
+      margin-top: 0.2rem;
+    }
+
+    .rating-source {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 0.15rem;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: var(--dark);
+    }
+
+    .btn-accent:hover {
+      background: #e8914a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(244,162,97,0.35);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.25);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.5);
+      transform: translateY(-2px);
+    }
+
+    .contact-map-placeholder {
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      padding: 2.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      min-height: 320px;
+    }
+
+    .map-pin-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(230,57,70,0.18);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-pin-icon svg {
+      width: 34px;
+      height: 34px;
+      fill: var(--primary);
+    }
+
+    .contact-map-placeholder h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .contact-map-placeholder p {
+      font-size: 0.95rem;
+      color: #adb5bd;
+      max-width: 240px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #0d0d1a;
+      color: #adb5bd;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .footer-brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand span {
+      color: var(--primary);
+    }
+
+    .footer-tagline {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
+
+    .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 1rem 0;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: #555;
+    }
+
+    /* MOBILE NAV OVERLAY */
+    .nav-mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      width: 100%;
+      background: var(--dark-mid);
+      padding: 1.5rem 2rem;
+      gap: 1.2rem;
+      z-index: 99;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .nav-mobile-menu.open {
+      display: flex;
+    }
+
+    .nav-mobile-menu a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      transition: color var(--transition);
+    }
+
+    .nav-mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .nav-mobile-menu a:hover {
+      color: var(--accent);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-visual {
+        order: -1;
+      }
+
+      .about-graphic {
+        max-width: 280px;
+        aspect-ratio: 1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 0 1.2rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .hero {
+        padding: 5rem 1rem 3rem;
+      }
+
+      section {
+        padding: 3.5rem 1rem;
+      }
+
+      .about-stats {
+        gap: 1rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .contact-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 6.5c0-.28-.22-.5-.5-.5h-2.91L16.5 4H7.5L6.41 6H3.5c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5H5v11a1 1 0 001 1h12a1 1 0 001-1V8h1.5c.28 0 .5-.22.5-.5v-1zM9 4h6l.67 2H8.33L9 4zm8 14H7V8h10v10zm-5-8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm0 6a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+      </div>
+      <div class="nav-brand-name">Walkers <span>OneStopShop</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMobileMenu()">About</a>
+    <a href="#services" onclick="closeMobileMenu()">Services</a>
+    <a href="#contact" onclick="closeMobileMenu()">Contact Us</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Gainesville's Custom Apparel Specialists
+      </div>
+      <h1>Walkers <span>OneStopShop</span></h1>
+      <div class="hero-tagline">Your Design. Your Style. Printed Perfect.</div>
+      <p class="hero-subtitle">Custom t-shirts, apparel, and merchandise for every occasion — right here in Gainesville, FL.</p>
+      <div class="hero-buttons">
+        <a href="#services" class="btn btn-primary">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Our Services
+        </a>
+        <a href="#contact" class="btn btn-outline">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.4 11.4 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.57 3.57 1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+          Get in Touch
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">Gainesville's Go-To Custom Apparel Shop</h2>
+          <div class="section-divider"></div>
+          <p>Walkers OneStopShop is a custom t-shirt and apparel destination serving Gainesville and the surrounding North Florida community. Whether you need gear for a local business, sports team, school event, or personal project, we bring your vision to life with quality printing and a wide range of apparel options.</p>
+          <p>We take pride in delivering fast turnarounds and attentive service, making the custom printing process as simple and stress-free as possible. From single pieces to large bulk orders, we work with customers to find the right fit for every budget and occasion.</p>
+          <p>Stop by our shop on SE 1st Ave or give us a call — we are happy to walk you through your options and help you create something you will love wearing.</p>
+          <div class="about-stats">
+            <div class="stat-pill">
+              <strong>5.0</strong>
+              <span>Google Rating</span>
+            </div>
+            <div class="stat-pill">
+              <strong>9</strong>
+              <span>Reviews</span>
+            </div>
+            <div class="stat-pill">
+              <strong>Local</strong>
+              <span>Gainesville, FL</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual">
+          <div class="about-graphic">
+            <div class="about-graphic-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 6.5c0-.28-.22-.5-.5-.5h-2.91L16.5 4H7.5L6.41 6H3.5c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5H5v11a1 1 0 001 1h12a1 1 0 001-1V8h1.5c.28 0 .5-.22.5-.5v-1zM9 4h6l.67 2H8.33L9 4zm8 14H7V8h10v10zm-5-8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm0 6a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+            </div>
+            <div class="about-graphic-text">Custom Apparel</div>
+            <div class="about-graphic-sub">Gainesville, FL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">Our Services</h2>
+        <div class="section-divider"></div>
+        <p class="section-desc">From single custom pieces to large bulk orders, we offer a full range of custom printing and apparel services.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 6.5c0-.28-.22-.5-.5-.5h-2.91L16.5 4H7.5L6.41 6H3.5c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5H5v11a1 1 0 001 1h12a1 1 0 001-1V8h1.5c.28 0 .5-.22.5-.5v-1zM9 4h6l.67 2H8.33L9 4zm8 14H7V8h10v10zm-5-8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm0 6a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          </div>
+          <h3>Custom T-Shirt Printing</h3>
+          <p>High-quality custom t-shirts with your logo, artwork, or text — perfect for events, teams, businesses, and personal use. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+          </div>
+          <h3>Screen Printing</h3>
+          <p>Durable screen printing ideal for bulk orders and vibrant, long-lasting designs on shirts, hoodies, and other apparel. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18A9 9 0 0012 3zm0 16a7 7 0 110-14 7 7 0 010 14zm1-11h-2v3H8v2h3v3h2v-3h3v-2h-3V8z"/></svg>
+          </div>
+          <h3>Embroidery</h3>
+          <p>Professional embroidery for polo shirts, hats, jackets, and workwear — adding a polished, premium look to any garment. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+          </div>
+          <h3>Bulk & Group Orders</h3>
+          <p>We handle large volume orders for companies, sports teams, schools, nonprofits, and events of any size. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+          </div>
+          <h3>Custom Merchandise</h3>
+          <p>Beyond shirts — tote bags, hats, hoodies, and other branded merchandise to help you stand out. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          </div>
+          <h3>Design Assistance</h3>
+          <p>Not sure where to start? Our team can help you develop or refine your design so it prints exactly the way you envision. Contact us for details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <span class="section-label">Find Us</span>
+          <h2 class="section-title">Get in Touch</h2>
+          <div class="section-divider"></div>
+          <p class="section-desc">We would love to hear about your project. Reach out by phone or stop by our Gainesville location.</p>
+
+          <div class="contact-info-list">
+            <div class="contact-info-item">
+              <div class="contact-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+              </div>
+              <div>
+                <span class="contact-info-label">Address</span>
+                <div class="contact-info-value">1334 SE 1st Ave, Gainesville, FL 32641</div>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.4 11.4 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.57 3.57 1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+              </div>
+              <div>
+                <span class="contact-info-label">Phone</span>
+                <div class="contact-info-value"><a href="tel:+13525629668">(352) 562-9668</a></div>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <div>
+                <span class="contact-info-label">Hours</span>
+                <div class="contact-info-value">Contact us for details</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rating-block">
+            <div>
+              <div class="rating-score">5.0</div>
+              <div class="rating-stars">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+            </div>
+            <div>
+              <div class="rating-meta">Based on 9 customer reviews</div>
+              <div class="rating-source">Google Maps Rating</div>
+            </div>
+          </div>
+
+          <div class="contact-actions">
+            <a href="https://www.google.com/maps/search/Walkers%20OneStopShop%201334%20SE%201st%20Ave%2C%20Gainesville%2C%20FL%2032641" target="_blank" rel="noopener noreferrer" class="btn btn-accent">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+              Get Directions
+            </a>
+            <a href="tel:+13525629668" class="btn btn-ghost">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.4 11.4 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.57 3.57 1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+              Call (352) 562-9668
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-map-placeholder">
+          <div class="map-pin-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          </div>
+          <h3>Walkers OneStopShop</h3>
+          <p>1334 SE 1st Ave<br>Gainesville, FL 32641</p>
+          <a href="https://www.google.com/maps/search/Walkers%20OneStopShop%201334%20SE%201st%20Ave%2C%20Gainesville%2C%20FL%2032641" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="margin-top:0.5rem; font-size:0.9rem; padding:0.65rem 1.4rem;">
+            <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+            Open in Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">Walkers <span>OneStopShop</span></div>
+      <div class="footer-tagline">Custom T-Shirts &amp; Apparel — Gainesville, FL</div>
+      <hr class="footer-divider" />
+      <div class="footer-copy">
+        &copy; 2026 Walkers OneStopShop &bull; 1334 SE 1st Ave, Gainesville, FL 32641 &bull; <a href="tel:+13525629668" style="color:#555; text-decoration:none;">(352) 562-9668</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', function() {
+      mobileMenu.classList.toggle('open');
+    });
+
+    hamburger.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        mobileMenu.classList.toggle('open');
+      }
+    });
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

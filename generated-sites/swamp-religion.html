@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swamp Religion | Southern Restaurant | Gainesville, FL</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --mud:        #2c1a0e;
+      --bark:       #4a2e1a;
+      --cypress:    #3b5a3e;
+      --moss:       #5c7a42;
+      --amber:      #c97c2a;
+      --gold:       #e0a843;
+      --cream:      #f5ead8;
+      --off-white:  #fdf6ec;
+      --text-dark:  #1e1007;
+      --text-mid:   #4a3520;
+      --star:       #e6b800;
+      --nav-h:      68px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--off-white);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--nav-h);
+      background: var(--mud);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 999;
+      border-bottom: 3px solid var(--amber);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--mud);
+    }
+
+    .nav-name {
+      font-size: 1.25rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      color: var(--cream);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      background: var(--mud);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative swamp texture overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(59,90,62,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 80%,  rgba(74,46,26,0.6)  0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%,  rgba(74,46,26,0.6)  0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* swamp water shimmer lines */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 220px;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent 0px,
+        transparent 14px,
+        rgba(59,90,62,0.12) 14px,
+        rgba(59,90,62,0.12) 15px
+      );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 4rem 1.5rem;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: bold;
+      color: var(--cream);
+      letter-spacing: 0.04em;
+      line-height: 1.05;
+      text-transform: uppercase;
+      text-shadow: 0 4px 24px rgba(0,0,0,0.6);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 em {
+      display: block;
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      color: var(--cream);
+      opacity: 0.88;
+      font-style: italic;
+      margin-bottom: 2.4rem;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--mud);
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.2rem;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+      border: 2px solid var(--amber);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--cream);
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.83rem 2.2rem;
+      border-radius: 2px;
+      border: 2px solid var(--cream);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      background: var(--cream);
+      color: var(--mud);
+      transform: translateY(-2px);
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--cream);
+      opacity: 0.5;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .scroll-hint-arrow {
+      width: 18px;
+      height: 18px;
+      border-right: 2px solid var(--cream);
+      border-bottom: 2px solid var(--cream);
+      transform: rotate(45deg);
+      animation: bounce 1.6s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+
+    /* ===== SECTION SHARED ===== */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.15;
+      font-weight: bold;
+      color: var(--mud);
+      margin-bottom: 1.4rem;
+    }
+
+    .divider {
+      width: 56px;
+      height: 3px;
+      background: var(--amber);
+      margin-bottom: 1.8rem;
+    }
+
+    /* ===== ABOUT ===== */
+    #about {
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      margin-bottom: 1.1rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* decorative illustration block */
+    .about-visual {
+      background: var(--bark);
+      border-radius: 4px;
+      min-height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .about-visual-inner {
+      text-align: center;
+      color: var(--cream);
+      padding: 2rem;
+    }
+
+    .about-visual svg {
+      width: 100px;
+      height: 100px;
+      fill: var(--amber);
+      opacity: 0.9;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-visual-caption {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      font-family: 'Arial Narrow', Arial, sans-serif;
+    }
+
+    /* decorative corner accent */
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 110%, rgba(59,90,62,0.5) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ===== MENU / SERVICES ===== */
+    #services {
+      background: var(--mud);
+    }
+
+    #services .section-title {
+      color: var(--cream);
+    }
+
+    #services .section-label {
+      color: var(--gold);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .service-card {
+      background: var(--bark);
+      border-radius: 4px;
+      padding: 2rem;
+      border-left: 4px solid var(--amber);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold);
+    }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(201,124,42,0.18);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .service-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--amber);
+    }
+
+    .service-name {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.92rem;
+      color: #c9b89e;
+      line-height: 1.6;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--off-white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--mud);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-item-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--amber);
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text span {
+      font-size: 1rem;
+      color: var(--text-mid);
+    }
+
+    /* rating badge */
+    .rating-badge {
+      background: var(--mud);
+      border-radius: 6px;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rating-score {
+      font-size: 2.8rem;
+      font-weight: bold;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .rating-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      color: var(--star);
+      font-size: 1.1rem;
+    }
+
+    .rating-source {
+      font-size: 0.78rem;
+      color: #c9b89e;
+      letter-spacing: 0.05em;
+    }
+
+    /* map placeholder */
+    .map-box {
+      background: var(--bark);
+      border-radius: 4px;
+      overflow: hidden;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.4rem;
+      padding: 2.5rem;
+      text-align: center;
+      border: 2px solid var(--amber);
+    }
+
+    .map-box svg {
+      width: 56px;
+      height: 56px;
+      fill: var(--amber);
+    }
+
+    .map-box p {
+      color: var(--cream);
+      font-size: 0.95rem;
+      max-width: 260px;
+      line-height: 1.6;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--mud);
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.88rem;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2px;
+      border: 2px solid var(--amber);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-directions:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--mud);
+      padding: 2.8rem 1.5rem;
+      text-align: center;
+      border-top: 3px solid var(--bark);
+    }
+
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .footer-name {
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-sub {
+      font-size: 0.82rem;
+      color: #9e8060;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.4rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+      justify-content: center;
+      list-style: none;
+      flex-wrap: wrap;
+      margin-bottom: 1.4rem;
+    }
+
+    .footer-links a {
+      font-family: 'Arial Narrow', Arial, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #9e8060;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--amber);
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: #6b5030;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0;
+        width: 100%;
+        background: var(--mud);
+        flex-direction: column;
+        padding: 1rem 2rem 1.5rem;
+        gap: 1.2rem;
+        border-bottom: 2px solid var(--bark);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-visual {
+        min-height: 220px;
+      }
+
+      section {
+        padding: 3.5rem 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-name {
+        font-size: 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2.6rem;
+      }
+
+      .rating-badge {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-icon" aria-hidden="true">
+        <!-- flame / gator icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C9.5 5 7 7 7 10.5a5 5 0 0010 0C17 7 14.5 5 12 2zM9.5 14.5c.3 1.2 1.3 2 2.5 2s2.2-.8 2.5-2c-1-.4-1.8-.4-2.5 0-.7-.4-1.5-.4-2.5 0z"/>
+        </svg>
+      </div>
+      <span class="nav-name">Swamp Religion</span>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Menu</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Southern Restaurant &bull; Gainesville, FL</p>
+      <h1>Swamp<em>Religion</em></h1>
+      <p class="hero-tagline">Where the bayou meets the blessing — honest Southern cooking rooted deep in Florida soil.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn-primary">See Our Menu</a>
+        <a href="#contact" class="btn-outline">Find Us</a>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-hint-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">Our Story</p>
+          <h2 class="section-title">Southern Soul on University Ave</h2>
+          <div class="divider"></div>
+          <p>Swamp Religion is a Gainesville institution serving the kind of slow-cooked, deeply flavored Southern food that feels like a Sunday table stretched into the middle of the week. Rooted in the culinary traditions of the American South, every dish draws on time-honored techniques and local spirit.</p>
+          <p>Tucked along East University Avenue, the restaurant has become a gathering place for students, locals, and visitors who crave comfort food done right — bold seasonings, generous portions, and an atmosphere as warm as the Florida air outside.</p>
+          <p>Whether you are stopping in for a plate of smothered classics or settling in for a longer meal with friends, Swamp Religion brings reverence and revelry to the Southern table.</p>
+        </div>
+        <div class="about-visual" aria-hidden="true">
+          <div class="about-visual-inner">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+              <!-- stylized cast-iron skillet -->
+              <circle cx="28" cy="32" r="18" fill="none" stroke-width="4" stroke="currentColor" style="stroke:#c97c2a;fill:none"/>
+              <line x1="46" y1="32" x2="60" y2="32" stroke="#c97c2a" stroke-width="4" stroke-linecap="round"/>
+              <line x1="28" y1="14" x2="28" y2="8" stroke="#c97c2a" stroke-width="3" stroke-linecap="round"/>
+              <line x1="28" y1="50" x2="28" y2="56" stroke="#c97c2a" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="28" cy="32" r="8" fill="#c97c2a" opacity="0.5"/>
+            </svg>
+            <p class="about-visual-caption">Cast-iron cooking &bull; Southern roots</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES / MENU ===== -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Serve</p>
+      <h2 class="section-title" style="color:var(--cream);">From the Kitchen</h2>
+      <div class="divider"></div>
+      <p style="color:#c9b89e; margin-bottom:0; max-width:560px; font-style:italic;">Classic Southern fare prepared with care. Contact us for current menu details and daily specials.</p>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.46L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.05zM1 21.99V21h15.03v.99c0 .55-.45 1-1.01 1H2.01c-.56 0-1.01-.45-1.01-1zm15.03-7c0-4.5-6.72-5-8.03-5C5.68 9.99 1 10.5 1 14.99v1h15.03v-1z"/></svg>
+          </div>
+          <p class="service-name">Southern Comfort Plates</p>
+          <p class="service-desc">Hearty entrees rooted in the traditions of the deep South — smothered, stewed, and slow-cooked to order. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+          </div>
+          <p class="service-name">Fried &amp; Grilled Mains</p>
+          <p class="service-desc">From golden fried chicken to chargrilled proteins, the heart of Southern cooking served straight from the fire. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+          </div>
+          <p class="service-name">Southern Sides &amp; Fixings</p>
+          <p class="service-desc">Collard greens, mac and cheese, black-eyed peas, cornbread — the sides that make the meal. Contact us for the daily lineup.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M18.5 3.5L3 19l1.5 1.5 1.5-1.5L9 22l1-1-3-3 8-8 3 3 1-1-2.5-2.5 1.5-1.5L21 11l1-1-3.5-6.5zM11 5.5l-.5.5L9 4.5l3-3 3 3-1.5 1.5L13 5.5V8h-2V5.5zM5 9l1.5 1.5L5 12l-1.5-1.5L5 9z"/></svg>
+          </div>
+          <p class="service-name">Swamp-Inspired Specials</p>
+          <p class="service-desc">Rotating dishes that celebrate Florida's Gulf and freshwater traditions — think blackened fish, Cajun-spiced offerings, and seasonal catches. Contact us for details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7 4v2H4.995A2 2 0 003 7.994v10.012A2 2 0 004.995 20H19.005A2 2 0 0021 18.006V7.994A2 2 0 0019.005 6H17V4H7zM9 6V4h6v2H9zm-4 2h14v2.5c0 1.5-1.5 3-3.5 3H8.5C6.5 13.5 5 12 5 10.5V8zm0 7.5V14c.95.64 2.14 1 3.5 1h7c1.36 0 2.55-.36 3.5-1v1.5c0 .28-.23.5-.495.5H4.995C4.73 16 4.5 15.78 4.5 15.5l.5.5v-.5z"/></svg>
+          </div>
+          <p class="service-name">Brunch &amp; All-Day Eats</p>
+          <p class="service-desc">Morning-to-afternoon Southern brunch classics including biscuits, gravy, and egg-forward dishes. Contact us for current hours and availability.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18A9 9 0 0012 3zm0 16a7 7 0 110-14 7 7 0 010 14zm.5-11H11v6l5.25 3.15.75-1.23-4.5-2.67V8z"/></svg>
+          </div>
+          <p class="service-name">Dine-In &amp; Takeout</p>
+          <p class="service-desc">Enjoy the full Swamp Religion atmosphere in-house or take the soul food home. Contact us directly to place an order or ask about availability.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Come on Down</h2>
+      <div class="divider"></div>
+
+      <div class="contact-grid">
+
+        <div class="contact-info">
+
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <strong>Address</strong>
+              <span>904 E University Ave<br>Gainesville, FL 32601</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <strong>Phone</strong>
+              <span><a href="tel:+13522156202" style="color:var(--text-mid);">(352) 215-6202</a></span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <strong>Hours</strong>
+              <span>Contact us for current hours</span>
+            </div>
+          </div>
+
+          <div class="rating-badge" role="complementary" aria-label="Google Maps rating">
+            <div class="rating-score">4.3</div>
+            <div class="rating-meta">
+              <div class="stars" aria-label="4.3 out of 5 stars">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star" style="opacity:0.45;">&#9733;</span>
+              </div>
+              <span class="rating-source">4.3 / 5 &bull; 12 Reviews on Google Maps</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="map-box">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          <p>904 E University Ave<br>Gainesville, FL 32601</p>
+          <a
+            href="https://www.google.com/maps/search/SWAMP%20RELIGION%20904%20E%20University%20Ave%2C%20Gainesville%2C%20FL%2032601"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >Get Directions</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-name">Swamp Religion</p>
+      <p class="footer-sub">Southern Restaurant &bull; Gainesville, FL</p>
+      <ul class="footer-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Menu</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <p class="footer-copy">&copy; 2026 Swamp Religion. All rights reserved. &bull; 904 E University Ave, Gainesville, FL 32601 &bull; (352) 215-6202</p>
+    </div>
+  </footer>
+
+  <!-- ===== MINIMAL JS: mobile nav toggle ===== -->
+  <script>
+    (function () {
+      var toggle = document.getElementById('navToggle');
+      var links  = document.getElementById('navLinks');
+      toggle.addEventListener('click', function () {
+        var open = links.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      // close on link click
+      links.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          links.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

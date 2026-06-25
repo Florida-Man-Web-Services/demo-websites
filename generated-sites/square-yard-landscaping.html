@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Square Yard Landscaping | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #2d5016;
+      --green-mid:    #4a7c2a;
+      --green-light:  #6ea832;
+      --green-pale:   #d6e8b8;
+      --earth-brown:  #7a5230;
+      --earth-light:  #c8a46e;
+      --cream:        #f7f3ec;
+      --white:        #ffffff;
+      --text-dark:    #1e2a10;
+      --text-mid:     #3d4d26;
+      --text-light:   #6b7c50;
+      --shadow:       rgba(0,0,0,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .nav-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .nav-name span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--green-pale);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--green-pale);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--green-light);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--earth-brown) !important; }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      background:
+        linear-gradient(to bottom, rgba(45,80,22,0.72) 0%, rgba(45,80,22,0.45) 60%, rgba(45,80,22,0.78) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%234a7c2a'/%3E%3Cellipse cx='400' cy='500' rx='600' ry='180' fill='%232d5016'/%3E%3Cellipse cx='100' cy='420' rx='200' ry='120' fill='%236ea832'/%3E%3Cellipse cx='700' cy='400' rx='220' ry='130' fill='%236ea832'/%3E%3Cellipse cx='400' cy='380' rx='250' ry='140' fill='%234a7c2a'/%3E%3Cellipse cx='200' cy='350' rx='180' ry='100' fill='%232d5016'/%3E%3Ccircle cx='400' cy='200' r='80' fill='%23c8a46e'/%3E%3Ccircle cx='400' cy='200' r='60' fill='%23f7f3ec'/%3E%3Crect x='360' y='260' width='80' height='120' fill='%237a5230'/%3E%3C/svg%3E")
+        center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.5rem 4rem;
+    }
+
+    .hero-inner { max-width: 760px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--white);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .hero h1 em {
+      color: var(--green-pale);
+      font-style: normal;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--green-pale);
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+
+    .hero-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 5px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+
+    .btn-primary {
+      background: var(--green-light);
+      color: var(--white);
+    }
+
+    .btn-primary:hover { background: var(--green-mid); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid var(--white);
+    }
+
+    .btn-outline:hover { background: rgba(255,255,255,0.12); }
+
+    /* ---- SECTION SHARED ---- */
+    section { padding: 5rem 1.5rem; }
+
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--green-dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 56px;
+      height: 4px;
+      background: var(--green-light);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ---- ABOUT ---- */
+    .about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      background: var(--green-pale);
+      border-radius: 12px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      border-left: 5px solid var(--green-light);
+    }
+
+    .about-visual-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .about-visual-text {
+      font-size: 1.1rem;
+      color: var(--green-dark);
+      font-style: italic;
+    }
+
+    .about-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+
+    .pill {
+      background: var(--green-pale);
+      color: var(--green-dark);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* ---- SERVICES ---- */
+    .services { background: var(--cream); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 2rem 1.75rem;
+      border-top: 4px solid var(--green-light);
+      box-shadow: 0 2px 10px var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--green-dark);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ---- CONTACT ---- */
+    .contact { background: var(--green-dark); }
+
+    .contact .section-title { color: var(--white); }
+    .contact .section-label { color: var(--green-pale); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      font-size: 1.4rem;
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-content { flex: 1; }
+
+    .contact-item-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-pale);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-item-value {
+      color: var(--white);
+      font-size: 1rem;
+    }
+
+    .contact-item-value a {
+      color: var(--earth-light);
+      text-decoration: none;
+    }
+
+    .contact-item-value a:hover { text-decoration: underline; }
+
+    .rating-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+
+    .rating-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-pale);
+      margin-bottom: 0.75rem;
+    }
+
+    .rating-value {
+      font-size: 1rem;
+      color: var(--earth-light);
+      font-style: italic;
+    }
+
+    .contact-cta {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+    }
+
+    .contact-cta h3 {
+      font-size: 1.4rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-cta p {
+      color: var(--green-pale);
+      font-size: 0.95rem;
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+    }
+
+    .contact-cta .btn-primary {
+      display: block;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .directions-btn {
+      display: block;
+      text-align: center;
+      padding: 0.75rem 2rem;
+      border-radius: 5px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.4);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .directions-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--white);
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--text-dark);
+      color: var(--text-light);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+    }
+
+    footer strong {
+      color: var(--green-pale);
+    }
+
+    footer p + p { margin-top: 0.4rem; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero { padding-top: 5rem; }
+
+      section { padding: 3.5rem 1.25rem; }
+
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="#hero">
+      <div class="nav-logo">&#127807;</div>
+      <div class="nav-name">
+        Square Yard Landscaping
+        <span>Gainesville, FL</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Lawn Care &amp; Landscaping &mdash; Gainesville, FL</div>
+      <h1>Your Yard, <em>Perfected</em></h1>
+      <p class="hero-tagline">Professional lawn care that keeps Gainesville green, clean, and beautiful season after season.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-primary">Get a Free Estimate</a>
+        <a href="#services" class="btn btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">About Us</div>
+          <h2 class="section-title">Rooted in Gainesville</h2>
+          <div class="section-divider"></div>
+          <p>Square Yard Landscaping provides dependable, professional lawn care and landscaping services tailored to the unique climate and soil conditions of North Central Florida. Our team understands what it takes to keep local properties healthy and looking their best through Gainesville's hot summers and mild winters.</p>
+          <p>From routine lawn maintenance to complete landscape enhancements, we bring attention to detail and a genuine care for the environment to every job. We serve residential and commercial properties throughout the Gainesville area.</p>
+          <div class="about-pills">
+            <span class="pill">Residential</span>
+            <span class="pill">Commercial</span>
+            <span class="pill">Gainesville, FL</span>
+            <span class="pill">Reliable &amp; Professional</span>
+          </div>
+        </div>
+        <div class="about-visual">
+          <span class="about-visual-icon">&#127807;</span>
+          <p class="about-visual-text">"A well-kept yard isn't just curb appeal&mdash;it's a welcoming home."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-inner">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Our Services</h2>
+      <div class="section-divider"></div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#9986;&#65039;</span>
+          <h3>Lawn Mowing &amp; Maintenance</h3>
+          <p>Regular mowing, edging, and trimming to keep your lawn neat and healthy on a schedule that works for you.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127807;</span>
+          <h3>Landscape Design &amp; Installation</h3>
+          <p>Transform your outdoor space with thoughtfully planned planting, ground cover, and decorative elements suited to Florida's climate.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#128167;</span>
+          <h3>Irrigation &amp; Sprinkler Services</h3>
+          <p>Installation, adjustment, and repair of irrigation systems to ensure efficient, even watering for your lawn and garden beds.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127795;</span>
+          <h3>Shrub &amp; Hedge Trimming</h3>
+          <p>Expert pruning and shaping of shrubs, hedges, and ornamental plants to maintain clean lines and healthy growth.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127810;</span>
+          <h3>Mulching &amp; Bed Maintenance</h3>
+          <p>Fresh mulch application and ongoing care for planting beds to improve moisture retention, suppress weeds, and enhance appearance.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127810;</span>
+          <h3>Yard Cleanup &amp; Debris Removal</h3>
+          <p>Seasonal and one-time cleanups including leaf removal, debris clearing, and general tidying to restore your outdoor space.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <div class="section-label">Reach Out</div>
+      <h2 class="section-title">Contact Us</h2>
+      <div class="section-divider"></div>
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-content">
+              <div class="contact-item-label">Address</div>
+              <div class="contact-item-value">4102 NW 21st Dr<br>Gainesville, FL</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div class="contact-item-content">
+              <div class="contact-item-label">Phone</div>
+              <div class="contact-item-value">
+                <a href="tel:+13522519418">(352) 251-9418</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128336;</div>
+            <div class="contact-item-content">
+              <div class="contact-item-label">Hours</div>
+              <div class="contact-item-value">Contact us for details</div>
+            </div>
+          </div>
+
+          <div class="rating-box">
+            <div class="rating-label">Google Maps Rating</div>
+            <div class="rating-value">No reviews yet &mdash; be the first to leave one!</div>
+          </div>
+        </div>
+
+        <div class="contact-cta">
+          <h3>Ready to get started?</h3>
+          <p>Give us a call or request a free estimate. We serve residential and commercial properties throughout the Gainesville area and are happy to discuss your lawn care needs.</p>
+          <a href="tel:+13522519418" class="btn btn-primary">Call (352) 251-9418</a>
+          <a
+            href="https://www.google.com/maps/search/Square%20Yard%20Landscaping%204102%20NW%2021st%20Dr"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="directions-btn"
+          >&#128205; Get Directions</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Square Yard Landscaping</strong></p>
+    <p>4102 NW 21st Dr, Gainesville, FL &nbsp;&bull;&nbsp; <a href="tel:+13522519418" style="color: var(--earth-light); text-decoration: none;">(352) 251-9418</a></p>
+    <p style="margin-top: 1rem; font-size: 0.78rem; color: #5a6b48;">&copy; 2026 Square Yard Landscaping. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

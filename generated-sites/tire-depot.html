@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tire Depot | Used Tire Shop | Gainesville, FL</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #111315;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== COLOR PALETTE =====
+       Primary:   #E8A000  (amber/golden — rubber, road, warning lights)
+       Dark bg:   #111315
+       Card bg:   #1C1F22
+       Mid:       #252A2E
+       Text:      #E0E0E0
+       Muted:     #8A9099
+    */
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(17, 19, 21, 0.97);
+      border-bottom: 2px solid #E8A000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .nav-logo .logo-icon {
+      width: 38px;
+      height: 38px;
+    }
+    .nav-logo span {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #E8A000;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #c8cdd3;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #E8A000; }
+
+    /* Hamburger — mobile only */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px; height: 2px;
+      background: #E8A000;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      background:
+        linear-gradient(160deg, rgba(232,160,0,0.12) 0%, rgba(17,19,21,0.95) 55%),
+        #111315;
+      position: relative;
+      overflow: hidden;
+    }
+    /* decorative tire rings */
+    .hero::before, .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 60px solid rgba(232,160,0,0.04);
+    }
+    .hero::before {
+      width: 700px; height: 700px;
+      top: -200px; right: -200px;
+    }
+    .hero::after {
+      width: 500px; height: 500px;
+      bottom: -200px; left: -150px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #E8A000;
+      background: rgba(232,160,0,0.1);
+      border: 1px solid rgba(232,160,0,0.3);
+      border-radius: 100px;
+      padding: 0.3rem 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 7vw, 4.6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: #E8A000;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.22rem);
+      color: #8A9099;
+      max-width: 500px;
+      margin: 0 auto 2.2rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #E8A000;
+      color: #111315;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 24px rgba(232,160,0,0.3);
+    }
+    .hero-cta:hover { background: #ffb81c; transform: translateY(-2px); }
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    /* ===== SECTION COMMONS ===== */
+    section { padding: 5rem 1.5rem; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #E8A000;
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      font-weight: 900;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.2rem;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ===== ABOUT ===== */
+    #about { background: #111315; }
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-text p {
+      color: #9aa0a8;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tire-graphic {
+      width: 260px;
+      height: 260px;
+    }
+
+    /* ===== SERVICES ===== */
+    #services { background: #1C1F22; }
+    #services .section-title { margin-bottom: 0.5rem; }
+    .services-sub {
+      color: #8A9099;
+      margin-bottom: 3rem;
+      font-size: 1rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.4rem;
+    }
+    .service-card {
+      background: #252A2E;
+      border: 1px solid #2e3338;
+      border-radius: 8px;
+      padding: 1.8rem;
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+    .service-card:hover {
+      border-color: rgba(232,160,0,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .service-icon {
+      width: 48px; height: 48px;
+      margin-bottom: 1rem;
+      color: #E8A000;
+    }
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: #8A9099;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact { background: #111315; }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    .contact-info h2 { margin-bottom: 1.8rem; }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+    .contact-detail-icon {
+      width: 44px; height: 44px;
+      background: rgba(232,160,0,0.1);
+      border: 1px solid rgba(232,160,0,0.25);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #E8A000;
+    }
+    .contact-detail-icon svg { width: 20px; height: 20px; }
+    .contact-detail-body strong {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #8A9099;
+      margin-bottom: 0.2rem;
+    }
+    .contact-detail-body span {
+      font-size: 1.02rem;
+      color: #e0e0e0;
+    }
+    .contact-detail-body a { color: #E8A000; }
+    .contact-detail-body a:hover { text-decoration: underline; }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #E8A000;
+      color: #111315;
+      font-weight: 800;
+      font-size: 0.88rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.8rem 1.6rem;
+      border-radius: 4px;
+      margin-top: 0.8rem;
+      transition: background 0.2s;
+    }
+    .btn-directions:hover { background: #ffb81c; }
+    .btn-directions svg { width: 16px; height: 16px; }
+
+    /* Rating card */
+    .rating-card {
+      background: #1C1F22;
+      border: 1px solid #2e3338;
+      border-radius: 10px;
+      padding: 2.2rem;
+      text-align: center;
+    }
+    .rating-card p.rating-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #8A9099;
+      margin-bottom: 1rem;
+    }
+    .rating-number {
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 0.8rem;
+    }
+    .stars svg {
+      width: 26px; height: 26px;
+    }
+    .star-full { fill: #E8A000; }
+    .star-partial { fill: url(#partial-grad); }
+    .star-empty { fill: #3a3f45; }
+    .rating-source {
+      font-size: 0.82rem;
+      color: #8A9099;
+    }
+    .rating-source strong { color: #E8A000; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0d0f10;
+      border-top: 1px solid #1e2226;
+      padding: 2.2rem 1.5rem;
+      text-align: center;
+    }
+    footer p {
+      font-size: 0.82rem;
+      color: #5a6068;
+    }
+    footer a { color: #8A9099; }
+    footer a:hover { color: #E8A000; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: #111315;
+        border-bottom: 2px solid #E8A000;
+        padding: 1rem 0;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li a {
+        display: block;
+        padding: 0.75rem 2rem;
+      }
+      .hamburger { display: flex; }
+
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .about-visual { order: -1; }
+      .tire-graphic { width: 200px; height: 200px; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 1.2rem; }
+      section { padding: 3.5rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <div class="nav-logo">
+      <!-- simple tire SVG logo -->
+      <svg class="logo-icon" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="19" cy="19" r="17" stroke="#E8A000" stroke-width="2.5"/>
+        <circle cx="19" cy="19" r="10" stroke="#E8A000" stroke-width="2"/>
+        <circle cx="19" cy="19" r="4" fill="#E8A000"/>
+        <!-- tread marks -->
+        <rect x="18" y="1" width="2" height="5" rx="1" fill="#E8A000"/>
+        <rect x="18" y="32" width="2" height="5" rx="1" fill="#E8A000"/>
+        <rect x="1" y="18" width="5" height="2" rx="1" fill="#E8A000"/>
+        <rect x="32" y="18" width="5" height="2" rx="1" fill="#E8A000"/>
+        <rect x="5.2" y="5.2" width="5" height="2" rx="1" transform="rotate(45 5.2 5.2)" fill="#E8A000"/>
+        <rect x="27.8" y="27.8" width="5" height="2" rx="1" transform="rotate(45 27.8 27.8)" fill="#E8A000"/>
+        <rect x="5.2" y="30.8" width="2" height="5" rx="1" transform="rotate(-45 5.2 30.8)" fill="#E8A000"/>
+        <rect x="30.8" y="5.2" width="2" height="5" rx="1" transform="rotate(-45 30.8 5.2)" fill="#E8A000"/>
+      </svg>
+      <span>Tire Depot</span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" aria-label="Open menu" role="button" tabindex="0">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Gainesville, FL</div>
+      <h1>Tire <em>Depot</em></h1>
+      <p>Quality used tires at honest prices — keeping Gainesville rolling, one set at a time.</p>
+      <a href="#contact" class="hero-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.71 1.19h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.56-1.04a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+        Call Us Today
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div class="about-text">
+          <div class="section-label">Who We Are</div>
+          <h2 class="section-title">Your Local Tire Specialists</h2>
+          <p>Tire Depot is a used tire shop serving the Gainesville community from our location on North Main Street. We carry a wide selection of quality pre-owned tires in all common sizes, making it easy to find what your vehicle needs without breaking the bank.</p>
+          <p>Whether you need a single replacement or a full set, our team works quickly to get you back on the road safely. We take pride in offering reliable tires at prices that fit real budgets.</p>
+          <p>Stop by or give us a call — we are happy to help you find the right fit for your car, truck, or SUV.</p>
+        </div>
+        <div class="about-visual">
+          <svg class="tire-graphic" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- outer tire -->
+            <circle cx="130" cy="130" r="120" fill="#1C1F22" stroke="#2e3338" stroke-width="2"/>
+            <circle cx="130" cy="130" r="120" fill="none" stroke="#E8A000" stroke-width="18" stroke-dasharray="20 12" stroke-dashoffset="6"/>
+            <!-- sidewall -->
+            <circle cx="130" cy="130" r="100" fill="#252A2E"/>
+            <!-- inner ring -->
+            <circle cx="130" cy="130" r="60" fill="#1C1F22" stroke="#2e3338" stroke-width="2"/>
+            <!-- hub -->
+            <circle cx="130" cy="130" r="30" fill="#E8A000" opacity="0.15"/>
+            <circle cx="130" cy="130" r="18" fill="#E8A000" opacity="0.4"/>
+            <circle cx="130" cy="130" r="8" fill="#E8A000"/>
+            <!-- spokes -->
+            <line x1="130" y1="112" x2="130" y2="70" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+            <line x1="130" y1="148" x2="130" y2="190" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+            <line x1="112" y1="130" x2="70" y2="130" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+            <line x1="148" y1="130" x2="190" y2="130" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+            <line x1="117" y1="117" x2="87" y2="87" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+            <line x1="143" y1="143" x2="173" y2="173" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+            <line x1="143" y1="117" x2="173" y2="87" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+            <line x1="117" y1="143" x2="87" y2="173" stroke="#E8A000" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services">
+    <div class="container">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Our Services</h2>
+      <p class="services-sub">Contact us for details on pricing and availability.</p>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="24" cy="24" r="20"/>
+            <circle cx="24" cy="24" r="10"/>
+            <circle cx="24" cy="24" r="3" fill="currentColor" stroke="none"/>
+          </svg>
+          <h3>Used Tire Sales</h3>
+          <p>Browse our extensive inventory of quality pre-owned tires in a wide range of sizes for all vehicle types.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 36 L8 44 L16 40 Z"/>
+            <path d="M36 12 L40 4 L32 8 Z"/>
+            <line x1="14" y1="34" x2="34" y2="14"/>
+            <circle cx="38" cy="38" r="6"/>
+            <path d="M36 38 L38 40 L42 36"/>
+          </svg>
+          <h3>Tire Mounting</h3>
+          <p>Professional mounting of new and used tires onto your wheels, performed with care and proper equipment.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="24" cy="24" r="8"/>
+            <path d="M24 4 L24 8"/>
+            <path d="M24 40 L24 44"/>
+            <path d="M4 24 L8 24"/>
+            <path d="M40 24 L44 24"/>
+            <path d="M8.7 8.7 L11.5 11.5"/>
+            <path d="M36.5 36.5 L39.3 39.3"/>
+            <path d="M39.3 8.7 L36.5 11.5"/>
+            <path d="M11.5 36.5 L8.7 39.3"/>
+            <path d="M24 16 L24 24 L30 24"/>
+          </svg>
+          <h3>Tire Balancing</h3>
+          <p>Wheel balancing to eliminate vibration and ensure a smooth, stable ride and even tread wear.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="14" width="36" height="22" rx="3"/>
+            <path d="M14 14 L14 10 L34 10 L34 14"/>
+            <line x1="18" y1="22" x2="30" y2="22"/>
+            <line x1="18" y1="28" x2="26" y2="28"/>
+          </svg>
+          <h3>Flat Tire Repair</h3>
+          <p>Quick and reliable flat tire repair services to get you back on the road with minimal downtime.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 32 C8 32 12 16 24 16 C36 16 40 32 40 32"/>
+            <line x1="8" y1="32" x2="40" y2="32"/>
+            <line x1="16" y1="32" x2="14" y2="38"/>
+            <line x1="32" y1="32" x2="34" y2="38"/>
+            <line x1="24" y1="16" x2="24" y2="10"/>
+            <line x1="20" y1="10" x2="28" y2="10"/>
+          </svg>
+          <h3>Tire Rotation</h3>
+          <p>Regular tire rotation to extend the life of your tires and maintain consistent handling performance.</p>
+        </div>
+
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="24" cy="24" r="18"/>
+            <path d="M24 6 L28 14 L37.4 11.1 L34.5 20.5 L43 24 L34.5 27.5 L37.4 36.9 L28 34 L24 42 L20 34 L10.6 36.9 L13.5 27.5 L5 24 L13.5 20.5 L10.6 11.1 L20 14 Z"/>
+          </svg>
+          <h3>Valve Stem Service</h3>
+          <p>Replacement of worn or damaged valve stems to prevent slow leaks and maintain proper tire pressure.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-info">
+          <div class="section-label">Find Us</div>
+          <h2 class="section-title">Get In Touch</h2>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <strong>Address</strong>
+              <span>1700 N Main St, Gainesville, FL</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.71 1.19h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.56-1.04a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <strong>Phone</strong>
+              <span><a href="tel:+13522563371">(352) 256-3371</a></span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="contact-detail-body">
+              <strong>Hours</strong>
+              <span>Contact us for details</span>
+            </div>
+          </div>
+
+          <a href="https://www.google.com/maps/search/Tire%20Depot%201700%20N%20Main%20St" target="_blank" rel="noopener noreferrer" class="btn-directions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            Get Directions
+          </a>
+        </div>
+
+        <!-- Rating card -->
+        <div>
+          <div class="rating-card">
+            <p class="rating-label">Google Maps Rating</p>
+            <div class="rating-number">4.4</div>
+            <!-- SVG stars: 4 full + partial 5th -->
+            <div class="stars" aria-label="4.4 out of 5 stars">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon class="star-full" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon class="star-full" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon class="star-full" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon class="star-full" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <!-- 4.4 star: partial fill using clip -->
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="partial-grad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="40%" stop-color="#E8A000"/>
+                    <stop offset="40%" stop-color="#3a3f45"/>
+                  </linearGradient>
+                </defs>
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="url(#partial-grad)"/>
+              </svg>
+            </div>
+            <p class="rating-source">Rated <strong>4.4 / 5</strong> on Google Maps</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>&copy; 2026 Tire Depot &mdash; 1700 N Main St, Gainesville, FL &mdash; <a href="tel:+13522563371">(352) 256-3371</a></p>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+    hamburger.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open');
+    });
+    // Close nav on link click
+    navLinks.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carlisle Pest Control | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:  #1a3a2a;
+      --green-mid:   #2d6a4f;
+      --green-light: #40916c;
+      --green-pale:  #d8f3dc;
+      --amber:       #f4a226;
+      --amber-dark:  #c97d0e;
+      --white:       #ffffff;
+      --off-white:   #f5f7f5;
+      --text-dark:   #1c2b1f;
+      --text-mid:    #3d5245;
+      --text-light:  #6b8c76;
+      --border:      #c3dccb;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--green-pale);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--green-pale);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--amber); }
+
+    .nav-cta {
+      background: var(--amber);
+      color: var(--green-dark) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--amber-dark) !important; color: var(--white) !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-light) 100%);
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 2rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M40 0L0 40 40 80 80 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(244, 162, 38, 0.15);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--amber);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: var(--green-pale);
+      max-width: 560px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--green-dark);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--amber-dark);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      border: 2px solid var(--green-pale);
+      color: var(--green-pale);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.78rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      background: var(--white);
+      color: var(--green-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section {
+      padding: 5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 4px;
+      background: var(--amber);
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--off-white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1rem;
+      text-align: center;
+    }
+
+    .stat-card .stat-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-card .stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--green-mid);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    /* ── SERVICES ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem 1.5rem;
+      transition: box-shadow 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--green-light);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(45, 106, 79, 0.13);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.55;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--off-white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2.5rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+    }
+
+    .contact-row-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .contact-row-body strong {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-row-body p,
+    .contact-row-body a {
+      font-size: 1rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-row-body a:hover { color: var(--green-light); }
+
+    .rating-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+    }
+
+    .rating-stars {
+      font-size: 1.8rem;
+      color: #f5a623;
+      letter-spacing: 2px;
+      margin-bottom: 0.4rem;
+    }
+
+    .rating-score {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--green-mid);
+      line-height: 1;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 0.25rem;
+    }
+
+    .rating-source {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 0.5rem;
+    }
+
+    .contact-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .cta-card {
+      background: var(--green-dark);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .cta-card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-card p {
+      font-size: 0.95rem;
+      color: var(--green-pale);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-card .btn-primary {
+      width: 100%;
+      text-align: center;
+    }
+
+    .cta-card .btn-directions {
+      display: block;
+      margin-top: 0.75rem;
+      background: transparent;
+      border: 2px solid var(--green-pale);
+      color: var(--green-pale);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .cta-card .btn-directions:hover {
+      background: var(--white);
+      color: var(--green-dark);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-dark);
+      color: var(--green-pale);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .footer-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.35rem;
+    }
+
+    .footer-address {
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .footer-phone a {
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.25rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      .nav-links {
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: var(--green-dark);
+        flex-direction: column;
+        padding: 1.5rem 2rem 2rem;
+        gap: 1rem;
+        transform: translateY(-110%);
+        transition: transform 0.3s;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      }
+
+      .nav-links.open { transform: translateY(0); }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-visual {
+        order: -1;
+      }
+
+      .hero {
+        min-height: 420px;
+        padding: 3rem 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-visual {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">&#x1F41C;</div>
+    <div class="nav-logo-text">
+      Carlisle Pest Control
+      <span>Gainesville, FL</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tel:3526416040" class="nav-cta">Call Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Serving Gainesville &amp; Surrounding Areas</div>
+    <h1>Protect Your Home from <em>Unwanted Guests</em></h1>
+    <p>Carlisle Pest Control delivers reliable, effective pest management so Gainesville families and businesses can live and work pest-free.</p>
+    <div class="hero-actions">
+      <a href="tel:3526416040" class="btn-primary">Call (352) 641-6040</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="section-label">About Us</p>
+        <h2 class="section-title">Dependable Pest Control in North Central Florida</h2>
+        <div class="section-divider"></div>
+        <p>Carlisle Pest Control provides comprehensive pest management services to homes and businesses throughout the Gainesville, FL area. Our team uses proven treatment methods tailored to Florida's unique pest pressures — from the humid summer months to year-round termite activity.</p>
+        <p>We take pride in delivering thorough inspections, targeted treatments, and clear communication at every step. Whether you are dealing with a sudden infestation or looking for ongoing prevention, we are equipped to protect what matters most.</p>
+        <p>Every job is approached with care for your family, pets, and property. Contact us to discuss the right treatment plan for your needs.</p>
+      </div>
+      <div class="about-visual">
+        <div class="stat-card">
+          <div class="stat-icon">&#x2B50;</div>
+          <div class="stat-value">5.0</div>
+          <div class="stat-label">Google Rating</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">&#x1F3E0;</div>
+          <div class="stat-value">Res &amp;</div>
+          <div class="stat-label">Commercial Service</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">&#x1F6E1;&#xFE0F;</div>
+          <div class="stat-value">Safe</div>
+          <div class="stat-label">Family &amp; Pet Friendly</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">&#x1F4CD;</div>
+          <div class="stat-value">Local</div>
+          <div class="stat-label">Gainesville Based</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-inner">
+    <p class="section-label">What We Do</p>
+    <h2 class="section-title">Pest Control Services</h2>
+    <div class="section-divider"></div>
+    <p style="color: var(--text-mid); max-width: 600px;">We handle a wide range of pests common to Florida homes and businesses. Contact us for details on treatment options and service schedules.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">&#x1F41C;</div>
+        <h3>General Pest Control</h3>
+        <p>Interior and exterior treatments targeting ants, roaches, spiders, silverfish, and other common household pests.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#x1F3DA;&#xFE0F;</div>
+        <h3>Termite Treatment &amp; Prevention</h3>
+        <p>Inspection and treatment solutions for subterranean and drywood termites, including barrier treatments and baiting systems.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#x1F99F;</div>
+        <h3>Mosquito Control</h3>
+        <p>Yard and perimeter treatments to reduce mosquito populations and help you reclaim your outdoor spaces.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#x1F400;</div>
+        <h3>Rodent Control</h3>
+        <p>Exclusion and elimination services for rats and mice, including entry point identification and ongoing monitoring.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#x1F41D;</div>
+        <h3>Bed Bug Treatment</h3>
+        <p>Targeted treatments to eliminate bed bug infestations from mattresses, furniture, and surrounding areas.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#x1F4C5;</div>
+        <h3>Ongoing Maintenance Plans</h3>
+        <p>Scheduled preventive treatments to keep pests out year-round. Contact us for details on available service frequencies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contact">
+  <div class="section-inner">
+    <p class="section-label">Get in Touch</p>
+    <h2 class="section-title">Contact Carlisle Pest Control</h2>
+    <div class="section-divider"></div>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-row">
+          <div class="contact-row-icon">&#x1F4CD;</div>
+          <div class="contact-row-body">
+            <strong>Address</strong>
+            <p>5745 SW 75th St<br>Gainesville, FL 32608</p>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">&#x1F4DE;</div>
+          <div class="contact-row-body">
+            <strong>Phone</strong>
+            <a href="tel:3526416040">(352) 641-6040</a>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">&#x23F0;</div>
+          <div class="contact-row-body">
+            <strong>Hours</strong>
+            <p>Contact us for details</p>
+          </div>
+        </div>
+        <div class="rating-box">
+          <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="rating-score">5.0</div>
+          <div class="rating-count">Based on 3 reviews</div>
+          <div class="rating-source">Google Maps Rating</div>
+        </div>
+      </div>
+
+      <div class="contact-cta">
+        <div class="cta-card">
+          <h3>Ready to Get Started?</h3>
+          <p>Call us today to schedule an inspection or ask about the right treatment plan for your home or business.</p>
+          <a href="tel:3526416040" class="btn-primary">Call (352) 641-6040</a>
+          <a
+            href="https://www.google.com/maps/search/Carlisle%20Pest%20Control%205745%20SW%2075th%20St%2C%20Gainesville%2C%20FL%2032608"
+            target="_blank"
+            rel="noopener"
+            class="btn-directions"
+          >Get Directions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">Carlisle Pest Control</div>
+    <div class="footer-address">5745 SW 75th St, Gainesville, FL 32608</div>
+    <div class="footer-phone"><a href="tel:3526416040">(352) 641-6040</a></div>
+    <div class="footer-copy">&copy; 2026 Carlisle Pest Control. All rights reserved. | Gainesville, FL</div>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

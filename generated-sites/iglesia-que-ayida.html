@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iglesia Que Ayida | House Cleaning Services in Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --sky: #e8f4f8;
+      --blue-light: #bde0ef;
+      --blue-mid: #4a9bb8;
+      --blue-deep: #1f6e8c;
+      --teal: #0d9488;
+      --white: #ffffff;
+      --off-white: #f7fbfd;
+      --text-dark: #1a2e35;
+      --text-mid: #3d5a65;
+      --text-light: #6b8f9a;
+      --accent: #f0a500;
+      --accent-hover: #d4920a;
+      --shadow: rgba(31, 110, 140, 0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: var(--text-dark);
+      background: var(--off-white);
+      line-height: 1.6;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--white);
+      box-shadow: 0 2px 16px var(--shadow);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--blue-mid), var(--teal));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--white);
+    }
+
+    .nav-brand {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+      line-height: 1.2;
+    }
+
+    .nav-brand span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-light);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-mid);
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--teal);
+    }
+
+    .nav-cta {
+      background: var(--teal);
+      color: var(--white) !important;
+      padding: 8px 18px;
+      border-radius: 6px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--blue-deep) !important;
+      color: var(--white) !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--blue-deep);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--blue-deep) 0%, var(--teal) 60%, #0a7a6e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(255,255,255,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    .hero-bubbles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .bubble:nth-child(1) { width: 120px; height: 120px; bottom: 15%; left: 8%; animation-delay: 0s; }
+    .bubble:nth-child(2) { width: 70px;  height: 70px;  bottom: 35%; right: 12%; animation-delay: 2s; }
+    .bubble:nth-child(3) { width: 50px;  height: 50px;  top: 25%;   left: 18%;  animation-delay: 4s; }
+    .bubble:nth-child(4) { width: 90px;  height: 90px;  top: 20%;   right: 20%; animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--accent);
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+
+    .hero-content p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.88);
+      margin-bottom: 2.5rem;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.6);
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ===== SECTIONS SHARED ===== */
+    section {
+      padding: 80px 5%;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+    }
+
+    .section-divider {
+      width: 50px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue-mid), var(--teal));
+      border-radius: 2px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ===== ABOUT ===== */
+    #about {
+      background: var(--white);
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-graphic {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--sky) 0%, var(--blue-light) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-graphic::before {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      top: -40px;
+      right: -40px;
+    }
+
+    .about-graphic svg {
+      width: 110px;
+      height: 110px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-stat {
+      position: absolute;
+      bottom: -16px;
+      right: -16px;
+      background: var(--teal);
+      color: var(--white);
+      border-radius: 14px;
+      padding: 16px 20px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(13,148,136,0.35);
+    }
+
+    .about-stat .num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .about-stat .lbl {
+      font-size: 0.72rem;
+      opacity: 0.9;
+      margin-top: 3px;
+    }
+
+    .about-text h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 1.2rem;
+      line-height: 1.25;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      margin-bottom: 1rem;
+      font-size: 1.02rem;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin-top: 1.5rem;
+    }
+
+    .highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-mid);
+      font-size: 0.95rem;
+    }
+
+    .highlight-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      flex-shrink: 0;
+    }
+
+    /* ===== SERVICES ===== */
+    #services {
+      background: var(--off-white);
+    }
+
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 4px 20px var(--shadow);
+      border-top: 4px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 36px var(--shadow);
+      border-top-color: var(--teal);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--sky), var(--blue-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.55;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--white);
+    }
+
+    .contact-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 0.8rem;
+    }
+
+    .contact-info > p {
+      color: var(--text-mid);
+      font-size: 0.97rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 1.4rem;
+    }
+
+    .contact-item-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--sky), var(--blue-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--blue-deep);
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-light);
+      margin-bottom: 2px;
+    }
+
+    .contact-item-text span {
+      color: var(--text-dark);
+      font-size: 0.97rem;
+    }
+
+    .rating-box {
+      background: linear-gradient(135deg, var(--blue-deep), var(--teal));
+      border-radius: 16px;
+      padding: 1.5rem;
+      color: var(--white);
+      margin-top: 0.5rem;
+    }
+
+    .rating-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 0.6rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .stars svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent);
+    }
+
+    .rating-num {
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      margin-top: 4px;
+    }
+
+    .contact-action-card {
+      background: var(--off-white);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--blue-light);
+    }
+
+    .contact-action-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.6rem;
+    }
+
+    .contact-action-card p {
+      color: var(--text-mid);
+      font-size: 0.92rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--teal);
+      color: var(--white);
+      text-decoration: none;
+      padding: 13px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: background 0.2s, transform 0.15s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-directions:hover {
+      background: var(--blue-deep);
+      transform: translateY(-2px);
+    }
+
+    .btn-directions svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--white);
+    }
+
+    .map-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, var(--sky), var(--blue-light));
+      border-radius: 12px;
+      margin-top: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 30px,
+        rgba(74,155,184,0.1) 30px,
+        rgba(74,155,184,0.1) 31px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 40px,
+        rgba(74,155,184,0.1) 40px,
+        rgba(74,155,184,0.1) 41px
+      );
+    }
+
+    .map-pin {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .map-pin svg {
+      width: 36px;
+      height: 36px;
+      fill: var(--teal);
+      filter: drop-shadow(0 4px 8px rgba(13,148,136,0.4));
+    }
+
+    .map-pin-label {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--blue-deep);
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 2.5rem 5%;
+    }
+
+    .footer-logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-sub {
+      font-size: 0.82rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      list-style: none;
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        padding: 1rem 5%;
+        box-shadow: 0 8px 20px var(--shadow);
+        gap: 0;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li {
+        border-bottom: 1px solid var(--sky);
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 12px 0;
+      }
+
+      .nav-links .nav-cta {
+        margin: 10px 0;
+        text-align: center;
+        border-radius: 6px;
+        padding: 10px;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-stat {
+        bottom: -12px;
+        right: -8px;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      section {
+        padding: 60px 5%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary, .btn-outline {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.5 3C8.12 3 7 4.12 7 5.5V7H5.5C4.12 7 3 8.12 3 9.5v9C3 19.88 4.12 21 5.5 21h13C19.88 21 21 19.88 21 18.5v-9C21 8.12 19.88 7 18.5 7H17V5.5C17 4.12 15.88 3 14.5 3h-5zm0 2h5c.28 0 .5.22.5.5V7H9V5.5c0-.28.22-.5.5-.5zM5.5 9h13c.28 0 .5.22.5.5v9c0 .28-.22.5-.5.5h-13c-.28 0-.5-.22-.5-.5v-9c0-.28.22-.5.5-.5zm3.5 2v2H7v2h2v1h2v-1h2v-2h-2v-2H9zm4 0v2h2v-2h-2z"/>
+        </svg>
+      </div>
+      <div class="nav-brand">
+        Iglesia Que Ayida
+        <span>House Cleaning Services</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bubbles">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Rated 5.0 on Google
+      </div>
+      <h1>A Sparkling Clean Home, Every Time</h1>
+      <p>Professional house cleaning services bringing care, thoroughness, and reliability to homes across Gainesville, FL.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get in Touch</a>
+        <a href="#services" class="btn-outline">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">Who We Are</p>
+    <h2 class="section-title">Cleaning You Can Trust</h2>
+    <div class="section-divider"></div>
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-graphic">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- House outline -->
+            <path d="M60 15L15 50v60h90V50z" fill="none" stroke="#4a9bb8" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M45 110V75h30v35" fill="none" stroke="#4a9bb8" stroke-width="3"/>
+            <!-- Roof shine -->
+            <path d="M60 15L15 50h90z" fill="#bde0ef" opacity="0.5"/>
+            <!-- Sparkle left -->
+            <line x1="28" y1="65" x2="28" y2="75" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+            <line x1="23" y1="70" x2="33" y2="70" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+            <!-- Sparkle right -->
+            <line x1="88" y1="63" x2="88" y2="71" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+            <line x1="84" y1="67" x2="92" y2="67" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+            <!-- Window -->
+            <rect x="71" y="58" width="18" height="18" rx="2" fill="none" stroke="#4a9bb8" stroke-width="2"/>
+            <line x1="80" y1="58" x2="80" y2="76" stroke="#4a9bb8" stroke-width="1.5"/>
+            <line x1="71" y1="67" x2="89" y2="67" stroke="#4a9bb8" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="about-stat">
+          <div class="num">5.0&#9733;</div>
+          <div class="lbl">Google Rating</div>
+        </div>
+      </div>
+      <div class="about-text">
+        <h2>Dedicated to a Cleaner, Healthier Home</h2>
+        <p>Iglesia Que Ayida provides dependable residential cleaning services to households throughout Gainesville, FL, treating every home with personal attention and care. Our team arrives fully equipped and committed to leaving your space looking its best, from kitchens and bathrooms to living areas and beyond.</p>
+        <p>We understand that a clean home is a comfortable home, and we take pride in the details that make the difference — so you can spend your time on what matters most.</p>
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <div class="highlight-dot"></div>
+            <span>Locally serving the Gainesville, FL community</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-dot"></div>
+            <span>Thorough, detail-oriented cleaning every visit</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-dot"></div>
+            <span>Trusted by homeowners — rated 5.0 stars on Google</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">Our Cleaning Services</h2>
+    <div class="section-divider"></div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="20" height="20" rx="3" stroke="#1f6e8c" stroke-width="2"/>
+            <path d="M9 14h10M9 10h6M9 18h8" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Standard House Cleaning</h3>
+        <p>A comprehensive top-to-bottom clean of your home, covering all main living areas, surfaces, floors, and fixtures. Contact us for details.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="14" cy="14" r="10" stroke="#1f6e8c" stroke-width="2"/>
+            <path d="M10 14l3 3 5-5" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Deep Cleaning</h3>
+        <p>An intensive cleaning session targeting hard-to-reach areas, built-up grime, baseboards, appliance interiors, and more. Ideal for seasonal refreshes.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 22l3-8 13-10-10 13-6 5z" stroke="#1f6e8c" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="14" cy="14" r="2" fill="#0d9488"/>
+          </svg>
+        </div>
+        <h3>Move-In / Move-Out Cleaning</h3>
+        <p>Get your home spotless before moving in or handing the keys back. We make sure every room is fresh and ready for the next chapter.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="12" width="22" height="10" rx="2" stroke="#1f6e8c" stroke-width="2"/>
+            <path d="M8 12V9a6 6 0 0112 0v3" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Kitchen &amp; Bathroom Cleaning</h3>
+        <p>Focused deep-clean of your kitchen and bathrooms — the two areas that matter most for hygiene — including tiles, grout, fixtures, and appliances.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 20l4-12h12l4 12H4z" stroke="#1f6e8c" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M10 20v-4h8v4" stroke="#0d9488" stroke-width="2"/>
+          </svg>
+        </div>
+        <h3>Recurring Cleaning Plans</h3>
+        <p>Keep your home consistently clean with scheduled weekly, bi-weekly, or monthly visits. Contact us to set up a plan that fits your lifestyle.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 14c0-5 4-9 9-9s9 4 9 9-4 9-9 9-9-4-9-9z" stroke="#1f6e8c" stroke-width="2"/>
+            <path d="M14 10v4l3 2" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Post-Event Cleaning</h3>
+        <p>Had a gathering or celebration at home? Let us handle the cleanup so you can relax after the festivities. Contact us for details on scheduling.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">Find Us</p>
+    <h2 class="section-title">Get in Touch</h2>
+    <div class="section-divider"></div>
+    <div class="contact-inner">
+      <div class="contact-info">
+        <h2>Ready for a Cleaner Home?</h2>
+        <p>Reach out to learn more about our services or to schedule a cleaning. We serve homes across Gainesville and the surrounding area.</p>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <strong>Address</strong>
+            <span>1717 NE 9th St, Gainesville, FL</span>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <strong>Contact</strong>
+            <span>Contact us for details</span>
+          </div>
+        </div>
+
+        <div class="rating-box">
+          <div class="rating-label">Google Maps Rating</div>
+          <div class="rating-stars">
+            <div class="stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+            </div>
+            <span class="rating-num">5.0</span>
+          </div>
+          <div class="rating-count">Based on 7 Google reviews</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="contact-action-card">
+          <h3>Visit or Get Directions</h3>
+          <p>We're located at 1717 NE 9th St in Gainesville, FL. Click below to open directions in Google Maps.</p>
+          <a href="https://www.google.com/maps/search/Iglesia%20Que%20Ayida%201717%20NE%209th%20St%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer" class="btn-directions">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+            Get Directions
+          </a>
+          <div class="map-placeholder">
+            <div class="map-pin">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+              <div class="map-pin-label">1717 NE 9th St, Gainesville, FL</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Iglesia Que Ayida</div>
+    <div class="footer-sub">House Cleaning Services &mdash; Gainesville, FL</div>
+    <ul class="footer-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="footer-copy">&copy; 2026 Iglesia Que Ayida. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>

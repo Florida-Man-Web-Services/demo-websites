@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michelle's Print Studio | Gainesville, FL</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      color: #2b2b2b;
+      background: #fafaf8;
+      line-height: 1.7;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Color Tokens ── */
+    :root {
+      --ink:        #1a1a2e;
+      --ink-mid:    #2e2e4a;
+      --crimson:    #c0392b;
+      --crimson-dk: #962d22;
+      --gold:       #d4a017;
+      --cream:      #fafaf8;
+      --light-gray: #f2f0eb;
+      --mid-gray:   #e0ddd6;
+      --text-muted: #6b6b6b;
+      --white:      #ffffff;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--crimson);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--white);
+    }
+    .nav-brand-text {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--white);
+      letter-spacing: 0.03em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--crimson);
+      color: var(--white) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--crimson-dk) !important; color: var(--white) !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* Mobile nav drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--ink-mid);
+      z-index: 999;
+      padding: 1rem 2rem 1.5rem;
+    }
+    .nav-drawer.open { display: block; }
+    .nav-drawer ul { list-style: none; }
+    .nav-drawer li { padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .nav-drawer a { color: rgba(255,255,255,0.9); font-size: 1rem; display: block; }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-mid) 60%, #3a2a1a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 39px,
+          rgba(255,255,255,0.03) 40px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 39px,
+          rgba(255,255,255,0.03) 40px
+        );
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      color: var(--white);
+      line-height: 1.15;
+      max-width: 760px;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.75);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+    }
+    .btn-primary {
+      background: var(--crimson);
+      color: var(--white);
+      padding: 0.85rem 2rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      border: 2px solid var(--crimson);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--crimson-dk); border-color: var(--crimson-dk); transform: translateY(-2px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      padding: 0.85rem 2rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      border: 2px solid rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid rgba(255,255,255,0.3);
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      transform: rotate(45deg);
+      animation: bounce 1.6s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(6px); }
+    }
+
+    /* ── Section Shared ── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: bold;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-divider {
+      width: 56px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+
+    /* ── About ── */
+    #about {
+      background: var(--white);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-visual {
+      background: linear-gradient(145deg, var(--ink) 0%, var(--ink-mid) 100%);
+      border-radius: 12px;
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      padding: 2.5rem;
+    }
+    .about-visual-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(192,57,43,0.2);
+      border: 2px solid var(--crimson);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-visual-icon svg { width: 44px; height: 44px; fill: var(--crimson); }
+    .about-visual-text {
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 1.05rem;
+      font-style: italic;
+    }
+    .about-visual-text strong {
+      display: block;
+      font-size: 1.3rem;
+      font-style: normal;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .about-content p {
+      color: #444;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+    .about-features {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .about-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.97rem;
+      color: var(--ink-mid);
+    }
+    .about-feature::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--crimson);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Services ── */
+    #services {
+      background: var(--light-gray);
+    }
+    .services-intro {
+      max-width: 620px;
+      margin-bottom: 3rem;
+    }
+    .services-intro p { color: var(--text-muted); font-size: 1.05rem; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 2rem 1.75rem;
+      border: 1px solid var(--mid-gray);
+      transition: box-shadow 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--crimson);
+      border-radius: 2px 0 0 2px;
+    }
+    .service-card:hover {
+      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+    .service-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(192,57,43,0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .service-icon svg { width: 28px; height: 28px; fill: var(--crimson); }
+    .service-card h3 {
+      font-size: 1.15rem;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .service-card .service-note {
+      margin-top: 0.8rem;
+      font-size: 0.82rem;
+      color: var(--crimson);
+      font-style: italic;
+    }
+
+    /* ── Contact ── */
+    #contact {
+      background: var(--white);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-details { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(192,57,43,0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-item-icon svg { width: 22px; height: 22px; fill: var(--crimson); }
+    .contact-item-text h4 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .contact-item-text p, .contact-item-text a {
+      font-size: 1.05rem;
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .contact-item-text a:hover { color: var(--crimson); }
+
+    .rating-box {
+      background: var(--light-gray);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .rating-stars {
+      font-size: 1.6rem;
+      color: var(--mid-gray);
+      letter-spacing: 4px;
+      margin-bottom: 0.4rem;
+    }
+    .rating-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .rating-text strong { color: var(--ink); }
+
+    .contact-cta {
+      background: var(--ink);
+      border-radius: 12px;
+      padding: 2.5rem;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .contact-cta h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .contact-cta p {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.97rem;
+    }
+    .contact-cta-buttons { display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .btn-map {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: var(--crimson);
+      color: var(--white);
+      padding: 0.9rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.97rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      border: 2px solid var(--crimson);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-map:hover { background: var(--crimson-dk); border-color: var(--crimson-dk); transform: translateY(-2px); }
+    .btn-map svg { width: 18px; height: 18px; fill: var(--white); }
+
+    .btn-call {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: transparent;
+      color: var(--white);
+      padding: 0.9rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.97rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      border: 2px solid rgba(255,255,255,0.35);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-call:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-call svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.88rem;
+    }
+    footer .footer-brand {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+    footer .footer-tagline {
+      margin-bottom: 1rem;
+      color: rgba(255,255,255,0.45);
+    }
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+    footer .footer-links a {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--gold); }
+    footer .footer-copy {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.2rem;
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+      .about-visual { min-height: 240px; }
+
+      section { padding: 3.5rem 1.25rem; }
+
+      .hero { padding: 6rem 1.25rem 4rem; }
+
+      .services-grid { grid-template-columns: 1fr; }
+
+      .contact-cta { padding: 2rem 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-secondary { width: 100%; max-width: 320px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 17H5V5h14v14zM7 10h10v2H7zm0 4h7v2H7zM7 6h10v2H7z"/>
+        </svg>
+      </div>
+      <span class="nav-brand-text">Michelle's Print Studio</span>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+    </ul>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="nav-drawer" id="navDrawer">
+    <ul>
+      <li><a href="#about" onclick="closeDrawer()">About</a></li>
+      <li><a href="#services" onclick="closeDrawer()">Services</a></li>
+      <li><a href="#contact" onclick="closeDrawer()">Get a Quote</a></li>
+    </ul>
+  </div>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="home">
+    <span class="hero-badge">Gainesville, FL Print Shop</span>
+    <h1>Your Vision, <span>Printed to Perfection</span></h1>
+    <p>Professional print services tailored for businesses, events, and individuals throughout the Gainesville area.</p>
+    <div class="hero-buttons">
+      <a href="#contact" class="btn-primary">Request a Quote</a>
+      <a href="#services" class="btn-secondary">View Services</a>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ── About ── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-visual-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+            </svg>
+          </div>
+          <div class="about-visual-text">
+            <strong>Michelle's Print Studio</strong>
+            Quality prints for every need
+          </div>
+        </div>
+
+        <div class="about-content">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">A Print Shop Built Around Your Needs</h2>
+          <div class="section-divider"></div>
+          <p>Michelle's Print Studio is a dedicated print shop serving the Gainesville, FL community with high-quality printing solutions for businesses, organizations, and individuals. Whether you need a small run of flyers or a large-scale banner, we deliver consistent, professional results.</p>
+          <p>We take pride in offering a wide range of print products and finishing options, ensuring every job meets the standards your brand deserves. From design assistance to final delivery, we are here to help bring your printed materials to life.</p>
+          <div class="about-features">
+            <div class="about-feature">Full-color and specialty printing options</div>
+            <div class="about-feature">Business and marketing print materials</div>
+            <div class="about-feature">Fast turnaround on most orders</div>
+            <div class="about-feature">Personal service from start to finish</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ── -->
+  <section id="services">
+    <div class="container">
+      <div class="services-intro">
+        <span class="section-label">What We Offer</span>
+        <h2 class="section-title">Print Services for Every Project</h2>
+        <div class="section-divider"></div>
+        <p>From everyday business essentials to custom event materials, Michelle's Print Studio handles it all with care and precision.</p>
+      </div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+            </svg>
+          </div>
+          <h3>Business Cards &amp; Stationery</h3>
+          <p>Make a lasting first impression with professionally designed and printed business cards, letterheads, envelopes, and branded stationery sets.</p>
+          <p class="service-note">Contact us for details</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 3H3v18h18V3zm-2 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
+            </svg>
+          </div>
+          <h3>Flyers &amp; Brochures</h3>
+          <p>Eye-catching flyers and folded brochures ideal for promotions, events, menus, and marketing campaigns of any scale.</p>
+          <p class="service-note">Contact us for details</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 2H3C2 2 2 2 2 3v18c0 1 0 1 1 1h18c1 0 1 0 1-1V3c0-1 0-1-1-1zm-1 18H4V4h16v16zM6 6h12v3H6zm0 5h12v2H6zm0 4h8v2H6z"/>
+            </svg>
+          </div>
+          <h3>Banners &amp; Signs</h3>
+          <p>Large-format vinyl banners, foam board signs, and retractable displays designed to command attention at any venue or storefront.</p>
+          <p class="service-note">Contact us for details</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+            </svg>
+          </div>
+          <h3>Posters &amp; Photo Prints</h3>
+          <p>Vibrant poster and photo printing in a variety of sizes, finishes, and paper stocks — perfect for events, art displays, and promotions.</p>
+          <p class="service-note">Contact us for details</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 6h-2.18c.07-.44.18-.88.18-1.34C18 2.54 15.96.5 13.5.5c-1.36 0-2.54.58-3.38 1.5L9 3.14l-1.12-1.12C7.04 1.08 5.86.5 4.5.5 2.04.5 0 2.54 0 5c0 3.77 3.4 6.86 8.55 11.54L9 17l.45-.45C14.6 11.86 18 8.77 18 5c0-.46-.1-.9-.18-1.34H20v14H4V7H2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/>
+            </svg>
+          </div>
+          <h3>Custom Labels &amp; Stickers</h3>
+          <p>Die-cut, sheet, and roll labels for product packaging, events, promotions, and branding — available in a range of materials and finishes.</p>
+          <p class="service-note">Contact us for details</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+            </svg>
+          </div>
+          <h3>Copying &amp; Digital Printing</h3>
+          <p>Black-and-white and full-color copying services for documents, reports, presentations, and more — fast and affordable for any volume.</p>
+          <p class="service-note">Contact us for details</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-label">Find Us</span>
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="section-divider"></div>
+
+      <div class="contact-grid">
+        <div class="contact-details">
+
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </div>
+            <div class="contact-item-text">
+              <h4>Address</h4>
+              <p>4002 NW 8th Ave<br>Gainesville, FL</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+              </svg>
+            </div>
+            <div class="contact-item-text">
+              <h4>Phone</h4>
+              <a href="tel:+19547086527">(954) 708-6527</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+              </svg>
+            </div>
+            <div class="contact-item-text">
+              <h4>Hours</h4>
+              <p>Contact us for current hours</p>
+            </div>
+          </div>
+
+          <div class="rating-box">
+            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="rating-text"><strong>New to Google Reviews</strong><br>Be the first to leave a review!</div>
+          </div>
+
+        </div>
+
+        <div class="contact-cta">
+          <div>
+            <h3>Ready to Start Your Print Job?</h3>
+            <p>Reach out by phone or find us on the map. We are happy to discuss your project and provide a custom quote.</p>
+          </div>
+          <div class="contact-cta-buttons">
+            <a
+              href="https://www.google.com/maps/search/Michelle's%20Print%20Studio%204002%20NW%208th%20Ave"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-map"
+            >
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              Get Directions
+            </a>
+            <a href="tel:+19547086527" class="btn-call">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+              </svg>
+              Call (954) 708-6527
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-brand">Michelle's Print Studio</div>
+    <div class="footer-tagline">Professional Print Services — Gainesville, FL</div>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Michelle's Print Studio &mdash; 4002 NW 8th Ave, Gainesville, FL &mdash; (954) 708-6527
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const hamburger = document.getElementById('hamburger');
+    const navDrawer = document.getElementById('navDrawer');
+    hamburger.addEventListener('click', function () {
+      navDrawer.classList.toggle('open');
+    });
+    function closeDrawer() {
+      navDrawer.classList.remove('open');
+    }
+    // Close drawer on outside click
+    document.addEventListener('click', function (e) {
+      if (!navDrawer.contains(e.target) && !hamburger.contains(e.target)) {
+        navDrawer.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

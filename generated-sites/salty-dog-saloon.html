@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salty Dog Saloon | Bar | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --dark-bg: #0f0f0f;
+      --dark-surface: #1a1a1a;
+      --dark-card: #222222;
+      --amber: #c9820a;
+      --amber-light: #e8a020;
+      --amber-glow: #f0b84a;
+      --rust: #8b3a1a;
+      --cream: #f5ede0;
+      --muted: #a89880;
+      --text-main: #e8ddd0;
+      --text-light: #c5b8a8;
+      --border: #333;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background-color: var(--dark-bg);
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.95);
+      border-bottom: 1px solid var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      backdrop-filter: blur(6px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-name {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--amber-glow);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--amber-glow);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--amber-glow);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #0a0a0a 0%, #1a0d00 50%, #0a0500 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 60%, rgba(201, 130, 10, 0.12) 0%, transparent 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 3px,
+          rgba(201, 130, 10, 0.02) 3px,
+          rgba(201, 130, 10, 0.02) 4px
+        );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 700px;
+    }
+
+    .hero-eyebrow {
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: bold;
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 0.3rem;
+      text-shadow: 0 0 40px rgba(201, 130, 10, 0.3);
+    }
+
+    .hero-title span {
+      color: var(--amber-glow);
+    }
+
+    .hero-divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--amber), transparent);
+      margin: 1.4rem auto;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      color: var(--text-light);
+      font-style: italic;
+      margin-bottom: 2.2rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--amber);
+      color: #0a0500;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .hero-cta:hover {
+      background: var(--amber-glow);
+      transform: translateY(-2px);
+    }
+
+    .hero-rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2.2rem;
+      background: rgba(201, 130, 10, 0.1);
+      border: 1px solid rgba(201, 130, 10, 0.3);
+      border-radius: 30px;
+      padding: 0.45rem 1.1rem;
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      color: var(--amber-light);
+    }
+
+    .stars {
+      color: var(--amber-glow);
+      letter-spacing: 1px;
+    }
+
+    /* ===== SECTIONS COMMON ===== */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 50px;
+      height: 2px;
+      background: var(--amber);
+      margin-bottom: 2rem;
+    }
+
+    /* ===== ABOUT ===== */
+    #about {
+      background: var(--dark-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-light);
+      margin-bottom: 1.1rem;
+      font-size: 1.05rem;
+    }
+
+    .about-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .about-badge {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      padding: 1.1rem 1.4rem;
+      border-radius: 2px;
+    }
+
+    .about-badge strong {
+      display: block;
+      color: var(--amber-glow);
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .about-badge span {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    /* ===== SERVICES ===== */
+    #services {
+      background: var(--dark-bg);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .service-card {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.8rem;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--amber);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+      transform-origin: left;
+    }
+
+    .service-card:hover {
+      border-color: var(--amber);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      color: var(--cream);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--dark-surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(201, 130, 10, 0.12);
+      border: 1px solid rgba(201, 130, 10, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      color: var(--amber-glow);
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-text span {
+      color: var(--text-light);
+      font-size: 0.98rem;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--amber);
+      color: var(--amber-glow);
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 0.5rem;
+      width: fit-content;
+    }
+
+    .directions-btn:hover {
+      background: var(--amber);
+      color: #0a0500;
+    }
+
+    .rating-card {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .rating-number {
+      font-size: 4rem;
+      font-weight: bold;
+      color: var(--amber-glow);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .rating-stars-large {
+      font-size: 1.6rem;
+      color: var(--amber-glow);
+      letter-spacing: 3px;
+      margin-bottom: 0.6rem;
+    }
+
+    .rating-count {
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .rating-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #080808;
+      border-top: 1px solid var(--amber);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .footer-name {
+      font-size: 1.2rem;
+      color: var(--amber-glow);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-address {
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-copy {
+      color: #555;
+      font-family: Arial, sans-serif;
+      font-size: 0.78rem;
+      border-top: 1px solid #1e1e1e;
+      padding-top: 1.2rem;
+      margin-top: 1.2rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 10, 0.98);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid var(--amber);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero {
+        padding-top: 5rem;
+      }
+
+      section {
+        padding: 3.5rem 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        padding: 0 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="#hero">
+      <div class="nav-logo-icon">&#127863;</div>
+      <span class="nav-name">Salty Dog Saloon</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Offer</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Gainesville, Florida</p>
+      <h1 class="hero-title">Salty<br /><span>Dog Saloon</span></h1>
+      <div class="hero-divider"></div>
+      <p class="hero-tagline">Your neighborhood watering hole on University Ave &mdash; cold drinks, good company, no pretense.</p>
+      <a href="#contact" class="hero-cta">Find Us</a>
+      <div>
+        <span class="hero-rating-badge">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;</span>
+          4.0 &nbsp;|&nbsp; 522 Google reviews
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">A True Gainesville Saloon</h2>
+          <div class="section-divider"></div>
+          <p>
+            Salty Dog Saloon is a beloved dive bar in the heart of Gainesville, FL, sitting right on West University Avenue where the Gator spirit runs deep. Whether you are winding down after a long day or gearing up for a big game, this is the kind of place that feels like home the moment you walk through the door.
+          </p>
+          <p>
+            We keep things unpretentious &mdash; great drinks, friendly faces, and a laid-back atmosphere that locals have come to rely on. From students to longtime residents, everyone finds their place at the Salty Dog.
+          </p>
+          <p>
+            Contact us for details on upcoming events, specials, and hours.
+          </p>
+        </div>
+        <div class="about-visual">
+          <div class="about-badge">
+            <strong>Location</strong>
+            <span>1712 W University Ave, Gainesville, FL 32603</span>
+          </div>
+          <div class="about-badge">
+            <strong>Vibe</strong>
+            <span>Classic dive bar &mdash; casual, welcoming, no-frills</span>
+          </div>
+          <div class="about-badge">
+            <strong>Community</strong>
+            <span>A neighborhood staple on University Ave</span>
+          </div>
+          <div class="about-badge">
+            <strong>Hours</strong>
+            <span>Contact us for current hours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Ice-Cold Drinks &amp; Good Times</h2>
+      <div class="section-divider"></div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <span class="service-icon">&#127866;</span>
+          <h3>Draft &amp; Bottled Beer</h3>
+          <p>A rotating selection of domestic and craft beers on draft, plus a full lineup of bottles and cans to suit every taste.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127864;</span>
+          <h3>Cocktails &amp; Spirits</h3>
+          <p>Classic cocktails, whiskeys, rum, vodka, and more &mdash; mixed to order by our bartenders. Contact us for current offerings.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127861;</span>
+          <h3>Shots &amp; Shooters</h3>
+          <p>A true saloon staple. Whether you are celebrating or commiserating, we have the shots for the occasion.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127918;</span>
+          <h3>Bar Games &amp; Entertainment</h3>
+          <p>Pool tables, darts, jukeboxes, and more &mdash; the kind of in-bar entertainment that keeps the night going.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127944;</span>
+          <h3>Game Day Atmosphere</h3>
+          <p>TVs throughout the bar keep you locked in on every Gator game, playoff run, and big sporting event of the season.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon">&#127881;</span>
+          <h3>Events &amp; Specials</h3>
+          <p>Live music nights, drink specials, and local events throughout the year. Contact us for the latest schedule and details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Come On In</h2>
+      <div class="section-divider"></div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div class="contact-item-text">
+              <strong>Address</strong>
+              <span>1712 W University Ave<br />Gainesville, FL 32603</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128337;</div>
+            <div class="contact-item-text">
+              <strong>Hours</strong>
+              <span>Contact us for current hours</span>
+            </div>
+          </div>
+
+          <a
+            class="directions-btn"
+            href="https://www.google.com/maps/search/Salty%20Dog%20Saloon%201712%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032603"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            &#128204; &nbsp;Get Directions
+          </a>
+
+        </div>
+
+        <div class="rating-card">
+          <div class="rating-number">4.0</div>
+          <div class="rating-stars-large">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+          <div class="rating-count">Based on 522 Google reviews</div>
+          <div class="rating-label">&#10003; &nbsp;Verified Google Maps Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-name">Salty Dog Saloon</p>
+      <p class="footer-address">1712 W University Ave &nbsp;&bull;&nbsp; Gainesville, FL 32603</p>
+      <p class="footer-copy">&copy; 2026 Salty Dog Saloon. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+    // Close nav when a link is clicked
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => links.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

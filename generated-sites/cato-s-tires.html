@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cato's Tires | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black:    #111111;
+      --charcoal: #1e1e1e;
+      --dark:     #2b2b2b;
+      --steel:    #3a3a3a;
+      --accent:   #e8a020;
+      --accent-dark: #c07d0a;
+      --light:    #f5f5f5;
+      --white:    #ffffff;
+      --text-muted: #aaaaaa;
+      --radius:   6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--black);
+      color: var(--light);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(17, 17, 17, 0.96);
+      backdrop-filter: blur(6px);
+      border-bottom: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo .wheel {
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-logo span {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: 0.5px;
+    }
+
+    .nav-logo span em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--light);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--black) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: var(--radius);
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--accent-dark) !important; color: var(--white) !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #111111 0%, #1e1e1e 60%, #2b2008 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 1.5rem 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative tire tread lines */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(232, 160, 32, 0.04) 40px,
+        rgba(232, 160, 32, 0.04) 42px
+      );
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; max-width: 720px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(232, 160, 32, 0.15);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-badge svg { width: 14px; height: 14px; }
+
+    #hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    #hero h1 span { color: var(--accent); }
+
+    #hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.25);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* spinning tire SVG decoration */
+    .tire-deco {
+      position: absolute;
+      right: -60px;
+      bottom: -60px;
+      width: 340px;
+      height: 340px;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+
+    @media (max-width: 700px) { .tire-deco { display: none; } }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 80px 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title span { color: var(--accent); }
+
+    .divider {
+      width: 48px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--charcoal);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: #cccccc;
+      font-size: 1.05rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .stat-card {
+      background: var(--dark);
+      border: 1px solid var(--steel);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.2rem;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card:hover { border-color: var(--accent); }
+
+    .stat-card .number {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--black);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .service-card {
+      background: var(--charcoal);
+      border: 1px solid var(--steel);
+      border-radius: var(--radius);
+      padding: 1.8rem 1.6rem;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: var(--accent);
+      border-radius: 0 0 var(--radius) 0;
+      transition: height 0.25s;
+    }
+
+    .service-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .service-card:hover::before { height: 100%; }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(232, 160, 32, 0.12);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .service-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--charcoal);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--dark);
+      border: 1px solid var(--steel);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.2rem;
+      transition: border-color 0.2s;
+    }
+
+    .info-row:hover { border-color: var(--accent); }
+
+    .info-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: rgba(232,160,32,0.1);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .info-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .info-text strong {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .info-text span, .info-text a {
+      font-size: 1rem;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .info-text a:hover { color: var(--accent); }
+
+    /* rating badge */
+    .rating-block {
+      background: var(--dark);
+      border: 1px solid var(--steel);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .rating-stars svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--accent);
+    }
+
+    .rating-meta .score {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-meta .source {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    .contact-cta-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding: 2rem;
+      background: var(--dark);
+      border: 1px solid var(--steel);
+      border-radius: var(--radius);
+    }
+
+    .contact-cta-block h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .contact-cta-block p {
+      font-size: 0.97rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .btn-map {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 0.97rem;
+      padding: 0.85rem 1.4rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-map:hover { background: var(--accent-dark); transform: translateY(-2px); }
+
+    .btn-map svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-call {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.97rem;
+      padding: 0.85rem 1.4rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.2);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-call:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-call svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--steel);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    footer .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    footer .footer-logo em { color: var(--accent); font-style: normal; }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ── MOBILE NAV ── */
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--charcoal);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .nav-links.open { display: flex; }
+
+      .nav-links li a {
+        display: block;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid var(--steel);
+        font-size: 1rem;
+      }
+
+      .hamburger { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <!-- tire wheel SVG logo -->
+      <svg class="wheel" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="18" cy="18" r="16" stroke="#e8a020" stroke-width="2.5"/>
+        <circle cx="18" cy="18" r="9" stroke="#e8a020" stroke-width="2"/>
+        <circle cx="18" cy="18" r="3" fill="#e8a020"/>
+        <line x1="18" y1="9" x2="18" y2="5" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18" y1="27" x2="18" y2="31" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+        <line x1="9" y1="18" x2="5" y2="18" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+        <line x1="27" y1="18" x2="31" y2="18" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+        <line x1="11.64" y1="11.64" x2="8.81" y2="8.81" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24.36" y1="24.36" x2="27.19" y2="27.19" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24.36" y1="11.64" x2="27.19" y2="8.81" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+        <line x1="11.64" y1="24.36" x2="8.81" y2="27.19" stroke="#e8a020" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span><em>Cato's</em> Tires</span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <!-- decorative tire -->
+    <svg class="tire-deco" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="100" cy="100" r="95" stroke="white" stroke-width="4" fill="none"/>
+      <circle cx="100" cy="100" r="60" stroke="white" stroke-width="6" fill="none"/>
+      <circle cx="100" cy="100" r="20" stroke="white" stroke-width="4" fill="none"/>
+      <line x1="100" y1="40" x2="100" y2="80" stroke="white" stroke-width="3"/>
+      <line x1="100" y1="120" x2="100" y2="160" stroke="white" stroke-width="3"/>
+      <line x1="40" y1="100" x2="80" y2="100" stroke="white" stroke-width="3"/>
+      <line x1="120" y1="100" x2="160" y2="100" stroke="white" stroke-width="3"/>
+      <line x1="57" y1="57" x2="79" y2="79" stroke="white" stroke-width="3"/>
+      <line x1="121" y1="121" x2="143" y2="143" stroke="white" stroke-width="3"/>
+      <line x1="143" y1="57" x2="121" y2="79" stroke="white" stroke-width="3"/>
+      <line x1="57" y1="143" x2="79" y2="121" stroke="white" stroke-width="3"/>
+    </svg>
+
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <!-- star icon -->
+        <svg viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7 1l1.54 3.12L12 4.63l-2.5 2.43.59 3.44L7 8.77l-3.09 1.73.59-3.44L2 4.63l3.46-.51z"/></svg>
+        Gainesville's Trusted Tire Shop
+      </div>
+
+      <h1>Keep Rolling<br />with <span>Cato's Tires</span></h1>
+
+      <p>Expert tire services and wheel care for every vehicle — fast, reliable, and right here in Gainesville, FL.</p>
+
+      <div class="hero-actions">
+        <a href="tel:+13528742286" class="btn-primary">Call (352) 874-2286</a>
+        <a href="#services" class="btn-outline">View Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-label">About Us</p>
+          <h2 class="section-title">Your Local<br /><span>Tire Experts</span></h2>
+          <div class="divider"></div>
+          <p>Cato's Tires is a locally owned tire and wheel shop serving drivers throughout Gainesville and the surrounding North Central Florida area. We take pride in delivering dependable, no-hassle service so you can get back on the road quickly and with confidence.</p>
+          <p>Whether you need a single replacement, a full set, or routine maintenance, our experienced team is ready to help with a wide range of vehicles and tire brands. Stop by our NW 6th Street location and see why our customers keep coming back.</p>
+        </div>
+
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="number">4.9</div>
+            <div class="label">Google Rating</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">★★★★★</div>
+            <div class="label">5-Star Service</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">NW 6th</div>
+            <div class="label">Gainesville, FL</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">Local</div>
+            <div class="label">Independently Owned</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Our <span>Services</span></h2>
+      <div class="divider"></div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- tire icon -->
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="3" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="21"/><line x1="3" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="21" y2="12"/></svg>
+          </div>
+          <h3>New Tire Sales</h3>
+          <p>Wide selection of passenger, SUV, and light truck tires from leading brands. Contact us for availability and details.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- wrench icon -->
+            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>Tire Installation</h3>
+          <p>Professional mounting and installation for all tire types, ensuring proper fit and safe performance on the road.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- rotate icon -->
+            <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </div>
+          <h3>Tire Rotation</h3>
+          <p>Regular rotation extends the life of your tires and promotes even tread wear across all four wheels.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- balance icon -->
+            <svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Wheel Balancing</h3>
+          <p>Precise balancing to eliminate vibration and ensure a smooth, comfortable ride at any speed.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- flat tire repair -->
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Flat Tire Repair</h3>
+          <p>Quick and dependable flat repairs to get you moving again safely, when and where you need it most.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- pressure gauge icon -->
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><line x1="22" y1="2" x2="18" y2="6"/></svg>
+          </div>
+          <h3>Tire Pressure & Inspection</h3>
+          <p>Thorough pressure checks and visual inspections to catch issues early and keep your tires in top condition.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Get in <span>Touch</span></h2>
+      <div class="divider"></div>
+
+      <div class="contact-grid">
+        <div class="contact-info-block">
+
+          <div class="info-row">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="info-text">
+              <strong>Address</strong>
+              <span>4551 NW 6th St, Gainesville, FL</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="info-text">
+              <strong>Phone</strong>
+              <a href="tel:+13528742286">(352) 874-2286</a>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="info-text">
+              <strong>Hours</strong>
+              <span>Contact us for current hours</span>
+            </div>
+          </div>
+
+          <!-- Google Rating -->
+          <div class="rating-block">
+            <div>
+              <div class="rating-stars">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              </div>
+            </div>
+            <div class="rating-meta">
+              <div class="score">4.9</div>
+              <div class="source">Rated on Google Maps</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="contact-cta-block">
+          <h3>Ready to visit us?</h3>
+          <p>Stop by our Gainesville shop on NW 6th Street or give us a call. Our team is ready to help with all your tire needs — no appointment necessary for most services.</p>
+          <div class="cta-actions">
+            <a href="https://www.google.com/maps/search/Cato's%20Tires%204551%20NW%206th%20St" target="_blank" rel="noopener noreferrer" class="btn-map">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Get Directions
+            </a>
+            <a href="tel:+13528742286" class="btn-call">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call (352) 874-2286
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo"><em>Cato's</em> Tires</div>
+    <p>4551 NW 6th St, Gainesville, FL &nbsp;|&nbsp; (352) 874-2286</p>
+    <p style="margin-top:0.4rem;">Proudly serving Gainesville and North Central Florida.</p>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

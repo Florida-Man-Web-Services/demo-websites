@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gville Sweets | Bakery — Gainesville, FL</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rose:      #e8637a;
+      --rose-dark: #c94760;
+      --rose-pale: #fce8ec;
+      --cream:     #fff8f0;
+      --sand:      #f5e6d3;
+      --brown:     #7c4f2f;
+      --brown-dk:  #5a3520;
+      --text:      #3b2010;
+      --muted:     #8a6a55;
+      --white:     #ffffff;
+      --shadow:    0 4px 20px rgba(124, 79, 47, .12);
+      --radius:    14px;
+      --nav-h:     68px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== Nav ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--white);
+      box-shadow: 0 2px 12px rgba(124,79,47,.10);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6vw;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: var(--rose-dark);
+      letter-spacing: .02em;
+    }
+    .nav-logo .icon {
+      width: 38px; height: 38px;
+      background: var(--rose-pale);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Arial', sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--rose-dark); }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--brown);
+      border-radius: 2px;
+      transition: .3s;
+    }
+    #nav-toggle { display: none; }
+    #nav-toggle:checked ~ .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--white);
+      padding: 20px 6vw 28px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      gap: 18px;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: calc(var(--nav-h) + 40px) 6vw 60px;
+      background:
+        radial-gradient(ellipse 70% 55% at 80% 60%, #f9d0da 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 20% 40%, #fde8c8 0%, transparent 65%),
+        var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    /* decorative blobs */
+    .hero::before, .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: .18;
+      pointer-events: none;
+    }
+    .hero::before {
+      width: 480px; height: 480px;
+      background: var(--rose);
+      top: -140px; right: -120px;
+    }
+    .hero::after {
+      width: 340px; height: 340px;
+      background: var(--brown);
+      bottom: -80px; left: -90px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 680px; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--rose-pale);
+      color: var(--rose-dark);
+      font-family: 'Arial', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 40px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 7vw, 4.2rem);
+      color: var(--brown-dk);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .hero h1 span { color: var(--rose-dark); }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.22rem);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 34px;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--rose-dark);
+      color: var(--white);
+      font-family: 'Arial', sans-serif;
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      padding: 14px 36px;
+      border-radius: 40px;
+      transition: background .22s, transform .18s, box-shadow .22s;
+      box-shadow: 0 6px 22px rgba(201,71,96,.30);
+    }
+    .btn:hover {
+      background: var(--rose);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201,71,96,.38);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--rose-dark);
+      color: var(--rose-dark);
+      box-shadow: none;
+    }
+    .btn-outline:hover {
+      background: var(--rose-dark);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Sections shared ===== */
+    section { padding: 80px 6vw; }
+    .section-label {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      color: var(--brown-dk);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+    }
+    .divider {
+      width: 52px; height: 4px;
+      background: var(--rose);
+      border-radius: 4px;
+      margin: 14px 0 28px;
+    }
+
+    /* ===== About ===== */
+    #about {
+      background: var(--white);
+    }
+    .about-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .about-visual {
+      background: var(--rose-pale);
+      border-radius: var(--radius);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.5), transparent 70%);
+    }
+    .about-text p {
+      color: var(--muted);
+      font-size: 1.04rem;
+      margin-bottom: 16px;
+    }
+
+    /* ===== Services ===== */
+    #services {
+      background: var(--sand);
+    }
+    .services-header { max-width: 980px; margin: 0 auto 44px; }
+    .services-grid {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      transition: transform .22s, box-shadow .22s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose), var(--rose-dark));
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 36px rgba(124,79,47,.16);
+    }
+    .service-icon {
+      width: 52px; height: 52px;
+      background: var(--rose-pale);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.55rem;
+      margin-bottom: 18px;
+    }
+    .service-card h3 {
+      font-size: 1.12rem;
+      color: var(--brown-dk);
+      margin-bottom: 8px;
+    }
+    .service-card p {
+      font-size: .93rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ===== Contact ===== */
+    #contact {
+      background: var(--white);
+    }
+    .contact-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .contact-card {
+      background: var(--cream);
+      border-radius: var(--radius);
+      padding: 44px 40px;
+      box-shadow: var(--shadow);
+      margin-top: 36px;
+    }
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+    .contact-row-icon {
+      width: 42px; height: 42px;
+      min-width: 42px;
+      background: var(--rose-pale);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem;
+      margin-top: 2px;
+    }
+    .contact-row-text strong {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+      margin-bottom: 3px;
+    }
+    .contact-row-text span {
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .directions-btn {
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .rating-block {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--sand);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .stars {
+      display: flex;
+      gap: 4px;
+    }
+    .star {
+      font-size: 1.5rem;
+      color: #f5a623;
+    }
+    .rating-label {
+      font-family: 'Arial', sans-serif;
+      font-size: .9rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .rating-score {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--brown-dk);
+      line-height: 1;
+    }
+    .rating-source {
+      font-family: 'Arial', sans-serif;
+      font-size: .78rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--brown-dk);
+      color: rgba(255,255,255,.7);
+      text-align: center;
+      padding: 36px 6vw;
+      font-family: 'Arial', sans-serif;
+      font-size: .88rem;
+    }
+    footer strong { color: var(--white); }
+    footer .footer-rose { color: var(--rose); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .about-visual { aspect-ratio: 16/7; font-size: 4rem; }
+      .contact-card { padding: 32px 20px; }
+      section { padding: 60px 5vw; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2.2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Nav ===== -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <span class="icon">&#x1F370;</span>
+      Gville Sweets
+    </a>
+    <input type="checkbox" id="nav-toggle" />
+    <label class="hamburger" for="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Menu &amp; Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <span class="hero-badge">Gainesville&#39;s Favorite Bakery</span>
+      <h1>Handcrafted <span>Sweets</span><br>Baked with Love</h1>
+      <p>Fresh from the oven every day — indulge in custom cakes, pastries, and treats made from quality ingredients right in the heart of Gainesville, FL.</p>
+      <a href="#services" class="btn">Explore Our Offerings</a>
+      &nbsp;&nbsp;
+      <a href="#contact" class="btn btn-outline">Find Us</a>
+    </div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-visual" aria-label="Decorative bakery illustration">
+        &#x1F382;
+      </div>
+      <div class="about-text">
+        <span class="section-label">Our Story</span>
+        <h2 class="section-title">Sweet Moments, Every Day</h2>
+        <div class="divider"></div>
+        <p>Gville Sweets is a beloved Gainesville bakery dedicated to crafting fresh, beautifully made confections for every occasion — from morning pastries to showstopping celebration cakes.</p>
+        <p>We take pride in using quality ingredients and time-honored baking techniques to create treats that bring people together and make every bite memorable.</p>
+        <p>Whether you&#39;re stopping in for a daily indulgence or planning a special event, our team is here to sweeten your day. Contact us for details on custom orders and seasonal offerings.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Services ===== -->
+  <section id="services">
+    <div class="services-header">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Our Baked Goods &amp; Services</h2>
+      <div class="divider"></div>
+      <p class="section-sub">From everyday treats to custom creations, we have something to satisfy every sweet tooth. Contact us for details on pricing and availability.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">&#x1F382;</div>
+        <h3>Custom Cakes</h3>
+        <p>Personalized cakes designed for birthdays, weddings, anniversaries, and any special celebration — made to your vision.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#x1F9C1;</div>
+        <h3>Cupcakes &amp; Minis</h3>
+        <p>Beautifully decorated cupcakes and bite-sized treats, perfect for parties, events, or an everyday pick-me-up.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#x1F950;</div>
+        <h3>Fresh Pastries</h3>
+        <p>Daily baked pastries including croissants, danishes, scones, and more — best enjoyed fresh with your morning coffee.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#x1F36A;</div>
+        <h3>Cookies &amp; Bars</h3>
+        <p>A rotating selection of handcrafted cookies, brownies, and dessert bars made with house recipes and quality ingredients.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#x1F6D2;</div>
+        <h3>Catering &amp; Bulk Orders</h3>
+        <p>Sweeten your next corporate event, party, or gathering with bulk bakery orders tailored to your group&#39;s needs.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#x1F381;</div>
+        <h3>Gift Boxes &amp; Packaging</h3>
+        <p>Thoughtfully assembled gift boxes of assorted sweets — ideal for holidays, thank-you gifts, and special occasions.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact">
+    <div class="contact-inner">
+      <span class="section-label">Visit Us</span>
+      <h2 class="section-title">Come Find Your Sweet Spot</h2>
+      <div class="divider" style="margin: 14px auto 0;"></div>
+
+      <div class="contact-card">
+
+        <div class="contact-row">
+          <div class="contact-row-icon">&#x1F4CD;</div>
+          <div class="contact-row-text">
+            <strong>Address</strong>
+            <span>211 SW 4th Ave, Ste 6<br>Gainesville, FL 32601</span>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">&#x1F552;</div>
+          <div class="contact-row-text">
+            <strong>Hours</strong>
+            <span>Contact us for current hours and availability.</span>
+          </div>
+        </div>
+
+        <a
+          href="https://www.google.com/maps/search/gville%20sweets%20211%20SW%204th%20Ave%20Ste%206%2C%20Gainesville%2C%20FL%2032601"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn directions-btn"
+        >
+          &#x1F5FA;&#xFE0F;&nbsp; Get Directions
+        </a>
+
+        <!-- Rating -->
+        <div class="rating-block">
+          <div class="rating-score">5.0</div>
+          <div class="stars" aria-label="5 out of 5 stars">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+          </div>
+          <div class="rating-label">Google Maps Rating</div>
+          <div class="rating-source">Based on customer reviews</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <p>
+      <strong>Gville Sweets</strong> &nbsp;&#x2022;&nbsp;
+      211 SW 4th Ave, Ste 6, Gainesville, FL 32601
+    </p>
+    <p style="margin-top:10px;">
+      Made with <span class="footer-rose">&#x2665;</span> in Gainesville &nbsp;&nbsp;&copy; 2026 Gville Sweets
+    </p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roses Express | Discount Store | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --red: #c0392b;
+      --red-dark: #96281b;
+      --red-light: #e74c3c;
+      --yellow: #f39c12;
+      --yellow-light: #f1c40f;
+      --bg: #fdf6ec;
+      --bg-alt: #fff8f0;
+      --text: #2c2c2c;
+      --text-muted: #666;
+      --white: #ffffff;
+      --shadow: 0 2px 12px rgba(0,0,0,0.10);
+      --radius: 8px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--red);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--yellow);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      color: var(--white);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.92);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--yellow-light);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2.5px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 50%, var(--red-light) 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 90px 5% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 320px;
+      height: 320px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--red-dark);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: rgba(255,255,255,0.9);
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--red-dark);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: 40px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+
+    .hero-cta:hover {
+      background: var(--yellow-light);
+      transform: translateY(-2px);
+    }
+
+    /* SECTIONS COMMON */
+    section {
+      padding: 72px 5%;
+    }
+
+    .section-label {
+      display: inline-block;
+      color: var(--red);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 18px;
+      line-height: 1.2;
+    }
+
+    .section-title span {
+      color: var(--red);
+    }
+
+    /* ABOUT */
+    .about {
+      background: var(--white);
+    }
+
+    .about-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 16px;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .highlight-card {
+      background: var(--bg);
+      border-left: 4px solid var(--red);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .highlight-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--red-dark);
+      margin-bottom: 4px;
+    }
+
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* SERVICES */
+    .services {
+      background: var(--bg-alt);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-top: 3px solid var(--red);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(192,57,43,0.13);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--red), var(--red-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    /* CONTACT */
+    .contact {
+      background: var(--white);
+    }
+
+    .contact-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--red);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      color: white;
+    }
+
+    .contact-detail h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .contact-detail p,
+    .contact-detail a {
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-detail a:hover {
+      color: var(--red);
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 13px 28px;
+      border-radius: 40px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 8px;
+      box-shadow: 0 3px 12px rgba(192,57,43,0.25);
+    }
+
+    .btn-directions:hover {
+      background: var(--red-dark);
+      transform: translateY(-2px);
+    }
+
+    .rating-card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-self: flex-start;
+    }
+
+    .rating-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .rating-score {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--red-dark);
+      line-height: 1;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      font-size: 1.3rem;
+      color: var(--yellow);
+    }
+
+    .star.half {
+      position: relative;
+      display: inline-block;
+    }
+
+    .rating-count {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .rating-source {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid #e8e0d5;
+      padding-top: 10px;
+      margin-top: 4px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--red-dark);
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 32px 5%;
+    }
+
+    footer .footer-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    footer p {
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+    }
+
+    footer a {
+      color: var(--yellow-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--yellow);
+      margin: 14px auto;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--red-dark);
+        padding: 16px 5%;
+        gap: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      section {
+        padding: 52px 5%;
+      }
+
+      .hero {
+        padding: 72px 5% 60px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">
+      <div class="nav-logo-icon">&#127800;</div>
+      <span class="nav-logo-text">Roses Express</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">What We Carry</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">Gainesville's Value Store</div>
+    <h1>Roses Express</h1>
+    <p class="hero-tagline">Big savings on everyday essentials — all under one roof in North Gainesville.</p>
+    <a href="#contact" class="hero-cta">Find Us Today</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Your <span>neighborhood</span> discount store</h2>
+        <p>Roses Express is a go-to discount destination on North Main Street, serving the Gainesville community with a wide assortment of everyday products at prices that fit every budget.</p>
+        <p>Whether you are stocking up on household essentials, personal care items, seasonal goods, or grab-and-go snacks, our store offers a convenient one-stop shopping experience without the big-box price tag.</p>
+        <p>We are proud to be a part of the North Gainesville neighborhood and to make value-priced shopping accessible and welcoming for families and individuals alike.</p>
+      </div>
+      <div class="about-highlights">
+        <div class="highlight-card">
+          <h4>Everyday Low Prices</h4>
+          <p>Discount pricing across thousands of products you use every day.</p>
+        </div>
+        <div class="highlight-card">
+          <h4>Wide Product Selection</h4>
+          <p>From household supplies to personal care, snacks, and seasonal items.</p>
+        </div>
+        <div class="highlight-card">
+          <h4>Convenient Location</h4>
+          <p>Easy to find on N Main St, right in the heart of North Gainesville.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="services-header">
+      <div class="section-label">What We Carry</div>
+      <h2 class="section-title">Products for <span>every need</span></h2>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto; font-size: 1rem;">A broad variety of discounted merchandise to cover everyday life.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">&#127968;</div>
+        <h3>Household Essentials</h3>
+        <p>Cleaning supplies, paper products, organizers, and everyday home items at unbeatable prices.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#129529;</div>
+        <h3>Health &amp; Personal Care</h3>
+        <p>Toiletries, hygiene products, over-the-counter basics, and personal care staples.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#127829;</div>
+        <h3>Snacks &amp; Grocery Items</h3>
+        <p>A selection of packaged snacks, beverages, and pantry staples for quick and affordable restocking.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#127873;</div>
+        <h3>Seasonal &amp; Holiday Goods</h3>
+        <p>Decorations, gifts, and seasonal merchandise updated throughout the year.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#128155;</div>
+        <h3>Clothing &amp; Accessories</h3>
+        <p>Value-priced apparel, basics, and accessories for the whole family.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">&#9999;&#65039;</div>
+        <h3>School &amp; Office Supplies</h3>
+        <p>Notebooks, pens, folders, and other stationery essentials at discount prices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div>
+        <div class="section-label">Visit Us</div>
+        <h2 class="section-title">Find <span>Roses Express</span></h2>
+        <div class="contact-info">
+          <div class="contact-row">
+            <div class="contact-icon">&#128205;</div>
+            <div class="contact-detail">
+              <h4>Address</h4>
+              <p>2370 N Main St<br>Gainesville, FL 32609</p>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon">&#128222;</div>
+            <div class="contact-detail">
+              <h4>Phone</h4>
+              <a href="tel:+13523733566">(352) 373-3566</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon">&#128344;</div>
+            <div class="contact-detail">
+              <h4>Hours</h4>
+              <p>Contact us for current store hours.</p>
+            </div>
+          </div>
+          <a
+            class="btn-directions"
+            href="https://www.google.com/maps/search/Roses%20Express%202370%20N%20Main%20St%2C%20Gainesville%2C%20FL%2032609"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            &#128205; Get Directions
+          </a>
+        </div>
+      </div>
+
+      <div class="rating-card">
+        <div class="rating-label">Google Maps Rating</div>
+        <div class="rating-score">3.5</div>
+        <div class="stars">
+          <span class="star">&#9733;</span>
+          <span class="star">&#9733;</span>
+          <span class="star">&#9733;</span>
+          <span class="star">&#9734;</span>
+          <span class="star">&#9734;</span>
+        </div>
+        <div class="rating-count">Based on 39 reviews</div>
+        <div class="rating-source">
+          Rated on
+          <a
+            href="https://www.google.com/maps/search/Roses%20Express%202370%20N%20Main%20St%2C%20Gainesville%2C%20FL%2032609"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Google Maps</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">&#127800; Roses Express</div>
+    <div class="footer-divider"></div>
+    <p>2370 N Main St, Gainesville, FL 32609</p>
+    <p><a href="tel:+13523733566">(352) 373-3566</a></p>
+    <p style="margin-top: 16px; font-size: 0.82rem; color: rgba(255,255,255,0.5);">&copy; 2026 Roses Express. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', function () {
+      links.classList.toggle('open');
+    });
+    links.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        links.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

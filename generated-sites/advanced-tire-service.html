@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Tire Service | Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1a2537;
+      --navy-dk: #111a28;
+      --red:     #d42b2b;
+      --red-dk:  #b02020;
+      --silver:  #c8cdd5;
+      --light:   #f4f5f7;
+      --white:   #ffffff;
+      --text:    #2c3340;
+      --muted:   #5a6070;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--navy-dk);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.45);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .nav-logo-text span:first-child {
+      font-size: .7rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--silver);
+      font-weight: 400;
+    }
+
+    .nav-logo-text span:last-child {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--silver);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--red); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all .3s;
+    }
+
+    /* mobile menu */
+    #mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--navy-dk);
+      z-index: 999;
+      padding: 1.2rem 2rem 1.6rem;
+      border-top: 2px solid var(--red);
+    }
+
+    #mobile-menu.open { display: block; }
+
+    #mobile-menu a {
+      display: block;
+      color: var(--silver);
+      text-decoration: none;
+      font-size: .95rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .65rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      transition: color .2s;
+    }
+
+    #mobile-menu a:hover { color: var(--red); }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero {
+      margin-top: 64px;
+      min-height: calc(100vh - 64px);
+      background:
+        linear-gradient(
+          160deg,
+          rgba(17,26,40,.88) 0%,
+          rgba(17,26,40,.72) 55%,
+          rgba(212,43,43,.55) 100%
+        ),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect fill='%231a2537' width='700' height='500'/%3E%3Ccircle cx='200' cy='260' r='180' fill='none' stroke='%23c8cdd5' stroke-width='42' opacity='.18'/%3E%3Ccircle cx='200' cy='260' r='110' fill='none' stroke='%23c8cdd5' stroke-width='28' opacity='.12'/%3E%3Ccircle cx='200' cy='260' r='50' fill='%231a2537' opacity='1'/%3E%3Ccircle cx='200' cy='260' r='18' fill='%23c8cdd5' opacity='.22'/%3E%3Ccircle cx='520' cy='160' r='120' fill='none' stroke='%23d42b2b' stroke-width='30' opacity='.14'/%3E%3Ccircle cx='520' cy='160' r='70' fill='none' stroke='%23d42b2b' stroke-width='20' opacity='.10'/%3E%3C/svg%3E")
+        center / cover no-repeat;
+      display: flex;
+      align-items: center;
+      padding: 4rem 2rem;
+    }
+
+    .hero-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 2px;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1.1rem;
+      letter-spacing: -.01em;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--red);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--silver);
+      max-width: 540px;
+      margin-bottom: 2.2rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: .9rem 2.2rem;
+      border-radius: 3px;
+      transition: background .2s, transform .15s;
+    }
+
+    .btn-primary:hover {
+      background: var(--red-dk);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: .88rem 2.2rem;
+      border: 2px solid rgba(255,255,255,.4);
+      border-radius: 3px;
+      margin-left: 1rem;
+      transition: border-color .2s, color .2s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+    /* ── ABOUT ───────────────────────────────────────────── */
+    .about {
+      background: var(--light);
+      padding: 5rem 2rem;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: .6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 1.4rem;
+      line-height: 1.15;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1.02rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-visual {
+      background: var(--navy);
+      border-radius: 6px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-icon svg { width: 22px; height: 22px; fill: var(--white); }
+
+    .stat-body strong {
+      display: block;
+      color: var(--white);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .stat-body span {
+      color: var(--silver);
+      font-size: .88rem;
+    }
+
+    /* ── SERVICES ────────────────────────────────────────── */
+    .services {
+      background: var(--white);
+      padding: 5rem 2rem;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      border: 2px solid var(--light);
+      border-radius: 6px;
+      padding: 2rem 1.8rem;
+      transition: border-color .25s, box-shadow .25s, transform .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--red);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform .25s;
+    }
+
+    .service-card:hover {
+      border-color: rgba(212,43,43,.3);
+      box-shadow: 0 6px 24px rgba(0,0,0,.09);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::before { transform: scaleY(1); }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-icon svg { width: 26px; height: 26px; }
+
+    .service-card h3 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: .5rem;
+    }
+
+    .service-card p {
+      font-size: .92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ─────────────────────────────────────────── */
+    .contact {
+      background: var(--navy);
+      padding: 5rem 2rem;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact .section-title { color: var(--white); }
+    .contact .section-label { color: var(--red); }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-row-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      background: rgba(212,43,43,.18);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-row-icon svg { width: 20px; height: 20px; fill: var(--red); }
+
+    .contact-row-body strong {
+      display: block;
+      color: var(--white);
+      font-weight: 600;
+      font-size: .95rem;
+    }
+
+    .contact-row-body span,
+    .contact-row-body a {
+      color: var(--silver);
+      font-size: .92rem;
+      text-decoration: none;
+    }
+
+    .contact-row-body a:hover { color: var(--white); }
+
+    /* rating */
+    .rating-box {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 6px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .rating-number {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-detail { display: flex; flex-direction: column; gap: .3rem; }
+
+    .stars { display: flex; gap: 3px; }
+
+    .star { color: #f5a623; font-size: 1.1rem; }
+    .star-half { color: #f5a623; font-size: 1.1rem; opacity: .5; }
+
+    .rating-label {
+      color: var(--silver);
+      font-size: .82rem;
+    }
+
+    /* map card */
+    .map-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .map-placeholder {
+      height: 200px;
+      background: linear-gradient(135deg, var(--navy-dk) 0%, #253045 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .8rem;
+    }
+
+    .map-placeholder svg { width: 48px; height: 48px; fill: var(--red); opacity: .8; }
+
+    .map-placeholder span {
+      color: var(--silver);
+      font-size: .88rem;
+    }
+
+    .map-cta {
+      padding: 1.2rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+    }
+
+    .map-address {
+      color: var(--silver);
+      font-size: .9rem;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-weight: 700;
+      font-size: .88rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: .75rem 1.6rem;
+      border-radius: 3px;
+      text-align: center;
+      transition: background .2s;
+    }
+
+    .btn-directions:hover { background: var(--red-dk); }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      background: var(--navy-dk);
+      border-top: 3px solid var(--red);
+      padding: 2rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .footer-brand svg { width: 32px; height: 32px; }
+
+    .footer-brand-name {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .footer-brand-sub {
+      font-size: .7rem;
+      color: var(--silver);
+    }
+
+    .footer-copy {
+      color: var(--muted);
+      font-size: .8rem;
+      text-align: right;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .about-grid,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-visual { order: -1; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero { padding: 3rem 1.5rem; }
+      .hero h1 { font-size: 2rem; }
+
+      .about, .services, .contact { padding: 3.5rem 1.5rem; }
+
+      .btn-outline { margin-left: 0; }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .footer-copy { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#home">
+      <svg class="nav-logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#c8cdd5" stroke-width="4"/>
+        <circle cx="20" cy="20" r="10" fill="none" stroke="#c8cdd5" stroke-width="3"/>
+        <circle cx="20" cy="20" r="4" fill="#d42b2b"/>
+        <line x1="20" y1="2" x2="20" y2="10" stroke="#c8cdd5" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="20" y1="30" x2="20" y2="38" stroke="#c8cdd5" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="2" y1="20" x2="10" y2="20" stroke="#c8cdd5" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="30" y1="20" x2="38" y2="20" stroke="#c8cdd5" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span>Gainesville, FL</span>
+        <span>Advanced Tire Service</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <button class="hamburger" aria-label="Toggle menu" onclick="document.getElementById('mobile-menu').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div id="mobile-menu">
+    <a href="#about" onclick="document.getElementById('mobile-menu').classList.remove('open')">About</a>
+    <a href="#services" onclick="document.getElementById('mobile-menu').classList.remove('open')">Services</a>
+    <a href="#contact" onclick="document.getElementById('mobile-menu').classList.remove('open')">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="hero-badge">Gainesville's Tire Experts</div>
+      <h1>Keep Your Ride<br><em>Rolling Right</em></h1>
+      <p>From flat repairs to full tire replacements, Advanced Tire Service delivers fast, dependable work you can count on — right here in Gainesville.</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="#contact">Get in Touch</a>
+        <a class="btn-outline" href="#services">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-label">About Us</span>
+          <h2 class="section-title">Trusted Tire Care in Gainesville, FL</h2>
+          <p>Advanced Tire Service is a locally owned tire shop serving drivers throughout the Gainesville area from our convenient location on N Main Street. We specialize in keeping vehicles safe and road-ready with reliable tire services performed by knowledgeable technicians.</p>
+          <p>Whether you need a quick patch, a new set of tires, or a wheel alignment, our team works efficiently to minimize your time off the road. We carry a wide selection of tires suited for cars, trucks, and SUVs at a range of price points to fit your needs.</p>
+          <p>We take pride in straightforward service and honest assessments — no unnecessary upsells, just the work your vehicle actually needs. Contact us for details on availability and pricing.</p>
+        </div>
+
+        <div class="about-visual">
+          <div class="stat-item">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 12 6zm0 2a4 4 0 1 1 0 8A4 4 0 0 1 12 8zm0 1.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>
+            </div>
+            <div class="stat-body">
+              <strong>Wide Tire Selection</strong>
+              <span>Cars, trucks, SUVs — we carry options for most vehicles</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+            </div>
+            <div class="stat-body">
+              <strong>Honest, Upfront Service</strong>
+              <span>We tell you what you need — nothing more</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+            </div>
+            <div class="stat-body">
+              <strong>Convenient Location</strong>
+              <span>912 N Main St, easy to reach from anywhere in Gainesville</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+            </div>
+            <div class="stat-body">
+              <strong>Quick Turnaround</strong>
+              <span>Efficient service to get you back on the road fast</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">Our Services</h2>
+      </div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#d42b2b"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 12 6zm0 2a4 4 0 1 1 0 8A4 4 0 0 1 12 8z"/></svg>
+          </div>
+          <h3>Tire Sales &amp; Installation</h3>
+          <p>We offer a broad selection of tires for passenger cars, trucks, and SUVs. Our team handles mounting and installation to manufacturer specifications. Contact us for details on current inventory and pricing.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#1a2537"><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07 10 10 0 0 0 19.07 4.93zm-1.41 1.41A8 8 0 1 1 6.34 17.66 8 8 0 0 1 17.66 6.34zM11 7v6h2V7h-2zm0 8v2h2v-2h-2z"/></svg>
+          </div>
+          <h3>Flat Tire Repair</h3>
+          <p>Punctured or leaking tire? We assess whether a safe repair is possible and patch or plug it properly, restoring your tire's integrity and getting you moving again quickly.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#d42b2b"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          </div>
+          <h3>Wheel Balancing</h3>
+          <p>Unbalanced wheels cause vibration, uneven tread wear, and premature tire wear. We balance your wheels to ensure a smooth, comfortable ride and extend tire life.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#1a2537"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-4-9h2v2H8v-2zm6 0h2v2h-2v-2z"/></svg>
+          </div>
+          <h3>Wheel Alignment</h3>
+          <p>Proper alignment protects your tires from irregular wear and keeps your vehicle tracking straight. We check and adjust camber, caster, and toe angles to factory specifications.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#d42b2b"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+          </div>
+          <h3>Tire Rotation</h3>
+          <p>Regular tire rotation promotes even tread wear across all four tires, maximizing their lifespan and maintaining consistent handling. We recommend rotation at each oil change interval.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#1a2537"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+          </div>
+          <h3>Tire Pressure &amp; Inspection</h3>
+          <p>Correct tire pressure is critical for safety, fuel efficiency, and tire longevity. We perform thorough tire inspections and pressure checks to catch issues before they become problems.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+
+        <div>
+          <span class="section-label">Find Us</span>
+          <h2 class="section-title">Visit Advanced Tire Service</h2>
+
+          <div class="contact-info">
+
+            <div class="contact-row">
+              <div class="contact-row-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+              </div>
+              <div class="contact-row-body">
+                <strong>Address</strong>
+                <span>912 N Main St, Gainesville, FL</span>
+              </div>
+            </div>
+
+            <div class="contact-row">
+              <div class="contact-row-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              </div>
+              <div class="contact-row-body">
+                <strong>Phone</strong>
+                <a href="tel:+13525590708">(352) 559-0708</a>
+              </div>
+            </div>
+
+            <div class="contact-row">
+              <div class="contact-row-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+              </div>
+              <div class="contact-row-body">
+                <strong>Hours</strong>
+                <span>Contact us for current hours</span>
+              </div>
+            </div>
+
+            <!-- Google Rating -->
+            <div class="rating-box">
+              <div class="rating-number">4.2</div>
+              <div class="rating-detail">
+                <div class="stars">
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star">&#9733;</span>
+                  <span class="star-half">&#9733;</span>
+                </div>
+                <div class="rating-label">Google Maps Rating</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Map Card -->
+        <div class="map-card">
+          <div class="map-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+            <span>Advanced Tire Service &mdash; Gainesville, FL</span>
+          </div>
+          <div class="map-cta">
+            <div class="map-address">912 N Main St, Gainesville, FL</div>
+            <a class="btn-directions" href="https://www.google.com/maps/search/Advanced%20Tire%20Service%20912%20N%20Main%20St" target="_blank" rel="noopener">
+              Get Directions
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="none" stroke="#c8cdd5" stroke-width="3"/>
+        <circle cx="16" cy="16" r="8" fill="none" stroke="#c8cdd5" stroke-width="2.5"/>
+        <circle cx="16" cy="16" r="3" fill="#d42b2b"/>
+      </svg>
+      <div>
+        <div class="footer-brand-name">Advanced Tire Service</div>
+        <div class="footer-brand-sub">912 N Main St &bull; Gainesville, FL &bull; (352) 559-0708</div>
+      </div>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Advanced Tire Service. All rights reserved.
+    </div>
+  </footer>
+
+</body>
+</html>

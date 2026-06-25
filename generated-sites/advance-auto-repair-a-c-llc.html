@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advance Auto Repair & A/C LLC – Gainesville, FL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0d1b2a;
+      --steel:   #1c3452;
+      --red:     #c0392b;
+      --red-dk:  #9b2218;
+      --silver:  #bfc9d1;
+      --light:   #e8ecef;
+      --white:   #ffffff;
+      --text:    #1a2330;
+      --muted:   #5a6a7a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.45);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+    }
+
+    .nav-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-icon svg { width: 22px; height: 22px; fill: var(--white); }
+
+    .nav-name {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .03em;
+      line-height: 1.2;
+    }
+
+    .nav-name span {
+      display: block;
+      font-size: .7rem;
+      font-weight: 400;
+      color: var(--silver);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--silver);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .03em;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: .45rem 1.1rem;
+      border-radius: 4px;
+      transition: background .2s !important;
+    }
+
+    .nav-cta:hover { background: var(--red-dk) !important; color: var(--white) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: .3s;
+    }
+
+    #mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--steel);
+      padding: 1rem 1.5rem 1.5rem;
+      gap: .85rem;
+    }
+
+    #mobile-menu a {
+      color: var(--silver);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding-bottom: .65rem;
+    }
+
+    #mobile-menu a:last-child { border-bottom: none; }
+    #mobile-menu a:hover { color: var(--white); }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 60%, #254162 100%);
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(255,255,255,.02) 18px,
+        rgba(255,255,255,.02) 36px
+      );
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(192, 57, 43, .2);
+      border: 1px solid rgba(192, 57, 43, .5);
+      color: #e98070;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -.01em;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: #e05c4a;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--silver);
+      max-width: 560px;
+      margin: 0 auto 2.2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .95rem;
+      padding: .8rem 1.8rem;
+      border-radius: 5px;
+      transition: .2s;
+      letter-spacing: .02em;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .btn-primary:hover { background: var(--red-dk); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,.4);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,.08);
+      transform: translateY(-1px);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 3.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .hero-stat span {
+      font-size: .8rem;
+      color: var(--silver);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTIONS ────────────────────────────────────────── */
+    section { padding: 5rem 1.5rem; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: .6rem;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    /* ── ABOUT ───────────────────────────────────────────── */
+    .about { background: var(--light); }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-visual {
+      background: var(--navy);
+      border-radius: 12px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .about-pill {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      padding: .9rem 1.1rem;
+    }
+
+    .about-pill-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .about-pill-icon svg { width: 20px; height: 20px; fill: var(--white); }
+
+    .about-pill-text strong {
+      display: block;
+      color: var(--white);
+      font-size: .95rem;
+    }
+
+    .about-pill-text span {
+      font-size: .8rem;
+      color: var(--silver);
+    }
+
+    /* ── SERVICES ────────────────────────────────────────── */
+    .services { background: var(--white); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .service-card {
+      background: var(--light);
+      border: 1px solid #d5dce4;
+      border-radius: 10px;
+      padding: 1.75rem;
+      transition: .25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .25s;
+    }
+
+    .service-card:hover {
+      border-color: #b0bec9;
+      box-shadow: 0 6px 24px rgba(13,27,42,.1);
+      transform: translateY(-3px);
+    }
+
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--navy);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .service-icon svg { width: 24px; height: 24px; fill: var(--white); }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: .4rem;
+    }
+
+    .service-card p {
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ─────────────────────────────────────────── */
+    .contact { background: var(--navy); color: var(--white); }
+
+    .contact h2 { color: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2.5rem;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-row-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(192, 57, 43, .25);
+      border: 1px solid rgba(192, 57, 43, .5);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-row-icon svg { width: 20px; height: 20px; fill: #e05c4a; }
+
+    .contact-row-body strong {
+      display: block;
+      font-size: .75rem;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: .2rem;
+    }
+
+    .contact-row-body a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .contact-row-body a:hover { color: #e05c4a; }
+
+    .contact-row-body p {
+      color: var(--white);
+      font-size: 1.05rem;
+    }
+
+    .rating-box {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .stars svg { width: 20px; height: 20px; fill: #f5c518; }
+
+    .rating-text strong {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .rating-text span {
+      font-size: .8rem;
+      color: var(--silver);
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--red);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .95rem;
+      padding: .85rem 1.6rem;
+      border-radius: 5px;
+      transition: .2s;
+      width: fit-content;
+    }
+
+    .btn-directions svg { width: 18px; height: 18px; fill: var(--white); }
+    .btn-directions:hover { background: var(--red-dk); transform: translateY(-1px); }
+
+    .contact-note {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+
+    .contact-note p {
+      font-size: .9rem;
+      color: var(--silver);
+    }
+
+    .contact-note strong { color: var(--white); }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      background: #060e17;
+      color: var(--silver);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: .85rem;
+    }
+
+    footer strong { color: var(--white); }
+
+    footer a { color: var(--silver); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+
+    .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,.08);
+      margin: 1rem auto;
+      max-width: 400px;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+
+      #mobile-menu.open { display: flex; position: fixed; top: 64px; left: 0; right: 0; z-index: 999; }
+
+      .about-inner { grid-template-columns: 1fr; }
+
+      .about-visual { order: -1; }
+
+      .contact-grid { grid-template-columns: 1fr; }
+
+      .hero-stats { gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-brand">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+    </div>
+    <div class="nav-name">
+      Advance Auto Repair
+      <span>&amp; A/C LLC</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu">
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#contact" onclick="closeMobile()">Contact Us</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-badge">
+      <svg viewBox="0 0 24 24" width="14" height="14" style="fill:#e98070"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Gainesville's Trusted Auto Shop
+    </div>
+    <h1>Expert Auto Repair &amp;<br><em>A/C Service</em> You Can Trust</h1>
+    <p>From routine maintenance to complex repairs, we keep Gainesville drivers safe and their vehicles running at their best.</p>
+    <div class="hero-buttons">
+      <a href="tel:3523723294" class="btn btn-primary">Call (352) 372-3294</a>
+      <a href="#services" class="btn btn-outline">View Services</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>4.7★</strong>
+        <span>Google Rating</span>
+      </div>
+      <div class="hero-stat">
+        <strong>81+</strong>
+        <span>Reviews</span>
+      </div>
+      <div class="hero-stat">
+        <strong>A/C</strong>
+        <span>Specialists</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-text">
+        <div class="section-label">About Us</div>
+        <h2>Reliable Repairs for Every Vehicle</h2>
+        <p>Advance Auto Repair &amp; A/C LLC is a full-service automotive shop located right on East University Ave in Gainesville, FL — conveniently serving University of Florida students, staff, and the surrounding community.</p>
+        <p>Our certified technicians are equipped to handle everything from oil changes and brake service to complex engine diagnostics and air conditioning repairs, ensuring your vehicle is road-ready year-round in Florida's demanding climate.</p>
+        <p>We pride ourselves on honest, straightforward service with no unnecessary upsells — just quality work at fair prices. Contact us for details on any service.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-pill">
+          <div class="about-pill-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg>
+          </div>
+          <div class="about-pill-text">
+            <strong>Certified Technicians</strong>
+            <span>Trained on all makes &amp; models</span>
+          </div>
+        </div>
+        <div class="about-pill">
+          <div class="about-pill-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14z"/><path d="M6 13h5v4H6zm6-6h2v2h-2zm0 4h2v2h-2zm-6-4h5v3H6z"/></svg>
+          </div>
+          <div class="about-pill-text">
+            <strong>Full Diagnostics</strong>
+            <span>Computer &amp; visual inspections</span>
+          </div>
+        </div>
+        <div class="about-pill">
+          <div class="about-pill-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          </div>
+          <div class="about-pill-text">
+            <strong>Fast Turnaround</strong>
+            <span>Get back on the road quickly</span>
+          </div>
+        </div>
+        <div class="about-pill">
+          <div class="about-pill-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+          </div>
+          <div class="about-pill-text">
+            <strong>A/C Specialists</strong>
+            <span>Florida-ready climate service</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-label">What We Do</div>
+    <h2>Our Services</h2>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        </div>
+        <h3>A/C Repair &amp; Service</h3>
+        <p>Recharge, leak detection, compressor replacement, and full air conditioning system diagnostics to keep your cabin cool in Florida's heat.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M19.07 4.93l-1.41 1.41C19.1 7.79 20 9.79 20 12c0 4.42-3.58 8-8 8s-8-3.58-8-8c0-4.08 3.05-7.44 7-7.93V6.5l3.5-3.5L11 0v2.07C6.05 2.56 2 6.92 2 12c0 5.52 4.48 10 10 10s10-4.48 10-10c0-2.76-1.12-5.26-2.93-7.07zM13 11V7h-2v6l4.25 2.52.75-1.29L13 11z"/></svg>
+        </div>
+        <h3>Oil Change &amp; Lube</h3>
+        <p>Conventional and synthetic oil changes with filter replacement and multi-point inspection to extend engine life and maintain warranty requirements.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <h3>Brake Inspection &amp; Repair</h3>
+        <p>Pad and rotor replacement, caliper service, and brake fluid flushes to ensure safe, reliable stopping power on every drive.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        </div>
+        <h3>Engine Diagnostics</h3>
+        <p>Computer-assisted check-engine light diagnostics pinpoint issues fast, saving time and preventing minor problems from becoming costly repairs.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12s4.48 10 10 10 10-4.48 10-10zm-10 6c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm2.5-9.5l-4 4-1.5-1.5-1.06 1.06 2.56 2.56 5.06-5.06L14.5 8.5z"/></svg>
+        </div>
+        <h3>Transmission Service</h3>
+        <p>Fluid flushes, filter changes, and transmission inspections to keep your drivetrain shifting smoothly and prevent premature wear.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M7 4v2H4v2h3v2H4v2h3v2H2v2h5v2H4v2h3v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h1V4H7zm11 14H9V6h9v12z"/></svg>
+        </div>
+        <h3>Battery &amp; Electrical</h3>
+        <p>Battery testing, replacement, alternator and starter inspection, and electrical system troubleshooting to prevent unexpected breakdowns.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-label" style="color:#e05c4a">Get In Touch</div>
+    <h2>Visit or Call Us Today</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div class="contact-row-body">
+            <strong>Address</strong>
+            <p>1224 E University Ave<br>Gainesville, FL</p>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </div>
+          <div class="contact-row-body">
+            <strong>Phone</strong>
+            <a href="tel:3523723294">(352) 372-3294</a>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+          </div>
+          <div class="contact-row-body">
+            <strong>Hours</strong>
+            <p>Contact us for current hours</p>
+          </div>
+        </div>
+
+        <div class="rating-box">
+          <div>
+            <div class="stars">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>
+            </div>
+          </div>
+          <div class="rating-text">
+            <strong>4.7 / 5</strong>
+            <span>Based on 81 Google reviews</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <div class="contact-actions">
+          <a
+            href="https://www.google.com/maps/search/ADVANCE%20AUTO%20REPAIR%20%26%20A%2FC%20LLC%201224%20E%20University%20Ave%2C%20Gainesville%2C%20FL"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-directions"
+          >
+            <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9c-.39-.39-1.02-.39-1.41 0l-9 9c-.39.39-.39 1.02 0 1.41l9 9c.39.39 1.02.39 1.41 0l9-9c.39-.38.39-1.02 0-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+            Get Directions
+          </a>
+          <a href="tel:3523723294" class="btn-directions" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            Call (352) 372-3294
+          </a>
+        </div>
+        <div class="contact-note" style="margin-top:1.5rem">
+          <p><strong>Service pricing and availability</strong> — Contact us for details on appointments, turnaround times, and service estimates. We're happy to answer any questions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Advance Auto Repair &amp; A/C LLC</strong><br>
+  1224 E University Ave, Gainesville, FL &nbsp;|&nbsp; <a href="tel:3523723294">(352) 372-3294</a>
+  <hr class="footer-divider" />
+  <span>&copy; 2025 Advance Auto Repair &amp; A/C LLC. All rights reserved.</span>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+
+  function closeMobile() {
+    mobileMenu.classList.remove('open');
+  }
+</script>
+</body>
+</html>
