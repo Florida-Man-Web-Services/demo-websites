@@ -322,10 +322,13 @@
     requestAnimationFrame(step);
   }
 
-  // pointer sheen + subtle 3D tilt (skip if reduced motion)
-  if(!reduce){
+  // pointer sheen + subtle 3D tilt (fine pointers only; skip if reduced motion / touch)
+  var finePointer = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
+  if(!reduce && finePointer){
     tiles.forEach(function(t){
+      function resetTile(){t.style.transform='';}
       t.addEventListener('pointermove',function(ev){
+        if(ev.pointerType && ev.pointerType!=='mouse'){resetTile();return;}
         var r=t.getBoundingClientRect();
         var x=(ev.clientX-r.left)/r.width, y=(ev.clientY-r.top)/r.height;
         t.style.setProperty('--mx',(x*100)+'%');
@@ -333,17 +336,21 @@
         var rx=(0.5-y)*4, ry=(x-0.5)*4;
         t.style.transform='perspective(900px) rotateX('+rx+'deg) rotateY('+ry+'deg)';
       });
-      t.addEventListener('pointerleave',function(){t.style.transform='';});
+      t.addEventListener('pointerleave',resetTile);
+      t.addEventListener('pointercancel',resetTile);
     });
 
     // magnetic buttons
     document.querySelectorAll('[data-mag]').forEach(function(b){
+      function resetBtn(){b.style.transform='';}
       b.addEventListener('pointermove',function(ev){
+        if(ev.pointerType && ev.pointerType!=='mouse'){resetBtn();return;}
         var r=b.getBoundingClientRect();
         var mx=ev.clientX-r.left-r.width/2, my=ev.clientY-r.top-r.height/2;
         b.style.transform='translate('+(mx*.18)+'px,'+(my*.3)+'px)';
       });
-      b.addEventListener('pointerleave',function(){b.style.transform='';});
+      b.addEventListener('pointerleave',resetBtn);
+      b.addEventListener('pointercancel',resetBtn);
     });
   }
 })();
