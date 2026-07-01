@@ -1,1082 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>David Michelle Repairman LLC | Handyman Services in Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy: #1c2b3a;
-      --steel: #2e4057;
-      --orange: #e8671a;
-      --orange-light: #f08038;
-      --cream: #f5f0e8;
-      --light-gray: #eaeaea;
-      --mid-gray: #7a8490;
-      --dark-text: #1a1a1a;
-      --white: #ffffff;
-      --shadow: 0 4px 18px rgba(0,0,0,0.12);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--dark-text);
-      background: var(--cream);
-      line-height: 1.65;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--orange);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .nav-brand {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1.2;
-    }
-
-    .nav-brand span {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--orange-light);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 28px;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.82);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--orange-light);
-    }
-
-    .nav-cta {
-      background: var(--orange);
-      color: var(--white) !important;
-      padding: 8px 20px;
-      border-radius: 4px;
-      font-weight: 600 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--orange-light) !important;
-      color: var(--white) !important;
-    }
-
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-
-    /* Mobile menu */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 64px;
-      left: 0;
-      right: 0;
-      background: var(--navy);
-      padding: 16px 5% 24px;
-      z-index: 999;
-      flex-direction: column;
-      gap: 16px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .mobile-menu.open {
-      display: flex;
-    }
-
-    .mobile-menu a {
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 64px;
-      min-height: 88vh;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 60%, #3a5068 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 5% 100px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 15% 85%, rgba(232,103,26,0.18) 0%, transparent 40%),
-        radial-gradient(circle at 85% 20%, rgba(232,103,26,0.12) 0%, transparent 40%);
-    }
-
-    /* Decorative gear */
-    .hero-gear {
-      position: absolute;
-      right: -60px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 400px;
-      height: 400px;
-      opacity: 0.04;
-    }
-
-    .hero-gear-2 {
-      position: absolute;
-      left: -40px;
-      bottom: -60px;
-      width: 250px;
-      height: 250px;
-      opacity: 0.04;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 750px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(232,103,26,0.2);
-      border: 1px solid rgba(232,103,26,0.5);
-      color: var(--orange-light);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 6px 18px;
-      border-radius: 20px;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
-    }
-
-    .hero h1 em {
-      font-style: normal;
-      color: var(--orange-light);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      color: rgba(255,255,255,0.75);
-      max-width: 560px;
-      margin: 0 auto 36px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      padding: 14px 32px;
-      border-radius: 5px;
-      font-weight: 700;
-      font-size: 1rem;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-primary:hover {
-      background: var(--orange-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      text-decoration: none;
-      padding: 14px 32px;
-      border-radius: 5px;
-      font-weight: 600;
-      font-size: 1rem;
-      border: 2px solid rgba(255,255,255,0.45);
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.08);
-      transform: translateY(-2px);
-    }
-
-    /* ── TRUST BAR ── */
-    .trust-bar {
-      background: var(--orange);
-      padding: 14px 5%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--white);
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-
-    .trust-item svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--white);
-      flex-shrink: 0;
-    }
-
-    /* ── SECTIONS SHARED ── */
-    section {
-      padding: 80px 5%;
-    }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 10px;
-    }
-
-    .section-heading {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    .section-sub {
-      color: var(--mid-gray);
-      font-size: 1rem;
-      max-width: 580px;
-      margin-bottom: 48px;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--white);
-    }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .about-text p {
-      color: #444;
-      font-size: 1.05rem;
-      margin-bottom: 18px;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-visual {
-      background: var(--navy);
-      border-radius: 12px;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .stat-row {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .stat-row:last-child {
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    .stat-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(232,103,26,0.2);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .stat-icon svg {
-      width: 24px;
-      height: 24px;
-      fill: var(--orange-light);
-    }
-
-    .stat-text strong {
-      display: block;
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-    }
-
-    .stat-text span {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.825rem;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--cream);
-    }
-
-    .services-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 30px 28px;
-      box-shadow: var(--shadow);
-      border-top: 4px solid var(--orange);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.14);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: rgba(232,103,26,0.1);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-    }
-
-    .service-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: var(--orange);
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--mid-gray);
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--navy);
-    }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-left .section-heading {
-      color: var(--white);
-    }
-
-    .contact-left .section-label {
-      color: var(--orange-light);
-    }
-
-    .contact-left .section-sub {
-      color: rgba(255,255,255,0.6);
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 26px;
-    }
-
-    .contact-detail-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(232,103,26,0.2);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-detail-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--orange-light);
-    }
-
-    .contact-detail-text strong {
-      display: block;
-      color: var(--white);
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .contact-detail-text span,
-    .contact-detail-text a {
-      color: rgba(255,255,255,0.65);
-      font-size: 0.95rem;
-      text-decoration: none;
-    }
-
-    .contact-detail-text a:hover {
-      color: var(--orange-light);
-    }
-
-    /* Rating */
-    .rating-box {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px;
-      padding: 20px 22px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 26px;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .star {
-      font-size: 1.3rem;
-      color: #f5b731;
-    }
-
-    .rating-text strong {
-      display: block;
-      color: var(--white);
-      font-size: 1.3rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .rating-text span {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.8rem;
-    }
-
-    /* Right panel — CTA card */
-    .contact-cta-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 40px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-    }
-
-    .contact-cta-card h3 {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 12px;
-    }
-
-    .contact-cta-card p {
-      color: var(--mid-gray);
-      font-size: 0.95rem;
-      margin-bottom: 28px;
-    }
-
-    .cta-call-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      padding: 16px 24px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 1.05rem;
-      transition: background 0.2s;
-      margin-bottom: 14px;
-    }
-
-    .cta-call-btn:hover {
-      background: var(--orange-light);
-    }
-
-    .cta-call-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--white);
-    }
-
-    .cta-directions-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: transparent;
-      color: var(--navy);
-      text-decoration: none;
-      padding: 14px 24px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 1rem;
-      border: 2px solid var(--navy);
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .cta-directions-btn:hover {
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    .cta-directions-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #111c26;
-      padding: 30px 5%;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 16px;
-      text-decoration: none;
-    }
-
-    .footer-logo-icon {
-      width: 30px;
-      height: 30px;
-      background: var(--orange);
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .footer-logo-icon svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--white);
-    }
-
-    .footer-name {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      font-size: 0.82rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--orange-light);
-    }
-
-    .footer-copy {
-      color: rgba(255,255,255,0.3);
-      font-size: 0.78rem;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .nav-links {
-        display: none;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 580px) {
-      nav {
-        padding: 0 4%;
-      }
-
-      .hero {
-        padding: 60px 4% 80px;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn-primary,
-      .btn-outline {
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .trust-bar {
-        gap: 20px;
-      }
-
-      section {
-        padding: 56px 4%;
-      }
-
-      .contact-cta-card {
-        padding: 28px 22px;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>David Michelle Repairman LLC | Handyman Services in Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#15212e;--ink2:#1f3042;--orange:#f26419;--orange-lt:#ff8a47;
+    --amber:#ffb627;--paper:#eef1f4;--card:#ffffff;--muted:#6c7a89;--line:#d8dee6;--hi:#0d161f;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  a{color:inherit}
+  .wrap{max-width:1220px;margin:0 auto;padding:22px 20px 60px}
+  .strip{
+    position:sticky;top:0;z-index:50;background:var(--ink);
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:12px clamp(16px,4vw,44px);border-bottom:3px solid var(--orange);box-shadow:0 6px 24px rgba(0,0,0,.25);
+  }
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand .mark{width:42px;height:42px;border-radius:9px;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--orange),var(--amber));display:grid;place-items:center;box-shadow:0 4px 14px rgba(242,100,25,.45)}
+  .brand .mark svg{width:24px;height:24px;fill:#fff}
+  .brand b{color:#fff;font-size:1rem;font-weight:800;line-height:1.05}
+  .brand small{display:block;color:var(--amber);font-size:.66rem;text-transform:uppercase;letter-spacing:.18em;font-weight:700}
+  .strip .call{background:var(--orange);color:#fff;text-decoration:none;font-weight:800;padding:10px 18px;border-radius:8px;font-size:.9rem;white-space:nowrap;transition:transform .15s,background .2s;will-change:transform}
+  .strip .call:hover{background:var(--orange-lt);transform:translateY(-2px)}
+  @media(max-width:560px){.brand small{display:none}.strip .call{padding:9px 13px;font-size:.8rem}}
+  .bento{display:grid;gap:16px;margin-top:22px;grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(120px,auto)}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;position:relative;overflow:hidden;
+    opacity:0;transform:translateY(26px) scale(.985);
+    transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);box-shadow:0 10px 30px rgba(20,33,46,.05)}
+  .tile.in{opacity:1;transform:none}
+  .tile.tilt{transition:opacity .7s,transform .25s cubic-bezier(.2,.7,.2,1)}
+  .label{font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+  .tile h2{font-size:clamp(1.3rem,2.6vw,1.9rem);font-weight:800;line-height:1.12;margin:8px 0 10px;letter-spacing:-.01em}
+  .tile h3{font-size:1.02rem;font-weight:800;margin:4px 0 6px}
+  .tile p{color:var(--muted);font-size:.95rem}
+  .t-hero{grid-column:span 4;grid-row:span 2;color:#fff;border:none;
+    background:radial-gradient(120% 140% at 0% 0%,#27425c 0%,var(--ink) 55%,var(--hi) 100%);
+    display:flex;flex-direction:column;justify-content:center;min-height:330px;padding:40px}
+  .t-hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(360px 360px at 88% 18%,rgba(242,100,25,.30),transparent 60%),radial-gradient(300px 300px at 12% 92%,rgba(255,182,39,.18),transparent 60%);
+    animation:drift 14s ease-in-out infinite alternate}
+  @keyframes drift{to{transform:translate(18px,-14px) scale(1.06)}}
+  .t-hero .badge{display:inline-block;align-self:flex-start;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+    color:var(--amber);font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;border-radius:30px;margin-bottom:18px}
+  .t-hero h1{position:relative;font-size:clamp(2rem,4.4vw,3.2rem);font-weight:900;line-height:1.07;letter-spacing:-.02em;margin-bottom:14px}
+  .t-hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--orange-lt),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .t-hero p{position:relative;color:rgba(255,255,255,.82);max-width:46ch;font-size:1.04rem}
+  .t-hero .cta{position:relative;display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-weight:800;padding:13px 24px;border-radius:10px;font-size:.98rem;
+    transition:transform .15s,background .2s,box-shadow .2s;will-change:transform}
+  .btn.primary{background:var(--orange);color:#fff;box-shadow:0 8px 22px rgba(242,100,25,.4)}
+  .btn.primary:hover{background:var(--orange-lt);transform:translateY(-2px)}
+  .btn.ghost{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+  .btn.ghost:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+  .btn svg{width:18px;height:18px;fill:currentColor}
+  .t-rating{grid-column:span 2;background:linear-gradient(160deg,#1f3042,#15212e);color:#fff;border:none;display:flex;flex-direction:column;justify-content:center}
+  .t-rating .big{font-size:2.9rem;font-weight:900;line-height:1;letter-spacing:-.02em}
+  .t-rating .big span{font-size:1.1rem;color:var(--muted);font-weight:700}
+  .stars{display:flex;gap:3px;margin:8px 0 6px}
+  .stars svg{width:20px;height:20px;fill:var(--amber)}
+  .stars svg.dim{fill:rgba(255,182,39,.28)}
+  .t-rating small{color:rgba(255,255,255,.7);font-size:.82rem}
+  .t-trust{grid-column:span 2;display:flex;align-items:center;gap:14px}
+  .t-trust .ic{width:46px;height:46px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;background:rgba(242,100,25,.12)}
+  .t-trust .ic svg{width:24px;height:24px;fill:var(--orange)}
+  .t-trust b{display:block;font-size:1rem}
+  .t-trust span span{color:var(--muted);font-size:.84rem}
+  .t-about{grid-column:span 4}
+  .t-about p{margin-bottom:10px}
+  .t-about p:last-child{margin-bottom:0}
+  .t-svc{grid-column:span 2;border-top:4px solid var(--orange)}
+  .t-svc .ic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:rgba(242,100,25,.1);margin-bottom:12px}
+  .t-svc .ic svg{width:26px;height:26px;fill:var(--orange)}
+  .t-contact{grid-column:span 3;background:linear-gradient(160deg,#1f3042,#0f1922);color:#fff;border:none}
+  .t-contact h2{color:#fff}
+  .t-contact .row{display:flex;align-items:flex-start;gap:13px;margin-top:16px}
+  .t-contact .row .ic{width:40px;height:40px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;background:rgba(255,182,39,.16)}
+  .t-contact .row .ic svg{width:20px;height:20px;fill:var(--amber)}
+  .t-contact .row b{display:block;font-size:.95rem}
+  .t-contact .row a,.t-contact .row .v{color:rgba(255,255,255,.72);text-decoration:none;font-size:.92rem}
+  .t-contact .row a:hover{color:var(--amber)}
+  .t-cta{grid-column:span 3;display:flex;flex-direction:column;justify-content:center}
+  .t-cta .btns{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+  .t-cta .btn.primary{justify-content:center}
+  .t-cta .btn.dark{background:var(--ink);color:#fff;justify-content:center}
+  .t-cta .btn.dark:hover{background:var(--ink2);transform:translateY(-2px)}
+  footer{text-align:center;color:var(--muted);font-size:.82rem;padding:34px 20px 10px}
+  footer b{color:var(--ink)}
+  @media(max-width:900px){
+    .bento{grid-template-columns:repeat(4,1fr)}
+    .t-hero,.t-about{grid-column:span 4}
+    .t-contact,.t-cta{grid-column:span 4}
+    .t-rating,.t-trust,.t-svc{grid-column:span 2}
+  }
+  @media(max-width:560px){
+    .bento{grid-template-columns:1fr;gap:13px}
+    .t-hero,.t-about,.t-contact,.t-cta,.t-rating,.t-trust,.t-svc{grid-column:span 1;grid-row:auto}
+    .tile{padding:22px}.t-hero{padding:30px;min-height:auto}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .tile{opacity:1!important;transform:none!important;transition:none!important}
+    .t-hero::after{animation:none}
+    .btn,.strip .call{transition:none}
+  }
+</style>
+<noscript><style>.tile{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">
-      <div class="nav-logo-icon">
-        <!-- Wrench icon -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-        </svg>
+<header class="strip">
+  <a class="brand" href="#top">
+    <span class="mark"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></span>
+    <b>David Michelle Repairman LLC<small>Gainesville, FL Handyman</small></b>
+  </a>
+  <a class="call" href="tel:+13522569013">Call (352) 256-9013</a>
+</header>
+<main class="wrap" id="top">
+  <section class="bento" aria-label="David Michelle Repairman LLC overview">
+    <article class="tile t-hero">
+      <span class="badge">Gainesville, FL Handyman Services</span>
+      <h1>Your Trusted <em>Fix-It Pros</em> When It Matters Most</h1>
+      <p>From minor repairs to bigger home maintenance tasks, David Michelle Repairman LLC handles the work so you don't have to.</p>
+      <div class="cta">
+        <a class="btn primary" href="tel:+13522569013"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>Call (352) 256-9013</a>
+        <a class="btn ghost" href="#services">View Services</a>
       </div>
-      <div class="nav-brand">
-        David Michelle<br>
-        <span>Repairman LLC</span>
+    </article>
+    <article class="tile t-rating">
+      <div class="label" style="color:var(--amber)">Google Rating</div>
+      <div class="big" data-count="4.3" data-dec="1">0.0<span> / 5</span></div>
+      <div class="stars" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.6L22 9.3l-5 4.7 1.4 7L12 17l-6.4 4 1.4-7-5-4.7 6.9-.7z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.6L22 9.3l-5 4.7 1.4 7L12 17l-6.4 4 1.4-7-5-4.7 6.9-.7z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.6L22 9.3l-5 4.7 1.4 7L12 17l-6.4 4 1.4-7-5-4.7 6.9-.7z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.6L22 9.3l-5 4.7 1.4 7L12 17l-6.4 4 1.4-7-5-4.7 6.9-.7z"/></svg>
+        <svg class="dim" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6L22 9.3l-5 4.7 1.4 7L12 17l-6.4 4 1.4-7-5-4.7 6.9-.7z"/></svg>
       </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="closeMobileMenu()">About</a>
-    <a href="#services" onclick="closeMobileMenu()">Services</a>
-    <a href="#contact" onclick="closeMobileMenu()">Get in Touch</a>
-  </div>
-
-  <!-- HERO -->
-  <section class="hero">
-    <!-- Decorative SVG elements -->
-    <svg class="hero-gear" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path fill="white" d="M97.6,55.7V44.3l-13.4-2.2c-0.8-3.1-2.1-6-3.8-8.7l8-10.9L79.5,13.6L68.6,21.6c-2.7-1.7-5.6-3-8.7-3.8L57.7,4.4H44.3l-2.2,13.4c-3.1,0.8-6,2.1-8.7,3.8l-10.9-8L13.6,22.5l8,10.9c-1.7,2.7-3,5.6-3.8,8.7L4.4,44.3v13.4l13.4,2.2c0.8,3.1,2.1,6,3.8,8.7l-8,10.9l9.5,9.5l10.9-8c2.7,1.7,5.6,3,8.7,3.8l2.2,13.4h13.4l2.2-13.4c3.1-0.8,6-2.1,8.7-3.8l10.9,8l9.5-9.5l-8-10.9c1.7-2.7,3-5.6,3.8-8.7L97.6,55.7z M51,65c-7.7,0-14-6.3-14-14s6.3-14,14-14s14,6.3,14,14S58.7,65,51,65z"/>
-    </svg>
-    <svg class="hero-gear-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path fill="white" d="M97.6,55.7V44.3l-13.4-2.2c-0.8-3.1-2.1-6-3.8-8.7l8-10.9L79.5,13.6L68.6,21.6c-2.7-1.7-5.6-3-8.7-3.8L57.7,4.4H44.3l-2.2,13.4c-3.1,0.8-6,2.1-8.7,3.8l-10.9-8L13.6,22.5l8,10.9c-1.7,2.7-3,5.6-3.8,8.7L4.4,44.3v13.4l13.4,2.2c0.8,3.1,2.1,6,3.8,8.7l-8,10.9l9.5,9.5l10.9-8c2.7,1.7,5.6,3,8.7,3.8l2.2,13.4h13.4l2.2-13.4c3.1-0.8,6-2.1,8.7-3.8l10.9,8l9.5-9.5l-8-10.9c1.7-2.7,3-5.6,3.8-8.7L97.6,55.7z M51,65c-7.7,0-14-6.3-14-14s6.3-14,14-14s14,6.3,14,14S58.7,65,51,65z"/>
-    </svg>
-
-    <div class="hero-content">
-      <div class="hero-badge">Gainesville, FL Handyman Services</div>
-      <h1>Your Trusted Fix-It Pros <em>When It Matters Most</em></h1>
-      <p class="hero-tagline">From minor repairs to bigger home maintenance tasks, David Michelle Repairman LLC handles the work so you don't have to.</p>
-      <div class="hero-buttons">
-        <a href="tel:+13522569013" class="btn-primary">Call (352) 256-9013</a>
-        <a href="#services" class="btn-outline">View Services</a>
+      <small>Based on 3 Google reviews</small>
+    </article>
+    <article class="tile t-trust">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></span>
+      <span><b>Licensed &amp; Insured</b><span>Quality you can count on</span></span>
+    </article>
+    <article class="tile t-trust">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></span>
+      <span><b>Fast Response</b><span>Locally owned &amp; operated</span></span>
+    </article>
+    <article class="tile t-about">
+      <div class="label">About Us</div>
+      <h2>Reliable Handyman Services in Gainesville</h2>
+      <p>David Michelle Repairman LLC is a Gainesville-based handyman service dedicated to helping homeowners and renters keep their properties in excellent shape. We take pride in showing up on time, communicating clearly, and leaving every job cleaner than we found it.</p>
+      <p>Whether you have a leaky faucet, a squeaky door, or a punch list of small repairs that have been piling up, we are equipped to handle a wide variety of household tasks efficiently and at a fair price.</p>
+      <p>Serving the greater Gainesville, FL area, we build our reputation one satisfied customer at a time. Contact us for a free estimate on your next project.</p>
+    </article>
+    <article class="tile t-svc" id="services">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M18 2.01L6 2c-1.1 0-2 .89-2 2v16c0 1.11.9 2 2 2h12c1.11 0 2-.89 2-2V4c0-1.11-.89-1.99-2-1.99zM18 20H6v-2.58l2.09-2.09 1.75 1.75 4.33-4.33L18 16.92V20zm0-5.08l-3.83-3.83L9.84 15.42 8.09 13.67 6 15.76V4h12v10.92z"/></svg></span>
+      <h3>Drywall Repair &amp; Patching</h3>
+      <p>Holes, cracks, and surface damage repaired and finished to blend seamlessly with your existing walls.</p>
+    </article>
+    <article class="tile t-svc">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></span>
+      <h3>Minor Plumbing Repairs</h3>
+      <p>Fixing leaky faucets, running toilets, and other small plumbing issues to stop water waste and damage.</p>
+    </article>
+    <article class="tile t-svc">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></span>
+      <h3>Electrical Fixes &amp; Fixtures</h3>
+      <p>Light fixture swaps, outlet and switch replacements, ceiling fan installation, and minor electrical tasks.</p>
+    </article>
+    <article class="tile t-svc">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M20 19V7H4v12h16m0-16a2 2 0 012 2v14a2 2 0 01-2 2H4a2 2 0 01-2-2V5c0-1.11.89-2 2-2h10l2 2h4z"/></svg></span>
+      <h3>Door &amp; Window Repairs</h3>
+      <p>Adjusting sticking doors, replacing hinges or hardware, weatherstripping, and basic window fixes.</p>
+    </article>
+    <article class="tile t-svc">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3zm0 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+      <h3>General Home Maintenance</h3>
+      <p>Caulking, weatherproofing, gutter cleaning, and other routine upkeep tasks to protect your home year-round.</p>
+    </article>
+    <article class="tile t-svc">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></span>
+      <h3>Furniture Assembly &amp; Odd Jobs</h3>
+      <p>TV mounting, furniture assembly, shelving installation, and miscellaneous household tasks. Contact us for details.</p>
+    </article>
+    <article class="tile t-contact" id="contact">
+      <div class="label" style="color:var(--amber)">Contact</div>
+      <h2>Get in Touch</h2>
+      <div class="row">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></span>
+        <span><b>Phone</b><a href="tel:+13522569013">(352) 256-9013</a></span>
       </div>
-    </div>
+      <div class="row">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></span>
+        <span><b>Address</b><span class="v">618 SW 69th St Apt C, Gainesville, FL</span></span>
+      </div>
+      <div class="row">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></span>
+        <span><b>Hours</b><span class="v">Contact us for current availability</span></span>
+      </div>
+    </article>
+    <article class="tile t-cta">
+      <div class="label">Schedule a Repair</div>
+      <h2>Ready When You Are</h2>
+      <p>Give us a call to discuss your project. We'll get you a fair estimate and a time that works for you.</p>
+      <div class="btns">
+        <a class="btn primary" href="tel:+13522569013"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>Call (352) 256-9013</a>
+        <a class="btn dark" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/(Handyman)%20David%20Michelle%20Repairman%20LLC%20618%20SW%2069th%20St%20Apt%20C"><svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 00-1.41 0l-9 9a1 1 0 000 1.41l9 9a1 1 0 001.41 0l9-9a1 1 0 000-1.41zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>Get Directions</a>
+      </div>
+    </article>
   </section>
-
-  <!-- TRUST BAR -->
-  <div class="trust-bar">
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-      Licensed &amp; Insured
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-      Fast Response Times
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-      Locally Owned
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-      Quality Guaranteed
-    </div>
-  </div>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-inner">
-      <div class="about-text">
-        <div class="section-label">About Us</div>
-        <h2 class="section-heading">Reliable Handyman Services in Gainesville</h2>
-        <p>David Michelle Repairman LLC is a Gainesville-based handyman service dedicated to helping homeowners and renters keep their properties in excellent shape. We take pride in showing up on time, communicating clearly, and leaving every job cleaner than we found it.</p>
-        <p>Whether you have a leaky faucet, a squeaky door, or a punch list of small repairs that have been piling up, we are equipped to handle a wide variety of household tasks efficiently and at a fair price.</p>
-        <p>Serving the greater Gainesville, FL area, we build our reputation one satisfied customer at a time. Contact us for a free estimate on your next project.</p>
-      </div>
-      <div class="about-visual">
-        <div class="stat-row">
-          <div class="stat-icon">
-            <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-          </div>
-          <div class="stat-text">
-            <strong>Wide Range of Repairs</strong>
-            <span>Interior, exterior, plumbing, and more</span>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          </div>
-          <div class="stat-text">
-            <strong>Local Gainesville Business</strong>
-            <span>Serving our community with care</span>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-          </div>
-          <div class="stat-text">
-            <strong>Satisfaction Focused</strong>
-            <span>We stand behind the quality of our work</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="services-inner">
-      <div class="section-label">What We Do</div>
-      <h2 class="section-heading">Our Services</h2>
-      <p class="section-sub">We handle a broad range of home repair and maintenance tasks. Contact us for details on pricing and scheduling.</p>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M18 2.01L6 2c-1.1 0-2 .89-2 2v16c0 1.11.9 2 2 2h12c1.11 0 2-.89 2-2V4c0-1.11-.89-1.99-2-1.99zM18 20H6v-2.58l2.09-2.09 1.75 1.75 4.33-4.33L18 16.92V20zm0-5.08l-3.83-3.83L9.84 15.42 8.09 13.67 6 15.76V4h12v10.92z"/></svg>
-          </div>
-          <h3>Drywall Repair &amp; Patching</h3>
-          <p>Holes, cracks, and surface damage repaired and finished to blend seamlessly with your existing walls.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
-          </div>
-          <h3>Minor Plumbing Repairs</h3>
-          <p>Fixing leaky faucets, running toilets, and other small plumbing issues to stop water waste and damage.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
-          </div>
-          <h3>Electrical Fixes &amp; Fixture Installation</h3>
-          <p>Light fixture swaps, outlet and switch replacements, ceiling fan installation, and minor electrical tasks.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M20 19V7H4v12h16m0-16a2 2 0 012 2v14a2 2 0 01-2 2H4a2 2 0 01-2-2V5c0-1.11.89-2 2-2h10l2 2h4z"/></svg>
-          </div>
-          <h3>Door &amp; Window Repairs</h3>
-          <p>Adjusting sticking doors, replacing hinges or hardware, weatherstripping, and basic window fixes.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3zm0 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-          </div>
-          <h3>General Home Maintenance</h3>
-          <p>Caulking, weatherproofing, gutter cleaning, and other routine upkeep tasks to protect your home year-round.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-          </div>
-          <h3>Furniture Assembly &amp; Odd Jobs</h3>
-          <p>TV mounting, furniture assembly, shelving installation, and miscellaneous household tasks. Contact us for details.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="contact-inner">
-      <div class="contact-left">
-        <div class="section-label">Contact</div>
-        <h2 class="section-heading">Get in Touch</h2>
-        <p class="section-sub">Ready to get your project started? Reach out by phone or stop by. We look forward to helping you.</p>
-
-        <!-- Rating -->
-        <div class="rating-box">
-          <div class="stars">
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star" style="opacity:0.45;">&#9733;</span>
-          </div>
-          <div class="rating-text">
-            <strong>4.3 / 5</strong>
-            <span>Based on 3 Google reviews</span>
-          </div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">
-            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          </div>
-          <div class="contact-detail-text">
-            <strong>Phone</strong>
-            <a href="tel:+13522569013">(352) 256-9013</a>
-          </div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          </div>
-          <div class="contact-detail-text">
-            <strong>Address</strong>
-            <span>618 SW 69th St Apt C<br>Gainesville, FL</span>
-          </div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">
-            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-          </div>
-          <div class="contact-detail-text">
-            <strong>Hours</strong>
-            <span>Contact us for current availability</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="contact-cta-card">
-          <h3>Ready to Schedule a Repair?</h3>
-          <p>Give us a call to discuss your project. We will get you a fair estimate and schedule a time that works for you.</p>
-          <a href="tel:+13522569013" class="cta-call-btn">
-            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            Call (352) 256-9013
-          </a>
-          <a href="https://www.google.com/maps/search/(Handyman)%20David%20Michelle%20Repairman%20LLC%20618%20SW%2069th%20St%20Apt%20C" target="_blank" rel="noopener noreferrer" class="cta-directions-btn">
-            <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 00-1.41 0l-9 9a1 1 0 000 1.41l9 9a1 1 0 001.41 0l9-9a1 1 0 000-1.41zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-            Get Directions
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <a href="#" class="footer-logo">
-        <div class="footer-logo-icon">
-          <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-        </div>
-        <span class="footer-name">David Michelle Repairman LLC</span>
-      </a>
-      <div class="footer-links">
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
-        <a href="tel:+13522569013">(352) 256-9013</a>
-      </div>
-      <p class="footer-copy">&copy; 2026 David Michelle Repairman LLC. Gainesville, FL. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <script>
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    hamburger.addEventListener('click', function () {
-      mobileMenu.classList.toggle('open');
-    });
-
-    function closeMobileMenu() {
-      mobileMenu.classList.remove('open');
+</main>
+<footer>
+  <b>David Michelle Repairman LLC</b> &bull; Gainesville, FL &bull; <a href="tel:+13522569013">(352) 256-9013</a><br>
+  &copy; 2026 David Michelle Repairman LLC. All rights reserved.
+</footer>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
+  function setCount(el){ el.firstChild.nodeValue = parseFloat(el.getAttribute('data-count')).toFixed(parseInt(el.getAttribute('data-dec')||'0',10)); }
+  function countEl(el){
+    if (reduce){ setCount(el); return; }
+    var target = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-dec')||'0',10);
+    var start = null, dur = 1100;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts-start)/dur,1), eased = 1-Math.pow(1-p,3);
+      el.firstChild.nodeValue = (target*eased).toFixed(dec);
+      if(p<1) requestAnimationFrame(step); else el.firstChild.nodeValue = target.toFixed(dec);
     }
-
-    // Close mobile menu on outside click
-    document.addEventListener('click', function (e) {
-      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-        mobileMenu.classList.remove('open');
-      }
+    requestAnimationFrame(step);
+  }
+  if (reduce || !('IntersectionObserver' in window)) {
+    tiles.forEach(function(t){ t.classList.add('in'); });
+    document.querySelectorAll('[data-count]').forEach(setCount);
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          var el = e.target;
+          setTimeout(function(){ el.classList.add('in'); }, (tiles.indexOf(el)%6) * 60);
+          var c = el.querySelector('[data-count]'); if (c) countEl(c);
+          io.unobserve(el);
+        }
+      });
+    }, {threshold:0.18});
+    tiles.forEach(function(t){ io.observe(t); });
+  }
+  if (!reduce && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    tiles.forEach(function(t){
+      t.classList.add('tilt');
+      t.addEventListener('pointermove', function(e){
+        var r = t.getBoundingClientRect();
+        var x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+        t.style.transform = 'perspective(900px) rotateX('+(-y*4).toFixed(2)+'deg) rotateY('+(x*4).toFixed(2)+'deg) translateY(-3px)';
+      });
+      t.addEventListener('pointerleave', function(){ t.style.transform=''; });
     });
-  </script>
+    document.querySelectorAll('.btn').forEach(function(b){
+      b.addEventListener('pointermove', function(e){
+        var r=b.getBoundingClientRect();
+        b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.18).toFixed(1)+'px,'+((e.clientY-r.top-r.height/2)*.3-2).toFixed(1)+'px)';
+      });
+      b.addEventListener('pointerleave', function(){ b.style.transform=''; });
+    });
+  }
+})();
+</script>
 </body>
 </html>
