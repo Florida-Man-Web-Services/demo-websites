@@ -1,896 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>352's Trusted Roofing &amp; Gutters | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy:   #1a2b3c;
-      --steel:  #2c4a6e;
-      --rust:   #b94b2c;
-      --rust-dk:#9a3a1e;
-      --sand:   #f2ede6;
-      --white:  #ffffff;
-      --gray:   #5a6470;
-      --light:  #eaeff4;
-      --text:   #1e2832;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text);
-      background: var(--white);
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 999;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 68px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 40px;
-      height: 40px;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-text {
-      color: var(--white);
-      font-size: 1.1rem;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: 0.01em;
-    }
-
-    .nav-logo-text span {
-      color: var(--rust);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.82);
-      text-decoration: none;
-      font-size: 0.92rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--rust); }
-
-    .nav-cta {
-      background: var(--rust);
-      color: var(--white) !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: 4px;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover { background: var(--rust-dk) !important; color: var(--white) !important; }
-
-    /* hamburger */
-    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-    .nav-toggle span { display: block; width: 24px; height: 3px; background: var(--white); border-radius: 2px; transition: 0.3s; }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 68px;
-      min-height: 88vh;
-      background: linear-gradient(145deg, var(--navy) 0%, var(--steel) 60%, #3a6090 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 1.5rem 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* subtle shingle-pattern overlay */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: repeating-linear-gradient(
-        135deg,
-        rgba(255,255,255,0.03) 0px,
-        rgba(255,255,255,0.03) 1px,
-        transparent 1px,
-        transparent 24px
-      );
-      pointer-events: none;
-    }
-
-    .hero-inner { position: relative; z-index: 1; max-width: 760px; }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--rust);
-      color: var(--white);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 20px;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero h1 {
-      color: var(--white);
-      font-size: clamp(2rem, 5.5vw, 3.5rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 1.1rem;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-    }
-
-    .hero h1 span { color: var(--rust); }
-
-    .hero p {
-      color: rgba(255,255,255,0.82);
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      max-width: 580px;
-      margin: 0 auto 2.2rem;
-      line-height: 1.65;
-    }
-
-    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-
-    .btn-primary {
-      background: var(--rust);
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 0.85rem 2rem;
-      border-radius: 5px;
-      transition: background 0.2s, transform 0.15s;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-primary:hover { background: var(--rust-dk); transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 0.85rem 2rem;
-      border-radius: 5px;
-      border: 2px solid rgba(255,255,255,0.55);
-      transition: border-color 0.2s, transform 0.15s;
-      cursor: pointer;
-    }
-    .btn-outline:hover { border-color: var(--white); transform: translateY(-2px); }
-
-    /* ── TRUST STRIP ── */
-    .trust-strip {
-      background: var(--rust);
-      padding: 0.85rem 1.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 2.5rem;
-      flex-wrap: wrap;
-    }
-
-    .trust-item {
-      color: var(--white);
-      font-size: 0.88rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .trust-item svg { flex-shrink: 0; }
-
-    /* ── SECTIONS ── */
-    section { padding: 5rem 1.5rem; }
-
-    .container { max-width: 1100px; margin: 0 auto; }
-
-    .section-label {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 0.6rem;
-    }
-
-    h2 {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    /* ── ABOUT ── */
-    .about { background: var(--sand); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--gray);
-      line-height: 1.75;
-      margin-bottom: 1rem;
-      font-size: 1.02rem;
-    }
-
-    .about-text p:last-child { margin-bottom: 0; }
-
-    .about-visual {
-      background: var(--navy);
-      border-radius: 10px;
-      padding: 2.5rem 2rem;
-      color: var(--white);
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(26,43,60,0.2);
-    }
-
-    .about-visual-icon {
-      margin-bottom: 1.2rem;
-    }
-
-    .about-visual h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .about-visual p {
-      color: rgba(255,255,255,0.72);
-      font-size: 0.93rem;
-      line-height: 1.6;
-    }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .stat-box {
-      background: rgba(255,255,255,0.08);
-      border-radius: 7px;
-      padding: 1rem 0.5rem;
-    }
-
-    .stat-box strong {
-      display: block;
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--rust);
-    }
-
-    .stat-box span {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.65);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* ── SERVICES ── */
-    .services { background: var(--light); }
-
-    .services-intro {
-      text-align: center;
-      max-width: 620px;
-      margin: 0 auto 3rem;
-    }
-
-    .services-intro p {
-      color: var(--gray);
-      line-height: 1.7;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 2rem 1.8rem;
-      box-shadow: 0 3px 16px rgba(0,0,0,0.07);
-      border-left: 4px solid var(--rust);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      background: var(--sand);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--gray);
-      line-height: 1.65;
-    }
-
-    /* ── CONTACT ── */
-    .contact { background: var(--white); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: start;
-    }
-
-    .contact-info h2 { margin-bottom: 1.5rem; }
-
-    .contact-detail {
-      display: flex;
-      gap: 0.9rem;
-      align-items: flex-start;
-      margin-bottom: 1.5rem;
-    }
-
-    .contact-detail-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--sand);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-detail-body strong {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-detail-body p, .contact-detail-body a {
-      color: var(--text);
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      line-height: 1.5;
-    }
-
-    .contact-detail-body a:hover { color: var(--rust); }
-
-    /* rating */
-    .rating-card {
-      background: var(--navy);
-      border-radius: 10px;
-      padding: 1.5rem;
-      color: var(--white);
-      margin-bottom: 1.5rem;
-    }
-
-    .rating-top {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.6rem;
-    }
-
-    .rating-score {
-      font-size: 2.8rem;
-      font-weight: 800;
-      line-height: 1;
-      color: var(--white);
-    }
-
-    .stars { display: flex; gap: 3px; }
-
-    .star { color: #f5b800; font-size: 1.3rem; }
-
-    .rating-label {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.65);
-      margin-top: 0.25rem;
-    }
-
-    .rating-source {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.5);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 0.7rem;
-      margin-top: 0.7rem;
-    }
-
-    /* contact form card */
-    .contact-card {
-      background: var(--sand);
-      border-radius: 12px;
-      padding: 2.5rem 2rem;
-    }
-
-    .contact-card h3 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 0.4rem;
-    }
-
-    .contact-card .sub {
-      color: var(--gray);
-      font-size: 0.92rem;
-      margin-bottom: 1.6rem;
-    }
-
-    .form-row { margin-bottom: 1rem; }
-
-    .form-row label {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 0.35rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .form-row input,
-    .form-row textarea,
-    .form-row select {
-      width: 100%;
-      padding: 0.7rem 0.9rem;
-      border: 1.5px solid #d0d8e2;
-      border-radius: 6px;
-      font-size: 0.97rem;
-      font-family: inherit;
-      color: var(--text);
-      background: var(--white);
-      transition: border-color 0.2s;
-      outline: none;
-    }
-
-    .form-row input:focus,
-    .form-row textarea:focus,
-    .form-row select:focus { border-color: var(--steel); }
-
-    .form-row textarea { resize: vertical; min-height: 100px; }
-
-    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-    .form-submit {
-      width: 100%;
-      margin-top: 0.5rem;
-      padding: 0.9rem;
-      background: var(--rust);
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s;
-      font-family: inherit;
-    }
-
-    .form-submit:hover { background: var(--rust-dk); }
-
-    /* directions btn */
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--steel);
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.92rem;
-      padding: 0.7rem 1.4rem;
-      border-radius: 6px;
-      margin-top: 0.3rem;
-      transition: background 0.2s;
-    }
-    .directions-btn:hover { background: var(--navy); }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-    }
-
-    .footer-inner { max-width: 1100px; margin: 0 auto; }
-
-    .footer-logo {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-logo span { color: var(--rust); }
-
-    footer p {
-      color: rgba(255,255,255,0.45);
-      font-size: 0.82rem;
-      margin-bottom: 0.3rem;
-    }
-
-    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
-    footer a:hover { color: var(--rust); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links { display: none; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--navy); padding: 1rem 2rem 1.5rem; gap: 1rem; }
-      .nav-links.open { display: flex; }
-      .nav-toggle { display: flex; }
-
-      .about-grid,
-      .contact-grid { grid-template-columns: 1fr; }
-
-      .about-visual { order: -1; }
-
-      .about-stats { grid-template-columns: repeat(3, 1fr); }
-
-      .form-2col { grid-template-columns: 1fr; }
-
-      .trust-strip { gap: 1.2rem; }
-    }
-
-    @media (max-width: 480px) {
-      .hero { min-height: 78vh; }
-      .hero-btns { flex-direction: column; align-items: center; }
-      .about-stats { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>352's Trusted Roofing &amp; Gutters | Gainesville, FL</title>
+<style>
+/* build 1.0 — bento archetype */
+:root{
+  --ink:#1c1712; --slate:#2c2620; --paper:#f4efe7; --card:#fbf8f2;
+  --roof:#b94b2c; --roof-2:#e0703f; --brass:#c58a3d; --line:#d8cebc;
+  --shadow:0 18px 40px -22px rgba(40,25,15,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    linear-gradient(var(--paper),var(--paper)),
+    repeating-linear-gradient(135deg,rgba(185,75,44,.03) 0 22px,transparent 22px 44px);
+}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+
+/* NAV */
+header{position:sticky;top:0;z-index:60;backdrop-filter:blur(10px);
+  background:rgba(244,239,231,.82);border-bottom:1px solid var(--line)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:1200px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.02em}
+.brand .mark{width:34px;height:34px;flex:none}
+.brand small{display:block;font-weight:600;font-size:.66rem;letter-spacing:.22em;color:var(--roof);text-transform:uppercase}
+.navlinks{display:flex;gap:26px;font-size:.9rem;font-weight:600}
+.navlinks a{text-decoration:none;opacity:.8;transition:opacity .2s,color .2s}
+.navlinks a:hover{opacity:1;color:var(--roof)}
+.callbtn{background:var(--roof);color:#fff;text-decoration:none;padding:9px 18px;border-radius:999px;font-weight:700;font-size:.85rem;
+  box-shadow:var(--shadow);transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s}
+.callbtn:hover{transform:translateY(-2px) scale(1.03);background:var(--roof-2)}
+
+/* HERO */
+.hero{padding:64px 0 26px}
+.hero h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.02;letter-spacing:-.03em;font-weight:800;max-width:14ch}
+.hero h1 .g{background:linear-gradient(100deg,var(--roof),var(--brass),var(--roof-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.hero p{max-width:52ch;margin-top:16px;font-size:1.06rem;color:var(--slate)}
+.hero .cta{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-weight:700;padding:13px 24px;border-radius:12px;font-size:.95rem;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .2s}
+.btn.primary{background:var(--ink);color:var(--paper);box-shadow:var(--shadow)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn:hover{transform:translateY(-3px)}
+.btn.primary:hover{box-shadow:0 26px 50px -20px rgba(185,75,44,.7)}
+
+/* BENTO GRID */
+.bento{display:grid;gap:16px;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(120px,auto);padding:26px 0 70px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow);opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1)}
+.tile.in{opacity:1;transform:none}
+.tile h3{font-size:1.15rem;letter-spacing:-.01em}
+.tile p{font-size:.92rem;color:var(--slate);margin-top:6px}
+.tag{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--roof)}
+.t-services{grid-column:span 5;grid-row:span 2}
+.t-rating{grid-column:span 4}
+.t-map{grid-column:span 3;grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between}
+.t-weather{grid-column:span 4}
+.t-phone{grid-column:span 4}
+.t-hours{grid-column:span 4}
+.t-area{grid-column:span 5}
+.t-cta{grid-column:span 7;background:linear-gradient(120deg,var(--ink),var(--slate));color:var(--paper)}
+.t-cta .tag{color:var(--roof-2)}
+
+.shingles{position:absolute;inset:auto 0 0 0;height:60%;opacity:.16;
+  background:repeating-linear-gradient(180deg,var(--roof) 0 10px,transparent 10px 12px),
+             repeating-linear-gradient(90deg,transparent 0 34px,rgba(0,0,0,.25) 34px 36px);
+  -webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000)}
+
+.svc{list-style:none;margin-top:14px;display:grid;gap:2px}
+.svc li{display:flex;align-items:center;gap:12px;padding:11px 10px;border-radius:12px;font-weight:600;font-size:.95rem;
+  transition:background .2s,transform .2s}
+.svc li:hover{background:#fff;transform:translateX(4px)}
+.svc li .dot{width:10px;height:10px;border-radius:3px;background:var(--roof);flex:none;transform:rotate(45deg)}
+
+.score{font-size:3.4rem;font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--roof)}
+.stars{color:var(--brass);font-size:1.2rem;letter-spacing:2px}
+.src{font-size:.74rem;color:var(--slate);margin-top:8px;display:flex;align-items:center;gap:7px}
+.src::before{content:"";width:8px;height:8px;border-radius:50%;background:#3a9d4a}
+
+.bignum{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.bignum a{color:var(--roof);text-decoration:none}
+.mapbtn{margin-top:14px;text-align:center;background:var(--roof);color:#fff;text-decoration:none;padding:12px;border-radius:12px;font-weight:700;font-size:.9rem;transition:transform .18s,background .2s}
+.mapbtn:hover{transform:translateY(-2px);background:var(--roof-2)}
+.addr{font-weight:700;font-size:1.05rem;line-height:1.35}
+
+.t-cta h3{font-size:1.5rem;margin:6px 0 4px}
+.t-cta p{color:rgba(244,239,231,.8)}
+.t-cta .btn.primary{background:var(--roof)}
+.cta-form{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.cta-form input{flex:1;min-width:150px;padding:13px 16px;border-radius:12px;border:1px solid rgba(244,239,231,.3);
+  background:rgba(244,239,231,.08);color:var(--paper);font-size:.95rem;font-family:inherit}
+.cta-form input::placeholder{color:rgba(244,239,231,.55)}
+.cta-form input:focus{outline:2px solid var(--roof-2);outline-offset:1px}
+
+footer{background:var(--ink);color:var(--paper);padding:38px 0}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+footer a{color:var(--roof-2);text-decoration:none}
+.mini{font-size:.8rem;opacity:.7}
+
+@media(max-width:900px){
+  .navlinks{display:none}
+  .bento{grid-template-columns:repeat(6,1fr)}
+  .t-services,.t-cta,.t-area{grid-column:span 6}
+  .t-rating,.t-weather,.t-phone,.t-hours{grid-column:span 3}
+  .t-map{grid-column:span 6;grid-row:auto}
+}
+@media(max-width:560px){
+  .bento{grid-template-columns:repeat(2,1fr)}
+  .tile{grid-column:span 2 !important;grid-row:auto !important}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;scroll-behavior:auto}
+  .tile{opacity:1;transform:none}
+}
+</style>
+<noscript><style>.tile{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
-  <a href="#home" class="nav-logo" aria-label="352's Trusted Roofing & Gutters">
-    <!-- Roof / house icon -->
-    <svg class="nav-logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="40" height="40" rx="6" fill="#b94b2c"/>
-      <path d="M7 22 L20 9 L33 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="12" y="22" width="16" height="10" rx="1" fill="white"/>
-      <rect x="17" y="27" width="6" height="5" rx="0.5" fill="#b94b2c"/>
-    </svg>
-    <span class="nav-logo-text">352's <span>Trusted</span><br>Roofing &amp; Gutters</span>
-  </a>
-
-  <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-    <span></span><span></span><span></span>
-  </button>
-
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-inner">
-    <div class="hero-badge">Gainesville, FL &bull; 4.9 &#9733; Rated</div>
-    <h1>Roofing &amp; Gutters<br>You Can <span>Trust</span></h1>
-    <p>Professional roof installation, repair, and gutter solutions for Gainesville homeowners and businesses — built to withstand Florida's toughest weather.</p>
-    <div class="hero-btns">
-      <a href="#contact" class="btn-primary">Request a Free Estimate</a>
-      <a href="tel:3526587237" class="btn-outline">Call (352) 658-7237</a>
+<header>
+  <nav>
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M4 26 24 8l20 18" fill="none" stroke="#b94b2c" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M9 24v16h30V24" fill="none" stroke="#2c2620" stroke-width="3"/>
+        <path d="M9 40v-5h30v5" fill="#c58a3d"/>
+      </svg>
+      <span>352's Trusted<small>Roofing &amp; Gutters</small></span>
     </div>
-  </div>
-</section>
-
-<!-- TRUST STRIP -->
-<div class="trust-strip" role="list">
-  <div class="trust-item" role="listitem">
-    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" fill="white"/></svg>
-    4.9 Stars on Google
-  </div>
-  <div class="trust-item" role="listitem">
-    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
-    Licensed &amp; Insured
-  </div>
-  <div class="trust-item" role="listitem">
-    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-    Residential &amp; Commercial
-  </div>
-  <div class="trust-item" role="listitem">
-    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="2"/><path d="M12 7v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-    Fast Local Response
-  </div>
-</div>
-
-<!-- ABOUT -->
-<section class="about" id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
-        <span class="section-label">About Us</span>
-        <h2>Gainesville's Roofing Specialists</h2>
-        <p>352's Trusted Roofing &amp; Gutters is a locally owned contractor serving Gainesville and the surrounding Alachua County area. We specialize in full roof replacements, storm damage repairs, and complete gutter system installations for both residential and commercial properties.</p>
-        <p>Florida's climate demands roofing solutions that stand up to intense heat, heavy rain, and severe storms. Our team uses quality materials and time-tested techniques to ensure every project is completed to last — protecting your home or business for years to come.</p>
-        <p>From minor leak repairs to brand-new roof systems, we provide honest assessments and workmanship you can count on. Contact us for details on any of our services.</p>
-      </div>
-      <div class="about-visual">
-        <div class="about-visual-icon">
-          <svg width="64" height="64" fill="none" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M8 36 L32 10 L56 36" stroke="#b94b2c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="16" y="36" width="32" height="20" rx="2" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-            <rect x="27" y="44" width="10" height="12" rx="1" fill="#b94b2c"/>
-            <path d="M20 36 v-6 a4 4 0 0 1 8 0 v6" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-          </svg>
-        </div>
-        <h3>Built for Florida Weather</h3>
-        <p>Every roof we install or repair is engineered to handle Gainesville's intense sun, seasonal storms, and heavy rainfall.</p>
-        <div class="about-stats">
-          <div class="stat-box"><strong>4.9</strong><span>Stars</span></div>
-          <div class="stat-box"><strong>GNV</strong><span>Local</span></div>
-          <div class="stat-box"><strong>352</strong><span>Area Code</span></div>
-        </div>
-      </div>
+    <div class="navlinks">
+      <a href="#services">Services</a>
+      <a href="#rating">Reputation</a>
+      <a href="#contact">Contact</a>
     </div>
-  </div>
-</section>
+    <a class="callbtn" href="tel:3526587237">Call (352) 658-7237</a>
+  </nav>
+</header>
 
-<!-- SERVICES -->
-<section class="services" id="services">
-  <div class="container">
-    <div class="services-intro">
-      <span class="section-label">What We Do</span>
-      <h2>Our Roofing &amp; Gutter Services</h2>
-      <p>From routine maintenance to complete roof replacements, we offer a full range of services to keep your property protected. Contact us for details on pricing and availability.</p>
+<main class="wrap">
+  <section class="hero">
+    <h1>Roofs &amp; gutters <span class="g">built to hold the line</span> in Gainesville.</h1>
+    <p>352's Trusted Roofing &amp; Gutters protects homes and businesses across Gainesville, FL with dependable roofing and gutter work made for Florida weather.</p>
+    <div class="cta">
+      <a class="btn primary" href="tel:3526587237">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Call for a Free Estimate
+      </a>
+      <a class="btn ghost" href="#services">Explore Services</a>
     </div>
-    <div class="services-grid">
+  </section>
 
-      <div class="service-card">
-        <div class="service-icon">
-          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" stroke="#b94b2c" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M9 22V12h6v10" stroke="#b94b2c" stroke-width="2" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3>Roof Replacement</h3>
-        <p>Complete tear-off and new roof installation using durable shingles, tile, or metal systems suited for Florida's climate. Contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="#b94b2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3>Roof Repair</h3>
-        <p>From missing shingles to storm damage and active leaks, we diagnose and repair issues quickly to prevent further damage to your property.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M17 11H3M17 11l-5-5M17 11l-5 5" stroke="#b94b2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M21 7v10" stroke="#b94b2c" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <h3>Gutter Installation</h3>
-        <p>Properly installed gutters protect your foundation and landscaping. We offer seamless gutter systems sized for your specific roof and drainage needs.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" stroke="#b94b2c" stroke-width="2"/>
-            <path d="M12 8v4l3 3" stroke="#b94b2c" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <h3>Gutter Cleaning &amp; Repair</h3>
-        <p>Clogged or sagging gutters can cause serious water damage. We provide thorough cleaning, re-pitching, resealing, and section repairs. Contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#b94b2c" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M2 17l10 5 10-5" stroke="#b94b2c" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M2 12l10 5 10-5" stroke="#b94b2c" stroke-width="2" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3>Storm Damage Assessment</h3>
-        <p>After a major storm, let us inspect your roof for hidden damage. We provide thorough assessments and can assist with the insurance documentation process.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 12l2 2 4-4" stroke="#b94b2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z" stroke="#b94b2c" stroke-width="2"/>
-          </svg>
-        </div>
-        <h3>Roof Inspections &amp; Maintenance</h3>
-        <p>Routine inspections catch small issues before they become costly problems. We offer preventative maintenance plans to extend the life of your roof.</p>
-      </div>
-
+  <section class="bento" id="services" aria-label="Overview">
+    <div class="tile t-services">
+      <span class="tag">What we do</span>
+      <h3>Roofing &amp; gutter services</h3>
+      <p>Contact us for details on any service below.</p>
+      <ul class="svc">
+        <li><span class="dot"></span>Roof Replacement</li>
+        <li><span class="dot"></span>Roof Repair</li>
+        <li><span class="dot"></span>Gutter Installation</li>
+        <li><span class="dot"></span>Gutter Cleaning &amp; Repair</li>
+        <li><span class="dot"></span>Storm Damage Assessment</li>
+        <li><span class="dot"></span>Roof Inspections &amp; Maintenance</li>
+      </ul>
     </div>
-  </div>
-</section>
 
-<!-- CONTACT -->
-<section class="contact" id="contact">
-  <div class="container">
-    <div class="contact-grid">
-      <div class="contact-info">
-        <span class="section-label">Contact Us</span>
-        <h2>Get in Touch for a Free Estimate</h2>
-
-        <!-- Rating card -->
-        <div class="rating-card">
-          <div class="rating-top">
-            <span class="rating-score">4.9</span>
-            <div>
-              <div class="stars" aria-label="4.9 out of 5 stars">
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-              </div>
-              <div class="rating-label">Highly Rated by Gainesville Customers</div>
-            </div>
-          </div>
-          <div class="rating-source">&#9679; Rating sourced from Google Maps</div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="#b94b2c" stroke-width="2"/>
-              <circle cx="12" cy="10" r="3" stroke="#b94b2c" stroke-width="2"/>
-            </svg>
-          </div>
-          <div class="contact-detail-body">
-            <strong>Address</strong>
-            <p>103 NE 23rd Ave<br>Gainesville, FL</p>
-            <a href="https://www.google.com/maps/search/352's%20Trusted%20Roofing%20%26%20Gutters%20103%20NE%2023rd%20Ave" class="directions-btn" target="_blank" rel="noopener noreferrer">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v4" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M13 21l9-9-4-4-9 9v4h4z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Get Directions
-            </a>
-          </div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="#b94b2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="contact-detail-body">
-            <strong>Phone</strong>
-            <a href="tel:3526587237">(352) 658-7237</a>
-          </div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke="#b94b2c" stroke-width="2"/>
-              <path d="M12 7v5l3 3" stroke="#b94b2c" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="contact-detail-body">
-            <strong>Hours</strong>
-            <p>Contact us for details</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Contact form -->
-      <div class="contact-card">
-        <h3>Request a Free Estimate</h3>
-        <p class="sub">Fill out the form and we'll get back to you as soon as possible.</p>
-        <form onsubmit="return false;" aria-label="Contact form">
-          <div class="form-2col">
-            <div class="form-row">
-              <label for="fname">First Name</label>
-              <input type="text" id="fname" name="fname" placeholder="Jane" autocomplete="given-name" />
-            </div>
-            <div class="form-row">
-              <label for="lname">Last Name</label>
-              <input type="text" id="lname" name="lname" placeholder="Smith" autocomplete="family-name" />
-            </div>
-          </div>
-          <div class="form-row">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="jane@example.com" autocomplete="email" />
-          </div>
-          <div class="form-row">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="(352) 555-0000" autocomplete="tel" />
-          </div>
-          <div class="form-row">
-            <label for="service">Service Needed</label>
-            <select id="service" name="service">
-              <option value="" disabled selected>Select a service...</option>
-              <option>Roof Replacement</option>
-              <option>Roof Repair</option>
-              <option>Gutter Installation</option>
-              <option>Gutter Cleaning &amp; Repair</option>
-              <option>Storm Damage Assessment</option>
-              <option>Roof Inspection &amp; Maintenance</option>
-              <option>Other / Not Sure</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Tell us a bit about your project or question..."></textarea>
-          </div>
-          <button type="submit" class="form-submit">Send My Request</button>
-        </form>
-      </div>
+    <div class="tile t-rating" id="rating">
+      <span class="tag">Reputation</span>
+      <div class="score" data-count="4.9">4.9</div>
+      <div class="stars" aria-label="4.9 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p>Highly rated by Gainesville customers &mdash; 4.9 out of 5.</p>
+      <div class="src">Rating sourced from Google Maps</div>
     </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
+    <div class="tile t-map" id="contact">
+      <div>
+        <span class="tag">Find us</span>
+        <p class="addr">103 NE 23rd Ave<br>Gainesville, FL</p>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/352's%20Trusted%20Roofing%20%26%20Gutters%20103%20NE%2023rd%20Ave" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+      <div class="shingles" aria-hidden="true"></div>
+    </div>
+
+    <div class="tile t-weather">
+      <span class="tag">Florida-ready</span>
+      <h3>Built for Florida weather</h3>
+      <p>From summer storms to relentless sun, we install and repair with our local climate in mind.</p>
+    </div>
+
+    <div class="tile t-phone">
+      <span class="tag">Phone</span>
+      <div class="bignum"><a href="tel:3526587237">(352) 658-7237</a></div>
+      <p>Call to talk through your roof or gutter project.</p>
+    </div>
+
+    <div class="tile t-hours">
+      <span class="tag">Hours</span>
+      <h3>Contact us for details</h3>
+      <p>Reach out and we'll set up a time that works.</p>
+    </div>
+
+    <div class="tile t-area">
+      <span class="tag">Service area</span>
+      <h3>Serving Gainesville &amp; nearby</h3>
+      <p>Local roofing and gutter work for homes and businesses throughout the Gainesville, FL area.</p>
+    </div>
+
+    <div class="tile t-cta">
+      <span class="tag">Get started</span>
+      <h3>Request a free estimate</h3>
+      <p>Tell us what your roof needs and we'll take it from there.</p>
+      <form class="cta-form" onsubmit="return false;" aria-label="Request a callback">
+        <input type="tel" id="phone" name="phone" placeholder="(352) 555-0000" autocomplete="tel" aria-label="Your phone number">
+        <a class="btn primary" href="tel:3526587237">Call (352) 658-7237</a>
+      </form>
+    </div>
+  </section>
+</main>
+
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">352's <span>Trusted</span> Roofing &amp; Gutters</div>
-    <p>103 NE 23rd Ave, Gainesville, FL &nbsp;&bull;&nbsp; <a href="tel:3526587237">(352) 658-7237</a></p>
-    <p style="margin-top:0.75rem;">&copy; 2026 352's Trusted Roofing &amp; Gutters. All rights reserved.</p>
+  <div class="wrap">
+    <div>
+      <strong>352's Trusted Roofing &amp; Gutters</strong><br>
+      <span class="mini">103 NE 23rd Ave, Gainesville, FL &middot; <a href="tel:3526587237">(352) 658-7237</a></span>
+    </div>
+    <div class="mini">&copy; 2026 352's Trusted Roofing &amp; Gutters. All rights reserved.</div>
   </div>
 </footer>
 
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
+  if (reduce || !('IntersectionObserver' in window)) {
+    tiles.forEach(function(t){ t.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          var el = e.target;
+          var i = tiles.indexOf(el);
+          setTimeout(function(){ el.classList.add('in'); }, (i % 6) * 80);
+          io.unobserve(el);
+          var sc = el.querySelector('.score');
+          if (sc) animateScore(sc);
+        }
+      });
+    }, {threshold:0.2});
+    tiles.forEach(function(t){ io.observe(t); });
+  }
+
+  function animateScore(node){
+    var target = parseFloat(node.getAttribute('data-count')) || 0;
+    var start = null, dur = 900;
+    function step(ts){
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      node.textContent = (target * (0.4 + 0.6 * p)).toFixed(1);
+      if (p < 1) requestAnimationFrame(step); else node.textContent = target.toFixed(1);
+    }
+    requestAnimationFrame(step);
+  }
+
+  var cb = document.querySelector('.callbtn');
+  if (cb && !reduce) {
+    cb.addEventListener('mousemove', function(e){
+      var r = cb.getBoundingClientRect();
+      cb.style.transform = 'translate(' + ((e.clientX - r.left - r.width/2)/5) + 'px,' + ((e.clientY - r.top - r.height/2)/5) + 'px) scale(1.03)';
+    });
+    cb.addEventListener('mouseleave', function(){ cb.style.transform = ''; });
+  }
+})();
+</script>
 </body>
 </html>
