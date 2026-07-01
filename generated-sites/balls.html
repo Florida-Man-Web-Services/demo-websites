@@ -5,49 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Balls | Bar – Gainesville, FL</title>
   <style>
-    /* ── Reset & Base ── */
+    /* === Reset & Base === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0e0e0e;
-      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #06060f;
+      color: #dcdcf0;
       line-height: 1.65;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
     a { color: inherit; text-decoration: none; }
 
-    /* ── Color Tokens ── */
+    /* === Design Tokens === */
     :root {
-      --gold:     #c9a84c;
-      --gold-lt:  #e2c27a;
-      --dark:     #0e0e0e;
-      --surface:  #1a1a1a;
-      --surface2: #222222;
-      --text:     #e0e0e0;
-      --muted:    #888;
-      --radius:   6px;
+      --neon-a: #b94fff;
+      --neon-b: #00e5ff;
+      --neon-c: #ff3cac;
+      --dark: #06060f;
+      --tile-bg: rgba(10, 8, 22, 0.88);
+      --tile-border: rgba(120, 60, 200, 0.22);
+      --text: #dcdcf0;
+      --muted: #7a7a9a;
+      --radius: 16px;
     }
 
-    /* ── Nav ── */
+    /* === Animated Mesh-Gradient Background === */
+    .mesh-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: #06060f;
+      overflow: hidden;
+    }
+    .mesh-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+    }
+    .mesh-blob-1 {
+      width: 55vw; height: 55vw;
+      background: radial-gradient(circle, rgba(185,79,255,0.55) 0%, transparent 70%);
+      top: -15%; left: -10%;
+      animation: drift1 16s ease-in-out infinite alternate;
+    }
+    .mesh-blob-2 {
+      width: 40vw; height: 40vw;
+      background: radial-gradient(circle, rgba(0,229,255,0.45) 0%, transparent 70%);
+      bottom: -10%; right: -5%;
+      animation: drift2 19s ease-in-out infinite alternate;
+    }
+    .mesh-blob-3 {
+      width: 35vw; height: 35vw;
+      background: radial-gradient(circle, rgba(255,60,172,0.3) 0%, transparent 70%);
+      top: 40%; left: 50%;
+      animation: drift3 22s ease-in-out infinite alternate;
+    }
+    @keyframes drift1 {
+      0%   { transform: translate(0,   0)   scale(1);    }
+      50%  { transform: translate(8vw, 6vh) scale(1.08); }
+      100% { transform: translate(3vw, 12vh) scale(0.95); }
+    }
+    @keyframes drift2 {
+      0%   { transform: translate(0,    0)    scale(1);   }
+      50%  { transform: translate(-6vw, -8vh) scale(1.1); }
+      100% { transform: translate(-2vw, -4vh) scale(0.9); }
+    }
+    @keyframes drift3 {
+      0%   { transform: translate(0,   0)   scale(1);    }
+      50%  { transform: translate(-4vw, 5vh) scale(1.05); }
+      100% { transform: translate(6vw, -3vh) scale(1.1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mesh-blob { animation: none !important; }
+    }
+
+    /* === Fixed Nav === */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(14,14,14,0.92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid #2a2a2a;
-      padding: 0 5vw;
+      z-index: 200;
+      background: rgba(6, 6, 15, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(185,79,255,0.2);
+      padding: 0 4vw;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
+      height: 62px;
     }
     .nav-logo {
-      font-size: 1.6rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--gold);
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
+      background: linear-gradient(100deg, var(--neon-a), var(--neon-b));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .nav-links {
       display: flex;
@@ -55,16 +113,14 @@
       list-style: none;
     }
     .nav-links a {
-      font-size: 0.88rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text);
-      transition: color 0.2s;
+      color: var(--muted);
+      transition: color 0.22s;
     }
-    .nav-links a:hover { color: var(--gold); }
-
-    /* Hamburger (mobile) */
+    .nav-links a:hover { color: var(--neon-b); }
     .hamburger {
       display: none;
       flex-direction: column;
@@ -72,407 +128,713 @@
       cursor: pointer;
       background: none;
       border: none;
-      padding: 4px;
+      padding: 6px;
     }
     .hamburger span {
       display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text);
+      width: 22px; height: 2px;
+      background: var(--muted);
       border-radius: 2px;
       transition: background 0.2s;
     }
-    .hamburger:hover span { background: var(--gold); }
-
-    @media (max-width: 700px) {
+    .hamburger:hover span { background: var(--neon-b); }
+    @media (max-width: 720px) {
       .nav-links {
         display: none;
         position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: #111;
+        top: 62px; left: 0; right: 0;
+        background: rgba(6,6,15,0.97);
         flex-direction: column;
         gap: 0;
-        border-bottom: 1px solid #2a2a2a;
+        border-bottom: 1px solid rgba(185,79,255,0.18);
       }
       .nav-links.open { display: flex; }
-      .nav-links li a {
-        display: block;
-        padding: 1rem 5vw;
-        border-top: 1px solid #1f1f1f;
-      }
+      .nav-links li a { display: block; padding: 1rem 5vw; border-top: 1px solid rgba(255,255,255,0.05); }
       .hamburger { display: flex; }
     }
 
-    /* ── Hero ── */
-    .hero {
+    /* === Bento Wrapper === */
+    .bento-wrap {
+      padding: 80px 2.5vw 2.5vw;
       min-height: 100vh;
+    }
+
+    /* === Bento Grid === */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas:
+        "hero    hero    hero    rating   "
+        "about   about   beer    cocktails"
+        "loc     gameday gameday livemusic"
+        "loc     bargames private private ";
+      gap: 14px;
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    /* === Tile Base === */
+    .tile {
+      background: var(--tile-bg);
+      border: 1px solid var(--tile-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(22px) scale(0.975);
+      transition: border-color 0.35s ease, box-shadow 0.35s ease;
+      will-change: transform, opacity;
+    }
+    .tile.revealed {
+      animation: tileIn 0.58s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes tileIn {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(185,79,255,0.07) 0%, transparent 55%, rgba(0,229,255,0.04) 100%);
+      opacity: 0;
+      transition: opacity 0.32s;
+      pointer-events: none;
+    }
+    .tile:hover::after { opacity: 1; }
+    .tile:hover {
+      border-color: rgba(185,79,255,0.55);
+      box-shadow:
+        0 0 22px rgba(185,79,255,0.28),
+        0 0 55px rgba(0,229,255,0.09),
+        inset 0 0 28px rgba(185,79,255,0.04);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tile {
+        opacity: 1;
+        transform: none;
+        animation: none !important;
+      }
+      .tile.revealed { animation: none !important; opacity: 1; transform: none; }
+    }
+
+    /* === Grid Area Assignments === */
+    .tile-hero     { grid-area: hero; }
+    .tile-rating   { grid-area: rating; }
+    .tile-about    { grid-area: about; }
+    .tile-beer     { grid-area: beer; }
+    .tile-cocktails{ grid-area: cocktails; }
+    .tile-loc      { grid-area: loc; }
+    .tile-gameday  { grid-area: gameday; }
+    .tile-livemusic{ grid-area: livemusic; }
+    .tile-bargames { grid-area: bargames; }
+    .tile-private  { grid-area: private; }
+
+    /* === Hero Tile === */
+    .tile-hero {
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2.5rem;
+      background:
+        linear-gradient(158deg, rgba(6,6,15,0.22) 0%, rgba(6,6,15,0.72) 100%),
+        radial-gradient(ellipse at 18% 55%, rgba(185,79,255,0.38) 0%, transparent 58%),
+        radial-gradient(ellipse at 78% 25%, rgba(0,229,255,0.22) 0%, transparent 52%),
+        rgba(10, 6, 22, 0.92);
+      border-color: rgba(185,79,255,0.4);
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--neon-b);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .hero-title {
+      font-size: clamp(3.8rem, 9vw, 7.5rem);
+      font-weight: 900;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      line-height: 0.9;
+      background: linear-gradient(130deg, #ffffff 25%, var(--neon-a) 65%, var(--neon-b) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.85rem;
+      filter: drop-shadow(0 0 30px rgba(185,79,255,0.5));
+    }
+    .hero-tagline {
+      font-size: clamp(0.88rem, 1.6vw, 1.05rem);
+      color: rgba(220,220,240,0.68);
+      max-width: 420px;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.68rem 1.8rem;
+      background: linear-gradient(120deg, var(--neon-a), var(--neon-b));
+      color: #06060f;
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 50px;
+      transition: opacity 0.22s, transform 0.22s;
+      align-self: flex-start;
+    }
+    .hero-cta:hover { opacity: 0.82; transform: translateY(-2px); }
+
+    /* === Rating Tile === */
+    .tile-rating {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 120px 5vw 80px;
-      background:
-        linear-gradient(to bottom, rgba(14,14,14,0.7) 0%, rgba(14,14,14,0.85) 60%, #0e0e0e 100%),
-        radial-gradient(ellipse at 30% 40%, #3a2600 0%, transparent 60%),
-        radial-gradient(ellipse at 70% 60%, #1a0a00 0%, transparent 60%);
+      gap: 0.35rem;
+      background: rgba(8, 4, 20, 0.92);
+      border-color: rgba(185,79,255,0.45);
+      padding: 1.5rem;
     }
-    .hero-eyebrow {
-      font-size: 0.78rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 700;
-      margin-bottom: 1.2rem;
-    }
-    .hero h1 {
-      font-size: clamp(3.5rem, 12vw, 8rem);
+    .rating-score {
+      font-size: clamp(3rem, 5vw, 4.5rem);
       font-weight: 900;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
       line-height: 1;
-      color: #fff;
+      letter-spacing: -0.03em;
+      background: linear-gradient(130deg, var(--neon-a), var(--neon-b));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 14px rgba(185,79,255,0.6));
     }
-    .hero h1 span { color: var(--gold); }
-    .hero-tagline {
-      margin-top: 1.4rem;
-      font-size: clamp(1rem, 2.5vw, 1.35rem);
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+      justify-content: center;
+      margin: 0.25rem 0;
+    }
+    .star-svg {
+      width: 15px; height: 15px;
+      fill: var(--neon-a);
+      filter: drop-shadow(0 0 5px rgba(185,79,255,0.7));
+    }
+    .star-svg.dim {
+      fill: rgba(185,79,255,0.2);
+      filter: none;
+    }
+    .rating-count {
+      font-size: 0.78rem;
       color: var(--muted);
-      max-width: 540px;
+      letter-spacing: 0.04em;
+    }
+    .rating-label {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--neon-b);
+      font-weight: 700;
+      margin-top: 0.2rem;
+    }
+
+    /* === About Tile === */
+    .tile-about { }
+
+    /* === Shared Tile Typography === */
+    .tile-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--neon-b);
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+    .tile-heading {
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      line-height: 1.2;
+    }
+    .tile-body {
+      font-size: 0.87rem;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    /* === Offering tiles === */
+    .tile-icon {
+      font-size: 1.9rem;
+      margin-bottom: 0.65rem;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(185,79,255,0.55));
+    }
+    .tile-offering-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #eeeeff;
+      margin-bottom: 0.38rem;
       letter-spacing: 0.02em;
     }
-    .btn {
-      display: inline-block;
-      margin-top: 2.4rem;
-      padding: 0.85rem 2.4rem;
-      background: var(--gold);
-      color: #0e0e0e;
-      font-weight: 800;
+
+    /* === Location Tile === */
+    .tile-loc {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      background: rgba(0,18,28,0.92);
+      border-color: rgba(0,229,255,0.28);
+    }
+    .tile-loc:hover {
+      border-color: rgba(0,229,255,0.6);
+      box-shadow:
+        0 0 22px rgba(0,229,255,0.22),
+        0 0 55px rgba(185,79,255,0.08);
+    }
+    .map-visual {
+      flex: 1;
+      min-height: 110px;
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(0,229,255,0.18) 0%, transparent 60%),
+        linear-gradient(160deg, rgba(0,18,34,0.85) 0%, rgba(0,8,18,0.92) 100%);
+      border: 1px dashed rgba(0,229,255,0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.06) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .pin-ring {
+      position: absolute;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,229,255,0.5);
+      animation: pinPulse 2.2s ease-out infinite;
+    }
+    .pin-ring-2 {
+      animation-delay: 0.7s;
+      width: 36px; height: 36px;
+      border-color: rgba(0,229,255,0.35);
+    }
+    @keyframes pinPulse {
+      0%   { transform: scale(0.7); opacity: 0.9; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pin-ring { animation: none; }
+    }
+    .pin-dot {
+      position: relative;
+      z-index: 2;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--neon-b);
+      box-shadow: 0 0 16px var(--neon-b), 0 0 32px rgba(0,229,255,0.5);
+    }
+    .loc-address {
       font-size: 0.88rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border-radius: var(--radius);
-      border: 2px solid var(--gold);
-      transition: background 0.2s, color 0.2s;
+      color: var(--text);
+      font-style: normal;
+      line-height: 1.55;
     }
-    .btn:hover { background: transparent; color: var(--gold); }
-
-    /* ── Sections shared ── */
-    section { padding: 90px 5vw; }
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-    }
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 1.2rem;
-    }
-    .divider {
-      width: 48px;
-      height: 3px;
-      background: var(--gold);
-      margin-bottom: 2rem;
-    }
-
-    /* ── About ── */
-    #about { background: var(--surface); }
-    .about-inner {
-      max-width: 760px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .about-inner .divider { margin: 0 auto 2rem; }
-    .about-inner p {
-      font-size: 1.05rem;
-      color: #bbb;
-      margin-bottom: 1rem;
-    }
-
-    /* ── Services ── */
-    #services { background: var(--dark); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-    .service-card {
-      background: var(--surface2);
-      border: 1px solid #2c2c2c;
-      border-radius: var(--radius);
-      padding: 2rem 1.6rem;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .service-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-3px);
-    }
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 0.9rem;
-      display: block;
-    }
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.03em;
-    }
-    .service-card p {
-      font-size: 0.9rem;
+    .loc-note {
+      font-size: 0.8rem;
       color: var(--muted);
     }
-
-    /* ── Contact ── */
-    #contact { background: var(--surface); }
-    .contact-inner {
-      max-width: 860px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-    @media (max-width: 640px) {
-      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
-    }
-    .contact-info h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.4rem;
-    }
-    .contact-info p, .contact-info address {
-      font-style: normal;
-      font-size: 0.98rem;
-      color: #bbb;
-      margin-bottom: 1.4rem;
-    }
-    .rating-badge {
+    .directions-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.55rem;
-      background: #1f1f1f;
-      border: 1px solid #2c2c2c;
+      gap: 0.4rem;
+      padding: 0.6rem 1.35rem;
+      border: 1.5px solid var(--neon-b);
       border-radius: 50px;
-      padding: 0.5rem 1.1rem;
-      margin-bottom: 1.8rem;
-    }
-    .rating-stars { color: var(--gold); font-size: 1rem; letter-spacing: 0.05em; }
-    .rating-text { font-size: 0.88rem; color: var(--muted); }
-    .rating-text strong { color: #fff; }
-    .directions-btn {
-      display: inline-block;
-      padding: 0.8rem 2rem;
-      background: transparent;
-      color: var(--gold);
-      border: 2px solid var(--gold);
-      border-radius: var(--radius);
+      color: var(--neon-b);
       font-weight: 700;
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.24s, color 0.24s, box-shadow 0.24s;
+      align-self: flex-start;
     }
-    .directions-btn:hover { background: var(--gold); color: #0e0e0e; }
+    .directions-btn:hover {
+      background: var(--neon-b);
+      color: #06060f;
+      box-shadow: 0 0 22px rgba(0,229,255,0.5);
+    }
 
-    .contact-note {
-      background: var(--surface2);
-      border: 1px solid #2c2c2c;
-      border-radius: var(--radius);
-      padding: 1.8rem;
+    /* === Gameday Tile (wider) === */
+    .tile-gameday {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
-    .contact-note h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.7rem;
+
+    /* === Private Tile (wider) === */
+    .tile-private {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
     }
-    .contact-note p {
-      font-size: 0.92rem;
-      color: var(--muted);
-      margin-bottom: 1.1rem;
-    }
-    .contact-note p:last-child { margin-bottom: 0; }
-    .tag {
+    .private-left { flex: 1; }
+    .private-tag {
       display: inline-block;
-      background: #1f1400;
-      color: var(--gold-lt);
-      border: 1px solid #3a2600;
+      background: rgba(185,79,255,0.12);
+      color: var(--neon-a);
+      border: 1px solid rgba(185,79,255,0.3);
       border-radius: 4px;
-      font-size: 0.78rem;
+      font-size: 0.65rem;
       font-weight: 700;
-      letter-spacing: 0.06em;
-      padding: 0.2rem 0.6rem;
-      margin-bottom: 0.9rem;
+      letter-spacing: 0.1em;
+      padding: 0.18rem 0.55rem;
+      margin-bottom: 0.7rem;
       text-transform: uppercase;
     }
+    .private-right {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    @media (max-width: 900px) {
+      .tile-private { flex-direction: column; gap: 1rem; }
+      .private-right { flex-direction: row; flex-wrap: wrap; }
+    }
 
-    /* ── Footer ── */
+    /* === Mobile Responsive Grid === */
+    @media (max-width: 920px) {
+      .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas:
+          "hero      hero     "
+          "rating    about    "
+          "beer      cocktails"
+          "gameday   gameday  "
+          "livemusic bargames "
+          "private   private  "
+          "loc       loc      ";
+        gap: 10px;
+      }
+      .tile-hero { min-height: 240px; }
+    }
+
+    @media (max-width: 520px) {
+      .bento-wrap { padding: 72px 2vw 2vw; }
+      .bento-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "hero"
+          "rating"
+          "about"
+          "beer"
+          "cocktails"
+          "gameday"
+          "livemusic"
+          "bargames"
+          "private"
+          "loc";
+        gap: 8px;
+      }
+      .tile { padding: 1.4rem; }
+      .tile-hero { min-height: 200px; }
+    }
+
+    /* === Footer === */
     footer {
-      background: #090909;
-      border-top: 1px solid #1e1e1e;
+      background: rgba(4,4,10,0.97);
+      border-top: 1px solid rgba(185,79,255,0.14);
       padding: 2.5rem 5vw;
       text-align: center;
+      margin-top: 0;
     }
     .footer-logo {
       font-size: 1.3rem;
       font-weight: 900;
-      letter-spacing: 0.1em;
-      color: var(--gold);
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      background: linear-gradient(100deg, var(--neon-a), var(--neon-b));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.55rem;
     }
-    footer p {
-      font-size: 0.82rem;
-      color: #444;
-    }
-    footer .footer-links {
+    .footer-links {
       display: flex;
       justify-content: center;
       gap: 1.5rem;
       list-style: none;
-      margin: 1rem 0;
+      margin: 0.7rem 0;
       flex-wrap: wrap;
     }
-    footer .footer-links a {
-      font-size: 0.82rem;
-      color: #555;
-      letter-spacing: 0.04em;
+    .footer-links a {
+      font-size: 0.75rem;
+      color: #3a3a55;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       font-weight: 600;
       transition: color 0.2s;
     }
-    footer .footer-links a:hover { color: var(--gold); }
+    .footer-links a:hover { color: var(--neon-b); }
+    footer p {
+      font-size: 0.76rem;
+      color: #2e2e48;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Animated mesh background (pure CSS, no external resources) -->
+  <div class="mesh-bg" aria-hidden="true">
+    <div class="mesh-blob mesh-blob-1"></div>
+    <div class="mesh-blob mesh-blob-2"></div>
+    <div class="mesh-blob mesh-blob-3"></div>
+  </div>
 
   <!-- Nav -->
   <nav>
     <div class="nav-logo">Balls</div>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#bento">About</a></li>
+      <li><a href="#bento">Offerings</a></li>
+      <li><a href="#bento">Find Us</a></li>
     </ul>
-    <button class="hamburger" aria-label="Toggle menu" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <button class="hamburger" aria-label="Toggle navigation menu"
+      onclick="document.getElementById('navLinks').classList.toggle('open')">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero" id="home">
-    <p class="hero-eyebrow">Gainesville's Go-To Spot</p>
-    <h1><span>Balls</span></h1>
-    <p class="hero-tagline">Where every round is better than the last. Cold drinks, great vibes, right on University Ave.</p>
-    <a href="#contact" class="btn">Find Us</a>
-  </section>
+  <!-- Single Bento Grid (all content) -->
+  <main class="bento-wrap" id="bento">
+    <div class="bento-grid">
 
-  <!-- About -->
-  <section id="about">
-    <div class="about-inner">
-      <p class="section-label">About Us</p>
-      <h2 class="section-title">A Bar Built for Gainesville</h2>
-      <div class="divider"></div>
-      <p>Balls is a neighborhood bar at the heart of Gainesville's lively University Avenue corridor, serving students, locals, and anyone looking for a genuinely good time in a laid-back atmosphere. Whether you're catching a game, unwinding after a long week, or just looking for a cold drink and good company, we've got a spot for you. With a welcoming crowd and a no-frills vibe that keeps people coming back, we've become a staple of the local bar scene.</p>
-    </div>
-  </section>
+      <!-- HERO TILE -->
+      <div class="tile tile-hero" data-delay="0">
+        <p class="hero-eyebrow">&#x2022; University Ave &nbsp;&mdash;&nbsp; Gainesville, FL</p>
+        <h1 class="hero-title">Balls</h1>
+        <p class="hero-tagline">Where every round is better than the last. Cold drinks, great vibes, right on University Ave.</p>
+        <a
+          href="https://www.google.com/maps/search/Balls%201716%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032603"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hero-cta"
+        >&#x2192; Get Directions</a>
+      </div>
 
-  <!-- Services -->
-  <section id="services">
-    <p class="section-label">What We Offer</p>
-    <h2 class="section-title">Drinks, Games & Good Times</h2>
-    <div class="divider"></div>
-    <div class="services-grid">
-      <div class="service-card">
-        <span class="service-icon">🍺</span>
-        <h3>Draft Beer Selection</h3>
-        <p>A rotating lineup of domestic and craft beers on tap, always served cold.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">🥃</span>
-        <h3>Cocktails & Spirits</h3>
-        <p>Classic mixed drinks and shots poured by experienced bartenders ready to keep up with the crowd.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">📺</span>
-        <h3>Game Day Viewing</h3>
-        <p>Multiple screens throughout the bar so you never miss a play. Perfect for Gator game days.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">🎱</span>
-        <h3>Bar Games</h3>
-        <p>Pool tables, darts, and other games to keep the fun going all night long.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">🎶</span>
-        <h3>Live Music & Events</h3>
-        <p>Periodic live music nights and special events. Contact us for details on upcoming shows.</p>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">🥂</span>
-        <h3>Private Gatherings</h3>
-        <p>Looking to host a group? Contact us for details on reserving space for your next event.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact">
-    <p class="section-label">Find Us</p>
-    <h2 class="section-title">Come On In</h2>
-    <div class="divider"></div>
-    <div class="contact-inner">
-      <div class="contact-info">
-        <div class="rating-badge">
-          <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-          <span class="rating-text"><strong>4.1</strong> &nbsp;·&nbsp; 128 reviews on Google</span>
+      <!-- RATING TILE -->
+      <div class="tile tile-rating" data-delay="1" aria-label="Google rating: 4.1 out of 5, 128 reviews">
+        <div class="rating-score" id="ratingNum" aria-hidden="true">4.1</div>
+        <div class="rating-stars" aria-hidden="true">
+          <svg class="star-svg" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg class="star-svg" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg class="star-svg" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg class="star-svg" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg class="star-svg dim" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
         </div>
-        <h3>Address</h3>
-        <address>
+        <div class="rating-count"><span id="reviewCount" aria-hidden="true">128</span> reviews on Google</div>
+        <div class="rating-label">Google Rating</div>
+      </div>
+
+      <!-- ABOUT TILE -->
+      <div class="tile tile-about" data-delay="2">
+        <p class="tile-eyebrow">About Us</p>
+        <h2 class="tile-heading">A Bar Built for Gainesville</h2>
+        <p class="tile-body">Balls is a neighborhood bar at the heart of Gainesville's lively University Avenue corridor, serving students, locals, and anyone looking for a genuinely good time in a laid-back atmosphere. Whether you're catching a game, unwinding after a long week, or just looking for a cold drink and good company &mdash; we've got a spot for you. A welcoming crowd and no-frills vibe that keeps people coming back.</p>
+      </div>
+
+      <!-- BEER TILE -->
+      <div class="tile tile-beer" data-delay="3">
+        <span class="tile-icon" aria-hidden="true">&#127866;</span>
+        <h3 class="tile-offering-title">Draft Beer</h3>
+        <p class="tile-body">A rotating lineup of domestic and craft beers on tap, always served cold.</p>
+      </div>
+
+      <!-- COCKTAILS TILE -->
+      <div class="tile tile-cocktails" data-delay="4">
+        <span class="tile-icon" aria-hidden="true">&#129347;</span>
+        <h3 class="tile-offering-title">Cocktails &amp; Spirits</h3>
+        <p class="tile-body">Classic mixed drinks and shots poured by experienced bartenders ready to keep up with the crowd.</p>
+      </div>
+
+      <!-- LOCATION TILE (spans 2 rows) -->
+      <div class="tile tile-loc" data-delay="5">
+        <p class="tile-eyebrow">Find Us</p>
+        <h3 class="tile-heading">Right on University Ave</h3>
+        <div class="map-visual" aria-hidden="true">
+          <div class="map-grid"></div>
+          <div class="pin-ring"></div>
+          <div class="pin-ring pin-ring-2"></div>
+          <div class="pin-dot"></div>
+        </div>
+        <address class="loc-address">
           1716 W University Ave<br>
           Gainesville, FL 32603
         </address>
-        <h3>Hours</h3>
-        <p>Contact us for details on current hours.</p>
+        <p class="loc-note">Close to campus, easy to find. Contact us for details on current hours.</p>
         <a
           class="directions-btn"
           href="https://www.google.com/maps/search/Balls%201716%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032603"
           target="_blank"
           rel="noopener noreferrer"
-        >Get Directions</a>
+        >&#x2192; Get Directions</a>
       </div>
-      <div class="contact-note">
-        <span class="tag">Bar</span>
-        <h3>Plan Your Visit</h3>
-        <p>We're located right on University Avenue in the heart of Gainesville — easy to find and close to campus.</p>
-        <p>For questions about events, group reservations, or anything else, reach out via our social channels or stop by in person.</p>
-        <p>See you at the bar.</p>
+
+      <!-- GAME DAY TILE (spans 2 cols) -->
+      <div class="tile tile-gameday" data-delay="6">
+        <span class="tile-icon" aria-hidden="true">&#128250;</span>
+        <h3 class="tile-offering-title">Game Day Viewing</h3>
+        <p class="tile-body">Multiple screens throughout the bar so you never miss a play. The perfect spot for Gator game days and big matchups.</p>
       </div>
-    </div>
-  </section>
+
+      <!-- LIVE MUSIC TILE -->
+      <div class="tile tile-livemusic" data-delay="7">
+        <span class="tile-icon" aria-hidden="true">&#127926;</span>
+        <h3 class="tile-offering-title">Live Music &amp; Events</h3>
+        <p class="tile-body">Periodic live music nights and special events. Contact us for details on upcoming shows.</p>
+      </div>
+
+      <!-- BAR GAMES TILE -->
+      <div class="tile tile-bargames" data-delay="8">
+        <span class="tile-icon" aria-hidden="true">&#127921;</span>
+        <h3 class="tile-offering-title">Bar Games</h3>
+        <p class="tile-body">Pool tables, darts, and more to keep the fun going all night long.</p>
+      </div>
+
+      <!-- PRIVATE GATHERINGS TILE (spans 2 cols) -->
+      <div class="tile tile-private" data-delay="9">
+        <div class="private-left">
+          <span class="private-tag">Plan Your Visit</span>
+          <h3 class="tile-heading">Private Gatherings &amp; Groups</h3>
+          <p class="tile-body">Looking to host your crew? We're easy to reach and close to campus. For questions about events, group reservations, or anything else, stop by or reach out via our social channels.</p>
+        </div>
+        <div class="private-right">
+          <span class="tile-icon" aria-hidden="true" style="margin-bottom:0;">&#127946;</span>
+          <p class="tile-body" style="font-size:0.8rem;">Contact us for details</p>
+        </div>
+      </div>
+
+    </div><!-- /.bento-grid -->
+  </main>
 
   <!-- Footer -->
   <footer>
     <div class="footer-logo">Balls</div>
     <ul class="footer-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#bento">About</a></li>
+      <li><a href="#bento">Offerings</a></li>
+      <li><a href="#bento">Find Us</a></li>
     </ul>
     <p>1716 W University Ave, Gainesville, FL 32603</p>
     <p style="margin-top:0.5rem;">&copy; 2026 Balls. All rights reserved.</p>
   </footer>
 
+  <script>
+    (function () {
+      "use strict";
+
+      var prefersReduced = window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ── Staggered Tile Reveals (IntersectionObserver) ── */
+      var tiles = Array.prototype.slice.call(document.querySelectorAll(".tile"));
+
+      if (!prefersReduced && "IntersectionObserver" in window) {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) { return; }
+            var tile = entry.target;
+            var delay = parseInt(tile.getAttribute("data-delay") || "0", 10) * 65;
+            setTimeout(function () { tile.classList.add("revealed"); }, delay);
+            revealObserver.unobserve(tile);
+          });
+        }, { threshold: 0.08, rootMargin: "0px 0px -30px 0px" });
+
+        tiles.forEach(function (tile) { revealObserver.observe(tile); });
+      } else {
+        /* No IntersectionObserver or reduced motion: show all immediately */
+        tiles.forEach(function (tile) { tile.classList.add("revealed"); });
+      }
+
+      /* ── 3D Pointer-Tilt on Tiles ── */
+      if (!prefersReduced) {
+        tiles.forEach(function (tile) {
+          tile.addEventListener("mousemove", function (e) {
+            if (!tile.classList.contains("revealed")) { return; }
+            var rect = tile.getBoundingClientRect();
+            var cx = rect.left + rect.width * 0.5;
+            var cy = rect.top + rect.height * 0.5;
+            var dx = (e.clientX - cx) / (rect.width * 0.5);
+            var dy = (e.clientY - cy) / (rect.height * 0.5);
+            var maxTilt = 7;
+            tile.style.transform =
+              "perspective(700px) rotateY(" + (dx * maxTilt) + "deg) " +
+              "rotateX(" + (-dy * maxTilt) + "deg) scale(1.025)";
+          });
+
+          tile.addEventListener("mouseleave", function () {
+            tile.style.transition =
+              "transform 0.55s cubic-bezier(0.34,1.56,0.64,1), " +
+              "border-color 0.35s ease, box-shadow 0.35s ease";
+            tile.style.transform = "";
+            setTimeout(function () { tile.style.transition = ""; }, 560);
+          });
+        });
+      }
+
+      /* ── Animated Counters for Rating Tile ── */
+      var ratingTile = document.querySelector(".tile-rating");
+      var ratingEl = document.getElementById("ratingNum");
+      var reviewEl = document.getElementById("reviewCount");
+      var counted = false;
+
+      function animCount(el, from, to, duration, fixed, suffix) {
+        suffix = suffix || "";
+        if (prefersReduced) {
+          el.textContent = fixed ? to.toFixed(fixed) : Math.round(to);
+          return;
+        }
+        var start = null;
+        function step(ts) {
+          if (!start) { start = ts; }
+          var progress = Math.min((ts - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var val = from + (to - from) * eased;
+          el.textContent = fixed ? val.toFixed(fixed) : Math.round(val);
+          if (progress < 1) { requestAnimationFrame(step); }
+        }
+        requestAnimationFrame(step);
+      }
+
+      if (ratingTile && "IntersectionObserver" in window) {
+        var ratingObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && !counted) {
+              counted = true;
+              ratingObserver.disconnect();
+              animCount(ratingEl, 0, 4.1, 1100, 1, "");
+              animCount(reviewEl, 0, 128, 1100, 0, "");
+            }
+          });
+        }, { threshold: 0.5 });
+        ratingObserver.observe(ratingTile);
+      }
+    }());
+  </script>
 </body>
 </html>

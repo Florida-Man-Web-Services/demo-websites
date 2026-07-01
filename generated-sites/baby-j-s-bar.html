@@ -3,92 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Baby J's Bar – Gainesville, FL</title>
+  <title>Baby J's Bar – Cocktail Bar, Gainesville FL</title>
   <style>
     /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Georgia', serif;
-      background: #0e0c0a;
-      color: #e8dcc8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #07060d;
+      color: #e0d8f0;
       line-height: 1.7;
+      overflow-x: hidden;
     }
 
-    /* ── Color Palette ── */
+    /* ── CSS Variables ── */
     :root {
-      --gold:    #c9a84c;
-      --gold-lt: #e2c47a;
-      --dark:    #0e0c0a;
-      --dark2:   #181410;
-      --dark3:   #211d18;
-      --amber:   #b06820;
-      --cream:   #e8dcc8;
-      --muted:   #9e9080;
+      --neon-pink:   #ff2d87;
+      --neon-violet: #b94fff;
+      --neon-cyan:   #00f0e0;
+      --near-black:  #07060d;
+      --dark2:       #0d0b18;
+      --dark3:       #12101f;
+      --dark4:       #181628;
+      --text-main:   #e0d8f0;
+      --text-muted:  #8a80a8;
+      --glass-bg:    rgba(13, 11, 24, 0.72);
     }
 
-    /* ── Nav ── */
+    /* ── Overlay Nav ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 2rem;
-      height: 64px;
-      background: rgba(14, 12, 10, 0.94);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      height: 68px;
+      background: transparent;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, border-bottom 0.4s ease;
+    }
+    nav.solid {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(185, 79, 255, 0.25);
     }
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.7rem;
       text-decoration: none;
     }
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      font-weight: bold;
-      color: var(--dark);
+    .nav-logo-svg {
+      width: 38px;
+      height: 38px;
       flex-shrink: 0;
-      letter-spacing: -0.5px;
     }
     .nav-name {
-      font-size: 1.15rem;
-      font-weight: bold;
-      color: var(--gold);
-      letter-spacing: 0.04em;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 2.2rem;
       list-style: none;
     }
     .nav-links a {
-      color: var(--cream);
+      color: rgba(224, 216, 240, 0.85);
       text-decoration: none;
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover { color: var(--neon-cyan); }
 
-    /* hamburger */
+    /* Hamburger */
     .nav-toggle {
       display: none;
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
-      padding: 4px;
+      padding: 6px;
       background: none;
       border: none;
     }
@@ -96,488 +98,748 @@
       display: block;
       width: 24px;
       height: 2px;
-      background: var(--cream);
+      background: var(--text-main);
       border-radius: 2px;
       transition: 0.3s;
     }
 
-    /* ── Hero ── */
+    /* ── Hero Section ── */
     #hero {
+      position: relative;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      position: relative;
       overflow: hidden;
-      background: var(--dark2);
     }
-    /* decorative background pattern */
-    #hero::before {
-      content: '';
+    #particle-canvas {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 70% 50% at 50% 60%, rgba(176, 104, 32, 0.18) 0%, transparent 70%),
-        repeating-linear-gradient(
-          135deg,
-          transparent,
-          transparent 40px,
-          rgba(201, 168, 76, 0.03) 40px,
-          rgba(201, 168, 76, 0.03) 41px
-        );
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 55%, rgba(185,79,255,0.12) 0%, transparent 70%),
+                  radial-gradient(ellipse 50% 40% at 20% 70%, rgba(255,45,135,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 40% at 80% 30%, rgba(0,240,224,0.07) 0%, transparent 60%);
       pointer-events: none;
     }
-    .hero-inner { position: relative; max-width: 680px; }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 740px;
+      padding: 8rem 1.5rem 5rem;
+    }
     .hero-eyebrow {
       display: inline-block;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid rgba(201, 168, 76, 0.4);
-      padding: 0.3rem 1rem;
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 224, 0.35);
+      padding: 0.35rem 1.1rem;
       border-radius: 2px;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.6rem;
+      background: rgba(0, 240, 224, 0.05);
     }
     .hero-title {
-      font-size: clamp(2.6rem, 7vw, 5rem);
-      color: var(--cream);
-      letter-spacing: 0.02em;
-      line-height: 1.1;
-      margin-bottom: 1.2rem;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.3rem;
     }
-    .hero-title span { color: var(--gold); }
+    .hero-title .line1 {
+      display: block;
+      color: #fff;
+      text-shadow: 0 0 40px rgba(255,255,255,0.15);
+    }
+    .hero-title .line2 {
+      display: block;
+      background: linear-gradient(135deg, var(--neon-pink) 0%, var(--neon-violet) 50%, var(--neon-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 24px rgba(185,79,255,0.6));
+    }
     .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--muted);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-muted);
       max-width: 480px;
-      margin: 0 auto 2.4rem;
-      font-style: italic;
+      margin: 0 auto 2.6rem;
+      line-height: 1.6;
     }
-    .hero-cta {
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
       display: inline-block;
-      padding: 0.8rem 2.2rem;
-      background: var(--gold);
-      color: var(--dark);
-      font-size: 0.85rem;
-      font-family: 'Georgia', serif;
-      font-weight: bold;
+      padding: 0.85rem 2.4rem;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       text-decoration: none;
-      border-radius: 2px;
-      transition: background 0.25s, transform 0.15s;
+      border-radius: 3px;
+      box-shadow: 0 0 24px rgba(185,79,255,0.45), 0 4px 16px rgba(255,45,135,0.3);
+      transition: box-shadow 0.25s, transform 0.15s;
     }
-    .hero-cta:hover {
-      background: var(--gold-lt);
+    .btn-primary:hover {
+      box-shadow: 0 0 40px rgba(185,79,255,0.7), 0 4px 24px rgba(255,45,135,0.5);
       transform: translateY(-2px);
     }
-
-    /* ── Section Shared ── */
-    section { padding: 6rem 1.5rem; }
-    .container { max-width: 1080px; margin: 0 auto; }
-    .section-label {
-      display: block;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.85rem 2.4rem;
+      border: 1px solid rgba(0,240,224,0.5);
+      color: var(--neon-cyan);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
+      text-decoration: none;
+      border-radius: 3px;
+      background: rgba(0,240,224,0.05);
+      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
     }
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.5rem);
-      color: var(--cream);
-      margin-bottom: 1.2rem;
-      line-height: 1.2;
+    .btn-ghost:hover {
+      background: rgba(0,240,224,0.12);
+      box-shadow: 0 0 24px rgba(0,240,224,0.3);
+      transform: translateY(-2px);
     }
-    .divider {
-      width: 48px;
-      height: 2px;
-      background: var(--gold);
-      margin-bottom: 2rem;
-    }
-
-    /* ── About ── */
-    #about { background: var(--dark3); }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    .about-text p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-    .about-visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .about-emblem {
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      border: 2px solid rgba(201, 168, 76, 0.3);
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 0.4rem;
-      position: relative;
     }
-    .about-emblem::before {
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(185,79,255,0.8), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* ── Section Shared ── */
+    section { padding: 7rem 1.5rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-kicker {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--neon-pink);
+      margin-bottom: 0.7rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .neon-rule {
+      display: block;
+      width: 52px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-violet));
+      margin-bottom: 2rem;
+      box-shadow: 0 0 10px rgba(185,79,255,0.6);
+    }
+
+    /* reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .scroll-line { animation: none; }
+      .hero-title .line2 { filter: none; }
+    }
+
+    /* ── The Story Section ── */
+    #story { background: var(--dark2); }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .story-text p {
+      color: var(--text-muted);
+      font-size: 1.02rem;
+      margin-bottom: 1.1rem;
+    }
+    .story-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glow-emblem {
+      position: relative;
+      width: 240px;
+      height: 240px;
+    }
+    .glow-emblem svg {
+      width: 100%;
+      height: 100%;
+    }
+    .emblem-pulse {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(185,79,255,0.18) 0%, transparent 70%);
+      animation: emblemPulse 3s ease-in-out infinite;
+    }
+    @keyframes emblemPulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .emblem-pulse { animation: none; }
+    }
+
+    /* ── What's Pouring Section ── */
+    #pouring { background: var(--dark3); }
+    .pouring-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.4rem;
+      margin-top: 0.5rem;
+    }
+    .pour-card {
+      background: var(--dark4);
+      border: 1px solid rgba(185,79,255,0.12);
+      border-radius: 8px;
+      padding: 2.2rem 2rem;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .pour-card::before {
       content: '';
       position: absolute;
-      inset: 10px;
-      border-radius: 50%;
-      border: 1px solid rgba(201, 168, 76, 0.15);
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-violet), var(--neon-cyan));
+      opacity: 0;
+      transition: opacity 0.3s;
     }
-    .emblem-icon {
-      font-size: 3.5rem;
-      line-height: 1;
-    }
-    .emblem-text {
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-
-    /* ── Services ── */
-    #services { background: var(--dark2); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-    .service-card {
-      background: var(--dark3);
-      border: 1px solid rgba(201, 168, 76, 0.12);
-      border-radius: 4px;
-      padding: 2rem 1.75rem;
-      transition: border-color 0.25s, transform 0.2s;
-    }
-    .service-card:hover {
-      border-color: rgba(201, 168, 76, 0.45);
+    .pour-card:hover {
+      border-color: rgba(185,79,255,0.4);
+      box-shadow: 0 4px 32px rgba(185,79,255,0.15), 0 0 0 1px rgba(185,79,255,0.08);
       transform: translateY(-4px);
     }
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    .pour-card:hover::before { opacity: 1; }
+    .pour-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.1rem;
+      display: block;
+      line-height: 1;
     }
-    .service-name {
+    .pour-name {
       font-size: 1.05rem;
-      color: var(--cream);
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.03em;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.55rem;
+      letter-spacing: 0.02em;
     }
-    .service-desc {
-      font-size: 0.88rem;
-      color: var(--muted);
+    .pour-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .pour-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0,240,224,0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
     }
 
-    /* ── Contact ── */
-    #contact { background: var(--dark3); }
-    .contact-grid {
+    /* ── Find Us Section ── */
+    #find-us { background: var(--dark2); }
+    .find-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
       align-items: start;
     }
-    .contact-info { }
-    .contact-detail {
+    .location-info { }
+    .loc-row {
       display: flex;
       align-items: flex-start;
-      gap: 0.9rem;
-      margin-bottom: 1.4rem;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
     }
-    .contact-icon {
-      font-size: 1.2rem;
-      margin-top: 0.15rem;
+    .loc-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: rgba(185,79,255,0.1);
+      border: 1px solid rgba(185,79,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
       flex-shrink: 0;
     }
-    .contact-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.2rem;
-    }
-    .contact-value {
-      color: var(--cream);
-      font-size: 0.98rem;
-    }
-    .directions-btn {
-      display: inline-block;
-      margin-top: 1.6rem;
-      padding: 0.75rem 1.8rem;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-radius: 2px;
-      transition: background 0.2s, color 0.2s;
-    }
-    .directions-btn:hover {
-      background: var(--gold);
-      color: var(--dark);
-    }
-
-    /* rating card */
-    .rating-card {
-      background: var(--dark2);
-      border: 1px solid rgba(201, 168, 76, 0.2);
-      border-radius: 6px;
-      padding: 2rem;
-      text-align: center;
-    }
-    .rating-source {
-      font-size: 0.72rem;
+    .loc-label {
+      font-size: 0.68rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1rem;
+      color: var(--neon-violet);
+      margin-bottom: 0.25rem;
+    }
+    .loc-value {
+      color: var(--text-main);
+      font-size: 0.97rem;
+      line-height: 1.5;
+    }
+    .directions-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.8rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, rgba(255,45,135,0.15), rgba(185,79,255,0.15));
+      border: 1px solid rgba(255,45,135,0.45);
+      border-radius: 4px;
+      color: var(--neon-pink);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.25s, box-shadow 0.25s;
+    }
+    .directions-link:hover {
+      background: linear-gradient(135deg, rgba(255,45,135,0.25), rgba(185,79,255,0.25));
+      box-shadow: 0 0 20px rgba(255,45,135,0.3);
+    }
+
+    /* Rating Card */
+    .rating-card {
+      background: var(--dark4);
+      border: 1px solid rgba(185,79,255,0.2);
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .rating-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(185,79,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .rating-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,240,224,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .rating-source {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+    }
+    .rating-score-wrap {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.2rem;
+      margin-bottom: 0.5rem;
     }
     .rating-number {
-      font-size: 4rem;
-      color: var(--gold);
+      font-size: 4.8rem;
+      font-weight: 800;
       line-height: 1;
-      font-weight: bold;
-      margin-bottom: 0.4rem;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 16px rgba(185,79,255,0.5));
+    }
+    .rating-max {
+      font-size: 1.6rem;
+      color: var(--text-muted);
+      font-weight: 400;
     }
     .stars {
       display: flex;
       justify-content: center;
-      gap: 0.2rem;
-      margin-bottom: 0.6rem;
+      gap: 0.25rem;
+      margin-bottom: 0.8rem;
     }
     .star {
-      color: var(--gold);
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      line-height: 1;
     }
-    .star.half { opacity: 0.5; }
+    .star-full { color: var(--neon-pink); filter: drop-shadow(0 0 4px rgba(255,45,135,0.7)); }
+    .star-half {
+      position: relative;
+      display: inline-block;
+      color: var(--text-muted);
+    }
+    .star-half::before {
+      content: '★';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50%;
+      overflow: hidden;
+      color: var(--neon-pink);
+      filter: drop-shadow(0 0 4px rgba(255,45,135,0.7));
+    }
+    .star-empty { color: rgba(224,216,240,0.15); }
     .rating-count {
-      font-size: 0.85rem;
-      color: var(--muted);
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
     }
     .rating-badge {
       display: inline-block;
-      margin-top: 1rem;
-      padding: 0.3rem 0.9rem;
-      background: rgba(201, 168, 76, 0.1);
-      border: 1px solid rgba(201, 168, 76, 0.25);
+      padding: 0.35rem 1rem;
+      background: rgba(185,79,255,0.1);
+      border: 1px solid rgba(185,79,255,0.3);
       border-radius: 20px;
-      font-size: 0.75rem;
-      color: var(--gold-lt);
-      letter-spacing: 0.06em;
+      font-size: 0.73rem;
+      letter-spacing: 0.08em;
+      color: var(--neon-violet);
     }
 
     /* ── Footer ── */
     footer {
-      background: #080605;
-      border-top: 1px solid rgba(201, 168, 76, 0.12);
-      padding: 2.5rem 1.5rem;
+      background: #040309;
+      border-top: 1px solid rgba(185,79,255,0.15);
+      padding: 3rem 1.5rem 2rem;
       text-align: center;
     }
-    .footer-name {
-      font-size: 1.1rem;
-      color: var(--gold);
-      margin-bottom: 0.4rem;
+    .footer-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
       letter-spacing: 0.06em;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
     }
     .footer-address {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+    }
+    .footer-divider {
+      width: 48px;
+      height: 1px;
+      background: rgba(185,79,255,0.3);
+      margin: 0 auto 1.2rem;
     }
     .footer-copy {
-      font-size: 0.75rem;
-      color: #4a4038;
+      font-size: 0.73rem;
+      color: rgba(138,128,168,0.5);
     }
 
-    /* ── Responsive ── */
+    /* ── Mobile ── */
     @media (max-width: 768px) {
       .nav-links {
         display: none;
         position: absolute;
-        top: 64px;
+        top: 68px;
         left: 0; right: 0;
-        background: rgba(14, 12, 10, 0.97);
+        background: rgba(7,6,13,0.97);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         flex-direction: column;
         padding: 1.5rem 2rem;
-        gap: 1.2rem;
-        border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+        gap: 1.3rem;
+        border-bottom: 1px solid rgba(185,79,255,0.2);
       }
       .nav-links.open { display: flex; }
       .nav-toggle { display: flex; }
 
-      .about-grid,
-      .contact-grid {
+      .story-grid,
+      .find-grid {
         grid-template-columns: 1fr;
-        gap: 2.5rem;
+        gap: 3rem;
       }
-      .about-visual { order: -1; }
-      .about-emblem { width: 160px; height: 160px; }
-      .rating-card { padding: 1.5rem; }
+      .story-visual { order: -1; }
+      .glow-emblem { width: 180px; height: 180px; }
+      section { padding: 5rem 1rem; }
     }
 
     @media (max-width: 480px) {
-      section { padding: 4rem 1rem; }
-      .services-grid { grid-template-columns: 1fr; }
+      .pouring-grid { grid-template-columns: 1fr; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .rating-card { padding: 2rem 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-brand" href="#hero">
-      <div class="nav-logo-icon">BJ</div>
+  <!-- OVERLAY NAV -->
+  <nav id="main-nav">
+    <a class="nav-brand" href="#hero" aria-label="Baby J's Bar – home">
+      <svg class="nav-logo-svg" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+        <circle cx="19" cy="19" r="18" stroke="url(#navGrad)" stroke-width="1.5"/>
+        <text x="19" y="24" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="11" fill="url(#navGrad)">BJ</text>
+        <defs>
+          <linearGradient id="navGrad" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ff2d87"/>
+            <stop offset="1" stop-color="#b94fff"/>
+          </linearGradient>
+        </defs>
+      </svg>
       <span class="nav-name">Baby J's Bar</span>
     </a>
-    <button class="nav-toggle" aria-label="Toggle menu" onclick="this.nextElementSibling.classList.toggle('open')">
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Find Us</a></li>
+    <ul class="nav-links" id="nav-links" role="list">
+      <li><a href="#story">The Story</a></li>
+      <li><a href="#pouring">What's Pouring</a></li>
+      <li><a href="#find-us">Find Us</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
-  <section id="hero">
+  <!-- CANVAS HERO -->
+  <section id="hero" aria-label="Welcome to Baby J's Bar">
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    <div class="hero-overlay" aria-hidden="true"></div>
     <div class="hero-inner">
       <span class="hero-eyebrow">Cocktail Bar &mdash; Gainesville, FL</span>
-      <h1 class="hero-title">Baby <span>J's</span> Bar</h1>
-      <p class="hero-tagline">Where the night starts and the drinks are worth every sip.</p>
-      <a href="#contact" class="hero-cta">Find Us Tonight</a>
+      <h1 class="hero-title">
+        <span class="line1">Baby&nbsp;J's</span>
+        <span class="line2">Bar</span>
+      </h1>
+      <p class="hero-tagline">Where craft cocktails meet the late-night pulse of University Ave.</p>
+      <div class="hero-ctas">
+        <a href="#pouring" class="btn-primary">What's Pouring</a>
+        <a href="#find-us" class="btn-ghost">Find Us Tonight</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section id="about">
+  <!-- THE STORY -->
+  <section id="story">
     <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <span class="section-label">Our Story</span>
-          <h2 class="section-title">A Neighborhood Bar with Serious Craft</h2>
-          <div class="divider"></div>
-          <p>Baby J's Bar is a laid-back yet carefully curated cocktail bar situated in the heart of downtown Gainesville, right on University Avenue. We bring together classic cocktail technique and a relaxed, welcoming atmosphere that keeps locals and visitors coming back.</p>
-          <p>Whether you're unwinding after a long week, catching up with friends, or discovering something new in your glass, our bar is the kind of place where everyone feels at home. Good drinks, good company — that's what we're about.</p>
-          <p>Stop in, pull up a stool, and let us take care of the rest.</p>
+      <div class="story-grid">
+        <div class="story-text reveal">
+          <span class="section-kicker">The Story</span>
+          <h2 class="section-title">A Neighborhood Bar With Serious Craft</h2>
+          <span class="neon-rule"></span>
+          <p>Baby J's Bar sits right on University Avenue in the heart of downtown Gainesville — a cocktail bar that balances genuine craft with a welcoming, no-pretense atmosphere.</p>
+          <p>Whether you're winding down after a long day, meeting friends for something worth savoring, or catching a DJ set that keeps the night alive, Baby J's is the place locals return to. Good spirits, well-made drinks, and real energy under one roof.</p>
+          <p>Stop in, grab a stool at the bar, and let us take care of the rest.</p>
         </div>
-        <div class="about-visual">
-          <div class="about-emblem">
-            <span class="emblem-icon">🍸</span>
-            <span class="emblem-text">Est. Gainesville</span>
+        <div class="story-visual reveal">
+          <div class="glow-emblem">
+            <div class="emblem-pulse" aria-hidden="true"></div>
+            <svg viewBox="0 0 240 240" fill="none" aria-hidden="true">
+              <defs>
+                <radialGradient id="embGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#b94fff" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#07060d" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="embGrad1" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#ff2d87"/>
+                  <stop offset="0.5" stop-color="#b94fff"/>
+                  <stop offset="1" stop-color="#00f0e0"/>
+                </linearGradient>
+                <filter id="embBlur">
+                  <feGaussianBlur stdDeviation="4"/>
+                </filter>
+              </defs>
+              <!-- Outer ring glow -->
+              <circle cx="120" cy="120" r="115" fill="url(#embGlow)"/>
+              <!-- Outer ring -->
+              <circle cx="120" cy="120" r="112" stroke="url(#embGrad1)" stroke-width="1.5" stroke-dasharray="4 6"/>
+              <!-- Inner ring -->
+              <circle cx="120" cy="120" r="88" stroke="url(#embGrad1)" stroke-width="1" opacity="0.4"/>
+              <!-- Cocktail glass SVG path -->
+              <g transform="translate(72,60)">
+                <!-- Glass bowl (triangle) -->
+                <path d="M4 8 L92 8 L48 72 Z" stroke="url(#embGrad1)" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+                <!-- Stem -->
+                <line x1="48" y1="72" x2="48" y2="98" stroke="url(#embGrad1)" stroke-width="2.5"/>
+                <!-- Base -->
+                <line x1="30" y1="98" x2="66" y2="98" stroke="url(#embGrad1)" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Olive on pick -->
+                <circle cx="72" cy="36" r="7" stroke="url(#embGrad1)" stroke-width="2" fill="rgba(185,79,255,0.15)"/>
+                <line x1="72" y1="14" x2="72" y2="43" stroke="url(#embGrad1)" stroke-width="1.5"/>
+              </g>
+              <!-- Text label -->
+              <text x="120" y="200" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="11" letter-spacing="4" fill="url(#embGrad1)" opacity="0.9">GAINESVILLE FL</text>
+            </svg>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services">
+  <!-- WHAT'S POURING -->
+  <section id="pouring">
     <div class="container">
-      <span class="section-label">What We Offer</span>
-      <h2 class="section-title">Crafted for Every Occasion</h2>
-      <div class="divider"></div>
-      <div class="services-grid">
+      <div class="reveal">
+        <span class="section-kicker">What's Pouring</span>
+        <h2 class="section-title">Built for the Night</h2>
+        <span class="neon-rule"></span>
+      </div>
+      <div class="pouring-grid">
 
-        <div class="service-card">
-          <div class="service-icon">🍹</div>
-          <h3 class="service-name">Craft Cocktails</h3>
-          <p class="service-desc">Handcrafted cocktails built with quality spirits, fresh ingredients, and attention to detail — from timeless classics to creative house originals.</p>
+        <div class="pour-card reveal">
+          <span class="pour-icon" aria-hidden="true">&#127864;</span>
+          <h3 class="pour-name">Craft Cocktails</h3>
+          <p class="pour-desc">Handcrafted cocktails built with quality spirits and fresh technique — from timeless classics to creative house originals worth coming back for.</p>
         </div>
 
-        <div class="service-card">
-          <div class="service-icon">🥃</div>
-          <h3 class="service-name">Spirits & Whiskey Selection</h3>
-          <p class="service-desc">A thoughtfully curated back bar featuring bourbons, Scotches, ryes, and a range of premium spirits to sip neat or on the rocks.</p>
+        <div class="pour-card reveal">
+          <span class="pour-icon" aria-hidden="true">&#129347;</span>
+          <h3 class="pour-name">Spirits &amp; Whiskey</h3>
+          <p class="pour-desc">A thoughtfully curated back bar: bourbons, Scotches, ryes, and premium spirits for sipping neat, on the rocks, or built into something exceptional.</p>
         </div>
 
-        <div class="service-card">
-          <div class="service-icon">🍺</div>
-          <h3 class="service-name">Beer & Wine</h3>
-          <p class="service-desc">A rotating selection of domestic, craft, and imported beers alongside wines to complement any mood or preference.</p>
+        <div class="pour-card reveal">
+          <span class="pour-icon" aria-hidden="true">&#127866;</span>
+          <h3 class="pour-name">Beer &amp; Wine</h3>
+          <p class="pour-desc">A rotating selection of domestic, craft, and imported beers alongside wines to match any mood or preference — something for everyone.</p>
         </div>
 
-        <div class="service-card">
-          <div class="service-icon">🎉</div>
-          <h3 class="service-name">Private Events & Buyouts</h3>
-          <p class="service-desc">Planning a celebration? Contact us about private event bookings and venue buyouts for groups of all sizes.</p>
+        <div class="pour-card reveal">
+          <span class="pour-icon" aria-hidden="true">&#127881;</span>
+          <h3 class="pour-name">Private Events</h3>
+          <p class="pour-desc">Planning a celebration or group event? Contact us for details on private bookings and venue buyouts — we'll make it memorable.</p>
+          <span class="pour-tag">Contact for details</span>
         </div>
 
-        <div class="service-card">
-          <div class="service-icon">🎶</div>
-          <h3 class="service-name">Live Entertainment</h3>
-          <p class="service-desc">Enjoy the bar's vibrant atmosphere with rotating live music and DJ nights — contact us for details on upcoming events.</p>
+        <div class="pour-card reveal">
+          <span class="pour-icon" aria-hidden="true">&#127926;</span>
+          <h3 class="pour-name">Live Music &amp; DJ Nights</h3>
+          <p class="pour-desc">Baby J's comes alive with rotating live music and DJ nights that keep the energy high. Contact us for details on upcoming events.</p>
+          <span class="pour-tag">Contact for details</span>
         </div>
 
-        <div class="service-card">
-          <div class="service-icon">🌙</div>
-          <h3 class="service-name">Late-Night Scene</h3>
-          <p class="service-desc">Baby J's keeps the energy going later into the evening, making it a natural stop for Gainesville's late-night crowd.</p>
+        <div class="pour-card reveal">
+          <span class="pour-icon" aria-hidden="true">&#127769;</span>
+          <h3 class="pour-name">Late-Night Scene</h3>
+          <p class="pour-desc">When the rest of Gainesville winds down, Baby J's keeps going. A natural home base for the late-night crowd on University Ave.</p>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
+  <!-- FIND US -->
+  <section id="find-us">
     <div class="container">
-      <span class="section-label">Find Us</span>
-      <h2 class="section-title">Come Visit</h2>
-      <div class="divider"></div>
-      <div class="contact-grid">
+      <div class="reveal">
+        <span class="section-kicker">Find Us</span>
+        <h2 class="section-title">Come Experience It Yourself</h2>
+        <span class="neon-rule"></span>
+      </div>
+      <div class="find-grid">
 
-        <div class="contact-info">
-          <div class="contact-detail">
-            <div class="contact-icon">📍</div>
+        <div class="location-info reveal">
+          <div class="loc-row">
+            <div class="loc-icon-wrap" aria-hidden="true">&#128205;</div>
             <div>
-              <div class="contact-label">Address</div>
-              <div class="contact-value">7 W University Ave<br>Gainesville, FL 32601</div>
+              <div class="loc-label">Address</div>
+              <div class="loc-value">7 W University Ave<br>Gainesville, FL 32601</div>
             </div>
           </div>
 
-          <div class="contact-detail">
-            <div class="contact-icon">🕐</div>
+          <div class="loc-row">
+            <div class="loc-icon-wrap" aria-hidden="true">&#128336;</div>
             <div>
-              <div class="contact-label">Hours</div>
-              <div class="contact-value">Contact us for details</div>
+              <div class="loc-label">Hours</div>
+              <div class="loc-value">Contact us for current hours</div>
+            </div>
+          </div>
+
+          <div class="loc-row">
+            <div class="loc-icon-wrap" aria-hidden="true">&#127937;</div>
+            <div>
+              <div class="loc-label">Events</div>
+              <div class="loc-value">Contact us for details on upcoming events and private bookings</div>
             </div>
           </div>
 
           <a
-            class="directions-btn"
+            class="directions-link"
             href="https://www.google.com/maps/search/Baby%20J%E2%80%99s%20Bar%207%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032601"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Get Directions &rarr;
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M7 1C4.79 1 3 2.79 3 5c0 3.25 4 8 4 8s4-4.75 4-8c0-2.21-1.79-4-4-4zm0 5.5A1.5 1.5 0 1 1 7 3.5a1.5 1.5 0 0 1 0 3z" fill="currentColor"/>
+            </svg>
+            Get Directions
           </a>
         </div>
 
-        <div class="rating-card">
+        <div class="rating-card reveal">
           <div class="rating-source">Google Maps Rating</div>
-          <div class="rating-number">4.3</div>
-          <div class="stars">
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star half">&#9733;</span>
+          <div class="rating-score-wrap">
+            <span class="rating-number" id="rating-counter" data-target="4.3" aria-label="4.3 out of 5">0.0</span>
+            <span class="rating-max">&thinsp;/ 5</span>
           </div>
-          <div class="rating-count">Based on 162 reviews</div>
+          <div class="stars" aria-label="4.3 stars out of 5" role="img">
+            <span class="star star-full" aria-hidden="true">&#9733;</span>
+            <span class="star star-full" aria-hidden="true">&#9733;</span>
+            <span class="star star-full" aria-hidden="true">&#9733;</span>
+            <span class="star star-full" aria-hidden="true">&#9733;</span>
+            <span class="star star-half" aria-hidden="true">&#9733;</span>
+          </div>
+          <div class="rating-count">
+            Based on <span id="review-counter" data-target="162" aria-label="162 reviews">0</span> reviews
+          </div>
           <span class="rating-badge">Highly Rated on Google</span>
         </div>
 
@@ -587,10 +849,203 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-name">Baby J's Bar</div>
+    <div class="footer-logo">Baby J's Bar</div>
     <div class="footer-address">7 W University Ave, Gainesville, FL 32601</div>
+    <div class="footer-divider"></div>
     <div class="footer-copy">&copy; 2026 Baby J's Bar. All rights reserved.</div>
   </footer>
 
+  <script>
+    (function () {
+      'use strict';
+
+      /* ── Nav: overlay → solid on scroll ── */
+      var nav = document.getElementById('main-nav');
+      var toggle = document.getElementById('nav-toggle');
+      var links = document.getElementById('nav-links');
+
+      function onScroll() {
+        if (window.scrollY > 60) {
+          nav.classList.add('solid');
+        } else {
+          nav.classList.remove('solid');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      toggle.addEventListener('click', function () {
+        var isOpen = links.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      /* Close mobile nav on link click */
+      links.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          links.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      /* ── Canvas Particle / Bokeh Field ── */
+      var canvas = document.getElementById('particle-canvas');
+      var ctx = canvas.getContext('2d');
+      var W, H, particles;
+      var COLORS = ['#ff2d87', '#b94fff', '#00f0e0', '#ff70b8', '#d080ff', '#60f8ec'];
+      var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function resize() {
+        W = canvas.width = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      }
+
+      function randBetween(a, b) {
+        return a + Math.random() * (b - a);
+      }
+
+      function makeParticle() {
+        var r = randBetween(2, 9);
+        return {
+          x: randBetween(0, W),
+          y: randBetween(0, H),
+          r: r,
+          baseR: r,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          alpha: randBetween(0.04, 0.35),
+          vx: randBetween(-0.18, 0.18),
+          vy: randBetween(-0.25, -0.05),
+          pulse: randBetween(0, Math.PI * 2),
+          pulseSpeed: randBetween(0.008, 0.022)
+        };
+      }
+
+      function initParticles() {
+        var count = REDUCED ? 0 : Math.min(90, Math.floor((W * H) / 9000));
+        particles = [];
+        for (var i = 0; i < count; i++) {
+          particles.push(makeParticle());
+        }
+      }
+
+      function drawParticle(p) {
+        p.pulse += p.pulseSpeed;
+        var pulseFactor = 1 + 0.25 * Math.sin(p.pulse);
+        var displayR = p.baseR * pulseFactor;
+        var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, displayR * 3.5);
+        grad.addColorStop(0, hexAlpha(p.color, p.alpha * 0.9));
+        grad.addColorStop(0.4, hexAlpha(p.color, p.alpha * 0.5));
+        grad.addColorStop(1, hexAlpha(p.color, 0));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, displayR * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        /* bright core */
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, displayR * 0.6, 0, Math.PI * 2);
+        ctx.fillStyle = hexAlpha(p.color, Math.min(p.alpha * 2.5, 0.9));
+        ctx.fill();
+      }
+
+      function hexAlpha(hex, alpha) {
+        var r = parseInt(hex.slice(1, 3), 16);
+        var g = parseInt(hex.slice(3, 5), 16);
+        var b = parseInt(hex.slice(5, 7), 16);
+        return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha.toFixed(3) + ')';
+      }
+
+      var raf;
+      function animate() {
+        ctx.clearRect(0, 0, W, H);
+        for (var i = 0; i < particles.length; i++) {
+          var p = particles[i];
+          drawParticle(p);
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.y + p.r * 4 < 0) {
+            p.y = H + p.r * 4;
+            p.x = randBetween(0, W);
+          }
+          if (p.x < -p.r * 4) p.x = W + p.r * 4;
+          if (p.x > W + p.r * 4) p.x = -p.r * 4;
+        }
+        raf = requestAnimationFrame(animate);
+      }
+
+      resize();
+      initParticles();
+      if (!REDUCED) {
+        animate();
+      }
+
+      window.addEventListener('resize', function () {
+        resize();
+        initParticles();
+      });
+
+      /* ── IntersectionObserver reveals ── */
+      var revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var revealObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealEls.forEach(function (el) { revealObs.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('visible'); });
+      }
+
+      /* ── Animated Counters ── */
+      function animateCounter(el, targetVal, isFloat, duration) {
+        var start = null;
+        var startVal = 0;
+        function step(ts) {
+          if (!start) start = ts;
+          var progress = Math.min((ts - start) / duration, 1);
+          /* ease-out cubic */
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = startVal + (targetVal - startVal) * eased;
+          el.textContent = isFloat ? current.toFixed(1) : Math.round(current).toString();
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = isFloat ? targetVal.toFixed(1) : targetVal.toString();
+        }
+        requestAnimationFrame(step);
+      }
+
+      var ratingEl = document.getElementById('rating-counter');
+      var reviewEl = document.getElementById('review-counter');
+      var countersStarted = false;
+
+      function startCounters() {
+        if (countersStarted) return;
+        countersStarted = true;
+        if (REDUCED) {
+          ratingEl.textContent = '4.3';
+          reviewEl.textContent = '162';
+          return;
+        }
+        animateCounter(ratingEl, 4.3, true, 1400);
+        animateCounter(reviewEl, 162, false, 1600);
+      }
+
+      var ratingCard = document.querySelector('.rating-card');
+      if (ratingCard && 'IntersectionObserver' in window) {
+        var countObs = new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting) {
+            startCounters();
+            countObs.disconnect();
+          }
+        }, { threshold: 0.3 });
+        countObs.observe(ratingCard);
+      } else {
+        startCounters();
+      }
+
+    }());
+  </script>
 </body>
 </html>
