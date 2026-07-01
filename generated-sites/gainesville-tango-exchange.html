@@ -1,1089 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gainesville Tango Exchange</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --crimson: #8B1A2E;
-      --deep-red: #5C0E1C;
-      --gold: #C9A84C;
-      --gold-light: #E8C96B;
-      --ivory: #F5F0E8;
-      --charcoal: #1C1C1E;
-      --dark-gray: #2A2A2A;
-      --mid-gray: #4A4A4A;
-      --light-gray: #9A9A9A;
-      --white: #FFFFFF;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background-color: var(--charcoal);
-      color: var(--ivory);
-      line-height: 1.7;
-    }
-
-    /* ─── NAV ─── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(28, 28, 30, 0.96);
-      border-bottom: 1px solid rgba(201, 168, 76, 0.3);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 68px;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--crimson);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .nav-title {
-      font-size: 1.05rem;
-      font-weight: normal;
-      letter-spacing: 0.08em;
-      color: var(--ivory);
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
-
-    .nav-title span {
-      display: block;
-      font-size: 0.65rem;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--ivory);
-      text-decoration: none;
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.85;
-      transition: color 0.2s, opacity 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold);
-      opacity: 1;
-    }
-
-    .nav-cta {
-      background: var(--crimson);
-      color: var(--ivory) !important;
-      padding: 0.5rem 1.2rem;
-      border-radius: 2px;
-      opacity: 1 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--deep-red) !important;
-      color: var(--gold) !important;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--ivory);
-      transition: transform 0.3s;
-    }
-
-    /* ─── HERO ─── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-      position: relative;
-      overflow: hidden;
-      background: var(--charcoal);
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(139, 26, 46, 0.25) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 50%, rgba(92, 14, 28, 0.2) 0%, transparent 60%),
-        radial-gradient(ellipse at 50% 80%, rgba(201, 168, 76, 0.08) 0%, transparent 50%);
-      z-index: 0;
-    }
-
-    /* Decorative tango silhouette using pure CSS */
-    .hero-silhouette {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-      opacity: 0.04;
-    }
-
-    .hero-silhouette::before {
-      content: '';
-      position: absolute;
-      right: 8%;
-      top: 15%;
-      width: 220px;
-      height: 400px;
-      background: var(--gold);
-      clip-path: polygon(45% 0%, 55% 0%, 60% 8%, 65% 20%, 62% 35%, 70% 45%, 80% 60%, 75% 75%, 60% 85%, 55% 100%, 45% 100%, 40% 85%, 25% 75%, 20% 60%, 30% 45%, 38% 35%, 35% 20%, 40% 8%);
-    }
-
-    .hero-silhouette::after {
-      content: '';
-      position: absolute;
-      left: 8%;
-      top: 20%;
-      width: 180px;
-      height: 360px;
-      background: var(--crimson);
-      clip-path: polygon(45% 0%, 55% 0%, 60% 8%, 65% 20%, 62% 35%, 72% 48%, 78% 65%, 70% 80%, 55% 90%, 50% 100%, 40% 95%, 30% 80%, 22% 65%, 28% 48%, 38% 35%, 35% 20%, 40% 8%);
-    }
-
-    /* Ornamental lines */
-    .hero-ornament {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-    }
-
-    .hero-ornament::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(201,168,76,0.15), transparent);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 780px;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.75rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-    }
-
-    .hero-eyebrow::before,
-    .hero-eyebrow::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--gold);
-      opacity: 0.6;
-    }
-
-    .hero-title {
-      font-size: clamp(2.4rem, 6vw, 4.5rem);
-      font-weight: normal;
-      letter-spacing: 0.04em;
-      color: var(--ivory);
-      line-height: 1.1;
-      margin-bottom: 0.4rem;
-    }
-
-    .hero-title em {
-      color: var(--gold);
-      font-style: italic;
-    }
-
-    .hero-divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(to right, var(--crimson), var(--gold));
-      margin: 1.6rem auto;
-      border-radius: 1px;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: var(--ivory);
-      opacity: 0.78;
-      font-style: italic;
-      letter-spacing: 0.02em;
-      margin-bottom: 2.5rem;
-      line-height: 1.5;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--crimson);
-      color: var(--ivory);
-      padding: 0.85rem 2.2rem;
-      border: none;
-      border-radius: 2px;
-      font-size: 0.82rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.25s, transform 0.15s;
-      font-family: inherit;
-    }
-
-    .btn-primary:hover {
-      background: var(--deep-red);
-      transform: translateY(-1px);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--gold);
-      padding: 0.85rem 2.2rem;
-      border: 1px solid var(--gold);
-      border-radius: 2px;
-      font-size: 0.82rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.25s, color 0.25s, transform 0.15s;
-      font-family: inherit;
-    }
-
-    .btn-outline:hover {
-      background: var(--gold);
-      color: var(--charcoal);
-      transform: translateY(-1px);
-    }
-
-    /* ─── SECTION BASICS ─── */
-    section {
-      padding: 6rem 2rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-align: center;
-      margin-bottom: 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-    }
-
-    .section-label::before,
-    .section-label::after {
-      content: '';
-      display: block;
-      width: 30px;
-      height: 1px;
-      background: var(--gold);
-      opacity: 0.5;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: normal;
-      text-align: center;
-      color: var(--ivory);
-      letter-spacing: 0.03em;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-title em {
-      color: var(--gold);
-      font-style: italic;
-    }
-
-    .section-divider {
-      width: 50px;
-      height: 2px;
-      background: linear-gradient(to right, var(--crimson), var(--gold));
-      margin: 0 auto 3rem;
-      border-radius: 1px;
-    }
-
-    /* ─── ABOUT ─── */
-    #about {
-      background: var(--dark-gray);
-      position: relative;
-      overflow: hidden;
-    }
-
-    #about::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-visual {
-      position: relative;
-    }
-
-    .about-art {
-      aspect-ratio: 4/5;
-      background: linear-gradient(135deg, var(--deep-red) 0%, var(--crimson) 40%, var(--dark-gray) 100%);
-      border-radius: 2px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .about-art-inner {
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .about-art-symbol {
-      font-size: 5rem;
-      line-height: 1;
-      margin-bottom: 1rem;
-      opacity: 0.8;
-    }
-
-    .about-art-text {
-      font-size: 0.8rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      opacity: 0.7;
-    }
-
-    .about-art::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 30% 30%, rgba(201,168,76,0.1) 0%, transparent 60%);
-    }
-
-    .about-accent {
-      position: absolute;
-      bottom: -12px;
-      right: -12px;
-      width: 60%;
-      height: 60%;
-      border: 1px solid rgba(201, 168, 76, 0.2);
-      border-radius: 2px;
-      z-index: -1;
-    }
-
-    .about-content p {
-      color: var(--ivory);
-      opacity: 0.85;
-      margin-bottom: 1.4rem;
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
-
-    .about-feature-list {
-      list-style: none;
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .about-feature-list li {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.9rem;
-      color: var(--ivory);
-      opacity: 0.8;
-    }
-
-    .about-feature-list li::before {
-      content: '';
-      display: block;
-      width: 20px;
-      height: 1px;
-      background: var(--gold);
-      flex-shrink: 0;
-    }
-
-    /* ─── SERVICES ─── */
-    #services {
-      background: var(--charcoal);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--dark-gray);
-      border: 1px solid rgba(201, 168, 76, 0.12);
-      border-radius: 2px;
-      padding: 2.2rem 1.8rem;
-      transition: border-color 0.3s, transform 0.2s, background 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(to right, var(--crimson), var(--gold));
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .service-card:hover {
-      border-color: rgba(201, 168, 76, 0.35);
-      transform: translateY(-4px);
-      background: rgba(42, 42, 42, 0.9);
-    }
-
-    .service-card:hover::before {
-      opacity: 1;
-    }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1.1rem;
-      display: block;
-    }
-
-    .service-name {
-      font-size: 1.05rem;
-      color: var(--ivory);
-      margin-bottom: 0.65rem;
-      letter-spacing: 0.04em;
-      font-weight: normal;
-    }
-
-    .service-desc {
-      font-size: 0.88rem;
-      color: var(--ivory);
-      opacity: 0.65;
-      line-height: 1.7;
-      font-family: 'Arial', sans-serif;
-    }
-
-    /* ─── CONTACT ─── */
-    #contact {
-      background: var(--dark-gray);
-      position: relative;
-    }
-
-    #contact::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .contact-block {
-      display: flex;
-      gap: 1.2rem;
-      align-items: flex-start;
-    }
-
-    .contact-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(139, 26, 46, 0.25);
-      border: 1px solid rgba(139, 26, 46, 0.4);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .contact-block-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.3rem;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .contact-block-value {
-      font-size: 1rem;
-      color: var(--ivory);
-      line-height: 1.5;
-    }
-
-    .contact-block-value a {
-      color: var(--ivory);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-block-value a:hover {
-      color: var(--gold);
-    }
-
-    .rating-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(201, 168, 76, 0.1);
-      border: 1px solid rgba(201, 168, 76, 0.3);
-      border-radius: 2px;
-      padding: 0.5rem 1rem;
-      margin-top: 0.5rem;
-    }
-
-    .rating-stars {
-      color: var(--gold);
-      font-size: 1rem;
-      letter-spacing: 1px;
-    }
-
-    .rating-text {
-      font-size: 0.82rem;
-      color: var(--ivory);
-      opacity: 0.75;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .contact-cta-box {
-      background: linear-gradient(135deg, rgba(139,26,46,0.2) 0%, rgba(92,14,28,0.15) 100%);
-      border: 1px solid rgba(139, 26, 46, 0.35);
-      border-radius: 2px;
-      padding: 2.5rem;
-      text-align: center;
-    }
-
-    .contact-cta-box h3 {
-      font-size: 1.5rem;
-      font-weight: normal;
-      color: var(--ivory);
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.04em;
-    }
-
-    .contact-cta-box p {
-      font-size: 0.92rem;
-      color: var(--ivory);
-      opacity: 0.7;
-      margin-bottom: 1.8rem;
-      font-family: 'Arial', sans-serif;
-      line-height: 1.7;
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--crimson);
-      color: var(--ivory);
-      padding: 0.9rem 2rem;
-      border-radius: 2px;
-      font-size: 0.82rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.25s, transform 0.15s;
-      margin-bottom: 1rem;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .btn-directions:hover {
-      background: var(--deep-red);
-      transform: translateY(-1px);
-    }
-
-    .btn-call {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: transparent;
-      color: var(--gold);
-      padding: 0.9rem 2rem;
-      border: 1px solid var(--gold);
-      border-radius: 2px;
-      font-size: 0.82rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.25s, color 0.25s, transform 0.15s;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .btn-call:hover {
-      background: var(--gold);
-      color: var(--charcoal);
-      transform: translateY(-1px);
-    }
-
-    /* ─── FOOTER ─── */
-    footer {
-      background: #111;
-      border-top: 1px solid rgba(201, 168, 76, 0.15);
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .footer-brand {
-      font-size: 1rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ivory);
-      opacity: 0.7;
-    }
-
-    .footer-brand em {
-      color: var(--gold);
-      font-style: italic;
-    }
-
-    .footer-divider {
-      width: 40px;
-      height: 1px;
-      background: rgba(201, 168, 76, 0.3);
-    }
-
-    .footer-address {
-      font-size: 0.82rem;
-      color: var(--ivory);
-      opacity: 0.45;
-      font-family: 'Arial', sans-serif;
-      letter-spacing: 0.05em;
-    }
-
-    .footer-copy {
-      font-size: 0.75rem;
-      color: var(--ivory);
-      opacity: 0.3;
-      font-family: 'Arial', sans-serif;
-    }
-
-    /* ─── MOBILE NAV OVERLAY ─── */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 68px;
-      left: 0;
-      right: 0;
-      background: rgba(28, 28, 30, 0.98);
-      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
-      z-index: 99;
-      padding: 1.5rem 2rem;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .mobile-menu.open {
-      display: flex;
-    }
-
-    .mobile-menu a {
-      color: var(--ivory);
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
-      transition: color 0.2s;
-    }
-
-    .mobile-menu a:hover {
-      color: var(--gold);
-    }
-
-    .mobile-menu a:last-child {
-      border-bottom: none;
-    }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-visual {
-        max-width: 360px;
-        margin: 0 auto;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .nav-links {
-        display: none;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 4rem 1.25rem;
-      }
-
-      .hero {
-        padding: 5rem 1.25rem 3rem;
-      }
-
-      .hero-actions {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .hero-actions .btn-primary,
-      .hero-actions .btn-outline {
-        width: 100%;
-        max-width: 280px;
-        text-align: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gainesville Tango Exchange | Argentine Tango — Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --charcoal:#161418;
+    --charcoal-2:#1f1c22;
+    --ink:#0d0c0f;
+    --gold:#c9a84c;
+    --gold-lt:#e7cd83;
+    --red:#7a1f2b;
+    --red-lt:#a83545;
+    --ivory:#f3efe6;
+    --muted:#9b9490;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Georgia","Times New Roman",serif;
+    background:var(--charcoal);
+    color:var(--ivory);
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  ::selection{background:var(--red);color:var(--ivory)}
+
+  /* scroll progress */
+  .progress{
+    position:fixed;top:0;left:0;height:3px;width:0;z-index:1000;
+    background:linear-gradient(90deg,var(--red),var(--gold));
+    transition:width .08s linear;
+  }
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:900;height:66px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 clamp(1.1rem,4vw,2.6rem);
+    background:rgba(13,12,15,0.55);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(201,168,76,0.16);
+  }
+  .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+  .brand-note{
+    width:36px;height:36px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 30% 30%,var(--red-lt),var(--red));
+    color:var(--gold-lt);font-size:1.1rem;
+    box-shadow:0 0 0 1px rgba(201,168,76,.35), 0 6px 20px rgba(122,31,43,.4);
+  }
+  .brand-txt{line-height:1.1}
+  .brand-txt b{font-size:.98rem;letter-spacing:.04em;color:var(--ivory);font-weight:600}
+  .brand-txt span{display:block;font-family:Arial,sans-serif;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+  .nav-links{display:flex;gap:1.9rem;list-style:none;align-items:center}
+  .nav-links a{
+    text-decoration:none;color:var(--muted);font-family:Arial,sans-serif;
+    font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;transition:color .25s;
+  }
+  .nav-links a:hover{color:var(--gold)}
+  .nav-cta{color:var(--ink)!important;background:linear-gradient(120deg,var(--gold),var(--gold-lt));
+    padding:.5rem 1rem;border-radius:2px;font-weight:700}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:6px}
+  .burger span{width:24px;height:2px;background:var(--gold);transition:.3s}
+  .mobile-menu{
+    display:none;position:fixed;top:66px;left:0;right:0;z-index:850;
+    background:rgba(13,12,15,.98);border-bottom:1px solid rgba(201,168,76,.2);
+    flex-direction:column;padding:1.2rem 1.6rem;gap:1rem;
+  }
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{text-decoration:none;color:var(--ivory);font-family:Arial,sans-serif;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;padding:.4rem 0;border-bottom:1px solid rgba(201,168,76,.1)}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:6rem 1.4rem 4rem;overflow:hidden;
+    background:radial-gradient(ellipse 70% 55% at 50% 42%,rgba(122,31,43,.32),transparent 70%),var(--ink);
+  }
+  .hero-mesh{position:absolute;inset:0;opacity:.5;
+    background:
+      radial-gradient(circle at 18% 30%,rgba(201,168,76,.14),transparent 40%),
+      radial-gradient(circle at 82% 70%,rgba(168,53,69,.2),transparent 45%);
+    animation:drift 16s ease-in-out infinite alternate;}
+  @keyframes drift{to{transform:translate3d(0,-3%,0) scale(1.06)}}
+  .hero-inner{position:relative;z-index:2;max-width:900px}
+  .eyebrow{display:inline-block;font-family:Arial,sans-serif;font-size:.72rem;letter-spacing:.4em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:1.6rem;padding-bottom:.4rem;
+    border-bottom:1px solid rgba(201,168,76,.35)}
+  .hero h1{
+    font-size:clamp(2.6rem,9vw,6.4rem);line-height:.98;font-weight:400;letter-spacing:-.02em;
+    margin-bottom:1.4rem;
+  }
+  .hero h1 em{
+    font-style:italic;
+    background:linear-gradient(100deg,var(--gold),var(--gold-lt),var(--red-lt),var(--gold));
+    background-size:280% 100%;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+    animation:sheen 7s linear infinite;
+  }
+  @keyframes sheen{to{background-position:280% 0}}
+  .hero p{font-size:clamp(1rem,2.4vw,1.3rem);color:var(--muted);max-width:620px;margin:0 auto 2.4rem;font-style:italic}
+  .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-family:Arial,sans-serif;
+    font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;padding:.95rem 2rem;border-radius:2px;
+    transition:transform .18s ease,background .25s,color .25s;will-change:transform}
+  .btn-solid{background:linear-gradient(120deg,var(--gold),var(--gold-lt));color:var(--ink);font-weight:700}
+  .btn-ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+  .btn-ghost:hover{background:var(--gold);color:var(--ink)}
+  .btn-solid:hover{transform:translateY(-2px)}
+  .scroll-hint{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:2;
+    font-family:Arial,sans-serif;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+  .scroll-hint::after{content:"";display:block;width:1px;height:34px;margin:.6rem auto 0;
+    background:linear-gradient(var(--gold),transparent);animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+  /* SPLIT-SCREEN */
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:start}
+  .split-sticky{
+    position:sticky;top:0;height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:3rem 2rem;text-align:center;overflow:hidden;
+    background:linear-gradient(160deg,var(--charcoal-2),var(--ink));
+    border-right:1px solid rgba(201,168,76,.14);
+  }
+  .sticky-glow{position:absolute;width:120%;height:60%;top:20%;left:-10%;
+    background:radial-gradient(ellipse,rgba(122,31,43,.5),transparent 70%);filter:blur(20px);
+    animation:sway 10s ease-in-out infinite alternate}
+  @keyframes sway{to{transform:translate3d(6%,-4%,0)}}
+  .embrace{position:relative;z-index:2;width:min(280px,60vw);height:min(280px,60vw);margin-bottom:1.6rem}
+  .ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(201,168,76,.3)}
+  .ring.r2{inset:12%;border-color:rgba(168,53,69,.5);animation:spin 22s linear infinite}
+  .ring.r3{inset:26%;border-style:dashed;border-color:rgba(201,168,76,.25);animation:spin 30s linear infinite reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .embrace-note{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:3.4rem;color:var(--gold-lt);z-index:3}
+  .sticky-word{position:relative;z-index:2;font-size:clamp(2rem,4.4vw,3.4rem);letter-spacing:.06em;line-height:1.05}
+  .sticky-word em{font-style:italic;color:var(--gold)}
+  .sticky-tag{position:relative;z-index:2;margin-top:1rem;font-family:Arial,sans-serif;font-size:.72rem;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+
+  .split-scroll{padding:0}
+  .panel{padding:clamp(3.5rem,8vh,7rem) clamp(1.4rem,5vw,4rem);border-bottom:1px solid rgba(201,168,76,.1)}
+  .panel:last-child{border-bottom:0}
+  .label{font-family:Arial,sans-serif;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+  .panel h2{font-size:clamp(1.7rem,3.6vw,2.7rem);font-weight:400;line-height:1.15;margin-bottom:1.2rem}
+  .panel h2 em{font-style:italic;color:var(--gold)}
+  .rule{width:52px;height:2px;background:linear-gradient(90deg,var(--red),var(--gold));margin-bottom:1.8rem}
+  .panel p{color:var(--muted);margin-bottom:1.1rem;font-size:1.03rem}
+  .feature-list{list-style:none;margin-top:1.4rem;display:flex;flex-direction:column;gap:.7rem}
+  .feature-list li{position:relative;padding-left:1.6rem;color:var(--ivory);font-size:.98rem}
+  .feature-list li::before{content:"\266A";position:absolute;left:0;color:var(--gold)}
+
+  /* classes */
+  .classes{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.6rem}
+  .cclass{
+    background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.16);border-radius:6px;
+    padding:1.4rem 1.3rem;transition:transform .25s ease,border-color .25s,background .25s;
+    will-change:transform;
+  }
+  .cclass:hover{transform:translateY(-4px);border-color:var(--gold);background:rgba(201,168,76,.06)}
+  .cclass .ic{font-size:1.5rem;margin-bottom:.6rem;display:block;color:var(--gold-lt)}
+  .cclass h3{font-size:1.06rem;color:var(--gold);margin-bottom:.4rem;font-weight:600}
+  .cclass p{font-family:Arial,sans-serif;font-size:.85rem;color:var(--muted);margin:0;line-height:1.55}
+
+  /* contact */
+  .contact-line{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.3rem}
+  .contact-line .ci{width:42px;height:42px;flex-shrink:0;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);font-size:1.05rem}
+  .contact-line .clab{font-family:Arial,sans-serif;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .contact-line .cval,.contact-line .cval a{font-size:1.02rem;color:var(--ivory);text-decoration:none}
+  .contact-line .cval a:hover{color:var(--gold)}
+  .rating-note{
+    display:inline-flex;align-items:center;gap:.7rem;margin:.6rem 0 2rem;
+    background:rgba(255,255,255,.03);border:1px dashed rgba(201,168,76,.3);border-radius:8px;padding:.9rem 1.2rem;
+  }
+  .rating-note .stars{color:var(--gold);letter-spacing:.12em;font-size:1.1rem}
+  .rating-note .rtxt{font-family:Arial,sans-serif;font-size:.85rem;color:var(--muted)}
+  .contact-btns{display:flex;flex-direction:column;gap:.9rem;max-width:340px}
+  .contact-btns .btn{justify-content:center;width:100%}
+
+  /* FOOTER */
+  footer{background:var(--ink);border-top:1px solid rgba(201,168,76,.15);padding:2.6rem 2rem;text-align:center}
+  .foot-brand{font-size:1.1rem;letter-spacing:.1em}
+  .foot-brand em{font-style:italic;color:var(--gold)}
+  .foot-div{width:40px;height:1px;background:rgba(201,168,76,.3);margin:1rem auto}
+  .foot-addr{font-family:Arial,sans-serif;font-size:.82rem;color:var(--muted)}
+  .foot-copy{font-family:Arial,sans-serif;font-size:.72rem;color:rgba(243,239,230,.3);margin-top:.8rem}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (max-width:860px){
+    .nav-links{display:none}
+    .burger{display:flex}
+    .split{grid-template-columns:1fr}
+    .split-sticky{position:relative;height:auto;min-height:60vh;border-right:0;border-bottom:1px solid rgba(201,168,76,.14)}
+    .classes{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
+<div class="progress" id="progress"></div>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-brand" href="#home">
-      <div class="nav-logo-icon">&#9835;</div>
-      <div class="nav-title">
-        Gainesville Tango Exchange
-        <span>Argentine Tango &bull; Gainesville, FL</span>
-      </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Classes</a></li>
-      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-    </ul>
-    <button class="hamburger" id="menuBtn" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+<nav>
+  <a class="brand" href="#home">
+    <span class="brand-note">&#9835;</span>
+    <span class="brand-txt"><b>Gainesville Tango Exchange</b><span>Argentine Tango &bull; Gainesville, FL</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">About</a>
+  <a href="#classes">Classes &amp; Services</a>
+  <a href="#contact">Contact</a>
+</div>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="closeMobileMenu()">About</a>
-    <a href="#services" onclick="closeMobileMenu()">Classes &amp; Services</a>
-    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+<section class="hero" id="home">
+  <div class="hero-mesh"></div>
+  <div class="hero-inner">
+    <span class="eyebrow">Argentine Tango</span>
+    <h1>Gainesville <em>Tango</em> Exchange</h1>
+    <p>Where the music leads and the dance follows &mdash; discover the art of Argentine tango in Gainesville.</p>
+    <div class="hero-actions">
+      <a href="#classes" class="btn btn-solid magnetic">Explore Classes</a>
+      <a href="#contact" class="btn btn-ghost magnetic">Find Us</a>
+    </div>
   </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-silhouette"></div>
-    <div class="hero-ornament"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">Argentine Tango</div>
-      <h1 class="hero-title">Gainesville <em>Tango</em> Exchange</h1>
-      <div class="hero-divider"></div>
-      <p class="hero-tagline">Where the music leads and the dance follows —<br>discover the art of Argentine tango in Gainesville.</p>
-      <div class="hero-actions">
-        <a href="#services" class="btn-primary">Explore Classes</a>
-        <a href="#contact" class="btn-outline">Find Us</a>
-      </div>
+<div class="split">
+  <aside class="split-sticky">
+    <div class="sticky-glow"></div>
+    <div class="embrace">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="embrace-note">&#9835;</div>
     </div>
-  </section>
+    <div class="sticky-word">Embrace <em>&middot;</em> Move <em>&middot;</em> Connect</div>
+    <div class="sticky-tag">The Heart of Tango in Gainesville</div>
+  </aside>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="section-label">Our Story</div>
-      <h2 class="section-title">The Heart of <em>Tango</em> in Gainesville</h2>
-      <div class="section-divider"></div>
-      <div class="about-grid">
-        <div class="about-visual">
-          <div class="about-art">
-            <div class="about-art-inner">
-              <div class="about-art-symbol">&#9835;</div>
-              <div class="about-art-text">Embrace &bull; Move &bull; Connect</div>
-            </div>
-          </div>
-          <div class="about-accent"></div>
-        </div>
-        <div class="about-content">
-          <p>Gainesville Tango Exchange is Gainesville's dedicated home for Argentine tango, welcoming dancers of all experience levels — from absolute beginners to seasoned milongueros. We offer a warm, inclusive environment where the subtleties of tango technique, connection, and musicality are explored with passion and depth.</p>
-          <p>Our classes blend structured instruction with the social joy of the milonga floor, helping students build genuine skill while fostering a vibrant local tango community. Whether you are drawn to the elegance of the embrace or the improvisational dialogue between partners, there is a place for you here.</p>
-          <p>Located in the heart of Gainesville at 720 NW 23rd Ave, we bring world-class tango culture to North Central Florida. Contact us for details on upcoming classes, practicas, and special events.</p>
-          <ul class="about-feature-list">
-            <li>All levels welcome, beginners to advanced</li>
-            <li>Focus on technique, musicality, and connection</li>
-            <li>Social dance events and practicas</li>
-            <li>Small class sizes for personalized attention</li>
-          </ul>
-        </div>
+  <div class="split-scroll">
+    <section class="panel reveal" id="about">
+      <div class="label">Our Story</div>
+      <h2>The Heart of <em>Tango</em> in Gainesville</h2>
+      <div class="rule"></div>
+      <p>Gainesville Tango Exchange is Gainesville's dedicated home for Argentine tango, welcoming dancers of all experience levels &mdash; from absolute beginners to seasoned milongueros. We offer a warm, inclusive environment where the subtleties of tango technique, connection, and musicality are explored with passion and depth.</p>
+      <p>Our classes blend structured instruction with the social joy of the milonga floor, helping students build genuine skill while fostering a vibrant local tango community. Whether you are drawn to the elegance of the embrace or the improvisational dialogue between partners, there is a place for you here.</p>
+      <p>Located in the heart of Gainesville at 720 NW 23rd Ave, we bring world-class tango culture to North Central Florida. Contact us for details on upcoming classes, practicas, and special events.</p>
+      <ul class="feature-list">
+        <li>All levels welcome, beginners to advanced</li>
+        <li>Focus on technique, musicality, and connection</li>
+        <li>Social dance events and practicas</li>
+        <li>Small class sizes for personalized attention</li>
+      </ul>
+    </section>
+
+    <section class="panel reveal" id="classes">
+      <div class="label">What We Offer</div>
+      <h2>Classes &amp; <em>Services</em></h2>
+      <div class="rule"></div>
+      <div class="classes">
+        <div class="cclass"><span class="ic">&#9786;</span><h3>Beginner Classes</h3><p>Start your tango journey from scratch. Learn the fundamental embrace, basic walk, and partner communication in a relaxed setting. No partner required.</p></div>
+        <div class="cclass"><span class="ic">&#9835;</span><h3>Intermediate &amp; Advanced Classes</h3><p>Deepen your technique with more complex vocabulary, musicality refinement, and the nuanced improvisational conversation that defines Argentine tango.</p></div>
+        <div class="cclass"><span class="ic">&#10022;</span><h3>Practica Sessions</h3><p>Open practice sessions where dancers explore and reinforce material from class in a social, low-pressure environment with guidance available.</p></div>
+        <div class="cclass"><span class="ic">&#9833;</span><h3>Milonga (Social Dance)</h3><p>Join our community milongas &mdash; social tango dances held in the traditional style, where the music sets the mood and the floor comes alive.</p></div>
+        <div class="cclass"><span class="ic">&#9654;</span><h3>Private Lessons</h3><p>One-on-one or couples instruction tailored to your specific goals, schedule, and current level. Contact us for details and availability.</p></div>
+        <div class="cclass"><span class="ic">&#10024;</span><h3>Workshops &amp; Special Events</h3><p>Periodic intensives, guest instructor workshops, and tango-themed events that bring the broader community together. Contact us for upcoming dates.</p></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <div class="section-label">What We Offer</div>
-      <h2 class="section-title">Classes &amp; <em>Services</em></h2>
-      <div class="section-divider"></div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <span class="service-icon">&#9786;</span>
-          <h3 class="service-name">Beginner Classes</h3>
-          <p class="service-desc">Start your tango journey from scratch. Learn the fundamental embrace, basic walk, and partner communication in a relaxed, encouraging setting. No partner required.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#9835;</span>
-          <h3 class="service-name">Intermediate &amp; Advanced Classes</h3>
-          <p class="service-desc">Deepen your technique with more complex vocabulary, musicality refinement, and the nuanced improvisational conversation that defines Argentine tango.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#10022;</span>
-          <h3 class="service-name">Practica Sessions</h3>
-          <p class="service-desc">Open practice sessions where dancers explore and reinforce material from class in a social, low-pressure environment with guidance available.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#9833;</span>
-          <h3 class="service-name">Milonga (Social Dance)</h3>
-          <p class="service-desc">Join our community milongas — social tango dances held in the traditional style, where the music sets the mood and the floor comes alive.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#9654;</span>
-          <h3 class="service-name">Private Lessons</h3>
-          <p class="service-desc">One-on-one or couples instruction tailored to your specific goals, schedule, and current level. Contact us for details and availability.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#10024;</span>
-          <h3 class="service-name">Workshops &amp; Special Events</h3>
-          <p class="service-desc">Periodic intensives, guest instructor workshops, and tango-themed events that bring the broader community together. Contact us for upcoming dates.</p>
-        </div>
-
+    <section class="panel reveal" id="contact">
+      <div class="label">Visit Us</div>
+      <h2>Get in <em>Touch</em></h2>
+      <div class="rule"></div>
+      <div class="contact-line">
+        <div class="ci">&#128205;</div>
+        <div><div class="clab">Address</div><div class="cval">720 NW 23rd Ave, Gainesville, FL</div></div>
       </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="section-label">Visit Us</div>
-      <h2 class="section-title">Get in <em>Touch</em></h2>
-      <div class="section-divider"></div>
-      <div class="contact-grid">
-        <div class="contact-info">
-
-          <div class="contact-block">
-            <div class="contact-icon">&#128205;</div>
-            <div>
-              <div class="contact-block-label">Address</div>
-              <div class="contact-block-value">
-                720 NW 23rd Ave<br>Gainesville, FL
-              </div>
-            </div>
+      <div class="contact-line">
+        <div class="ci">&#128222;</div>
+        <div><div class="clab">Phone</div><div class="cval"><a href="tel:+18622082646">(862) 208-2646</a></div></div>
+      </div>
+      <div class="contact-line">
+        <div class="ci">&#128337;</div>
+        <div><div class="clab">Hours</div><div class="cval">Contact us for details</div></div>
+      </div>
+      <div class="contact-line">
+        <div class="ci">&#11088;</div>
+        <div>
+          <div class="clab">Community Rating</div>
+          <div class="rating-note">
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="rtxt">No reviews yet &mdash; be the first!</span>
           </div>
-
-          <div class="contact-block">
-            <div class="contact-icon">&#128222;</div>
-            <div>
-              <div class="contact-block-label">Phone</div>
-              <div class="contact-block-value">
-                <a href="tel:+18622082646">(862) 208-2646</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-block">
-            <div class="contact-icon">&#128337;</div>
-            <div>
-              <div class="contact-block-label">Hours</div>
-              <div class="contact-block-value">
-                Contact us for details
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-block">
-            <div class="contact-icon">&#11088;</div>
-            <div>
-              <div class="contact-block-label">Community Rating</div>
-              <div class="contact-block-value">
-                <div class="rating-badge">
-                  <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                  <span class="rating-text">No reviews yet &mdash; be the first!</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="contact-cta-box">
-          <h3>Ready to Dance?</h3>
-          <p>Come find us at 720 NW 23rd Ave in Gainesville. We would love to welcome you to the floor — no experience necessary.</p>
-          <a
-            class="btn-directions"
-            href="https://www.google.com/maps/search/Gainesville%20Tango%20Exchange%20720%20NW%2023rd%20Ave"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            &#128205; Get Directions
-          </a>
-          <a class="btn-call" href="tel:+18622082646">
-            &#128222; Call (862) 208-2646
-          </a>
         </div>
       </div>
-    </div>
-  </section>
+      <p>Come find us at 720 NW 23rd Ave in Gainesville. We would love to welcome you to the floor &mdash; no experience necessary.</p>
+      <div class="contact-btns">
+        <a class="btn btn-solid magnetic" href="https://www.google.com/maps/search/Gainesville%20Tango%20Exchange%20720%20NW%2023rd%20Ave" target="_blank" rel="noopener noreferrer">&#128205; Get Directions</a>
+        <a class="btn btn-ghost magnetic" href="tel:+18622082646">&#128222; Call (862) 208-2646</a>
+      </div>
+    </section>
+  </div>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">Gainesville <em>Tango</em> Exchange</div>
-      <div class="footer-divider"></div>
-      <div class="footer-address">720 NW 23rd Ave &bull; Gainesville, FL &bull; (862) 208-2646</div>
-      <div class="footer-copy">&copy; 2026 Gainesville Tango Exchange. All rights reserved.</div>
-    </div>
-  </footer>
+<footer>
+  <div class="foot-brand">Gainesville <em>Tango</em> Exchange</div>
+  <div class="foot-div"></div>
+  <div class="foot-addr">720 NW 23rd Ave &bull; Gainesville, FL &bull; (862) 208-2646</div>
+  <div class="foot-copy">&copy; 2026 Gainesville Tango Exchange. All rights reserved.</div>
+</footer>
 
-  <script>
-    var menuBtn = document.getElementById('menuBtn');
-    var mobileMenu = document.getElementById('mobileMenu');
+<script>
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    menuBtn.addEventListener('click', function () {
-      mobileMenu.classList.toggle('open');
-    });
+    var burger = document.getElementById("burger");
+    var menu = document.getElementById("mobileMenu");
+    burger.addEventListener("click", function(){ menu.classList.toggle("open"); });
+    menu.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", function(){ menu.classList.remove("open"); }); });
 
-    function closeMobileMenu() {
-      mobileMenu.classList.remove('open');
+    var progress = document.getElementById("progress");
+    function onScroll(){
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max * 100 : 0;
+      progress.style.width = pct + "%";
     }
-  </script>
+    window.addEventListener("scroll", onScroll, {passive:true});
+    onScroll();
+
+    if (!reduce && "IntersectionObserver" in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+        });
+      }, {threshold:0.16});
+      document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll(".reveal").forEach(function(el){ el.classList.add("in"); });
+    }
+
+    if (!reduce){
+      document.querySelectorAll(".magnetic").forEach(function(btn){
+        btn.addEventListener("mousemove", function(e){
+          var r = btn.getBoundingClientRect();
+          var x = e.clientX - r.left - r.width/2;
+          var y = e.clientY - r.top - r.height/2;
+          btn.style.transform = "translate(" + (x*0.22) + "px," + (y*0.32) + "px)";
+        });
+        btn.addEventListener("mouseleave", function(){ btn.style.transform = ""; });
+      });
+    }
+  })();
+</script>
 </body>
 </html>
