@@ -1,860 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dolce Vita Bakery Cafe | Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --cream:     #fdf6ee;
-      --warm-tan:  #e8d5b7;
-      --caramel:   #c9975a;
-      --espresso:  #3b1f0e;
-      --mocha:     #6b3d1e;
-      --text:      #2e1a0e;
-      --text-light:#7a5c3e;
-      --white:     #ffffff;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: var(--cream);
-      color: var(--text);
-      line-height: 1.7;
-    }
-
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--espresso);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--caramel);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-text {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--cream);
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-
-    .nav-logo-text span {
-      display: block;
-      font-size: 0.68rem;
-      font-weight: 400;
-      color: var(--warm-tan);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--warm-tan);
-      text-decoration: none;
-      font-size: 0.88rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--caramel); }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--warm-tan);
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-      background: var(--espresso);
-    }
-
-    /* Decorative background pattern */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 55% at 50% 45%, rgba(201,151,90,0.18) 0%, transparent 70%),
-        radial-gradient(ellipse 80% 60% at 30% 80%, rgba(107,61,30,0.4) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 75% 20%, rgba(107,61,30,0.3) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* Wheat / swirl decorations */
-    .hero::after {
-      content: '';
-      position: absolute;
-      width: 520px;
-      height: 520px;
-      border: 1px solid rgba(201,151,90,0.12);
-      border-radius: 50%;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      max-width: 700px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(201,151,90,0.18);
-      border: 1px solid rgba(201,151,90,0.4);
-      color: var(--caramel);
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 0.35rem 1.1rem;
-      border-radius: 50px;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      color: var(--cream);
-      line-height: 1.15;
-      margin-bottom: 0.3rem;
-      font-style: italic;
-    }
-
-    .hero h1 em {
-      font-style: normal;
-      color: var(--caramel);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--warm-tan);
-      margin: 1rem 0 2.4rem;
-      font-style: italic;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 2rem;
-      border-radius: 4px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.25s;
-      border: 2px solid transparent;
-    }
-
-    .btn-primary {
-      background: var(--caramel);
-      color: var(--espresso);
-      font-weight: 700;
-    }
-
-    .btn-primary:hover {
-      background: #b8854a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border-color: var(--warm-tan);
-      color: var(--warm-tan);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--caramel);
-      color: var(--caramel);
-    }
-
-    /* ── Sections shared ── */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .container {
-      max-width: 1060px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--caramel);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.5rem);
-      line-height: 1.25;
-      color: var(--espresso);
-      margin-bottom: 1rem;
-    }
-
-    .divider {
-      width: 48px;
-      height: 3px;
-      background: var(--caramel);
-      border-radius: 2px;
-      margin: 1rem 0 2rem;
-    }
-
-    /* ── About ── */
-    #about {
-      background: var(--white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-light);
-      margin-bottom: 1rem;
-      font-size: 1.03rem;
-    }
-
-    .about-visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .about-illustration {
-      width: 100%;
-      max-width: 360px;
-      aspect-ratio: 1;
-      background: var(--cream);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.2rem;
-      border: 2px solid var(--warm-tan);
-      padding: 2.5rem;
-      text-align: center;
-    }
-
-    .about-icon {
-      font-size: 4rem;
-      line-height: 1;
-    }
-
-    .about-illustration p {
-      font-size: 1rem;
-      color: var(--mocha);
-      font-style: italic;
-    }
-
-    .about-stats {
-      display: flex;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .stat {
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--caramel);
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-light);
-      margin-top: 0.25rem;
-    }
-
-    /* ── Services ── */
-    #services {
-      background: var(--cream);
-    }
-
-    .services-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .services-header .divider {
-      margin: 1rem auto 0;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 2rem 1.8rem;
-      border: 1px solid var(--warm-tan);
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--caramel);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(59,31,14,0.12);
-      border-color: var(--caramel);
-    }
-
-    .service-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .service-icon {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .service-card h3 {
-      font-size: 1.15rem;
-      color: var(--espresso);
-      margin-bottom: 0.6rem;
-    }
-
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
-
-    /* ── Contact ── */
-    #contact {
-      background: var(--espresso);
-      color: var(--cream);
-    }
-
-    #contact .section-title {
-      color: var(--cream);
-    }
-
-    #contact .section-label {
-      color: var(--caramel);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
-    }
-
-    .contact-item {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .contact-item-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      background: rgba(201,151,90,0.15);
-      border: 1px solid rgba(201,151,90,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .contact-item-content p {
-      font-size: 0.9rem;
-      color: var(--warm-tan);
-    }
-
-    .contact-item-content strong {
-      display: block;
-      color: var(--cream);
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-item-content a {
-      color: var(--warm-tan);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-item-content a:hover { color: var(--caramel); }
-
-    /* Rating badge */
-    .rating-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(201,151,90,0.25);
-      border-radius: 10px;
-      padding: 1.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .rating-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--caramel);
-    }
-
-    .rating-score {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-    }
-
-    .rating-number {
-      font-size: 3rem;
-      font-weight: 700;
-      color: var(--cream);
-      line-height: 1;
-    }
-
-    .rating-max {
-      font-size: 1.1rem;
-      color: var(--warm-tan);
-    }
-
-    .stars {
-      display: flex;
-      gap: 4px;
-    }
-
-    .star {
-      width: 20px;
-      height: 20px;
-      background: var(--caramel);
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    }
-
-    .star-half {
-      background: linear-gradient(90deg, var(--caramel) 50%, rgba(201,151,90,0.25) 50%);
-    }
-
-    .star-empty {
-      background: rgba(201,151,90,0.25);
-    }
-
-    .rating-count {
-      font-size: 0.88rem;
-      color: var(--warm-tan);
-    }
-
-    .rating-source {
-      font-size: 0.75rem;
-      color: rgba(232,213,183,0.5);
-      letter-spacing: 0.05em;
-    }
-
-    .contact-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-
-    .btn-directions {
-      background: var(--caramel);
-      color: var(--espresso);
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-family: inherit;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: all 0.25s;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-directions:hover {
-      background: #b8854a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: #1e0d04;
-      color: var(--warm-tan);
-      text-align: center;
-      padding: 2rem 1.5rem;
-    }
-
-    footer p {
-      font-size: 0.85rem;
-      opacity: 0.7;
-    }
-
-    footer a {
-      color: var(--caramel);
-      text-decoration: none;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: var(--espresso);
-        flex-direction: column;
-        padding: 1.2rem 2rem 1.5rem;
-        gap: 1.2rem;
-        border-top: 1px solid rgba(255,255,255,0.08);
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-toggle { display: flex; }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-visual { display: none; }
-
-      .about-stats { justify-content: flex-start; }
-
-      .hero { padding-top: 5rem; }
-    }
-
-    @media (max-width: 480px) {
-      section { padding: 3.5rem 1.2rem; }
-      .services-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dolce Vita Bakery Cafe | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --espresso:#2a1a16; --espresso-2:#3a2620; --cream:#f7efe6;
+    --rose:#c8657a; --rose-dk:#a34a5f; --gold:#c9a24b; --paper:#fbf6ee; --muted:#8a7568;
+    --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+    --sans:"Helvetica Neue",Arial,system-ui,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--espresso);font-family:var(--serif);line-height:1.65;overflow-x:hidden}
+  ::selection{background:var(--rose);color:var(--cream)}
+  a{color:inherit}
+
+  .shell{display:grid;grid-template-columns:40% 60%;min-height:100vh}
+
+  /* ---------- STICKY LEFT PANEL ---------- */
+  .stage{position:sticky;top:0;height:100vh;background:var(--espresso);color:var(--cream);
+    display:flex;flex-direction:column;justify-content:space-between;padding:clamp(28px,4vw,56px);overflow:hidden}
+  .stage::before{content:"";position:absolute;width:150%;height:150%;top:-25%;left:-25%;
+    background:radial-gradient(circle at 30% 30%,rgba(201,162,75,.22),transparent 45%),
+      radial-gradient(circle at 70% 70%,rgba(200,101,122,.22),transparent 45%);
+    animation:mesh 18s ease-in-out infinite alternate;z-index:0}
+  @keyframes mesh{from{transform:translate(-4%,-3%) rotate(0deg)}to{transform:translate(4%,3%) rotate(8deg)}}
+  .stage>*{position:relative;z-index:1}
+  .stage .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:.34em;font-size:.7rem;color:var(--gold)}
+  .stage h1{font-weight:400;font-size:clamp(2.6rem,5vw,4.6rem);line-height:.94;letter-spacing:-.01em;margin:auto 0}
+  .stage h1 em{font-style:italic;color:var(--rose)}
+  .stage .tagline{font-size:1.1rem;color:#e6d6c6;font-style:italic;max-width:30ch}
+  .stage .nav{display:flex;gap:22px;margin-top:22px;font-family:var(--sans);font-size:.72rem;
+    letter-spacing:.2em;text-transform:uppercase}
+  .stage .nav a{text-decoration:none;color:#cbb9a8;border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
+  .stage .nav a:hover{color:var(--gold);border-color:var(--gold)}
+
+  /* progress bar under stage */
+  .prog{position:absolute;left:0;bottom:0;height:4px;width:0;background:linear-gradient(90deg,var(--rose),var(--gold));z-index:2}
+
+  /* ---------- SCROLLING RIGHT ---------- */
+  .scroll{background:var(--paper)}
+  .blk{padding:clamp(56px,8vw,120px) clamp(28px,5vw,72px);border-bottom:1px solid rgba(42,26,22,.12)}
+  .blk .lab{font-family:var(--sans);text-transform:uppercase;letter-spacing:.28em;font-size:.7rem;color:var(--rose-dk);margin-bottom:14px}
+  .blk h2{font-weight:400;font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.05;margin-bottom:22px;letter-spacing:-.01em}
+
+  .rv{opacity:0;transform:translateY(30px);transition:opacity .85s ease,transform .85s ease}
+  .rv.in{opacity:1;transform:none}
+
+  .intro p{font-size:1.08rem;color:var(--muted);margin-bottom:16px;max-width:60ch}
+  .quote{font-size:clamp(1.4rem,3vw,2rem);font-style:italic;color:var(--espresso);border-left:3px solid var(--gold);
+    padding-left:22px;margin-top:26px;line-height:1.3}
+
+  /* menu list */
+  .m-item{padding:22px 0;border-top:1px solid rgba(42,26,22,.14);transition:padding-left .35s}
+  .m-item:hover{padding-left:14px}
+  .m-item h3{font-weight:400;font-size:clamp(1.3rem,3vw,2rem);display:flex;align-items:baseline;gap:12px;transition:color .3s}
+  .m-item:hover h3{color:var(--rose-dk)}
+  .m-item h3 .dots{flex:1;border-bottom:2px dotted rgba(42,26,22,.25);transform:translateY(-4px)}
+  .m-item p{font-family:var(--sans);color:var(--muted);font-size:.96rem;margin-top:8px;line-height:1.65;max-width:62ch}
+
+  /* rating */
+  .rate{display:flex;gap:clamp(20px,4vw,54px);align-items:center;flex-wrap:wrap}
+  .rate .disc{width:clamp(120px,20vw,190px);aspect-ratio:1;border-radius:50%;flex-shrink:0;
+    background:conic-gradient(var(--gold) 0 90%,rgba(42,26,22,.12) 90% 100%);
+    display:flex;align-items:center;justify-content:center;position:relative}
+  .rate .disc::before{content:"";position:absolute;inset:14px;background:var(--paper);border-radius:50%}
+  .rate .disc span{position:relative;font-size:clamp(2.4rem,6vw,3.6rem);color:var(--espresso)}
+  .rate .rmeta .rstars{font-size:1.5rem;letter-spacing:.2em;color:var(--gold)}
+  .rate .rmeta h3{font-weight:400;font-size:clamp(1.3rem,3vw,1.9rem);margin:8px 0 4px}
+  .rate .rmeta p{font-family:var(--sans);color:var(--muted)}
+  .rate .rmeta .src{margin-top:6px;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--rose-dk)}
+
+  /* visit */
+  .visit .info{font-family:var(--sans);font-size:1.05rem;line-height:1.9}
+  .visit .info .lab2{display:block;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rose-dk);margin-top:18px;margin-bottom:2px}
+  .visit a.tel{color:var(--rose-dk);text-decoration:none;border-bottom:1px solid var(--gold)}
+  .btn{display:inline-block;margin-top:28px;background:var(--espresso);color:var(--cream);text-decoration:none;
+    font-family:var(--sans);font-weight:700;letter-spacing:.06em;padding:16px 38px;border-radius:100px;font-size:.9rem;
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;will-change:transform}
+  .btn:hover{box-shadow:0 16px 32px rgba(42,26,22,.28);transform:translateY(-3px)}
+
+  footer{background:var(--espresso-2);color:#c9b5a5;font-family:var(--sans);padding:30px clamp(28px,5vw,72px);
+    font-size:.8rem;letter-spacing:.03em}
+  footer b{color:var(--gold)}
+
+  @media(max-width:860px){
+    .shell{grid-template-columns:1fr}
+    .stage{position:relative;height:auto;min-height:70vh}
+    .prog{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .rv{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- ── Navigation ── -->
-  <nav>
-    <a href="#hero" class="nav-logo">
-      <div class="nav-logo-icon">&#x2767;</div>
-      <div class="nav-logo-text">
-        Dolce Vita
-        <span>Bakery Cafe</span>
+  <div class="shell">
+    <!-- ===== STICKY LEFT ===== -->
+    <aside class="stage">
+      <div class="eyebrow">Bakery &amp; Cafe &mdash; Gainesville, FL</div>
+      <h1>Dolce <em>Vita</em></h1>
+      <div>
+        <p class="tagline">Handcrafted pastries, artisan breads, and cafe favorites &mdash; baked fresh every day.</p>
+        <nav class="nav">
+          <a href="#intro">Story</a>
+          <a href="#menu">Menu</a>
+          <a href="#rate">Reviews</a>
+          <a href="#visit">Visit</a>
+        </nav>
       </div>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Menu &amp; Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+      <div class="prog" id="prog"></div>
+    </aside>
 
-  <!-- ── Hero ── -->
-  <section class="hero" id="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">Bakery &amp; Cafe &mdash; Gainesville, FL</div>
-      <h1>The Sweet Life<br>Starts at <em>Dolce Vita</em></h1>
-      <p class="hero-tagline">Handcrafted pastries, artisan breads, and cafe favorites &mdash; baked fresh every day.</p>
-      <div class="hero-cta">
-        <a href="#services" class="btn btn-primary">Explore Our Offerings</a>
-        <a href="#contact" class="btn btn-outline">Find Us</a>
-      </div>
-    </div>
-  </section>
+    <!-- ===== SCROLLING RIGHT ===== -->
+    <main class="scroll">
+      <section class="blk intro" id="intro">
+        <p class="lab">The Sweet Life</p>
+        <h2>An Italian-inspired patisserie in the heart of Gainesville.</h2>
+        <p class="rv">Dolce Vita Bakery Cafe brings the warmth and craft of an Italian-inspired patisserie to the heart of Gainesville, serving the community with house-made pastries, artisan breads, and specialty coffee drinks. Every item that leaves our kitchen is prepared with quality ingredients and a dedication to old-world technique.</p>
+        <p class="rv">Whether you stop in for your morning espresso and a flaky croissant or linger over a slice of cake in the afternoon, Dolce Vita is a place to slow down, savor, and enjoy the sweeter side of life. We are proud to be part of the northwest Gainesville neighborhood and welcome locals, UF families, and visitors alike.</p>
+        <p class="quote rv">&ldquo;Baked with love, served with a smile &mdash; every single day.&rdquo;</p>
+      </section>
 
-  <!-- ── About ── -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Our Story</p>
-          <h2 class="section-title">A Corner of Italy<br>in Gainesville</h2>
-          <div class="divider"></div>
-          <p>Dolce Vita Bakery Cafe brings the warmth and craft of an Italian-inspired patisserie to the heart of Gainesville, serving the community with house-made pastries, artisan breads, and specialty coffee drinks. Every item that leaves our kitchen is prepared with quality ingredients and a dedication to old-world technique.</p>
-          <p>Whether you stop in for your morning espresso and a flaky croissant or linger over a slice of cake in the afternoon, Dolce Vita is a place to slow down, savor, and enjoy the sweeter side of life.</p>
-          <p>We are proud to be part of the northwest Gainesville neighborhood and welcome locals, UF families, and visitors alike.</p>
-          <div class="about-stats">
-            <div class="stat">
-              <div class="stat-value">4.5&#9733;</div>
-              <div class="stat-label">Google Rating</div>
-            </div>
-            <div class="stat">
-              <div class="stat-value">373</div>
-              <div class="stat-label">Reviews</div>
-            </div>
+      <section class="blk" id="menu">
+        <p class="lab">Fresh From Our Kitchen</p>
+        <h2>The Menu</h2>
+        <div class="m-item rv"><h3>Fresh-Baked Pastries <span class="dots"></span></h3><p>Croissants, danishes, muffins, and seasonal specialties crafted in-house each morning. Contact us for today's selection.</p></div>
+        <div class="m-item rv"><h3>Artisan Breads <span class="dots"></span></h3><p>Sourdoughs, focaccia, baguettes, and specialty loaves baked using traditional methods with quality ingredients.</p></div>
+        <div class="m-item rv"><h3>Cakes &amp; Desserts <span class="dots"></span></h3><p>Elegant layer cakes, tarts, cookies, and European-style desserts perfect for everyday treats or special occasions.</p></div>
+        <div class="m-item rv"><h3>Specialty Coffee &amp; Drinks <span class="dots"></span></h3><p>Espresso-based beverages, lattes, cappuccinos, and other cafe drinks to complement your baked goods.</p></div>
+        <div class="m-item rv"><h3>Sandwiches &amp; Light Bites <span class="dots"></span></h3><p>Fresh-made sandwiches and light savory options served on house-baked breads for a satisfying cafe lunch.</p></div>
+        <div class="m-item rv"><h3>Custom &amp; Celebration Orders <span class="dots"></span></h3><p>Special occasion cakes and custom orders for birthdays, events, and celebrations. Contact us for details and lead times.</p></div>
+      </section>
+
+      <section class="blk" id="rate">
+        <p class="lab">What Guests Say</p>
+        <div class="rate">
+          <div class="disc"><span id="dvnum">0.0</span></div>
+          <div class="rmeta">
+            <div class="rstars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            <h3>Loved across Gainesville</h3>
+            <p>Based on 373 verified reviews</p>
+            <div class="src">Source: Google Maps</div>
           </div>
         </div>
-        <div class="about-visual">
-          <div class="about-illustration">
-            <div class="about-icon">&#x1F950;</div>
-            <p>&ldquo;Baked with love, served with a smile &mdash; every single day.&rdquo;</p>
-          </div>
+      </section>
+
+      <section class="blk visit" id="visit">
+        <p class="lab">Visit Dolce Vita</p>
+        <h2>Slow down &amp; savor.</h2>
+        <div class="info">
+          <span class="lab2">Address</span>
+          4908 NW 34th Blvd, Suite 2<br>Gainesville, FL 32605
+          <span class="lab2">Phone</span>
+          <a class="tel" href="tel:+13525056688">(352) 505-6688</a>
+          <span class="lab2">Hours</span>
+          Contact us for current hours of operation.
         </div>
-      </div>
-    </div>
-  </section>
+        <a class="btn"
+           href="https://www.google.com/maps/search/Dolce%20Vita%20Bakery%20Cafe%204908%20NW%2034th%20Blvd%20Ste%202%2C%20Gainesville%2C%20FL%2032605"
+           target="_blank" rel="noopener noreferrer">Get Directions &nbsp;&rarr;</a>
+      </section>
 
-  <!-- ── Services ── -->
-  <section id="services">
-    <div class="container">
-      <div class="services-header">
-        <p class="section-label">What We Offer</p>
-        <h2 class="section-title">Fresh From Our Kitchen</h2>
-        <div class="divider"></div>
-      </div>
-      <div class="services-grid">
+      <footer>
+        <p><b>Dolce Vita Bakery Cafe</b> &mdash; 4908 NW 34th Blvd Ste 2, Gainesville, FL 32605 &mdash; (352) 505-6688</p>
+        <p style="margin-top:6px">&copy; 2026 Dolce Vita Bakery Cafe. Demo website. All information is for illustrative purposes.</p>
+      </footer>
+    </main>
+  </div>
 
-        <div class="service-card">
-          <span class="service-icon">&#x1F950;</span>
-          <h3>Fresh-Baked Pastries</h3>
-          <p>Croissants, danishes, muffins, and seasonal specialties crafted in-house each morning. Contact us for today&rsquo;s selection.</p>
-        </div>
+<script>
+(function(){
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        <div class="service-card">
-          <span class="service-icon">&#x1F35E;</span>
-          <h3>Artisan Breads</h3>
-          <p>Sourdoughs, focaccia, baguettes, and specialty loaves baked using traditional methods with quality ingredients.</p>
-        </div>
+  var rv = document.querySelectorAll('.rv');
+  if (rm || !('IntersectionObserver' in window)) {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.15});
+    rv.forEach(function(el){ io.observe(el); });
+  }
 
-        <div class="service-card">
-          <span class="service-icon">&#x2615;</span>
-          <h3>Specialty Coffee &amp; Drinks</h3>
-          <p>Espresso-based beverages, lattes, cappuccinos, and other cafe drinks to complement your baked goods.</p>
-        </div>
+  // scroll progress bar in sticky panel
+  var prog = document.getElementById('prog');
+  if (prog && !rm) {
+    window.addEventListener('scroll', function(){
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = h > 0 ? window.pageYOffset / h : 0;
+      prog.style.width = (p*100) + '%';
+    }, {passive:true});
+  } else if (prog) { prog.style.width = '100%'; }
 
-        <div class="service-card">
-          <span class="service-icon">&#x1F370;</span>
-          <h3>Cakes &amp; Desserts</h3>
-          <p>Elegant layer cakes, tarts, cookies, and European-style desserts perfect for everyday treats or special occasions.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#x1F381;</span>
-          <h3>Custom &amp; Celebration Orders</h3>
-          <p>Special occasion cakes and custom orders for birthdays, events, and celebrations. Contact us for details and lead times.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#x1F96A;</span>
-          <h3>Sandwiches &amp; Light Bites</h3>
-          <p>Fresh-made sandwiches and light savory options served on house-baked breads for a satisfying cafe lunch.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Contact ── -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-grid">
-
-        <div>
-          <p class="section-label">Get In Touch</p>
-          <h2 class="section-title">Visit Dolce Vita</h2>
-          <div class="divider" style="background:var(--caramel);"></div>
-
-          <div class="contact-info">
-
-            <div class="contact-item">
-              <div class="contact-item-icon">&#x1F4CD;</div>
-              <div class="contact-item-content">
-                <strong>Address</strong>
-                <p>4908 NW 34th Blvd, Suite 2<br>Gainesville, FL 32605</p>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-item-icon">&#x1F4DE;</div>
-              <div class="contact-item-content">
-                <strong>Phone</strong>
-                <p><a href="tel:+13525056688">(352) 505-6688</a></p>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-item-icon">&#x1F552;</div>
-              <div class="contact-item-content">
-                <strong>Hours</strong>
-                <p>Contact us for current hours of operation.</p>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="contact-actions" style="margin-top: 2rem;">
-            <a
-              href="https://www.google.com/maps/search/Dolce%20Vita%20Bakery%20Cafe%204908%20NW%2034th%20Blvd%20Ste%202%2C%20Gainesville%2C%20FL%2032605"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-directions"
-            >
-              &#x27A4;&nbsp; Get Directions
-            </a>
-          </div>
-        </div>
-
-        <div>
-          <div class="rating-card">
-            <div class="rating-label">Customer Reviews &mdash; Google Maps</div>
-            <div class="rating-score">
-              <div class="rating-number">4.5</div>
-              <div class="rating-max">/ 5</div>
-            </div>
-            <div class="stars">
-              <!-- 4 full stars -->
-              <div class="star"></div>
-              <div class="star"></div>
-              <div class="star"></div>
-              <div class="star"></div>
-              <!-- half star -->
-              <div class="star star-half"></div>
-            </div>
-            <div class="rating-count">Based on 373 verified reviews</div>
-            <div class="rating-source">Source: Google Maps</div>
-          </div>
-
-          <div style="margin-top: 2rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,151,90,0.2); border-radius: 10px; padding: 1.8rem;">
-            <p style="font-size: 0.88rem; color: var(--warm-tan); font-style: italic; line-height: 1.7;">
-              &ldquo;Our guests consistently celebrate the freshness of our pastries, the quality of our coffee, and the welcoming atmosphere of our cafe.&rdquo;
-            </p>
-            <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--caramel); letter-spacing: 0.06em; text-transform: uppercase;">
-              &mdash; Dolce Vita Bakery Cafe
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Footer ── -->
-  <footer>
-    <p>&copy; 2026 Dolce Vita Bakery Cafe &mdash; 4908 NW 34th Blvd Ste 2, Gainesville, FL 32605 &mdash; <a href="tel:+13525056688">(352) 505-6688</a></p>
-    <p style="margin-top: 0.4rem;">Demo website. All information is for illustrative purposes.</p>
-  </footer>
-
-  <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('navToggle');
-    const navLinks = document.getElementById('navLinks');
-    toggle.addEventListener('click', function () {
-      navLinks.classList.toggle('open');
-    });
-
-    // Close nav on link click (mobile)
-    navLinks.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        navLinks.classList.remove('open');
-      });
-    });
-  </script>
-
+  // rating count-up (4.5)
+  var num = document.getElementById('dvnum');
+  if (num) {
+    var target = 4.5;
+    if (rm) { num.textContent = target.toFixed(1); }
+    else {
+      var run = function(){
+        var t0=null, dur=1300;
+        function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
+          num.textContent=(target*e).toFixed(1); if(p<1) requestAnimationFrame(step); }
+        requestAnimationFrame(step);
+      };
+      if('IntersectionObserver' in window){
+        var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run();io2.unobserve(e.target);}});},{threshold:.6});
+        io2.observe(num);
+      } else run();
+    }
+  }
+})();
+</script>
 </body>
 </html>

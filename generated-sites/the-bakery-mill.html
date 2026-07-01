@@ -1,583 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Bakery Mill – Gainesville, FL</title>
-  <style>
-    /* ===== Reset & Base ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Georgia', serif;
-      background-color: #fdf6ee;
-      color: #3b2f1e;
-      line-height: 1.7;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Bakery Mill &ndash; Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --wheat:#efe3cc; --wheat-2:#f7f0e1; --ink:#241a10; --ink-2:#332413;
+    --gold:#c9902f; --gold-lt:#e6b862; --sage:#6f7f52; --cream:#fdf9f0; --muted:#7c6a50;
+    --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+    --sans:"Helvetica Neue",Arial,system-ui,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--wheat);color:var(--ink);font-family:var(--serif);line-height:1.65;overflow-x:hidden;text-align:center}
+  ::selection{background:var(--gold);color:var(--cream)}
+  a{color:inherit}
 
-    /* ===== Color Variables ===== */
-    :root {
-      --cream:      #fdf6ee;
-      --warm-light: #f5e6d0;
-      --gold:       #c8873a;
-      --gold-dark:  #a96a22;
-      --brown:      #3b2f1e;
-      --brown-mid:  #6b4c2a;
-      --brown-light:#9a7152;
-      --white:      #ffffff;
-    }
+  /* ---------- MONOLITH HERO ---------- */
+  .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;
+    padding:90px 20px;overflow:hidden;
+    background:radial-gradient(circle at 50% 42%,var(--wheat-2),var(--wheat) 68%)}
+  .orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none}
+  .ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:1px solid rgba(201,144,47,.28);border-radius:50%}
+  .ring.r1{width:360px;height:360px}
+  .ring.r2{width:820px;height:820px;border-style:dashed;border-color:rgba(111,127,82,.28)}
+  .ring.r3{width:1000px;height:1000px;border-color:rgba(201,144,47,.16)}
+  .spin{position:absolute;top:50%;left:50%;width:0;height:0}
+  .spin .grain{position:absolute;font-size:1.4rem;transform:translate(-50%,-50%)}
+  .spin.s1{animation:orbit 26s linear infinite}
+  .spin.s2{animation:orbit 40s linear infinite reverse}
+  @keyframes orbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  /* counter-rotate glyphs so they stay upright */
+  .spin.s1 .grain{animation:unspin 26s linear infinite}
+  .spin.s2 .grain{animation:unspin 40s linear infinite reverse}
+  @keyframes unspin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(-360deg)}}
 
-    /* ===== Typography ===== */
-    h1, h2, h3 { font-family: 'Georgia', serif; font-weight: normal; }
-    a { color: inherit; text-decoration: none; }
+  .monolith{position:relative;z-index:2;background:var(--ink);color:var(--cream);border-radius:26px;
+    padding:clamp(40px,6vw,70px) clamp(28px,5vw,64px);max-width:640px;box-shadow:0 30px 70px rgba(36,26,16,.32)}
+  .monolith .badge{font-family:var(--sans);text-transform:uppercase;letter-spacing:.32em;font-size:.72rem;color:var(--gold-lt)}
+  .monolith h1{font-weight:400;font-size:clamp(2.6rem,7.5vw,5.2rem);line-height:.92;letter-spacing:-.01em;margin:16px 0 10px}
+  .monolith .name{display:block;font-style:italic;color:var(--gold-lt);font-size:.5em;letter-spacing:.02em;margin-top:10px}
+  .monolith p{color:#d9c9b0;font-size:1.08rem;font-style:italic;margin:8px auto 26px;max-width:38ch}
+  .btn{display:inline-block;background:var(--gold);color:var(--ink);text-decoration:none;font-family:var(--sans);
+    font-weight:700;letter-spacing:.06em;padding:15px 36px;border-radius:100px;font-size:.9rem;
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;will-change:transform}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(201,144,47,.4)}
+  @media(max-width:760px){.ring.r3{display:none}.ring.r2{width:420px;height:420px}}
 
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background-color: rgba(59, 47, 30, 0.97);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .nav-logo .logo-icon {
-      width: 38px;
-      height: 38px;
-      background-color: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-    .nav-logo .logo-text {
-      color: var(--cream);
-      font-size: 1.15rem;
-      letter-spacing: 0.04em;
-    }
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-    .nav-links a {
-      color: var(--warm-light);
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background-color: var(--cream);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
-    }
+  section{padding:clamp(64px,9vw,120px) clamp(20px,6vw,40px)}
+  .rv{opacity:0;transform:translateY(30px);transition:opacity .85s ease,transform .85s ease}
+  .rv.in{opacity:1;transform:none}
+  .lab{font-family:var(--sans);text-transform:uppercase;letter-spacing:.3em;font-size:.72rem;color:var(--gold);margin-bottom:12px}
 
-    /* ===== HERO ===== */
-    .hero {
-      margin-top: 64px;
-      min-height: calc(100vh - 64px);
-      background: linear-gradient(160deg, #4a3320 0%, #6b4c2a 45%, #8a6040 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 20% 80%, rgba(200,135,58,0.18) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(200,135,58,0.12) 0%, transparent 50%);
-    }
-    .hero-content { position: relative; z-index: 1; max-width: 680px; }
-    .hero-badge {
-      display: inline-block;
-      background-color: rgba(200,135,58,0.25);
-      border: 1px solid rgba(200,135,58,0.55);
-      color: var(--gold);
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.35rem 1.1rem;
-      border-radius: 20px;
-      margin-bottom: 1.4rem;
-    }
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      color: var(--cream);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-    .hero h1 span { color: var(--gold); }
-    .hero p {
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      color: var(--warm-light);
-      max-width: 480px;
-      margin: 0 auto 2.2rem;
-      opacity: 0.92;
-    }
-    .btn-primary {
-      display: inline-block;
-      background-color: var(--gold);
-      color: var(--white);
-      padding: 0.85rem 2.2rem;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: background-color 0.25s, transform 0.15s;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-primary:hover { background-color: var(--gold-dark); transform: translateY(-2px); }
+  /* ---------- ABOUT (centered column) ---------- */
+  .about{max-width:760px;margin:0 auto}
+  .about h2{font-weight:400;font-size:clamp(2rem,5vw,3.2rem);line-height:1.05;margin-bottom:8px}
+  .about .sub{font-family:var(--sans);letter-spacing:.16em;text-transform:uppercase;font-size:.72rem;color:var(--sage);margin-bottom:26px}
+  .about p{color:var(--muted);font-size:1.08rem;margin-bottom:16px}
 
-    /* ===== SECTION WRAPPER ===== */
-    section { padding: 5rem 1.5rem; }
-    .container { max-width: 1060px; margin: 0 auto; }
-    .section-label {
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-    .section-title {
-      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
-      color: var(--brown);
-      margin-bottom: 1.2rem;
-    }
-    .divider {
-      width: 52px;
-      height: 3px;
-      background-color: var(--gold);
-      border-radius: 2px;
-      margin-bottom: 2.2rem;
-    }
+  /* ---------- OFFERINGS (centered radial cards) ---------- */
+  .offer{background:var(--wheat-2)}
+  .offer h2{font-weight:400;font-size:clamp(2rem,5vw,3.2rem);margin-bottom:8px}
+  .offer .grid{max-width:1000px;margin:34px auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+  .oc{background:var(--cream);border-radius:18px;padding:30px 26px;text-align:center;border:1px solid rgba(201,144,47,.2);
+    transition:transform .35s,box-shadow .35s}
+  .oc:hover{transform:translateY(-6px);box-shadow:0 18px 38px rgba(36,26,16,.14)}
+  .oc .emoji{font-size:2rem}
+  .oc h3{font-weight:400;font-size:1.3rem;margin:12px 0 8px}
+  .oc p{font-family:var(--sans);color:var(--muted);font-size:.92rem;line-height:1.6}
 
-    /* ===== ABOUT ===== */
-    .about { background-color: var(--cream); }
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    .about-text p {
-      font-size: 1.05rem;
-      color: var(--brown-mid);
-      margin-bottom: 1rem;
-    }
-    .about-art {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .about-illustration {
-      width: 260px;
-      height: 260px;
-      background: linear-gradient(135deg, var(--warm-light), #e8d0b0);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 7rem;
-      box-shadow: 0 8px 40px rgba(107,76,42,0.18);
-    }
-    .about-highlights {
-      display: flex;
-      gap: 2rem;
-      margin-top: 1.8rem;
-    }
-    .highlight-card {
-      flex: 1;
-      background-color: var(--warm-light);
-      border-radius: 8px;
-      padding: 1.2rem 1rem;
-      text-align: center;
-      border-top: 3px solid var(--gold);
-    }
-    .highlight-card .hc-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
-    .highlight-card .hc-label { font-size: 0.8rem; color: var(--brown-light); letter-spacing: 0.08em; text-transform: uppercase; }
+  /* ---------- RATING monolith ---------- */
+  .rate{background:var(--ink);color:var(--cream)}
+  .rate .big{font-family:var(--serif);font-size:clamp(4.4rem,15vw,9rem);line-height:.85;color:var(--gold-lt)}
+  .rate .stars{font-size:1.6rem;letter-spacing:.24em;color:var(--gold-lt);margin-top:6px}
+  .rate .meta{font-family:var(--sans);margin-top:12px;color:#d9c9b0}
+  .rate .src{font-family:var(--sans);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-top:6px}
 
-    /* ===== SERVICES ===== */
-    .services { background-color: var(--warm-light); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 1.6rem;
-    }
-    .service-card {
-      background-color: var(--white);
-      border-radius: 10px;
-      padding: 2rem 1.6rem;
-      border-bottom: 4px solid transparent;
-      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-    }
-    .service-card:hover {
-      border-color: var(--gold);
-      box-shadow: 0 6px 28px rgba(107,76,42,0.14);
-      transform: translateY(-4px);
-    }
-    .service-icon { font-size: 2.2rem; margin-bottom: 0.9rem; }
-    .service-card h3 {
-      font-size: 1.12rem;
-      color: var(--brown);
-      margin-bottom: 0.5rem;
-    }
-    .service-card p {
-      font-size: 0.93rem;
-      color: var(--brown-light);
-    }
+  /* ---------- ORDERS + CONTACT ---------- */
+  .orders{max-width:720px;margin:0 auto}
+  .orders h2{font-weight:400;font-size:clamp(2rem,5vw,3.2rem);margin-bottom:16px}
+  .orders p{font-family:var(--sans);color:var(--muted);margin-bottom:14px;line-height:1.7}
+  .orders .card{background:var(--cream);border-radius:20px;padding:34px;margin-top:30px;border:1px solid rgba(201,144,47,.2)}
+  .orders .card .addr{font-family:var(--serif);font-size:1.3rem;line-height:1.5}
+  .orders .card .k{display:block;font-family:var(--sans);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:16px 0 4px}
+  .orders .card .hrs{font-family:var(--sans);color:var(--muted)}
 
-    /* ===== CONTACT ===== */
-    .contact { background-color: var(--cream); }
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    .contact-info .info-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.9rem;
-      margin-bottom: 1.4rem;
-    }
-    .info-icon {
-      width: 40px;
-      height: 40px;
-      background-color: var(--warm-light);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .info-content .info-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.15rem;
-    }
-    .info-content .info-value {
-      font-size: 0.98rem;
-      color: var(--brown-mid);
-    }
-    .rating-block {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      background-color: var(--warm-light);
-      border-radius: 10px;
-      padding: 1.1rem 1.4rem;
-      margin-top: 2rem;
-    }
-    .rating-stars { font-size: 1.3rem; }
-    .rating-score {
-      font-size: 1.6rem;
-      font-weight: bold;
-      color: var(--brown);
-      line-height: 1;
-    }
-    .rating-meta { font-size: 0.82rem; color: var(--brown-light); }
-    .rating-meta strong { color: var(--brown-mid); }
-    .directions-btn {
-      display: inline-block;
-      margin-top: 1.6rem;
-      background-color: var(--gold);
-      color: var(--white);
-      padding: 0.82rem 2rem;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      transition: background-color 0.25s, transform 0.15s;
-    }
-    .directions-btn:hover { background-color: var(--gold-dark); transform: translateY(-2px); }
-    .contact-note {
-      background-color: var(--warm-light);
-      border-radius: 10px;
-      padding: 2.4rem 2rem;
-    }
-    .contact-note h3 {
-      font-size: 1.25rem;
-      color: var(--brown);
-      margin-bottom: 0.8rem;
-    }
-    .contact-note p {
-      font-size: 0.96rem;
-      color: var(--brown-mid);
-      margin-bottom: 1rem;
-    }
-    .contact-cta {
-      display: inline-block;
-      margin-top: 0.4rem;
-      border: 2px solid var(--gold);
-      color: var(--gold-dark);
-      padding: 0.7rem 1.6rem;
-      border-radius: 4px;
-      font-size: 0.88rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      transition: background-color 0.2s, color 0.2s;
-    }
-    .contact-cta:hover { background-color: var(--gold); color: var(--white); }
+  footer{background:var(--ink-2);color:#c2ac8c;font-family:var(--sans);padding:32px 20px;font-size:.82rem;letter-spacing:.03em}
+  footer b{color:var(--gold-lt)}
 
-    /* ===== FOOTER ===== */
-    footer {
-      background-color: var(--brown);
-      color: var(--warm-light);
-      text-align: center;
-      padding: 2.4rem 1.5rem;
-    }
-    footer .footer-logo {
-      font-size: 1.3rem;
-      color: var(--gold);
-      margin-bottom: 0.4rem;
-    }
-    footer p { font-size: 0.85rem; opacity: 0.7; }
-    footer .footer-address {
-      font-size: 0.88rem;
-      opacity: 0.8;
-      margin: 0.5rem 0;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .nav-links { display: none; flex-direction: column; }
-      .nav-links.open {
-        display: flex;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background-color: rgba(59,47,30,0.98);
-        padding: 1rem 2rem 1.5rem;
-        gap: 1.2rem;
-      }
-      .nav-toggle { display: flex; }
-
-      .about-inner,
-      .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-
-      .about-art { order: -1; }
-      .about-illustration { width: 180px; height: 180px; font-size: 5rem; }
-
-      .about-highlights { flex-direction: column; gap: 1rem; }
-
-      section { padding: 3.5rem 1.2rem; }
-    }
-
-    @media (max-width: 480px) {
-      .hero h1 { font-size: 2rem; }
-      .section-title { font-size: 1.5rem; }
-      .rating-block { flex-direction: column; align-items: flex-start; }
-    }
-  </style>
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .rv{opacity:1;transform:none}
+    .ring{opacity:.5}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">
-      <div class="logo-icon">&#127859;</div>
-      <span class="logo-text">The Bakery Mill</span>
-    </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Find Us</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
+  <!-- ===== MONOLITH HERO ===== -->
   <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">Gainesville's Local Bakery</div>
-      <h1>Baked Fresh, <span>Made with Heart</span></h1>
-      <p>Artisan breads, pastries, and sweets crafted with care — right here in Gainesville, FL.</p>
-      <a href="#about" class="btn-primary">Discover Our Story</a>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="container">
-      <div class="about-inner">
-        <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">A Neighborhood Bakery Worth Visiting</h2>
-          <div class="divider"></div>
-          <p>The Bakery Mill is a beloved neighborhood bakery in northwest Gainesville, dedicated to bringing the community fresh, scratch-made baked goods every day. From rustic sourdough loaves to delicate pastries, everything that comes out of our ovens is crafted with quality ingredients and old-fashioned care.</p>
-          <p>Whether you're stopping in for your morning coffee and a croissant or ordering a custom cake for a special occasion, we strive to make every visit feel warm and welcoming. We're proud to serve the Gainesville community and look forward to sharing a little sweetness with you.</p>
-          <div class="about-highlights">
-            <div class="highlight-card">
-              <div class="hc-icon">&#127850;</div>
-              <div class="hc-label">Fresh Daily</div>
-            </div>
-            <div class="highlight-card">
-              <div class="hc-icon">&#9829;&#65039;</div>
-              <div class="hc-label">Made with Love</div>
-            </div>
-            <div class="highlight-card">
-              <div class="hc-icon">&#127808;</div>
-              <div class="hc-label">Local Ingredients</div>
-            </div>
-          </div>
-        </div>
-        <div class="about-art">
-          <div class="about-illustration">&#127859;</div>
-        </div>
+    <div class="orbit" aria-hidden="true">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="spin s1">
+        <span class="grain" style="left:346px;top:-200px">&#127806;</span>
+        <span class="grain" style="left:-346px;top:200px">&#127838;</span>
+        <span class="grain" style="left:0;top:400px">&#129360;</span>
+      </div>
+      <div class="spin s2">
+        <span class="grain" style="left:0;top:-490px">&#127850;</span>
+        <span class="grain" style="left:-424px;top:245px">&#9749;</span>
+        <span class="grain" style="left:424px;top:245px">&#127874;</span>
       </div>
     </div>
-  </section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="container">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">From Our Oven to Your Table</h2>
-      <div class="divider"></div>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">&#127840;</div>
-          <h3>Artisan Breads</h3>
-          <p>Freshly baked sourdoughs, baguettes, and specialty loaves made daily with quality grains and traditional techniques.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#129360;</div>
-          <h3>Pastries &amp; Croissants</h3>
-          <p>Buttery, flaky pastries, croissants, danishes, and morning treats perfect alongside your favorite coffee.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127874;</div>
-          <h3>Custom Cakes</h3>
-          <p>Beautifully crafted custom cakes for birthdays, weddings, and special celebrations. Contact us for details.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127850;</div>
-          <h3>Cookies &amp; Sweets</h3>
-          <p>An ever-changing selection of cookies, brownies, bars, and seasonal confections to satisfy any sweet tooth.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#9749;</div>
-          <h3>Coffee &amp; Beverages</h3>
-          <p>Pair your baked goods with freshly brewed coffee and other beverages for the perfect bakery experience.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127881;</div>
-          <h3>Event &amp; Catering Orders</h3>
-          <p>Bulk and catering orders for office meetings, parties, and community events. Contact us for details.</p>
-        </div>
-      </div>
+    <div class="monolith">
+      <div class="badge">Gainesville's Local Bakery</div>
+      <h1>From Our Oven<br>to Your Table<span class="name">The Bakery Mill</span></h1>
+      <p>Artisan breads, pastries, and sweets crafted with care &mdash; right here in Gainesville, FL.</p>
+      <a class="btn" href="#offer">See What We Bake</a>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Come Visit The Bakery Mill</h2>
-      <div class="divider"></div>
-      <div class="contact-inner">
-        <div class="contact-info">
-          <div class="info-row">
-            <div class="info-icon">&#128205;</div>
-            <div class="info-content">
-              <div class="info-label">Address</div>
-              <div class="info-value">1143 NW 76th Blvd<br>Gainesville, FL 32606</div>
-            </div>
-          </div>
-          <div class="info-row">
-            <div class="info-icon">&#128337;</div>
-            <div class="info-content">
-              <div class="info-label">Hours</div>
-              <div class="info-value">Contact us for current hours</div>
-            </div>
-          </div>
+  <!-- ===== ABOUT ===== -->
+  <section class="about">
+    <div class="lab">Made with Heart</div>
+    <h2>A Neighborhood Bakery Worth Visiting</h2>
+    <div class="sub">Northwest Gainesville</div>
+    <p class="rv">The Bakery Mill is a beloved neighborhood bakery in northwest Gainesville, dedicated to bringing the community fresh, scratch-made baked goods every day. From rustic sourdough loaves to delicate pastries, everything that comes out of our ovens is crafted with quality ingredients and old-fashioned care.</p>
+    <p class="rv">Whether you're stopping in for your morning coffee and a croissant or ordering a custom cake for a special occasion, we strive to make every visit feel warm and welcoming. We're proud to serve the Gainesville community and look forward to sharing a little sweetness with you.</p>
+  </section>
 
-          <div class="rating-block">
-            <div class="rating-stars">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
-            <div>
-              <div class="rating-score">4.6</div>
-              <div class="rating-meta"><strong>709 reviews</strong> on Google Maps</div>
-            </div>
-          </div>
-
-          <a
-            href="https://www.google.com/maps/search/The%20Bakery%20Mill%201143%20NW%2076th%20Blvd%2C%20Gainesville%2C%20FL%2032606"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="directions-btn"
-          >
-            &#128205; Get Directions
-          </a>
-        </div>
-
-        <div class="contact-note">
-          <h3>Orders &amp; Inquiries</h3>
-          <p>Have a question about a custom cake, a catering order, or just want to know what's fresh today? We'd love to hear from you.</p>
-          <p>Stop by in person or reach out — we're always happy to help plan your next order or answer any questions about what we offer.</p>
-          <a
-            href="https://www.google.com/maps/search/The%20Bakery%20Mill%201143%20NW%2076th%20Blvd%2C%20Gainesville%2C%20FL%2032606"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="contact-cta"
-          >
-            View on Google Maps
-          </a>
-        </div>
-      </div>
+  <!-- ===== OFFERINGS ===== -->
+  <section class="offer" id="offer">
+    <div class="lab">From Our Oven</div>
+    <h2>What We Bake</h2>
+    <div class="grid">
+      <div class="oc rv"><div class="emoji">&#127838;</div><h3>Artisan Breads</h3><p>Freshly baked sourdoughs, baguettes, and specialty loaves made daily with quality grains and traditional techniques.</p></div>
+      <div class="oc rv"><div class="emoji">&#129360;</div><h3>Pastries &amp; Croissants</h3><p>Buttery, flaky pastries, croissants, danishes, and morning treats perfect alongside your favorite coffee.</p></div>
+      <div class="oc rv"><div class="emoji">&#127874;</div><h3>Custom Cakes</h3><p>Beautifully crafted custom cakes for birthdays, weddings, and special celebrations. Contact us for details.</p></div>
+      <div class="oc rv"><div class="emoji">&#127850;</div><h3>Cookies &amp; Sweets</h3><p>An ever-changing selection of cookies, brownies, bars, and seasonal confections to satisfy any sweet tooth.</p></div>
+      <div class="oc rv"><div class="emoji">&#9749;</div><h3>Coffee &amp; Beverages</h3><p>Pair your baked goods with freshly brewed coffee and other beverages for the perfect bakery experience.</p></div>
+      <div class="oc rv"><div class="emoji">&#128230;</div><h3>Event &amp; Catering Orders</h3><p>Bulk and catering orders for office meetings, parties, and community events. Contact us for details.</p></div>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ===== RATING ===== -->
+  <section class="rate">
+    <div class="lab" style="color:var(--gold-lt)">Loved Locally</div>
+    <div class="big" id="tmnum">0.0</div>
+    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <div class="meta">709 reviews on Google Maps</div>
+    <div class="src">Google Maps Rating</div>
+  </section>
+
+  <!-- ===== ORDERS + CONTACT ===== -->
+  <section class="orders" id="visit">
+    <div class="lab">Orders &amp; Inquiries</div>
+    <h2>Come Visit The Bakery Mill</h2>
+    <p class="rv">Have a question about a custom cake, a catering order, or just want to know what's fresh today? We'd love to hear from you.</p>
+    <p class="rv">Stop by in person or reach out &mdash; we're always happy to help plan your next order or answer any questions about what we offer.</p>
+    <div class="card rv">
+      <div class="addr">1143 NW 76th Blvd<br>Gainesville, FL 32606</div>
+      <span class="k">Hours</span>
+      <div class="hrs">Contact us for current hours and availability.</div>
+      <a class="btn" style="margin-top:22px"
+         href="https://www.google.com/maps/search/The%20Bakery%20Mill%201143%20NW%2076th%20Blvd%2C%20Gainesville%2C%20FL%2032606"
+         target="_blank" rel="noopener noreferrer">Get Directions &nbsp;&rarr;</a>
+    </div>
+  </section>
+
   <footer>
-    <div class="footer-logo">The Bakery Mill</div>
-    <p class="footer-address">1143 NW 76th Blvd, Gainesville, FL 32606</p>
-    <p>&copy; 2026 The Bakery Mill. All rights reserved.</p>
+    <p><b>The Bakery Mill</b> &mdash; 1143 NW 76th Blvd, Gainesville, FL 32606</p>
+    <p style="margin-top:6px">&copy; 2026 The Bakery Mill. All rights reserved.</p>
   </footer>
 
-  <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('navToggle');
-    const links  = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
-  </script>
+<script>
+(function(){
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  var rv = document.querySelectorAll('.rv');
+  if (rm || !('IntersectionObserver' in window)) {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.16});
+    rv.forEach(function(el){ io.observe(el); });
+  }
+
+  var num = document.getElementById('tmnum');
+  if (num) {
+    var target = 4.6;
+    if (rm) { num.textContent = target.toFixed(1); }
+    else {
+      var run = function(){
+        var t0=null, dur=1300;
+        function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
+          num.textContent=(target*e).toFixed(1); if(p<1) requestAnimationFrame(step); }
+        requestAnimationFrame(step);
+      };
+      if('IntersectionObserver' in window){
+        var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run();io2.unobserve(e.target);}});},{threshold:.6});
+        io2.observe(num);
+      } else run();
+    }
+  }
+})();
+</script>
 </body>
 </html>

@@ -1,733 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lor Kebab — Persian Restaurant | Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Georgia', serif;
-      background: #1a0e08;
-      color: #f2e8d9;
-      line-height: 1.7;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lor Kebab &mdash; Persian Restaurant | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --night:#120d0a; --night-2:#1c1410; --saffron:#e8a13a; --saffron-lt:#f4c65f;
+    --pom:#9e2b3a; --pom-lt:#c34355; --teal:#3f8f86; --cream:#f3e9d9; --muted:#b8a690;
+    --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+    --sans:"Helvetica Neue",Arial,system-ui,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--night);color:var(--cream);font-family:var(--serif);line-height:1.65;overflow-x:hidden}
+  ::selection{background:var(--saffron);color:var(--night)}
+  a{color:inherit}
 
-    /* ── Palette ──
-       Deep saffron: #e8a020
-       Warm ivory:   #f2e8d9
-       Rich crimson: #8b1a1a
-       Dark earth:   #1a0e08
-       Mid earth:    #2d1a0e
-       Accent copper:#c47c2b
-    */
+  /* ---------- CANVAS HERO ---------- */
+  .hero{position:relative;height:100vh;min-height:560px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+  #spice{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+  .hero::after{content:"";position:absolute;inset:0;z-index:1;
+    background:radial-gradient(ellipse at 50% 40%,rgba(18,13,10,.15),rgba(18,13,10,.85) 78%)}
+  .hero-inner{position:relative;z-index:2;padding:0 22px;max-width:900px}
+  .hero .badge{font-family:var(--sans);text-transform:uppercase;letter-spacing:.36em;font-size:.74rem;color:var(--saffron)}
+  .hero h1{font-weight:400;font-size:clamp(3.4rem,13vw,9rem);line-height:.86;letter-spacing:.01em;margin:18px 0 20px}
+  .hero h1 em{font-style:italic;background:linear-gradient(90deg,var(--saffron),var(--pom-lt),var(--saffron));
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+    background-size:200% 100%;animation:shine 8s ease-in-out infinite}
+  @keyframes shine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .hero p{font-size:clamp(1.05rem,2.4vw,1.4rem);color:var(--cream);font-style:italic;max-width:44ch;margin:0 auto 30px}
+  .hero .cta{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .btn{display:inline-block;text-decoration:none;font-family:var(--sans);font-weight:700;letter-spacing:.06em;
+    padding:15px 34px;border-radius:100px;font-size:.9rem;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,background .25s;will-change:transform}
+  .btn.solid{background:var(--saffron);color:var(--night)}
+  .btn.solid:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(232,161,58,.4)}
+  .btn.ghost{border:1px solid rgba(243,233,217,.4);color:var(--cream)}
+  .btn.ghost:hover{border-color:var(--saffron);color:var(--saffron)}
+  .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;
+    font-family:var(--sans);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
 
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-      background: rgba(26, 14, 8, 0.95);
-      border-bottom: 2px solid #c47c2b;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.85rem 2rem;
-      backdrop-filter: blur(6px);
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-    }
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: #e8a020;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-    .nav-logo-text {
-      font-size: 1.35rem;
-      font-weight: bold;
-      color: #f2e8d9;
-      letter-spacing: 0.04em;
-    }
-    .nav-logo-text span {
-      color: #e8a020;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-    }
-    nav ul li a {
-      color: #d4c4a8;
-      text-decoration: none;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    nav ul li a:hover { color: #e8a020; }
+  section{padding:clamp(64px,9vw,120px) clamp(20px,6vw,80px)}
+  .rv{opacity:0;transform:translateY(30px);transition:opacity .85s ease,transform .85s ease}
+  .rv.in{opacity:1;transform:none}
 
-    /* ── Hamburger ── */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #f2e8d9;
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-    .nav-toggle:hover span { background: #e8a020; }
+  /* ---------- ABOUT ---------- */
+  .about{background:var(--night-2);max-width:none}
+  .about .lab{font-family:var(--sans);text-transform:uppercase;letter-spacing:.3em;font-size:.72rem;color:var(--saffron);margin-bottom:14px}
+  .about h2{font-weight:400;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin-bottom:26px;max-width:20ch}
+  .about .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px;font-family:var(--sans);color:var(--muted);font-size:1rem;line-height:1.8}
+  .about .cols p{border-top:1px solid rgba(243,233,217,.15);padding-top:16px}
 
-    /* ── Hero ── */
-    #hero {
-      min-height: 100vh;
-      background:
-        linear-gradient(to bottom, rgba(26,14,8,0.55) 0%, rgba(26,14,8,0.75) 60%, #1a0e08 100%),
-        repeating-linear-gradient(
-          135deg,
-          #2d1a0e 0px, #2d1a0e 2px,
-          transparent 2px, transparent 28px
-        ),
-        radial-gradient(ellipse at 30% 60%, #5a2a0a 0%, #1a0e08 70%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 7rem 1.5rem 4rem;
-    }
-    .hero-ornament {
-      font-size: 2.8rem;
-      margin-bottom: 1.2rem;
-      opacity: 0.85;
-    }
-    .hero-eyebrow {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: #e8a020;
-      margin-bottom: 1rem;
-    }
-    #hero h1 {
-      font-size: clamp(2.8rem, 8vw, 5.5rem);
-      color: #f2e8d9;
-      letter-spacing: 0.06em;
-      line-height: 1.05;
-      margin-bottom: 1.2rem;
-    }
-    #hero h1 em {
-      color: #e8a020;
-      font-style: normal;
-    }
-    .hero-divider {
-      width: 80px;
-      height: 2px;
-      background: linear-gradient(to right, transparent, #c47c2b, transparent);
-      margin: 0 auto 1.4rem;
-    }
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: #d4c4a8;
-      max-width: 540px;
-      margin: 0 auto 2.4rem;
-      font-style: italic;
-    }
-    .hero-cta {
-      display: inline-block;
-      padding: 0.85rem 2.2rem;
-      background: #e8a020;
-      color: #1a0e08;
-      text-decoration: none;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      transition: background 0.25s, transform 0.15s;
-    }
-    .hero-cta:hover { background: #c47c2b; transform: translateY(-2px); }
+  /* ---------- HORIZONTAL SCROLL MENU ---------- */
+  .menu-head{padding:clamp(50px,7vw,90px) clamp(20px,6vw,80px) 0}
+  .menu-head .lab{font-family:var(--sans);text-transform:uppercase;letter-spacing:.3em;font-size:.72rem;color:var(--saffron);margin-bottom:10px}
+  .menu-head h2{font-weight:400;font-size:clamp(2rem,5vw,3.4rem)}
+  .menu-head .hint{font-family:var(--sans);font-size:.78rem;color:var(--muted);margin-top:10px}
+  .rail{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:34px clamp(20px,6vw,80px) 40px;scrollbar-width:thin;scrollbar-color:var(--saffron) transparent}
+  .rail::-webkit-scrollbar{height:8px}
+  .rail::-webkit-scrollbar-thumb{background:var(--saffron);border-radius:4px}
+  .rail::-webkit-scrollbar-track{background:rgba(243,233,217,.08)}
+  .card{scroll-snap-align:center;flex:0 0 min(84vw,360px);background:linear-gradient(160deg,var(--night-2),#241a14);
+    border:1px solid rgba(232,161,58,.22);border-radius:20px;padding:32px;position:relative;overflow:hidden;
+    transition:transform .35s,border-color .35s}
+  .card:hover{transform:translateY(-8px);border-color:var(--saffron)}
+  .card .no{font-family:var(--sans);font-size:.72rem;letter-spacing:.2em;color:var(--pom-lt)}
+  .card h3{font-weight:400;font-size:1.7rem;margin:10px 0 12px;line-height:1.05;color:var(--saffron-lt)}
+  .card p{font-family:var(--sans);color:var(--muted);font-size:.95rem;line-height:1.7}
+  .card::after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle,rgba(232,161,58,.16),transparent 70%);right:-30px;top:-30px}
 
-    /* ── Section Base ── */
-    section {
-      padding: 5rem 1.5rem;
-    }
-    .section-inner {
-      max-width: 1060px;
-      margin: 0 auto;
-    }
-    .section-label {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: #e8a020;
-      margin-bottom: 0.6rem;
-    }
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.6rem);
-      color: #f2e8d9;
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-    }
-    .section-rule {
-      width: 60px;
-      height: 2px;
-      background: #c47c2b;
-      margin-bottom: 2rem;
-    }
+  /* ---------- RATING + RESERVATIONS ---------- */
+  .foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,80px);align-items:center;background:var(--night-2)}
+  .rate-badge{background:linear-gradient(160deg,var(--pom),var(--pom-lt));border-radius:24px;padding:40px;text-align:center;color:var(--cream)}
+  .rate-badge .star{font-size:2rem}
+  .rate-badge .big{font-family:var(--serif);font-size:clamp(3.6rem,9vw,5.6rem);line-height:.9}
+  .rate-badge .stars{font-size:1.3rem;letter-spacing:.2em;color:var(--saffron-lt)}
+  .rate-badge .sub{font-family:var(--sans);font-size:.9rem;margin-top:8px;opacity:.92}
+  .rate-badge .src{font-family:var(--sans);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;margin-top:6px;opacity:.7}
+  .resv .lab{font-family:var(--sans);text-transform:uppercase;letter-spacing:.3em;font-size:.72rem;color:var(--saffron);margin-bottom:12px}
+  .resv h2{font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.05;margin-bottom:18px}
+  .resv p{font-family:var(--sans);color:var(--muted);margin-bottom:14px;line-height:1.7}
+  .resv .info{font-family:var(--sans);font-size:1.05rem;line-height:1.9;margin-top:10px}
+  .resv .info .k{display:block;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--saffron);margin-top:14px}
+  .resv a.tel{color:var(--saffron-lt);text-decoration:none;border-bottom:1px solid var(--pom-lt)}
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr}}
 
-    /* ── About ── */
-    #about {
-      background: #2d1a0e;
-    }
-    #about .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-    }
-    #about .about-text p {
-      color: #d4c4a8;
-      margin-bottom: 1.1rem;
-      font-size: 1.05rem;
-    }
-    .about-badge {
-      background: #1a0e08;
-      border: 1px solid #c47c2b;
-      border-radius: 4px;
-      padding: 2rem;
-      text-align: center;
-    }
-    .about-badge-star {
-      font-size: 2.2rem;
-      margin-bottom: 0.6rem;
-    }
-    .about-badge-rating {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #e8a020;
-      line-height: 1;
-    }
-    .about-badge-label {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.8rem;
-      color: #a89070;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 0.4rem;
-    }
-    .about-badge-sub {
-      font-size: 0.9rem;
-      color: #d4c4a8;
-      margin-top: 0.5rem;
-    }
-    .stars {
-      color: #e8a020;
-      font-size: 1.3rem;
-      letter-spacing: 0.05em;
-      margin: 0.5rem 0;
-    }
+  footer{background:var(--night);color:var(--muted);font-family:var(--sans);text-align:center;
+    padding:32px 20px;font-size:.82rem;letter-spacing:.03em;border-top:1px solid rgba(232,161,58,.18)}
+  footer b{color:var(--saffron)}
 
-    /* ── Menu / Services ── */
-    #services {
-      background: #1a0e08;
-    }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 0.5rem;
-    }
-    .service-card {
-      background: #2d1a0e;
-      border: 1px solid #3d2515;
-      border-radius: 4px;
-      padding: 1.8rem;
-      transition: border-color 0.25s, transform 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: #e8a020;
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-    .service-card:hover {
-      border-color: #c47c2b;
-      transform: translateY(-3px);
-    }
-    .service-card:hover::before { opacity: 1; }
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 0.8rem;
-    }
-    .service-card h3 {
-      font-size: 1.15rem;
-      color: #f2e8d9;
-      margin-bottom: 0.5rem;
-    }
-    .service-card p {
-      font-size: 0.92rem;
-      color: #a89070;
-      font-family: 'Helvetica Neue', sans-serif;
-      line-height: 1.55;
-    }
-
-    /* ── Contact ── */
-    #contact {
-      background: #2d1a0e;
-    }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 3.5rem;
-      align-items: start;
-    }
-    .contact-info-item {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-      margin-bottom: 1.8rem;
-    }
-    .contact-info-icon {
-      width: 40px;
-      height: 40px;
-      border: 1px solid #c47c2b;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-    .contact-info-text strong {
-      display: block;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #e8a020;
-      margin-bottom: 0.3rem;
-    }
-    .contact-info-text p, .contact-info-text a {
-      color: #d4c4a8;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .contact-info-text a:hover { color: #e8a020; }
-
-    .contact-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.9rem 1.6rem;
-      background: #e8a020;
-      color: #1a0e08;
-      text-decoration: none;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-weight: 700;
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      transition: background 0.25s, transform 0.15s;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-primary:hover { background: #c47c2b; transform: translateY(-2px); }
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.9rem 1.6rem;
-      background: transparent;
-      color: #f2e8d9;
-      text-decoration: none;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-weight: 600;
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      border: 1px solid #c47c2b;
-      transition: background 0.25s, color 0.25s, transform 0.15s;
-    }
-    .btn-outline:hover {
-      background: rgba(196, 124, 43, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .contact-card {
-      background: #1a0e08;
-      border: 1px solid #3d2515;
-      border-radius: 4px;
-      padding: 2.2rem;
-    }
-    .contact-card h3 {
-      font-size: 1.3rem;
-      color: #f2e8d9;
-      margin-bottom: 0.4rem;
-    }
-    .contact-card p {
-      color: #a89070;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.9rem;
-      margin-bottom: 1.6rem;
-    }
-    .rating-display {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      background: #2d1a0e;
-      border: 1px solid #3d2515;
-      border-radius: 4px;
-      padding: 1rem 1.3rem;
-      margin-top: 1.5rem;
-    }
-    .rating-number {
-      font-size: 2.2rem;
-      font-weight: bold;
-      color: #e8a020;
-      line-height: 1;
-    }
-    .rating-details {
-      flex: 1;
-    }
-    .rating-details .stars { font-size: 1rem; margin: 0 0 0.2rem; }
-    .rating-details small {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.78rem;
-      color: #a89070;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: #0f0804;
-      border-top: 1px solid #2d1a0e;
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-    }
-    .footer-inner {
-      max-width: 1060px;
-      margin: 0 auto;
-    }
-    .footer-logo {
-      font-size: 1.4rem;
-      color: #e8a020;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.05em;
-    }
-    .footer-tagline {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.82rem;
-      color: #6b5040;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 1.4rem;
-    }
-    .footer-divider {
-      width: 40px;
-      height: 1px;
-      background: #3d2515;
-      margin: 0 auto 1.4rem;
-    }
-    .footer-nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      list-style: none;
-      margin-bottom: 1.5rem;
-    }
-    .footer-nav a {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.8rem;
-      color: #6b5040;
-      text-decoration: none;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .footer-nav a:hover { color: #e8a020; }
-    .footer-copy {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.78rem;
-      color: #4a3020;
-    }
-
-    /* ── Persian ornament dividers ── */
-    .ornament-row {
-      text-align: center;
-      color: #c47c2b;
-      font-size: 1.2rem;
-      opacity: 0.5;
-      margin: 1rem 0;
-      letter-spacing: 0.4em;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      nav ul { display: none; }
-      nav ul.open {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: rgba(26, 14, 8, 0.98);
-        padding: 1rem 2rem 1.5rem;
-        gap: 1.2rem;
-        border-bottom: 2px solid #c47c2b;
-      }
-      .nav-toggle { display: flex; }
-
-      #about .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      .about-badge { max-width: 280px; margin: 0 auto; }
-    }
-
-    @media (max-width: 480px) {
-      section { padding: 3.5rem 1rem; }
-      .service-card { padding: 1.4rem; }
-      .contact-card { padding: 1.5rem; }
-    }
-  </style>
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .rv{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav id="main-nav">
-    <a href="#hero" class="nav-logo">
-      <div class="nav-logo-icon">&#x1F525;</div>
-      <span class="nav-logo-text"><span>Lor</span> Kebab</span>
-    </a>
-    <button class="nav-toggle" aria-label="Toggle menu" onclick="
-      var ul = document.querySelector('nav ul');
-      ul.classList.toggle('open');
-    ">
-      <span></span><span></span><span></span>
-    </button>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Menu</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-ornament">&#x2741;</div>
-    <p class="hero-eyebrow">Persian Cuisine &bull; Gainesville, FL</p>
-    <h1><em>Lor</em> Kebab</h1>
-    <div class="hero-divider"></div>
-    <p class="hero-tagline">Ancient flavors, lovingly prepared &mdash; where the aromas of saffron and sumac bring Persia to your table.</p>
-    <a href="#contact" class="hero-cta">Visit Us</a>
+  <!-- ===== CANVAS HERO ===== -->
+  <section class="hero">
+    <canvas id="spice" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="badge">Persian Cuisine &bull; Gainesville, FL</div>
+      <h1>Lor <em>Kebab</em></h1>
+      <p>Ancient flavors, lovingly prepared &mdash; where the aromas of saffron and sumac bring Persia to your table.</p>
+      <div class="cta">
+        <a class="btn solid" href="#menu">Explore the Menu</a>
+        <a class="btn ghost" href="#visit">Reservations</a>
+      </div>
+    </div>
+    <div class="scroll-hint">Scroll &darr;</div>
   </section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Our Story</p>
-          <h2 class="section-title">A Taste of Persian Tradition</h2>
-          <div class="section-rule"></div>
-          <p>Lor Kebab brings the rich culinary heritage of Persia to the heart of downtown Gainesville. Every dish is crafted with time-honored spice blends and slow-cooked techniques that honor the depth and warmth of Iranian home cooking.</p>
-          <p>From fragrant rice dishes layered with saffron to charcoal-grilled skewers marinated overnight, our kitchen is devoted to authenticity and freshness. We source quality ingredients and prepare each plate with the care it deserves.</p>
-          <p>Whether you are a longtime lover of Persian food or discovering it for the first time, Lor Kebab offers a welcoming table and a menu that speaks for itself. Contact us for current availability and details.</p>
-          <div class="ornament-row">&#x2665; &nbsp; &#x2665; &nbsp; &#x2665;</div>
-        </div>
-        <div>
-          <div class="about-badge">
-            <div class="about-badge-star">&#x2B50;</div>
-            <div class="about-badge-rating">4.9</div>
-            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div class="about-badge-label">Google Maps Rating</div>
-            <div class="about-badge-sub">Based on 271 reviews</div>
-          </div>
-        </div>
-      </div>
+  <!-- ===== ABOUT ===== -->
+  <section class="about">
+    <div class="lab">A Taste of Persian Tradition</div>
+    <h2>The rich culinary heritage of Persia, in downtown Gainesville.</h2>
+    <div class="cols">
+      <p class="rv">Lor Kebab brings the rich culinary heritage of Persia to the heart of downtown Gainesville. Every dish is crafted with time-honored spice blends and slow-cooked techniques that honor the depth and warmth of Iranian home cooking.</p>
+      <p class="rv">From fragrant rice dishes layered with saffron to charcoal-grilled skewers marinated overnight, our kitchen is devoted to authenticity and freshness. We source quality ingredients and prepare each plate with the care it deserves.</p>
+      <p class="rv">Whether you are a longtime lover of Persian food or discovering it for the first time, Lor Kebab offers a welcoming table and a menu that speaks for itself. Contact us for current availability and details.</p>
     </div>
   </section>
 
-  <!-- SERVICES / MENU HIGHLIGHTS -->
-  <section id="services">
-    <div class="section-inner">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Menu Highlights</h2>
-      <div class="section-rule"></div>
-      <div class="services-grid">
+  <!-- ===== MENU (horizontal scroll) ===== -->
+  <div class="menu-head" id="menu">
+    <div class="lab">Menu Highlights</div>
+    <h2>Dishes worth the journey</h2>
+    <p class="hint">Scroll sideways to browse &rarr;</p>
+  </div>
+  <div class="rail">
+    <div class="card"><span class="no">01 &mdash; Mezze</span><h3>Mezze &amp; Appetizers</h3><p>A selection of Persian starters including hummus, kashk-e bademjan (eggplant dip), fresh herbs, and warm flatbread.</p></div>
+    <div class="card"><span class="no">02 &mdash; Soups</span><h3>Soups &amp; Ash</h3><p>Hearty Persian soups like ash reshteh &mdash; thick, herb-laden, and deeply nourishing, served as a traditional starter or standalone meal.</p></div>
+    <div class="card"><span class="no">03 &mdash; The Grill</span><h3>Charcoal Kebabs</h3><p>Tender skewers of seasoned lamb, beef, and chicken, charcoal-grilled to perfection and served with saffron rice and grilled tomatoes.</p></div>
+    <div class="card"><span class="no">04 &mdash; Rice</span><h3>Saffron Rice Dishes</h3><p>Fluffy basmati rice preparations including chelo and polo varieties, infused with golden saffron and topped with a crispy tahdig crust.</p></div>
+    <div class="card"><span class="no">05 &mdash; Stews</span><h3>Persian Stews (Khoresht)</h3><p>Slow-simmered stews such as ghormeh sabzi and fesenjan, rich with herbs, pomegranate, and warming spices &mdash; the heart of Persian cuisine.</p></div>
+    <div class="card"><span class="no">06 &mdash; Sweets</span><h3>Persian Desserts &amp; Drinks</h3><p>Finish with rosewater-scented sweets, baklava, or a refreshing glass of doogh. Dessert selections vary &mdash; contact us for current offerings.</p></div>
+  </div>
 
-        <div class="service-card">
-          <div class="service-icon">&#x1F356;</div>
-          <h3>Grilled Kebabs</h3>
-          <p>Tender skewers of seasoned lamb, beef, and chicken, charcoal-grilled to perfection and served with saffron rice and grilled tomatoes.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#x1F372;</div>
-          <h3>Persian Stews (Khoresht)</h3>
-          <p>Slow-simmered stews such as ghormeh sabzi and fesenjan, rich with herbs, pomegranate, and warming spices &mdash; the heart of Persian cuisine.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#x1F35A;</div>
-          <h3>Saffron Rice Dishes</h3>
-          <p>Fluffy basmati rice preparations including chelo and polo varieties, infused with golden saffron and topped with a crispy tahdig crust.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#x1F96B;</div>
-          <h3>Mezze &amp; Appetizers</h3>
-          <p>A selection of Persian starters including hummus, kashk-e bademjan (eggplant dip), fresh herbs, and warm flatbread.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#x1F9C5;</div>
-          <h3>Soups &amp; Ash</h3>
-          <p>Hearty Persian soups like ash reshteh &mdash; thick, herb-laden, and deeply nourishing, served as a traditional starter or standalone meal.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#x1F36E;</div>
-          <h3>Persian Desserts &amp; Drinks</h3>
-          <p>Finish with rosewater-scented sweets, baklava, or a refreshing glass of doogh. Dessert selections vary &mdash; contact us for current offerings.</p>
-        </div>
-
+  <!-- ===== RATING + RESERVATIONS ===== -->
+  <section class="foot-grid" id="visit">
+    <div class="rate-badge">
+      <div class="star">&#11088;</div>
+      <div class="big" id="lknum">0.0</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="sub">Based on 271 reviews</div>
+      <div class="src">Google Maps Rating</div>
+    </div>
+    <div class="resv">
+      <div class="lab">Reservations &amp; Inquiries</div>
+      <h2>Come to the table.</h2>
+      <p>For table reservations, catering inquiries, or any questions about our menu, give us a call or stop by. Contact us for details on private events and catering packages.</p>
+      <div class="info">
+        <span class="k">Address</span>
+        12 SW 1st Ave, Gainesville, FL 32601
+        <span class="k">Phone</span>
+        <a class="tel" href="tel:+13058464506">(305) 846-4506</a>
+        <span class="k">Hours</span>
+        Contact us for current hours and availability.
       </div>
+      <a class="btn solid" style="margin-top:22px"
+         href="https://www.google.com/maps/search/Lor%20Kebab%2012%20SW%201st%20Ave%2C%20Gainesville%2C%20FL%2032601"
+         target="_blank" rel="noopener noreferrer">Get Directions &nbsp;&rarr;</a>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <div class="contact-grid">
-        <div>
-          <p class="section-label">Find Us</p>
-          <h2 class="section-title">Come Visit</h2>
-          <div class="section-rule"></div>
-
-          <div class="contact-info-item">
-            <div class="contact-info-icon">&#x1F4CD;</div>
-            <div class="contact-info-text">
-              <strong>Address</strong>
-              <p>12 SW 1st Ave<br>Gainesville, FL 32601</p>
-            </div>
-          </div>
-
-          <div class="contact-info-item">
-            <div class="contact-info-icon">&#x1F4DE;</div>
-            <div class="contact-info-text">
-              <strong>Phone</strong>
-              <a href="tel:+13058464506">(305) 846-4506</a>
-            </div>
-          </div>
-
-          <div class="contact-info-item">
-            <div class="contact-info-icon">&#x1F55B;</div>
-            <div class="contact-info-text">
-              <strong>Hours</strong>
-              <p>Contact us for current hours and availability.</p>
-            </div>
-          </div>
-
-          <div class="contact-actions">
-            <a href="https://www.google.com/maps/search/Lor%20Kebab%2012%20SW%201st%20Ave%2C%20Gainesville%2C%20FL%2032601"
-               target="_blank" rel="noopener" class="btn-primary">
-              &#x1F5FA; Get Directions
-            </a>
-            <a href="tel:+13058464506" class="btn-outline">
-              &#x1F4DE; Call Us Now
-            </a>
-          </div>
-        </div>
-
-        <div>
-          <div class="contact-card">
-            <h3>Reservations &amp; Inquiries</h3>
-            <p>For table reservations, catering inquiries, or any questions about our menu, give us a call or stop by.</p>
-            <div style="margin-bottom: 0.8rem;">
-              <strong style="display:block; font-family:'Helvetica Neue',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:#e8a020; margin-bottom:0.4rem;">Phone</strong>
-              <a href="tel:+13058464506" style="color:#f2e8d9; font-size:1.25rem; text-decoration:none; font-weight:bold;">(305) 846-4506</a>
-            </div>
-            <div>
-              <strong style="display:block; font-family:'Helvetica Neue',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:#e8a020; margin-bottom:0.4rem;">Catering</strong>
-              <p style="color:#a89070; font-family:'Helvetica Neue',sans-serif; font-size:0.9rem;">Contact us for details on private events and catering packages.</p>
-            </div>
-            <div class="rating-display">
-              <div class="rating-number">4.9</div>
-              <div class="rating-details">
-                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <small>271 reviews on Google Maps</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
   <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">Lor Kebab</div>
-      <div class="footer-tagline">Persian Cuisine &bull; Gainesville, FL</div>
-      <div class="footer-divider"></div>
-      <ul class="footer-nav">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Menu</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="tel:+13058464506">(305) 846-4506</a></li>
-      </ul>
-      <p class="footer-copy">12 SW 1st Ave, Gainesville, FL 32601 &nbsp;&bull;&nbsp; &copy; Lor Kebab. All rights reserved.</p>
-    </div>
+    <p><b>Lor Kebab</b> &mdash; 12 SW 1st Ave, Gainesville, FL 32601 &nbsp;&bull;&nbsp; (305) 846-4506</p>
+    <p style="margin-top:6px">&copy; Lor Kebab. All rights reserved.</p>
   </footer>
 
+<script>
+(function(){
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveals
+  var rv = document.querySelectorAll('.rv');
+  if (rm || !('IntersectionObserver' in window)) {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.18});
+    rv.forEach(function(el){ io.observe(el); });
+  }
+
+  // Rating count-up (4.9)
+  var num = document.getElementById('lknum');
+  if (num) {
+    var target = 4.9;
+    if (rm) { num.textContent = target.toFixed(1); }
+    else {
+      var run = function(){
+        var t0=null, dur=1300;
+        function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
+          num.textContent=(target*e).toFixed(1); if(p<1) requestAnimationFrame(step); }
+        requestAnimationFrame(step);
+      };
+      if('IntersectionObserver' in window){
+        var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run();io2.unobserve(e.target);}});},{threshold:.6});
+        io2.observe(num);
+      } else run();
+    }
+  }
+
+  // Canvas spice-mote particle field
+  var cv = document.getElementById('spice');
+  if (cv && cv.getContext) {
+    var ctx = cv.getContext('2d'), w, h, parts = [], raf = null;
+    var colors = ['#e8a13a','#f4c65f','#c34355','#3f8f86'];
+    function size(){
+      w = cv.width = cv.offsetWidth * (window.devicePixelRatio||1);
+      h = cv.height = cv.offsetHeight * (window.devicePixelRatio||1);
+    }
+    function seed(){
+      var n = Math.min(120, Math.floor((cv.offsetWidth*cv.offsetHeight)/9000));
+      parts = [];
+      for (var i=0;i<n;i++){
+        parts.push({
+          x:Math.random()*w, y:Math.random()*h,
+          r:(Math.random()*2.2+.6)*(window.devicePixelRatio||1),
+          vx:(Math.random()-.5)*.25*(window.devicePixelRatio||1),
+          vy:(-Math.random()*.5-.15)*(window.devicePixelRatio||1),
+          a:Math.random()*.6+.2,
+          c:colors[Math.floor(Math.random()*colors.length)]
+        });
+      }
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for (var i=0;i<parts.length;i++){
+        var p=parts[i];
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.y< -10){p.y=h+10;p.x=Math.random()*w;}
+        if(p.x< -10)p.x=w+10; if(p.x>w+10)p.x=-10;
+        ctx.globalAlpha=p.a;
+        ctx.fillStyle=p.c;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+      }
+      ctx.globalAlpha=1;
+      raf=requestAnimationFrame(draw);
+    }
+    size(); seed();
+    if (rm) {
+      // static single frame
+      draw(); if(raf){cancelAnimationFrame(raf);raf=null;}
+    } else {
+      draw();
+    }
+    var t;
+    window.addEventListener('resize', function(){
+      clearTimeout(t);
+      t=setTimeout(function(){ size(); seed(); }, 150);
+    });
+  }
+})();
+</script>
 </body>
 </html>
