@@ -1,785 +1,577 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gainesville Dance | Dance School in Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gainesville Dance | Dance School &mdash; Gainesville, FL</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --plum:       #5C2D6E;
-      --plum-dark:  #3E1A50;
-      --rose:       #C2547A;
-      --rose-light: #E8899F;
-      --gold:       #D4A843;
-      --cream:      #FAF5F0;
-      --charcoal:   #2B2B2B;
-      --white:      #FFFFFF;
-      --gray-light: #F0EAF5;
-      --text-muted: #6B6B6B;
-    }
+  :root {
+    --bg: #120814;
+    --bg2: #1c0e22;
+    --plum: #3a1440;
+    --plum-2: #52145c;
+    --rose: #ff5d8f;
+    --rose-2: #ff9ec4;
+    --violet: #b06bff;
+    --gold: #ffd479;
+    --ink: #f5eaf2;
+    --muted: #c8a9cf;
+    --tile: rgba(255,255,255,0.04);
+    --tile-border: rgba(255,255,255,0.10);
+    --glass: rgba(30,12,36,0.55);
+    --radius: 22px;
+  }
 
-    html {
-      scroll-behavior: smooth;
-    }
+  html { scroll-behavior: smooth; }
 
-    body {
-      font-family: 'Georgia', serif;
-      color: var(--charcoal);
-      background: var(--white);
-      line-height: 1.7;
-    }
+  body {
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    background:
+      radial-gradient(1100px 700px at 12% -5%, rgba(176,107,255,0.22), transparent 60%),
+      radial-gradient(900px 600px at 95% 8%, rgba(255,93,143,0.18), transparent 55%),
+      radial-gradient(1000px 800px at 60% 110%, rgba(82,20,92,0.35), transparent 60%),
+      var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(62, 26, 80, 0.97);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    }
+  a { color: inherit; }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
+  /* ── animated aurora backdrop ── */
+  .aurora {
+    position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background:
+      conic-gradient(from 0deg at 30% 40%, rgba(255,93,143,0.10), rgba(176,107,255,0.08), rgba(255,212,121,0.06), rgba(255,93,143,0.10));
+    filter: blur(60px);
+    animation: swirl 26s linear infinite;
+  }
+  @keyframes swirl { to { transform: rotate(360deg) scale(1.2); } }
 
-    .nav-logo-icon {
-      font-size: 1.6rem;
-      line-height: 1;
-    }
+  canvas#ribbons {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.55;
+  }
 
-    .nav-logo-text {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: var(--gold);
-      letter-spacing: 0.04em;
-    }
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem clamp(1rem, 4vw, 2.4rem);
+    background: rgba(18,8,20,0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--tile-border);
+  }
+  .brand { display: flex; align-items: center; gap: 0.65rem; text-decoration: none; font-weight: 800; letter-spacing: 0.02em; }
+  .brand-mark {
+    width: 40px; height: 40px; border-radius: 14px; flex-shrink: 0;
+    background: conic-gradient(from 220deg, var(--rose), var(--violet), var(--gold), var(--rose));
+    display: grid; place-items: center; color: #1a0a1e; font-size: 1.2rem;
+    box-shadow: 0 6px 20px rgba(255,93,143,0.35);
+    animation: spinmark 12s linear infinite;
+  }
+  @keyframes spinmark { to { transform: rotate(360deg); } }
+  .brand-name { font-size: 1.05rem; }
+  .brand-name span { display:block; font-size:0.62rem; font-weight:600; letter-spacing:0.28em; text-transform:uppercase; color: var(--muted); }
+  .nav-links { display: flex; gap: 0.4rem; list-style: none; align-items: center; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted); font-size: 0.85rem; font-weight: 600;
+    padding: 0.5rem 0.9rem; border-radius: 999px; transition: color 0.2s, background 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); background: rgba(255,255,255,0.06); }
+  .nav-links a.cta {
+    background: linear-gradient(120deg, var(--rose), var(--violet));
+    color: #1a0a1e; font-weight: 800;
+  }
+  .nav-links a.cta:hover { filter: brightness(1.08); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: 0; cursor: pointer; padding: 6px; }
+  .hamburger span { width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: 0.3s; }
 
+  /* ── LAYOUT ── */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem); }
+  .section-head { margin: 0 auto 1.6rem; }
+  .eyebrow {
+    display: inline-block; font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--rose-2); font-weight: 700; margin-bottom: 0.5rem;
+  }
+  h2.title { font-size: clamp(1.7rem, 4vw, 2.7rem); line-height: 1.1; font-weight: 800; }
+
+  .grad-text {
+    background: linear-gradient(100deg, var(--rose), var(--violet) 45%, var(--gold));
+    background-size: 220% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: slidegrad 8s ease-in-out infinite;
+  }
+  @keyframes slidegrad { 0%,100%{ background-position: 0% 50%; } 50%{ background-position: 100% 50%; } }
+
+  /* ── BENTO GRID ── */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(120px, auto);
+    gap: 16px;
+  }
+  .tile {
+    position: relative;
+    background: var(--tile);
+    border: 1px solid var(--tile-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0; transform: translateY(26px) scale(0.98);
+    transition: opacity 0.7s cubic-bezier(.2,.8,.2,1), transform 0.7s cubic-bezier(.2,.8,.2,1), border-color 0.3s, box-shadow 0.3s;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .tile.in { opacity: 1; transform: translateY(0) scale(1); }
+  .tile::after {
+    content: ""; position: absolute; inset: 0; border-radius: var(--radius); pointer-events: none;
+    background: radial-gradient(300px 200px at var(--mx,50%) var(--my,0%), rgba(255,158,196,0.16), transparent 60%);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .tile:hover { border-color: rgba(255,158,196,0.45); box-shadow: 0 22px 60px rgba(255,93,143,0.18); }
+  .tile:hover::after { opacity: 1; }
+
+  /* tile spans */
+  .t-hero    { grid-column: span 4; grid-row: span 3; display:flex; flex-direction:column; justify-content:center; }
+  .t-motif   { grid-column: span 2; grid-row: span 3; padding: 0; }
+  .t-ballet  { grid-column: span 2; grid-row: span 2; }
+  .t-jazz    { grid-column: span 2; grid-row: span 2; }
+  .t-hiphop  { grid-column: span 2; grid-row: span 2; }
+  .t-about   { grid-column: span 3; grid-row: span 2; }
+  .t-rating  { grid-column: span 3; grid-row: span 2; }
+  .t-tap     { grid-column: span 2; grid-row: span 2; }
+  .t-contemp { grid-column: span 2; grid-row: span 2; }
+  .t-tots    { grid-column: span 2; grid-row: span 2; }
+  .t-address { grid-column: span 2; grid-row: span 2; }
+  .t-phone   { grid-column: span 2; grid-row: span 2; }
+  .t-cta     { grid-column: span 2; grid-row: span 2; }
+
+  /* hero tile */
+  .t-hero .badge {
+    display:inline-flex; align-items:center; gap:0.5rem; align-self:flex-start;
+    font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--rose-2);
+    border:1px solid rgba(255,158,196,0.3); border-radius:999px; padding:0.35rem 0.9rem; margin-bottom:1.1rem;
+  }
+  .t-hero h1 { font-size: clamp(2.4rem, 6.5vw, 4.6rem); line-height: 0.98; font-weight: 900; letter-spacing:-0.02em; margin-bottom: 0.7rem; }
+  .t-hero p { color: var(--muted); max-width: 34ch; font-size: 1.02rem; margin-bottom: 1.4rem; }
+  .hero-btns { display:flex; gap:0.8rem; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none;
+    padding:0.8rem 1.4rem; border-radius:999px; font-weight:800; font-size:0.9rem; cursor:pointer;
+    border:1px solid transparent; transition: transform 0.15s ease, filter 0.2s;
+  }
+  .btn-primary { background: linear-gradient(120deg, var(--rose), var(--violet)); color:#1a0a1e; }
+  .btn-primary:hover { filter:brightness(1.08); }
+  .btn-ghost { background: rgba(255,255,255,0.05); color: var(--ink); border-color: var(--tile-border); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+  /* motif tile (canvas dancer) */
+  .t-motif canvas { display:block; width:100%; height:100%; }
+  .t-motif .motif-label {
+    position:absolute; left:1.2rem; bottom:1.1rem; font-size:0.7rem; letter-spacing:0.24em;
+    text-transform:uppercase; color:var(--rose-2); z-index:2;
+  }
+
+  /* class tiles */
+  .class-tile .icon { font-size:2rem; display:block; margin-bottom:0.6rem; }
+  .class-tile h3 { font-size:1.15rem; margin-bottom:0.35rem; }
+  .class-tile p { color:var(--muted); font-size:0.86rem; }
+  .class-tile .tag {
+    position:absolute; top:1.1rem; right:1.1rem; font-size:0.6rem; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--muted); opacity:0.7;
+  }
+
+  /* about tile */
+  .t-about h3, .t-rating h3, .t-address h3, .t-phone h3, .t-cta h3 { font-size:1.2rem; margin-bottom:0.6rem; }
+  .t-about p { color:var(--muted); font-size:0.92rem; }
+  .about-stats { display:flex; gap:1.4rem; margin-top:1rem; flex-wrap:wrap; }
+  .stat .num { font-size:1.5rem; font-weight:900; }
+  .stat .lbl { font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+
+  /* rating tile — honest */
+  .t-rating .rating-top { display:flex; align-items:baseline; gap:0.6rem; }
+  .t-rating .score { font-size:3rem; font-weight:900; line-height:1; }
+  .t-rating .outof { color:var(--muted); font-size:1.1rem; }
+  .stars { font-size:1.3rem; letter-spacing:0.1em; margin:0.5rem 0 0.3rem; }
+  .stars .on { color: var(--gold); }
+  .stars .off { color: rgba(255,255,255,0.18); }
+  .t-rating .meta { color:var(--muted); font-size:0.85rem; }
+  .t-rating .src { font-size:0.72rem; color:var(--muted); opacity:0.7; margin-top:0.5rem; letter-spacing:0.05em; }
+
+  /* address / phone / cta */
+  .info-icon { font-size:1.6rem; margin-bottom:0.5rem; display:block; }
+  .t-address p, .t-phone p { color:var(--ink); font-size:1rem; }
+  .t-phone a { text-decoration:none; font-weight:800; font-size:1.35rem; }
+  .t-phone a:hover { color: var(--rose-2); }
+  .t-cta { display:flex; flex-direction:column; justify-content:center; }
+  .t-cta p { color:var(--muted); font-size:0.86rem; margin-bottom:0.9rem; }
+  .t-cta .btn { justify-content:center; }
+  .t-cta .btn + .btn { margin-top:0.6rem; }
+  .muted-note { color:var(--muted); font-size:0.82rem; }
+
+  section { padding: clamp(2.8rem, 6vw, 4.6rem) 0; }
+  .section-tag { text-align:center; }
+
+  footer {
+    border-top:1px solid var(--tile-border);
+    padding: 2.4rem 1rem; text-align:center; color:var(--muted); font-size:0.86rem;
+  }
+  footer strong { color: var(--ink); }
+  footer a { text-decoration:none; }
+  footer a:hover { color: var(--rose-2); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 940px) {
+    .bento { grid-template-columns: repeat(4, 1fr); }
+    .t-hero { grid-column: span 4; grid-row: span 2; }
+    .t-motif { grid-column: span 4; grid-row: span 1; min-height:160px; }
+    .t-about, .t-rating { grid-column: span 4; }
+    .t-ballet,.t-jazz,.t-hiphop,.t-tap,.t-contemp,.t-tots,.t-address,.t-phone,.t-cta { grid-column: span 2; }
+  }
+  @media (max-width: 620px) {
     .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--white);
-      text-decoration: none;
-      font-size: 0.95rem;
-      letter-spacing: 0.03em;
-      opacity: 0.88;
-      transition: opacity 0.2s, color 0.2s;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .nav-links a:hover {
-      opacity: 1;
-      color: var(--gold);
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--plum-dark) 0%, var(--plum) 50%, var(--rose) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 30% 60%, rgba(212,168,67,0.15) 0%, transparent 60%),
-                  radial-gradient(ellipse at 70% 30%, rgba(194,84,122,0.2) 0%, transparent 55%);
-    }
-
-    .hero-shapes {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .hero-circle {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .hero-circle:nth-child(1) { width: 300px; height: 300px; top: -80px; left: -80px; }
-    .hero-circle:nth-child(2) { width: 500px; height: 500px; bottom: -200px; right: -150px; }
-    .hero-circle:nth-child(3) { width: 200px; height: 200px; top: 40%; left: 10%; }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      background: rgba(212,168,67,0.2);
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      font-size: 0.8rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 20px;
-      margin-bottom: 1.5rem;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      color: var(--white);
-      line-height: 1.1;
-      margin-bottom: 1.2rem;
-      font-style: italic;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 2.5rem;
-      font-style: italic;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      font-family: 'Arial', sans-serif;
-      font-weight: bold;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-      border: 2px solid transparent;
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--plum-dark);
-    }
-
-    .btn-primary:hover {
-      background: #e0b84e;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212,168,67,0.45);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border-color: rgba(255,255,255,0.55);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.1);
-      transform: translateY(-2px);
-    }
-
-    /* ── SECTIONS ── */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      display: inline-block;
-      color: var(--rose);
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-family: 'Arial', sans-serif;
-      font-weight: bold;
-      margin-bottom: 0.75rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.9rem, 4vw, 2.8rem);
-      color: var(--plum-dark);
-      margin-bottom: 1.5rem;
-      line-height: 1.2;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--cream);
-    }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      font-size: 1.05rem;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-visual {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .about-stat {
-      background: var(--white);
-      border-left: 4px solid var(--rose);
-      padding: 1.2rem 1.5rem;
-      border-radius: 0 8px 8px 0;
-      box-shadow: 0 2px 10px rgba(92,45,110,0.08);
-    }
-
-    .about-stat-value {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--plum);
-      line-height: 1;
-      margin-bottom: 0.25rem;
-    }
-
-    .about-stat-label {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      font-family: 'Arial', sans-serif;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--white);
-    }
-
-    .services-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--gray-light);
-      border-radius: 12px;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      transition: transform 0.25s, box-shadow 0.25s;
-      border: 1px solid transparent;
-    }
-
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(92,45,110,0.12);
-      border-color: rgba(194,84,122,0.2);
-    }
-
-    .service-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .service-name {
-      font-size: 1.15rem;
-      color: var(--plum-dark);
-      margin-bottom: 0.6rem;
-    }
-
-    .service-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      font-family: 'Arial', sans-serif;
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: linear-gradient(135deg, var(--plum-dark) 0%, var(--plum) 100%);
-    }
-
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: start;
-    }
-
-    .contact-info .section-label {
-      color: var(--rose-light);
-    }
-
-    .contact-info .section-title {
-      color: var(--white);
-    }
-
-    .contact-info .section-title span {
-      color: var(--gold);
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .contact-item-icon {
-      font-size: 1.4rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-item-text {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.85);
-      font-family: 'Arial', sans-serif;
-      line-height: 1.5;
-    }
-
-    .contact-item-text strong {
-      display: block;
-      color: var(--white);
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-item-text a {
-      color: var(--rose-light);
-      text-decoration: none;
-    }
-
-    .contact-item-text a:hover {
-      text-decoration: underline;
-    }
-
-    .rating-box {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 10px;
-      padding: 1.2rem 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .rating-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-      font-family: 'Arial', sans-serif;
-      margin-bottom: 0.5rem;
-    }
-
-    .rating-stars {
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-    }
-
-    .rating-value {
-      font-size: 1.1rem;
-      color: var(--white);
-      font-family: 'Arial', sans-serif;
-      margin-top: 0.3rem;
-    }
-
-    .contact-card {
-      background: var(--white);
-      border-radius: 14px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-    }
-
-    .contact-card h3 {
-      font-size: 1.35rem;
-      color: var(--plum-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-card p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      font-family: 'Arial', sans-serif;
-      margin-bottom: 1.8rem;
-    }
-
-    .directions-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      width: 100%;
-      justify-content: center;
-      padding: 1rem;
-      background: var(--plum);
-      color: var(--white);
-      text-decoration: none;
-      border-radius: 8px;
-      font-family: 'Arial', sans-serif;
-      font-weight: bold;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-      transition: background 0.2s, transform 0.2s;
-      margin-bottom: 1rem;
-    }
-
-    .directions-btn:hover {
-      background: var(--plum-dark);
-      transform: translateY(-2px);
-    }
-
-    .call-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      width: 100%;
-      justify-content: center;
-      padding: 1rem;
-      background: var(--rose);
-      color: var(--white);
-      text-decoration: none;
-      border-radius: 8px;
-      font-family: 'Arial', sans-serif;
-      font-weight: bold;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .call-btn:hover {
-      background: var(--rose-light);
-      transform: translateY(-2px);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--plum-dark);
-      color: rgba(255,255,255,0.6);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.88rem;
-    }
-
-    footer strong {
-      color: var(--gold);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-inner {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-    }
-
-    @media (max-width: 640px) {
-      nav {
-        padding: 0 1.2rem;
-      }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: var(--plum-dark);
-        flex-direction: column;
-        gap: 0;
-        padding: 0.5rem 0 1rem;
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links a {
-        padding: 0.75rem 1.5rem;
-        display: block;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 3.5rem 1.2rem;
-      }
-
-      .contact-card {
-        padding: 1.8rem 1.4rem;
-      }
-    }
-  </style>
+      position: fixed; top: 66px; left:0; right:0; flex-direction:column; gap:0;
+      background: rgba(18,8,20,0.97); padding: 0.6rem 1rem 1.2rem; display:none;
+      border-bottom:1px solid var(--tile-border);
+    }
+    .nav-links.open { display:flex; }
+    .nav-links a { width:100%; padding:0.8rem 1rem; }
+    .hamburger { display:flex; }
+    .bento { grid-template-columns: 1fr; }
+    .tile, .t-hero, .t-motif, .t-ballet, .t-jazz, .t-hiphop, .t-about, .t-rating,
+    .t-tap, .t-contemp, .t-tots, .t-address, .t-phone, .t-cta { grid-column: 1 / -1 !important; grid-row: auto !important; }
+    .t-motif { min-height: 180px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora, .brand-mark { animation: none; }
+    canvas#ribbons { display:none; }
+    .grad-text { animation: none; }
+    .tile { opacity:1 !important; transform:none !important; transition: border-color 0.3s, box-shadow 0.3s; }
+    html { scroll-behavior: auto; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#hero" class="nav-logo">
-      <span class="nav-logo-icon">&#9670;</span>
-      <span class="nav-logo-text">Gainesville Dance</span>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Classes</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+<div class="aurora"></div>
+<canvas id="ribbons" aria-hidden="true"></canvas>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-shapes">
-      <div class="hero-circle"></div>
-      <div class="hero-circle"></div>
-      <div class="hero-circle"></div>
-    </div>
-    <div class="hero-content">
-      <span class="hero-eyebrow">Dance School &mdash; Gainesville, FL</span>
-      <h1>Gainesville Dance</h1>
-      <p class="hero-tagline">Where movement becomes art &mdash; classes for every age and every level.</p>
-      <div class="hero-cta">
-        <a href="#services" class="btn btn-primary">Explore Classes</a>
-        <a href="#contact" class="btn btn-outline">Get in Touch</a>
-      </div>
-    </div>
-  </section>
+<!-- NAV -->
+<nav>
+  <a class="brand" href="#top">
+    <span class="brand-mark">&#9834;</span>
+    <span class="brand-name">Gainesville Dance<span>Dance School &bull; Gainesville, FL</span></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#visit" class="cta">Visit Us</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-inner">
-        <div class="about-text">
-          <span class="section-label">Our Story</span>
-          <h2 class="section-title">A Place to Move, Create &amp; Grow</h2>
-          <p>Gainesville Dance is a local dance school serving students of all ages and experience levels in the Gainesville community. Our studio offers a welcoming environment where beginners and experienced dancers alike can develop their skills, confidence, and passion for movement.</p>
-          <p>From classical styles to contemporary forms, our classes are designed to nurture creativity and technical growth in every student. Whether you are enrolling a child for the first time or returning to dance as an adult, there is a place for you here.</p>
-          <p>Located conveniently on NW 16th Blvd, we are proud to be part of the vibrant arts community in Gainesville, FL. Contact us for details on current class schedules and enrollment.</p>
-        </div>
-        <div class="about-visual">
-          <div class="about-stat">
-            <div class="about-stat-value">All Ages</div>
-            <div class="about-stat-label">Classes available for children through adults</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-value">All Levels</div>
-            <div class="about-stat-label">Beginner to advanced instruction</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-value">Multiple</div>
-            <div class="about-stat-label">Dance styles offered under one roof</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<main class="wrap" id="top" style="padding-top: 6.5rem;">
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <div class="services-header">
-        <span class="section-label">What We Offer</span>
-        <h2 class="section-title">Classes &amp; Programs</h2>
-        <p style="color: var(--text-muted); max-width: 560px; margin: 0 auto; font-family: Arial, sans-serif;">Contact us for details on current schedules, age groups, and session availability.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <span class="service-icon">&#127888;</span>
-          <h3 class="service-name">Ballet</h3>
-          <p class="service-desc">Classical ballet training focused on posture, technique, and grace for students at all levels.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127900;</span>
-          <h3 class="service-name">Jazz Dance</h3>
-          <p class="service-desc">High-energy jazz classes that build rhythm, coordination, and stage presence.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127928;</span>
-          <h3 class="service-name">Hip-Hop</h3>
-          <p class="service-desc">Contemporary street styles taught in a fun, energetic environment for youth and adults.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#9917;</span>
-          <h3 class="service-name">Tap Dance</h3>
-          <p class="service-desc">Develop rhythm and musicality through traditional and modern tap techniques.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127774;</span>
-          <h3 class="service-name">Contemporary Dance</h3>
-          <p class="service-desc">Expressive movement combining modern and lyrical styles to tell stories through dance.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127870;</span>
-          <h3 class="service-name">Tiny Tots / Pre-Dance</h3>
-          <p class="service-desc">Introductory dance classes designed for young children to build a love of movement early on.</p>
+  <!-- HERO + CLASSES BENTO -->
+  <section id="classes" style="padding-top:0;">
+    <div class="bento" id="bento1">
+
+      <div class="tile t-hero">
+        <span class="badge">&#10022; Kinetic movement &bull; fluid artistry</span>
+        <h1>Where movement becomes <span class="grad-text">art</span>.</h1>
+        <p>Gainesville Dance is a local dance school welcoming students of every age and every level &mdash; from a child&rsquo;s first pli&eacute; to a lifelong dancer&rsquo;s next chapter.</p>
+        <div class="hero-btns">
+          <a class="btn btn-primary" href="#visit">Get in Touch</a>
+          <a class="btn btn-ghost" href="#about">Our Story</a>
         </div>
       </div>
+
+      <div class="tile t-motif" aria-hidden="true">
+        <canvas id="dancer"></canvas>
+        <span class="motif-label">Move &bull; Flow</span>
+      </div>
+
+      <div class="tile class-tile t-ballet">
+        <span class="tag">Class</span>
+        <span class="icon">&#127920;</span>
+        <h3>Ballet</h3>
+        <p>Classical training focused on posture, technique, and grace for students at all levels.</p>
+      </div>
+
+      <div class="tile class-tile t-jazz">
+        <span class="tag">Class</span>
+        <span class="icon">&#127900;</span>
+        <h3>Jazz Dance</h3>
+        <p>High-energy classes that build rhythm, coordination, and stage presence.</p>
+      </div>
+
+      <div class="tile class-tile t-hiphop">
+        <span class="tag">Class</span>
+        <span class="icon">&#127928;</span>
+        <h3>Hip-Hop</h3>
+        <p>Contemporary street styles taught in a fun, energetic environment for youth and adults.</p>
+      </div>
+
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-inner">
-        <div class="contact-info">
-          <span class="section-label">Find Us</span>
-          <h2 class="section-title">Come <span>Dance</span> With Us</h2>
+  <!-- ABOUT + RATING + MORE CLASSES -->
+  <section id="about" style="padding-top:0;">
+    <div class="bento" id="bento2">
 
-          <div class="contact-item">
-            <span class="contact-item-icon">&#128205;</span>
-            <div class="contact-item-text">
-              <strong>Address</strong>
-              3830 NW 16th Blvd<br>Gainesville, FL
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <span class="contact-item-icon">&#128222;</span>
-            <div class="contact-item-text">
-              <strong>Phone</strong>
-              <a href="tel:+13523273672">(352) 327-3672</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <span class="contact-item-icon">&#128336;</span>
-            <div class="contact-item-text">
-              <strong>Hours</strong>
-              Contact us for current class schedule details
-            </div>
-          </div>
-
-          <div class="rating-box">
-            <div class="rating-label">Google Maps Rating</div>
-            <div class="rating-stars">&#9733;&#9733;&#9734;&#9734;&#9734;</div>
-            <div class="rating-value">2.0 / 5 &nbsp;&middot;&nbsp; <span style="opacity:0.7; font-size:0.9rem;">1 review</span></div>
-          </div>
-        </div>
-
-        <div class="contact-card">
-          <h3>Visit Our Studio</h3>
-          <p>We are conveniently located in Gainesville. Use the buttons below to get directions or give us a call to learn more about enrollment and class availability.</p>
-
-          <a
-            href="https://www.google.com/maps/search/Gainesville%20Dance%203830%20NW%2016th%20Blvd"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="directions-btn"
-          >
-            &#128205; Get Directions
-          </a>
-
-          <a href="tel:+13523273672" class="call-btn">
-            &#128222; Call (352) 327-3672
-          </a>
+      <div class="tile t-about">
+        <span class="eyebrow">Our Story</span>
+        <h3>A place to move, create &amp; grow</h3>
+        <p>From classical styles to contemporary forms, our classes nurture creativity and technical growth in every student. Whether you&rsquo;re enrolling a child for the first time or returning to dance as an adult, there&rsquo;s a place for you here on NW 16th Blvd in Gainesville, FL. Contact us for details on current schedules and enrollment.</p>
+        <div class="about-stats">
+          <div class="stat"><div class="num grad-text">All</div><div class="lbl">Ages</div></div>
+          <div class="stat"><div class="num grad-text">All</div><div class="lbl">Levels</div></div>
+          <div class="stat"><div class="num grad-text" data-count="6">0</div><div class="lbl">Dance styles</div></div>
         </div>
       </div>
+
+      <div class="tile t-rating">
+        <span class="eyebrow">Reputation &mdash; unfiltered</span>
+        <div class="rating-top">
+          <span class="score">2.0</span>
+          <span class="outof">/ 5</span>
+        </div>
+        <div class="stars"><span class="on">&#9733;&#9733;</span><span class="off">&#9733;&#9733;&#9733;</span></div>
+        <div class="meta">Google Maps Rating &middot; based on 1 review</div>
+        <div class="src">We&rsquo;re a young studio still building our story &mdash; come see the classes for yourself and help write the next chapter.</div>
+      </div>
+
+      <div class="tile class-tile t-tap">
+        <span class="tag">Class</span>
+        <span class="icon">&#9917;</span>
+        <h3>Tap Dance</h3>
+        <p>Develop rhythm and musicality through traditional and modern tap techniques.</p>
+      </div>
+
+      <div class="tile class-tile t-contemp">
+        <span class="tag">Class</span>
+        <span class="icon">&#127774;</span>
+        <h3>Contemporary Dance</h3>
+        <p>Expressive movement combining modern and lyrical styles to tell stories through dance.</p>
+      </div>
+
+      <div class="tile class-tile t-tots">
+        <span class="tag">Class</span>
+        <span class="icon">&#127870;</span>
+        <h3>Tiny Tots / Pre-Dance</h3>
+        <p>Introductory classes designed for young children to build a love of movement early on.</p>
+      </div>
+
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <p><strong>Gainesville Dance</strong> &mdash; 3830 NW 16th Blvd, Gainesville, FL &mdash; <a href="tel:+13523273672" style="color: var(--rose-light); text-decoration:none;">(352) 327-3672</a></p>
-    <p style="margin-top:0.5rem;">&copy; 2026 Gainesville Dance. All rights reserved.</p>
-  </footer>
+  <!-- VISIT / CONTACT -->
+  <section id="visit" style="padding-top:0;">
+    <div class="section-head section-tag">
+      <span class="eyebrow">Find Us</span>
+      <h2 class="title">Come <span class="grad-text">dance</span> with us</h2>
+    </div>
+    <div class="bento" id="bento3">
 
-  <script>
-    const toggle = document.getElementById('navToggle');
-    const links  = document.getElementById('navLinks');
+      <div class="tile t-address">
+        <span class="info-icon">&#128205;</span>
+        <h3>Studio</h3>
+        <p>3830 NW 16th Blvd<br>Gainesville, FL</p>
+      </div>
 
-    toggle.addEventListener('click', function() {
-      links.classList.toggle('open');
+      <div class="tile t-phone">
+        <span class="info-icon">&#128222;</span>
+        <h3>Call</h3>
+        <p><a href="tel:+13523273672">(352) 327-3672</a></p>
+        <p class="muted-note" style="margin-top:0.5rem;">Hours: contact us for current class schedule details.</p>
+      </div>
+
+      <div class="tile t-cta">
+        <h3>Ready to visit?</h3>
+        <p>Get directions to the studio or give us a call to learn about enrollment and class availability.</p>
+        <a class="btn btn-primary" href="https://www.google.com/maps/search/Gainesville%20Dance%203830%20NW%2016th%20Blvd" target="_blank" rel="noopener noreferrer">&#128205; Get Directions</a>
+        <a class="btn btn-ghost" href="tel:+13523273672">&#128222; Call (352) 327-3672</a>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p><strong>Gainesville Dance</strong> &mdash; 3830 NW 16th Blvd, Gainesville, FL &mdash; <a href="tel:+13523273672">(352) 327-3672</a></p>
+  <p style="margin-top:0.5rem;">&copy; 2026 Gainesville Dance. All rights reserved.</p>
+</footer>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Mobile nav
+    var burger = document.getElementById('hamburger');
+    var links = document.getElementById('navLinks');
+    burger.addEventListener('click', function () { links.classList.toggle('open'); });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { links.classList.remove('open'); });
     });
 
-    links.querySelectorAll('a').forEach(function(a) {
-      a.addEventListener('click', function() {
-        links.classList.remove('open');
+    // Reveal tiles with stagger
+    var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
+    if (reduce || !('IntersectionObserver' in window)) {
+      tiles.forEach(function (t) { t.classList.add('in'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var t = e.target;
+            var delay = parseInt(t.getAttribute('data-i') || '0', 10) * 70;
+            setTimeout(function () { t.classList.add('in'); }, delay);
+            io.unobserve(t);
+          }
+        });
+      }, { threshold: 0.15 });
+      // per-grid index for stagger
+      document.querySelectorAll('.bento').forEach(function (grid) {
+        Array.prototype.slice.call(grid.children).forEach(function (t, i) {
+          t.setAttribute('data-i', i);
+          io.observe(t);
+        });
       });
-    });
-  </script>
+    }
+
+    // Animated counters
+    function animateCount(el) {
+      var target = parseInt(el.getAttribute('data-count'), 10);
+      if (reduce) { el.textContent = target; return; }
+      var start = null, dur = 1100;
+      function step(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        el.textContent = Math.round(p * target);
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    var counters = document.querySelectorAll('[data-count]');
+    if ('IntersectionObserver' in window && !reduce) {
+      var cio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { animateCount(e.target); cio.unobserve(e.target); }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(function (c) { cio.observe(c); });
+    } else {
+      counters.forEach(function (c) { c.textContent = c.getAttribute('data-count'); });
+    }
+
+    // 3D tilt + glow tracking on tiles (pointer, non-reduced)
+    if (!reduce && window.matchMedia('(pointer:fine)').matches) {
+      tiles.forEach(function (t) {
+        t.addEventListener('pointermove', function (ev) {
+          var r = t.getBoundingClientRect();
+          var px = (ev.clientX - r.left) / r.width;
+          var py = (ev.clientY - r.top) / r.height;
+          t.style.setProperty('--mx', (px * 100) + '%');
+          t.style.setProperty('--my', (py * 100) + '%');
+          var rx = (0.5 - py) * 6;
+          var ry = (px - 0.5) * 6;
+          t.style.transform = 'translateY(0) scale(1) perspective(700px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+        });
+        t.addEventListener('pointerleave', function () { t.style.transform = ''; });
+      });
+    }
+
+    // Magnetic buttons
+    if (!reduce && window.matchMedia('(pointer:fine)').matches) {
+      document.querySelectorAll('.btn').forEach(function (b) {
+        b.addEventListener('pointermove', function (ev) {
+          var r = b.getBoundingClientRect();
+          var x = ev.clientX - r.left - r.width / 2;
+          var y = ev.clientY - r.top - r.height / 2;
+          b.style.transform = 'translate(' + (x * 0.25) + 'px,' + (y * 0.3) + 'px)';
+        });
+        b.addEventListener('pointerleave', function () { b.style.transform = ''; });
+      });
+    }
+
+    // Ribbons canvas — flowing kinetic background lines
+    var rc = document.getElementById('ribbons');
+    if (rc && !reduce) {
+      var ctx = rc.getContext('2d');
+      var W, H;
+      function resize() { W = rc.width = window.innerWidth; H = rc.height = window.innerHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+      var palette = ['rgba(255,93,143,0.5)', 'rgba(176,107,255,0.45)', 'rgba(255,212,121,0.4)'];
+      function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+        for (var r = 0; r < 3; r++) {
+          ctx.beginPath();
+          for (var x = 0; x <= W; x += 12) {
+            var y = H * (0.35 + r * 0.14)
+              + Math.sin(x * 0.006 + t * 0.0007 + r) * 46
+              + Math.sin(x * 0.013 + t * 0.0011 + r * 2) * 22;
+            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = palette[r];
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+        }
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    }
+
+    // Motif canvas — a small kinetic dancing figure trail
+    var mc = document.getElementById('dancer');
+    if (mc) {
+      var mctx = mc.getContext('2d');
+      function msize() {
+        var rect = mc.getBoundingClientRect();
+        mc.width = Math.max(120, rect.width);
+        mc.height = Math.max(120, rect.height);
+      }
+      msize();
+      window.addEventListener('resize', msize);
+      var trail = [];
+      function mdraw(t) {
+        var w = mc.width, h = mc.height;
+        mctx.clearRect(0, 0, w, h);
+        var cx = w / 2, cy = h / 2;
+        // figure-eight kinetic path
+        var a = t * 0.0016;
+        var x = cx + Math.sin(a) * (w * 0.28);
+        var y = cy + Math.sin(a * 2) * (h * 0.22);
+        trail.push({ x: x, y: y });
+        if (trail.length > 46) trail.shift();
+        for (var i = 0; i < trail.length; i++) {
+          var p = i / trail.length;
+          mctx.beginPath();
+          mctx.arc(trail[i].x, trail[i].y, 2 + p * 6, 0, Math.PI * 2);
+          mctx.fillStyle = 'rgba(255,' + Math.round(120 + p * 100) + ',' + Math.round(160 + p * 60) + ',' + (0.15 + p * 0.6) + ')';
+          mctx.fill();
+        }
+        requestAnimationFrame(mdraw);
+      }
+      if (!reduce) {
+        requestAnimationFrame(mdraw);
+      } else {
+        mctx.fillStyle = 'rgba(255,93,143,0.5)';
+        mctx.font = '48px sans-serif';
+        mctx.textAlign = 'center';
+        mctx.fillText('♫', mc.width / 2, mc.height / 2 + 16);
+      }
+    }
+  })();
+</script>
 
 </body>
 </html>
