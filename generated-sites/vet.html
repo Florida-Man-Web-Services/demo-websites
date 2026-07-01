@@ -1,680 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vet | Animal Hospital – Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --teal-dark:   #1a6b6b;
-      --teal:        #2a9292;
-      --teal-light:  #e6f7f7;
-      --green-soft:  #d4edda;
-      --white:       #ffffff;
-      --off-white:   #f7fbfb;
-      --text-dark:   #1c2b2b;
-      --text-mid:    #3d5555;
-      --text-light:  #6b8888;
-      --accent:      #e07b39;
-      --border:      #c2dede;
-      --star:        #f5a623;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--teal-dark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px; height: 38px;
-      background: var(--white);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px; height: 22px;
-      fill: var(--teal-dark);
-    }
-
-    .nav-name {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.02em;
-    }
-
-    .nav-sub {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.7);
-      font-weight: 400;
-      display: block;
-      line-height: 1;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.8rem;
-    }
-
-    nav ul a {
-      color: rgba(255,255,255,0.88);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    nav ul a:hover { color: var(--white); }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px; height: 2px;
-      background: var(--white);
-      margin: 5px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 60%, #3ab5b5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-
-    .hero-content { position: relative; max-width: 700px; }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: var(--white);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 999px;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.88);
-      max-width: 520px;
-      margin: 0 auto 2rem;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--white);
-      padding: 0.9rem 2.2rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 4px 18px rgba(224,123,57,0.35);
-    }
-
-    .hero-cta:hover { background: #c96a28; transform: translateY(-2px); }
-
-    /* ── SECTIONS COMMON ── */
-    section { padding: 5rem 1.5rem; }
-
-    .container { max-width: 1080px; margin: 0 auto; }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 800;
-      color: var(--text-dark);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .section-divider {
-      width: 48px; height: 4px;
-      background: var(--teal);
-      border-radius: 2px;
-      margin-bottom: 1.8rem;
-    }
-
-    /* ── ABOUT ── */
-    #about { background: var(--off-white); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-mid);
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--teal-light) 0%, var(--green-soft) 100%);
-      border-radius: 16px;
-      padding: 3rem 2rem;
-      text-align: center;
-      border: 1px solid var(--border);
-    }
-
-    .about-visual svg {
-      width: 90px; height: 90px;
-      fill: var(--teal-dark);
-      opacity: 0.85;
-    }
-
-    .about-visual p {
-      margin-top: 1rem;
-      color: var(--teal-dark);
-      font-weight: 600;
-      font-size: 1rem;
-    }
-
-    /* ── SERVICES ── */
-    #services { background: var(--white); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--off-white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.8rem;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 28px rgba(42,146,146,0.12);
-      transform: translateY(-3px);
-    }
-
-    .service-icon {
-      width: 52px; height: 52px;
-      background: var(--teal-light);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1rem;
-    }
-
-    .service-icon svg {
-      width: 26px; height: 26px;
-      fill: var(--teal-dark);
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      line-height: 1.5;
-    }
-
-    /* ── CONTACT ── */
-    #contact { background: var(--teal-light); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    .contact-info h2 { margin-bottom: 0.5rem; }
-
-    .contact-block {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 2rem;
-      border: 1px solid var(--border);
-    }
-
-    .contact-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.9rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .contact-row:last-child { margin-bottom: 0; }
-
-    .contact-row-icon {
-      width: 40px; height: 40px;
-      background: var(--teal-light);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-row-icon svg {
-      width: 20px; height: 20px;
-      fill: var(--teal-dark);
-    }
-
-    .contact-row-text strong {
-      display: block;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-light);
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-row-text span {
-      font-size: 0.97rem;
-      color: var(--text-dark);
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--teal-dark);
-      color: var(--white);
-      padding: 0.8rem 1.6rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      margin-top: 1.2rem;
-      transition: background 0.2s;
-    }
-
-    .btn-directions:hover { background: var(--teal); }
-
-    .btn-directions svg {
-      width: 18px; height: 18px;
-      fill: var(--white);
-    }
-
-    .rating-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 2rem;
-      border: 1px solid var(--border);
-      text-align: center;
-    }
-
-    .rating-number {
-      font-size: 3.5rem;
-      font-weight: 800;
-      color: var(--teal-dark);
-      line-height: 1;
-    }
-
-    .stars {
-      display: flex;
-      justify-content: center;
-      gap: 3px;
-      margin: 0.6rem 0;
-    }
-
-    .stars svg {
-      width: 22px; height: 22px;
-      fill: var(--star);
-    }
-
-    .stars .half-star { position: relative; display: inline-block; }
-
-    .rating-label {
-      font-size: 0.85rem;
-      color: var(--text-light);
-      margin-bottom: 0.3rem;
-    }
-
-    .rating-count {
-      font-size: 0.82rem;
-      color: var(--text-light);
-    }
-
-    .rating-source {
-      font-size: 0.78rem;
-      color: var(--text-light);
-      margin-top: 0.8rem;
-      font-style: italic;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--text-dark);
-      color: rgba(255,255,255,0.65);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.85rem;
-    }
-
-    footer strong { color: rgba(255,255,255,0.9); }
-
-    footer a {
-      color: var(--teal);
-      text-decoration: none;
-    }
-
-    footer a:hover { text-decoration: underline; }
-
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      nav ul { display: none; }
-
-      .nav-toggle { display: block; }
-
-      nav.open ul {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: var(--teal-dark);
-        padding: 1rem 2rem 1.5rem;
-        gap: 1rem;
-        border-top: 1px solid rgba(255,255,255,0.1);
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .about-visual { order: -1; padding: 2rem 1.5rem; }
-
-      section { padding: 3.5rem 1.2rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vet | Animal Hospital &ndash; Gainesville, FL</title>
+<style>
+  :root{
+    --ink:#2a3330; --ink-soft:#5f6d68; --bg:#f3faf6;
+    --green:#3fb98a; --green-deep:#218f68; --teal:#2fb2c4; --peach:#ffb27a; --sun:#ffd66b;
+    --forest:#183a2f; --card:#ffffff;
+    --font:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+    --sh:0 24px 54px -28px rgba(20,60,45,.5);
+    --op:1.0; /* full opacity token */
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.62;overflow-x:hidden;opacity:1.0}
+  a{color:inherit;text-decoration:none}
+
+  /* fixed side rail */
+  .rail{position:fixed;top:0;left:0;height:100vh;width:230px;z-index:50;
+    background:linear-gradient(180deg,var(--forest),#0f2a22);color:#fff;
+    display:flex;flex-direction:column;padding:26px 22px}
+  .rail .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:1.15rem}
+  .rail .brand .m{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--green),var(--teal));display:grid;place-items:center;font-size:1.4rem}
+  .rail .tag{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sun);font-weight:800;margin-top:8px}
+  .rail nav{margin-top:38px;display:flex;flex-direction:column;gap:4px}
+  .rail nav a{display:flex;align-items:center;gap:14px;padding:11px 12px;border-radius:14px;color:rgba(255,255,255,.72);font-weight:700;font-size:.92rem;transition:.22s}
+  .rail nav a .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.3);transition:.22s;flex:none}
+  .rail nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+  .rail nav a.active{background:rgba(63,185,138,.22);color:#fff}
+  .rail nav a.active .dot{background:var(--green);box-shadow:0 0 0 5px rgba(63,185,138,.25);transform:scale(1.2)}
+  .rail .foot{margin-top:auto;font-size:.78rem;color:rgba(255,255,255,.6)}
+  .rail .foot .rate{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border-radius:16px;padding:12px 14px;margin-bottom:14px}
+  .rail .foot .rate .num{font-size:1.9rem;font-weight:800;color:var(--sun);line-height:1}
+
+  .content{margin-left:230px}
+  @media(max-width:860px){
+    .rail{position:sticky;top:0;height:auto;width:100%;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px}
+    .rail nav{flex-direction:row;flex-wrap:wrap;margin:0;gap:4px}
+    .rail nav a{padding:8px 12px;font-size:.82rem}
+    .rail nav a .dot{display:none}
+    .rail .tag,.rail .foot{display:none}
+    .content{margin-left:0}
+  }
+
+  .sec{min-height:auto;padding:clamp(56px,10vh,120px) clamp(24px,5vw,80px);scroll-margin-top:70px;position:relative}
+  .kick{font-size:.76rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--green-deep);margin-bottom:14px}
+  h1{font-size:clamp(2.6rem,7vw,5rem);line-height:.98;font-weight:800;letter-spacing:-.02em}
+  h1 .g{background:linear-gradient(90deg,var(--green-deep),var(--teal),var(--green-deep));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+  @keyframes flow{to{background-position:200% center}}
+  h2{font-size:clamp(1.9rem,5vw,3rem);font-weight:800;line-height:1.06;letter-spacing:-.01em}
+  .lead{max-width:620px;font-size:clamp(1.05rem,2.4vw,1.3rem);color:var(--ink-soft);margin-top:20px}
+
+  #home{background:
+    radial-gradient(60% 60% at 85% 15%,rgba(47,178,196,.2),transparent 60%),
+    radial-gradient(55% 55% at 10% 90%,rgba(63,185,138,.18),transparent 60%),
+    var(--bg)}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:999px;font-weight:800;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
+  .btn.primary{background:var(--green-deep);color:#fff;box-shadow:0 16px 34px -14px var(--green-deep)}
+  .btn.ghost{background:var(--card);color:var(--green-deep);border:2px solid var(--green)}
+  .btn:hover{transform:translateY(-3px) scale(1.03)}
+  .heart{display:inline-block;color:var(--peach);animation:beat 1.6s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}20%{transform:scale(1.25)}40%{transform:scale(1)}}
+
+  .svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:36px}
+  .scard{background:var(--card);border-radius:24px;padding:28px;box-shadow:var(--sh);transition:transform .3s cubic-bezier(.2,.8,.2,1);border-bottom:5px solid transparent}
+  .scard:hover{transform:translateY(-8px);border-bottom-color:var(--green)}
+  .scard .ic{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--green),var(--green-deep));display:grid;place-items:center;font-size:1.6rem;color:#fff}
+  .scard h3{margin:16px 0 8px;font-size:1.2rem}
+  .scard p{color:var(--ink-soft);font-size:.95rem}
+
+  #trust{background:linear-gradient(140deg,var(--forest),#0f2a22);color:#fff;border-radius:36px;margin:clamp(24px,4vw,50px);padding:clamp(34px,5vw,64px)}
+  #trust h2{color:#fff}
+  .ratewrap{display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:26px}
+  .bignum{font-size:5rem;font-weight:800;line-height:1;color:var(--sun)}
+  .starrow svg{width:26px;height:26px;fill:var(--sun)}
+  .starrow svg.empty{fill:rgba(255,255,255,.3)}
+  .rmeta{color:rgba(255,255,255,.85)}
+  .rmeta .big{font-size:1.15rem;font-weight:800;color:#fff}
+
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+  @media(max-width:700px){.contact{grid-template-columns:1fr}}
+  .info{background:var(--card);border-radius:22px;padding:22px;box-shadow:var(--sh);display:flex;gap:14px;align-items:flex-start}
+  .info .ic{width:48px;height:48px;flex:none;border-radius:15px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem}
+  .info .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);font-weight:800}
+  .info .v{font-weight:700}
+  .maparea{grid-column:1/-1;border-radius:24px;min-height:190px;display:grid;place-items:center;text-align:center;padding:24px;box-shadow:var(--sh);
+    background:linear-gradient(rgba(63,185,138,.06),rgba(63,185,138,.06)),repeating-linear-gradient(45deg,#e9f7ef,#e9f7ef 16px,#ddf0e6 16px,#ddf0e6 32px)}
+  .maparea .pin{font-size:2.4rem}
+
+  .reveal{opacity:0;transform:translateY(34px);transition:.75s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{text-align:center;padding:40px;color:var(--ink-soft);font-size:.9rem}
+  footer strong{color:var(--ink)}
+  .disc{font-size:.78rem;margin-top:8px;opacity:.85}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none;transition:none}
+  }
+</style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav id="navbar">
-  <a class="nav-brand" href="#hero">
-    <div class="nav-logo-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm15 0a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM7 4a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Zm5 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0ZM12 10c-3.5 0-7 2-7 5.5V17a5 5 0 0 0 10 0v-1.5C15 12 11.5 10 12 10Z"/>
-      </svg>
-    </div>
-    <div>
-      <span class="nav-name">Vet</span>
-      <span class="nav-sub">Animal Hospital</span>
-    </div>
-  </a>
-  <button class="nav-toggle" aria-label="Toggle menu" onclick="document.getElementById('navbar').classList.toggle('open')">
-    <span></span><span></span><span></span>
-  </button>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-content">
-    <span class="hero-badge">Gainesville, FL Animal Hospital</span>
-    <h1>Compassionate Care<br>for Every Pet</h1>
-    <p>Your pet's health and well-being are our top priority — from routine checkups to urgent medical needs, we're here to help.</p>
-    <a href="#contact" class="hero-cta">Get in Touch</a>
+<aside class="rail">
+  <div>
+    <div class="brand"><span class="m">&#128062;</span> Vet</div>
+    <div class="tag">Animal Hospital &bull; Gainesville</div>
   </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
-        <p class="section-label">About Us</p>
-        <h2 class="section-title">A Trusted Animal Hospital in Gainesville</h2>
-        <div class="section-divider"></div>
-        <p>We are a full-service animal hospital serving pets and their families across the Gainesville, FL area. Our team is committed to providing compassionate, evidence-based veterinary care in a welcoming environment where both animals and owners feel at ease.</p>
-        <p>Whether your companion needs a routine wellness visit, dental care, or treatment for an unexpected illness or injury, we are equipped to support their health at every stage of life. Contact us for details on appointment availability and any specific needs your pet may have.</p>
-      </div>
-      <div class="about-visual">
-        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <!-- Simple paw icon -->
-          <circle cx="18" cy="14" r="5"/>
-          <circle cx="32" cy="10" r="5"/>
-          <circle cx="46" cy="14" r="5"/>
-          <circle cx="12" cy="26" r="4"/>
-          <ellipse cx="32" cy="40" rx="16" ry="14"/>
-        </svg>
-        <p>Caring for Gainesville's Pets</p>
-      </div>
-    </div>
+  <nav id="railnav">
+    <a href="#home" data-t="home"><span class="dot"></span> Home</a>
+    <a href="#services" data-t="services"><span class="dot"></span> Services</a>
+    <a href="#trust" data-t="trust"><span class="dot"></span> Trusted Care</a>
+    <a href="#contact" data-t="contact"><span class="dot"></span> Contact</a>
+  </nav>
+  <div class="foot">
+    <div class="rate"><span class="num" data-count="4.3">4.3</span><div>&#11088;&#11088;&#11088;&#11088;<br>Google Maps</div></div>
+    NW 34th Blvd, Gainesville, FL
   </div>
-</section>
+</aside>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="container">
-    <p class="section-label">What We Offer</p>
-    <h2 class="section-title">Our Veterinary Services</h2>
-    <div class="section-divider"></div>
-    <div class="services-grid">
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 14.93V17a1 1 0 0 1-2 0v-.07A8 8 0 0 1 4.07 9H5a1 1 0 0 1 0 2 6 6 0 0 0 5 5.93ZM9 9a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm4 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"/>
-          </svg>
-        </div>
-        <h3>Wellness Exams</h3>
-        <p>Routine checkups and annual exams to keep your pet healthy and catch any issues early.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm-7 13a1 1 0 0 1-1-1v-3H8a1 1 0 0 1 0-2h3V7a1 1 0 0 1 2 0v3h3a1 1 0 0 1 0 2h-3v3a1 1 0 0 1-1 1Z"/>
-          </svg>
-        </div>
-        <h3>Vaccinations</h3>
-        <p>Core and lifestyle vaccines to protect your pet against preventable diseases.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 6h-2.18c.07-.33.18-.65.18-1a3 3 0 0 0-6 0c0 .35.11.67.18 1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2Zm-8-1a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm8 15H4V8h16Z"/>
-          </svg>
-        </div>
-        <h3>Spay &amp; Neuter</h3>
-        <p>Safe surgical sterilization services to support responsible pet ownership and long-term health.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm-1 15v-4H7l5-8v4h4l-5 8Z"/>
-          </svg>
-        </div>
-        <h3>Urgent &amp; Sick Visits</h3>
-        <p>Prompt attention for illness, injury, or any sudden change in your pet's condition.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9Zm1 13H11v-5h2Zm0-7H11V7h2Z"/>
-          </svg>
-        </div>
-        <h3>Dental Care</h3>
-        <p>Professional dental cleanings and oral health evaluations to prevent pain and infection.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 2H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3ZM9 12H7v-2h2Zm4 0h-2v-2h2Zm4 0h-2v-2h2Zm-8 4H7v-2h2Zm4 0h-2v-2h2Zm4 0h-2v-2h2ZM9 8H7V6h2Zm4 0h-2V6h2Zm4 0h-2V6h2Z"/>
-          </svg>
-        </div>
-        <h3>Diagnostics &amp; Lab Work</h3>
-        <p>In-house blood panels, urinalysis, imaging, and other diagnostics to guide accurate treatment.</p>
-      </div>
-
+<main class="content">
+  <section class="sec" id="home">
+    <div class="kick">Compassionate Veterinary Care</div>
+    <h1>A Trusted <span class="g">Animal Hospital</span><br>in Gainesville</h1>
+    <p class="lead">Warm, attentive care for the pets who are part of your family <span class="heart">&#10084;</span> &mdash; right here on NW 34th Blvd.</p>
+    <div class="hero-cta">
+      <a class="btn primary magnet" href="https://www.google.com/maps/search/Vet%20NW%2034th%20Blvd" target="_blank" rel="noopener">&#128506; Get Directions</a>
+      <a class="btn ghost" href="#services">Our Services</a>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="container">
-    <p class="section-label">Find Us</p>
-    <h2 class="section-title">Contact &amp; Location</h2>
-    <div class="section-divider"></div>
-    <div class="contact-grid">
+  <section class="sec" id="services">
+    <div class="reveal"><div class="kick">Our Veterinary Services</div><h2>Caring for every wag, purr &amp; whisker</h2>
+    <p class="lead">A full range of veterinary care for your companions. Contact us for details on appointment availability.</p></div>
+    <div class="svc">
+      <div class="scard reveal"><div class="ic">&#129658;</div><h3>Wellness Exams</h3><p>Routine checkups to keep your pet happy and healthy.</p></div>
+      <div class="scard reveal"><div class="ic">&#128137;</div><h3>Vaccinations</h3><p>Protection tailored to your pet&rsquo;s needs.</p></div>
+      <div class="scard reveal"><div class="ic">&#128149;</div><h3>Spay &amp; Neuter</h3><p>Safe, compassionate surgical care.</p></div>
+      <div class="scard reveal"><div class="ic">&#127973;</div><h3>Urgent &amp; Sick Visits</h3><p>Attentive help when your pet isn&rsquo;t feeling well.</p></div>
+      <div class="scard reveal"><div class="ic">&#129701;</div><h3>Dental Care</h3><p>Healthy teeth for a happier, more comfortable pet.</p></div>
+      <div class="scard reveal"><div class="ic">&#128300;</div><h3>Diagnostics &amp; Lab Work</h3><p>Careful testing to understand your pet&rsquo;s health.</p></div>
+    </div>
+  </section>
 
+  <section class="sec" id="trust">
+    <div class="reveal"><div class="kick" style="color:var(--sun)">Trusted by Pet Owners</div><h2>Care that families rely on</h2>
+    <div class="ratewrap">
+      <div class="bignum" data-count="4.3">4.3</div>
       <div>
-        <div class="contact-block">
-          <div class="contact-row">
-            <div class="contact-row-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/>
-              </svg>
-            </div>
-            <div class="contact-row-text">
-              <strong>Address</strong>
-              <span>NW 34th Blvd, Gainesville, FL</span>
-            </div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-row-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5Z"/>
-              </svg>
-            </div>
-            <div class="contact-row-text">
-              <strong>Inquiries</strong>
-              <span>Contact us for details</span>
-            </div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-row-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 14H11V11h2Zm0-8H11V6h2Z"/>
-              </svg>
-            </div>
-            <div class="contact-row-text">
-              <strong>Hours</strong>
-              <span>Contact us for details</span>
-            </div>
-          </div>
-          <a class="btn-directions" href="https://www.google.com/maps/search/Vet%20NW%2034th%20Blvd" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.71 11.29-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42ZM13 17.59V15h-2v2.59l-2.29-2.3-1.42 1.42L12 21.41l4.71-4.7-1.42-1.42ZM13 10V7h-2v3H8.41l3.59 3.59L15.59 10Z"/></svg>
-            Get Directions
-          </a>
+        <div class="starrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
+          <svg class="empty" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
         </div>
+        <div class="rmeta"><div class="big">Google Maps Rating</div>Based on 9 reviews &bull; Verified on Google Maps</div>
       </div>
+    </div></div>
+  </section>
 
-      <div>
-        <div class="rating-card">
-          <p class="rating-label">Google Maps Rating</p>
-          <div class="rating-number">4.3</div>
-          <div class="stars">
-            <!-- 4 full stars -->
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-            <!-- partial / empty 5th star -->
-            <svg viewBox="0 0 24 24" style="opacity:0.35;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-          </div>
-          <p class="rating-count">Based on 9 reviews</p>
-          <p class="rating-source">Verified on Google Maps</p>
-        </div>
-      </div>
-
+  <section class="sec" id="contact">
+    <div class="reveal"><div class="kick">Contact &amp; Location</div><h2>Come see us on NW 34th Blvd</h2></div>
+    <div class="contact">
+      <div class="info reveal"><span class="ic">&#128205;</span><div><div class="lbl">Address</div><div class="v">NW 34th Blvd, Gainesville, FL</div></div></div>
+      <div class="info reveal"><span class="ic">&#128336;</span><div><div class="lbl">Hours</div><div class="v">Contact us for details</div></div></div>
+      <div class="info reveal"><span class="ic">&#128231;</span><div><div class="lbl">Appointments</div><div class="v">Contact us for availability</div></div></div>
+      <div class="info reveal"><span class="ic">&#11088;</span><div><div class="lbl">Reviews</div><div class="v">Rated on Google Maps</div></div></div>
+      <div class="maparea reveal"><div><div class="pin">&#128205;</div><strong>Vet &mdash; Animal Hospital</strong><br>NW 34th Blvd, Gainesville, FL<br>
+        <a class="btn primary magnet" style="margin-top:14px" href="https://www.google.com/maps/search/Vet%20NW%2034th%20Blvd" target="_blank" rel="noopener">&#128506; Get Directions</a>
+      </div></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- FOOTER -->
-<footer>
-  <p><strong>Vet</strong> &mdash; Animal Hospital &mdash; NW 34th Blvd, Gainesville, FL</p>
-  <p style="margin-top:0.4rem;">
-    <a href="https://www.google.com/maps/search/Vet%20NW%2034th%20Blvd" target="_blank" rel="noopener noreferrer">View on Google Maps</a>
-  </p>
-</footer>
+  <footer>
+    <strong>Vet</strong> &bull; Animal Hospital &bull; NW 34th Blvd, Gainesville, FL
+    <div class="disc">This is a demonstration website created for this Gainesville animal hospital. Please contact directly for current details.</div>
+  </footer>
+</main>
 
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el){reduce?el.classList.add('in'):io.observe(el);});
+
+  function up(el){var t=parseFloat(el.getAttribute('data-count'));
+    if(reduce||isNaN(t)){el.textContent=el.getAttribute('data-count');return;}
+    var s=null;function step(n){if(!s)s=n;var p=Math.min((n-s)/1100,1);
+      el.textContent=(t*(1-Math.pow(1-p,3))).toFixed(1);
+      if(p<1)requestAnimationFrame(step);else el.textContent=t.toFixed(1);}requestAnimationFrame(step);}
+  var cio=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){up(e.target);cio.unobserve(e.target);}});},{threshold:.5});
+  document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el);});
+
+  // active section in side rail
+  var links=Array.prototype.slice.call(document.querySelectorAll('#railnav a'));
+  var secs={};
+  links.forEach(function(a){var t=a.getAttribute('data-t');var s=document.getElementById(t);if(s)secs[t]=a;});
+  var sio=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){
+      var id=e.target.id;
+      links.forEach(function(a){a.classList.toggle('active',a.getAttribute('data-t')===id);});
+    }});
+  },{rootMargin:"-45% 0px -45% 0px"});
+  Object.keys(secs).forEach(function(t){var s=document.getElementById(t);if(s)sio.observe(s);});
+
+  if(!reduce){
+    document.querySelectorAll('.magnet').forEach(function(btn){
+      btn.addEventListener('pointermove',function(e){var r=btn.getBoundingClientRect();
+        btn.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.2-3)+'px) scale(1.03)';});
+      btn.addEventListener('pointerleave',function(){btn.style.transform='';});
+    });
+  }
+})();
+</script>
 </body>
 </html>

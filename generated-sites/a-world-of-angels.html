@@ -1,1011 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A World of Angels | Day Care Center | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --sky: #5bb8f5;
-      --sky-dark: #3a9de0;
-      --sunshine: #ffd966;
-      --sunshine-dark: #f5c400;
-      --grass: #6dbf67;
-      --grass-dark: #4fa84a;
-      --cloud: #ffffff;
-      --soft-bg: #f0f8ff;
-      --light-card: #fff9e6;
-      --text-dark: #2c3e50;
-      --text-mid: #4a5568;
-      --text-light: #718096;
-      --pink-accent: #ff8fab;
-      --lavender: #c9b8f5;
-      --radius: 16px;
-      --shadow: 0 4px 20px rgba(91, 184, 245, 0.18);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      color: var(--text-dark);
-      background: var(--soft-bg);
-      line-height: 1.6;
-    }
-
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: var(--cloud);
-      box-shadow: 0 2px 12px rgba(91, 184, 245, 0.2);
-      padding: 0 24px;
-      height: 68px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-icon {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, var(--sky), var(--lavender));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-
-    .nav-brand-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .nav-brand-name {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--sky-dark);
-      line-height: 1.1;
-    }
-
-    .nav-brand-sub {
-      font-size: 0.7rem;
-      color: var(--text-light);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-mid);
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--sky-dark);
-    }
-
-    .nav-cta {
-      background: var(--sky);
-      color: var(--cloud) !important;
-      padding: 8px 20px;
-      border-radius: 50px;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--sky-dark) !important;
-      color: var(--cloud) !important;
-    }
-
-    /* ===== HERO ===== */
-    .hero {
-      margin-top: 68px;
-      min-height: 92vh;
-      background: linear-gradient(160deg, #d6f0ff 0%, #e8f8ff 40%, #fff8d6 80%, #ffe8f4 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 60px 24px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Decorative blobs */
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px;
-      right: -80px;
-      width: 360px;
-      height: 360px;
-      background: radial-gradient(circle, rgba(201,184,245,0.4) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px;
-      left: -60px;
-      width: 320px;
-      height: 320px;
-      background: radial-gradient(circle, rgba(91,184,245,0.25) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--sunshine);
-      color: #7a5800;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 18px;
-      border-radius: 50px;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      font-weight: 900;
-      color: var(--text-dark);
-      line-height: 1.15;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 span {
-      color: var(--sky-dark);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-      color: var(--text-mid);
-      margin-bottom: 36px;
-      max-width: 540px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
-      color: #fff;
-      padding: 14px 32px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 700;
-      box-shadow: 0 4px 16px rgba(58,157,224,0.35);
-      transition: transform 0.2s, box-shadow 0.2s;
-      display: inline-block;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(58,157,224,0.45);
-    }
-
-    .btn-secondary {
-      background: var(--cloud);
-      color: var(--sky-dark);
-      padding: 14px 32px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 700;
-      border: 2px solid var(--sky);
-      transition: background 0.2s, color 0.2s;
-      display: inline-block;
-    }
-
-    .btn-secondary:hover {
-      background: var(--sky);
-      color: #fff;
-    }
-
-    .hero-deco {
-      margin-top: 48px;
-      display: flex;
-      gap: 28px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .hero-deco-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-mid);
-    }
-
-    .hero-deco-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--grass);
-    }
-
-    .hero-deco-dot.yellow { background: var(--sunshine-dark); }
-    .hero-deco-dot.pink { background: var(--pink-accent); }
-
-    /* ===== SHARED SECTION ===== */
-    section {
-      padding: 80px 24px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--sky-dark);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.5rem);
-      font-weight: 900;
-      color: var(--text-dark);
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-
-    .section-intro {
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      max-width: 620px;
-      line-height: 1.75;
-    }
-
-    /* ===== ABOUT ===== */
-    #about {
-      background: var(--cloud);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, #d6f0ff, #fff8d6, #ffe8f4);
-      border-radius: var(--radius);
-      height: 340px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .about-visual-emoji {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .about-visual-emoji span {
-      font-size: 2.8rem;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .about-visual-emoji span:nth-child(2) { animation-delay: 0.4s; }
-    .about-visual-emoji span:nth-child(3) { animation-delay: 0.8s; }
-    .about-visual-emoji span:nth-child(4) { animation-delay: 1.2s; }
-    .about-visual-emoji span:nth-child(5) { animation-delay: 1.6s; }
-    .about-visual-emoji span:nth-child(6) { animation-delay: 2.0s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .about-text .section-intro {
-      max-width: 100%;
-      margin-bottom: 28px;
-    }
-
-    .about-highlights {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .about-highlight {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .highlight-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .hi-sky { background: #d6f0ff; }
-    .hi-yellow { background: #fff3cc; }
-    .hi-pink { background: #ffe8f0; }
-    .hi-green { background: #e0f5e0; }
-
-    .highlight-text strong {
-      display: block;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--text-dark);
-    }
-
-    .highlight-text span {
-      font-size: 0.85rem;
-      color: var(--text-light);
-    }
-
-    /* ===== SERVICES ===== */
-    #services {
-      background: var(--soft-bg);
-    }
-
-    .services-header {
-      margin-bottom: 50px;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      background: var(--cloud);
-      border-radius: var(--radius);
-      padding: 32px 28px;
-      box-shadow: var(--shadow);
-      transition: transform 0.25s, box-shadow 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-    }
-
-    .service-card:nth-child(1)::before { background: var(--sky); }
-    .service-card:nth-child(2)::before { background: var(--sunshine); }
-    .service-card:nth-child(3)::before { background: var(--pink-accent); }
-    .service-card:nth-child(4)::before { background: var(--grass); }
-    .service-card:nth-child(5)::before { background: var(--lavender); }
-    .service-card:nth-child(6)::before { background: var(--sky-dark); }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(91, 184, 245, 0.22);
-    }
-
-    .service-icon {
-      font-size: 2.4rem;
-      margin-bottom: 16px;
-      display: block;
-    }
-
-    .service-name {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--text-dark);
-      margin-bottom: 10px;
-    }
-
-    .service-desc {
-      font-size: 0.88rem;
-      color: var(--text-mid);
-      line-height: 1.65;
-    }
-
-    /* ===== CONTACT ===== */
-    #contact {
-      background: linear-gradient(160deg, #d6f0ff 0%, #fff8d6 60%, #ffe8f4 100%);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info-card {
-      background: var(--cloud);
-      border-radius: var(--radius);
-      padding: 40px;
-      box-shadow: var(--shadow);
-    }
-
-    .contact-info-card .section-title {
-      font-size: 1.7rem;
-      margin-bottom: 28px;
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    .contact-detail-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: #d6f0ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .contact-detail-body strong {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 3px;
-    }
-
-    .contact-detail-body span,
-    .contact-detail-body a {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-dark);
-      text-decoration: none;
-    }
-
-    .contact-detail-body a:hover {
-      color: var(--sky-dark);
-    }
-
-    .contact-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 28px;
-    }
-
-    .btn-directions {
-      background: linear-gradient(135deg, var(--grass), var(--grass-dark));
-      color: #fff;
-      padding: 14px 24px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-align: center;
-      box-shadow: 0 4px 14px rgba(109,191,103,0.35);
-      transition: transform 0.2s, box-shadow 0.2s;
-      display: block;
-    }
-
-    .btn-directions:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 22px rgba(109,191,103,0.45);
-    }
-
-    .btn-call {
-      background: var(--cloud);
-      color: var(--sky-dark);
-      padding: 14px 24px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-align: center;
-      border: 2px solid var(--sky);
-      transition: background 0.2s, color 0.2s;
-      display: block;
-    }
-
-    .btn-call:hover {
-      background: var(--sky);
-      color: #fff;
-    }
-
-    .rating-box {
-      background: var(--cloud);
-      border-radius: var(--radius);
-      padding: 36px 40px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .rating-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .rating-score {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .rating-number {
-      font-size: 4rem;
-      font-weight: 900;
-      color: var(--text-dark);
-      line-height: 1;
-    }
-
-    .rating-stars-col {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .star {
-      font-size: 1.5rem;
-      color: var(--sunshine-dark);
-    }
-
-    .rating-source {
-      font-size: 0.8rem;
-      color: var(--text-light);
-      font-weight: 500;
-    }
-
-    .rating-badge {
-      background: linear-gradient(135deg, #fff8d6, #fff3cc);
-      border: 2px solid var(--sunshine);
-      border-radius: 12px;
-      padding: 18px 22px;
-    }
-
-    .rating-badge-headline {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #7a5800;
-      margin-bottom: 4px;
-    }
-
-    .rating-badge-sub {
-      font-size: 0.83rem;
-      color: #a07010;
-    }
-
-    .trust-items {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-mid);
-    }
-
-    .trust-check {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #e0f5e0;
-      color: var(--grass-dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--text-dark);
-      color: #a0b0c0;
-      padding: 40px 24px;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .footer-icon {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, var(--sky), var(--lavender));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-    .footer-name {
-      font-weight: 800;
-      color: #fff;
-      font-size: 1rem;
-    }
-
-    .footer-address {
-      font-size: 0.82rem;
-      color: #7090a0;
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-      text-align: right;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-
-      .about-visual {
-        height: 220px;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .nav-links {
-        display: none;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        min-height: 80vh;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .footer-copy {
-        text-align: center;
-      }
-
-      .rating-number {
-        font-size: 3rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A World of Angels | Day Care Center | Gainesville, FL</title>
+<style>
+  :root{
+    --cream:#fff7ee; --peach:#ffd9c0; --coral:#ff8f6b; --coral-deep:#f0663f;
+    --lilac:#c9b8ff; --sky:#a9e0ff; --mint:#bff0d6; --sun:#ffe08a;
+    --ink:#4a3b3a; --ink-soft:#7c6a68; --white:#ffffff;
+    --shadow:0 26px 60px -28px rgba(150,80,50,.55);
+    --font:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font); color:var(--ink); background:var(--cream);
+    line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  /* floating top pill nav */
+  header{
+    position:fixed; top:16px; left:50%; transform:translateX(-50%);
+    z-index:60; display:flex; gap:6px; align-items:center;
+    background:rgba(255,255,255,.72); backdrop-filter:blur(14px);
+    border:2px solid rgba(255,143,107,.35); border-radius:999px;
+    padding:8px 10px 8px 18px; box-shadow:var(--shadow);
+    max-width:calc(100% - 24px);
+  }
+  header .brand{font-weight:800;letter-spacing:.3px;white-space:nowrap;font-size:1rem}
+  header nav{display:flex;gap:2px}
+  header nav a{padding:8px 12px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--ink-soft);transition:.25s}
+  header nav a:hover{background:var(--peach);color:var(--coral-deep)}
+  header .call{background:var(--coral);color:#fff;padding:9px 15px;border-radius:999px;font-weight:800;font-size:.82rem;white-space:nowrap}
+  @media(max-width:720px){header nav{display:none}}
+
+  /* stacking deck */
+  .deck{position:relative}
+  .card{
+    position:sticky; top:0; min-height:100vh; display:flex; align-items:center;
+    padding:96px 0 40px;
+  }
+  .panel{
+    width:100%; border-radius:42px; padding:clamp(30px,5vw,72px);
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .c1 .panel{background:radial-gradient(120% 120% at 15% 10%,#fff 0%,var(--peach) 55%,var(--coral) 130%)}
+  .c2 .panel{background:linear-gradient(140deg,var(--sky),#e9f6ff)}
+  .c3 .panel{background:linear-gradient(140deg,var(--mint),#eafff2)}
+  .c4 .panel{background:linear-gradient(140deg,var(--lilac),#f3eeff)}
+
+  .kicker{display:inline-block;background:rgba(255,255,255,.65);border-radius:999px;padding:7px 16px;font-weight:800;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--coral-deep);margin-bottom:22px}
+  h1{font-size:clamp(2.6rem,8vw,5.4rem);line-height:.98;font-weight:800;letter-spacing:-.02em}
+  h1 .grad{background:linear-gradient(90deg,var(--coral-deep),var(--lilac),var(--coral-deep));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+  @keyframes flow{to{background-position:200% center}}
+  .lead{font-size:clamp(1.05rem,2.4vw,1.4rem);max-width:640px;margin-top:22px;color:var(--ink)}
+  h2{font-size:clamp(1.9rem,5vw,3.2rem);font-weight:800;letter-spacing:-.01em;line-height:1.05}
+  .sub{color:var(--ink-soft);max-width:560px;margin-top:14px;font-size:1.05rem}
+
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{position:relative;display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:999px;font-weight:800;font-size:1rem;transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;will-change:transform}
+  .btn.primary{background:var(--coral);color:#fff;box-shadow:0 14px 30px -10px var(--coral-deep)}
+  .btn.ghost{background:#fff;color:var(--coral-deep);border:2px solid var(--coral)}
+  .btn:hover{transform:translateY(-3px) scale(1.03)}
+  .btn:active{transform:translateY(0) scale(.99)}
+
+  /* floating blobs in hero */
+  .blob{position:absolute;border-radius:46% 54% 60% 40%/55% 45% 55% 45%;filter:blur(1px);opacity:.9;animation:bob 7s ease-in-out infinite}
+  .b1{width:150px;height:150px;background:var(--lilac);top:8%;right:8%}
+  .b2{width:90px;height:90px;background:var(--mint);bottom:12%;right:26%;animation-delay:1.2s}
+  .b3{width:60px;height:60px;background:var(--sun);top:26%;right:34%;animation-delay:.6s}
+  @keyframes bob{50%{transform:translateY(-22px) rotate(8deg)}}
+
+  /* rating */
+  .rating{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:30px;background:rgba(255,255,255,.7);border-radius:26px;padding:20px 26px;max-width:520px}
+  .rnum{font-size:3.4rem;font-weight:800;line-height:1;color:var(--coral-deep)}
+  .stars{font-size:1.4rem;letter-spacing:2px}
+  .rlabel{font-weight:800}
+  .rsource{font-size:.82rem;color:var(--ink-soft)}
+
+  /* program chips */
+  .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .chip{background:rgba(255,255,255,.72);border-radius:20px;padding:16px 20px;font-weight:700;display:flex;align-items:center;gap:10px;transition:transform .2s;box-shadow:0 10px 24px -16px rgba(0,0,0,.4)}
+  .chip:hover{transform:translateY(-4px) rotate(-1.5deg)}
+  .chip .dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:1.1rem;background:var(--peach)}
+
+  .values{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin-top:34px}
+  .val{background:rgba(255,255,255,.72);border-radius:24px;padding:24px}
+  .val .big{font-size:2.4rem;font-weight:800;color:var(--coral-deep);line-height:1}
+  .val h3{margin:.4rem 0;font-size:1.1rem}
+  .val p{font-size:.92rem;color:var(--ink-soft)}
+
+  /* contact card */
+  .contact-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;margin-top:34px}
+  @media(max-width:760px){.contact-grid{grid-template-columns:1fr}}
+  .info-item{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:2px dashed rgba(74,59,58,.15)}
+  .info-item:last-child{border-bottom:0}
+  .info-item .ic{width:44px;height:44px;flex:none;border-radius:14px;background:#fff;display:grid;place-items:center;font-size:1.3rem}
+  .info-item .lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);font-weight:800}
+  .info-item .v{font-weight:700;font-size:1.05rem}
+  .mapcard{background:#fff;border-radius:26px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}
+  .maparea{border-radius:18px;background:repeating-linear-gradient(45deg,#fff2e6,#fff2e6 14px,#ffe6d4 14px,#ffe6d4 28px);min-height:190px;display:grid;place-items:center;text-align:center;padding:20px}
+  .maparea .pin{font-size:2.4rem;animation:bob 3s ease-in-out infinite}
+
+  .reveal{opacity:0;transform:translateY(38px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{background:var(--ink);color:#fff;text-align:center;padding:44px 22px;border-radius:42px 42px 0 0;position:relative;z-index:2}
+  footer .fbrand{font-size:1.5rem;font-weight:800}
+  footer p{color:#d8c9c6;font-size:.9rem;margin-top:8px}
+  footer .note{font-size:.78rem;color:#a89896;margin-top:16px}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none;transition:none}
+    .card{position:relative;min-height:auto}
+  }
+</style>
 </head>
 <body>
-
-  <!-- NAV -->
+<header>
+  <span class="brand">&#128118; A World of Angels</span>
   <nav>
-    <a class="nav-brand" href="#hero">
-      <div class="nav-icon">&#128149;</div>
-      <div class="nav-brand-text">
-        <span class="nav-brand-name">A World of Angels</span>
-        <span class="nav-brand-sub">Day Care Center &bull; Gainesville, FL</span>
-      </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-    </ul>
+    <a href="#welcome">Welcome</a>
+    <a href="#programs">Programs</a>
+    <a href="#care">Our Care</a>
+    <a href="#visit">Visit</a>
   </nav>
+  <a class="call" href="tel:+13523810080">Call Us</a>
+</header>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-content">
-      <div class="hero-badge">5.0 Stars on Google &#11088;</div>
-      <h1>Where Every Child Is<br><span>Loved &amp; Celebrated</span></h1>
-      <p class="hero-tagline">
-        A nurturing, safe, and joyful day care environment in Gainesville, FL &mdash; because your little ones deserve a world of care.
-      </p>
-      <div class="hero-buttons">
-        <a href="#contact" class="btn-primary">Get in Touch</a>
-        <a href="#services" class="btn-secondary">Our Programs</a>
-      </div>
-      <div class="hero-deco">
-        <div class="hero-deco-item"><div class="hero-deco-dot"></div> Safe &amp; Nurturing</div>
-        <div class="hero-deco-item"><div class="hero-deco-dot yellow"></div> Play-Based Learning</div>
-        <div class="hero-deco-item"><div class="hero-deco-dot pink"></div> Loving Staff</div>
-      </div>
-    </div>
-  </section>
+<div class="deck">
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-visual">
-          <div class="about-visual-emoji">
-            <span>&#128149;</span>
-            <span>&#129516;</span>
-            <span>&#127774;</span>
-            <span>&#127775;</span>
-            <span>&#128167;</span>
-            <span>&#127752;</span>
-          </div>
-        </div>
-        <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">A Home Away From Home</h2>
-          <p class="section-intro">
-            A World of Angels is a warm and welcoming day care center serving families throughout Gainesville, FL, offering attentive, individualized care for children in a safe and stimulating environment. Our caregivers are dedicated to fostering each child's social, emotional, and developmental growth through age-appropriate activities and play-based learning. We take pride in being a trusted partner for local families, giving parents peace of mind while their children thrive in our care.
-          </p>
-          <div class="about-highlights">
-            <div class="about-highlight">
-              <div class="highlight-icon hi-sky">&#128274;</div>
-              <div class="highlight-text">
-                <strong>Safe &amp; Secure Environment</strong>
-                <span>A protected, clean space designed with children's safety first</span>
-              </div>
-            </div>
-            <div class="about-highlight">
-              <div class="highlight-icon hi-yellow">&#127774;</div>
-              <div class="highlight-text">
-                <strong>Developmental Activities</strong>
-                <span>Hands-on learning that grows with your child at every stage</span>
-              </div>
-            </div>
-            <div class="about-highlight">
-              <div class="highlight-icon hi-pink">&#128149;</div>
-              <div class="highlight-text">
-                <strong>Compassionate Caregivers</strong>
-                <span>A team that treats every child with warmth and respect</span>
-              </div>
-            </div>
-            <div class="about-highlight">
-              <div class="highlight-icon hi-green">&#127758;</div>
-              <div class="highlight-text">
-                <strong>Gainesville Community Focus</strong>
-                <span>Proudly serving families in our local neighborhood</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <div class="services-header">
-        <p class="section-label">What We Offer</p>
-        <h2 class="section-title">Programs &amp; Services</h2>
-        <p class="section-intro">We offer a range of care programs designed to support children's growth and give parents flexibility. Contact us for details on enrollment and scheduling.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <span class="service-icon">&#128118;</span>
-          <div class="service-name">Infant &amp; Toddler Care</div>
-          <p class="service-desc">Gentle, attentive care tailored to the unique developmental needs of infants and toddlers, with nurturing one-on-one interaction throughout the day.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#129299;</span>
-          <div class="service-name">Preschool Program</div>
-          <p class="service-desc">Structured yet playful learning activities that prepare young children for kindergarten, building early literacy, numeracy, and social skills.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127774;</span>
-          <div class="service-name">Full-Day Child Care</div>
-          <p class="service-desc">Comprehensive daytime supervision and enrichment activities for children, providing consistent care and routine throughout the full day.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127943;</span>
-          <div class="service-name">Indoor Play &amp; Activities</div>
-          <p class="service-desc">Engaging games, arts and crafts, storytime, music, and movement activities that stimulate creativity and develop motor skills.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127815;</span>
-          <div class="service-name">Meals &amp; Snacks</div>
-          <p class="service-desc">Nutritious meals and snacks served throughout the day to keep growing children energized and healthy. Contact us for details on our meal program.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#128106;</span>
-          <div class="service-name">Family Communication</div>
-          <p class="service-desc">Regular updates and open communication with parents to keep families informed and involved in their child's daily experiences and milestones.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-grid">
-        <div class="contact-info-card">
-          <p class="section-label">Find Us</p>
-          <h2 class="section-title">Get in Touch</h2>
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128205;</div>
-            <div class="contact-detail-body">
-              <strong>Address</strong>
-              <span>1119 NW 42nd Ave<br>Gainesville, FL</span>
-            </div>
-          </div>
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128222;</div>
-            <div class="contact-detail-body">
-              <strong>Phone</strong>
-              <a href="tel:+13523810080">(352) 381-0080</a>
-            </div>
-          </div>
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128336;</div>
-            <div class="contact-detail-body">
-              <strong>Hours</strong>
-              <span>Contact us for hours</span>
-            </div>
-          </div>
-          <div class="contact-actions">
-            <a href="https://www.google.com/maps/search/A%20World%20of%20Angels%201119%20NW%2042nd%20Ave" target="_blank" rel="noopener" class="btn-directions">&#127968; Get Directions</a>
-            <a href="tel:+13523810080" class="btn-call">&#128222; Call (352) 381-0080</a>
-          </div>
-        </div>
-
-        <div class="rating-box">
-          <div class="rating-title">Our Google Rating</div>
-          <div class="rating-score">
-            <div class="rating-number">5.0</div>
-            <div class="rating-stars-col">
-              <div class="stars">
-                <span class="star">&#11088;</span>
-                <span class="star">&#11088;</span>
-                <span class="star">&#11088;</span>
-                <span class="star">&#11088;</span>
-                <span class="star">&#11088;</span>
-              </div>
-              <div class="rating-source">Google Maps Rating</div>
-            </div>
-          </div>
-          <div class="rating-badge">
-            <div class="rating-badge-headline">Perfect 5.0 Star Rating</div>
-            <div class="rating-badge-sub">A World of Angels has earned a perfect rating from Gainesville families.</div>
-          </div>
-          <div class="trust-items">
-            <div class="trust-item">
-              <div class="trust-check">&#10003;</div>
-              Trusted by local Gainesville families
-            </div>
-            <div class="trust-item">
-              <div class="trust-check">&#10003;</div>
-              Safe, nurturing care environment
-            </div>
-            <div class="trust-item">
-              <div class="trust-check">&#10003;</div>
-              Dedicated, compassionate team
-            </div>
-            <div class="trust-item">
-              <div class="trust-check">&#10003;</div>
-              Enriching programs for every stage
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-icon">&#128149;</div>
+  <!-- 1 hero -->
+  <section class="card c1" id="welcome">
+    <div class="wrap"><div class="panel">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+      <span class="kicker">Day Care Center &bull; Gainesville, FL</span>
+      <h1>Where Every Child Is<br><span class="grad">A Home Away From Home</span></h1>
+      <p class="lead">A World of Angels is a warm, nurturing day care center in Gainesville, giving little ones a safe and joyful place to play, learn, and grow.</p>
+      <div class="rating">
+        <div class="rnum" data-count="5.0">5.0</div>
         <div>
-          <div class="footer-name">A World of Angels</div>
-          <div class="footer-address">1119 NW 42nd Ave, Gainesville, FL &bull; (352) 381-0080</div>
+          <div class="stars">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
+          <div class="rlabel">Perfect 5.0 Star Rating</div>
+          <div class="rsource">Google Maps Rating</div>
         </div>
       </div>
-      <div class="footer-copy">
-        <div>&copy; 2026 A World of Angels. All rights reserved.</div>
-        <div style="margin-top:4px; font-size:0.75rem; color:#506070;">Day Care Center &bull; Gainesville, FL</div>
+      <div class="cta-row">
+        <a class="btn primary magnet" href="tel:+13523810080">&#128222; Call (352) 381-0080</a>
+        <a class="btn ghost" href="#visit">Plan a Visit</a>
       </div>
-    </div>
-  </footer>
+    </div></div>
+  </section>
 
+  <!-- 2 programs -->
+  <section class="card c2" id="programs">
+    <div class="wrap"><div class="panel">
+      <span class="kicker reveal">Programs &amp; Services</span>
+      <h2 class="reveal">Playful days, big little milestones</h2>
+      <p class="sub reveal">A World of Angels offers a caring day care program for Gainesville families. For details on enrollment, schedules, and availability, please reach out.</p>
+      <div class="chips">
+        <div class="chip reveal"><span class="dot">&#127907;</span> Infant Care</div>
+        <div class="chip reveal"><span class="dot">&#129528;</span> Toddler Play &amp; Learn</div>
+        <div class="chip reveal"><span class="dot">&#127912;</span> Preschool Activities</div>
+        <div class="chip reveal"><span class="dot">&#127793;</span> Everyday Growth</div>
+        <div class="chip reveal"><span class="dot">&#127838;</span> Meals &amp; Snacks</div>
+        <div class="chip reveal"><span class="dot">&#127881;</span> A Loving Environment</div>
+      </div>
+      <p class="sub reveal" style="margin-top:26px"><strong>Enrollment &amp; scheduling:</strong> Contact us for details.</p>
+    </div></div>
+  </section>
+
+  <!-- 3 care values -->
+  <section class="card c3" id="care">
+    <div class="wrap"><div class="panel">
+      <span class="kicker reveal">Our Care</span>
+      <h2 class="reveal">Little hands, big hearts, safe hugs</h2>
+      <div class="values">
+        <div class="val reveal"><div class="big" data-count="5.0">0</div><h3>Star Rating</h3><p>Rated a perfect 5.0 on Google Maps by local families.</p></div>
+        <div class="val reveal"><div class="big">&#128149;</div><h3>Nurturing First</h3><p>Warm, attentive care that treats every child like family.</p></div>
+        <div class="val reveal"><div class="big">&#127793;</div><h3>Learn Through Play</h3><p>Days filled with creativity, movement, and gentle discovery.</p></div>
+        <div class="val reveal"><div class="big">&#127968;</div><h3>Home Away From Home</h3><p>A cozy, welcoming space right here in Gainesville.</p></div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 4 visit / contact -->
+  <section class="card c4" id="visit">
+    <div class="wrap"><div class="panel">
+      <span class="kicker reveal">Get in Touch</span>
+      <h2 class="reveal">Come see our happy place</h2>
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="info-item"><div class="ic">&#128205;</div><div><div class="lbl">Visit Us</div><div class="v">1119 NW 42nd Ave, Gainesville, FL</div></div></div>
+          <div class="info-item"><div class="ic">&#128222;</div><div><div class="lbl">Call</div><div class="v"><a href="tel:+13523810080">(352) 381-0080</a></div></div></div>
+          <div class="info-item"><div class="ic">&#128336;</div><div><div class="lbl">Hours</div><div class="v">Contact us for hours</div></div></div>
+          <div class="info-item"><div class="ic">&#127869;</div><div><div class="lbl">Meal Program</div><div class="v">Contact us for details</div></div></div>
+        </div>
+        <div class="mapcard reveal">
+          <div class="maparea"><div><div class="pin">&#128205;</div><strong>A World of Angels</strong><br>1119 NW 42nd Ave, Gainesville, FL</div></div>
+          <a class="btn primary" style="margin-top:16px;justify-content:center" href="https://www.google.com/maps/search/A%20World%20of%20Angels%201119%20NW%2042nd%20Ave" target="_blank" rel="noopener">&#128506; Get Directions</a>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="fbrand">&#128118; A World of Angels</div>
+  <p>Day Care Center &bull; 1119 NW 42nd Ave, Gainesville, FL &bull; (352) 381-0080</p>
+  <p class="note">This is a demonstration website created for A World of Angels. Contact the center directly for current details.</p>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.16});
+  document.querySelectorAll('.reveal').forEach(function(el){
+    if(reduce){ el.classList.add('in'); } else { io.observe(el); }
+  });
+
+  function animateCount(el){
+    var target = parseFloat(el.getAttribute('data-count'));
+    if(reduce || isNaN(target)){ el.textContent = el.getAttribute('data-count'); return; }
+    var start=null, dur=1200;
+    function step(t){
+      if(!start) start=t;
+      var p=Math.min((t-start)/dur,1);
+      var v=(target*(1-Math.pow(1-p,3))).toFixed(1);
+      el.textContent=v;
+      if(p<1){ requestAnimationFrame(step); } else { el.textContent=target.toFixed(1); }
+    }
+    requestAnimationFrame(step);
+  }
+  var cio=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){ animateCount(e.target); cio.unobserve(e.target); }});
+  },{threshold:.5});
+  document.querySelectorAll('[data-count]').forEach(function(el){ cio.observe(el); });
+
+  if(!reduce){
+    document.querySelectorAll('.magnet').forEach(function(btn){
+      btn.addEventListener('pointermove', function(e){
+        var r=btn.getBoundingClientRect();
+        var x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+        btn.style.transform='translate('+x*0.25+'px,'+(y*0.25-3)+'px) scale(1.04)';
+      });
+      btn.addEventListener('pointerleave', function(){ btn.style.transform=''; });
+    });
+  }
+})();
+</script>
 </body>
 </html>

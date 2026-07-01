@@ -1,941 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vet Wellcare Vaccinations Clinic at Pet Supermarket</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --teal: #2a7f7f;
-      --teal-dark: #1d5f5f;
-      --teal-light: #3fa8a8;
-      --mint: #e6f5f5;
-      --white: #ffffff;
-      --off-white: #f7fbfb;
-      --text-dark: #1a2e2e;
-      --text-mid: #3d5c5c;
-      --text-light: #6a8f8f;
-      --accent: #f5a623;
-      --accent-dark: #d4891a;
-      --border: #c8e0e0;
-      --shadow: rgba(42, 127, 127, 0.12);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: var(--white);
-      border-bottom: 2px solid var(--border);
-      box-shadow: 0 2px 12px var(--shadow);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 68px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-      color: var(--teal-dark);
-    }
-
-    .nav-logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--teal);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 24px;
-      height: 24px;
-      fill: white;
-    }
-
-    .nav-logo-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .nav-logo-text span:first-child {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--teal-dark);
-    }
-
-    .nav-logo-text span:last-child {
-      font-size: 0.72rem;
-      color: var(--text-light);
-      font-weight: 400;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-mid);
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--teal);
-    }
-
-    .nav-cta {
-      background: var(--teal);
-      color: var(--white) !important;
-      padding: 0.5rem 1.2rem;
-      border-radius: 6px;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--teal-dark) !important;
-      color: var(--white) !important;
-    }
-
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--teal-dark);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* HERO */
-    .hero {
-      margin-top: 68px;
-      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 50%, var(--teal-light) 100%);
-      color: var(--white);
-      padding: 6rem 2rem 5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px;
-      right: -60px;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.05);
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px;
-      left: -80px;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.95);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 20px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.02em;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.88);
-      margin-bottom: 2.5rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 4px 16px rgba(245, 166, 35, 0.4);
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-dark);
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      display: inline-block;
-      background: rgba(255,255,255,0.15);
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border: 2px solid rgba(255,255,255,0.4);
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.25);
-      transform: translateY(-1px);
-    }
-
-    /* SECTION COMMON */
-    section {
-      padding: 5rem 2rem;
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 800;
-      color: var(--text-dark);
-      line-height: 1.2;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .section-subtitle {
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      max-width: 620px;
-      line-height: 1.7;
-    }
-
-    /* ABOUT */
-    .about {
-      background: var(--off-white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      margin-top: 3rem;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--mint) 0%, #d0eded 100%);
-      border-radius: 16px;
-      padding: 3rem 2rem;
-      text-align: center;
-      border: 2px solid var(--border);
-    }
-
-    .about-visual-icon {
-      width: 90px;
-      height: 90px;
-      background: var(--teal);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.5rem;
-    }
-
-    .about-visual-icon svg {
-      width: 50px;
-      height: 50px;
-      fill: white;
-    }
-
-    .about-visual p {
-      color: var(--teal-dark);
-      font-weight: 600;
-      font-size: 1rem;
-    }
-
-    .about-content p {
-      color: var(--text-mid);
-      font-size: 1.05rem;
-      line-height: 1.8;
-      margin-bottom: 1.2rem;
-    }
-
-    .about-content p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-highlight {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .highlight-pill {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 30px;
-      padding: 0.5rem 1.1rem;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--teal-dark);
-    }
-
-    .highlight-pill svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--teal);
-      flex-shrink: 0;
-    }
-
-    /* SERVICES */
-    .services {
-      background: var(--white);
-    }
-
-    .services-header {
-      margin-bottom: 3rem;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--off-white);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 2rem 1.5rem;
-      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 28px var(--shadow);
-      border-color: var(--teal-light);
-      transform: translateY(-2px);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: var(--mint);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.2rem;
-      border: 1.5px solid var(--border);
-    }
-
-    .service-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: var(--teal);
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--text-mid);
-      line-height: 1.6;
-    }
-
-    /* CONTACT */
-    .contact {
-      background: var(--off-white);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      margin-top: 3rem;
-      align-items: start;
-    }
-
-    .contact-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 2.5rem;
-      box-shadow: 0 4px 20px var(--shadow);
-    }
-
-    .contact-item {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-      margin-bottom: 1.8rem;
-    }
-
-    .contact-item:last-of-type {
-      margin-bottom: 0;
-    }
-
-    .contact-item-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--mint);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      border: 1.5px solid var(--border);
-    }
-
-    .contact-item-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--teal);
-    }
-
-    .contact-item-text strong {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-item-text span,
-    .contact-item-text a {
-      font-size: 1rem;
-      color: var(--text-dark);
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    .contact-item-text a:hover {
-      color: var(--teal);
-    }
-
-    .rating-block {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 2.5rem;
-      box-shadow: 0 4px 20px var(--shadow);
-    }
-
-    .rating-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 1rem;
-    }
-
-    .rating-stars {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .star {
-      color: var(--accent);
-      font-size: 1.6rem;
-      line-height: 1;
-    }
-
-    .star.empty {
-      color: #d0d0d0;
-    }
-
-    .rating-number {
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: var(--text-dark);
-      line-height: 1;
-      margin-bottom: 0.3rem;
-    }
-
-    .rating-count {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      margin-bottom: 1.8rem;
-    }
-
-    .rating-source {
-      font-size: 0.8rem;
-      color: var(--text-light);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .rating-source svg {
-      width: 16px;
-      height: 16px;
-      fill: #4285f4;
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--teal);
-      color: var(--white);
-      padding: 0.85rem 1.8rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .btn-directions:hover {
-      background: var(--teal-dark);
-      transform: translateY(-1px);
-    }
-
-    .btn-directions svg {
-      width: 18px;
-      height: 18px;
-      fill: white;
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--text-dark);
-      color: rgba(255,255,255,0.75);
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    footer .footer-inner {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    footer .footer-name {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 0.4rem;
-    }
-
-    footer p {
-      font-size: 0.85rem;
-      line-height: 1.6;
-    }
-
-    footer a {
-      color: var(--teal-light);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-visual {
-        order: -1;
-      }
-    }
-
-    @media (max-width: 640px) {
-      nav {
-        padding: 0 1.2rem;
-      }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 68px;
-        left: 0;
-        right: 0;
-        background: var(--white);
-        border-bottom: 2px solid var(--border);
-        flex-direction: column;
-        padding: 1.5rem 1.5rem 2rem;
-        gap: 1.2rem;
-        box-shadow: 0 4px 16px var(--shadow);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-hamburger {
-        display: flex;
-      }
-
-      .hero {
-        padding: 4rem 1.5rem 3.5rem;
-      }
-
-      section {
-        padding: 3.5rem 1.2rem;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-card,
-      .rating-block {
-        padding: 1.8rem;
-      }
-
-      .nav-logo-text span:last-child {
-        display: none;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vet Wellcare Vaccinations Clinic at Pet Supermarket</title>
+<style>
+  :root{
+    --ink:#2b2a3a; --ink-soft:#615f78; --bg:#f4f1ff;
+    --violet:#7b5cf0; --violet-deep:#5a37d8; --sky:#3fbdf0; --coral:#ff7d8f; --sun:#ffc84d; --mint:#42d3a5;
+    --card:#ffffff;
+    --font:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+    --sh:0 26px 56px -28px rgba(60,40,150,.5);
+    --op:1.0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.6;overflow-x:hidden;opacity:1.0}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+
+  header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    padding:14px 22px;background:rgba(244,241,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(123,92,240,.16)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:.98rem}
+  .brand .m{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,var(--violet),var(--sky));display:grid;place-items:center;font-size:1.2rem;color:#fff}
+  header nav{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+  header nav a{font-weight:700;font-size:.82rem;padding:8px 12px;border-radius:999px;color:var(--ink-soft);transition:.2s}
+  header nav a:hover{background:var(--card);color:var(--violet-deep)}
+  header .call{background:var(--violet);color:#fff!important}
+  @media(max-width:720px){header nav .lnk{display:none}}
+
+  /* centered monolith + orbit */
+  .stage{position:relative;min-height:100vh;display:grid;place-items:center;text-align:center;padding:90px 20px 60px;overflow:hidden}
+  .stage::before{content:"";position:absolute;width:120vmax;height:120vmax;border-radius:50%;
+    background:radial-gradient(circle,rgba(123,92,240,.16),transparent 55%);top:50%;left:50%;transform:translate(-50%,-50%)}
+  .orbit{position:absolute;top:50%;left:50%;width:1px;height:1px;transform:translate(-50%,-50%)}
+  .ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2px dashed rgba(123,92,240,.22);border-radius:50%}
+  .ring.r1{width:min(430px,88vw);height:min(430px,88vw)}
+  .ring.r2{width:min(620px,120vw);height:min(620px,120vw);border-color:rgba(63,189,240,.18)}
+  .spin{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:spin 26s linear infinite}
+  .spin.rev{animation-duration:34s;animation-direction:reverse}
+  @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  /* satellites hold a fixed orbit radius via their inline translate; the parent .spin
+     rotation carries them around the center. No per-satellite transform animation here,
+     or it would override the positioning translate and collapse them inward. */
+  .sat{position:absolute;width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-size:1.6rem;color:#fff;box-shadow:var(--sh)}
+  .monolith{position:relative;z-index:3;background:linear-gradient(160deg,#fff,#f0ebff);border-radius:34px;box-shadow:var(--sh);
+    padding:clamp(30px,5vw,60px);max-width:640px;border:1px solid rgba(255,255,255,.8)}
+  .eye{display:inline-block;background:var(--bg);border-radius:999px;padding:7px 16px;font-weight:800;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--violet-deep)}
+  .monolith h1{font-size:clamp(2rem,5.6vw,3.8rem);line-height:1.02;font-weight:800;letter-spacing:-.02em;margin:18px 0 0}
+  .monolith h1 .g{background:linear-gradient(90deg,var(--violet-deep),var(--sky),var(--violet-deep));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+  @keyframes flow{to{background-position:200% center}}
+  .monolith p{color:var(--ink-soft);margin-top:16px;font-size:1.05rem}
+  .ratechip{display:inline-flex;align-items:center;gap:12px;margin-top:22px;background:var(--bg);border-radius:18px;padding:12px 18px}
+  .ratechip .num{font-size:2.2rem;font-weight:800;line-height:1;color:var(--violet-deep)}
+  .ratechip .stars{letter-spacing:2px}
+  .ratechip .cap{font-size:.8rem;color:var(--ink-soft)}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:999px;font-weight:800;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
+  .btn.primary{background:var(--violet);color:#fff;box-shadow:0 16px 34px -14px var(--violet)}
+  .btn.ghost{background:#fff;color:var(--violet-deep);border:2px solid var(--violet)}
+  .btn:hover{transform:translateY(-3px) scale(1.03)}
+
+  section.pad{padding:clamp(56px,9vh,110px) 0}
+  .kick{font-size:.76rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--sky);margin-bottom:12px}
+  h2{font-size:clamp(1.9rem,5vw,3rem);font-weight:800;line-height:1.06;letter-spacing:-.01em;text-align:center}
+  .lead{color:var(--ink-soft);max-width:640px;margin:14px auto 0;text-align:center;font-size:1.05rem}
+  .svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:38px}
+  .scard{background:var(--card);border-radius:24px;padding:28px;box-shadow:var(--sh);transition:transform .3s cubic-bezier(.2,.8,.2,1);text-align:center}
+  .scard:hover{transform:translateY(-8px)}
+  .scard .ic{width:60px;height:60px;margin:0 auto;border-radius:20px;display:grid;place-items:center;font-size:1.7rem;color:#fff;background:linear-gradient(135deg,var(--violet),var(--violet-deep))}
+  .scard:nth-child(3n+2) .ic{background:linear-gradient(135deg,var(--sky),#2f8fd0)}
+  .scard:nth-child(3n+3) .ic{background:linear-gradient(135deg,var(--mint),#28a986)}
+  .scard h3{margin:14px 0 8px;font-size:1.15rem}
+  .scard p{color:var(--ink-soft);font-size:.94rem}
+
+  .store{background:linear-gradient(140deg,var(--violet-deep),#3a1fa8);color:#fff;border-radius:34px;padding:clamp(30px,5vw,56px);box-shadow:var(--sh);text-align:center;margin-top:20px}
+  .store h2{color:#fff}
+  .store p{color:rgba(255,255,255,.88);max-width:600px;margin:14px auto 0}
+
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+  @media(max-width:700px){.contact{grid-template-columns:1fr}}
+  .info{background:var(--card);border-radius:22px;padding:22px;box-shadow:var(--sh);display:flex;gap:14px;align-items:flex-start}
+  .info .ic{width:48px;height:48px;flex:none;border-radius:15px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem}
+  .info .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);font-weight:800}
+  .info .v{font-weight:700}
+  .maparea{grid-column:1/-1;border-radius:24px;min-height:190px;display:grid;place-items:center;text-align:center;padding:24px;box-shadow:var(--sh);
+    background:linear-gradient(rgba(123,92,240,.06),rgba(123,92,240,.06)),repeating-linear-gradient(45deg,#efeaff,#efeaff 16px,#e5dcff 16px,#e5dcff 32px)}
+  .maparea .pin{font-size:2.4rem}
+
+  .reveal{opacity:0;transform:translateY(34px);transition:.75s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{text-align:center;padding:40px;color:var(--ink-soft);font-size:.9rem}
+  footer strong{color:var(--ink)}
+  .disc{font-size:.78rem;margin-top:8px;opacity:.85}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none;transition:none}
+    .spin,.sat{animation:none!important}
+    .orbit{display:none}
+  }
+</style>
 </head>
 <body>
-
-  <!-- NAV -->
+<header>
+  <div class="brand"><span class="m">&#128137;</span> Vet Wellcare Vaccinations Clinic</div>
   <nav>
-    <a href="#" class="nav-logo">
-      <div class="nav-logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4.5 8.5C4.5 6.57 6.07 5 8 5s3.5 1.57 3.5 3.5S9.93 12 8 12 4.5 10.43 4.5 8.5zm7 0c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5zm-4 5c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm9 0c-.33 0-.69.02-1.07.06C17.4 14.44 18 15.22 18 16.5V20h6v-2c0-2.66-5.33-4-8-4z"/>
-        </svg>
-      </div>
-      <div class="nav-logo-text">
-        <span>Vet Wellcare</span>
-        <span>Vaccinations Clinic at Pet Supermarket</span>
-      </div>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-    </ul>
-    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+    <a class="lnk" href="#services">Services</a>
+    <a class="lnk" href="#location">Location</a>
+    <a class="lnk" href="#contact">Contact</a>
+    <a class="call" href="tel:+13523368006">&#128222; Call</a>
   </nav>
+</header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">Gainesville, FL Veterinary Clinic</div>
-      <h1>Affordable Pet Vaccinations &amp; Wellness Care</h1>
-      <p>Keeping your furry family members healthy and protected — right inside Pet Supermarket on NW 13th St.</p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary">Find Us Today</a>
-        <a href="#services" class="btn-secondary">Our Services</a>
+<section class="stage">
+  <div class="orbit" aria-hidden="true">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="spin">
+      <div class="sat" style="background:linear-gradient(135deg,var(--violet),var(--violet-deep));transform:translate(min(215px,44vw),-32px)">&#128137;</div>
+      <div class="sat" style="background:linear-gradient(135deg,var(--coral),#e85067);transform:translate(-32px,min(215px,44vw))">&#128062;</div>
+      <div class="sat" style="background:linear-gradient(135deg,var(--sky),#2f8fd0);transform:translate(min(-215px,-44vw),-32px)">&#129658;</div>
+      <div class="sat" style="background:linear-gradient(135deg,var(--mint),#28a986);transform:translate(-32px,min(-215px,-44vw))">&#128054;</div>
+    </div>
+    <div class="spin rev">
+      <div class="sat" style="background:linear-gradient(135deg,var(--sun),#e8ac2a);transform:translate(min(300px,58vw),min(80px,16vw))">&#128300;</div>
+      <div class="sat" style="background:linear-gradient(135deg,var(--violet),var(--sky));transform:translate(min(-300px,-58vw),min(-80px,-16vw))">&#128203;</div>
+    </div>
+  </div>
+
+  <div class="monolith">
+    <span class="eye">Vaccination Clinic &bull; Gainesville, FL</span>
+    <h1>Affordable Pet <span class="g">Vaccinations</span> &amp; Wellness Care</h1>
+    <p>Convenient, caring wellness visits right inside Pet Supermarket on NW 13th St &mdash; making it easy to keep your pet healthy.</p>
+    <div class="ratechip">
+      <span class="num" data-count="3.7">3.7</span>
+      <div style="text-align:left">
+        <div class="stars">&#11088;&#11088;&#11088;&#9734;&#9734;</div>
+        <div class="cap">Google Maps Rating &bull; Based on 3 reviews</div>
       </div>
     </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="section-inner">
-      <div class="section-label">About Us</div>
-      <div class="section-title">Convenient Care for Your Pets</div>
-      <div class="about-grid">
-        <div class="about-visual">
-          <div class="about-visual-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 2a2 2 0 0 0-2 2v1H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2V4a2 2 0 0 0-2-2h-4zm0 2h4v1h-4V4zm-4 3h12v13H6V7zm6 2a1 1 0 0 0-1 1v2H9a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0-2h-2v-2a1 1 0 0 0-1-1z"/>
-            </svg>
-          </div>
-          <p>Professional veterinary care<br/>available at your local<br/>Pet Supermarket</p>
-        </div>
-        <div class="about-content">
-          <p>Vet Wellcare Vaccinations Clinic brings convenient, professional veterinary services to pet owners in Gainesville and the surrounding community. Located conveniently inside Pet Supermarket on NW 13th St, our clinic makes it easy to keep your pet's health a priority while you shop for their everyday needs.</p>
-          <p>Our licensed veterinary team provides routine wellness exams, core vaccinations, and preventive care tailored to dogs and cats of all ages. We believe every pet deserves quality healthcare without unnecessary hassle or inconvenience for their owners.</p>
-          <p>Whether you need to update your pet's rabies vaccine, schedule a wellness check, or discuss parasite prevention, our compassionate clinic staff is here to help. Contact us for details on current service availability and scheduling.</p>
-          <div class="about-highlight">
-            <div class="highlight-pill">
-              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-              Licensed Vets
-            </div>
-            <div class="highlight-pill">
-              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-              Dogs &amp; Cats
-            </div>
-            <div class="highlight-pill">
-              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-              Walk-ins Welcome
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="cta">
+      <a class="btn primary magnet" href="tel:+13523368006">&#128222; Call (352) 336-8006</a>
+      <a class="btn ghost" href="#services">See Services</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="section-inner">
-      <div class="services-header">
-        <div class="section-label">What We Offer</div>
-        <div class="section-title">Our Veterinary Services</div>
-        <p class="section-subtitle">We offer a range of preventive and wellness services to keep your pet healthy. Contact us for details on pricing and scheduling.</p>
-      </div>
-      <div class="services-grid">
+<section class="pad wrap" id="services">
+  <div class="reveal"><div class="kick" style="text-align:center">What We Offer</div><h2>Simple, affordable wellness care</h2>
+  <p class="lead">Vet Wellcare Vaccinations Clinic provides convenient preventive care for your pet. Contact us for details on current hours.</p></div>
+  <div class="svc">
+    <div class="scard reveal"><div class="ic">&#129658;</div><h3>Wellness Exams</h3><p>Quick, caring checkups to keep tails wagging.</p></div>
+    <div class="scard reveal"><div class="ic">&#128137;</div><h3>Core Vaccinations</h3><p>Essential protection for a healthy, happy pet.</p></div>
+    <div class="scard reveal"><div class="ic">&#128029;</div><h3>Parasite Prevention</h3><p>Keeping fleas, ticks, and worms at bay.</p></div>
+    <div class="scard reveal"><div class="ic">&#128203;</div><h3>Vaccination Records</h3><p>Easy-to-access records for your peace of mind.</p></div>
+    <div class="scard reveal"><div class="ic">&#128225;</div><h3>Microchipping</h3><p>A little chip that helps bring lost pets home.</p></div>
+    <div class="scard reveal"><div class="ic">&#128172;</div><h3>Preventive Consultations</h3><p>Friendly guidance on your pet&rsquo;s wellness.</p></div>
+  </div>
+</section>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-          </div>
-          <h3>Wellness Exams</h3>
-          <p>Routine physical examinations to assess your pet's overall health and catch potential issues early. Contact us for details.</p>
-        </div>
+<section class="pad wrap" id="location">
+  <div class="store reveal">
+    <div class="kick" style="color:var(--sun);text-align:center">Inside Pet Supermarket</div>
+    <h2>Wellness care where you already shop</h2>
+    <p>Our clinic is conveniently located right inside Pet Supermarket on NW 13th St, making it easy to keep your pet up to date on their wellness and vaccinations.</p>
+  </div>
+</section>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M10 2a2 2 0 0 0-2 2v1H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2V4a2 2 0 0 0-2-2h-4zm0 2h4v1h-4V4zm-4 3h12v13H6V7zm6 2a1 1 0 0 0-1 1v2H9a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0-2h-2v-2a1 1 0 0 0-1-1z"/></svg>
-          </div>
-          <h3>Core Vaccinations</h3>
-          <p>Rabies, distemper, parvovirus, and other essential vaccines to protect your dog or cat from preventable diseases.</p>
-        </div>
+<section class="pad wrap" id="contact" style="padding-top:0">
+  <div class="reveal"><div class="kick" style="text-align:center">Contact Us</div><h2>Visit us at Pet Supermarket</h2></div>
+  <div class="contact">
+    <div class="info reveal"><span class="ic">&#128205;</span><div><div class="lbl">Address</div><div class="v">2339 NW 13th St, Gainesville, FL</div></div></div>
+    <div class="info reveal"><span class="ic">&#128222;</span><div><div class="lbl">Phone</div><div class="v"><a href="tel:+13523368006">(352) 336-8006</a></div></div></div>
+    <div class="info reveal"><span class="ic">&#128336;</span><div><div class="lbl">Hours</div><div class="v">Contact us for current hours</div></div></div>
+    <div class="info reveal"><span class="ic">&#128717;</span><div><div class="lbl">Inside</div><div class="v">Pet Supermarket on NW 13th St</div></div></div>
+    <div class="maparea reveal"><div><div class="pin">&#128205;</div><strong>Vet Wellcare Vaccinations Clinic at Pet Supermarket</strong><br>2339 NW 13th St, Gainesville, FL<br>
+      <a class="btn primary magnet" style="margin-top:14px" href="https://www.google.com/maps/search/Vet%20Wellcare%20Vaccinations%20Clinic%20at%20Pet%20Supermarket%202339%20NW%2013th%20St" target="_blank" rel="noopener">&#128506; Get Directions</a>
+    </div></div>
+  </div>
+</section>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          </div>
-          <h3>Parasite Prevention</h3>
-          <p>Flea, tick, and heartworm prevention guidance and products to keep your pet protected year-round in Florida's climate.</p>
-        </div>
+<footer>
+  <strong>Vet Wellcare Vaccinations Clinic at Pet Supermarket</strong> &bull; 2339 NW 13th St, Gainesville, FL &bull; (352) 336-8006
+  <div class="disc">This is a demonstration website created for Vet Wellcare Vaccinations Clinic. Please contact directly for current details.</div>
+</footer>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
-          </div>
-          <h3>Vaccination Records</h3>
-          <p>Up-to-date health and vaccination documentation to support boarding, grooming, travel, and licensing requirements.</p>
-        </div>
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.35C18 2.06 15.96 0 13.5 0c-1.38 0-2.5.56-3.5 1.48C9 .56 7.88 0 6.5 0 4.04 0 2 2.06 2 4.65c0 .48.09.91.18 1.35H0v2h20V6zM4 4.65C4 3.16 5.12 2 6.5 2s2.5 1.16 2.5 2.65c0 .5-.19.97-.43 1.35H4.43C4.19 5.62 4 5.15 4 4.65zM13.5 2c1.38 0 2.5 1.16 2.5 2.65 0 .5-.19.97-.43 1.35h-4.14C11.19 5.62 11 5.15 11 4.65 11 3.16 12.12 2 13.5 2zM2 20h2v2h2v-2h12v2h2v-2h2V8H2v12zm8-8h4v6h-4v-6z"/></svg>
-          </div>
-          <h3>Microchipping</h3>
-          <p>Permanent pet identification implanted quickly and safely, giving you peace of mind if your pet ever gets lost.</p>
-        </div>
+  var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el){reduce?el.classList.add('in'):io.observe(el);});
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-          </div>
-          <h3>Preventive Health Consultations</h3>
-          <p>One-on-one consultations to discuss your pet's diet, lifestyle, and long-term health needs with our veterinary staff.</p>
-        </div>
+  function up(el){var t=parseFloat(el.getAttribute('data-count'));
+    if(reduce||isNaN(t)){el.textContent=el.getAttribute('data-count');return;}
+    var s=null;function step(n){if(!s)s=n;var p=Math.min((n-s)/1100,1);
+      el.textContent=(t*(1-Math.pow(1-p,3))).toFixed(1);
+      if(p<1)requestAnimationFrame(step);else el.textContent=t.toFixed(1);}requestAnimationFrame(step);}
+  var cio=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){up(e.target);cio.unobserve(e.target);}});},{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el);});
 
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="section-inner">
-      <div class="section-label">Get in Touch</div>
-      <div class="section-title">Visit Us or Call Today</div>
-      <div class="contact-grid">
-
-        <div class="contact-card">
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Address</strong>
-              <span>2339 NW 13th St<br/>Gainesville, FL</span>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Phone</strong>
-              <a href="tel:3523368006">(352) 336-8006</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Hours</strong>
-              <span>Contact us for current hours</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="rating-block">
-          <div class="rating-label">Google Maps Rating</div>
-          <div class="rating-number">3.7</div>
-          <div class="rating-stars">
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9734;</span>
-            <span class="star">&#9734;</span>
-          </div>
-          <div class="rating-count">Based on 3 reviews</div>
-          <div class="rating-source">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-            Verified on Google Maps
-          </div>
-          <a
-            href="https://www.google.com/maps/search/Vet%20Wellcare%20Vaccinations%20Clinic%20at%20Pet%20Supermarket%202339%20NW%2013th%20St"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-directions"
-          >
-            <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-            Get Directions
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-name">Vet Wellcare Vaccinations Clinic at Pet Supermarket</div>
-      <p>2339 NW 13th St &mdash; Gainesville, FL &nbsp;&bull;&nbsp; <a href="tel:3523368006">(352) 336-8006</a></p>
-      <p style="margin-top:0.8rem; font-size:0.78rem; opacity:0.6;">&copy; 2026 Vet Wellcare Vaccinations Clinic at Pet Supermarket. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <script>
-    (function() {
-      var hamburger = document.getElementById('hamburger');
-      var navLinks = document.getElementById('navLinks');
-      hamburger.addEventListener('click', function() {
-        navLinks.classList.toggle('open');
-      });
-      navLinks.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          navLinks.classList.remove('open');
-        });
-      });
-    })();
-  </script>
-
+  if(!reduce){
+    document.querySelectorAll('.magnet').forEach(function(btn){
+      btn.addEventListener('pointermove',function(e){var r=btn.getBoundingClientRect();
+        btn.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.2-3)+'px) scale(1.03)';});
+      btn.addEventListener('pointerleave',function(){btn.style.transform='';});
+    });
+  }
+})();
+</script>
 </body>
 </html>

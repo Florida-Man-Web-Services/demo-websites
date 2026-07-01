@@ -1,763 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elevate Early Learning Academy – Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --sky:      #4FC3F7;
-      --sun:      #FFD54F;
-      --grass:    #66BB6A;
-      --coral:    #FF8A65;
-      --lavender: #CE93D8;
-      --white:    #FFFFFF;
-      --off-white:#F9F6FF;
-      --dark:     #2D2D3A;
-      --mid:      #5A5A72;
-      --light-border: #E0D9F5;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--dark);
-      background: var(--off-white);
-      line-height: 1.65;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--white);
-      box-shadow: 0 2px 12px rgba(79,195,247,.18);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: .65rem;
-      text-decoration: none;
-    }
-
-    .nav-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--sky) 0%, var(--lavender) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      flex-shrink: 0;
-    }
-
-    .nav-name {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--dark);
-      line-height: 1.2;
-    }
-    .nav-name span { color: var(--sky); }
-
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--mid);
-      font-weight: 600;
-      font-size: .92rem;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--sky); }
-
-    .nav-cta {
-      background: var(--coral);
-      color: var(--white) !important;
-      padding: .45rem 1.1rem;
-      border-radius: 999px;
-      transition: background .2s, transform .15s !important;
-    }
-    .nav-cta:hover { background: #f4704d !important; transform: translateY(-1px); }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2.5px;
-      background: var(--dark);
-      border-radius: 2px;
-      transition: .3s;
-    }
-
-    /* mobile nav */
-    @media (max-width: 720px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: var(--white);
-        flex-direction: column;
-        gap: 0;
-        box-shadow: 0 8px 20px rgba(0,0,0,.1);
-      }
-      .nav-links.open { display: flex; }
-      .nav-links li a {
-        display: block;
-        padding: .9rem 2rem;
-        border-top: 1px solid var(--light-border);
-      }
-      .hamburger { display: flex; }
-      .nav-cta { border-radius: 0 !important; padding: .9rem 2rem !important; }
-    }
-
-    /* ── HERO ── */
-    .hero {
-      padding-top: 64px;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: linear-gradient(160deg, #E3F8FF 0%, #F3E8FF 50%, #FFF8E1 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-shapes {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .shape {
-      position: absolute;
-      border-radius: 50%;
-      opacity: .18;
-    }
-    .shape-1 { width: 380px; height: 380px; background: var(--sky);     top: -80px;  left: -100px; }
-    .shape-2 { width: 260px; height: 260px; background: var(--lavender);bottom: -60px; right: -60px; }
-    .shape-3 { width: 150px; height: 150px; background: var(--sun);     top: 40%;  right: 8%; }
-    .shape-4 { width: 100px; height: 100px; background: var(--grass);   bottom: 15%; left: 10%; }
-    .shape-5 { width: 80px;  height: 80px;  background: var(--coral);   top: 20%;  left: 30%; border-radius: 30%; }
-
-    .hero-content {
-      position: relative;
-      max-width: 720px;
-      padding: 2rem 1.5rem;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--white);
-      color: var(--sky);
-      font-size: .8rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: .35rem 1rem;
-      border-radius: 999px;
-      border: 2px solid var(--sky);
-      margin-bottom: 1.4rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 800;
-      line-height: 1.15;
-      color: var(--dark);
-      margin-bottom: 1rem;
-    }
-
-    .hero h1 .accent { color: var(--sky); }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: var(--mid);
-      max-width: 540px;
-      margin: 0 auto 2.2rem;
-    }
-
-    .hero-btns {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: .75rem 1.8rem;
-      border-radius: 999px;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: transform .18s, box-shadow .18s;
-      cursor: pointer;
-      border: none;
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.14); }
-
-    .btn-primary { background: var(--sky);   color: var(--white); }
-    .btn-outline { background: transparent; color: var(--dark); border: 2px solid var(--dark); }
-
-    .hero-rating {
-      margin-top: 2.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      font-size: .92rem;
-      color: var(--mid);
-    }
-
-    .stars { color: var(--sun); font-size: 1.1rem; letter-spacing: .05em; }
-
-    /* ── SECTIONS SHARED ── */
-    section { padding: 5rem 1.5rem; }
-
-    .section-inner {
-      max-width: 1060px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: .5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-      font-weight: 800;
-      color: var(--dark);
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    .section-sub {
-      color: var(--mid);
-      max-width: 600px;
-      font-size: 1.02rem;
-    }
-
-    /* ── ABOUT ── */
-    .about { background: var(--white); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-      margin-top: 2.5rem;
-    }
-
-    .about-illustration {
-      background: linear-gradient(135deg, #E3F8FF 0%, #F3E8FF 100%);
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2.5rem;
-      font-size: 6rem;
-      line-height: 1;
-      text-align: center;
-      min-height: 280px;
-      position: relative;
-    }
-
-    .about-emoji-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      font-size: 2.8rem;
-    }
-
-    .about-text p {
-      color: var(--mid);
-      margin-bottom: 1rem;
-      font-size: 1.03rem;
-    }
-
-    .about-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .6rem;
-      margin-top: 1.5rem;
-    }
-
-    .pill {
-      background: var(--off-white);
-      border: 1.5px solid var(--light-border);
-      border-radius: 999px;
-      padding: .35rem .9rem;
-      font-size: .85rem;
-      font-weight: 600;
-      color: var(--mid);
-    }
-
-    @media (max-width: 720px) {
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .about-illustration { min-height: 180px; }
-    }
-
-    /* ── SERVICES ── */
-    .services { background: var(--off-white); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 2rem 1.8rem;
-      border: 1.5px solid var(--light-border);
-      transition: transform .2s, box-shadow .2s;
-    }
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(79,195,247,.15);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 1.1rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: .45rem;
-    }
-
-    .service-card p {
-      font-size: .92rem;
-      color: var(--mid);
-    }
-
-    /* ── CONTACT ── */
-    .contact { background: var(--white); }
-
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin-top: 2.5rem;
-      align-items: start;
-    }
-
-    .contact-info-block {
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .contact-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      flex-shrink: 0;
-    }
-
-    .ci-sky     { background: #E3F8FF; }
-    .ci-coral   { background: #FFE8DF; }
-    .ci-grass   { background: #E6F7E6; }
-    .ci-lavender{ background: #F3E8FF; }
-
-    .contact-item-label {
-      font-size: .78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--sky);
-      margin-bottom: .15rem;
-    }
-
-    .contact-item-value {
-      font-size: 1rem;
-      color: var(--dark);
-      font-weight: 600;
-    }
-
-    .contact-item-value a {
-      color: inherit;
-      text-decoration: none;
-    }
-    .contact-item-value a:hover { text-decoration: underline; }
-
-    .rating-box {
-      background: linear-gradient(135deg, #FFF8E1 0%, #FFFDE7 100%);
-      border: 2px solid var(--sun);
-      border-radius: 20px;
-      padding: 1.5rem 1.8rem;
-      text-align: center;
-    }
-
-    .rating-number {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--dark);
-      line-height: 1;
-      margin-bottom: .35rem;
-    }
-
-    .rating-stars { color: var(--sun); font-size: 1.5rem; margin-bottom: .4rem; }
-
-    .rating-caption {
-      font-size: .88rem;
-      color: var(--mid);
-    }
-
-    .map-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: var(--grass);
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 700;
-      padding: .85rem 1.8rem;
-      border-radius: 999px;
-      margin-top: 1.8rem;
-      font-size: 1rem;
-      transition: background .2s, transform .18s;
-    }
-    .map-btn:hover { background: #4caf50; transform: translateY(-2px); }
-
-    .contact-cta-panel {
-      background: linear-gradient(135deg, #E3F8FF 0%, #F3E8FF 100%);
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .contact-cta-panel h3 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-bottom: .75rem;
-      color: var(--dark);
-    }
-
-    .contact-cta-panel p {
-      color: var(--mid);
-      margin-bottom: 1.5rem;
-      font-size: .97rem;
-    }
-
-    .contact-cta-panel .btn-primary {
-      font-size: .97rem;
-      padding: .75rem 1.6rem;
-    }
-
-    @media (max-width: 720px) {
-      .contact-layout { grid-template-columns: 1fr; gap: 2rem; }
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--dark);
-      color: rgba(255,255,255,.7);
-      text-align: center;
-      padding: 2.5rem 1.5rem;
-      font-size: .88rem;
-    }
-
-    footer .footer-brand {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: .5rem;
-    }
-
-    footer .footer-brand span { color: var(--sky); }
-
-    footer a { color: var(--sky); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elevate Early Learning Academy &ndash; Gainesville, FL</title>
+<style>
+  :root{
+    --bg:#fdf4ff; --ink:#3a2f4a; --ink-soft:#6d5f80;
+    --grape:#8b5cf6; --grape-deep:#6d34e0; --rose:#ff7eb6; --tang:#ff9f68;
+    --teal:#2dd4bf; --sky:#7cc9ff; --lemon:#ffe266; --card:#ffffff;
+    --font:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+    --sh:0 22px 50px -26px rgba(90,50,150,.55);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--ink);line-height:1.55;overflow-x:hidden;
+    background:
+      radial-gradient(60% 55% at 12% 8%,rgba(255,126,182,.35),transparent 60%),
+      radial-gradient(55% 55% at 92% 6%,rgba(124,201,255,.4),transparent 60%),
+      radial-gradient(70% 60% at 80% 95%,rgba(45,212,191,.3),transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  a{color:inherit;text-decoration:none}
+  .shell{max-width:1180px;margin:0 auto;padding:22px}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    background:rgba(255,255,255,.6);backdrop-filter:blur(12px);border-radius:22px;padding:12px 20px;
+    box-shadow:var(--sh);border:1px solid rgba(255,255,255,.7);position:sticky;top:12px;z-index:40}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem}
+  .logo .mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--grape),var(--rose));display:grid;place-items:center;color:#fff;font-size:1.2rem;transform:rotate(-6deg)}
+  .topbar nav{display:flex;gap:4px;flex-wrap:wrap}
+  .topbar nav a{padding:8px 13px;border-radius:12px;font-weight:700;font-size:.85rem;color:var(--ink-soft);transition:.2s}
+  .topbar nav a:hover{background:var(--lemon);color:var(--ink)}
+  .topbar .cta{background:var(--grape);color:#fff;padding:10px 18px;border-radius:12px;font-weight:800;font-size:.85rem}
+
+  h1,h2,h3{letter-spacing:-.01em}
+  .grad{background:linear-gradient(90deg,var(--grape-deep),var(--rose),var(--tang));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 7s linear infinite}
+  @keyframes flow{to{background-position:200% center}}
+
+  /* bento grid */
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(96px,auto);gap:16px;margin-top:20px}
+  .tile{background:var(--card);border-radius:26px;padding:26px;box-shadow:var(--sh);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.8);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+  .tile.tilt{transform-style:preserve-3d;will-change:transform}
+  .t-hero{grid-column:span 8;grid-row:span 3;background:linear-gradient(150deg,#fff,#f4e9ff);display:flex;flex-direction:column;justify-content:center}
+  .t-rate{grid-column:span 4;grid-row:span 2;background:linear-gradient(150deg,var(--grape),var(--grape-deep));color:#fff;display:flex;flex-direction:column;justify-content:center;text-align:center}
+  .t-call{grid-column:span 4;grid-row:span 1;background:linear-gradient(135deg,var(--rose),var(--tang));color:#fff;display:flex;align-items:center;gap:12px}
+  .t-prog{grid-column:span 4;grid-row:span 2}
+  .t-wide{grid-column:span 8;grid-row:span 2;background:linear-gradient(150deg,#fff,#e9fbf7)}
+  .t-map{grid-column:span 5;grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between}
+  .t-contact{grid-column:span 7;grid-row:span 2}
+  @media(max-width:860px){
+    .bento{grid-template-columns:repeat(6,1fr)}
+    .t-hero,.t-wide,.t-contact{grid-column:span 6}
+    .t-rate,.t-call,.t-prog,.t-map{grid-column:span 3}
+  }
+  @media(max-width:560px){
+    .bento{grid-template-columns:1fr}
+    .tile{grid-column:1/-1!important}
+  }
+
+  .eyebrow{font-size:.74rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--grape-deep);margin-bottom:12px}
+  .t-hero h1{font-size:clamp(2.2rem,5.4vw,4rem);line-height:1;font-weight:800}
+  .t-hero p{color:var(--ink-soft);margin-top:16px;font-size:1.08rem;max-width:560px}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .tag{background:var(--bg);border:1px solid rgba(139,92,246,.25);border-radius:999px;padding:6px 14px;font-size:.8rem;font-weight:700;color:var(--grape-deep)}
+  .confetti{position:absolute;inset:0;pointer-events:none}
+  .confetti i{position:absolute;width:12px;height:12px;border-radius:3px;opacity:.7;animation:fall 6s linear infinite}
+  @keyframes fall{0%{transform:translateY(-30px) rotate(0)}100%{transform:translateY(360px) rotate(360deg)}}
+
+  .t-rate .num{font-size:4.4rem;font-weight:800;line-height:1}
+  .t-rate .stars{font-size:1.5rem;letter-spacing:3px;margin:4px 0}
+  .t-rate .cap{font-size:.9rem;opacity:.92}
+
+  .t-call .ic{width:48px;height:48px;flex:none;border-radius:16px;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:1.5rem}
+  .t-call .lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;opacity:.9}
+  .t-call .num{font-size:1.25rem;font-weight:800}
+
+  .t-prog h3,.t-wide h2,.t-contact h2{font-size:1.35rem;font-weight:800;margin-bottom:14px}
+  .plist{display:flex;flex-direction:column;gap:10px}
+  .prow{display:flex;align-items:center;gap:12px;font-weight:700;font-size:.98rem}
+  .prow .b{width:34px;height:34px;flex:none;border-radius:11px;display:grid;place-items:center;background:var(--lemon);font-size:1rem}
+  .wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:6px}
+  .wcard{background:rgba(45,212,191,.12);border-radius:18px;padding:16px}
+  .wcard .b{font-size:1.6rem}
+  .wcard h4{margin:6px 0 4px;font-size:1rem}
+  .wcard p{font-size:.85rem;color:var(--ink-soft)}
+
+  .info{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px dashed rgba(109,95,128,.25)}
+  .info:last-child{border-bottom:0}
+  .info .ic{width:40px;height:40px;flex:none;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:1.2rem}
+  .info .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);font-weight:800}
+  .info .v{font-weight:700}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:14px;font-weight:800;background:var(--grape);color:#fff;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
+  .btn:hover{transform:translateY(-3px)}
+  .t-map .maparea{border-radius:18px;flex:1;min-height:150px;background:
+    linear-gradient(rgba(139,92,246,.08),rgba(139,92,246,.08)),
+    repeating-linear-gradient(0deg,#f6eeff,#f6eeff 22px,#efe2ff 22px,#efe2ff 44px);
+    display:grid;place-items:center;text-align:center;padding:16px;margin-bottom:14px}
+  .t-map .pin{font-size:2.2rem}
+
+  .reveal{opacity:0;transform:translateY(30px) scale(.98);transition:.7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:.9rem}
+  footer strong{color:var(--ink)}
+  .disc{font-size:.78rem;margin-top:10px;opacity:.8}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none;transition:none}
+    .tile{transform:none!important}
+  }
+</style>
 </head>
 <body>
-
-<!-- ── NAV ── -->
-<nav>
-  <a class="nav-brand" href="#hero">
-    <div class="nav-logo">🌟</div>
-    <div class="nav-name">Elevate Early<br><span>Learning Academy</span></div>
-  </a>
-
-  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
-
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Programs</a></li>
-    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-  </ul>
-</nav>
-
-<!-- ── HERO ── -->
-<section class="hero" id="hero">
-  <div class="hero-shapes">
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-    <div class="shape shape-3"></div>
-    <div class="shape shape-4"></div>
-    <div class="shape shape-5"></div>
+<div class="shell">
+  <div class="topbar">
+    <div class="logo"><span class="mark">&#127775;</span> Elevate Early Learning Academy</div>
+    <nav>
+      <a href="#programs">Programs</a>
+      <a href="#stages">Stages</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a class="cta" href="tel:+13527564867">Call (352) 756-4867</a>
   </div>
-  <div class="hero-content">
-    <div class="hero-badge">Gainesville, FL Child Care</div>
-    <h1>Where Little Minds <span class="accent">Grow & Shine</span></h1>
-    <p class="hero-tagline">
-      A nurturing, joyful environment where curiosity is celebrated and every child
-      is empowered to learn, play, and thrive.
-    </p>
-    <div class="hero-btns">
-      <a href="#contact" class="btn btn-primary">Enroll Today</a>
-      <a href="#services" class="btn btn-outline">Our Programs</a>
-    </div>
-    <div class="hero-rating">
-      <span class="stars">★★★★★</span>
-      <strong>5.0</strong>&nbsp;on Google Maps &mdash; Families love us!
-    </div>
-  </div>
-</section>
 
-<!-- ── ABOUT ── -->
-<section class="about" id="about">
-  <div class="section-inner">
-    <p class="section-label">About Us</p>
-    <h2 class="section-title">A Place Where Every Child Belongs</h2>
-    <div class="about-grid">
-      <div class="about-illustration">
-        <div class="about-emoji-grid">
-          <span>🎨</span><span>📚</span><span>🧩</span>
-          <span>🌈</span><span>🌻</span><span>🎵</span>
-          <span>🚀</span><span>🦋</span><span>🌟</span>
-        </div>
-      </div>
-      <div class="about-text">
-        <p>
-          Elevate Early Learning Academy is a dedicated child care center serving
-          families throughout Gainesville, FL. Our team of caring educators provides a
-          safe, stimulating space where children build the foundational skills that
-          set them up for lifelong success.
-        </p>
-        <p>
-          We believe that play is a child's most important work. Our curriculum blends
-          structured learning with creative exploration, giving each child the individual
-          attention they deserve in a warm, home-like setting.
-        </p>
-        <p>
-          From infants to school-age children, we partner closely with families,
-          offering open communication and a genuine commitment to each little learner's
-          well-being and development.
-        </p>
-        <div class="about-pills">
-          <span class="pill">Licensed &amp; Certified</span>
-          <span class="pill">Caring Staff</span>
-          <span class="pill">Safe Environment</span>
-          <span class="pill">Family-Centered</span>
-          <span class="pill">Play-Based Learning</span>
-        </div>
+  <div class="bento">
+
+    <div class="tile t-hero tilt">
+      <div class="confetti" aria-hidden="true"></div>
+      <div class="eyebrow">Early Learning Academy &bull; Gainesville, FL</div>
+      <h1>Where Little Minds <span class="grad">Rise &amp; Shine</span></h1>
+      <p>A place where every child belongs. Elevate Early Learning Academy nurtures curious kids in Gainesville with warmth, play, and room to grow.</p>
+      <div class="hero-tags">
+        <span class="tag">Warm &amp; caring</span>
+        <span class="tag">Play-based</span>
+        <span class="tag">Every stage</span>
+        <span class="tag">Family-first</span>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ── SERVICES ── -->
-<section class="services" id="services">
-  <div class="section-inner">
-    <p class="section-label">Our Programs</p>
-    <h2 class="section-title">Care &amp; Learning for Every Stage</h2>
-    <p class="section-sub">
-      We offer age-appropriate programs designed to meet children right where they are
-      developmentally — contact us for current availability and details.
-    </p>
-    <div class="services-grid">
-
-      <div class="service-card">
-        <div class="service-icon ci-sky">🍼</div>
-        <h3>Infant Care</h3>
-        <p>Attentive, responsive care for your youngest family members in a gentle,
-           nurturing setting — contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon ci-lavender">🚶</div>
-        <h3>Toddler Program</h3>
-        <p>Hands-on exploration and social skill-building designed for curious toddlers
-           discovering their world — contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon ci-sun" style="background:#FFF8E1;">🌱</div>
-        <h3>Preschool / Pre-K</h3>
-        <p>Kindergarten-readiness activities covering literacy, numeracy, social-emotional
-           skills, and creative arts — contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon ci-grass">🏫</div>
-        <h3>School-Age Care</h3>
-        <p>Before- and after-school care that gives school-age children a safe,
-           enriching home base — contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon ci-coral">🌞</div>
-        <h3>Summer &amp; Holiday Programs</h3>
-        <p>Engaging enrichment activities during school breaks that keep children
-           learning and active all year long — contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon ci-lavender">🤝</div>
-        <h3>Family Support &amp; Resources</h3>
-        <p>Open-door communication, progress updates, and community resources to
-           help families thrive alongside their children — contact us for details.</p>
-      </div>
-
+    <div class="tile t-rate reveal">
+      <div class="num" data-count="5.0">5.0</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="cap">Based on 3 Google Maps reviews</div>
     </div>
-  </div>
-</section>
 
-<!-- ── CONTACT ── -->
-<section class="contact" id="contact">
-  <div class="section-inner">
-    <p class="section-label">Contact &amp; Location</p>
-    <h2 class="section-title">We'd Love to Meet Your Family</h2>
-    <p class="section-sub">
-      Reach out to learn about enrollment, tour our facility, or ask any questions.
-      We're here to help.
-    </p>
+    <a class="tile t-call reveal magnet" href="tel:+13527564867">
+      <span class="ic">&#128222;</span>
+      <span><span class="lbl">Call today</span><br><span class="num">(352) 756-4867</span></span>
+    </a>
 
-    <div class="contact-layout">
-      <!-- Left: info -->
+    <div class="tile t-prog reveal">
+      <h3>Care &amp; Learning</h3>
+      <div class="plist">
+        <div class="prow"><span class="b">&#127868;</span> Infant Care</div>
+        <div class="prow"><span class="b">&#129528;</span> Toddler Program</div>
+        <div class="prow"><span class="b">&#9999;&#65039;</span> Preschool / Pre-K</div>
+        <div class="prow"><span class="b">&#127890;</span> School-Age Care</div>
+      </div>
+    </div>
+
+    <div class="tile t-wide reveal" id="stages">
+      <h2>Growing together, every stage</h2>
+      <div class="wgrid">
+        <div class="wcard"><div class="b">&#9925;</div><h4>Summer &amp; Holiday</h4><p>Seasonal programs full of fun and discovery.</p></div>
+        <div class="wcard"><div class="b">&#129309;</div><h4>Family Support</h4><p>Resources and partnership for every family.</p></div>
+        <div class="wcard"><div class="b">&#127917;</div><h4>Play &amp; Explore</h4><p>Hands-on learning through joyful play.</p></div>
+      </div>
+    </div>
+
+    <div class="tile t-map reveal" id="visit">
       <div>
-        <div class="contact-info-block">
-
-          <div class="contact-item">
-            <div class="contact-icon ci-sky">📍</div>
-            <div>
-              <div class="contact-item-label">Address</div>
-              <div class="contact-item-value">1127 NW 7th Ave<br>Gainesville, FL</div>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-icon ci-coral">📞</div>
-            <div>
-              <div class="contact-item-label">Phone</div>
-              <div class="contact-item-value">
-                <a href="tel:+13527564867">(352) 756-4867</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-icon ci-grass">🕐</div>
-            <div>
-              <div class="contact-item-label">Hours</div>
-              <div class="contact-item-value">Contact us for details</div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="rating-box" style="margin-top:1.8rem;">
-          <div class="rating-number">5.0</div>
-          <div class="rating-stars">★★★★★</div>
-          <div class="rating-caption">Based on 3 Google Maps reviews</div>
-        </div>
-
-        <a
-          class="map-btn"
-          href="https://www.google.com/maps/search/Elevate%20Early%20Learning%20Academy%2C%20Gainesville%201127%20NW%207th%20Ave"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          🗺️ Get Directions
-        </a>
+        <div class="eyebrow">Find Us</div>
+        <div class="maparea"><div><div class="pin">&#128205;</div><strong>1127 NW 7th Ave</strong><br>Gainesville, FL</div></div>
       </div>
-
-      <!-- Right: CTA panel -->
-      <div class="contact-cta-panel">
-        <div style="font-size:3rem;margin-bottom:1rem;">🌟</div>
-        <h3>Ready to Elevate Your Child's Start?</h3>
-        <p>
-          Give us a call or stop by to learn how Elevate Early Learning Academy
-          can support your child's growth and your family's peace of mind.
-        </p>
-        <a href="tel:+13527564867" class="btn btn-primary">Call (352) 756-4867</a>
-      </div>
+      <a class="btn" href="https://www.google.com/maps/search/Elevate%20Early%20Learning%20Academy%2C%20Gainesville%201127%20NW%207th%20Ave" target="_blank" rel="noopener">&#128506; Get Directions</a>
     </div>
-  </div>
-</section>
 
-<!-- ── FOOTER ── -->
-<footer>
-  <div class="footer-brand">Elevate Early <span>Learning Academy</span></div>
-  <p>1127 NW 7th Ave, Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13527564867">(352) 756-4867</a></p>
-  <p style="margin-top:.5rem;">&copy; 2026 Elevate Early Learning Academy. All rights reserved.</p>
-</footer>
+    <div class="tile t-contact reveal" id="programs">
+      <h2>We&rsquo;d love to meet your family</h2>
+      <div class="info"><span class="ic">&#128205;</span><div><div class="lbl">Address</div><div class="v">1127 NW 7th Ave, Gainesville, FL</div></div></div>
+      <div class="info"><span class="ic">&#128222;</span><div><div class="lbl">Phone</div><div class="v"><a href="tel:+13527564867">(352) 756-4867</a></div></div></div>
+      <div class="info"><span class="ic">&#128336;</span><div><div class="lbl">Hours</div><div class="v">Contact us for details</div></div></div>
+      <div class="info"><span class="ic">&#127891;</span><div><div class="lbl">Enrollment</div><div class="v">Contact us to elevate your child&rsquo;s start</div></div></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>Elevate Early Learning Academy</strong> &bull; 1127 NW 7th Ave, Gainesville, FL &bull; (352) 756-4867
+    <div class="disc">This is a demonstration website created for Elevate Early Learning Academy. Please contact the academy directly for current details.</div>
+  </footer>
+</div>
 
 <script>
-  function toggleMenu() {
-    document.getElementById('navLinks').classList.toggle('open');
-  }
-  // Close mobile nav on link click
-  document.querySelectorAll('#navLinks a').forEach(function(link) {
-    link.addEventListener('click', function() {
-      document.getElementById('navLinks').classList.remove('open');
-    });
-  });
-</script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // confetti tiles
+  var conf = document.querySelector('.confetti');
+  if(conf && !reduce){
+    var colors=['#8b5cf6','#ff7eb6','#ff9f68','#2dd4bf','#ffe266','#7cc9ff'];
+    for(var i=0;i<14;i++){
+      var s=document.createElement('i');
+      s.style.left=(Math.random()*100)+'%';
+      s.style.background=colors[i%colors.length];
+      s.style.animationDelay=(Math.random()*6)+'s';
+      s.style.animationDuration=(4+Math.random()*4)+'s';
+      conf.appendChild(s);
+    }
+  }
+
+  // reveal
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
+  },{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el){ reduce?el.classList.add('in'):io.observe(el); });
+
+  // count up
+  function up(el){
+    var t=parseFloat(el.getAttribute('data-count'));
+    if(reduce||isNaN(t)){el.textContent=el.getAttribute('data-count');return;}
+    var s=null;
+    function step(n){ if(!s)s=n; var p=Math.min((n-s)/1100,1);
+      el.textContent=(t*(1-Math.pow(1-p,3))).toFixed(1);
+      if(p<1)requestAnimationFrame(step); else el.textContent=t.toFixed(1); }
+    requestAnimationFrame(step);
+  }
+  var cio=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){up(e.target);cio.unobserve(e.target);}});},{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el);});
+
+  // 3D tilt
+  if(!reduce){
+    document.querySelectorAll('.tilt').forEach(function(el){
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+        el.style.transform='perspective(900px) rotateY('+(px*5)+'deg) rotateX('+(-py*5)+'deg)';
+      });
+      el.addEventListener('pointerleave',function(){el.style.transform='';});
+    });
+    document.querySelectorAll('.magnet').forEach(function(btn){
+      btn.addEventListener('pointermove',function(e){
+        var r=btn.getBoundingClientRect();
+        btn.style.transform='translate('+((e.clientX-r.left-r.width/2)*.12)+'px,'+((e.clientY-r.top-r.height/2)*.12)+'px)';
+      });
+      btn.addEventListener('pointerleave',function(){btn.style.transform='';});
+    });
+  }
+})();
+</script>
 </body>
 </html>
