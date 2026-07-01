@@ -1,624 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coronet Fabric Mills | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --cream:    #f7f3ee;
-      --warm-tan: #c9a97a;
-      --deep-tan: #a07850;
-      --bark:     #5c3d2e;
-      --charcoal: #2d2d2d;
-      --white:    #ffffff;
-      --shadow:   rgba(44, 30, 15, 0.12);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: var(--cream);
-      color: var(--charcoal);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--bark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 62px;
-      box-shadow: 0 2px 10px var(--shadow);
-    }
-
-    .nav-logo {
-      color: var(--cream);
-      font-size: 1.25rem;
-      font-weight: bold;
-      letter-spacing: 0.04em;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--warm-tan);
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--white); }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 26px;
-      height: 2px;
-      background: var(--cream);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 62px;
-      min-height: 88vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 1.5rem;
-      background:
-        linear-gradient(160deg, rgba(92,61,46,0.82) 0%, rgba(92,61,46,0.55) 100%),
-        repeating-linear-gradient(
-          135deg,
-          rgba(201,169,122,0.18) 0px,
-          rgba(201,169,122,0.18) 2px,
-          transparent 2px,
-          transparent 18px
-        ),
-        repeating-linear-gradient(
-          45deg,
-          rgba(201,169,122,0.12) 0px,
-          rgba(201,169,122,0.12) 2px,
-          transparent 2px,
-          transparent 18px
-        ),
-        #5c3d2e;
-    }
-
-    .hero-inner { max-width: 760px; }
-
-    .hero-eyebrow {
-      display: inline-block;
-      color: var(--warm-tan);
-      font-size: 0.8rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
-    }
-
-    .hero h1 {
-      color: var(--white);
-      font-size: clamp(2.4rem, 5.5vw, 4rem);
-      line-height: 1.18;
-      margin-bottom: 1.2rem;
-      text-shadow: 0 2px 18px rgba(0,0,0,0.35);
-    }
-
-    .hero p {
-      color: #e8ddd0;
-      font-size: clamp(1rem, 2.2vw, 1.22rem);
-      margin-bottom: 2.4rem;
-      max-width: 560px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2.2rem;
-      border-radius: 3px;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-decoration: none;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      transition: background 0.2s, color 0.2s, transform 0.15s;
-    }
-
-    .btn-primary {
-      background: var(--warm-tan);
-      color: var(--bark);
-      font-weight: bold;
-    }
-    .btn-primary:hover { background: #d4b48a; transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--warm-tan);
-      color: var(--warm-tan);
-      margin-left: 1rem;
-    }
-    .btn-outline:hover { background: var(--warm-tan); color: var(--bark); transform: translateY(-2px); }
-
-    /* ── SECTION BASICS ── */
-    section { padding: 5rem 1.5rem; }
-
-    .section-inner { max-width: 1080px; margin: 0 auto; }
-
-    .section-label {
-      display: block;
-      color: var(--deep-tan);
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
-      color: var(--bark);
-      margin-bottom: 1.2rem;
-      line-height: 1.2;
-    }
-
-    .section-divider {
-      width: 54px;
-      height: 3px;
-      background: var(--warm-tan);
-      margin-bottom: 2rem;
-    }
-
-    /* ── ABOUT ── */
-    .about { background: var(--white); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-    }
-
-    .about-text p { color: #4a4035; margin-bottom: 1rem; font-size: 1.05rem; }
-
-    .about-pattern {
-      height: 320px;
-      border-radius: 4px;
-      background:
-        repeating-linear-gradient(
-          45deg,
-          var(--warm-tan) 0px, var(--warm-tan) 4px,
-          transparent 4px, transparent 28px
-        ),
-        repeating-linear-gradient(
-          -45deg,
-          var(--deep-tan) 0px, var(--deep-tan) 2px,
-          transparent 2px, transparent 28px
-        ),
-        var(--cream);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .about-pattern::after {
-      content: '';
-      position: absolute;
-      inset: 16px;
-      border: 2px solid rgba(160,120,80,0.4);
-      border-radius: 2px;
-    }
-
-    .about-badge {
-      background: var(--bark);
-      color: var(--cream);
-      padding: 1.2rem 1.8rem;
-      border-radius: 3px;
-      text-align: center;
-      z-index: 1;
-    }
-
-    .about-badge strong { display: block; font-size: 2.2rem; color: var(--warm-tan); }
-    .about-badge span { font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; }
-
-    /* ── SERVICES ── */
-    .services { background: var(--cream); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
-      margin-top: 1rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 4px;
-      padding: 2rem 1.8rem;
-      box-shadow: 0 2px 14px var(--shadow);
-      border-top: 4px solid var(--warm-tan);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 28px var(--shadow);
-    }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .service-card h3 {
-      color: var(--bark);
-      font-size: 1.15rem;
-      margin-bottom: 0.6rem;
-    }
-
-    .service-card p { color: #5a4d40; font-size: 0.96rem; }
-
-    /* ── CONTACT ── */
-    .contact { background: var(--bark); }
-
-    .contact .section-title { color: var(--cream); }
-    .contact .section-label { color: var(--warm-tan); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    .contact-info-block { color: #e4d5c4; }
-
-    .contact-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .contact-icon {
-      font-size: 1.3rem;
-      margin-top: 0.1rem;
-      flex-shrink: 0;
-    }
-
-    .contact-row h4 {
-      color: var(--warm-tan);
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 0.25rem;
-    }
-
-    .contact-row p, .contact-row a {
-      color: #e4d5c4;
-      text-decoration: none;
-      font-size: 1rem;
-      transition: color 0.2s;
-    }
-
-    .contact-row a:hover { color: var(--warm-tan); }
-
-    /* Rating badge */
-    .rating-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.7rem;
-      background: rgba(201,169,122,0.15);
-      border: 1px solid rgba(201,169,122,0.35);
-      border-radius: 6px;
-      padding: 1rem 1.4rem;
-      margin-top: 1.5rem;
-    }
-
-    .rating-score {
-      font-size: 2.2rem;
-      font-weight: bold;
-      color: var(--warm-tan);
-      line-height: 1;
-    }
-
-    .rating-details { font-size: 0.87rem; color: #c9b49a; }
-
-    .stars {
-      color: #f5c842;
-      font-size: 1.05rem;
-      letter-spacing: 0.05em;
-    }
-
-    .contact-cta {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(201,169,122,0.25);
-      border-radius: 4px;
-      padding: 2.2rem;
-    }
-
-    .contact-cta h3 {
-      color: var(--cream);
-      font-size: 1.3rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .contact-cta p { color: #c9b49a; margin-bottom: 1.8rem; font-size: 0.97rem; }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--warm-tan);
-      color: var(--bark);
-      padding: 0.85rem 2rem;
-      border-radius: 3px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .btn-directions:hover { background: #d4b48a; transform: translateY(-2px); }
-
-    .contact-note {
-      color: #9e8877;
-      font-size: 0.83rem;
-      margin-top: 1rem;
-      font-style: italic;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #3a2416;
-      color: #8a7060;
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.85rem;
-    }
-
-    footer strong { color: var(--warm-tan); }
-    footer .footer-links { margin: 0.5rem 0; }
-    footer .footer-links a { color: #7a6255; text-decoration: none; margin: 0 0.6rem; }
-    footer .footer-links a:hover { color: var(--warm-tan); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 820px) {
-      .about-grid, .contact-grid { grid-template-columns: 1fr; }
-      .about-pattern { height: 220px; }
-      .contact-cta { margin-top: 0.5rem; }
-
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        gap: 0;
-        position: absolute;
-        top: 62px; left: 0; right: 0;
-        background: var(--bark);
-        padding: 0.5rem 0 1rem;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-      }
-
-      .nav-links.open { display: flex; }
-      .nav-links li a {
-        display: block;
-        padding: 0.7rem 2rem;
-        font-size: 1rem;
-      }
-
-      .nav-toggle { display: flex; }
-
-      .hero-btns { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-      .btn-outline { margin-left: 0; }
-    }
-
-    @media (max-width: 500px) {
-      nav { padding: 0 1rem; }
-      .service-card { padding: 1.5rem 1.2rem; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coronet Fabric Mills | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#211b16; --paper:#f6efe2; --paper2:#efe5d2; --rust:#9c4a2a;
+    --plum:#5d3a4e; --gold:#b8863b; --muted:#6c5d4c; --line:#d8cab0;
+    --line-height-ref:1.7;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:Georgia,"Times New Roman",serif;background:var(--paper);color:var(--ink);
+    line-height:1.6;overflow-x:hidden}
+  /* newsprint texture */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+    background:
+      repeating-linear-gradient(0deg,rgba(33,27,22,.03) 0 1px,transparent 1px 4px),
+      repeating-linear-gradient(90deg,rgba(33,27,22,.03) 0 1px,transparent 1px 4px),
+      radial-gradient(900px 500px at 90% 0,rgba(184,134,59,.14),transparent 60%)}
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+  /* TICKER */
+  .ticker{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;
+    border-bottom:2px solid var(--gold);font-family:system-ui,sans-serif;font-size:.78rem;
+    letter-spacing:.14em;text-transform:uppercase;position:sticky;top:0;z-index:40}
+  .ticker .run{display:inline-block;padding:.5rem 0;animation:scroll 26s linear infinite}
+  .ticker .run span{margin:0 1.4rem;color:var(--gold)}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .ticker:hover .run{animation-play-state:paused}
+
+  /* MASTHEAD */
+  header.mast{padding:34px 0 20px;text-align:center;border-bottom:3px double var(--ink)}
+  .mast .over{display:flex;justify-content:space-between;font-family:system-ui,sans-serif;
+    font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+    border-bottom:1px solid var(--line);padding-bottom:.5rem;margin-bottom:1rem;flex-wrap:wrap;gap:.4rem}
+  .mast h1{font-size:clamp(2.4rem,8vw,5.4rem);line-height:.92;font-weight:900;letter-spacing:-.02em;
+    font-family:"Iowan Old Style",Georgia,serif}
+  .mast h1 .ink{display:inline-block;overflow:hidden}
+  .mast h1 .ink b{display:inline-block;font-weight:900;transform:translateY(110%);animation:rise .8s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes rise{to{transform:none}}
+  .mast .sub{margin-top:.9rem;font-style:italic;color:var(--rust);font-size:clamp(1rem,2.4vw,1.35rem)}
+  .mast .thinrule{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin-top:1rem;
+    padding:.4rem 0;font-family:system-ui,sans-serif;font-size:.72rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted)}
+
+  /* LEDE */
+  .lede{max-width:1120px;margin:0 auto;padding:44px 22px;display:grid;grid-template-columns:1.6fr 1fr;gap:40px;align-items:start;
+    border-bottom:1px solid var(--line)}
+  .lede h2{font-size:clamp(1.6rem,3.4vw,2.4rem);margin-bottom:.7rem;line-height:1.1}
+  .kicker{font-family:system-ui,sans-serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:.5rem}
+  .cols{columns:2;column-gap:26px;color:var(--muted)}
+  .cols p{margin-bottom:.9rem;break-inside:avoid}
+  .cols p::first-letter{}
+  .lede .drop::first-letter{float:left;font-size:3.4rem;line-height:.8;padding:.1rem .5rem .1rem 0;
+    color:var(--rust);font-weight:900}
+  .aside{background:var(--paper2);border:1px solid var(--line);border-top:4px solid var(--rust);
+    padding:24px;border-radius:4px}
+  .rating-block{text-align:center}
+  .rscore{font-size:3.6rem;font-weight:900;line-height:1;font-family:system-ui,sans-serif}
+  .rstars{color:var(--gold);font-size:1.3rem;letter-spacing:3px;margin:.3rem 0}
+  .rmeta{font-family:system-ui,sans-serif;font-size:.82rem;color:var(--muted)}
+  .aside hr{border:0;border-top:1px solid var(--line);margin:1.1rem 0}
+  .aside .lab{font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:.2rem}
+  .aside a{text-decoration:none;font-weight:700}
+  .aside a:hover{color:var(--rust)}
+
+  /* CLASSIFIEDS / services */
+  section{padding:52px 0}
+  #services{border-bottom:1px solid var(--line)}
+  .sec-h{text-align:center;margin-bottom:2rem}
+  .sec-h h2{font-size:clamp(1.8rem,4vw,2.8rem);position:relative;display:inline-block}
+  .sec-h h2::before,.sec-h h2::after{content:"";position:absolute;top:50%;width:60px;height:1px;background:var(--ink)}
+  .sec-h h2::before{right:calc(100% + 16px)} .sec-h h2::after{left:calc(100% + 16px)}
+  .classifieds{columns:3;column-gap:26px}
+  .item{break-inside:avoid;border:1px solid var(--line);background:var(--paper2);padding:20px;
+    margin-bottom:26px;border-radius:4px;position:relative;opacity:0;transform:translateY(20px);
+    transition:opacity .7s,transform .7s}
+  .item.in{opacity:1;transform:none}
+  .item .no{font-family:system-ui,sans-serif;font-size:.66rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+  .item h3{font-size:1.25rem;margin:.3rem 0 .5rem;border-bottom:1px solid var(--line);padding-bottom:.4rem}
+  .item p{color:var(--muted);font-size:.94rem}
+  .item .em{font-size:1.6rem}
+
+  /* CONTACT footer-page */
+  #contact{background:var(--ink);color:var(--paper)}
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  #contact h2{color:var(--paper)}
+  .cinfo p{margin-bottom:1rem;color:#e7dcc9}
+  .cinfo .lab{font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--gold)}
+  .cinfo a{color:var(--paper);text-decoration:none;font-weight:700}
+  .cinfo a:hover{color:var(--gold)}
+  .dirbtn{display:inline-block;margin-top:.6rem;background:var(--gold);color:var(--ink);
+    font-family:system-ui,sans-serif;font-weight:700;text-decoration:none;padding:.8rem 1.4rem;
+    border-radius:4px;letter-spacing:.04em;transition:transform .18s,background .2s}
+  .dirbtn:hover{background:var(--paper);transform:translateY(-2px)}
+  .stamp{border:3px double var(--gold);border-radius:8px;padding:30px;text-align:center}
+  .stamp .big{font-size:2rem;font-family:system-ui,sans-serif;font-weight:900;color:var(--gold)}
+  .stamp .small{font-style:italic;color:#cdbfa9;margin-top:.4rem}
+
+  footer{text-align:center;padding:26px;font-family:system-ui,sans-serif;font-size:.78rem;color:var(--muted);
+    border-top:3px double var(--ink)}
+  footer b{color:var(--rust)}
+
+  @media(max-width:820px){
+    .lede{grid-template-columns:1fr} .classifieds{columns:2} .cols{columns:1} .cgrid{grid-template-columns:1fr}
+  }
+  @media(max-width:560px){ .classifieds{columns:1} .mast .over{justify-content:center} }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;scroll-behavior:auto}
+    .mast h1 .ink b{transform:none} .item{opacity:1;transform:none}
+  }
+</style>
+<noscript><style>.item{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#hero" class="nav-logo">Coronet Fabric Mills</a>
-    <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<div class="ticker">
+  <div class="run" id="tick"></div>
+</div>
 
-  <!-- HERO -->
-  <section id="hero" class="hero">
-    <div class="hero-inner">
-      <span class="hero-eyebrow">Gainesville, Florida</span>
-      <h1>Where Every Project Starts with the Perfect Fabric</h1>
-      <p>Serving the Gainesville community with an exceptional selection of fabrics, notions, and expert guidance for every sewing and crafting need.</p>
-      <div class="hero-btns">
-        <a href="#services" class="btn btn-primary">Explore Our Selection</a>
-        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+<header class="mast">
+  <div class="wrap">
+    <div class="over">
+      <span>Serving Gainesville &bull; Florida</span>
+      <span>The Fabric Gazette</span>
+      <span>One Yard at a Time</span>
+    </div>
+    <h1 class="reveal-head"><span class="ink"><b>CORONET</b></span> <span class="ink"><b>FABRIC MILLS</b></span></h1>
+    <div class="sub">Where Every Project Starts with the Perfect Fabric</div>
+    <div class="thinrule">Apparel &bull; Quilting &bull; Home Decor &bull; Upholstery &bull; Notions &bull; Specialty</div>
+  </div>
+</header>
+
+<section class="lede" id="about">
+  <div class="wrap" style="padding:0;max-width:none;grid-column:1">
+    <div class="kicker">Our Story</div>
+    <h2>A Trusted Name in Fabric &amp; Textiles</h2>
+    <div class="cols">
+      <p class="drop">Coronet Fabric Mills has been a cornerstone destination for sewists, crafters, and design professionals across the Gainesville area. Our store carries a wide-ranging inventory of fabrics &mdash; from everyday quilting cottons to specialty apparel and upholstery textiles &mdash; so you can find exactly what your project calls for.</p>
+      <p>Whether you are a seasoned seamstress, a home decorator, or just picking up a needle and thread for the first time, our knowledgeable team is here to help you navigate our extensive selection and find the materials that bring your vision to life.</p>
+      <p>We are proud to be the local resource that keeps creative projects moving forward &mdash; one yard at a time.</p>
+    </div>
+  </div>
+  <aside class="aside">
+    <div class="rating-block">
+      <div class="rscore"><span data-count="4.7" data-dec="1">4.7</span></div>
+      <div class="rstars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="rmeta">Based on 29 Google reviews</div>
+    </div>
+    <hr>
+    <div class="lab">Visit</div>
+    <div>9414 US-441<br>Gainesville, FL 32653</div>
+    <hr>
+    <div class="lab">Telephone</div>
+    <a href="tel:+13523733666">(352) 373-3666</a>
+    <hr>
+    <div class="lab">Hours</div>
+    <div>Contact us for current store hours.</div>
+  </aside>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="sec-h"><div class="kicker">What We Offer</div><h2>Our Products &amp; Services</h2></div>
+    <div class="classifieds">
+      <div class="item"><div class="no">No. 01</div><div class="em">&#129526;</div><h3>Apparel Fabrics</h3><p>A broad selection of woven and knit fabrics for garment construction, including cotton, linen, denim, jersey, chiffon, and more &mdash; suitable for every skill level and style.</p></div>
+      <div class="item"><div class="no">No. 02</div><div class="em">&#9986;</div><h3>Quilting &amp; Craft Fabrics</h3><p>Hundreds of quilting cottons, fat quarters, and specialty prints to inspire your next quilt, wall hanging, or handmade gift project.</p></div>
+      <div class="item"><div class="no">No. 03</div><div class="em">&#127968;</div><h3>Home Decor &amp; Upholstery</h3><p>Durable decorator fabrics, canvas, and upholstery-weight textiles for cushions, drapery, slipcovers, and furniture reupholstery.</p></div>
+      <div class="item"><div class="no">No. 04</div><div class="em">&#129525;</div><h3>Notions &amp; Sewing Supplies</h3><p>Everything you need alongside your fabric &mdash; thread, zippers, buttons, elastic, interfacing, patterns, and essential sewing tools.</p></div>
+      <div class="item"><div class="no">No. 05</div><div class="em">&#127774;</div><h3>Specialty &amp; Seasonal Fabrics</h3><p>Unique seasonal selections, fleece, felt, vinyl, and specialty materials to support a full range of creative and functional projects year-round.</p></div>
+      <div class="item"><div class="no">No. 06</div><div class="em">&#128172;</div><h3>Expert In-Store Guidance</h3><p>Our staff is on hand to help you estimate yardage, choose the right material for your project, and answer any sewing or craft questions you bring through our door.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="cgrid">
+      <div class="cinfo">
+        <div class="kicker" style="color:var(--gold)">Find Us</div>
+        <h2 style="font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:1.2rem">Visit Coronet Fabric Mills</h2>
+        <p><span class="lab">Address</span><br>9414 US-441, Gainesville, FL 32653</p>
+        <p><span class="lab">Phone</span><br><a href="tel:+13523733666">(352) 373-3666</a></p>
+        <p><span class="lab">Hours</span><br>Contact us for current store hours.</p>
+        <p>We are conveniently located on US-441 in Gainesville. Tap the button below to get turn-by-turn directions straight to our door.</p>
+        <a class="dirbtn magnetic" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Coronet%20Fabric%20Mills%209414%20US-441%2C%20Gainesville%2C%20FL%2032653">Get Directions &rarr;</a>
+      </div>
+      <div class="stamp">
+        <div class="big">4.7 &#9733;</div>
+        <div class="rmeta" style="color:#cdbfa9">Based on 29 Google reviews</div>
+        <div class="small">"Where every project starts with the perfect fabric."</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ABOUT -->
-  <section id="about" class="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <span class="section-label">Our Story</span>
-          <h2 class="section-title">A Trusted Name in Fabric &amp; Textiles</h2>
-          <div class="section-divider"></div>
-          <p>Coronet Fabric Mills has been a cornerstone destination for sewists, crafters, and design professionals across the Gainesville area. Our store carries a wide-ranging inventory of fabrics — from everyday quilting cottons to specialty apparel and upholstery textiles — so you can find exactly what your project calls for.</p>
-          <p>Whether you are a seasoned seamstress, a home decorator, or just picking up a needle and thread for the first time, our knowledgeable team is here to help you navigate our extensive selection and find the materials that bring your vision to life.</p>
-          <p>We are proud to be the local resource that keeps creative projects moving forward — one yard at a time.</p>
-        </div>
-        <div class="about-pattern">
-          <div class="about-badge">
-            <strong>4.7&#9733;</strong>
-            <span>Google Rated</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<footer>
+  <b>Coronet Fabric Mills</b> &nbsp;&bull;&nbsp; 9414 US-441, Gainesville, FL 32653 &nbsp;&bull;&nbsp; <a href="tel:+13523733666" style="color:var(--muted);text-decoration:none">(352) 373-3666</a><br>
+  &copy; 2026 Coronet Fabric Mills. All rights reserved.
+</footer>
 
-  <!-- SERVICES -->
-  <section id="services" class="services">
-    <div class="section-inner">
-      <span class="section-label">What We Offer</span>
-      <h2 class="section-title">Our Products &amp; Services</h2>
-      <div class="section-divider"></div>
-      <div class="services-grid">
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // ticker content (duplicated for seamless loop)
+  var items=["Apparel Fabrics","Quilting Cottons","Home Decor","Upholstery Textiles","Notions & Thread","Specialty & Seasonal","Fat Quarters","Expert Guidance"];
+  var line=items.map(function(t){return "<span>&#10022;</span>"+t;}).join("");
+  document.getElementById("tick").innerHTML=line+line;
 
-        <div class="service-card">
-          <div class="service-icon">&#129526;</div>
-          <h3>Apparel Fabrics</h3>
-          <p>A broad selection of woven and knit fabrics for garment construction, including cotton, linen, denim, jersey, chiffon, and more — suitable for every skill level and style.</p>
-        </div>
+  // stagger headline letters already via CSS; add per-word delay
+  document.querySelectorAll(".mast h1 .ink b").forEach(function(b,i){ b.style.animationDelay=(reduce?0:i*.12)+"s"; });
 
-        <div class="service-card">
-          <div class="service-icon">&#128065;&#65039;</div>
-          <h3>Quilting &amp; Craft Fabrics</h3>
-          <p>Hundreds of quilting cottons, fat quarters, and specialty prints to inspire your next quilt, wall hanging, or handmade gift project.</p>
-        </div>
+  // reveal
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){
+      e.target.classList.add("in");
+      var c=e.target.querySelector("[data-count]"); if(c&&!c.dataset.done){c.dataset.done=1;count(c);}
+      io.unobserve(e.target);}});
+  },{threshold:.16});
+  document.querySelectorAll(".item,.aside").forEach(function(el){io.observe(el);});
 
-        <div class="service-card">
-          <div class="service-icon">&#127968;</div>
-          <h3>Home Decor &amp; Upholstery</h3>
-          <p>Durable decorator fabrics, canvas, and upholstery-weight textiles for cushions, drapery, slipcovers, and furniture reupholstery.</p>
-        </div>
+  function count(el){var to=parseFloat(el.dataset.count),dec=+el.dataset.dec||0;
+    if(reduce){el.textContent=to.toFixed(dec);return;}
+    var st=null;function step(t){if(!st)st=t;var p=Math.min((t-st)/1000,1);
+      el.textContent=(to*(1-Math.pow(1-p,3))).toFixed(dec);
+      if(p<1)requestAnimationFrame(step);else el.textContent=to.toFixed(dec);}
+    requestAnimationFrame(step);}
 
-        <div class="service-card">
-          <div class="service-icon">&#9986;&#65039;</div>
-          <h3>Notions &amp; Sewing Supplies</h3>
-          <p>Everything you need alongside your fabric — thread, zippers, buttons, elastic, interfacing, patterns, and essential sewing tools.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127774;</div>
-          <h3>Specialty &amp; Seasonal Fabrics</h3>
-          <p>Unique seasonal selections, fleece, felt, vinyl, and specialty materials to support a full range of creative and functional projects year-round.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128172;</div>
-          <h3>Expert In-Store Guidance</h3>
-          <p>Our staff is on hand to help you estimate yardage, choose the right material for your project, and answer any sewing or craft questions you bring through our door.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" class="contact">
-    <div class="section-inner">
-      <span class="section-label">Find Us</span>
-      <h2 class="section-title">Visit Coronet Fabric Mills</h2>
-      <div class="section-divider"></div>
-      <div class="contact-grid">
-
-        <div class="contact-info-block">
-
-          <div class="contact-row">
-            <div class="contact-icon">&#128205;</div>
-            <div>
-              <h4>Address</h4>
-              <p>9414 US-441<br>Gainesville, FL 32653</p>
-            </div>
-          </div>
-
-          <div class="contact-row">
-            <div class="contact-icon">&#128222;</div>
-            <div>
-              <h4>Phone</h4>
-              <a href="tel:+13523733666">(352) 373-3666</a>
-            </div>
-          </div>
-
-          <div class="contact-row">
-            <div class="contact-icon">&#128337;</div>
-            <div>
-              <h4>Hours</h4>
-              <p>Contact us for current store hours.</p>
-            </div>
-          </div>
-
-          <div class="rating-box">
-            <div class="rating-score">4.7</div>
-            <div>
-              <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-              <div class="rating-details">Based on 29 Google reviews</div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="contact-cta">
-          <h3>Ready to Visit?</h3>
-          <p>We are conveniently located on US-441 in Gainesville. Tap the button below to get turn-by-turn directions straight to our door.</p>
-          <a
-            href="https://www.google.com/maps/search/Coronet%20Fabric%20Mills%209414%20US-441%2C%20Gainesville%2C%20FL%2032653"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-directions"
-          >
-            &#9655; Get Directions
-          </a>
-          <p class="contact-note">Opens in Google Maps. No account required.</p>
-          <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(201,169,122,0.2);">
-            <p style="color:#c9b49a; font-size:0.93rem;">Have a question about a specific fabric or project? Give us a call at <a href="tel:+13523733666" style="color:var(--warm-tan);">(352) 373-3666</a> and we will be happy to help.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p><strong>Coronet Fabric Mills</strong></p>
-    <p>9414 US-441, Gainesville, FL 32653 &nbsp;|&nbsp; <a href="tel:+13523733666" style="color:#7a6255; text-decoration:none;">(352) 373-3666</a></p>
-    <p style="margin-top:0.8rem; font-size:0.8rem; color:#6a5a50;">Demo website. All business information is accurate to the best of available public data.</p>
-  </footer>
-
+  if(!reduce){
+    document.querySelectorAll(".magnetic").forEach(function(b){
+      b.addEventListener("mousemove",function(e){var r=b.getBoundingClientRect();
+        b.style.transform="translate("+((e.clientX-r.left-r.width/2)*.2)+"px,"+((e.clientY-r.top-r.height/2)*.3)+"px)";});
+      b.addEventListener("mouseleave",function(){b.style.transform="";});
+    });
+  }
+})();
+</script>
 </body>
 </html>
