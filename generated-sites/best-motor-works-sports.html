@@ -1,868 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Best Motor Works & Sports | Auto Repair – Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy:   #0d1b2a;
-      --steel:  #1e3a5f;
-      --red:    #c0392b;
-      --red-lt: #e74c3c;
-      --silver: #bdc3c7;
-      --light:  #f4f6f8;
-      --white:  #ffffff;
-      --text:   #2c3e50;
-      --muted:  #6b7a8d;
-      --radius: 6px;
-      --shadow: 0 4px 18px rgba(0,0,0,.18);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text);
-      background: var(--light);
-      line-height: 1.65;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.4);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo .logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo .logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .nav-logo .brand {
-      color: var(--white);
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: .4px;
-      line-height: 1.2;
-    }
-
-    .nav-logo .brand span {
-      color: var(--red-lt);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--silver);
-      text-decoration: none;
-      font-size: .9rem;
-      font-weight: 500;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-      transition: color .2s;
-    }
-
-    .nav-links a:hover { color: var(--red-lt); }
-
-    .nav-cta {
-      background: var(--red);
-      color: var(--white) !important;
-      padding: 8px 18px;
-      border-radius: var(--radius);
-      transition: background .2s !important;
-    }
-
-    .nav-cta:hover { background: var(--red-lt) !important; color: var(--white) !important; }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all .3s;
-    }
-
-    /* ── HERO ── */
-    #hero {
-      margin-top: 64px;
-      background:
-        linear-gradient(160deg, rgba(13,27,42,.88) 0%, rgba(30,58,95,.72) 100%),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect width='800' height='500' fill='%230d1b2a'/%3E%3Ccircle cx='200' cy='300' r='160' fill='%231a2e46'/%3E%3Ccircle cx='600' cy='200' r='120' fill='%231a2e46'/%3E%3Ccircle cx='400' cy='420' r='80' fill='%231e3a5f'/%3E%3C/svg%3E") center/cover no-repeat;
-      min-height: 540px;
-      display: flex;
-      align-items: center;
-      padding: 60px 5%;
-    }
-
-    .hero-content {
-      max-width: 680px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--red);
-      color: var(--white);
-      font-size: .75rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-    }
-
-    .hero-content h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 20px;
-      letter-spacing: -.5px;
-    }
-
-    .hero-content h1 em {
-      font-style: normal;
-      color: var(--red-lt);
-    }
-
-    .hero-content p {
-      font-size: 1.1rem;
-      color: var(--silver);
-      max-width: 520px;
-      margin-bottom: 36px;
-    }
-
-    .hero-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .btn-primary {
-      background: var(--red);
-      color: var(--white);
-      padding: 14px 30px;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .95rem;
-      letter-spacing: .3px;
-      transition: background .2s, transform .15s;
-      border: 2px solid var(--red);
-      display: inline-block;
-    }
-
-    .btn-primary:hover { background: var(--red-lt); border-color: var(--red-lt); transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      padding: 14px 30px;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .95rem;
-      letter-spacing: .3px;
-      border: 2px solid rgba(255,255,255,.5);
-      transition: border-color .2s, transform .15s;
-      display: inline-block;
-    }
-
-    .btn-outline:hover { border-color: var(--white); transform: translateY(-2px); }
-
-    /* ── STATS BAR ── */
-    .stats-bar {
-      background: var(--steel);
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0;
-    }
-
-    .stat {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 20px 40px;
-      border-right: 1px solid rgba(255,255,255,.1);
-    }
-
-    .stat:last-child { border-right: none; }
-
-    .stat-icon {
-      font-size: 1.6rem;
-    }
-
-    .stat-text strong {
-      display: block;
-      color: var(--white);
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
-
-    .stat-text span {
-      color: var(--silver);
-      font-size: .82rem;
-    }
-
-    /* ── SECTIONS ── */
-    section { padding: 72px 5%; }
-
-    .section-label {
-      font-size: .75rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 16px;
-      letter-spacing: -.3px;
-    }
-
-    .section-intro {
-      color: var(--muted);
-      font-size: 1rem;
-      max-width: 620px;
-      margin-bottom: 48px;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .about-text p {
-      color: var(--muted);
-      margin-bottom: 18px;
-      font-size: 1rem;
-    }
-
-    .about-highlights {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .highlight-card {
-      background: var(--light);
-      border-left: 4px solid var(--red);
-      border-radius: 0 var(--radius) var(--radius) 0;
-      padding: 16px 20px;
-    }
-
-    .highlight-card strong {
-      display: block;
-      color: var(--navy);
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .highlight-card p {
-      color: var(--muted);
-      font-size: .9rem;
-      margin: 0;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--light);
-    }
-
-    .services-header {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 28px 26px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.07);
-      transition: transform .2s, box-shadow .2s;
-      border-top: 4px solid transparent;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-      border-top-color: var(--red);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: rgba(192,57,43,.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-    }
-
-    .service-icon svg {
-      width: 26px;
-      height: 26px;
-      fill: var(--red);
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 8px;
-    }
-
-    .service-card p {
-      color: var(--muted);
-      font-size: .9rem;
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    #contact .section-label { color: var(--red-lt); }
-    #contact h2 { color: var(--white); }
-    #contact .section-intro { color: var(--silver); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 52px;
-      max-width: 1000px;
-      margin: 0 auto;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-
-    .contact-item-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(255,255,255,.08);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-item-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--red-lt);
-    }
-
-    .contact-item-text strong {
-      display: block;
-      color: var(--white);
-      font-size: .85rem;
-      font-weight: 700;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .contact-item-text a,
-    .contact-item-text span {
-      color: var(--silver);
-      text-decoration: none;
-      font-size: .97rem;
-    }
-
-    .contact-item-text a:hover { color: var(--white); text-decoration: underline; }
-
-    .rating-box {
-      background: rgba(255,255,255,.07);
-      border-radius: 10px;
-      padding: 24px;
-      border: 1px solid rgba(255,255,255,.12);
-    }
-
-    .rating-label {
-      color: var(--silver);
-      font-size: .82rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-    }
-
-    .rating-stars {
-      font-size: 1.6rem;
-      color: #f4c542;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-
-    .rating-score {
-      color: var(--white);
-      font-size: 2rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .rating-count {
-      color: var(--silver);
-      font-size: .88rem;
-      margin-top: 4px;
-    }
-
-    .contact-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .btn-directions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: var(--red);
-      color: var(--white);
-      padding: 15px 28px;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .95rem;
-      transition: background .2s;
-    }
-
-    .btn-directions:hover { background: var(--red-lt); }
-
-    .btn-directions svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--white);
-    }
-
-    .btn-call {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: transparent;
-      color: var(--white);
-      padding: 15px 28px;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .95rem;
-      border: 2px solid rgba(255,255,255,.3);
-      transition: border-color .2s;
-    }
-
-    .btn-call:hover { border-color: var(--white); }
-
-    .btn-call svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--white);
-    }
-
-    .map-embed {
-      border-radius: 10px;
-      overflow: hidden;
-      background: rgba(255,255,255,.06);
-      padding: 20px;
-      border: 1px solid rgba(255,255,255,.1);
-    }
-
-    .map-placeholder {
-      background: var(--steel);
-      border-radius: 8px;
-      height: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--silver);
-      font-size: .9rem;
-      margin-bottom: 16px;
-    }
-
-    .map-placeholder svg {
-      width: 36px;
-      height: 36px;
-      fill: var(--red-lt);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #07101a;
-      color: var(--muted);
-      text-align: center;
-      padding: 28px 5%;
-      font-size: .87rem;
-    }
-
-    footer strong {
-      color: var(--silver);
-    }
-
-    footer a {
-      color: var(--red-lt);
-      text-decoration: none;
-    }
-
-    footer a:hover { text-decoration: underline; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--navy); padding: 20px 5%; gap: 0; }
-      .nav-links.open { display: flex; }
-      .nav-links li { border-bottom: 1px solid rgba(255,255,255,.08); }
-      .nav-links a { display: block; padding: 14px 0; }
-      .nav-cta { border-bottom: none !important; }
-      .hamburger { display: flex; }
-
-      .about-grid,
-      .contact-grid { grid-template-columns: 1fr; gap: 36px; }
-
-      .stat { padding: 18px 24px; flex: 1 1 140px; border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); }
-      .stat:last-child { border-bottom: none; }
-      .stats-bar { flex-direction: column; }
-
-      #hero { min-height: 420px; }
-    }
-
-    @media (max-width: 480px) {
-      nav { padding: 0 4%; }
-      section { padding: 52px 4%; }
-      .hero-btns { flex-direction: column; }
-      .btn-primary, .btn-outline { text-align: center; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Best Motor Works &amp; Sports | Auto Repair – Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --carbon:#08090c; --steel:#12161c; --panel:#171d25; --line:#28323d;
+    --silver:#a8b2bd; --chrome:#eef2f6; --red:#e11d2a; --red-lt:#ff3b47; --ember:#ff6a00;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"SF Mono",monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--chrome);background:var(--carbon);line-height:1.65;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+
+  header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+    padding:.7rem clamp(1rem,4vw,2.6rem);background:rgba(8,9,12,.55);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:.3s}
+  header.solid{background:rgba(8,9,12,.9);border-bottom-color:var(--line)}
+  .brand{font-weight:900;letter-spacing:.02em;font-size:1.05rem;line-height:1.1}
+  .brand span{color:var(--red-lt)}
+  .brand small{display:block;font:600 .58rem/1 var(--mono);letter-spacing:.26em;color:var(--silver);text-transform:uppercase;margin-top:4px}
+  nav.links{display:flex;gap:1.5rem;align-items:center;font:700 .8rem var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  nav.links a{color:var(--silver);transition:.2s}nav.links a:hover{color:var(--chrome)}
+  .call{background:var(--red);color:#fff!important;padding:.55rem 1rem;border-radius:4px;font-weight:800;transition:.2s}
+  .call:hover{background:var(--red-lt);transform:translateY(-2px)}
+  .burger{display:none;background:none;border:1px solid var(--line);border-radius:5px;padding:.4rem .5rem;cursor:pointer;flex-direction:column;gap:4px}
+  .burger span{width:22px;height:2px;background:var(--chrome);display:block}
+  #mnav{display:none;flex-direction:column;position:fixed;top:58px;left:0;right:0;z-index:99;background:rgba(12,15,20,.98);border-bottom:1px solid var(--line);padding:.5rem 1rem}
+  #mnav a{padding:.75rem;border-bottom:1px solid var(--line);font:700 .82rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--silver)}
+  #mnav.open{display:flex}
+
+  /* CANVAS HERO */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+  #spark{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(120% 90% at 70% 20%, transparent 30%, rgba(8,9,12,.55) 75%, var(--carbon) 100%),
+      linear-gradient(180deg,transparent 60%,var(--carbon))}
+  .hero-in{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:6rem clamp(1.2rem,5vw,3rem) 4rem;width:100%}
+  .tag{display:inline-flex;align-items:center;gap:.5rem;font:700 .72rem var(--mono);letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red-lt);border:1px solid rgba(225,29,42,.4);border-radius:30px;padding:.4rem .9rem;margin-bottom:1.4rem}
+  .tag i{width:8px;height:8px;border-radius:50%;background:var(--red-lt);box-shadow:0 0 12px var(--red-lt);animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{opacity:.3}}
+  .hero h1{font-size:clamp(2.6rem,8vw,6rem);font-weight:900;line-height:.95;letter-spacing:-.03em;text-transform:uppercase}
+  .hero h1 .r{background:linear-gradient(90deg,var(--red),var(--ember),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200%;animation:slide 5s linear infinite}
+  @keyframes slide{to{background-position:200% 0}}
+  .hero p{color:var(--silver);max-width:56ch;font-size:1.1rem;margin:1.4rem 0 2rem}
+  .row{display:flex;gap:.9rem;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.5rem;border-radius:6px;font-weight:800;font-size:.92rem;letter-spacing:.02em;transition:transform .15s,background .2s,box-shadow .2s}
+  .btn-a{background:var(--red);color:#fff;box-shadow:0 10px 30px rgba(225,29,42,.3)}.btn-a:hover{background:var(--red-lt);transform:translateY(-2px)}
+  .btn-b{border:1px solid var(--line);color:var(--chrome)}.btn-b:hover{border-color:var(--red);transform:translateY(-2px)}
+  .scroll-cue{position:absolute;left:50%;bottom:1.4rem;transform:translateX(-50%);z-index:2;color:var(--silver);font:700 .62rem var(--mono);letter-spacing:.3em;text-transform:uppercase;text-align:center}
+  .scroll-cue .m{width:22px;height:36px;border:2px solid var(--line);border-radius:12px;margin:0 auto .5rem;position:relative}
+  .scroll-cue .m::after{content:"";position:absolute;left:50%;top:6px;width:3px;height:7px;border-radius:2px;background:var(--red-lt);transform:translateX(-50%);animation:wheel 1.6s infinite}
+  @keyframes wheel{60%{transform:translate(-50%,12px);opacity:0}100%{opacity:0}}
+
+  /* STAT STRIP */
+  .strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--steel)}
+  .strip .s{padding:1.6rem clamp(1rem,3vw,2rem);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:.2rem}
+  .strip .s:last-child{border-right:none}
+  .strip b{font-size:1.6rem;font-weight:900;background:linear-gradient(180deg,#fff,var(--silver));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .strip span{font:600 .7rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--silver)}
+
+  section{padding:5rem clamp(1.2rem,5vw,3rem)}
+  .wrap{max-width:1120px;margin:0 auto}
+  .eyebrow{font:700 .7rem var(--mono);letter-spacing:.26em;text-transform:uppercase;color:var(--red-lt);display:inline-block;margin-bottom:.6rem}
+  h2{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:900;letter-spacing:-.02em;margin-bottom:1rem}
+  .reveal{opacity:0;transform:translateY(28px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  .about{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center}
+  .about p{color:var(--silver);margin-bottom:1rem}
+  .hl{display:flex;flex-direction:column;gap:.9rem}
+  .hl .c{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:0 10px 10px 0;padding:1rem 1.2rem}
+  .hl b{display:block;margin-bottom:.2rem}.hl p{font-size:.9rem;margin:0}
+
+  #services{background:linear-gradient(180deg,var(--carbon),var(--steel))}
+  .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem;margin-top:2rem}
+  .svc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.6rem;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+  .svc:hover{transform:translateY(-5px);border-color:var(--red)}
+  .svc .ic{width:46px;height:46px;color:var(--red-lt);margin-bottom:.8rem}
+  .svc h3{font-size:1.08rem;margin-bottom:.4rem}.svc p{color:var(--silver);font-size:.9rem}
+
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+  .info{display:flex;gap:1rem;margin-bottom:1.3rem}
+  .info svg{width:22px;height:22px;color:var(--red-lt);flex-shrink:0;margin-top:3px}
+  .info b{display:block;font:700 .68rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--silver)}
+  .info span,.info a{font-size:1.02rem}.info a:hover{color:var(--red-lt)}
+  .rate{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.6rem;text-align:center;margin-top:.5rem}
+  .rate .big{font-size:3.4rem;font-weight:900;line-height:1;background:linear-gradient(180deg,#fff,var(--silver));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .rate .st{color:#ffd21a;font-size:1.3rem;letter-spacing:3px;margin:.3rem 0}
+  .rate .sub{color:var(--silver);font-size:.85rem}
+  .cta{display:flex;flex-direction:column;gap:.9rem;margin-top:1.2rem}
+  .btn-wide{justify-content:center;padding:1rem}
+
+  footer{background:#05060a;border-top:1px solid var(--line);text-align:center;padding:2.2rem clamp(1.2rem,5vw,3rem);color:var(--silver);font-size:.86rem}
+  footer b{color:var(--chrome)}footer a{color:var(--red-lt)}
+
+  @media(max-width:860px){nav.links{display:none}.burger{display:flex}.about,.contact-grid{grid-template-columns:1fr;gap:1.6rem}.strip b{font-size:1.3rem}}
+  @media(max-width:520px){.strip{grid-template-columns:1fr}.strip .s{border-right:none;border-bottom:1px solid var(--line)}}
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}html{scroll-behavior:auto}
+    #spark{display:none}
+    .hero{background:radial-gradient(120% 90% at 70% 20%,#1a222c,var(--carbon))}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#hero">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-5h14v5zm-8-3H9v-1.5h2V14zm4 0h-2v-1.5h2V14z"/>
-        </svg>
-      </div>
-      <div class="brand">Best Motor Works<br><span>&amp; Sports</span></div>
-    </a>
-
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="tel:+13523753525" class="nav-cta">Call Us</a></li>
-    </ul>
+<header id="hdr">
+  <div class="brand">Best Motor Works <span>&amp; Sports</span><small>Auto Repair · Gainesville FL</small></div>
+  <nav class="links">
+    <a href="#about">About</a><a href="#services">Services</a><a href="#contact">Contact</a>
+    <a href="tel:+13523753525" class="call">(352) 375-3525</a>
   </nav>
+  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+<nav id="mnav">
+  <a href="#about">About</a><a href="#services">Services</a><a href="#contact">Contact</a><a href="tel:+13523753525">Call (352) 375-3525</a>
+</nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-content">
-      <span class="hero-badge">Gainesville, FL</span>
-      <h1>Expert Auto Repair<br>You Can <em>Trust</em></h1>
-      <p>From routine maintenance to performance work, Best Motor Works &amp; Sports keeps your vehicle running at its best — with honest service every time.</p>
-      <div class="hero-btns">
-        <a href="#services" class="btn-primary">Our Services</a>
-        <a href="#contact" class="btn-outline">Get in Touch</a>
-      </div>
+<section class="hero" id="home">
+  <canvas id="spark" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <span class="tag"><i></i>Gainesville, FL</span>
+    <h1>Built to<br><span class="r">Perform</span></h1>
+    <p>Best Motor Works &amp; Sports keeps daily drivers and performance vehicles running their best — full-service repair with honest, straightforward work every time.</p>
+    <div class="row">
+      <a class="btn btn-a" href="#services">Our Services</a>
+      <a class="btn btn-b" href="#contact">Get in Touch</a>
     </div>
-  </section>
+  </div>
+  <div class="scroll-cue"><div class="m"></div>Scroll</div>
+</section>
 
-  <!-- STATS BAR -->
-  <div class="stats-bar">
-    <div class="stat">
-      <div class="stat-icon">⭐</div>
-      <div class="stat-text">
-        <strong>5.0 Rating</strong>
-        <span>Google Reviews</span>
-      </div>
+<div class="strip">
+  <div class="s"><b id="rate">5.0</b><span>Google Rating</span></div>
+  <div class="s"><b>All Makes</b><span>Domestic &amp; Import</span></div>
+  <div class="s"><b>Gainesville</b><span>65 SE 10th Ave</span></div>
+</div>
+
+<section id="about">
+  <div class="wrap about">
+    <div class="reveal">
+      <span class="eyebrow">About Us</span>
+      <h2>Your local repair &amp; performance shop</h2>
+      <p>Best Motor Works &amp; Sports is a full-service auto repair shop serving the Gainesville community. Whether you drive a daily commuter or a performance vehicle, our technicians bring skill and care to every job.</p>
+      <p>We believe repair should be transparent and stress-free — clear communication, quality parts, and work done right. Located at 65 SE 10th Ave. Contact us for hours and to schedule your next service.</p>
     </div>
-    <div class="stat">
-      <div class="stat-icon">🔧</div>
-      <div class="stat-text">
-        <strong>Full-Service Shop</strong>
-        <span>All Makes &amp; Models</span>
-      </div>
+    <div class="hl reveal">
+      <div class="c"><b>All Makes &amp; Models</b><p>Domestic and import vehicles welcome — sedans, SUVs, and performance cars.</p></div>
+      <div class="c"><b>Honest Diagnostics</b><p>We explain what your vehicle needs and why, before any work begins.</p></div>
+      <div class="c"><b>Quality Parts</b><p>Reliable parts for lasting repairs and your peace of mind.</p></div>
     </div>
-    <div class="stat">
-      <div class="stat-icon">📍</div>
-      <div class="stat-text">
-        <strong>Gainesville, FL</strong>
-        <span>65 SE 10th Ave</span>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <span class="eyebrow reveal">What We Do</span>
+    <h2 class="reveal">Our Services</h2>
+    <p class="reveal" style="color:var(--silver);max-width:60ch">A wide range of automotive services to keep your vehicle performing safely and reliably. Contact us for details on scheduling and pricing.</p>
+    <div class="svc-grid">
+      <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg><h3>General Maintenance</h3><p>Oil changes, fluid checks, filter replacements, and routine inspections to keep your vehicle in top shape.</p></div>
+      <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke-linejoin="round"/></svg><h3>Engine Diagnostics &amp; Repair</h3><p>Advanced diagnostics to pinpoint issues quickly, followed by expert repairs using quality components.</p></div>
+      <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>Brake Service</h3><p>Inspection, pad replacement, rotor service, and brake fluid work for safe, reliable stopping.</p></div>
+      <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8V6M17 8V6M7 16v2M17 16v2"/></svg><h3>Transmission Service</h3><p>Fluid flushes, filter replacement, and diagnostics to maintain smooth shifting and long-term reliability.</p></div>
+      <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 17V9a8 8 0 0 1 16 0v8"/><path d="M2 17h20M8 13h8"/></svg><h3>Suspension &amp; Steering</h3><p>Alignment, shocks, struts, and steering service to restore handling and reduce tire wear.</p></div>
+      <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h4l2-5 3 10 2-5h3"/></svg><h3>Performance Upgrades</h3><p>Sport tuning, exhaust work, and performance modifications for drivers who want more. Contact us for details.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="background:linear-gradient(180deg,var(--steel),var(--carbon))">
+  <div class="wrap">
+    <span class="eyebrow reveal">Find Us</span>
+    <h2 class="reveal">Contact &amp; Location</h2>
+    <div class="contact-grid" style="margin-top:1.5rem">
+      <div class="reveal">
+        <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg><div><b>Address</b><span>65 SE 10th Ave<br>Gainesville, FL</span></div></div>
+        <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6.6 10.8a13 13 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11 11 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11 11 0 0 0 .58 3.6 1 1 0 0 1-.24 1l-2.24 2.2Z"/></svg><div><b>Phone</b><a href="tel:+13523753525">(352) 375-3525</a></div></div>
+        <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Hours</b><span>Contact us for current hours</span></div></div>
+      </div>
+      <div class="reveal">
+        <div class="rate">
+          <div class="big">5.0</div>
+          <div class="st">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="sub">Based on 63 Google reviews</div>
+        </div>
+        <div class="cta">
+          <a class="btn btn-a btn-wide" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/Best%20Motor%20Works%20%26%20Sports%2065%20SE%2010th%20Ave%2C%20Gainesville%2C%20FL">Get Directions</a>
+          <a class="btn btn-b btn-wide" href="tel:+13523753525">Call (352) 375-3525</a>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-grid">
-      <div class="about-text">
-        <div class="section-label">About Us</div>
-        <h2>Your Local Auto Repair Specialists</h2>
-        <p>Best Motor Works &amp; Sports is a full-service auto repair shop serving the Gainesville community. Whether you drive a daily commuter or a performance vehicle, our technicians bring skill and care to every job.</p>
-        <p>We believe auto repair should be transparent and stress-free. That means clear communication, quality parts, and work done right — so you can get back on the road with confidence.</p>
-        <p>Located conveniently at 65 SE 10th Ave, we're proud to be a trusted resource for drivers throughout Gainesville and the surrounding area. Contact us for hours and to schedule your next service.</p>
-      </div>
+<footer>
+  <p><b>Best Motor Works &amp; Sports</b> — 65 SE 10th Ave, Gainesville, FL — <a href="tel:+13523753525">(352) 375-3525</a></p>
+  <p style="margin-top:.5rem">&copy; 2026 Best Motor Works &amp; Sports. All rights reserved.</p>
+</footer>
 
-      <div class="about-highlights">
-        <div class="highlight-card">
-          <strong>All Makes &amp; Models</strong>
-          <p>Domestic and import vehicles welcome — from sedans and SUVs to performance cars.</p>
-        </div>
-        <div class="highlight-card">
-          <strong>Honest Diagnostics</strong>
-          <p>We explain what your vehicle needs and why, before any work begins.</p>
-        </div>
-        <div class="highlight-card">
-          <strong>Quality Parts</strong>
-          <p>We use reliable parts to ensure lasting repairs and your peace of mind.</p>
-        </div>
-        <div class="highlight-card">
-          <strong>Performance-Ready</strong>
-          <p>From sport tuning to everyday upkeep, we handle it all under one roof.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<script>
+(function(){
+  var burger=document.getElementById('burger'),mnav=document.getElementById('mnav'),hdr=document.getElementById('hdr');
+  burger.addEventListener('click',function(){mnav.classList.toggle('open');});
+  mnav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mnav.classList.remove('open');});});
+  window.addEventListener('scroll',function(){hdr.classList.toggle('solid',window.scrollY>40);});
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="services-header">
-      <div class="section-label">What We Do</div>
-      <h2>Our Services</h2>
-      <p class="section-intro">We offer a wide range of automotive services to keep your vehicle performing safely and reliably. Contact us for details on scheduling and pricing.</p>
-    </div>
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    <div class="services-grid">
+  var rev=document.querySelectorAll('.reveal');
+  if(reduce||!('IntersectionObserver' in window)){rev.forEach(function(r){r.classList.add('in');});}
+  else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+    rev.forEach(function(r){io.observe(r);});
+  }
 
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M13 2.05V4.06C14.5 4.26 15.85 4.87 16.95 5.8L18.36 4.39C16.88 3.14 15.04 2.28 13 2.05ZM11 2.05C8.96 2.28 7.12 3.14 5.64 4.38L7.05 5.79C8.15 4.87 9.5 4.26 11 4.06V2.05ZM4.38 5.64C3.14 7.12 2.28 8.96 2.05 11H4.06C4.26 9.5 4.87 8.15 5.8 7.05L4.38 5.64ZM19.94 11C19.72 8.96 18.85 7.12 17.61 5.64L16.2 7.05C17.13 8.15 17.74 9.5 17.94 11H19.94ZM12 14C10.9 14 10 13.1 10 12S10.9 10 12 10 14 10.9 14 12 13.1 14 12 14ZM12 8C9.79 8 8 9.79 8 12S9.79 16 12 16 16 14.21 16 12 14.21 8 12 8ZM2.05 13C2.28 15.04 3.14 16.88 4.38 18.36L5.79 16.95C4.87 15.85 4.26 14.5 4.06 13H2.05ZM17.61 18.37C18.86 16.89 19.72 15.04 19.95 13H17.94C17.74 14.5 17.13 15.85 16.2 16.95L17.61 18.37ZM5.64 19.62C7.12 20.86 8.96 21.72 11 21.95V19.94C9.5 19.74 8.15 19.13 7.05 18.2L5.64 19.62ZM13 21.95C15.04 21.72 16.88 20.86 18.36 19.61L16.95 18.2C15.85 19.13 14.5 19.74 13 19.94V21.95Z"/></svg>
-        </div>
-        <h3>General Maintenance</h3>
-        <p>Oil changes, fluid checks, filter replacements, and routine inspections to keep your vehicle in top shape.</p>
-      </div>
+  // canvas sparks/embers (decorative only)
+  if(!reduce){
+    var c=document.getElementById('spark'),x=c.getContext('2d'),W,H,parts=[];
+    function size(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+    size();window.addEventListener('resize',size);
+    var N=Math.min(90,Math.floor(W/16));
+    for(var i=0;i<N;i++)parts.push(mk());
+    function mk(){return{x:Math.random()*W,y:H+Math.random()*H,r:Math.random()*2+.6,v:Math.random()*1.2+.3,h:Math.random()*40+10,a:Math.random()*.6+.2};}
+    function loop(){
+      x.clearRect(0,0,W,H);
+      for(var i=0;i<parts.length;i++){var p=parts[i];
+        p.y-=p.v;p.x+=Math.sin(p.y/40)*.3;
+        if(p.y< -10){parts[i]=mk();continue;}
+        var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);
+        g.addColorStop(0,'rgba(255,'+(80+p.h*2)+',40,'+p.a+')');
+        g.addColorStop(1,'rgba(255,60,20,0)');
+        x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.r*4,0,6.29);x.fill();
+      }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  }
 
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg>
-        </div>
-        <h3>Engine Diagnostics &amp; Repair</h3>
-        <p>Advanced diagnostics to pinpoint engine issues quickly, followed by expert repairs using quality components.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm1-9h-2V7h2v4zm0 4h-2v-2h2v2z"/></svg>
-        </div>
-        <h3>Brake Service</h3>
-        <p>Inspection, pad replacement, rotor resurfacing or replacement, and brake fluid service for safe, reliable stopping.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 10H6v-2h12v2z"/></svg>
-        </div>
-        <h3>Transmission Service</h3>
-        <p>Fluid flushes, filter replacement, and transmission diagnostics to maintain smooth shifting and long-term reliability.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C13 5.06 12.51 5 12 5s-1 .06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-4 4v3c0 2.21-1.79 4-4 4s-4-1.79-4-4v-3c0-2.21 1.79-4 4-4s4 1.79 4 4zm-5-1h2v4h-2zm0-2h2v1h-2z"/></svg>
-        </div>
-        <h3>Suspension &amp; Steering</h3>
-        <p>Alignment, shocks, struts, and steering component service to restore handling and reduce tire wear.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        </div>
-        <h3>Performance Upgrades</h3>
-        <p>Sport tuning, exhaust work, and performance modifications for drivers who want more from their vehicle. Contact us for details.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div style="max-width:1000px; margin:0 auto 40px;">
-      <div class="section-label">Find Us</div>
-      <h2>Contact &amp; Location</h2>
-      <p class="section-intro">Ready to schedule service or have a question? Reach out by phone or stop by our shop in Gainesville.</p>
-    </div>
-
-    <div class="contact-grid">
-
-      <div>
-        <div class="contact-info" style="margin-bottom:32px;">
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Address</strong>
-              <span>65 SE 10th Ave<br>Gainesville, FL</span>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Phone</strong>
-              <a href="tel:+13523753525">(352) 375-3525</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Hours</strong>
-              <span>Contact us for current hours</span>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="rating-box">
-          <div class="rating-label">Google Maps Rating</div>
-          <div class="rating-stars">★★★★★</div>
-          <div class="rating-score">5.0</div>
-          <div class="rating-count">Based on 63 Google reviews</div>
-        </div>
-      </div>
-
-      <div class="contact-actions">
-        <div class="map-placeholder">
-          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
-          <span>65 SE 10th Ave, Gainesville, FL</span>
-        </div>
-
-        <a href="https://www.google.com/maps/search/Best%20Motor%20Works%20%26%20Sports%2065%20SE%2010th%20Ave%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer" class="btn-directions">
-          <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-          Get Directions
-        </a>
-
-        <a href="tel:+13523753525" class="btn-call">
-          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          Call (352) 375-3525
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p><strong>Best Motor Works &amp; Sports</strong> &mdash; 65 SE 10th Ave, Gainesville, FL &mdash; <a href="tel:+13523753525">(352) 375-3525</a></p>
-    <p style="margin-top:8px;">&copy; 2026 Best Motor Works &amp; Sports. All rights reserved.</p>
-  </footer>
-
-  <script>
-    // Mobile nav toggle
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('nav-links');
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-    });
-    // Close nav on link click (mobile)
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => navLinks.classList.remove('open'));
-    });
-  </script>
-
+  // count rating
+  var rEl=document.getElementById('rate');
+  if(rEl&&!reduce&&'IntersectionObserver' in window){
+    var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+      var t0=null;function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/900,1);rEl.textContent=(5*(0.2+0.8*p)).toFixed(1);if(p<1)requestAnimationFrame(step);else rEl.textContent='5.0';}
+      requestAnimationFrame(step);ro.disconnect();}});},{threshold:.5});
+    ro.observe(rEl);
+  }
+})();
+</script>
 </body>
 </html>

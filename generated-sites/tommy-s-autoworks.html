@@ -1,801 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tommy's Autoworks | Auto Repair – Gainesville, FL</title>
-  <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #0f1117;
-      color: #e0e4ef;
-      line-height: 1.65;
-    }
-    a { text-decoration: none; color: inherit; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tommy's Autoworks | Auto Repair – Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --carbon:#0b0b0d; --steel:#131418; --panel:#191b20; --line:#2d2f36;
+    --grey:#9a9ca6; --chrome:#f1f1ee; --red:#d8342a; --red-lt:#ff5347; --gold:#e8c14b;
+    --serif:Georgia,"Times New Roman",Times,serif;
+    --cond:"Arial Narrow",Impact,"Haettenschweiler",var(--sans);
+    --sans:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"SF Mono",monospace;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--serif);background:var(--carbon);color:var(--chrome);line-height:1.6;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
 
-    /* ===== COLOR TOKENS ===== */
-    /* Primary accent: bold amber/orange — classic auto shop energy */
-    :root {
-      --accent:      #f5a623;
-      --accent-dark: #c97f0e;
-      --bg-dark:     #0f1117;
-      --bg-card:     #1a1e2a;
-      --bg-section:  #141720;
-      --text-main:   #e0e4ef;
-      --text-muted:  #8a90a8;
-      --border:      #2a2f40;
-    }
+  .paper{max-width:1180px;margin:0 auto;padding:0 clamp(1rem,4vw,2.4rem)}
 
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: rgba(15, 17, 23, 0.95);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-main);
-      letter-spacing: 0.01em;
-    }
-    .nav-logo .logo-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 38px; height: 38px;
-      background: var(--accent);
-      border-radius: 6px;
-    }
-    .nav-logo .logo-icon svg { display: block; }
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--accent); }
-    .nav-cta {
-      background: var(--accent);
-      color: #0f1117;
-      font-weight: 700;
-      font-size: 0.875rem;
-      padding: 8px 18px;
-      border-radius: 6px;
-      transition: background 0.2s;
-    }
-    .nav-cta:hover { background: var(--accent-dark); color: #fff; }
+  /* MASTHEAD */
+  .topline{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--line);
+    font:700 .7rem var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--grey)}
+  .topline .call{color:var(--gold)}
+  .masthead{text-align:center;padding:1.6rem 0 1.1rem;border-bottom:3px double var(--line)}
+  .masthead .over{font:700 .74rem var(--mono);letter-spacing:.4em;text-transform:uppercase;color:var(--red-lt);margin-bottom:.6rem}
+  .masthead h1{font-family:var(--sans);font-weight:900;font-size:clamp(2.4rem,9vw,7rem);line-height:.9;letter-spacing:-.03em;text-transform:uppercase}
+  .masthead h1 .amp{color:var(--red)}
+  .masthead .sub{margin-top:.7rem;font-style:italic;color:var(--grey);font-size:clamp(.95rem,2vw,1.2rem)}
+  .rulebar{display:flex;justify-content:space-between;gap:1rem;padding:.5rem 0;border-bottom:1px solid var(--line);
+    font:700 .68rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--grey);flex-wrap:wrap}
 
-    /* hamburger (mobile) */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px; height: 2px;
-      background: var(--text-main);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 64px; left: 0; right: 0;
-      background: rgba(15, 17, 23, 0.98);
-      border-bottom: 1px solid var(--border);
-      padding: 20px 5%;
-      z-index: 999;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .mobile-menu a:last-child { border-bottom: none; }
-    .mobile-menu a:hover { color: var(--accent); }
+  /* TICKER */
+  .ticker{background:var(--red);color:#fff;overflow:hidden;white-space:nowrap;display:flex;align-items:center}
+  .ticker .lbl{background:#0b0b0d;color:var(--gold);font:800 .72rem var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:.6rem 1rem;flex-shrink:0}
+  .ticker .run{display:inline-block;font-family:var(--sans);font-weight:700;font-size:.9rem;letter-spacing:.03em;padding:.6rem 0;animation:tick 26s linear infinite}
+  .ticker .run span{margin:0 1.4rem;text-transform:uppercase}
+  .ticker .run b{color:var(--gold)}
+  @keyframes tick{to{transform:translateX(-50%)}}
 
-    @media (max-width: 768px) {
-      .nav-links, .nav-cta { display: none; }
-      .hamburger { display: flex; }
-    }
+  /* LEAD */
+  .lead{display:grid;grid-template-columns:2fr 1fr;gap:clamp(1.5rem,4vw,3rem);padding:2.4rem 0;border-bottom:1px solid var(--line)}
+  .lead h2{font-family:var(--sans);font-weight:900;font-size:clamp(1.8rem,4.6vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin-bottom:1rem}
+  .lead .body{column-count:2;column-gap:2rem}
+  .lead .body p{margin-bottom:1rem;color:#cfd2d8}
+  .lead .body p:first-child::first-letter{font-family:var(--sans);font-weight:900;font-size:3.4rem;float:left;line-height:.8;padding:.1rem .5rem .1rem 0;color:var(--red-lt)}
+  .aside{border-left:1px solid var(--line);padding-left:clamp(1rem,2vw,2rem)}
+  .rate-card{border:1px solid var(--line);background:var(--panel);padding:1.4rem;text-align:center;margin-bottom:1.4rem}
+  .rate-card .lbl{font:700 .66rem var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--grey)}
+  .rate-card .big{font-family:var(--sans);font-weight:900;font-size:3.6rem;line-height:1;margin:.3rem 0;
+    background:linear-gradient(180deg,#fff,var(--grey));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .rate-card .st{color:var(--gold);font-size:1.3rem;letter-spacing:3px}
+  .rate-card .sub{color:var(--grey);font-size:.82rem;margin-top:.4rem}
+  .btn{display:block;text-align:center;padding:.85rem 1rem;font-family:var(--sans);font-weight:800;font-size:.9rem;margin-top:.7rem;transition:transform .15s,background .2s}
+  .btn-a{background:var(--red);color:#fff}.btn-a:hover{background:var(--red-lt);transform:translateY(-2px)}
+  .btn-b{border:1px solid var(--line);color:var(--chrome)}.btn-b:hover{border-color:var(--red);transform:translateY(-2px)}
 
-    /* ===== HERO ===== */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 5% 60px;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(245,166,35,0.12) 0%, transparent 70%),
-        linear-gradient(160deg, #0f1117 0%, #141720 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    /* decorative grid lines */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.35;
-      pointer-events: none;
-    }
-    .hero-content { position: relative; max-width: 760px; }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(245,166,35,0.12);
-      border: 1px solid rgba(245,166,35,0.3);
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 20px;
-      margin-bottom: 24px;
-    }
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      font-weight: 800;
-      line-height: 1.1;
-      color: #fff;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
-    }
-    .hero h1 span { color: var(--accent); }
-    .hero p {
-      font-size: clamp(1rem, 2.2vw, 1.2rem);
-      color: var(--text-muted);
-      max-width: 540px;
-      margin: 0 auto 36px;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: #0f1117;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 13px 28px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-    .btn-primary:hover { background: var(--accent-dark); color: #fff; transform: translateY(-1px); }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text-main);
-      font-weight: 600;
-      font-size: 0.95rem;
-      padding: 12px 28px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
-      display: inline-block;
-    }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
 
-    /* hero stat strip */
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-top: 52px;
-      flex-wrap: wrap;
-    }
-    .hero-stat { text-align: center; }
-    .hero-stat .stat-val {
-      font-size: 1.9rem;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-    }
-    .hero-stat .stat-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
+  /* SERVICES as columns */
+  .sec{padding:2.6rem 0;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--sans);font:900 .8rem var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--red-lt);
+    border-bottom:2px solid var(--red);display:inline-block;padding-bottom:.3rem;margin-bottom:1.4rem}
+  .cols{columns:280px;column-gap:2rem}
+  .art{break-inside:avoid;border-top:1px solid var(--line);padding:1rem 0;display:flex;gap:.9rem;align-items:flex-start}
+  .art .ic{width:34px;height:34px;color:var(--red-lt);flex-shrink:0}
+  .art h3{font-family:var(--sans);font-weight:800;font-size:1.05rem;margin-bottom:.2rem}
+  .art p{color:var(--grey);font-size:.92rem}
 
-    /* ===== SECTION SHARED ===== */
-    section { padding: 80px 5%; }
-    .section-tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      font-size: 1rem;
-      color: var(--text-muted);
-      max-width: 560px;
-      margin-bottom: 48px;
-    }
+  /* CONTACT classifieds */
+  .classifieds{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border:1px solid var(--line)}
+  .cell{padding:1.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .cell .lbl{font-family:var(--sans);font:800 .66rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red-lt);margin-bottom:.5rem}
+  .cell .v{font-size:1.1rem}.cell a:hover{color:var(--gold)}
+  .cell.full{grid-column:1/-1;border-right:none;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  .cell.full .btn{margin:0;padding:.8rem 1.4rem}
 
-    /* ===== ABOUT ===== */
-    #about { background: var(--bg-section); }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .about-text p {
-      color: var(--text-muted);
-      font-size: 1rem;
-      margin-bottom: 18px;
-    }
-    .about-text p:last-child { margin-bottom: 0; }
-    .about-highlights {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .highlight-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 22px;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-    .highlight-icon {
-      width: 42px; height: 42px;
-      min-width: 42px;
-      background: rgba(245,166,35,0.12);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-      font-size: 1.2rem;
-    }
-    .highlight-card h4 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-    .highlight-card p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin: 0;
-    }
+  footer{text-align:center;padding:2.4rem 0 3rem;color:var(--grey);font-size:.85rem}
+  footer b{color:var(--chrome)}footer a{color:var(--gold)}
+  .mono-note{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-top:.6rem}
 
-    @media (max-width: 768px) {
-      .about-grid { grid-template-columns: 1fr; }
-    }
-
-    /* ===== SERVICES ===== */
-    #services { background: var(--bg-dark); }
-    .services-inner { max-width: 1100px; margin: 0 auto; }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    @media (max-width: 900px) {
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 560px) {
-      .services-grid { grid-template-columns: 1fr; }
-    }
-    .service-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px 24px;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .service-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-3px);
-    }
-    .service-icon {
-      width: 50px; height: 50px;
-      background: rgba(245,166,35,0.12);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .service-icon svg { width: 26px; height: 26px; fill: var(--accent); }
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-    .service-card p {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ===== CONTACT ===== */
-    #contact { background: var(--bg-section); }
-    .contact-inner {
-      max-width: 1000px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: start;
-    }
-    @media (max-width: 768px) {
-      .contact-inner { grid-template-columns: 1fr; }
-    }
-    .contact-info { display: flex; flex-direction: column; gap: 20px; }
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-    .contact-item-icon {
-      width: 44px; height: 44px;
-      min-width: 44px;
-      background: rgba(245,166,35,0.1);
-      border: 1px solid rgba(245,166,35,0.2);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-    }
-    .contact-item-icon svg { width: 20px; height: 20px; fill: var(--accent); }
-    .contact-item-text .label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-    .contact-item-text .value {
-      font-size: 1rem;
-      color: #fff;
-      font-weight: 500;
-    }
-    .contact-item-text .value a { color: var(--accent); }
-    .contact-item-text .value a:hover { text-decoration: underline; }
-
-    /* rating card */
-    .rating-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px 24px;
-      text-align: center;
-    }
-    .rating-number {
-      font-size: 3.8rem;
-      font-weight: 900;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stars {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-    .stars svg { width: 22px; height: 22px; }
-    .star-full { fill: var(--accent); }
-    .star-half { fill: var(--accent); }
-    .star-empty { fill: var(--border); }
-    .rating-source {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent);
-      color: #0f1117;
-      font-weight: 700;
-      font-size: 0.9rem;
-      padding: 12px 24px;
-      border-radius: 8px;
-      transition: background 0.2s;
-      width: 100%;
-      justify-content: center;
-    }
-    .directions-btn:hover { background: var(--accent-dark); color: #fff; }
-    .directions-btn svg { width: 18px; height: 18px; fill: currentColor; }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: #0a0c12;
-      border-top: 1px solid var(--border);
-      padding: 36px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 1rem;
-      color: #fff;
-    }
-    .footer-brand .logo-icon {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .footer-copy {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-    .footer-links {
-      display: flex;
-      gap: 20px;
-      list-style: none;
-    }
-    .footer-links a {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--accent); }
-
-    /* ===== DIVIDER ===== */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0;
-    }
-  </style>
+  @media(max-width:760px){
+    .lead{grid-template-columns:1fr}.lead .body{column-count:1}
+    .aside{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:1.4rem}
+    .cell{border-right:none}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">
-      <div class="logo-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19.5 8.5H18l-1.5-4.5H7.5L6 8.5H4.5A1.5 1.5 0 003 10v5a1.5 1.5 0 001.5 1.5V18a1 1 0 002 0v-1.5h11V18a1 1 0 002 0v-1.5A1.5 1.5 0 0021 15v-5a1.5 1.5 0 00-1.5-1.5zM8.25 6.5h7.5l1 3H7.25l1-3zm-2 8a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm11.5 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z" fill="#0f1117"/>
-        </svg>
-      </div>
-      Tommy's Autoworks
-    </div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <a href="tel:3525779502" class="nav-cta">Call Now</a>
-    <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="document.getElementById('mobileMenu').classList.remove('open')">About</a>
-    <a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a>
-    <a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a>
-    <a href="tel:3525779502">Call (352) 577-9502</a>
+<div class="paper">
+  <div class="topline">
+    <span>Gainesville, FL Edition</span>
+    <span>Auto Repair &amp; Service</span>
+    <a class="call" href="tel:3525779502">Call (352) 577-9502</a>
   </div>
+  <div class="masthead">
+    <div class="over">The Gainesville Garage Gazette</div>
+    <h1>Tommy's <span class="amp">Autoworks</span></h1>
+    <div class="sub">Straight-talking auto repair for Gainesville drivers</div>
+  </div>
+  <div class="rulebar">
+    <span>Vol. GNV · No. 352</span>
+    <span>Full-Service Repair · All Makes &amp; Models</span>
+    <span>Rated 4.6 on Google</span>
+  </div>
+</div>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74L12 2z"/></svg>
-        Gainesville's Trusted Auto Repair
+<div class="ticker" aria-hidden="true">
+  <span class="lbl">Latest</span>
+  <div class="run">
+    <span><b>Now serving Gainesville</b> — 125 NE 23rd Ave Ste D</span>
+    <span>Maintenance <b>·</b> Diagnostics <b>·</b> Brakes <b>·</b> Engine <b>·</b> Electrical</span>
+    <span><b>4.6</b> rated on Google Reviews</span>
+    <span>Contact us for hours &amp; estimates <b>·</b> (352) 577-9502</span>
+    <span><b>Now serving Gainesville</b> — 125 NE 23rd Ave Ste D</span>
+    <span>Maintenance <b>·</b> Diagnostics <b>·</b> Brakes <b>·</b> Engine <b>·</b> Electrical</span>
+    <span><b>4.6</b> rated on Google Reviews</span>
+    <span>Contact us for hours &amp; estimates <b>·</b> (352) 577-9502</span>
+  </div>
+</div>
+
+<div class="paper">
+  <section class="lead" id="about">
+    <div class="reveal">
+      <h2>Dependable repairs, done the right way</h2>
+      <div class="body">
+        <p>Tommy's Autoworks keeps Gainesville drivers moving with honest, full-service auto repair. From routine maintenance to more involved fixes, the shop focuses on quality work and clear communication.</p>
+        <p>All makes and models are welcome. Whether it's a quick service or a deeper diagnostic, you'll know what your vehicle needs before any work begins.</p>
+        <p>Find the shop at 125 NE 23rd Ave Ste D in Gainesville, FL. Contact us for current hours, estimates, and to schedule your next visit.</p>
       </div>
-      <h1>Keep Your Car <span>Running Right</span> with Tommy's</h1>
-      <p>Honest diagnostics, quality repairs, and straight-talk service from a shop that puts your vehicle — and your wallet — first.</p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary">Get in Touch</a>
-        <a href="#services" class="btn-secondary">View Services</a>
+    </div>
+    <div class="aside reveal">
+      <div class="rate-card">
+        <div class="lbl">Google Maps Rating</div>
+        <div class="big" id="rate">4.6</div>
+        <div class="st">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="sub">Based on Google Reviews</div>
       </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="stat-val">4.6</div>
-          <div class="stat-label">Google Rating</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-val">GNV</div>
-          <div class="stat-label">Gainesville, FL</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-val">ASE</div>
-          <div class="stat-label">Certified Techs</div>
+      <a class="btn btn-a" href="tel:3525779502">Call (352) 577-9502</a>
+      <a class="btn btn-b" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/Tommy's%20Autoworks%20125%20NE%2023rd%20Ave%20Ste%20D%2C%20Gainesville%2C%20FL">Get Directions</a>
+    </div>
+  </section>
+
+  <section class="sec" id="services">
+    <span class="kicker">The Service Desk</span>
+    <div class="cols reveal">
+      <div class="art"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg><div><h3>General Maintenance</h3><p>Oil changes, fluids, filters, and routine inspections to keep you rolling.</p></div></div>
+      <div class="art"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 18v-6a8 8 0 0 1 16 0v6"/><path d="M2 18h20M9 12h6"/></svg><div><h3>Engine Diagnostics</h3><p>Computer-assisted diagnostics to pinpoint issues accurately.</p></div></div>
+      <div class="art"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><h3>Brake Service</h3><p>Pads, rotors, and brake fluid work for safe, reliable stopping.</p></div></div>
+      <div class="art"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8V6M17 8V6M7 16v2M17 16v2"/></svg><div><h3>Transmission Service</h3><p>Fluid service and diagnostics for smooth, dependable shifting.</p></div></div>
+      <div class="art"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke-linejoin="round"/></svg><div><h3>Battery &amp; Electrical</h3><p>Battery, alternator, and electrical troubleshooting.</p></div></div>
+      <div class="art"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 17V9a8 8 0 0 1 16 0v8"/><path d="M2 17h20M8 13h8"/></svg><div><h3>Suspension &amp; Steering</h3><p>Alignment and steering service. Contact us for details.</p></div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="contact">
+    <span class="kicker">Where to Find Us</span>
+    <div class="classifieds reveal">
+      <div class="cell"><div class="lbl">Address</div><div class="v">125 NE 23rd Ave Ste D<br>Gainesville, FL</div></div>
+      <div class="cell"><div class="lbl">Phone</div><div class="v"><a href="tel:3525779502">(352) 577-9502</a></div></div>
+      <div class="cell"><div class="lbl">Hours</div><div class="v">Contact us for current hours</div></div>
+      <div class="cell full">
+        <div><div class="lbl">Ready when you are</div><div class="v">Stop by or call to schedule service.</div></div>
+        <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+          <a class="btn btn-a" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/Tommy's%20Autoworks%20125%20NE%2023rd%20Ave%20Ste%20D%2C%20Gainesville%2C%20FL">Get Directions</a>
+          <a class="btn btn-b" href="tel:3525779502">Call (352) 577-9502</a>
         </div>
       </div>
     </div>
   </section>
 
-  <hr class="divider" />
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-grid">
-      <div class="about-text">
-        <span class="section-tag">About Us</span>
-        <h2 class="section-title">A Local Shop You Can Actually Trust</h2>
-        <p>Tommy's Autoworks is a full-service auto repair shop serving the Gainesville community with straightforward, no-nonsense vehicle care. We believe every driver deserves honest assessments and repairs done right the first time — no upsells, no surprises.</p>
-        <p>From daily commuters to work trucks, our certified technicians handle a wide range of makes and models. We take the time to explain what your car needs and why, so you leave feeling confident, not confused.</p>
-        <p>Located conveniently on NE 23rd Ave in Gainesville, we're your neighborhood shop for everything from routine maintenance to more involved mechanical work. Contact us for current availability and details.</p>
-      </div>
-      <div class="about-highlights">
-        <div class="highlight-card">
-          <div class="highlight-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-          </div>
-          <div>
-            <h4>Transparent Estimates</h4>
-            <p>Know what you're paying for before any work begins. No hidden fees.</p>
-          </div>
-        </div>
-        <div class="highlight-card">
-          <div class="highlight-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-          </div>
-          <div>
-            <h4>Fast Turnaround</h4>
-            <p>We respect your time and work efficiently to get you back on the road.</p>
-          </div>
-        </div>
-        <div class="highlight-card">
-          <div class="highlight-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-          </div>
-          <div>
-            <h4>Quality Parts</h4>
-            <p>We use reliable parts that meet or exceed OEM specifications.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="services-inner">
-      <span class="section-tag">What We Do</span>
-      <h2 class="section-title">Our Services</h2>
-      <p class="section-sub">From quick oil changes to complex diagnostics, we've got the tools and experience to handle it. Contact us for details on any service.</p>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 7h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2v3H4a2 2 0 00-2 2v8a2 2 0 002 2h1v1a1 1 0 002 0v-1h10v1a1 1 0 002 0v-1h1a2 2 0 002-2V9a2 2 0 00-2-2zM7 4h10v3H7V4zM4 17V9h16l.002 8H4z"/>
-              <circle cx="7.5" cy="13.5" r="1.5"/>
-              <circle cx="16.5" cy="13.5" r="1.5"/>
-            </svg>
-          </div>
-          <h3>Oil Change &amp; Fluid Service</h3>
-          <p>Routine oil and filter changes plus inspection of critical fluids to keep your engine running smoothly.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm0-14a6 6 0 100 12A6 6 0 0012 6zm0 10a4 4 0 110-8 4 4 0 010 8zm0-6a2 2 0 100 4 2 2 0 000-4z"/>
-            </svg>
-          </div>
-          <h3>Brake Inspection &amp; Repair</h3>
-          <p>Full brake system inspection, pad and rotor replacement, and caliper service to ensure safe stopping power.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19.5 8.5H18l-1.5-4.5H7.5L6 8.5H4.5A1.5 1.5 0 003 10v5a1.5 1.5 0 001.5 1.5V18a1 1 0 002 0v-1.5h11V18a1 1 0 002 0v-1.5A1.5 1.5 0 0021 15v-5a1.5 1.5 0 00-1.5-1.5zM8.25 6.5h7.5l1 3H7.25l1-3zm-2 8a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm11.5 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/>
-            </svg>
-          </div>
-          <h3>Engine Diagnostics</h3>
-          <p>Advanced scan-tool diagnostics to quickly identify fault codes, warning lights, and performance issues.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.66 11.2c-.23-.3-.51-.56-.77-.82-.67-.6-1.43-1.03-2.07-1.66C13.33 7.26 13 4.85 13.95 3c-.95.23-1.78.75-2.49 1.32-2.59 2.08-3.61 5.75-2.39 8.9.04.1.08.2.08.33 0 .22-.15.42-.35.5-.23.1-.47.04-.66-.12a.58.58 0 01-.14-.17c-1.13-1.43-1.31-3.48-.55-5.12C5.78 10 4.87 12.3 5 14.47c.06.5.12 1 .29 1.5.14.6.41 1.2.71 1.73 1.08 1.73 2.95 2.97 4.96 3.22 2.14.27 4.43-.12 6.07-1.6 1.82-1.66 2.47-4.32 1.51-6.6l-.13-.28c-.2-.46-.43-.86-.75-1.24zm-7.48 7.37a2.36 2.36 0 01-2.27-2.36c0-1.2 1.04-2.1 1.7-3.05.64 1.01 1.64 1.7 1.99 2.9.17.6.08 1.38-.22 1.93a2.37 2.37 0 01-1.2.58z"/>
-            </svg>
-          </div>
-          <h3>Tire Services</h3>
-          <p>Tire rotation, balancing, and flat repair to extend tire life and improve fuel economy and handling.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 3L2 7v10l10 4 10-4V7L12 3zm0 2.18L20 8.09v7.85L12 19l-8-3.06V8.09L12 5.18zM12 7a5 5 0 100 10A5 5 0 0012 7zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
-            </svg>
-          </div>
-          <h3>AC &amp; Heating Service</h3>
-          <p>Refrigerant recharge, leak detection, and climate system repair to keep you comfortable year-round in Florida's heat.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 4v2H4v14h16V6h-3V4h-2v2H9V4H7zm9 4H8v2h8V8zM8 12h8v2H8v-2zm0 4h5v2H8v-2z"/>
-            </svg>
-          </div>
-          <h3>Preventive Maintenance</h3>
-          <p>Scheduled tune-ups, belt and hose inspections, battery checks, and filter replacements to prevent costly breakdowns.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <span class="section-tag">Find Us</span>
-    <h2 class="section-title">Contact &amp; Location</h2>
-    <p class="section-sub">Stop by, give us a call, or get directions below. We're ready to help.</p>
-    <div class="contact-inner">
-      <div class="contact-info">
-
-        <div class="contact-item">
-          <div class="contact-item-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-            </svg>
-          </div>
-          <div class="contact-item-text">
-            <div class="label">Address</div>
-            <div class="value">125 NE 23rd Ave Ste D<br>Gainesville, FL</div>
-          </div>
-        </div>
-
-        <div class="contact-item">
-          <div class="contact-item-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.29 21 3 13.71 3 4.99 3 4.45 3.45 4 4 4h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.01l-2.21 2.21z"/>
-            </svg>
-          </div>
-          <div class="contact-item-text">
-            <div class="label">Phone</div>
-            <div class="value"><a href="tel:3525779502">(352) 577-9502</a></div>
-          </div>
-        </div>
-
-        <div class="contact-item">
-          <div class="contact-item-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.5 14.5h-1V11h1v5.5zm0-7h-1V8h1v1.5z"/>
-            </svg>
-          </div>
-          <div class="contact-item-text">
-            <div class="label">Hours</div>
-            <div class="value">Contact us for current hours</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="rating-card">
-        <div class="rating-number">4.6</div>
-        <div class="stars">
-          <!-- 4 full stars -->
-          <svg viewBox="0 0 24 24" class="star-full"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <svg viewBox="0 0 24 24" class="star-full"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <svg viewBox="0 0 24 24" class="star-full"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <svg viewBox="0 0 24 24" class="star-full"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <!-- half star -->
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="halfGrad">
-                <stop offset="50%" stop-color="#f5a623"/>
-                <stop offset="50%" stop-color="#2a2f40"/>
-              </linearGradient>
-            </defs>
-            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="url(#halfGrad)"/>
-          </svg>
-        </div>
-        <div class="rating-source">Based on Google Reviews</div>
-        <a
-          href="https://www.google.com/maps/search/Tommy's%20Autoworks%20125%20NE%2023rd%20Ave%20Ste%20D%2C%20Gainesville%2C%20FL"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="directions-btn"
-        >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/>
-          </svg>
-          Get Directions
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
   <footer>
-    <div class="footer-brand">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19.5 8.5H18l-1.5-4.5H7.5L6 8.5H4.5A1.5 1.5 0 003 10v5a1.5 1.5 0 001.5 1.5V18a1 1 0 002 0v-1.5h11V18a1 1 0 002 0v-1.5A1.5 1.5 0 0021 15v-5a1.5 1.5 0 00-1.5-1.5zM8.25 6.5h7.5l1 3H7.25l1-3zm-2 8a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm11.5 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z" fill="#0f1117"/>
-        </svg>
-      </div>
-      Tommy's Autoworks
-    </div>
-    <span class="footer-copy">&copy; 2026 Tommy's Autoworks &mdash; Gainesville, FL</span>
-    <ul class="footer-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <p><b>Tommy's Autoworks</b> &nbsp;·&nbsp; 125 NE 23rd Ave Ste D, Gainesville, FL &nbsp;·&nbsp; <a href="tel:3525779502">(352) 577-9502</a></p>
+    <p class="mono-note">&copy; 2025 Tommy's Autoworks · All Rights Reserved</p>
   </footer>
+</div>
 
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rev=document.querySelectorAll('.reveal');
+  if(reduce||!('IntersectionObserver' in window)){rev.forEach(function(r){r.classList.add('in');});}
+  else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+    rev.forEach(function(r){io.observe(r);});
+    var rEl=document.getElementById('rate');
+    if(rEl){var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+      var t0=null;function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1000,1);rEl.textContent=(4.6*(0.2+0.8*p)).toFixed(1);if(p<1)requestAnimationFrame(step);else rEl.textContent='4.6';}
+      requestAnimationFrame(step);ro.disconnect();}});},{threshold:.5});ro.observe(rEl);}
+  }
+})();
+</script>
 </body>
 </html>

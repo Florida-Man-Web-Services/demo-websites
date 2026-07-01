@@ -1,982 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dan Kays Auto Repair | Gainesville, FL</title>
-  <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy:      #1a2744;
-      --navy-dark: #111b33;
-      --red:       #c0392b;
-      --red-dark:  #96281b;
-      --silver:    #d0d4dc;
-      --light-bg:  #f4f5f7;
-      --white:     #ffffff;
-      --text:      #222831;
-      --text-muted:#5a6275;
-      --radius:    6px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text);
-      background: var(--white);
-      line-height: 1.65;
-    }
-
-    a { color: inherit; text-decoration: none; }
-
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: var(--navy-dark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.45);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    /* Wrench SVG inline */
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .nav-brand {
-      color: var(--white);
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-
-    .nav-brand span {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 400;
-      color: var(--silver);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--silver);
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--white); }
-
-    .nav-cta {
-      background: var(--red);
-      color: var(--white) !important;
-      padding: 8px 18px;
-      border-radius: var(--radius);
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover { background: var(--red-dark) !important; }
-
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 3px;
-      background: var(--silver);
-      border-radius: 2px;
-      transition: all 0.25s;
-    }
-
-    /* Mobile nav */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      top: 64px;
-      left: 0;
-      right: 0;
-      background: var(--navy-dark);
-      padding: 18px 5%;
-      z-index: 99;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .mobile-nav.open { display: block; }
-
-    .mobile-nav ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .mobile-nav a {
-      display: block;
-      padding: 12px 0;
-      color: var(--silver);
-      font-size: 1rem;
-      font-weight: 500;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .mobile-nav a:last-child { border-bottom: none; }
-
-    /* ===== HERO ===== */
-    .hero {
-      margin-top: 64px;
-      min-height: 88vh;
-      background: linear-gradient(135deg, var(--navy-dark) 0%, #1e2f5c 60%, #2d1515 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 60px 5%;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Decorative gear rings */
-    .hero::before, .hero::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      border: 2px solid rgba(192,57,43,0.18);
-      pointer-events: none;
-    }
-
-    .hero::before {
-      width: 520px;
-      height: 520px;
-      top: -160px;
-      right: -100px;
-    }
-
-    .hero::after {
-      width: 340px;
-      height: 340px;
-      bottom: -120px;
-      left: -80px;
-    }
-
-    .hero-inner {
-      max-width: 780px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(192,57,43,0.25);
-      border: 1px solid rgba(192,57,43,0.55);
-      color: #e8a89c;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 5px 16px;
-      border-radius: 20px;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 {
-      color: var(--white);
-      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
-    }
-
-    .hero h1 .accent { color: var(--red); }
-
-    .hero p {
-      color: var(--silver);
-      font-size: clamp(1rem, 2vw, 1.22rem);
-      max-width: 600px;
-      margin: 0 auto 36px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 14px 30px;
-      border-radius: var(--radius);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    }
-
-    .btn:hover { transform: translateY(-2px); }
-
-    .btn-primary {
-      background: var(--red);
-      color: var(--white);
-      box-shadow: 0 4px 18px rgba(192,57,43,0.4);
-    }
-
-    .btn-primary:hover {
-      background: var(--red-dark);
-      box-shadow: 0 6px 24px rgba(192,57,43,0.55);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border: 2px solid rgba(255,255,255,0.38);
-    }
-
-    .btn-outline:hover { border-color: var(--white); }
-
-    /* Rating pill in hero */
-    .hero-rating {
-      margin-top: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--silver);
-      font-size: 0.9rem;
-    }
-
-    .stars { color: #f5c518; font-size: 1.1rem; letter-spacing: 1px; }
-
-    /* ===== SECTION SHELLS ===== */
-    section { padding: 80px 5%; }
-
-    .section-label {
-      display: inline-block;
-      color: var(--red);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 14px;
-      line-height: 1.2;
-    }
-
-    .section-sub {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 560px;
-    }
-
-    /* ===== ABOUT ===== */
-    .about {
-      background: var(--light-bg);
-    }
-
-    .about-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-bottom: 16px;
-    }
-
-    .about-text p:last-child { margin-bottom: 0; }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 24px 20px;
-      text-align: center;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      border-top: 4px solid var(--red);
-    }
-
-    .stat-card .stat-num {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .stat-card .stat-label {
-      font-size: 0.83rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* ===== SERVICES ===== */
-    .services { background: var(--white); }
-
-    .services-header { max-width: 1100px; margin: 0 auto 48px; }
-
-    .services-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      border: 1px solid #e4e7ee;
-      border-radius: 10px;
-      padding: 30px 24px;
-      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
-      background: var(--white);
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      transform: translateY(-4px);
-      border-color: var(--red);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: rgba(192,57,43,0.1);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-    }
-
-    .service-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: var(--red);
-    }
-
-    .service-card h3 {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 8px;
-    }
-
-    .service-card p {
-      font-size: 0.93rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ===== CONTACT ===== */
-    .contact { background: var(--light-bg); }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info-list {
-      list-style: none;
-      margin-top: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    .contact-info-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-
-    .contact-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--navy);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .contact-detail strong {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-
-    .contact-detail span {
-      font-size: 1.02rem;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .contact-detail a {
-      color: var(--red);
-      font-weight: 600;
-    }
-
-    .contact-detail a:hover { text-decoration: underline; }
-
-    /* Rating card */
-    .rating-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 30px 28px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      margin-top: 16px;
-    }
-
-    .rating-card .rating-score {
-      font-size: 3rem;
-      font-weight: 900;
-      color: var(--navy);
-      line-height: 1;
-    }
-
-    .rating-card .rating-stars {
-      color: #f5c518;
-      font-size: 1.4rem;
-      letter-spacing: 3px;
-      margin: 6px 0 4px;
-    }
-
-    .rating-card .rating-label {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .rating-card .rating-source {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 14px;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    .google-g {
-      width: 20px;
-      height: 20px;
-    }
-
-    .contact-actions {
-      margin-top: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .btn-directions {
-      background: var(--navy);
-      color: var(--white);
-      border-radius: var(--radius);
-      padding: 14px 24px;
-      font-size: 1rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      transition: background 0.2s, transform 0.15s;
-      text-align: center;
-      justify-content: center;
-    }
-
-    .btn-directions:hover {
-      background: var(--red);
-      transform: translateY(-2px);
-    }
-
-    .btn-directions svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--white);
-      flex-shrink: 0;
-    }
-
-    .btn-call {
-      background: var(--red);
-      color: var(--white);
-      border-radius: var(--radius);
-      padding: 14px 24px;
-      font-size: 1rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      transition: background 0.2s, transform 0.15s;
-      justify-content: center;
-    }
-
-    .btn-call:hover {
-      background: var(--red-dark);
-      transform: translateY(-2px);
-    }
-
-    .btn-call svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--white);
-      flex-shrink: 0;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--navy-dark);
-      color: var(--silver);
-      padding: 40px 5%;
-      text-align: center;
-    }
-
-    footer .footer-brand {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    footer p {
-      font-size: 0.88rem;
-      color: rgba(208,212,220,0.65);
-      margin-bottom: 4px;
-    }
-
-    footer .footer-divider {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      margin: 20px auto;
-      max-width: 320px;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 580px) {
-      section { padding: 60px 5%; }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .about-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .hero-actions { flex-direction: column; align-items: center; }
-
-      .btn { width: 100%; text-align: center; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dan Kays Auto Repair | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --carbon:#0a0d11; --steel:#12171d; --panel:#161c23; --line:#28313b;
+    --grey:#9ba6b1; --chrome:#eef2f5; --cyan:#25d0c0; --cyan-dk:#0e8f83; --blue:#2b6cff;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"SF Mono",monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    --rail:96px;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--carbon);color:var(--chrome);line-height:1.65;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+
+  /* FIXED SIDE-RAIL NAV */
+  .rail{position:fixed;top:0;left:0;bottom:0;width:var(--rail);z-index:100;
+    background:linear-gradient(180deg,var(--steel),var(--carbon));border-right:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:1.2rem 0}
+  .rail .logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(150deg,var(--cyan),var(--cyan-dk));
+    display:flex;align-items:center;justify-content:center;color:#04110f;font-weight:900;font-size:1.2rem}
+  .rail .vnav{display:flex;flex-direction:column;gap:1.6rem;writing-mode:vertical-rl;transform:rotate(180deg)}
+  .rail .vnav a{font:700 .74rem var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--grey);transition:.2s;position:relative}
+  .rail .vnav a:hover,.rail .vnav a.active{color:var(--cyan)}
+  .rail .vnav a.active::after{content:"";position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+  .rail .phone{writing-mode:vertical-rl;transform:rotate(180deg);font:800 .78rem var(--mono);letter-spacing:.12em;color:var(--cyan)}
+
+  .topbar{display:none;position:fixed;top:0;left:0;right:0;z-index:100;align-items:center;justify-content:space-between;
+    padding:.7rem 1rem;background:rgba(10,13,17,.92);border-bottom:1px solid var(--line)}
+  .topbar .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(150deg,var(--cyan),var(--cyan-dk));display:flex;align-items:center;justify-content:center;color:#04110f;font-weight:900}
+  .topbar b{font-weight:800;font-size:.95rem}
+  .burger{background:none;border:1px solid var(--line);border-radius:6px;padding:.4rem .5rem;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+  .burger span{width:22px;height:2px;background:var(--chrome);display:block}
+  #mnav{display:none;flex-direction:column;position:fixed;top:54px;left:0;right:0;z-index:99;background:rgba(12,16,21,.98);border-bottom:1px solid var(--line);padding:.5rem 1rem}
+  #mnav a{padding:.75rem;border-bottom:1px solid var(--line);font:700 .82rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--grey)}
+  #mnav.open{display:flex}
+
+  .content{margin-left:var(--rail)}
+  .pad{padding:0 clamp(1.4rem,6vw,5rem)}
+  section{padding:6rem 0}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;z-index:-1;
+    background:radial-gradient(700px 500px at 85% 15%,rgba(37,208,192,.14),transparent 60%),
+      radial-gradient(600px 400px at 10% 90%,rgba(43,108,255,.1),transparent 60%)}
+  .kick{font:700 .78rem var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.3rem}
+  .hero h1{font-size:clamp(2.4rem,6.5vw,5rem);font-weight:900;line-height:1;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--grey);max-width:52ch;font-size:1.12rem;margin:1.4rem 0 2rem}
+  .row{display:flex;gap:.9rem;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.5rem;border-radius:8px;font-weight:800;font-size:.92rem;transition:transform .15s,background .2s,box-shadow .2s}
+  .btn-a{background:var(--cyan);color:#04110f;box-shadow:0 10px 30px rgba(37,208,192,.25)}.btn-a:hover{transform:translateY(-2px)}
+  .btn-b{border:1px solid var(--line);color:var(--chrome)}.btn-b:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .hero-rate{display:inline-flex;align-items:center;gap:.6rem;margin-top:2.2rem;font:600 .95rem var(--sans);color:var(--grey)}
+  .hero-rate .st{color:#ffd21a;letter-spacing:2px}
+  .hero-rate b{color:var(--chrome)}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:.75s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .eyebrow{font:700 .72rem var(--mono);letter-spacing:.26em;text-transform:uppercase;color:var(--cyan);margin-bottom:.7rem;display:inline-block}
+  h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;letter-spacing:-.02em;margin-bottom:1rem}
+
+  #about{background:linear-gradient(180deg,var(--carbon),var(--steel))}
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+  .about p{color:var(--grey);margin-bottom:1rem}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .fact{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.2rem}
+  .fact b{display:block;font-size:1.7rem;font-weight:900;background:linear-gradient(180deg,#fff,var(--grey));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .fact span{font:600 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--grey)}
+
+  .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-top:2rem}
+  .svc{background:linear-gradient(160deg,var(--panel),var(--steel));border:1px solid var(--line);border-radius:14px;padding:1.5rem;transition:transform .25s,border-color .25s}
+  .svc:hover{transform:translateY(-5px);border-color:var(--cyan)}
+  .svc .ic{width:44px;height:44px;color:var(--cyan);margin-bottom:.7rem}
+  .svc h3{font-size:1.05rem;margin-bottom:.35rem}.svc p{color:var(--grey);font-size:.9rem}
+
+  #contact{background:linear-gradient(180deg,var(--steel),var(--carbon))}
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+  .info{display:flex;gap:1rem;margin-bottom:1.3rem}
+  .info svg{width:22px;height:22px;color:var(--cyan);flex-shrink:0;margin-top:3px}
+  .info b{display:block;font:700 .66rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--grey)}
+  .info span,.info a{font-size:1.05rem}.info a:hover{color:var(--cyan)}
+  .rcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:2rem;text-align:center}
+  .rcard .big{font-size:3.6rem;font-weight:900;line-height:1;background:linear-gradient(180deg,#fff,var(--grey));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .rcard .st{color:#ffd21a;font-size:1.4rem;letter-spacing:3px;margin:.4rem 0}
+  .rcard .sub{color:var(--grey);font-size:.88rem}
+  .cta{display:flex;flex-direction:column;gap:.8rem;margin-top:1.3rem}
+  .btn-wide{justify-content:center;padding:1rem}
+
+  footer{border-top:1px solid var(--line);padding:2.2rem 0 3rem;text-align:center;color:var(--grey);font-size:.86rem}
+  footer b{color:var(--chrome)}footer a{color:var(--cyan)}
+
+  @media(max-width:860px){
+    .rail{display:none}.topbar{display:flex}.content{margin-left:0}
+    .pad{padding:0 clamp(1rem,5vw,2rem)}
+    .hero{min-height:auto;padding-top:6rem}
+    .about,.cgrid{grid-template-columns:1fr;gap:1.6rem}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
 
-<!-- ===== NAV ===== -->
-<nav>
-  <div class="nav-logo">
-    <div class="nav-logo-icon">
-      <!-- Wrench icon -->
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.7 19.2l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-4.8-2.4-7.1-1.4L9 6 6 9 1.6 4.7C.4 7 .9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-      </svg>
-    </div>
-    <div class="nav-brand">
-      Dan Kays Auto Repair
-      <span>Gainesville, FL</span>
-    </div>
-  </div>
+<aside class="rail">
+  <div class="logo">DK</div>
+  <nav class="vnav">
+    <a href="#home" class="active">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a href="tel:3523713888" class="phone">(352) 371-3888</a>
+</aside>
 
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-  </ul>
-
-  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-</nav>
-
-<div class="mobile-nav" id="mobileNav">
-  <ul>
-    <li><a href="#about" onclick="toggleMenu()">About</a></li>
-    <li><a href="#services" onclick="toggleMenu()">Services</a></li>
-    <li><a href="#contact" onclick="toggleMenu()">Contact Us</a></li>
-  </ul>
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:.6rem"><div class="logo">DK</div><b>Dan Kays Auto Repair</b></div>
+  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
 </div>
+<nav id="mnav"><a href="#about">About</a><a href="#services">Services</a><a href="#contact">Contact</a><a href="tel:3523713888">Call (352) 371-3888</a></nav>
 
-<!-- ===== HERO ===== -->
-<section class="hero" id="home">
-  <div class="hero-inner">
-    <div class="hero-badge">Gainesville's Trusted Mechanic</div>
-    <h1>Quality Auto Repair<br>You Can <span class="accent">Count On</span></h1>
-    <p>Honest diagnostics, reliable repairs, and straightforward service — keeping Gainesville drivers safely on the road.</p>
-    <div class="hero-actions">
-      <a href="tel:3523713888" class="btn btn-primary">Call (352) 371-3888</a>
-      <a href="#services" class="btn btn-outline">View Services</a>
+<div class="content">
+  <section class="hero pad" id="home">
+    <div class="kick">Gainesville, FL · Auto Repair</div>
+    <h1>Honest work.<br><em>Every job.</em></h1>
+    <p>Dan Kays Auto Repair delivers high-quality mechanical work for all makes and models — with transparent communication so you always know what's being done and why.</p>
+    <div class="row">
+      <a class="btn btn-a" href="tel:3523713888">Call (352) 371-3888</a>
+      <a class="btn btn-b" href="#services">Our Services</a>
     </div>
-    <div class="hero-rating">
-      <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-      <span>4.8 rating on Google Maps</span>
-    </div>
-  </div>
-</section>
+    <div class="hero-rate"><span class="st">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <b>4.8</b> rating on Google Maps</div>
+  </section>
 
-<!-- ===== ABOUT ===== -->
-<section class="about" id="about">
-  <div class="about-inner">
-    <div class="about-text">
-      <span class="section-label">About Us</span>
-      <h2 class="section-title">A Shop That Treats You Right</h2>
-      <p>Dan Kays Auto Repair is a full-service auto repair shop located in the heart of Gainesville, FL, committed to providing honest, high-quality mechanical work for all makes and models. We pride ourselves on transparent communication — you'll always know what needs to be done and why before any work begins.</p>
-      <p>Conveniently situated on SE 4th Street, our shop serves drivers throughout Gainesville and the surrounding area with the kind of straightforward, dependable service that keeps customers coming back. Whether it's a routine maintenance visit or a more complex repair, we treat every vehicle with the same level of care and attention to detail.</p>
-      <p>Our team uses up-to-date diagnostic equipment and quality parts so that every repair is done right the first time. Contact us for details on any specific service or to schedule your next appointment.</p>
-    </div>
-
-    <div class="about-stats">
-      <div class="stat-card">
-        <div class="stat-num">4.8</div>
-        <div class="stat-label">Google Rating</div>
+  <section id="about">
+    <div class="pad about">
+      <div class="reveal">
+        <span class="eyebrow">About the shop</span>
+        <h2>In the heart of Gainesville</h2>
+        <p>Dan Kays Auto Repair is a full-service auto repair shop located in the heart of Gainesville, FL, committed to honest, high-quality mechanical work for all makes and models.</p>
+        <p>We pride ourselves on transparent communication — you'll always know what needs to be done and why before any work begins. Contact us for hours and to schedule your next service.</p>
       </div>
-      <div class="stat-card">
-        <div class="stat-num">All</div>
-        <div class="stat-label">Makes &amp; Models</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">Full</div>
-        <div class="stat-label">Service Shop</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">GNV</div>
-        <div class="stat-label">Gainesville, FL</div>
+      <div class="facts reveal">
+        <div class="fact"><b id="rate">4.8</b><span>Google Rating</span></div>
+        <div class="fact"><b>All</b><span>Makes &amp; Models</span></div>
+        <div class="fact"><b>Full</b><span>Service Shop</span></div>
+        <div class="fact"><b>GNV</b><span>Gainesville, FL</span></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== SERVICES ===== -->
-<section class="services" id="services">
-  <div class="services-header">
-    <span class="section-label">What We Do</span>
-    <h2 class="section-title">Our Services</h2>
-    <p class="section-sub">From routine maintenance to complex repairs, we handle it all. Contact us for details on pricing and availability.</p>
-  </div>
-
-  <div class="services-grid">
-
-    <!-- Oil Change -->
-    <div class="service-card">
-      <div class="service-icon">
-        <!-- Oil drop -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
-        </svg>
+  <section id="services">
+    <div class="pad">
+      <span class="eyebrow reveal">What We Do</span>
+      <h2 class="reveal">Our Services</h2>
+      <div class="svc-grid">
+        <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg><h3>General Maintenance</h3><p>Oil changes, fluids, filters, and routine inspections to keep you running.</p></div>
+        <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 18v-6a8 8 0 0 1 16 0v6"/><path d="M2 18h20M9 12h6"/></svg><h3>Engine Diagnostics</h3><p>Computer-assisted diagnostics to pinpoint issues accurately.</p></div>
+        <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>Brake Service</h3><p>Pads, rotors, and brake fluid work for safe, reliable stopping.</p></div>
+        <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8V6M17 8V6M7 16v2M17 16v2"/></svg><h3>Transmission Service</h3><p>Fluid service and diagnostics for smooth, dependable shifting.</p></div>
+        <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke-linejoin="round"/></svg><h3>Electrical</h3><p>Battery, alternator, and electrical troubleshooting.</p></div>
+        <div class="svc reveal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 17V9a8 8 0 0 1 16 0v8"/><path d="M2 17h20M8 13h8"/></svg><h3>Suspension &amp; Steering</h3><p>Alignment and steering service to restore handling. Contact us for details.</p></div>
       </div>
-      <h3>Oil Change &amp; Lube</h3>
-      <p>Regular oil and filter changes using quality fluids to keep your engine running cleanly and efficiently.</p>
     </div>
+  </section>
 
-    <!-- Brakes -->
-    <div class="service-card">
-      <div class="service-icon">
-        <!-- Warning/brake circle -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-        </svg>
-      </div>
-      <h3>Brake Service</h3>
-      <p>Inspection, pad replacement, rotor resurfacing or replacement, and brake fluid service to ensure safe stopping power.</p>
-    </div>
-
-    <!-- Diagnostics -->
-    <div class="service-card">
-      <div class="service-icon">
-        <!-- Settings/diagnostic gear -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96a6.9 6.9 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.47.47 0 00-.59.22L2.74 8.87a.47.47 0 00.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.47.47 0 00-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-        </svg>
-      </div>
-      <h3>Engine Diagnostics</h3>
-      <p>Computer diagnostics to accurately identify the root cause of warning lights and performance issues.</p>
-    </div>
-
-    <!-- Tires -->
-    <div class="service-card">
-      <div class="service-icon">
-        <!-- Tire / circle -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zm0-14c-3.313 0-6 2.687-6 6s2.687 6 6 6 6-2.687 6-6-2.687-6-6-6zm0 10c-2.206 0-4-1.794-4-4s1.794-4 4-4 4 1.794 4 4-1.794 4-4 4zm0-6c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2z"/>
-        </svg>
-      </div>
-      <h3>Tires &amp; Alignment</h3>
-      <p>Tire rotation, balancing, alignment checks, and mounting to extend tire life and improve handling.</p>
-    </div>
-
-    <!-- AC -->
-    <div class="service-card">
-      <div class="service-icon">
-        <!-- AC / snowflake-ish -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 11h-4.17l3.24-3.24-1.41-1.42L15 11h-2V9l4.66-4.66-1.42-1.41L13 6.17V2h-2v4.17L7.76 2.93 6.34 4.34 11 9v2H9L4.34 6.34 2.93 7.76 6.17 11H2v2h4.17l-3.24 3.24 1.41 1.42L9 13h2v2l-4.66 4.66 1.42 1.41L11 17.83V22h2v-4.17l3.24 3.24 1.42-1.41L13 15v-2h2l4.66 4.66 1.41-1.42L17.83 13H22v-2z"/>
-        </svg>
-      </div>
-      <h3>A/C &amp; Heating</h3>
-      <p>Refrigerant recharge, leak detection, compressor service, and heating system repairs — critical for Florida's climate.</p>
-    </div>
-
-    <!-- General Repair -->
-    <div class="service-card">
-      <div class="service-icon">
-        <!-- Build/hammer icon -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.7 19.2l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-4.8-2.4-7.1-1.4L9 6 6 9 1.6 4.7C.4 7 .9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-        </svg>
-      </div>
-      <h3>General Mechanical Repair</h3>
-      <p>Suspension, steering, belts, hoses, batteries, starters, and more — comprehensive repairs for everyday vehicle issues.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- ===== CONTACT ===== -->
-<section class="contact" id="contact">
-  <div class="contact-inner">
-
-    <div>
-      <span class="section-label">Find Us</span>
-      <h2 class="section-title">Get In Touch</h2>
-      <p class="section-sub">Ready to schedule service or have a question? Give us a call or stop by — we're here to help.</p>
-
-      <ul class="contact-info-list">
-
-        <li>
-          <div class="contact-icon">
-            <!-- Location pin -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
-            </svg>
+  <section id="contact">
+    <div class="pad">
+      <span class="eyebrow reveal">Find Us</span>
+      <h2 class="reveal">Contact &amp; Location</h2>
+      <div class="cgrid" style="margin-top:1.5rem">
+        <div class="reveal">
+          <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg><div><b>Address</b><span>1124 SE 4th St<br>Gainesville, FL</span></div></div>
+          <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6.6 10.8a13 13 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11 11 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11 11 0 0 0 .58 3.6 1 1 0 0 1-.24 1l-2.24 2.2Z"/></svg><div><b>Phone</b><a href="tel:3523713888">(352) 371-3888</a></div></div>
+          <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Hours</b><span>Contact us for current hours</span></div></div>
+        </div>
+        <div class="reveal">
+          <div class="rcard">
+            <div class="big">4.8</div>
+            <div class="st">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="sub">Based on customer reviews · Rated on Google Maps</div>
           </div>
-          <div class="contact-detail">
-            <strong>Address</strong>
-            <span>1124 SE 4th St, Gainesville, FL</span>
+          <div class="cta">
+            <a class="btn btn-a btn-wide" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/Dan%20Kays%20Auto%20Repair%201124%20SE%204th%20St%2C%20Gainesville%2C%20FL">Open in Google Maps</a>
+            <a class="btn btn-b btn-wide" href="tel:3523713888">Call (352) 371-3888</a>
           </div>
-        </li>
-
-        <li>
-          <div class="contact-icon">
-            <!-- Phone -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-            </svg>
-          </div>
-          <div class="contact-detail">
-            <strong>Phone</strong>
-            <span><a href="tel:3523713888">(352) 371-3888</a></span>
-          </div>
-        </li>
-
-        <li>
-          <div class="contact-icon">
-            <!-- Clock / hours -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
-            </svg>
-          </div>
-          <div class="contact-detail">
-            <strong>Hours</strong>
-            <span>Contact us for details</span>
-          </div>
-        </li>
-
-      </ul>
-
-      <div class="contact-actions">
-        <a href="https://www.google.com/maps/search/Dan%20Kays%20Auto%20Repair%201124%20SE%204th%20St%2C%20Gainesville%2C%20FL"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="btn-directions">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/>
-          </svg>
-          Get Directions
-        </a>
-        <a href="tel:3523713888" class="btn-call">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-          </svg>
-          Call (352) 371-3888
-        </a>
-      </div>
-    </div>
-
-    <div>
-      <div class="rating-card">
-        <div class="rating-score">4.8</div>
-        <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="rating-label">Based on customer reviews</div>
-        <div class="rating-source">
-          <!-- Google "G" color SVG -->
-          <svg class="google-g" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-          </svg>
-          Rated on Google Maps
         </div>
       </div>
-
-      <!-- Simple map embed placeholder with styling -->
-      <div style="margin-top: 20px; border-radius: 10px; overflow: hidden; border: 1px solid #e4e7ee; background: #e8eaf0; min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; padding: 30px; text-align: center;">
-        <svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:#1a2744;opacity:0.4;" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
-        </svg>
-        <div style="color:#5a6275;font-size:0.95rem;font-weight:500;">1124 SE 4th St<br>Gainesville, FL</div>
-        <a href="https://www.google.com/maps/search/Dan%20Kays%20Auto%20Repair%201124%20SE%204th%20St%2C%20Gainesville%2C%20FL"
-           target="_blank"
-           rel="noopener noreferrer"
-           style="color:#c0392b;font-size:0.88rem;font-weight:600;text-decoration:underline;">
-          Open in Google Maps &rarr;
-        </a>
-      </div>
     </div>
+  </section>
 
-  </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="footer-brand">Dan Kays Auto Repair</div>
-  <p>1124 SE 4th St, Gainesville, FL</p>
-  <p><a href="tel:3523713888" style="color:rgba(208,212,220,0.75);">(352) 371-3888</a></p>
-  <hr class="footer-divider" />
-  <p>&copy; 2026 Dan Kays Auto Repair. All rights reserved.</p>
-</footer>
+  <footer>
+    <p><b>Dan Kays Auto Repair</b> &nbsp;·&nbsp; 1124 SE 4th St, Gainesville, FL &nbsp;·&nbsp; <a href="tel:3523713888">(352) 371-3888</a></p>
+    <p style="margin-top:.5rem">&copy; 2025 Dan Kays Auto Repair. All rights reserved.</p>
+  </footer>
+</div>
 
 <script>
-  function toggleMenu() {
-    var nav = document.getElementById('mobileNav');
-    nav.classList.toggle('open');
+(function(){
+  var burger=document.getElementById('burger'),mnav=document.getElementById('mnav');
+  burger.addEventListener('click',function(){mnav.classList.toggle('open');});
+  mnav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mnav.classList.remove('open');});});
+
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rev=document.querySelectorAll('.reveal');
+  if(reduce||!('IntersectionObserver' in window)){rev.forEach(function(r){r.classList.add('in');});}
+  else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+    rev.forEach(function(r){io.observe(r);});
+    var rEl=document.getElementById('rate');
+    if(rEl){var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+      var t0=null;function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1000,1);rEl.textContent=(4.8*(0.2+0.8*p)).toFixed(1);if(p<1)requestAnimationFrame(step);else rEl.textContent='4.8';}
+      requestAnimationFrame(step);ro.disconnect();}});},{threshold:.5});ro.observe(rEl);}
   }
 
-  // Close mobile nav when clicking a link
-  document.querySelectorAll('.mobile-nav a').forEach(function(link) {
-    link.addEventListener('click', function() {
-      document.getElementById('mobileNav').classList.remove('open');
-    });
-  });
-
-  // Close mobile nav when clicking outside
-  document.addEventListener('click', function(e) {
-    var nav = document.getElementById('mobileNav');
-    var hamburger = document.querySelector('.hamburger');
-    if (nav.classList.contains('open') && !nav.contains(e.target) && !hamburger.contains(e.target)) {
-      nav.classList.remove('open');
-    }
-  });
+  // side-rail active section highlight
+  var secs=['home','about','services','contact'].map(function(id){return document.getElementById(id);});
+  var navs=document.querySelectorAll('.rail .vnav a');
+  if('IntersectionObserver' in window){
+    var so=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting){navs.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id);});}
+    });},{rootMargin:'-45% 0px -45% 0px'});
+    secs.forEach(function(s){if(s)so.observe(s);});
+  }
+})();
 </script>
-
 </body>
 </html>
