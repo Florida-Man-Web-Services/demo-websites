@@ -1,748 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Low Cost Tires LLC – Gainesville, FL</title>
-  <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #111418;
-      color: #e8eaed;
-      line-height: 1.6;
-    }
-    a { text-decoration: none; color: inherit; }
-    img { display: block; max-width: 100%; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Low Cost Tires LLC – Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --paper:#f3efe6; --ink:#141210; --red:#e2231a; --char:#1c1a17;
+    --mut:#6b665e; --line:#d8d2c4; --accent:#ffcf00;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5;overflow-x:hidden}
+  a{color:inherit}
+  ::selection{background:var(--red);color:#fff}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 26px}
 
-    /* ===== COLOR PALETTE ===== */
-    /* Primary dark: #111418  |  Surface: #1c2026  |  Panel: #242b33  |
-       Accent red: #e03030    |  Accent yellow: #f5c518  |
-       Text primary: #e8eaed  |  Text muted: #9aa0a9                   */
+  header{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:2px solid var(--ink);
+    display:flex;justify-content:space-between;align-items:center;padding:14px 26px}
+  .mk{font-weight:900;letter-spacing:-.02em;font-size:1.1rem;text-decoration:none;display:flex;align-items:center;gap:.5rem}
+  .mk .dot{width:12px;height:12px;background:var(--red);border-radius:50%}
+  .mk small{display:block;font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mut);font-weight:700}
+  header nav a{margin-left:1.4rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;font-weight:800;text-decoration:none;color:var(--ink)}
+  header nav a:hover{color:var(--red)}
+  .call{background:var(--ink);color:var(--paper)!important;padding:.5rem 1rem;border-radius:2px}
+  @media(max-width:700px){header nav a:not(.call){display:none}}
 
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: #111418;
-      border-bottom: 3px solid #e03030;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .nav-logo .logo-icon {
-      width: 40px;
-      height: 40px;
-    }
-    .nav-logo .brand {
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      line-height: 1.2;
-    }
-    .nav-logo .brand span {
-      color: #e03030;
-    }
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #9aa0a9;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: #f5c518; }
+  /* editorial hero */
+  .masthead{padding:70px 0 40px;border-bottom:2px solid var(--ink)}
+  .tiny{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;font-weight:800;color:var(--red);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+  .display{font-size:clamp(3.2rem,15vw,12rem);font-weight:900;line-height:.82;letter-spacing:-.04em;margin:.2em 0 .1em;text-transform:uppercase}
+  .display .out{-webkit-text-stroke:2px var(--ink);color:transparent}
+  .display .hl{color:var(--red)}
+  .subrow{display:grid;grid-template-columns:1.4fr .6fr;gap:2rem;align-items:end;margin-top:1rem}
+  .subrow p{font-size:1.25rem;max-width:640px;color:var(--char)}
+  .subrow .price{text-align:right}
+  .subrow .price b{font-size:2.6rem;font-weight:900;display:block;line-height:1}
+  .subrow .price span{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mut);font-weight:700}
 
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 3px;
-      background: #e8eaed;
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 64px; left: 0; right: 0;
-      background: #1c2026;
-      border-bottom: 2px solid #e03030;
-      z-index: 99;
-      padding: 1.5rem 2rem;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      font-size: 1rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #e8eaed;
-      letter-spacing: 0.05em;
-    }
-    .mobile-menu a:hover { color: #f5c518; }
+  /* asymmetric about */
+  .about{display:grid;grid-template-columns:0.9fr 1.5fr 0.6fr;gap:0;border-bottom:2px solid var(--ink)}
+  .about>div{padding:56px 30px}
+  .about .idx{border-right:2px solid var(--ink);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--mut)}
+  .about .idx b{display:block;font-size:4rem;color:var(--ink);margin-top:.3rem}
+  .about .body h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;letter-spacing:-.02em;line-height:1.02;margin-bottom:1rem}
+  .about .body p{color:var(--char);font-size:1.05rem;max-width:520px}.about .body p+p{margin-top:.8rem}
+  .about .rail{border-left:2px solid var(--ink);display:flex;flex-direction:column;gap:1.4rem}
+  .rail .k{font-size:.66rem;text-transform:uppercase;letter-spacing:.18em;color:var(--mut);font-weight:800}
+  .rail .v{font-size:1.1rem;font-weight:800}
+  .rail .rate b{font-size:3rem;font-weight:900;color:var(--red);line-height:1;display:block}
+  .rail .rate .stars{color:var(--red);letter-spacing:2px}
 
-    /* ===== HERO ===== */
-    .hero {
-      margin-top: 64px;
-      background: linear-gradient(135deg, #111418 0%, #1c2026 60%, #242b33 100%);
-      padding: 5rem 2rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    /* decorative tire rings */
-    .hero::before,
-    .hero::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      border: 18px solid rgba(224, 48, 48, 0.08);
-      pointer-events: none;
-    }
-    .hero::before {
-      width: 500px; height: 500px;
-      top: -160px; right: -120px;
-    }
-    .hero::after {
-      width: 340px; height: 340px;
-      bottom: -120px; left: -80px;
-    }
-    .hero-badge {
-      display: inline-block;
-      background: #e03030;
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.3rem 1rem;
-      border-radius: 2px;
-      margin-bottom: 1.5rem;
-    }
-    .hero h1 {
-      font-size: clamp(2rem, 6vw, 3.8rem);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
-    }
-    .hero h1 .highlight { color: #e03030; }
-    .hero p.tagline {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: #9aa0a9;
-      max-width: 600px;
-      margin: 0 auto 2.5rem;
-    }
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #e03030;
-      color: #fff;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: background 0.2s, transform 0.15s;
-      border: none;
-      cursor: pointer;
-    }
-    .hero-cta:hover {
-      background: #c42525;
-      transform: translateY(-2px);
-    }
-    /* tire SVG illustration */
-    .tire-row {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-top: 3.5rem;
-      flex-wrap: wrap;
-    }
-    .tire-icon {
-      opacity: 0.18;
-    }
+  /* services offset list */
+  .svcsec{padding:64px 0;border-bottom:2px solid var(--ink)}
+  .svc{display:grid;grid-template-columns:80px 1fr 2fr;gap:1.5rem;align-items:baseline;padding:26px 0;border-top:1px solid var(--line);
+    transition:padding-left .25s,background .25s}
+  .svc:first-of-type{border-top:none}
+  .svc:hover{padding-left:18px;background:linear-gradient(90deg,rgba(226,35,26,.06),transparent)}
+  .svc .no{font-size:1.6rem;font-weight:900;color:var(--red)}
+  .svc h3{font-size:clamp(1.4rem,3vw,2.2rem);font-weight:900;letter-spacing:-.01em}
+  .svc p{color:var(--char);font-size:1rem}
 
-    /* ===== SECTION COMMON ===== */
-    section {
-      padding: 5rem 2rem;
-    }
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #e03030;
-      margin-bottom: 0.75rem;
-    }
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 1.25rem;
-    }
-    .section-divider {
-      width: 48px;
-      height: 4px;
-      background: #e03030;
-      border-radius: 2px;
-      margin-bottom: 2rem;
-    }
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+  /* contact */
+  .contact{padding:64px 0 90px;background:var(--ink);color:var(--paper)}
+  .contact .wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:3rem}
+  .contact h2{font-size:clamp(2.4rem,6vw,4.6rem);font-weight:900;letter-spacing:-.03em;line-height:.9;text-transform:uppercase}
+  .contact h2 .hl{color:var(--accent)}
+  .cinfo{display:flex;flex-direction:column;gap:1.2rem}
+  .ci b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.16em;color:#a49e92;font-weight:800;margin-bottom:.2rem}
+  .ci a,.ci span{font-size:1.3rem;font-weight:800;text-decoration:none;color:var(--paper)}
+  .ci a:hover{color:var(--accent)}
+  .dir{display:inline-block;margin-top:.6rem;background:var(--accent);color:var(--ink);font-weight:900;text-transform:uppercase;letter-spacing:.05em;text-decoration:none;padding:.9rem 1.8rem;border-radius:2px;transition:transform .15s}
+  .dir:hover{transform:translateX(6px)}
 
-    /* ===== ABOUT ===== */
-    .about {
-      background: #1c2026;
-    }
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    .about-text p {
-      color: #9aa0a9;
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-    .about-text p:last-child { margin-bottom: 0; }
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-    .stat-card {
-      background: #242b33;
-      border: 1px solid #2e3740;
-      border-radius: 8px;
-      padding: 1.5rem;
-      text-align: center;
-    }
-    .stat-card .num {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: #f5c518;
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-    .stat-card .lbl {
-      font-size: 0.82rem;
-      color: #9aa0a9;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s}
+  .reveal.in{opacity:1;transform:none}
+  footer{background:var(--ink);color:#a49e92;text-align:center;padding:24px;font-size:.8rem;border-top:1px solid #333}
+  footer b{color:var(--paper)}
 
-    /* ===== SERVICES ===== */
-    .services {
-      background: #111418;
-    }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-    .service-card {
-      background: #1c2026;
-      border: 1px solid #242b33;
-      border-radius: 8px;
-      padding: 2rem 1.75rem;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .service-card:hover {
-      border-color: #e03030;
-      transform: translateY(-4px);
-    }
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 1.25rem;
-    }
-    .service-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-    }
-    .service-card p {
-      color: #9aa0a9;
-      font-size: 0.92rem;
-    }
-
-    /* ===== CONTACT ===== */
-    .contact {
-      background: #1c2026;
-    }
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    .contact-info h2 { margin-bottom: 0; }
-    .contact-details {
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-    .contact-item .ci-icon {
-      flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      background: #242b33;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .contact-item .ci-icon svg {
-      width: 20px; height: 20px;
-    }
-    .contact-item .ci-text .ci-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #9aa0a9;
-      margin-bottom: 0.2rem;
-    }
-    .contact-item .ci-text .ci-val {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e8eaed;
-    }
-    .contact-item .ci-text .ci-val a {
-      color: #e8eaed;
-      transition: color 0.2s;
-    }
-    .contact-item .ci-text .ci-val a:hover { color: #f5c518; }
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #e03030;
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 0.8rem 1.75rem;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-top: 2rem;
-      transition: background 0.2s;
-    }
-    .directions-btn:hover { background: #c42525; }
-
-    /* rating card */
-    .rating-card {
-      background: #242b33;
-      border: 1px solid #2e3740;
-      border-radius: 12px;
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-    .rating-card .rc-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #9aa0a9;
-      margin-bottom: 1.25rem;
-    }
-    .stars {
-      display: flex;
-      justify-content: center;
-      gap: 0.3rem;
-      margin-bottom: 1rem;
-    }
-    .stars svg {
-      width: 32px; height: 32px;
-    }
-    .rating-num {
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: #f5c518;
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    .rating-sub {
-      font-size: 0.9rem;
-      color: #9aa0a9;
-    }
-    .rating-badge {
-      display: inline-block;
-      background: rgba(245, 197, 24, 0.12);
-      border: 1px solid rgba(245, 197, 24, 0.35);
-      color: #f5c518;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 20px;
-      margin-top: 1.25rem;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: #0d1014;
-      border-top: 2px solid #1c2026;
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .footer-brand {
-      font-size: 1.1rem;
-      font-weight: 800;
-    }
-    .footer-brand span { color: #e03030; }
-    .footer-address {
-      font-size: 0.88rem;
-      color: #9aa0a9;
-    }
-    .footer-copy {
-      font-size: 0.8rem;
-      color: #4a5260;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-stats { grid-template-columns: 1fr 1fr; }
-      .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-      .services-grid { grid-template-columns: 1fr; }
-      section { padding: 3.5rem 1.25rem; }
-    }
-    @media (max-width: 480px) {
-      .about-stats { grid-template-columns: 1fr; }
-      .hero { padding: 3.5rem 1.25rem 3rem; }
-    }
-  </style>
+  @media(max-width:820px){
+    .about{grid-template-columns:1fr}.about .idx,.about .rail{border:none;border-top:2px solid var(--ink)}
+    .subrow{grid-template-columns:1fr}.subrow .price{text-align:left}
+    .svc{grid-template-columns:50px 1fr;gap:.6rem}.svc p{grid-column:1/-1}
+    .contact .wrap{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}}
+</style>
 </head>
 <body>
-
-  <!-- ===== NAV ===== -->
+<header>
+  <a class="mk" href="#top"><span class="dot"></span><span>Low Cost Tires LLC<small>Gainesville, FL</small></span></a>
   <nav>
-    <div class="nav-logo">
-      <!-- SVG tire logo -->
-      <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="20" cy="20" r="18" stroke="#e03030" stroke-width="3"/>
-        <circle cx="20" cy="20" r="10" stroke="#e03030" stroke-width="2.5"/>
-        <circle cx="20" cy="20" r="4" fill="#e03030"/>
-        <line x1="20" y1="2" x2="20" y2="10" stroke="#9aa0a9" stroke-width="2" stroke-linecap="round"/>
-        <line x1="20" y1="30" x2="20" y2="38" stroke="#9aa0a9" stroke-width="2" stroke-linecap="round"/>
-        <line x1="2" y1="20" x2="10" y2="20" stroke="#9aa0a9" stroke-width="2" stroke-linecap="round"/>
-        <line x1="30" y1="20" x2="38" y2="20" stroke="#9aa0a9" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <div class="brand">Low Cost <span>Tires</span><br>LLC</div>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a class="call" href="tel:+13523381002">(352) 338-1002</a>
   </nav>
+</header>
 
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="closeMobile()">About</a>
-    <a href="#services" onclick="closeMobile()">Services</a>
-    <a href="#contact" onclick="closeMobile()">Contact</a>
-  </div>
-
-  <!-- ===== HERO ===== -->
-  <section class="hero" id="home">
-    <div class="hero-badge">Gainesville, FL</div>
-    <h1>Quality Used Tires<br><span class="highlight">At Prices That Work</span></h1>
-    <p class="tagline">Affordable, reliable used tires for every vehicle — keeping Gainesville drivers safely on the road without breaking the bank.</p>
-    <a href="#contact" class="hero-cta">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.64A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-      Call Us Today
-    </a>
-    <!-- decorative tires -->
-    <div class="tire-row" aria-hidden="true">
-      <svg class="tire-icon" width="72" height="72" viewBox="0 0 72 72" fill="none">
-        <circle cx="36" cy="36" r="33" stroke="#e03030" stroke-width="6"/>
-        <circle cx="36" cy="36" r="18" stroke="#e03030" stroke-width="4"/>
-        <circle cx="36" cy="36" r="7" fill="#e03030"/>
-      </svg>
-      <svg class="tire-icon" width="90" height="90" viewBox="0 0 90 90" fill="none">
-        <circle cx="45" cy="45" r="41" stroke="#e03030" stroke-width="7"/>
-        <circle cx="45" cy="45" r="22" stroke="#e03030" stroke-width="5"/>
-        <circle cx="45" cy="45" r="9" fill="#e03030"/>
-      </svg>
-      <svg class="tire-icon" width="72" height="72" viewBox="0 0 72 72" fill="none">
-        <circle cx="36" cy="36" r="33" stroke="#e03030" stroke-width="6"/>
-        <circle cx="36" cy="36" r="18" stroke="#e03030" stroke-width="4"/>
-        <circle cx="36" cy="36" r="7" fill="#e03030"/>
-      </svg>
+<main id="top">
+  <section class="masthead wrap">
+    <div class="tiny"><span>Used Tire Specialists</span><span>1409 S Main St &bull; Gainesville, FL</span></div>
+    <h1 class="display">Low <span class="hl">Cost</span><br><span class="out">Tires</span></h1>
+    <div class="subrow">
+      <p>Quality used tires and honest service for Gainesville drivers — real value without the runaround.</p>
+      <div class="price"><b>4.5</b><span>out of 5 &bull; Google Maps</span></div>
     </div>
   </section>
 
-  <!-- ===== ABOUT ===== -->
   <section class="about" id="about">
-    <div class="container">
-      <div class="about-inner">
-        <div class="about-text">
-          <div class="section-label">Who We Are</div>
-          <h2 class="section-title">Your Neighborhood Tire Shop in Gainesville</h2>
-          <div class="section-divider"></div>
-          <p>Low Cost Tires LLC is a used tire shop serving drivers throughout Gainesville and the surrounding North Central Florida area. We specialize in providing quality pre-owned tires at prices that fit real budgets, so you never have to choose between safety and affordability.</p>
-          <p>Whether you need a single replacement tire or a full set, our team inspects every tire for safety and reliability before it hits our lot. We carry a wide variety of sizes to fit cars, trucks, SUVs, and more.</p>
-          <p>Located on S Main St, we are easy to find and ready to help — no appointment necessary. Contact us for current inventory and pricing details.</p>
-        </div>
-        <div class="about-stats">
-          <div class="stat-card">
-            <div class="num">4.5</div>
-            <div class="lbl">Google Rating</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">★</div>
-            <div class="lbl">Top Local Shop</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">&#36;</div>
-            <div class="lbl">Budget Friendly</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">GNV</div>
-            <div class="lbl">Locally Owned</div>
-          </div>
-        </div>
-      </div>
+    <div class="idx reveal">Section<b>01</b>About</div>
+    <div class="body reveal">
+      <h2>Big savings, solid tires.</h2>
+      <p>Low Cost Tires LLC is a locally owned used tire shop on S Main Street in Gainesville. We help drivers stay safely on the road without overspending, offering quality used tires and dependable service.</p>
+      <p>Not sure what you need? We'll take a look and give you a straight answer. Contact us for current inventory and pricing details.</p>
+    </div>
+    <div class="rail reveal">
+      <div><div class="k">Google Maps</div><div class="rate"><b>4.5</b><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div><div class="k" style="margin-top:.3rem">Based on Google Maps reviews</div></div>
+      <div><div class="k">Location</div><div class="v">1409 S Main St</div></div>
+      <div><div class="k">Type</div><div class="v">Used Tire Shop</div></div>
     </div>
   </section>
 
-  <!-- ===== SERVICES ===== -->
-  <section class="services" id="services">
-    <div class="container">
-      <div class="section-label">What We Do</div>
-      <h2 class="section-title">Our Services</h2>
-      <div class="section-divider"></div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <!-- tire icon -->
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="24" cy="24" r="21" stroke="#e03030" stroke-width="3"/>
-            <circle cx="24" cy="24" r="12" stroke="#e03030" stroke-width="2"/>
-            <circle cx="24" cy="24" r="5" fill="#e03030"/>
-          </svg>
-          <h3>Used Tire Sales</h3>
-          <p>Wide selection of quality pre-owned tires in various sizes to fit cars, trucks, SUVs, and vans. Contact us for current inventory.</p>
-        </div>
-
-        <div class="service-card">
-          <!-- wrench icon -->
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M30 8c-4 0-7 3-7 7 0 1 .2 2 .5 2.9L8 34a3 3 0 104.2 4.2L27 22.5c.9.3 1.9.5 3 .5 4 0 7-3 7-7 0-.9-.2-1.8-.4-2.6L32 18l-4-4 4.6-4.6A7 7 0 0030 8z" stroke="#e03030" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3>Tire Installation</h3>
-          <p>Professional mounting and installation of tires on your vehicle. Fast service to get you back on the road quickly.</p>
-        </div>
-
-        <div class="service-card">
-          <!-- balance icon -->
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="24" cy="24" r="20" stroke="#e03030" stroke-width="2.5"/>
-            <line x1="24" y1="4" x2="24" y2="44" stroke="#e03030" stroke-width="2" stroke-linecap="round"/>
-            <line x1="4" y1="24" x2="44" y2="24" stroke="#e03030" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="24" cy="24" r="4" fill="#e03030"/>
-          </svg>
-          <h3>Tire Balancing</h3>
-          <p>Proper tire balancing to reduce vibration, improve ride comfort, and extend the life of your tires and suspension components.</p>
-        </div>
-
-        <div class="service-card">
-          <!-- swap icon -->
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 16l8-8 8 8M14 8v28" stroke="#e03030" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M42 32l-8 8-8-8M34 40V12" stroke="#e03030" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3>Tire Rotation</h3>
-          <p>Regular tire rotation service to promote even tread wear across all four tires, helping maximize their usable life.</p>
-        </div>
-
-        <div class="service-card">
-          <!-- flat/repair icon -->
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="24" cy="24" r="20" stroke="#e03030" stroke-width="2.5"/>
-            <path d="M16 24h16M24 16v16" stroke="#e03030" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
-          <h3>Flat Tire Assistance</h3>
-          <p>Caught a flat? Stop in and we will assess the damage and get you set up with a suitable replacement tire fast.</p>
-        </div>
-
-        <div class="service-card">
-          <!-- pressure/check icon -->
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="8" y="14" width="32" height="22" rx="4" stroke="#e03030" stroke-width="2.5"/>
-            <path d="M18 36v4M30 36v4M24 14V10" stroke="#e03030" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M17 26l4 4 10-10" stroke="#e03030" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3>Tire Inspection &amp; Pressure Check</h3>
-          <p>Quick visual inspection and pressure check to ensure your tires are safe and properly inflated before you head out.</p>
-        </div>
-
-      </div>
-    </div>
+  <section class="svcsec wrap" id="services">
+    <div class="tiny reveal" style="margin-bottom:1.4rem"><span>Section 02 — Services</span><span>What we offer</span></div>
+    <div class="svc reveal"><div class="no">01</div><h3>Used Tire Sales</h3><p>A rotating selection of quality used tires for cars, trucks, and SUVs. Contact us for current inventory and pricing.</p></div>
+    <div class="svc reveal"><div class="no">02</div><h3>Tire Installation</h3><p>Mounting and installation to get your tires on and ready to roll.</p></div>
+    <div class="svc reveal"><div class="no">03</div><h3>Flat Repair</h3><p>We check whether a puncture can be safely repaired, then patch or plug it properly.</p></div>
+    <div class="svc reveal"><div class="no">04</div><h3>Balancing &amp; Rotation</h3><p>Keep your ride smooth and your tread wearing evenly across all four tires.</p></div>
+    <div class="svc reveal"><div class="no">05</div><h3>Inspection</h3><p>Pressure checks and safety inspections so you know exactly where your tires stand.</p></div>
   </section>
 
-  <!-- ===== CONTACT ===== -->
   <section class="contact" id="contact">
-    <div class="container">
-      <div class="contact-inner">
-        <div class="contact-info">
-          <div class="section-label">Find Us</div>
-          <h2 class="section-title">Get In Touch</h2>
-          <div class="section-divider"></div>
-          <div class="contact-details">
-
-            <div class="contact-item">
-              <div class="ci-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#e03030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
-              </div>
-              <div class="ci-text">
-                <div class="ci-label">Address</div>
-                <div class="ci-val">1409 S Main St, Gainesville, FL</div>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="ci-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#e03030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.64A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
-                </svg>
-              </div>
-              <div class="ci-text">
-                <div class="ci-label">Phone</div>
-                <div class="ci-val"><a href="tel:+13523381002">(352) 338-1002</a></div>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="ci-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#e03030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
-                </svg>
-              </div>
-              <div class="ci-text">
-                <div class="ci-label">Hours</div>
-                <div class="ci-val">Contact us for details</div>
-              </div>
-            </div>
-
-          </div>
-
-          <a href="https://www.google.com/maps/search/Low%20Cost%20Tires%20LLC%201409%20S%20Main%20St" target="_blank" rel="noopener noreferrer" class="directions-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-            </svg>
-            Get Directions
-          </a>
-        </div>
-
-        <!-- Rating card -->
-        <div class="rating-card">
-          <div class="rc-title">Google Maps Rating</div>
-          <div class="stars" aria-label="4.5 out of 5 stars">
-            <!-- 4 full stars -->
-            <svg viewBox="0 0 24 24" fill="#f5c518" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24" fill="#f5c518" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24" fill="#f5c518" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24" fill="#f5c518" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <!-- half star -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <linearGradient id="half">
-                  <stop offset="50%" stop-color="#f5c518"/>
-                  <stop offset="50%" stop-color="#2e3740"/>
-                </linearGradient>
-              </defs>
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#half)"/>
-            </svg>
-          </div>
-          <div class="rating-num">4.5</div>
-          <div class="rating-sub">Based on Google Maps reviews</div>
-          <div class="rating-badge">Highly Rated Local Shop</div>
-        </div>
-
+    <div class="wrap">
+      <div class="reveal"><h2>Visit <span class="hl">Low Cost</span> Tires.</h2></div>
+      <div class="cinfo reveal">
+        <div class="ci"><b>Address</b><span>1409 S Main St, Gainesville, FL</span></div>
+        <div class="ci"><b>Phone</b><a href="tel:+13523381002">(352) 338-1002</a></div>
+        <div class="ci"><b>Hours</b><span>Contact us for current hours</span></div>
+        <a class="dir" href="https://www.google.com/maps/search/Low%20Cost%20Tires%20LLC%201409%20S%20Main%20St" target="_blank" rel="noopener">Get Directions &rarr;</a>
       </div>
     </div>
   </section>
+</main>
 
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">Low Cost <span>Tires</span> LLC</div>
-      <div class="footer-address">1409 S Main St, Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13523381002" style="color:#9aa0a9;">(352) 338-1002</a></div>
-      <div class="footer-copy">&copy; 2026 Low Cost Tires LLC. All rights reserved.</div>
-    </div>
-  </footer>
+<footer>
+  <b>Low Cost Tires LLC</b> &bull; 1409 S Main St, Gainesville, FL &bull; (352) 338-1002 &bull; &copy; 2026 &bull; All rights reserved.
+</footer>
 
-  <!-- ===== JS: hamburger ===== -->
-  <script>
-    var btn = document.getElementById('hamburger');
-    var menu = document.getElementById('mobileMenu');
-    btn.addEventListener('click', function() {
-      menu.classList.toggle('open');
-    });
-    function closeMobile() {
-      menu.classList.remove('open');
-    }
-  </script>
-
+<script>
+(function(){
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  // subtle parallax on the display headline
+  var d=document.querySelector('.display');
+  if(d&&!rm){
+    window.addEventListener('scroll',function(){
+      var y=window.scrollY;if(y<700)d.style.transform='translateX('+(-y*0.06)+'px)';
+    },{passive:true});
+  }
+})();
+</script>
 </body>
 </html>
