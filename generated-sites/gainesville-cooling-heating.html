@@ -1,1110 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gainesville Cooling &amp; Heating | HVAC Contractor</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --blue-dark: #0d2b4e;
-      --blue-mid: #1a4a7a;
-      --blue-accent: #2176ae;
-      --sky: #63b3ed;
-      --orange: #f47c20;
-      --orange-light: #fba85a;
-      --white: #ffffff;
-      --off-white: #f4f7fb;
-      --gray-light: #e2eaf3;
-      --gray-text: #5a6a7e;
-      --text-dark: #152238;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: var(--blue-dark);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--orange);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .nav-brand {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.01em;
-      line-height: 1.2;
-    }
-
-    .nav-brand span {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--sky);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--gray-light);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--orange-light);
-    }
-
-    .nav-cta {
-      background: var(--orange);
-      color: var(--white) !important;
-      padding: 8px 18px;
-      border-radius: 6px;
-      font-weight: 700 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--orange-light) !important;
-      color: var(--white) !important;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-      background: none;
-      border: none;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 3px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    #home {
-      padding-top: 64px;
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 55%, #1e5c96 100%);
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #home::before {
-      content: '';
-      position: absolute;
-      top: -80px;
-      right: -80px;
-      width: 520px;
-      height: 520px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(33,118,174,0.35) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    #home::after {
-      content: '';
-      position: absolute;
-      bottom: -60px;
-      left: -60px;
-      width: 340px;
-      height: 340px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(244,124,32,0.15) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 80px 5%;
-      display: flex;
-      align-items: center;
-      gap: 60px;
-      width: 100%;
-    }
-
-    .hero-text {
-      flex: 1;
-      z-index: 1;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: var(--sky);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 100px;
-      margin-bottom: 22px;
-    }
-
-    .hero-badge svg {
-      width: 14px;
-      height: 14px;
-      fill: var(--sky);
-    }
-
-    .hero-title {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 18px;
-    }
-
-    .hero-title .accent {
-      color: var(--orange-light);
-    }
-
-    .hero-tagline {
-      font-size: 1.15rem;
-      color: rgba(255,255,255,0.75);
-      max-width: 480px;
-      margin-bottom: 36px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--orange);
-      color: var(--white);
-      padding: 14px 30px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1rem;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-primary:hover {
-      background: var(--orange-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--white);
-      padding: 14px 30px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      border: 2px solid rgba(255,255,255,0.4);
-      transition: border-color 0.2s, background 0.2s;
-      display: inline-block;
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .hero-graphic {
-      flex: 0 0 auto;
-      z-index: 1;
-    }
-
-    .hero-graphic svg {
-      width: clamp(160px, 22vw, 280px);
-      height: auto;
-      opacity: 0.9;
-      filter: drop-shadow(0 8px 30px rgba(0,0,0,0.35));
-    }
-
-    /* ── SECTION SHARED ── */
-    section {
-      padding: 80px 5%;
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--blue-dark);
-      margin-bottom: 18px;
-      line-height: 1.2;
-    }
-
-    .section-divider {
-      width: 52px;
-      height: 4px;
-      background: var(--orange);
-      border-radius: 2px;
-      margin-bottom: 30px;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--off-white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--gray-text);
-      font-size: 1.04rem;
-      margin-bottom: 16px;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-features {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .feature-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 22px 24px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      box-shadow: 0 2px 12px rgba(13,43,78,0.07);
-      border-left: 4px solid var(--orange);
-    }
-
-    .feature-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--blue-dark);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .feature-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--orange-light);
-    }
-
-    .feature-content h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--blue-dark);
-      margin-bottom: 4px;
-    }
-
-    .feature-content p {
-      font-size: 0.88rem;
-      color: var(--gray-text);
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--white);
-    }
-
-    .services-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .services-header .section-divider {
-      margin: 0 auto 30px;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      background: var(--off-white);
-      border-radius: 14px;
-      padding: 32px 26px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--blue-accent), var(--sky));
-    }
-
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(13,43,78,0.12);
-    }
-
-    .service-icon {
-      width: 54px;
-      height: 54px;
-      background: var(--blue-dark);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-    }
-
-    .service-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: var(--orange-light);
-    }
-
-    .service-card h3 {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: var(--blue-dark);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--gray-text);
-      line-height: 1.55;
-    }
-
-    .service-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 14px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--blue-accent);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .service-link:hover {
-      color: var(--orange);
-    }
-
-    .service-link svg {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--blue-dark);
-      color: var(--white);
-    }
-
-    #contact .section-title {
-      color: var(--white);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-
-    .contact-item-icon {
-      width: 46px;
-      height: 46px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-item-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--orange-light);
-    }
-
-    .contact-item-body h4 {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 4px;
-    }
-
-    .contact-item-body p,
-    .contact-item-body a {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-    }
-
-    .contact-item-body a:hover {
-      color: var(--orange-light);
-    }
-
-    .rating-box {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 20px 22px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .rating-score {
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1;
-    }
-
-    .rating-details {
-      flex: 1;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-      margin-bottom: 5px;
-    }
-
-    .star {
-      width: 18px;
-      height: 18px;
-    }
-
-    .star-full { fill: #f5a623; }
-    .star-half { fill: #f5a623; }
-    .star-empty { fill: rgba(255,255,255,0.25); }
-
-    .rating-label {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.55);
-    }
-
-    .rating-label strong {
-      color: rgba(255,255,255,0.85);
-    }
-
-    .contact-cta {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 36px 32px;
-    }
-
-    .contact-cta h3 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .contact-cta p {
-      color: rgba(255,255,255,0.65);
-      font-size: 0.95rem;
-      margin-bottom: 28px;
-    }
-
-    .cta-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .btn-orange {
-      background: var(--orange);
-      color: var(--white);
-      padding: 14px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1rem;
-      text-align: center;
-      display: block;
-      transition: background 0.2s;
-    }
-
-    .btn-orange:hover {
-      background: var(--orange-light);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--white);
-      padding: 14px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      text-align: center;
-      display: block;
-      border: 2px solid rgba(255,255,255,0.3);
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.06);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #091a30;
-      padding: 30px 5%;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .footer-brand {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .footer-brand span {
-      color: var(--sky);
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.35);
-    }
-
-    .footer-nav {
-      display: flex;
-      gap: 20px;
-      list-style: none;
-    }
-
-    .footer-nav a {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.45);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-nav a:hover {
-      color: var(--sky);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .hero-inner {
-        flex-direction: column;
-        text-align: center;
-        gap: 40px;
-        padding: 60px 5%;
-      }
-
-      .hero-tagline {
-        max-width: none;
-      }
-
-      .hero-actions {
-        justify-content: center;
-      }
-
-      .hero-badge {
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .nav-links {
-        display: none;
-        position: fixed;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: var(--blue-dark);
-        flex-direction: column;
-        gap: 0;
-        padding: 12px 0;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links li a {
-        display: block;
-        padding: 12px 24px;
-        font-size: 1rem;
-      }
-
-      .nav-links .nav-cta {
-        margin: 8px 24px;
-        text-align: center;
-        border-radius: 8px;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 60px 5%;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gainesville Cooling &amp; Heating | HVAC Contractor</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#060f18;--panel:#0c1c2b;--cool:#60a5fa;--cool2:#2563eb;--warm:#fb7185;--warm2:#f43f5e;
+    --ice:#e6f0ff;--muted:#93a8c4;--line:rgba(140,180,240,.16);--text:#eaf2ff;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;background:var(--ink);color:var(--text);line-height:1.6;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
+
+  header{position:fixed;top:0;left:0;right:0;z-index:60;height:62px;display:flex;align-items:center}
+  header.scrolled{backdrop-filter:blur(12px);background:rgba(6,15,24,.6);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;width:100%}
+  .brand{display:flex;align-items:center;gap:.55rem;font-weight:800}
+  .mark{width:33px;height:33px;border-radius:9px;background:linear-gradient(135deg,var(--cool2),var(--warm2));display:grid;place-items:center}
+  .mark svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round}
+  nav a{margin-left:1.3rem;font-size:.85rem;color:var(--muted);font-weight:600}
+  nav a:hover{color:var(--ice)}
+  .call{background:linear-gradient(135deg,var(--cool2),var(--warm2));color:#fff;font-weight:800;padding:.45rem 1rem;border-radius:999px;font-size:.82rem}
+  @media(max-width:720px){nav a:not(.call){display:none}}
+
+  /* HERO with full-bleed canvas */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+  #bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .hero::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,15,24,.2),rgba(6,15,24,.7))}
+  .hero-in{position:relative;z-index:2;max-width:56ch}
+  .badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ice);border:1px solid var(--line);border-radius:999px;padding:.35rem .95rem;margin-bottom:1.3rem;background:rgba(0,0,0,.25)}
+  .badge svg{width:14px;height:14px;stroke:var(--cool);fill:none;stroke-width:2}
+  h1{font-size:clamp(2.4rem,7vw,4.6rem);line-height:1;font-weight:900;letter-spacing:-.03em}
+  h1 em{font-style:normal;background:linear-gradient(100deg,var(--cool),var(--warm));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{color:#cdd9ec;margin:1.3rem 0 2rem;max-width:44ch;font-size:1.08rem}
+  .actions{display:flex;gap:.8rem;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;border-radius:12px;font-weight:800}
+  .btn-p{background:linear-gradient(135deg,var(--cool2),var(--warm2));color:#fff;box-shadow:0 8px 30px rgba(37,99,235,.4)}
+  .btn-o{border:1px solid rgba(255,255,255,.25);color:var(--ice);background:rgba(255,255,255,.04)}
+  .btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round}
+
+  section.pad{padding:clamp(3rem,7vw,6rem) 0}
+  .eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--cool);font-weight:800}
+  h2{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:900;letter-spacing:-.01em;margin:.5rem 0 1rem}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+  .reveal.in{opacity:1;transform:none}
+
+  .about{display:grid;grid-template-columns:1.3fr .7fr;gap:3rem;align-items:center}
+  .about p{color:var(--muted)}.about p+p{margin-top:1rem}
+  .ratebox{border:1px solid var(--line);border-radius:20px;padding:2rem;text-align:center;background:linear-gradient(160deg,var(--panel),#0a1521)}
+  .rscore{font-size:3.4rem;font-weight:900;line-height:1;background:linear-gradient(120deg,var(--cool),var(--warm));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stars{display:flex;gap:2px;justify-content:center;margin:.5rem 0}
+  .stars svg{width:18px;height:18px}
+  .stars .full{fill:var(--warm)} .stars .half{fill:url(#hg)} .stars .empty{fill:rgba(255,255,255,.18)}
+  .ratebox small{color:var(--muted);font-size:.82rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem}
+  .card{border:1px solid var(--line);border-radius:16px;padding:1.5rem;background:var(--panel);transition:transform .3s,border-color .3s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(96,165,250,.45)}
+  .ico{width:46px;height:46px;border-radius:12px;background:rgba(96,165,250,.14);display:grid;place-items:center;margin-bottom:.8rem}
+  .ico svg{width:24px;height:24px;stroke:var(--cool);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .card h3{font-size:1.05rem;margin-bottom:.3rem}.card p{font-size:.88rem;color:var(--muted)}
+
+  .contact{background:linear-gradient(160deg,#0a1725,#070f18);border-top:1px solid var(--line)}
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem}
+  .info{display:grid;gap:1.1rem;margin-top:1rem}
+  .row{display:flex;gap:1rem;align-items:center}
+  .row .ico{margin:0;background:rgba(251,113,133,.14)}.row .ico svg{stroke:var(--warm)}
+  .row strong{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .row span,.row a{font-weight:700}
+  .dirbtn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;background:linear-gradient(135deg,var(--cool2),var(--warm2));color:#fff;font-weight:800;padding:.9rem 1.5rem;border-radius:12px}
+  .dirbtn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.4}
+  footer{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+  footer strong{color:var(--ice)}
+  @media(max-width:760px){.about,.cgrid{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="hg"><stop offset="50%" stop-color="#fb7185"/><stop offset="50%" stop-color="rgba(255,255,255,.18)"/></linearGradient></defs></svg>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#home">
-      <div class="nav-logo-icon">
-        <!-- Snowflake / AC unit icon -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93 4.93 19.07M12 7l-2 2 2 2 2-2-2-2zm0 6-2 2 2 2 2-2-2-2z" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
-      <div class="nav-brand">
-        Gainesville Cooling &amp; Heating
-        <span>HVAC Contractor &bull; Gainesville, FL</span>
-      </div>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Call Us</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+<header id="hdr">
+  <div class="wrap bar">
+    <a class="brand" href="#"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 2v20M5 5l14 14M19 5 5 19"/></svg></span>Gainesville Cooling &amp; Heating</a>
+    <nav>
+      <a href="#about">About</a><a href="#services">Services</a><a href="#contact">Contact</a>
+      <a class="call" href="tel:3523283429">(352) 328-3429</a>
+    </nav>
+  </div>
+</header>
 
-  <!-- HERO -->
-  <section id="home">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <div class="hero-badge">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-          Gainesville, FL
-        </div>
-        <h1 class="hero-title">
-          Stay Comfortable<br />
-          <span class="accent">All Year Long</span>
-        </h1>
-        <p class="hero-tagline">
-          Dependable air conditioning and heating services for homes and businesses across the Gainesville area. Fast response, honest service, lasting results.
-        </p>
-        <div class="hero-actions">
-          <a href="tel:3523283429" class="btn-primary">Call (352) 328-3429</a>
-          <a href="#services" class="btn-secondary">Our Services</a>
-        </div>
+<section class="hero">
+  <canvas id="bg"></canvas>
+  <div class="wrap hero-in">
+    <span class="badge"><svg viewBox="0 0 24 24"><path d="M12 2v20M5 5l14 14M19 5 5 19"/></svg>HVAC Contractor &bull; Gainesville, FL</span>
+    <h1>Your local <em>HVAC</em> specialists.</h1>
+    <p class="lead">Keeping Gainesville comfortable through every season with dependable cooling and heating service you can rely on.</p>
+    <div class="actions">
+      <a class="btn btn-p" href="tel:3523283429"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.5 19.5 0 0 1 4.7 12 19.8 19.8 0 0 1 1.7 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L7.9 8.6a16 16 0 0 0 6.3 6.3l1-1a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z"/></svg>Call (352) 328-3429</a>
+      <a class="btn btn-o" href="#services">Our Services</a>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="about">
+  <div class="wrap about reveal">
+    <div>
+      <span class="eyebrow">About</span>
+      <h2>Your local HVAC specialists</h2>
+      <p>Gainesville Cooling &amp; Heating is a local HVAC contractor serving homeowners and businesses throughout the Gainesville area. We provide dependable heating and cooling service tuned to Florida's demanding climate.</p>
+      <p>Whether you need a quick repair, a system replacement, or seasonal maintenance, we bring straightforward, professional service to every job. Contact us for details on how we can help.</p>
+    </div>
+    <div class="ratebox">
+      <div class="rscore">3.6</div>
+      <div class="stars">
+        <svg class="full" viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.3 17 14 18 21 12 17.5 6 21 7 14 2 9.3 9 9"/></svg>
+        <svg class="full" viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.3 17 14 18 21 12 17.5 6 21 7 14 2 9.3 9 9"/></svg>
+        <svg class="full" viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.3 17 14 18 21 12 17.5 6 21 7 14 2 9.3 9 9"/></svg>
+        <svg class="half" viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.3 17 14 18 21 12 17.5 6 21 7 14 2 9.3 9 9"/></svg>
+        <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.3 17 14 18 21 12 17.5 6 21 7 14 2 9.3 9 9"/></svg>
       </div>
-      <div class="hero-graphic">
-        <!-- HVAC illustration (SVG) -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <!-- AC unit body -->
-          <rect x="30" y="60" width="140" height="90" rx="12" fill="#1a4a7a" stroke="#2176ae" stroke-width="2"/>
-          <!-- Front panel -->
-          <rect x="44" y="74" width="112" height="62" rx="7" fill="#0d2b4e"/>
-          <!-- Vents -->
-          <rect x="54" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <rect x="66" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <rect x="78" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <rect x="90" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <rect x="102" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <rect x="114" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <rect x="126" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <rect x="138" y="84" width="6" height="42" rx="3" fill="#2176ae" opacity="0.7"/>
-          <!-- Status light -->
-          <circle cx="158" cy="80" r="5" fill="#4ade80" opacity="0.9"/>
-          <!-- Brand stripe -->
-          <rect x="30" y="60" width="140" height="10" rx="6" fill="#2176ae"/>
-          <!-- Cold air waves -->
-          <path d="M60 160 Q70 155 80 160 Q90 165 100 160 Q110 155 120 160" stroke="#63b3ed" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8"/>
-          <path d="M70 172 Q82 167 94 172 Q106 177 118 172" stroke="#63b3ed" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.55"/>
-          <!-- Snowflake decoration -->
-          <g transform="translate(165,130)" stroke="#f47c20" stroke-width="2" stroke-linecap="round" fill="none">
-            <line x1="0" y1="-14" x2="0" y2="14"/>
-            <line x1="-14" y1="0" x2="14" y2="0"/>
-            <line x1="-10" y1="-10" x2="10" y2="10"/>
-            <line x1="10" y1="-10" x2="-10" y2="10"/>
-            <circle cx="0" cy="0" r="4" fill="#f47c20" stroke="none"/>
-          </g>
-        </svg>
+      <small>3.6 / 5 on Google Maps &bull; 10 reviews</small>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="services">
+  <div class="wrap">
+    <div class="reveal"><span class="eyebrow">What we do</span><h2>Our services</h2></div>
+    <div class="grid" style="margin-top:1.5rem">
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="12" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg></div><h3>Air Conditioning</h3><p>Installation, replacement, and repair of central AC systems sized for Florida's heat.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2s5 4 5 9a5 5 0 0 1-10 0c0-5 5-9 5-9z"/></svg></div><h3>Heating Systems</h3><p>Heat pump and heating service to keep your home warm through cooler months.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Maintenance</h3><p>Seasonal tune-ups and inspections that keep systems efficient and reliable.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 5a10 10 0 0 1 0 14M5 5a10 10 0 0 0 0 14"/></svg></div><h3>Repairs &amp; Diagnostics</h3><p>Honest troubleshooting to get comfort systems back up and running quickly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pad contact" id="contact">
+  <div class="wrap cgrid">
+    <div class="reveal">
+      <span class="eyebrow">Get in touch</span>
+      <h2>Contact us</h2>
+      <p style="color:var(--muted)">Ready to schedule service or have a question? Reach out &mdash; we're here to help.</p>
+      <div class="info">
+        <div class="row"><div class="ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><strong>Address</strong><span>1501 NW 23rd Ave, Gainesville, FL</span></div></div>
+        <div class="row"><div class="ico"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.5 19.5 0 0 1 4.7 12 19.8 19.8 0 0 1 1.7 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L7.9 8.6a16 16 0 0 0 6.3 6.3l1-1a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z"/></svg></div><div><strong>Phone</strong><a href="tel:3523283429">(352) 328-3429</a></div></div>
+        <div class="row"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg></div><div><strong>Hours</strong><span>Contact us for details</span></div></div>
       </div>
     </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">Your Local HVAC Specialists</h2>
-          <div class="section-divider"></div>
-          <p>Gainesville Cooling &amp; Heating provides reliable heating, ventilation, and air conditioning services to homeowners and businesses throughout the Gainesville area. Florida's heat and humidity demand HVAC systems you can count on, and our team is equipped to keep yours running at its best.</p>
-          <p>We handle everything from routine maintenance and system tune-ups to full equipment installations and emergency repairs. Whether your AC has stopped cooling on a hot summer day or your heat is struggling in the cooler months, we respond quickly and work to resolve the problem right the first time.</p>
-          <p>Our goal is straightforward: honest assessments, quality workmanship, and comfort restored as fast as possible. Contact us for details on pricing or service availability.</p>
-        </div>
-        <div class="about-features">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24"><path d="M13 2.05V4.07C16.95 4.56 20 7.92 20 12C20 14.62 18.81 16.97 16.96 18.56L18.41 20C20.64 18.03 22 15.17 22 12C22 6.82 18.05 2.55 13 2.05M11 2.05C5.95 2.55 2 6.81 2 12C2 15.17 3.36 18.03 5.59 20L7.04 18.56C5.19 16.97 4 14.62 4 12C4 7.92 7.05 4.56 11 4.07V2.05M12 6C8.69 6 6 8.69 6 12C6 14.22 7.21 16.15 9 17.19V19C9 19.55 9.45 20 10 20H14C14.55 20 15 19.55 15 19V17.19C16.79 16.15 18 14.22 18 12C18 8.69 15.31 6 12 6Z"/></svg>
-            </div>
-            <div class="feature-content">
-              <h4>Fast Response</h4>
-              <p>Prompt service when your system is down. Contact us for current availability.</p>
-            </div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-            </div>
-            <div class="feature-content">
-              <h4>Reliable &amp; Honest</h4>
-              <p>We give straightforward diagnoses and transparent recommendations — no upsells.</p>
-            </div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24"><path d="M19.5 6c-1.31 0-2.37 1.01-2.48 2.3L11.43 11c-.28-.45-.72-.8-1.24-.94l-.93-5.58C10.13 4.01 10.87 3 10.87 2c0-1.1-.9-2-2-2s-2 .9-2 2c0 1 .73 1.82 1.7 1.97L9.49 7.5C8.49 7.85 7.75 8.75 7.75 9.87c0 1.37 1.12 2.49 2.49 2.49.42 0 .82-.11 1.17-.29l6.09 3.91c-.14.35-.22.73-.22 1.13 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg>
-            </div>
-            <div class="feature-content">
-              <h4>Experienced Technicians</h4>
-              <p>Skilled professionals servicing all major HVAC brands and system types.</p>
-            </div>
-          </div>
-        </div>
+    <div class="reveal">
+      <div class="ratebox" style="text-align:left">
+        <h2 style="margin-top:0">Find us</h2>
+        <p style="color:var(--muted)">Located at 1501 NW 23rd Ave in Gainesville, FL. Open Google Maps for directions.</p>
+        <a class="dirbtn" href="https://www.google.com/maps/search/Gainesville%20Cooling%20%26%20Heating%201501%20NW%2023rd%20Ave" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Get Directions</a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="section-inner">
-      <div class="services-header">
-        <p class="section-label">What We Do</p>
-        <h2 class="section-title">Our HVAC Services</h2>
-        <div class="section-divider"></div>
-      </div>
-      <div class="services-grid">
+<footer>
+  <div class="wrap"><strong>Gainesville Cooling &amp; Heating</strong> &bull; 1501 NW 23rd Ave, Gainesville, FL &bull; <a href="tel:3523283429">(352) 328-3429</a>
+  <div style="margin-top:.4rem;opacity:.6">&copy; 2026 Gainesville Cooling &amp; Heating</div></div>
+</footer>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7 1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91 1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
-          </div>
-          <h3>AC Installation &amp; Replacement</h3>
-          <p>New system installation and full equipment replacements for residential and light commercial properties. Contact us for details.</p>
-          <a href="#contact" class="service-link">
-            Get a Quote
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-          </a>
-        </div>
+<script>
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hdr=document.getElementById('hdr');
+  window.addEventListener('scroll',function(){hdr.classList.toggle('scrolled',window.scrollY>30);});
+  var revs=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.15});
+    revs.forEach(function(el,i){el.style.transitionDelay=(i%4*70)+'ms';io.observe(el);});
+    setTimeout(function(){revs.forEach(function(el){el.classList.add('in');});},2200);
+  } else {
+    revs.forEach(function(el){el.classList.add('in');});
+  }
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm1-11h-2v3H8v2h3v3h2v-3h3v-2h-3V8z"/></svg>
-          </div>
-          <h3>AC Repair</h3>
-          <p>Diagnosing and repairing all types of air conditioning issues, from refrigerant leaks and compressor problems to electrical faults and frozen coils.</p>
-          <a href="#contact" class="service-link">
-            Contact Us
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-          </a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
-          </div>
-          <h3>Heating System Service</h3>
-          <p>Repair, maintenance, and installation of heat pumps, furnaces, and other heating systems to keep you warm during Gainesville's cooler months.</p>
-          <a href="#contact" class="service-link">
-            Learn More
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-          </a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-          </div>
-          <h3>Preventive Maintenance</h3>
-          <p>Scheduled tune-ups and inspections that keep your system running efficiently, extend equipment life, and help avoid unexpected breakdowns.</p>
-          <a href="#contact" class="service-link">
-            Schedule Service
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-          </a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-5h2v5h6v-9h3L12 3zm0 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-          </div>
-          <h3>Indoor Air Quality</h3>
-          <p>Air filtration upgrades, UV purification systems, and humidity control solutions to improve the air inside your home or office.</p>
-          <a href="#contact" class="service-link">
-            Contact Us
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-          </a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34C6.99 3.34 5.25 4 4 5.25 2.75 6.5 2.11 8.2 2 9.99 1.89 11.8 2.35 13.56 3.28 15.07L1.5 21l6.07-1.68C9.07 20.07 10.54 20.5 12 20.5c5.52 0 10-4.48 10-10 0-2.68-1.05-5.19-2.93-7.07zm-7.07 15.57c-1.3 0-2.58-.35-3.7-1.01l-.27-.16-2.77.77.77-2.73-.18-.28c-.71-1.15-1.09-2.47-1.09-3.81C4.76 8 8 4.76 12 4.76c1.93 0 3.73.75 5.08 2.11A7.18 7.18 0 0 1 19.24 12c0 3.97-3.24 7.24-7.24 7.24zm3.98-5.43c-.22-.11-1.29-.64-1.49-.71-.2-.08-.35-.11-.49.11-.14.22-.55.71-.68.86-.13.14-.25.16-.47.05-.22-.11-.93-.34-1.77-1.09-.65-.58-1.09-1.3-1.22-1.52-.13-.22-.01-.34.1-.45.1-.1.22-.25.33-.38.11-.13.14-.22.22-.36.07-.14.04-.27-.02-.38-.05-.11-.49-1.18-.67-1.62-.18-.42-.36-.37-.5-.37h-.42c-.14 0-.38.05-.58.27-.2.22-.76.74-.76 1.81 0 1.07.78 2.1.89 2.24.11.14 1.53 2.34 3.71 3.28.52.22.93.36 1.24.46.52.17 1 .14 1.37.09.42-.06 1.29-.53 1.47-1.04.18-.51.18-.95.13-1.04-.05-.1-.2-.16-.42-.27z"/></svg>
-          </div>
-          <h3>Duct Inspection &amp; Repair</h3>
-          <p>Inspection, sealing, and repair of ductwork to eliminate air loss, improve efficiency, and ensure even cooling and heating throughout your space.</p>
-          <a href="#contact" class="service-link">
-            Contact Us
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <div class="contact-grid">
-        <div>
-          <p class="section-label" style="color: var(--sky);">Get In Touch</p>
-          <h2 class="section-title">Contact &amp; Location</h2>
-          <div class="section-divider"></div>
-
-          <div class="contact-info">
-            <div class="contact-item">
-              <div class="contact-item-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-              </div>
-              <div class="contact-item-body">
-                <h4>Address</h4>
-                <p>1501 NW 23rd Ave<br/>Gainesville, FL</p>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-item-icon">
-                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-              </div>
-              <div class="contact-item-body">
-                <h4>Phone</h4>
-                <a href="tel:3523283429">(352) 328-3429</a>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-item-icon">
-                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-              </div>
-              <div class="contact-item-body">
-                <h4>Hours</h4>
-                <p>Contact us for current availability</p>
-              </div>
-            </div>
-
-            <div class="rating-box">
-              <div class="rating-score">3.6</div>
-              <div class="rating-details">
-                <div class="stars">
-                  <!-- 3 full stars -->
-                  <svg class="star" viewBox="0 0 24 24"><path class="star-full" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <svg class="star" viewBox="0 0 24 24"><path class="star-full" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <svg class="star" viewBox="0 0 24 24"><path class="star-full" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <!-- half star -->
-                  <svg class="star" viewBox="0 0 24 24">
-                    <defs><linearGradient id="half"><stop offset="60%" stop-color="#f5a623"/><stop offset="60%" stop-color="rgba(255,255,255,0.25)"/></linearGradient></defs>
-                    <path fill="url(#half)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  <!-- empty star -->
-                  <svg class="star" viewBox="0 0 24 24"><path class="star-empty" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </div>
-                <p class="rating-label"><strong>3.6 / 5</strong> on Google Maps &bull; 10 reviews</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="contact-cta">
-          <h3>Ready to Get Started?</h3>
-          <p>Whether you need a repair, a new installation, or a routine tune-up, our team is ready to help. Give us a call or get directions to visit us.</p>
-          <div class="cta-actions">
-            <a href="tel:3523283429" class="btn-orange">Call (352) 328-3429</a>
-            <a href="https://www.google.com/maps/search/Gainesville%20Cooling%20%26%20Heating%201501%20NW%2023rd%20Ave" target="_blank" rel="noopener noreferrer" class="btn-ghost">Get Directions</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">Gainesville Cooling &amp; <span>Heating</span></div>
-      <ul class="footer-nav">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <p class="footer-copy">&copy; 2026 Gainesville Cooling &amp; Heating. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <script>
-    // Hamburger toggle
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-    });
-    // Close menu on link click
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('open'));
-    });
-  </script>
+  // full-bleed canvas: flowing air currents, cool->warm
+  var c=document.getElementById('bg'),x=c.getContext('2d'),W,H,streams=[];
+  function rs(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;
+    streams=[];var n=Math.min(70,Math.round(W/22));
+    for(var i=0;i<n;i++){streams.push({x:Math.random()*W,y:Math.random()*H,len:Math.random()*90+40,sp:Math.random()*1.2+.4,o:Math.random()*.5+.15,warm:Math.random()>.5});}
+  }
+  rs();window.addEventListener('resize',rs);
+  function frame(){
+    x.clearRect(0,0,W,H);
+    for(var i=0;i<streams.length;i++){var s=streams[i];
+      var g=x.createLinearGradient(s.x,s.y,s.x+s.len,s.y);
+      var col=s.warm?'251,113,133':'96,165,250';
+      g.addColorStop(0,'rgba('+col+',0)');g.addColorStop(1,'rgba('+col+','+s.o+')');
+      x.strokeStyle=g;x.lineWidth=1.4;x.beginPath();
+      x.moveTo(s.x,s.y);x.quadraticCurveTo(s.x+s.len*.5,s.y-12,s.x+s.len,s.y);x.stroke();
+      s.x+=s.sp;if(s.x>W+s.len){s.x=-s.len;s.y=Math.random()*H;}
+    }
+    if(!rm)requestAnimationFrame(frame);
+  }
+  frame();
+</script>
 </body>
 </html>

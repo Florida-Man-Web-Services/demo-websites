@@ -1,990 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grand HVAC Repair Gainesville</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy: #1a2b45;
-      --steel: #2e4a6e;
-      --sky: #4a90d9;
-      --light-sky: #7ab8f0;
-      --orange: #e07b30;
-      --orange-dark: #c0621e;
-      --light-gray: #f4f7fb;
-      --mid-gray: #e0e8f0;
-      --text-dark: #1a2b45;
-      --text-mid: #4a5e78;
-      --text-light: #ffffff;
-      --white: #ffffff;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--orange);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .nav-logo-text {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-
-    .nav-logo-text span {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 400;
-      color: var(--light-sky);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--mid-gray);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--light-sky); }
-
-    .nav-cta {
-      background: var(--orange);
-      color: var(--white) !important;
-      padding: 8px 18px;
-      border-radius: 6px;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover { background: var(--orange-dark) !important; color: var(--white) !important; }
-
-    /* hamburger */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 64px;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 60%, #1d3a5e 100%);
-      color: var(--white);
-      padding: 90px 5% 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      min-height: 440px;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 40%, rgba(74,144,217,0.18) 0%, transparent 65%),
-                  radial-gradient(ellipse at 20% 80%, rgba(224,123,48,0.12) 0%, transparent 55%);
-      pointer-events: none;
-    }
-
-    /* decorative gear shapes */
-    .hero-deco {
-      position: absolute;
-      right: 6%;
-      top: 50%;
-      transform: translateY(-50%);
-      opacity: 0.06;
-      pointer-events: none;
-    }
-
-    .hero-deco svg {
-      width: 260px;
-      height: 260px;
-      fill: var(--white);
-    }
-
-    .hero-content {
-      position: relative;
-      max-width: 680px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(74,144,217,0.22);
-      border: 1px solid rgba(74,144,217,0.5);
-      color: var(--light-sky);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 5px 16px;
-      border-radius: 20px;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 18px;
-      color: var(--white);
-    }
-
-    .hero h1 em {
-      font-style: normal;
-      color: var(--orange);
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: var(--mid-gray);
-      margin-bottom: 36px;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      padding: 14px 30px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-primary:hover { background: var(--orange-dark); transform: translateY(-1px); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      text-decoration: none;
-      padding: 13px 30px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      border: 2px solid rgba(255,255,255,0.35);
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.08);
-      transform: translateY(-1px);
-    }
-
-    /* ── TRUST BAR ── */
-    .trust-bar {
-      background: var(--orange);
-      color: var(--white);
-      padding: 14px 5%;
-      display: flex;
-      justify-content: center;
-      gap: 48px;
-      flex-wrap: wrap;
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-
-    .trust-item svg {
-      width: 18px;
-      height: 18px;
-      fill: rgba(255,255,255,0.85);
-      flex-shrink: 0;
-    }
-
-    /* ── SECTIONS ── */
-    section { padding: 72px 5%; }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 18px;
-      line-height: 1.2;
-    }
-
-    .section-title em {
-      font-style: normal;
-      color: var(--orange);
-    }
-
-    .section-sub {
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      max-width: 600px;
-      line-height: 1.7;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--light-gray);
-    }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .about-visual {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .about-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 28px 20px;
-      text-align: center;
-      box-shadow: 0 2px 16px rgba(26,43,69,0.08);
-      border-top: 3px solid var(--sky);
-    }
-
-    .about-card:nth-child(2) { border-top-color: var(--orange); }
-    .about-card:nth-child(3) { border-top-color: var(--orange); }
-    .about-card:nth-child(4) { border-top-color: var(--sky); }
-
-    .about-card svg {
-      width: 34px;
-      height: 34px;
-      fill: var(--sky);
-      margin-bottom: 10px;
-    }
-
-    .about-card:nth-child(2) svg,
-    .about-card:nth-child(3) svg { fill: var(--orange); }
-
-    .about-card-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 4px;
-    }
-
-    .about-card-text {
-      font-size: 0.78rem;
-      color: var(--text-mid);
-    }
-
-    .about-text p {
-      color: var(--text-mid);
-      font-size: 1.02rem;
-      line-height: 1.8;
-      margin-bottom: 16px;
-    }
-
-    .about-text p:last-child { margin-bottom: 0; }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--white);
-    }
-
-    .services-header {
-      max-width: 1100px;
-      margin: 0 auto 48px;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .service-card {
-      background: var(--light-gray);
-      border-radius: 14px;
-      padding: 32px 28px;
-      border: 1px solid var(--mid-gray);
-      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--sky), var(--orange));
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 32px rgba(26,43,69,0.13);
-      transform: translateY(-3px);
-      border-color: var(--sky);
-    }
-
-    .service-card:hover::before { opacity: 1; }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: linear-gradient(135deg, var(--navy), var(--steel));
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .service-icon svg {
-      width: 26px;
-      height: 26px;
-      fill: var(--white);
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--text-mid);
-      line-height: 1.65;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--light-gray);
-    }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: start;
-    }
-
-    .contact-details h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--navy);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 20px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    .contact-item-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--navy);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-item-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--white);
-    }
-
-    .contact-item-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--sky);
-      margin-bottom: 2px;
-    }
-
-    .contact-item-value {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--navy);
-    }
-
-    .contact-item-value a {
-      color: var(--navy);
-      text-decoration: none;
-    }
-
-    .contact-item-value a:hover { color: var(--sky); }
-
-    /* rating */
-    .rating-box {
-      background: var(--white);
-      border: 1px solid var(--mid-gray);
-      border-radius: 12px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 28px;
-      box-shadow: 0 2px 8px rgba(26,43,69,0.06);
-    }
-
-    .rating-stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .rating-stars svg {
-      width: 20px;
-      height: 20px;
-      fill: #d0d0d0;
-    }
-
-    .rating-meta strong {
-      display: block;
-      font-size: 0.95rem;
-      color: var(--navy);
-      font-weight: 700;
-    }
-
-    .rating-meta span {
-      font-size: 0.8rem;
-      color: var(--text-mid);
-    }
-
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--sky);
-      color: var(--white);
-      text-decoration: none;
-      padding: 14px 26px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .directions-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--white);
-    }
-
-    .directions-btn:hover { background: var(--navy); transform: translateY(-1px); }
-
-    .contact-cta-panel {
-      background: var(--navy);
-      border-radius: 16px;
-      padding: 40px 36px;
-      color: var(--white);
-    }
-
-    .contact-cta-panel h3 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 12px;
-      line-height: 1.25;
-    }
-
-    .contact-cta-panel p {
-      font-size: 0.95rem;
-      color: var(--mid-gray);
-      margin-bottom: 28px;
-      line-height: 1.65;
-    }
-
-    .cta-phone-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      padding: 16px 24px;
-      border-radius: 10px;
-      font-size: 1.2rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-      transition: background 0.2s;
-    }
-
-    .cta-phone-link svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .cta-phone-link:hover { background: var(--orange-dark); }
-
-    .cta-note {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.5);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #111d2e;
-      color: rgba(255,255,255,0.55);
-      text-align: center;
-      padding: 28px 5%;
-      font-size: 0.82rem;
-      line-height: 1.8;
-    }
-
-    footer strong {
-      color: rgba(255,255,255,0.85);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 860px) {
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-
-      .about-visual {
-        order: -1;
-      }
-
-      .hero-deco { display: none; }
-    }
-
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-
-      .nav-toggle { display: flex; }
-
-      nav.open .nav-links {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: var(--navy);
-        padding: 20px 5%;
-        gap: 0;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      }
-
-      nav.open .nav-links li {
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-      }
-
-      nav.open .nav-links a {
-        display: block;
-        padding: 14px 0;
-        font-size: 1rem;
-      }
-
-      nav.open .nav-links .nav-cta {
-        margin: 12px 0;
-        text-align: center;
-        border-radius: 8px;
-        background: var(--orange);
-        border: none;
-        padding: 14px 0;
-      }
-
-      .trust-bar { gap: 24px; }
-
-      section { padding: 56px 5%; }
-
-      .about-visual {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero { padding: 60px 5% 60px; min-height: 360px; }
-    }
-
-    @media (max-width: 400px) {
-      .about-visual { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grand HVAC Repair Gainesville</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#08131c;--steel:#12283a;--cool:#38bdf8;--cool2:#0369a1;--warm:#facc15;--warm2:#f59e0b;
+    --ice:#dcf1fb;--muted:#8aa6bb;--line:rgba(140,190,220,.16);--text:#eef7fc;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;background:var(--ink);color:var(--text);line-height:1.6;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
+
+  header{position:fixed;top:0;left:0;right:0;z-index:70;height:62px;display:flex;align-items:center;
+    backdrop-filter:blur(10px);background:rgba(8,19,28,.5);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;width:100%}
+  .brand{display:flex;align-items:center;gap:.55rem;font-weight:800;font-size:.96rem}
+  .mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--cool2),var(--warm2));display:grid;place-items:center}
+  .mark svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round}
+  .call{background:linear-gradient(135deg,var(--cool2),var(--warm2));color:#04121d;font-weight:800;padding:.45rem 1rem;border-radius:999px;font-size:.82rem}
+
+  /* PINNED PARALLAX HERO */
+  .stage{position:relative;height:220vh}
+  .pin{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .layer{position:absolute;inset:0;will-change:transform}
+  .l-sky{background:radial-gradient(70% 90% at 50% 20%,rgba(56,189,248,.18),transparent 60%),radial-gradient(60% 60% at 80% 80%,rgba(250,204,21,.12),transparent 60%)}
+  .l-flakes svg{position:absolute;stroke:rgba(220,241,251,.14);fill:none;stroke-width:2}
+  .l-flakes .f1{width:200px;top:12%;left:6%}
+  .l-flakes .f2{width:280px;bottom:8%;right:4%}
+  .l-flakes .f3{width:150px;top:55%;left:70%}
+  .hero-content{position:relative;z-index:5;text-align:center;padding:0 1.2rem;max-width:760px}
+  .badge{display:inline-block;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);border:1px solid var(--line);border-radius:999px;padding:.35rem .95rem;margin-bottom:1.4rem;background:rgba(0,0,0,.2)}
+  h1{font-size:clamp(2.4rem,7vw,5rem);line-height:1.02;font-weight:900;letter-spacing:-.03em}
+  h1 em{font-style:normal;background:linear-gradient(100deg,var(--cool),var(--warm));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{color:#cbdcea;margin:1.3rem auto 2rem;max-width:46ch;font-size:1.08rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;border-radius:12px;font-weight:800}
+  .btn-p{background:linear-gradient(135deg,var(--cool2),var(--warm2));color:#04121d;box-shadow:0 8px 30px rgba(3,105,161,.4)}
+  .btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round}
+  .scrollcue{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:5;color:var(--muted);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase}
+  .scrollcue svg{width:20px;height:20px;stroke:var(--cool);fill:none;stroke-width:2;display:block;margin:.4rem auto 0;animation:bob 1.6s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(8px)}}
+
+  section.pad{padding:clamp(3rem,7vw,6rem) 0;position:relative;z-index:2;background:var(--ink)}
+  .eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--cool);font-weight:800}
+  h2{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:900;letter-spacing:-.01em;margin:.5rem 0 1rem}
+  h2 em{font-style:normal;color:var(--warm)}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+  .reveal.in{opacity:1;transform:none}
+  .about p{color:var(--muted);max-width:62ch}.about p+p{margin-top:1rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin-top:1.5rem}
+  .card{border:1px solid var(--line);border-radius:16px;padding:1.5rem;background:var(--steel);transition:transform .3s,border-color .3s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(56,189,248,.45)}
+  .ico{width:46px;height:46px;border-radius:12px;background:rgba(56,189,248,.14);display:grid;place-items:center;margin-bottom:.8rem}
+  .ico svg{width:24px;height:24px;stroke:var(--cool);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .card h3{font-size:1.05rem;margin-bottom:.3rem}.card p{font-size:.88rem;color:var(--muted)}
+
+  .contact{background:linear-gradient(160deg,#0d1e2b,#08121a)}
+  .cgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:3rem;align-items:start}
+  .info{display:grid;gap:1.1rem;margin-top:1rem}
+  .row{display:flex;gap:1rem;align-items:center}
+  .row .ico{margin:0;background:rgba(250,204,21,.14)}.row .ico svg{stroke:var(--warm)}
+  .row strong{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .row span,.row a{font-weight:700}
+  .newnote{border:1px dashed var(--line);border-radius:14px;padding:1rem 1.2rem;color:var(--muted);font-size:.9rem;margin-top:1.4rem}
+  .dirbtn{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,var(--cool2),var(--warm2));color:#04121d;font-weight:800;padding:.9rem 1.5rem;border-radius:12px;margin-top:1.4rem}
+  .dirbtn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.4}
+  footer{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.85rem}
+  footer strong{color:var(--ice)}
+  @media(max-width:760px){.cgrid{grid-template-columns:1fr}.stage{height:auto}.pin{position:relative;height:88vh}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}.layer{transform:none!important}.stage{height:auto}.pin{position:relative;height:90vh}}
+</style>
 </head>
 <body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#"><span class="mark"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>Grand HVAC Repair Gainesville</a>
+    <a class="call" href="tel:3527722154">(352) 772-2154</a>
+  </div>
+</header>
 
-<!-- ── NAV ── -->
-<nav id="main-nav">
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <!-- snowflake / HVAC icon -->
-        <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93 4.93 19.07M12 5.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 16a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM5.5 12a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm16 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
-      </svg>
+<div class="stage">
+  <div class="pin">
+    <div class="layer l-sky" data-speed="0.15"></div>
+    <div class="layer l-flakes" data-speed="0.4">
+      <svg class="f1" viewBox="0 0 100 100"><line x1="50" y1="5" x2="50" y2="95"/><line x1="5" y1="50" x2="95" y2="50"/><line x1="18" y1="18" x2="82" y2="82"/><line x1="82" y1="18" x2="18" y2="82"/></svg>
+      <svg class="f2" viewBox="0 0 100 100"><line x1="50" y1="5" x2="50" y2="95"/><line x1="5" y1="50" x2="95" y2="50"/><line x1="18" y1="18" x2="82" y2="82"/><line x1="82" y1="18" x2="18" y2="82"/></svg>
+      <svg class="f3" viewBox="0 0 100 100"><line x1="50" y1="5" x2="50" y2="95"/><line x1="5" y1="50" x2="95" y2="50"/><line x1="18" y1="18" x2="82" y2="82"/><line x1="82" y1="18" x2="18" y2="82"/></svg>
     </div>
-    <div class="nav-logo-text">
-      Grand HVAC Repair
-      <span>Gainesville, FL</span>
+    <div class="hero-content" data-speed="-0.2">
+      <span class="badge">Serving Gainesville &amp; Surrounding Areas</span>
+      <h1>Keep your home <em>comfortable</em> year-round.</h1>
+      <p class="lead">Dependable heating, ventilation, and air conditioning repair for homeowners throughout the Gainesville area &mdash; done right the first time.</p>
+      <a class="btn btn-p" href="tel:3527722154"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.5 19.5 0 0 1 4.7 12 19.8 19.8 0 0 1 1.7 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L7.9 8.6a16 16 0 0 0 6.3 6.3l1-1a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z"/></svg>Call (352) 772-2154</a>
     </div>
-  </a>
-
-  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
-    <span></span><span></span><span></span>
-  </button>
-
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="tel:3527722154" class="nav-cta">Call Now</a></li>
-  </ul>
-</nav>
-
-<!-- ── HERO ── -->
-<section class="hero" id="home">
-  <div class="hero-deco">
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="100" cy="100" r="90" stroke="white" stroke-width="6" fill="none"/>
-      <circle cx="100" cy="100" r="60" stroke="white" stroke-width="4" fill="none"/>
-      <circle cx="100" cy="100" r="30" stroke="white" stroke-width="4" fill="none"/>
-      <line x1="10" y1="100" x2="190" y2="100" stroke="white" stroke-width="4"/>
-      <line x1="100" y1="10" x2="100" y2="190" stroke="white" stroke-width="4"/>
-      <line x1="36" y1="36" x2="164" y2="164" stroke="white" stroke-width="3"/>
-      <line x1="164" y1="36" x2="36" y2="164" stroke="white" stroke-width="3"/>
-    </svg>
-  </div>
-
-  <div class="hero-content">
-    <div class="hero-badge">Serving Gainesville &amp; Surrounding Areas</div>
-    <h1>Keep Your Home <em>Comfortable</em> Year-Round</h1>
-    <p>Professional HVAC repair, installation, and maintenance you can count on — whether it's the Florida heat or a chilly winter night.</p>
-    <div class="hero-actions">
-      <a href="tel:3527722154" class="btn-primary">Call (352) 772-2154</a>
-      <a href="#services" class="btn-outline">View Services</a>
-    </div>
-  </div>
-</section>
-
-<!-- ── TRUST BAR ── -->
-<div class="trust-bar">
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-    Licensed &amp; Insured
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24"><path d="M13 2.05V4.06c3.94.49 7 3.85 7 7.94 0 3.21-1.81 6-4.47 7.5L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.78-9.49-8.82-9.98zM11 2.05C5.96 2.54 2 6.85 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg>
-    Fast Response Times
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93C9.33 17.79 7 14.5 7 11V7.18L12 5z"/></svg>
-    Trusted Local Technicians
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
-    Quality Workmanship
+    <div class="scrollcue">Scroll<svg viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="20"/><polyline points="6 14 12 20 18 14"/></svg></div>
   </div>
 </div>
 
-<!-- ── ABOUT ── -->
-<section id="about">
-  <div class="about-inner">
-    <div class="about-visual">
-      <div class="about-card">
-        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5c0 2.76-2.24 5-5 5S7 9.76 7 7a5 5 0 0 1 5-5m0 12c5.33 0 8 2.67 8 4v2H4v-2c0-1.33 2.67-4 8-4z"/></svg>
-        <div class="about-card-title">Local Experts</div>
-        <div class="about-card-text">Experienced technicians serving our community</div>
-      </div>
-      <div class="about-card">
-        <svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
-        <div class="about-card-title">All Systems</div>
-        <div class="about-card-text">Central, mini-split, and more</div>
-      </div>
-      <div class="about-card">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-        <div class="about-card-title">Residential</div>
-        <div class="about-card-text">Homeowners across Gainesville</div>
-      </div>
-      <div class="about-card">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-        <div class="about-card-title">Reliable Service</div>
-        <div class="about-card-text">On-time, transparent, professional</div>
-      </div>
-    </div>
+<section class="pad" id="about">
+  <div class="wrap about reveal">
+    <span class="eyebrow">About</span>
+    <h2>Gainesville's <em>HVAC</em> specialists</h2>
+    <p>Grand HVAC Repair Gainesville provides dependable heating, ventilation, and air conditioning services to homeowners throughout the Gainesville area. North Central Florida's climate demands systems that perform flawlessly &mdash; from scorching summer months to cooler winter spells &mdash; and our team is equipped to keep yours running at peak efficiency.</p>
+    <p>We work on all major HVAC brands and system types, offering honest assessments and straightforward repairs so you know exactly what you're getting. Located right here in Gainesville at 816 SE 4th Ave, we take pride in being a locally focused contractor you can reach quickly. Contact us for details on scheduling and availability.</p>
+  </div>
+</section>
 
-    <div class="about-text">
-      <div class="section-label">About Us</div>
-      <h2 class="section-title">Gainesville's <em>HVAC</em> Specialists</h2>
-      <p>Grand HVAC Repair Gainesville provides dependable heating, ventilation, and air conditioning services to homeowners throughout the Gainesville area. North Central Florida's climate demands systems that perform flawlessly — from scorching summer months to cooler winter spells — and our team is equipped to keep yours running at peak efficiency.</p>
-      <p>We work on all major HVAC brands and system types, offering honest assessments and straightforward repairs so you know exactly what you're getting. Whether you need a quick fix, a full system replacement, or a routine tune-up, we're committed to getting the job done right the first time.</p>
-      <p>Located right here in Gainesville at 816 SE 4th Ave, we take pride in being a locally focused contractor you can reach quickly when your system needs attention. Contact us for details on scheduling and availability.</p>
+<section class="pad" id="services">
+  <div class="wrap">
+    <div class="reveal"><span class="eyebrow">What we do</span><h2>Our services</h2></div>
+    <div class="grid">
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="12" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg></div><h3>AC Repair</h3><p>Fast, honest diagnostics and repair to get your air conditioning back up and running when it matters most.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2s5 4 5 9a5 5 0 0 1-10 0c0-5 5-9 5-9z"/></svg></div><h3>Heating System Repair</h3><p>Keeping your heating system reliable during cooler months, including heat pump service, electric furnace repair, and general heating diagnostics.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h3>System Replacement</h3><p>Full system replacements when repair no longer makes sense &mdash; sized and configured for your space.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Tune-Ups</h3><p>Routine tune-ups that keep equipment efficient and help prevent breakdowns before they happen.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ── SERVICES ── -->
-<section id="services">
-  <div class="services-header">
-    <div class="section-label">What We Do</div>
-    <h2 class="section-title">Our <em>Services</em></h2>
-    <p class="section-sub">From emergency repairs to preventive maintenance, we cover the full range of residential HVAC needs across Gainesville and the surrounding communities.</p>
-  </div>
-
-  <div class="services-grid">
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+<section class="pad contact" id="contact">
+  <div class="wrap cgrid">
+    <div class="reveal">
+      <span class="eyebrow">Get in touch</span>
+      <h2>Contact us</h2>
+      <p style="color:var(--muted)">Ready to schedule service or have a question? Reach out &mdash; we're here to help.</p>
+      <div class="info">
+        <div class="row"><div class="ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><strong>Address</strong><span>816 SE 4th Ave, Gainesville, FL</span></div></div>
+        <div class="row"><div class="ico"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.5 19.5 0 0 1 4.7 12 19.8 19.8 0 0 1 1.7 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L7.9 8.6a16 16 0 0 0 6.3 6.3l1-1a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z"/></svg></div><div><strong>Phone</strong><a href="tel:3527722154">(352) 772-2154</a></div></div>
+        <div class="row"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg></div><div><strong>Hours</strong><span>Contact us for details</span></div></div>
       </div>
-      <h3>AC Repair</h3>
-      <p>Diagnosing and fixing air conditioning problems large and small — from refrigerant leaks and compressor issues to thermostat malfunctions and restricted airflow.</p>
+      <div class="newnote">New on Google Maps &mdash; no reviews yet. Be among the first to work with us.</div>
     </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-      </div>
-      <h3>Heating System Repair</h3>
-      <p>Keeping your heating system reliable during cooler months, including heat pump service, electric furnace repair, and general heating system diagnostics.</p>
+    <div class="reveal">
+      <h2 style="font-size:1.4rem">Find us</h2>
+      <p style="color:var(--muted)">Located at 816 SE 4th Ave in Gainesville. Open Google Maps for directions.</p>
+      <a class="dirbtn" href="https://www.google.com/maps/search/Grand%20HVAC%20Repair%20Gainesville%20816%20SE%204th%20Ave" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Get Directions</a>
     </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-      </div>
-      <h3>HVAC Installation</h3>
-      <p>New system installation for homes upgrading outdated equipment or building out new spaces, sized and configured to match your home's specific needs.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M13 2.05V4.06c3.94.49 7 3.85 7 7.94 0 3.21-1.81 6-4.47 7.5L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.78-9.49-8.82-9.98zM11 2.05C5.96 2.54 2 6.85 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg>
-      </div>
-      <h3>Preventive Maintenance</h3>
-      <p>Scheduled tune-ups and inspections to extend equipment life, improve energy efficiency, and catch small issues before they become expensive repairs.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
-      </div>
-      <h3>System Inspections</h3>
-      <p>Thorough inspections of all HVAC components — coils, filters, ductwork, electrical connections, and refrigerant levels — with a clear report of findings.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3zm0 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-      </div>
-      <h3>Ductwork &amp; Airflow</h3>
-      <p>Assessment and repair of ductwork leaks, blockages, and design issues that cause uneven cooling, poor air quality, or reduced system efficiency.</p>
-    </div>
-
   </div>
 </section>
 
-<!-- ── CONTACT ── -->
-<section id="contact">
-  <div class="contact-inner">
-
-    <div>
-      <div class="section-label">Find Us</div>
-      <h2 class="section-title">Get In <em>Touch</em></h2>
-
-      <div class="rating-box">
-        <div class="rating-stars">
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-        </div>
-        <div class="rating-meta">
-          <strong>No reviews yet</strong>
-          <span>Google Maps &mdash; Be the first to leave a review</span>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-item-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        </div>
-        <div>
-          <div class="contact-item-label">Address</div>
-          <div class="contact-item-value">816 SE 4th Ave<br>Gainesville, FL</div>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-item-icon">
-          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        </div>
-        <div>
-          <div class="contact-item-label">Phone</div>
-          <div class="contact-item-value">
-            <a href="tel:3527722154">(352) 772-2154</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-item-icon">
-          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-        </div>
-        <div>
-          <div class="contact-item-label">Hours</div>
-          <div class="contact-item-value">Contact us for details</div>
-        </div>
-      </div>
-
-      <a href="https://www.google.com/maps/search/Grand%20HVAC%20Repair%20Gainesville%20816%20SE%204th%20Ave" target="_blank" rel="noopener noreferrer" class="directions-btn">
-        <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.41 0l-9 9a1 1 0 0 0 0 1.41l9 9a1 1 0 0 0 1.41 0l9-9a1 1 0 0 0 0-1.41zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-        Get Directions
-      </a>
-    </div>
-
-    <div class="contact-cta-panel">
-      <h3>Ready to Schedule a Service?</h3>
-      <p>Don't let a broken AC or heating system disrupt your comfort. Call us directly and we'll help diagnose the issue and get a technician out to you.</p>
-      <a href="tel:3527722154" class="cta-phone-link">
-        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        (352) 772-2154
-      </a>
-      <p class="cta-note">Contact us for details on pricing, availability, and service areas.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- ── FOOTER ── -->
 <footer>
-  <strong>Grand HVAC Repair Gainesville</strong><br>
-  816 SE 4th Ave &mdash; Gainesville, FL &mdash; <a href="tel:3527722154" style="color:rgba(255,255,255,0.6);text-decoration:none;">(352) 772-2154</a><br>
-  &copy; 2026 Grand HVAC Repair Gainesville. All rights reserved.
+  <div class="wrap"><strong>Grand HVAC Repair Gainesville</strong> &bull; 816 SE 4th Ave, Gainesville, FL &bull; <a href="tel:3527722154">(352) 772-2154</a>
+  <div style="margin-top:.4rem;opacity:.6">&copy; 2026 Grand HVAC Repair Gainesville</div></div>
 </footer>
 
 <script>
-  // Mobile nav toggle
-  const toggle = document.getElementById('nav-toggle');
-  const nav = document.getElementById('main-nav');
-  if (toggle && nav) {
-    toggle.addEventListener('click', function() {
-      nav.classList.toggle('open');
-    });
-    // Close nav when a link is clicked
-    nav.querySelectorAll('.nav-links a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        nav.classList.remove('open');
-      });
-    });
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revs=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.15});
+    revs.forEach(function(el,i){el.style.transitionDelay=(i%4*70)+'ms';io.observe(el);});
+    setTimeout(function(){revs.forEach(function(el){el.classList.add('in');});},2200);
+  } else {
+    revs.forEach(function(el){el.classList.add('in');});
+  }
+  if(!rm){
+    var layers=[].slice.call(document.querySelectorAll('.layer,[data-speed]'));
+    var ticking=false;
+    function par(){
+      var y=window.scrollY;
+      layers.forEach(function(l){var sp=parseFloat(l.getAttribute('data-speed'))||0;l.style.transform='translateY('+(y*sp)+'px)';});
+      ticking=false;
+    }
+    window.addEventListener('scroll',function(){if(!ticking){requestAnimationFrame(par);ticking=true;}});
+    par();
   }
 </script>
-
 </body>
 </html>
