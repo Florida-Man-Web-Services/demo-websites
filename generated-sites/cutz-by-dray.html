@@ -115,6 +115,7 @@
     .scroll-hint{animation:none}
   }
 </style>
+<noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
 
@@ -231,7 +232,7 @@
       var l=lines[i];
       if(!reduce){
         l.x+=Math.cos(l.ang)*l.sp; l.y+=Math.sin(l.ang)*l.sp;
-        if(l.x<-120||l.y>c.offsetHeight+120){ l.x=Math.random()*c.offsetWidth+120; l.y=-40; }
+        if(l.x>c.offsetWidth+120||l.y<-120){ l.x=Math.random()*c.offsetWidth-120; l.y=c.offsetHeight+40; }
       }
       ctx.strokeStyle='rgba(201,162,75,'+l.a+')'; ctx.lineWidth=l.w;
       ctx.beginPath(); ctx.moveTo(l.x,l.y);
