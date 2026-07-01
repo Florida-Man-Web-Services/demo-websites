@@ -5,636 +5,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simply Fashion | Gainesville, FL</title>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#fffdfb;--ink:#221a22;--plum:#6d2f5b;--coral:#ff7a6b;--gold:#e8b04b;
+      --blush:#fbeef2;--muted:#7c7180;--line:#efe4ea;
     }
+    html{scroll-behavior:smooth}
+    body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 1.4rem}
+    a{color:inherit}
 
-    :root {
-      --primary: #c0392b;
-      --primary-dark: #922b21;
-      --accent: #f5a623;
-      --light: #fdf6f0;
-      --dark: #1a1a1a;
-      --mid: #4a4a4a;
-      --card-bg: #ffffff;
-      --border: #e8d5c4;
-      --nav-bg: #1a1a1a;
-      --footer-bg: #111111;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Georgia', serif;
-      color: var(--dark);
-      background: var(--light);
-      line-height: 1.7;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: var(--nav-bg);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      color: #fff;
-      font-style: italic;
-      font-weight: bold;
-      letter-spacing: -1px;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-text {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.04em;
-      font-family: 'Georgia', serif;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-      font-family: Arial, sans-serif;
-    }
-
-    .nav-links a:hover {
-      color: var(--accent);
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #fff;
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
+    nav{position:fixed;top:0;left:0;width:100%;z-index:60;display:flex;align-items:center;justify-content:space-between;
+      padding:.85rem 1.5rem;background:rgba(255,253,251,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .brand .mk{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--plum),var(--coral));
+      color:#fff;display:grid;place-items:center;font-weight:800;font-family:Georgia,serif;font-style:italic}
+    .brand b{font-family:Georgia,'Times New Roman',serif;font-size:1.05rem;color:var(--plum)}
+    .navlinks{display:flex;gap:1.6rem;list-style:none}
+    .navlinks a{text-decoration:none;color:var(--muted);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;transition:color .2s}
+    .navlinks a:hover{color:var(--coral)}
+    @media(max-width:600px){.navlinks{display:none}}
 
     /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 2rem 4rem;
-      background: linear-gradient(135deg, #1a1a1a 0%, #2c1810 40%, #3d1a0e 100%);
-      position: relative;
-      overflow: hidden;
-    }
+    .hero{padding:8rem 0 4.5rem;position:relative;overflow:hidden;text-align:center;
+      background:radial-gradient(ellipse at 50% 0%,var(--blush),var(--bg) 60%)}
+    .hero .kick{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--coral);font-weight:700;margin-bottom:1.2rem}
+    .hero h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(2.8rem,9vw,6rem);line-height:1;letter-spacing:-.01em}
+    .hero h1 em{font-style:italic;
+      background:linear-gradient(90deg,var(--plum),var(--coral),var(--gold),var(--plum));background-size:300% 100%;
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:flow 8s linear infinite}
+    @keyframes flow{to{background-position:300% 0}}
+    .hero p.lead{max-width:44ch;margin:1.4rem auto 2rem;color:var(--muted);font-size:1.12rem}
+    .btn{display:inline-block;text-decoration:none;font-weight:800;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;
+      padding:.95rem 2.1rem;border-radius:44px;transition:transform .18s,box-shadow .2s;will-change:transform;
+      background:linear-gradient(135deg,var(--plum),var(--coral));color:#fff}
+    .btn:hover{box-shadow:0 12px 30px rgba(109,47,91,.3)}
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 40px,
-        rgba(192,57,43,0.04) 40px,
-        rgba(192,57,43,0.04) 80px
-      );
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 700px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--primary);
-      color: #fff;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.35rem 1.1rem;
-      border-radius: 100px;
-      margin-bottom: 1.5rem;
-      font-family: Arial, sans-serif;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.6rem, 7vw, 4.5rem);
-      color: #fff;
-      line-height: 1.15;
-      letter-spacing: -0.01em;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero h1 span {
-      color: var(--accent);
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: #c9b8ad;
-      max-width: 520px;
-      margin: 0 auto 2.5rem;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--primary);
-      color: #fff;
-      padding: 0.9rem 2.4rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 1rem;
-      letter-spacing: 0.05em;
-      font-family: Arial, sans-serif;
-      transition: background 0.25s, transform 0.2s;
-      font-weight: 600;
-    }
-
-    .hero-cta:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    /* SECTION SHARED */
-    section {
-      padding: 5rem 2rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--primary);
-      font-family: Arial, sans-serif;
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      color: var(--dark);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .section-divider {
-      width: 50px;
-      height: 3px;
-      background: var(--primary);
-      margin-bottom: 2.5rem;
-      border-radius: 2px;
-    }
+    section{padding:5rem 0}
+    .lbl{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--coral);font-weight:800;margin-bottom:.6rem}
+    .h2{font-family:Georgia,serif;font-size:clamp(1.9rem,4.5vw,2.8rem);line-height:1.1;margin-bottom:1.2rem;color:var(--ink)}
 
     /* ABOUT */
-    #about {
-      background: var(--card-bg);
-    }
+    #about{background:var(--blush)}
+    .about{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center}
+    .about p{color:#5b5162;margin-bottom:1.1rem;font-size:1.05rem}
+    .about-card{background:#fff;border-radius:20px;padding:2.4rem;text-align:center;box-shadow:0 16px 40px rgba(109,47,91,.12)}
+    .about-card .em{font-size:2.6rem}
+    .about-card h3{font-family:Georgia,serif;font-size:1.3rem;color:var(--plum);margin:.6rem 0 .5rem}
+    .about-card p{color:var(--muted);font-size:.95rem}
 
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
+    /* HORIZONTAL SCROLL COLLECTIONS */
+    #collections{background:var(--ink);color:#fff;overflow:hidden}
+    #collections .lbl{color:var(--gold)}
+    #collections .h2{color:#fff}
+    .hs-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
+    .hs-hint{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#a99;opacity:.8}
+    .filmstrip{display:flex;gap:1.4rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.5rem .2rem 1.6rem;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .filmstrip::-webkit-scrollbar{display:none}
+    .panel{scroll-snap-align:center;flex:0 0 min(84vw,380px);background:#26202a;border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;padding:2.2rem 2rem;min-height:300px;display:flex;flex-direction:column;position:relative;overflow:hidden;
+      transition:transform .25s,border-color .25s}
+    .panel:hover{transform:translateY(-6px);border-color:var(--coral)}
+    .panel::before{content:"";position:absolute;top:-40%;right:-30%;width:70%;height:70%;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,122,107,.4),transparent 70%);pointer-events:none}
+    .panel .n{font-family:Georgia,serif;font-style:italic;font-size:1rem;color:var(--gold)}
+    .panel .em{font-size:2.4rem;margin:.6rem 0}
+    .panel h3{font-family:Georgia,serif;font-size:1.4rem;margin-bottom:.6rem}
+    .panel p{color:#c3b9c7;font-size:.95rem}
+    .progress{height:4px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden;max-width:280px}
+    .progress span{display:block;height:100%;width:16%;background:linear-gradient(90deg,var(--coral),var(--gold));border-radius:4px;transition:transform .2s ease}
 
-    .about-text p {
-      color: var(--mid);
-      margin-bottom: 1.2rem;
-      font-size: 1.05rem;
-    }
+    /* VISIT */
+    .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+    .info{list-style:none}
+    .info li{display:flex;gap:1rem;padding:1.1rem 0;border-bottom:1px solid var(--line);align-items:flex-start}
+    .info .em{font-size:1.3rem}
+    .info .k{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);font-weight:800;margin-bottom:.15rem}
+    .rate{background:var(--blush);border-radius:16px;padding:1.6rem;margin-top:1.5rem;display:flex;align-items:center;gap:1.2rem}
+    .rate .score{font-family:Georgia,serif;font-size:3rem;font-weight:700;color:var(--plum);line-height:1}
+    .rate .stars{color:var(--gold);font-size:1.2rem;letter-spacing:2px}
+    .rate .meta{font-size:.82rem;color:var(--muted);margin-top:.2rem}
+    .mapcard{border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(109,47,91,.14);background:#fff}
+    .mapface{height:190px;position:relative;
+      background:radial-gradient(circle at 60% 40%,rgba(255,122,107,.3),transparent 55%),linear-gradient(160deg,#f6e6ee,#efe0e8);
+      display:grid;place-items:center}
+    .mapface .pin{font-size:2.6rem}
+    .mapbody{padding:1.6rem}
+    .mapbody h4{font-family:Georgia,serif;margin-bottom:.2rem;color:var(--plum)}
+    .mapbody p{color:var(--muted);font-size:.9rem;margin-bottom:1.1rem}
+    .directions{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;
+      background:linear-gradient(135deg,var(--plum),var(--coral));color:#fff;text-decoration:none;font-weight:800;
+      font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;padding:.9rem;border-radius:10px;transition:transform .18s;will-change:transform}
+    .directions:hover{transform:translateY(-2px)}
+    .directions svg{width:17px;height:17px;fill:#fff}
 
-    .about-visual {
-      background: linear-gradient(135deg, #c0392b 0%, #922b21 100%);
-      border-radius: 8px;
-      padding: 3.5rem 2.5rem;
-      text-align: center;
-      color: #fff;
-    }
+    footer{background:var(--ink);color:#b7abbc;text-align:center;padding:2.6rem 1.4rem}
+    footer .fn{font-family:Georgia,serif;font-size:1.4rem;color:#fff}
+    footer .fa{font-size:.85rem;margin:.5rem 0}
+    footer .fl{display:flex;gap:1.2rem;justify-content:center;margin:.6rem 0}
+    footer .fl a{text-decoration:none;color:var(--gold);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+    footer .fc{font-size:.72rem;color:#8a7f8f}
 
-    .about-visual-icon {
-      font-size: 4rem;
-      margin-bottom: 1.2rem;
-      display: block;
-    }
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+    .reveal.in{opacity:1;transform:none}
 
-    .about-visual h3 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-      letter-spacing: 0.02em;
-    }
-
-    .about-visual p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.8);
-      line-height: 1.6;
-    }
-
-    /* SERVICES */
-    #services {
-      background: var(--light);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem 1.75rem;
-      transition: box-shadow 0.25s, transform 0.2s, border-color 0.25s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 28px rgba(192,57,43,0.12);
-      transform: translateY(-4px);
-      border-color: var(--primary);
-    }
-
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      background: #fce8e6;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.1rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 0.5rem;
-      color: var(--dark);
-    }
-
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--mid);
-      line-height: 1.6;
-    }
-
-    /* CONTACT */
-    #contact {
-      background: var(--card-bg);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info h3 {
-      font-size: 1.3rem;
-      margin-bottom: 1.5rem;
-      color: var(--dark);
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .contact-item-icon {
-      width: 42px;
-      height: 42px;
-      background: #fce8e6;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .contact-item-body strong {
-      display: block;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--primary);
-      font-family: Arial, sans-serif;
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-item-body span {
-      font-size: 1rem;
-      color: var(--mid);
-    }
-
-    .directions-btn {
-      display: inline-block;
-      margin-top: 1.5rem;
-      background: var(--primary);
-      color: #fff;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-family: Arial, sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .directions-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    .rating-card {
-      background: var(--light);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
-    }
-
-    .rating-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 1.25rem;
-      color: var(--dark);
-    }
-
-    .stars-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .star {
-      color: #f5a623;
-      font-size: 1.3rem;
-    }
-
-    .star.empty {
-      color: #ddd;
-    }
-
-    .rating-number {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--dark);
-      line-height: 1;
-    }
-
-    .rating-meta {
-      font-size: 0.88rem;
-      color: var(--mid);
-      font-family: Arial, sans-serif;
-      margin-bottom: 1.25rem;
-    }
-
-    .rating-source {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      color: var(--mid);
-      font-family: Arial, sans-serif;
-    }
-
-    .gmaps-dot {
-      width: 8px;
-      height: 8px;
-      background: #4285f4;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .contact-cta-note {
-      background: #fff8f6;
-      border-left: 3px solid var(--primary);
-      padding: 1rem 1.25rem;
-      margin-top: 1.5rem;
-      border-radius: 0 4px 4px 0;
-      font-size: 0.92rem;
-      color: var(--mid);
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--footer-bg);
-      color: #aaa;
-      padding: 3rem 2rem 2rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .footer-logo {
-      font-size: 1.4rem;
-      color: #fff;
-      font-family: 'Georgia', serif;
-      margin-bottom: 0.6rem;
-    }
-
-    .footer-tagline {
-      font-size: 0.88rem;
-      color: #666;
-      margin-bottom: 2rem;
-      font-family: Arial, sans-serif;
-    }
-
-    .footer-nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-      list-style: none;
-    }
-
-    .footer-nav a {
-      color: #888;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-family: Arial, sans-serif;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .footer-nav a:hover {
-      color: var(--accent);
-    }
-
-    .footer-divider {
-      border: none;
-      border-top: 1px solid #2a2a2a;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-      color: #555;
-      font-family: Arial, sans-serif;
-    }
-
-    /* MOBILE */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: var(--nav-bg);
-        flex-direction: column;
-        padding: 1.5rem 2rem;
-        gap: 1.25rem;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-visual {
-        padding: 2.5rem 1.75rem;
-      }
-
-      section {
-        padding: 3.5rem 1.25rem;
-      }
-
-      .hero {
-        padding: 90px 1.25rem 3.5rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .nav-logo-text {
-        font-size: 1.05rem;
-      }
+    @media(max-width:820px){.about,.visit-grid{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){
+      *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+      .reveal{opacity:1;transform:none}.filmstrip{scroll-snap-type:none}
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
-    <a href="#home" class="nav-logo">
-      <div class="nav-logo-icon">SF</div>
-      <span class="nav-logo-text">Simply Fashion</span>
-    </a>
-    <ul class="nav-links" id="navLinks">
+    <a class="brand" href="#top"><span class="mk">SF</span><b>Simply Fashion</b></a>
+    <ul class="navlinks">
       <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#collections">Services</a></li>
+      <li><a href="#visit">Contact</a></li>
     </ul>
-    <div class="nav-toggle" id="navToggle" aria-label="Toggle menu" role="button" tabindex="0">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-inner">
-      <span class="hero-badge">Clothing &amp; Apparel &mdash; Gainesville, FL</span>
-      <h1>Style That&rsquo;s<br /><span>Simply You</span></h1>
-      <p>Discover on-trend clothing and everyday fashion at prices that fit your lifestyle, right in the heart of Gainesville.</p>
-      <a href="#services" class="hero-cta">Explore Our Offerings</a>
+  <header class="hero" id="top">
+    <div class="wrap">
+      <p class="kick">Clothing &amp; Apparel &mdash; Gainesville, FL</p>
+      <h1>Style That's<br><em>Simply You</em></h1>
+      <p class="lead">Discover on-trend clothing and everyday fashion at prices that fit your lifestyle, right in the heart of Gainesville.</p>
+      <a href="#collections" class="btn" data-magnetic>Explore Our Offerings</a>
     </div>
-  </section>
+  </header>
 
-  <!-- ABOUT -->
   <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Who We Are</p>
-          <h2 class="section-title">Fashion for Every Occasion</h2>
-          <div class="section-divider"></div>
+    <div class="wrap">
+      <div class="about">
+        <div class="reveal">
+          <p class="lbl">Who We Are</p>
+          <h2 class="h2">Fashion for Every Occasion</h2>
           <p>Simply Fashion is a neighborhood clothing destination serving the Gainesville community with a wide selection of women's apparel, accessories, and footwear. We believe looking great shouldn't cost a fortune, so our curated collections make stylish dressing accessible for every budget and body type.</p>
           <p>Located on N Main St in the heart of Gainesville, we pride ourselves on staying current with seasonal trends while keeping our inventory fresh and our service friendly. Whether you're updating your everyday wardrobe or searching for something special for a night out, we have options to suit your style.</p>
-          <p>Stop in and browse our ever-changing selection — our staff are happy to help you put together the perfect look. Contact us for details on current inventory and availability.</p>
+          <p>Stop in and browse our ever-changing selection &mdash; our staff are happy to help you put together the perfect look. Contact us for details on current inventory and availability.</p>
         </div>
-        <div class="about-visual">
-          <span class="about-visual-icon">&#128084;</span>
+        <div class="about-card reveal">
+          <div class="em" aria-hidden="true">&#128084;</div>
           <h3>Your Style, Simplified</h3>
           <p>Trend-forward clothing and accessories for women who want to look and feel their best without the designer price tag.</p>
         </div>
@@ -642,165 +156,113 @@
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Our Collections &amp; Services</h2>
-      <div class="section-divider"></div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">&#128084;</div>
-          <h3>Women's Clothing</h3>
-          <p>A broad selection of tops, bottoms, dresses, and sets spanning casual daywear to evening styles, updated regularly with seasonal trends.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128095;</div>
-          <h3>Footwear</h3>
-          <p>Sandals, boots, sneakers, and heels to complete any outfit. We carry a variety of sizes and styles to suit different occasions and preferences.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128144;</div>
-          <h3>Accessories</h3>
-          <p>Handbags, jewelry, belts, scarves, and more to elevate your look. The right accessories can transform any outfit from ordinary to outstanding.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127774;</div>
-          <h3>Seasonal Collections</h3>
-          <p>Fresh arrivals throughout the year to keep your wardrobe in step with the latest trends, from breezy summer looks to cozy fall layers.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127873;</div>
-          <h3>Special Occasion Wear</h3>
-          <p>Dresses and ensembles suited for events, celebrations, and nights out. Find something memorable without the high-end boutique price.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128205;</div>
-          <h3>In-Store Styling Guidance</h3>
-          <p>Our knowledgeable staff are on hand to help you mix, match, and discover new looks you'll love. No appointment needed — just come in and explore.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <p class="section-label">Visit Us</p>
-      <h2 class="section-title">Find Simply Fashion</h2>
-      <div class="section-divider"></div>
-      <div class="contact-grid">
-
-        <div class="contact-info">
-          <h3>Store Information</h3>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128205;</div>
-            <div class="contact-item-body">
-              <strong>Address</strong>
-              <span>1208 N Main St<br />Gainesville, FL 32601</span>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128337;</div>
-            <div class="contact-item-body">
-              <strong>Hours</strong>
-              <span>Contact us for current store hours</span>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128172;</div>
-            <div class="contact-item-body">
-              <strong>Inquiries</strong>
-              <span>Contact us in-store for details</span>
-            </div>
-          </div>
-
-          <a
-            href="https://www.google.com/maps/search/Simply%20Fashion%201208%20N%20Main%20St%2C%20Gainesville%2C%20FL%2032601"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="directions-btn"
-          >
-            &#128205; Get Directions
-          </a>
-
-          <div class="contact-cta-note">
-            We're happy to answer any questions in person. Come visit us at 1208 N Main St and let us help you find your next favorite outfit.
-          </div>
-        </div>
-
+  <section id="collections">
+    <div class="wrap">
+      <div class="hs-head">
         <div>
-          <div class="rating-card">
-            <h3>Customer Rating</h3>
-            <div class="stars-row">
-              <div class="stars">
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star empty">&#9733;</span>
-                <span class="star empty">&#9733;</span>
-              </div>
-              <span class="rating-number">3.0</span>
+          <p class="lbl reveal">What We Offer</p>
+          <h2 class="h2 reveal">Our Collections &amp; Services</h2>
+        </div>
+        <span class="hs-hint reveal">Scroll &rarr; to browse</span>
+      </div>
+      <div class="filmstrip" id="strip" tabindex="0" aria-label="Collections carousel">
+        <article class="panel"><span class="n">01</span><div class="em" aria-hidden="true">&#128084;</div><h3>Women's Clothing</h3><p>A broad selection of tops, bottoms, dresses, and sets spanning casual daywear to evening styles, updated regularly with seasonal trends.</p></article>
+        <article class="panel"><span class="n">02</span><div class="em" aria-hidden="true">&#128095;</div><h3>Footwear</h3><p>Sandals, boots, sneakers, and heels to complete any outfit. We carry a variety of sizes and styles to suit different occasions and preferences.</p></article>
+        <article class="panel"><span class="n">03</span><div class="em" aria-hidden="true">&#128092;</div><h3>Accessories</h3><p>Handbags, jewelry, belts, scarves, and more to elevate your look. The right accessories can transform any outfit from ordinary to outstanding.</p></article>
+        <article class="panel"><span class="n">04</span><div class="em" aria-hidden="true">&#127807;</div><h3>Seasonal Collections</h3><p>Fresh arrivals throughout the year to keep your wardrobe in step with the latest trends, from breezy summer looks to cozy fall layers.</p></article>
+        <article class="panel"><span class="n">05</span><div class="em" aria-hidden="true">&#128142;</div><h3>Special Occasion Wear</h3><p>Dresses and ensembles suited for events, celebrations, and nights out. Find something memorable without the high-end boutique price.</p></article>
+        <article class="panel"><span class="n">06</span><div class="em" aria-hidden="true">&#129504;</div><h3>In-Store Styling Guidance</h3><p>Our knowledgeable staff are on hand to help you mix, match, and discover new looks you'll love. No appointment needed &mdash; just come in and explore.</p></article>
+      </div>
+      <div class="progress reveal" aria-hidden="true"><span id="bar"></span></div>
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap">
+      <p class="lbl reveal">Visit Us</p>
+      <h2 class="h2 reveal">Find Simply Fashion</h2>
+      <div class="visit-grid">
+        <div class="reveal">
+          <ul class="info">
+            <li><span class="em">&#128205;</span><div><div class="k">Address</div>1208 N Main St<br>Gainesville, FL 32601</div></li>
+            <li><span class="em">&#128340;</span><div><div class="k">Hours</div>Contact us for current store hours</div></li>
+            <li><span class="em">&#128172;</span><div><div class="k">Inquiries</div>Contact us in-store for details</div></li>
+          </ul>
+          <div class="rate">
+            <div class="score" data-count="3.0">3.0</div>
+            <div>
+              <div class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+              <div style="font-weight:700">Customer Rating</div>
+              <div class="meta">Based on 2 Google reviews</div>
             </div>
-            <p class="rating-meta">Based on 2 Google reviews</p>
-            <span class="rating-source">
-              <span class="gmaps-dot"></span>
-              Google Maps &mdash; Simply Fashion, Gainesville FL
-            </span>
           </div>
         </div>
-
+        <div class="mapcard reveal">
+          <div class="mapface" aria-hidden="true"><span class="pin">&#128205;</span></div>
+          <div class="mapbody">
+            <h4>Simply Fashion</h4>
+            <p>1208 N Main St &bull; Gainesville, FL 32601</p>
+            <a class="directions" href="https://www.google.com/maps/search/Simply%20Fashion%201208%20N%20Main%20St%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+              Get Directions
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">Simply Fashion</div>
-      <div class="footer-tagline">1208 N Main St &bull; Gainesville, FL 32601</div>
-      <ul class="footer-nav">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <hr class="footer-divider" />
-      <p class="footer-copy">&copy; 2026 Simply Fashion. All rights reserved.</p>
-    </div>
+    <div class="fn">Simply Fashion</div>
+    <div class="fa">1208 N Main St &bull; Gainesville, FL 32601</div>
+    <div class="fl"><a href="#top">Home</a><a href="#about">About</a><a href="#collections">Services</a><a href="#visit">Contact</a></div>
+    <div class="fc">&copy; 2026 Simply Fashion. All rights reserved.</div>
   </footer>
 
   <script>
-    const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
+    (function(){
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var reveals = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        reveals.forEach(function(el){ el.classList.add('in'); });
+      } else {
+        var io = new IntersectionObserver(function(en){
+          en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.14 });
+        reveals.forEach(function(el){ io.observe(el); });
 
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('open');
-    });
+        var score = document.querySelector('[data-count]');
+        if (score){
+          var t=parseFloat(score.getAttribute('data-count'));
+          var co=new IntersectionObserver(function(en){
+            en.forEach(function(e){ if(e.isIntersecting){
+              var s=null;
+              (function anim(ts){ if(!s)s=ts; var p=Math.min((ts-s)/900,1);
+                score.textContent=(t*p).toFixed(1); if(p<1)requestAnimationFrame(anim); else score.textContent=t.toFixed(1);
+              })(performance.now?performance.now():0);
+              co.unobserve(e.target);
+            }});
+          },{threshold:0.6});
+          co.observe(score);
+        }
 
-    toggle.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        links.classList.toggle('open');
+        document.querySelectorAll('[data-magnetic]').forEach(function(b){
+          b.addEventListener('mousemove',function(ev){var r=b.getBoundingClientRect();
+            b.style.transform='translate('+((ev.clientX-r.left-r.width/2)*0.3)+'px,'+((ev.clientY-r.top-r.height/2)*0.4)+'px)';});
+          b.addEventListener('mouseleave',function(){b.style.transform='';});
+        });
       }
-    });
 
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', () => {
-        links.classList.remove('open');
-      });
-    });
+      // horizontal scroll progress bar
+      var strip=document.getElementById('strip'), bar=document.getElementById('bar');
+      if(strip && bar){
+        strip.addEventListener('scroll',function(){
+          var max=strip.scrollWidth-strip.clientWidth;
+          var p=max>0?strip.scrollLeft/max:0;
+          bar.style.transform='translateX('+(p*520)+'%)';
+        });
+      }
+    })();
   </script>
-
 </body>
 </html>

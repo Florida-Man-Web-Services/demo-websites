@@ -1,903 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Precious Emeralds Boutique | Women's Clothing | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --emerald:      #1a6644;
-      --emerald-dark: #124730;
-      --emerald-light:#2a8f5e;
-      --gold:         #c9a84c;
-      --gold-light:   #e8c97a;
-      --cream:        #faf7f2;
-      --warm-white:   #ffffff;
-      --text-dark:    #1c1c1c;
-      --text-mid:     #4a4a4a;
-      --text-light:   #7a7a7a;
-      --border:       #e0d8cc;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      color: var(--text-dark);
-      background: var(--cream);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ─────────────────────────────────────────────── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: var(--emerald-dark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 68px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-gem {
-      width: 34px;
-      height: 34px;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .nav-logo-text .brand {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--gold-light);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .nav-logo-text .sub {
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold-light); }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 5px;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: rgba(255,255,255,0.85);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* ── HERO ─────────────────────────────────────────────── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 7rem 1.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(145deg, var(--emerald-dark) 0%, var(--emerald) 55%, #1d7a50 100%);
-    }
-
-    /* Decorative gem shapes in background */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 30%, rgba(201,168,76,0.08) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 70%, rgba(201,168,76,0.06) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .hero-gem-bg {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .hero-gem-bg svg {
-      position: absolute;
-      opacity: 0.04;
-    }
-
-    .hero-gem-bg svg:nth-child(1) { top: 8%;  left: 6%;  width: 180px; transform: rotate(15deg); }
-    .hero-gem-bg svg:nth-child(2) { top: 60%; left: 80%; width: 240px; transform: rotate(-20deg); }
-    .hero-gem-bg svg:nth-child(3) { top: 75%; left: 10%; width: 130px; transform: rotate(40deg); }
-    .hero-gem-bg svg:nth-child(4) { top: 15%; left: 70%; width: 160px; transform: rotate(-5deg); }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      margin-bottom: 1.2rem;
-      opacity: 0.9;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      color: var(--warm-white);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-    }
-
-    .hero h1 em {
-      font-style: normal;
-      color: var(--gold-light);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.8);
-      margin-bottom: 2.5rem;
-      font-style: italic;
-      letter-spacing: 0.01em;
-    }
-
-    .hero-cta-group {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2rem;
-      border-radius: 2px;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.25s;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--emerald-dark);
-      border-color: var(--gold);
-    }
-
-    .btn-gold:hover {
-      background: var(--gold-light);
-      border-color: var(--gold-light);
-    }
-
-    .btn-outline-white {
-      background: transparent;
-      color: rgba(255,255,255,0.9);
-      border-color: rgba(255,255,255,0.5);
-    }
-
-    .btn-outline-white:hover {
-      border-color: var(--gold-light);
-      color: var(--gold-light);
-    }
-
-    /* ── SECTION COMMONS ──────────────────────────────────── */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .container {
-      max-width: 1060px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      display: block;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--emerald);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.3rem);
-      color: var(--emerald-dark);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .divider {
-      width: 48px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      margin: 0 0 1.6rem;
-      border-radius: 2px;
-    }
-
-    /* ── ABOUT ────────────────────────────────────────────── */
-    #about {
-      background: var(--warm-white);
-    }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-mid);
-      margin-bottom: 1.1rem;
-      font-size: 1.03rem;
-    }
-
-    .about-visual {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .about-gem-card {
-      background: linear-gradient(135deg, var(--emerald-dark) 0%, var(--emerald) 100%);
-      border-radius: 4px;
-      padding: 3rem 2.5rem;
-      text-align: center;
-      width: 100%;
-      box-shadow: 0 12px 40px rgba(26,102,68,0.25);
-    }
-
-    .about-gem-card svg {
-      display: block;
-      margin: 0 auto 1.2rem;
-    }
-
-    .about-gem-card p {
-      color: rgba(255,255,255,0.85);
-      font-style: italic;
-      font-size: 1.05rem;
-      line-height: 1.6;
-    }
-
-    .about-gem-card cite {
-      display: block;
-      margin-top: 1rem;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      font-style: normal;
-    }
-
-    /* ── SERVICES ─────────────────────────────────────────── */
-    #services {
-      background: var(--cream);
-    }
-
-    .services-header {
-      margin-bottom: 2.8rem;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--warm-white);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 2rem 1.8rem;
-      transition: box-shadow 0.25s, transform 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(180deg, var(--gold), var(--emerald-light));
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 30px rgba(26,102,68,0.12);
-      transform: translateY(-3px);
-    }
-
-    .service-card:hover::after { opacity: 1; }
-
-    .service-icon {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, var(--emerald-dark), var(--emerald-light));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.1rem;
-    }
-
-    .service-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--gold-light);
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--emerald-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-card p {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.88rem;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ──────────────────────────────────────────── */
-    #contact {
-      background: var(--warm-white);
-    }
-
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: start;
-    }
-
-    .contact-info-block {
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-    }
-
-    .contact-item {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .contact-item-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--emerald-dark), var(--emerald-light));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-item-icon svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--gold-light);
-    }
-
-    .contact-item-body {
-      padding-top: 4px;
-    }
-
-    .contact-item-body strong {
-      display: block;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--emerald);
-      margin-bottom: 0.25rem;
-    }
-
-    .contact-item-body p,
-    .contact-item-body a {
-      font-size: 1rem;
-      color: var(--text-mid);
-      text-decoration: none;
-    }
-
-    .contact-item-body a:hover { color: var(--emerald); }
-
-    .rating-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--cream);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 0.4rem 1rem;
-      margin-top: 0.4rem;
-    }
-
-    .rating-badge .stars {
-      color: var(--gold);
-      font-size: 0.95rem;
-      letter-spacing: 1px;
-    }
-
-    .rating-badge span {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      color: var(--text-light);
-    }
-
-    .contact-cta-card {
-      background: linear-gradient(135deg, var(--emerald-dark) 0%, var(--emerald) 100%);
-      border-radius: 4px;
-      padding: 2.8rem 2.2rem;
-      text-align: center;
-      box-shadow: 0 12px 40px rgba(26,102,68,0.2);
-    }
-
-    .contact-cta-card h3 {
-      color: var(--warm-white);
-      font-size: 1.4rem;
-      margin-bottom: 0.7rem;
-    }
-
-    .contact-cta-card p {
-      color: rgba(255,255,255,0.75);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.9rem;
-      margin-bottom: 1.8rem;
-      line-height: 1.6;
-    }
-
-    .contact-cta-card .btn {
-      display: block;
-      margin-bottom: 0.9rem;
-    }
-
-    .contact-cta-card .phone-link {
-      color: var(--gold-light);
-      font-size: 1.25rem;
-      font-weight: 700;
-      text-decoration: none;
-      display: block;
-      margin-top: 0.5rem;
-      transition: color 0.2s;
-    }
-
-    .contact-cta-card .phone-link:hover { color: #fff; }
-
-    /* ── FOOTER ───────────────────────────────────────────── */
-    footer {
-      background: var(--emerald-dark);
-      color: rgba(255,255,255,0.7);
-      text-align: center;
-      padding: 2.4rem 1.5rem;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-    }
-
-    footer .footer-logo {
-      color: var(--gold-light);
-      font-size: 1rem;
-      font-family: 'Georgia', serif;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.04em;
-    }
-
-    footer .footer-address {
-      margin-bottom: 0.4rem;
-    }
-
-    footer .footer-bottom {
-      margin-top: 1.2rem;
-      padding-top: 1.2rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.4);
-    }
-
-    /* ── RESPONSIVE ───────────────────────────────────────── */
-    @media (max-width: 768px) {
-      nav { padding: 0 1.2rem; }
-
-      .nav-links {
-        display: none;
-        position: fixed;
-        top: 68px;
-        left: 0;
-        right: 0;
-        background: var(--emerald-dark);
-        flex-direction: column;
-        gap: 0;
-        padding: 0.5rem 0 1rem;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-links li a {
-        display: block;
-        padding: 0.9rem 1.5rem;
-      }
-
-      .nav-toggle { display: flex; }
-
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .about-visual { order: -1; }
-
-      section { padding: 3.5rem 1.2rem; }
-
-      .hero { padding: 6rem 1.2rem 3rem; }
-    }
-
-    @media (max-width: 480px) {
-      .hero-cta-group { flex-direction: column; align-items: center; }
-      .btn { width: 100%; max-width: 280px; text-align: center; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Precious Emeralds Boutique | Women's Clothing | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --em:#0d6b4f;--em-dk:#063d2d;--em-lt:#cfe9dd;--emerald:#12a077;
+    --gold:#c8a35a;--gold-lt:#f3e6c4;--ink:#0e1a15;--paper:#f6f3ea;--gray:#586460;--white:#fff;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
+  .serif{font-family:Georgia,'Times New Roman',serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 26px}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;
+    padding:16px 26px;mix-blend-mode:normal}
+  .brand{font-family:Georgia,serif;font-weight:700;color:var(--em-dk);font-size:1rem;letter-spacing:.02em}
+  .brand small{display:block;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:400;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gray)}
+  .nlinks{display:flex;gap:24px;font-size:.76rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--em-dk)}
+  .nlinks a:hover{color:var(--gold)}
+  @media(max-width:560px){.nlinks{gap:14px;font-size:.66rem}}
+
+  /* HERO — oversized asymmetric type */
+  .hero{padding:20vh 0 12vh;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-10%;right:-6%;width:52vw;height:52vw;max-width:640px;max-height:640px;border-radius:50%;
+    background:radial-gradient(circle at 40% 35%,var(--emerald),var(--em-dk));opacity:.16;filter:blur(2px);z-index:0}
+  .hero .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;position:relative;z-index:1}
+  .giant{font-family:Georgia,serif;font-weight:800;line-height:.82;letter-spacing:-.03em;position:relative;z-index:1}
+  .giant .l1{font-size:clamp(3rem,15vw,10rem);display:block;color:var(--em-dk)}
+  .giant .l2{font-size:clamp(3rem,15vw,10rem);display:block;font-style:italic;margin-left:12vw;
+    background:linear-gradient(100deg,var(--emerald),var(--gold),var(--em));background-size:220% 100%;
+    -webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 9s linear infinite}
+  .giant .l3{font-size:clamp(1.6rem,7vw,4.4rem);display:block;color:var(--gold);margin-left:4vw}
+  @keyframes flow{to{background-position:220% 0}}
+  .hero-tag{font-family:Georgia,serif;font-style:italic;font-size:clamp(1.1rem,2.4vw,1.6rem);color:var(--gray);margin:36px 0 30px;max-width:34ch;position:relative;z-index:1}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;position:relative;z-index:1}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    padding:15px 30px;border-radius:2px;transition:transform .2s,box-shadow .2s,background .2s,color .2s;cursor:pointer}
+  .btn.solid{background:var(--em-dk);color:#fff}
+  .btn.solid:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(6,61,45,.3);background:var(--em)}
+  .btn.line{border:2px solid var(--em-dk);color:var(--em-dk)}
+  .btn.line:hover{background:var(--em-dk);color:#fff}
+
+  /* section */
+  section{padding:9vh 0;position:relative}
+  .lab{font-size:.74rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  .head{font-family:Georgia,serif;font-weight:800;font-size:clamp(2rem,5.4vw,4rem);line-height:.98;letter-spacing:-.02em;color:var(--em-dk)}
+
+  /* about asymmetric */
+  .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:6vw;align-items:center;margin-top:30px}
+  .about-grid p{color:var(--gray);font-size:1.08rem;margin-bottom:16px}
+  .quote{font-family:Georgia,serif;font-style:italic;font-size:clamp(1.4rem,3vw,2.2rem);line-height:1.25;color:var(--em-dk);
+    border-left:4px solid var(--gold);padding-left:24px}
+  #about{background:var(--white)}
+
+  /* offerings — offset editorial cards */
+  .offers{margin-top:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+  .card{background:var(--white);padding:30px 26px;border:1px solid var(--em-lt);border-radius:4px;position:relative;
+    transition:transform .3s,box-shadow .3s;transform:perspective(900px)}
+  .card:nth-child(even){transform:perspective(900px) translateY(26px)}
+  .card:hover{box-shadow:0 20px 44px rgba(6,61,45,.14)}
+  .card .no{font-family:Georgia,serif;font-size:2.4rem;font-weight:800;color:var(--em-lt);line-height:1}
+  .card h3{font-family:Georgia,serif;font-size:1.3rem;margin:6px 0 8px;color:var(--em-dk)}
+  .card p{font-size:.94rem;color:var(--gray)}
+  @media(max-width:820px){.card:nth-child(even){transform:perspective(900px)}}
+
+  /* contact */
+  #contact{background:linear-gradient(160deg,var(--em-dk),var(--em));color:#fff}
+  #contact .lab{color:var(--gold-lt)}
+  #contact .head{color:#fff}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5vw;margin-top:30px;align-items:start}
+  @media(max-width:760px){.about-grid,.contact-grid{grid-template-columns:1fr}}
+  .info .row{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.16)}
+  .info .row .ic{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .info .row .ic svg{width:22px;height:22px;fill:var(--gold-lt)}
+  .info .row b{display:block;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-lt)}
+  .info .row a,.info .row span{font-family:Georgia,serif;font-size:1.1rem;color:#fff}
+  .rate{margin-top:24px}
+  .rate .stars{color:var(--gold);font-size:1.6rem;letter-spacing:4px}
+  .rate .lbl{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-lt);margin-top:6px}
+  .rate .none{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:#fff;margin-top:4px}
+  .visit-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:30px}
+  .visit-card h3{font-family:Georgia,serif;font-size:1.5rem;margin-bottom:10px}
+  .visit-card p{color:rgba(255,255,255,.88);margin-bottom:18px}
+  .dir{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--ink);
+    font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:14px 26px;border-radius:2px;transition:transform .2s,box-shadow .2s}
+  .dir:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.3)}
+  .dir svg{width:18px;height:18px;fill:var(--ink)}
+  .callrow{margin-top:16px;font-family:Georgia,serif;font-size:1.15rem}
+  .callrow a{color:var(--gold-lt)}
+
+  footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;padding:44px 20px}
+  footer .fl{font-family:Georgia,serif;font-size:1.3rem;color:var(--gold-lt)}
+  footer .fa{font-size:.85rem;margin-top:8px}
+  footer .fc{font-size:.74rem;color:rgba(255,255,255,.32);margin-top:16px}
+
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#hero">
-      <!-- Gem SVG logo mark -->
-      <svg class="nav-logo-gem" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="30,4 56,20 56,40 30,56 4,40 4,20" fill="none" stroke="#c9a84c" stroke-width="2"/>
-        <polygon points="30,4 48,14 30,26 12,14" fill="#c9a84c" opacity="0.35"/>
-        <polygon points="12,14 4,20 4,40 30,26" fill="#c9a84c" opacity="0.2"/>
-        <polygon points="48,14 56,20 56,40 30,26" fill="#c9a84c" opacity="0.45"/>
-        <polygon points="4,40 30,56 56,40 30,26" fill="#c9a84c" opacity="0.3"/>
-        <polygon points="30,4 48,14 30,26 12,14" fill="none" stroke="#e8c97a" stroke-width="0.8"/>
-      </svg>
-      <div class="nav-logo-text">
-        <span class="brand">Precious Emeralds</span>
-        <span class="sub">Boutique &nbsp;&bull;&nbsp; Gainesville, FL</span>
-      </div>
-    </a>
+<nav>
+  <div class="brand">Precious Emeralds<small>Boutique &bull; Gainesville, FL</small></div>
+  <div class="nlinks"><a href="#about">About</a><a href="#collections">Collections</a><a href="#contact">Contact</a></div>
+</nav>
 
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+<header class="hero wrap">
+  <p class="eyebrow">Women's Boutique &bull; Gainesville, FL</p>
+  <h1 class="giant">
+    <span class="l1">Precious</span>
+    <span class="l2">Emeralds</span>
+    <span class="l3">Boutique</span>
+  </h1>
+  <p class="hero-tag">Dress with intention. Shine with confidence.</p>
+  <div class="hero-cta">
+    <a href="#collections" class="btn solid">Explore Collections</a>
+    <a href="#contact" class="btn line">Visit Us</a>
+  </div>
+</header>
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Collections</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-gem-bg">
-      <!-- Repeating gem silhouettes -->
-      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="30,2 58,18 58,42 30,58 2,42 2,18" fill="white"/>
-      </svg>
-      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="30,2 58,18 58,42 30,58 2,42 2,18" fill="white"/>
-      </svg>
-      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="30,2 58,18 58,42 30,58 2,42 2,18" fill="white"/>
-      </svg>
-      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="30,2 58,18 58,42 30,58 2,42 2,18" fill="white"/>
-      </svg>
+<section id="about" class="wrap">
+  <div class="reveal">
+    <p class="lab">Our Story</p>
+    <h2 class="head">Style That Speaks to You</h2>
+  </div>
+  <div class="about-grid">
+    <div class="reveal">
+      <p>Precious Emeralds Boutique is a women's clothing destination in the heart of Gainesville, curated for the woman who values elegance, individuality, and quality craftsmanship. Whether you're updating your everyday wardrobe or seeking something special for an occasion, our carefully selected pieces celebrate every style and silhouette.</p>
+      <p>Rooted in the vibrant Gainesville community, we're proud to offer a thoughtfully curated mix of contemporary styles, timeless classics, and on-trend seasonal pieces that keep our clients looking and feeling their very best.</p>
+      <p>Our team is passionate about helping every guest find clothing that feels as good as it looks. Stop by our suite or reach out &mdash; we'd love to help you find your next favorite piece.</p>
     </div>
-    <div class="hero-content">
-      <span class="hero-eyebrow">Women's Boutique &nbsp;&bull;&nbsp; Gainesville, FL</span>
-      <h1>Precious <em>Emeralds</em> Boutique</h1>
-      <p class="hero-tagline">Dress with intention. Shine with confidence.</p>
-      <div class="hero-cta-group">
-        <a class="btn btn-gold" href="#services">Explore Collections</a>
-        <a class="btn btn-outline-white" href="#contact">Visit Us</a>
-      </div>
-    </div>
-  </section>
+    <blockquote class="quote reveal">"Fashion is about more than clothes &mdash; it is about the confidence you wear every day."</blockquote>
+  </div>
+</section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-inner">
-        <div class="about-text">
-          <span class="section-label">Our Story</span>
-          <h2 class="section-title">Style That Speaks to You</h2>
-          <div class="divider"></div>
-          <p>
-            Precious Emeralds Boutique is a women's clothing destination in the heart of Gainesville,
-            curated for the woman who values elegance, individuality, and quality craftsmanship.
-            Whether you're updating your everyday wardrobe or seeking something special for an
-            occasion, our carefully selected pieces celebrate every style and silhouette.
-          </p>
-          <p>
-            Rooted in the vibrant Gainesville community, we're proud to offer a thoughtfully
-            curated mix of contemporary styles, timeless classics, and on-trend seasonal pieces
-            that keep our clients looking and feeling their very best.
-          </p>
-          <p>
-            Our team is passionate about helping every guest find clothing that feels as good as it looks.
-            Stop by our suite or reach out — we'd love to help you find your next favorite piece.
-          </p>
+<section id="collections" class="wrap">
+  <div class="reveal">
+    <p class="lab">What We Offer</p>
+    <h2 class="head">Collections &amp; Services</h2>
+  </div>
+  <div class="offers">
+    <div class="card reveal"><div class="no">01</div><h3>Everyday Wear</h3><p>Comfortable, stylish pieces for daily life &mdash; from casual tops and bottoms to relaxed dresses suited for Gainesville's warm climate.</p></div>
+    <div class="card reveal"><div class="no">02</div><h3>Occasion &amp; Formal Attire</h3><p>Elegant dresses, blouses, and coordinated sets for weddings, events, date nights, and every milestone worth celebrating.</p></div>
+    <div class="card reveal"><div class="no">03</div><h3>Seasonal Collections</h3><p>Fresh arrivals each season featuring the latest trends in color, pattern, and silhouette &mdash; always curated with the Florida lifestyle in mind.</p></div>
+    <div class="card reveal"><div class="no">04</div><h3>Accessories &amp; Add-Ons</h3><p>Complete your look with a curated selection of accessories &mdash; including jewelry, scarves, handbags, and other finishing touches.</p></div>
+    <div class="card reveal"><div class="no">05</div><h3>Personal Styling Assistance</h3><p>Our attentive staff are ready to help you put together outfits that match your style, body type, and the occasion. Contact us for details.</p></div>
+    <div class="card reveal"><div class="no">06</div><h3>Gift Purchases &amp; Special Orders</h3><p>Looking for the perfect gift? We're happy to help you find something thoughtful, or assist with special order inquiries. Contact us for details.</p></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="lab">Find Us</p>
+      <h2 class="head">Visit Precious Emeralds</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="info reveal">
+        <div class="row"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg></div><div><b>Address</b><span>901 NW 8th Ave, Suite B5-2, Gainesville, FL 32601</span></div></div>
+        <div class="row"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div><div><b>Phone</b><a href="tel:+13528887750">(352) 888-7750</a></div></div>
+        <div class="row"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20a8 8 0 110-16 8 8 0 010 16zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div><div><b>Hours</b><span>Contact us for details</span></div></div>
+        <div class="rate">
+          <div class="lbl">Google Rating</div>
+          <div class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="none">No reviews yet &mdash; be the first!</p>
         </div>
-        <div class="about-visual">
-          <div class="about-gem-card">
-            <!-- Large gem SVG -->
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="40,5 74,22 74,58 40,75 6,58 6,22" fill="none" stroke="#c9a84c" stroke-width="2"/>
-              <polygon points="40,5 62,16 40,32 18,16" fill="#c9a84c" opacity="0.4"/>
-              <polygon points="18,16 6,22 6,58 40,32" fill="#c9a84c" opacity="0.2"/>
-              <polygon points="62,16 74,22 74,58 40,32" fill="#c9a84c" opacity="0.55"/>
-              <polygon points="6,58 40,75 74,58 40,32" fill="#c9a84c" opacity="0.35"/>
-            </svg>
-            <p>"Fashion is about more than clothes — it is about the confidence you wear every day."</p>
-            <cite>Precious Emeralds Boutique</cite>
-          </div>
-        </div>
+      </div>
+      <div class="visit-card reveal">
+        <h3>Come See Us</h3>
+        <p>We're located in Gainesville and ready to help you find something you'll love. Stop in or give us a call to learn more.</p>
+        <a class="dir" href="https://www.google.com/maps/search/Precious%20Emeralds%20Boutique%20901%20NW%208th%20Ave%20Suite%20B5-2%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+          Get Directions
+        </a>
+        <p class="callrow">Call <a href="tel:+13528887750">(352) 888-7750</a></p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <div class="services-header">
-        <span class="section-label">What We Offer</span>
-        <h2 class="section-title">Collections &amp; Services</h2>
-        <div class="divider"></div>
-      </div>
-      <div class="services-grid">
+<footer>
+  <div class="fl">Precious Emeralds Boutique</div>
+  <p class="fa">901 NW 8th Ave, Suite B5-2 &bull; Gainesville, FL 32601 &bull; <a href="tel:+13528887750">(352) 888-7750</a></p>
+  <p class="fc">&copy; 2024 Precious Emeralds Boutique. All rights reserved.</p>
+</footer>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Hanger / Clothing icon -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 3a2 2 0 0 1 2 2c0 .74-.41 1.38-1 1.73V8l8 6H3l8-6V6.73A2 2 0 0 1 12 3zm0 2a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM4 15h16v2H4v-2z"/>
-            </svg>
-          </div>
-          <h3>Everyday Wear</h3>
-          <p>Comfortable, stylish pieces for daily life — from casual tops and bottoms to relaxed dresses suited for Gainesville's warm climate.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Star / Occasion icon -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-          </div>
-          <h3>Occasion &amp; Formal Attire</h3>
-          <p>Elegant dresses, blouses, and coordinated sets for weddings, events, date nights, and every milestone worth celebrating.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Layers / Seasonal icon -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
-          </div>
-          <h3>Seasonal Collections</h3>
-          <p>Fresh arrivals each season featuring the latest trends in color, pattern, and silhouette — always curated with the Florida lifestyle in mind.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Accessories / Gem icon -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2l4 7H8l4-7zm0 20l-8-11h16L12 22zm-6-11l6-9 6 9H6z"/>
-            </svg>
-          </div>
-          <h3>Accessories &amp; Add-Ons</h3>
-          <p>Complete your look with a curated selection of accessories — including jewelry, scarves, handbags, and other finishing touches.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Person / Styling icon -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-            </svg>
-          </div>
-          <h3>Personal Styling Assistance</h3>
-          <p>Our attentive staff are ready to help you put together outfits that match your style, body type, and the occasion. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Gift / Gift card icon -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-            </svg>
-          </div>
-          <h3>Gift Purchases &amp; Special Orders</h3>
-          <p>Looking for the perfect gift? We're happy to help you find something thoughtful, or assist with special order inquiries. Contact us for details.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <span class="section-label">Find Us</span>
-      <h2 class="section-title">Visit Precious Emeralds</h2>
-      <div class="divider"></div>
-      <div class="contact-inner">
-
-        <div class="contact-info-block">
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Address</strong>
-              <p>901 NW 8th Ave, Suite B5-2<br>Gainesville, FL 32601</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Phone</strong>
-              <a href="tel:+13528887750">(352) 888-7750</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Hours</strong>
-              <p>Contact us for details</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Google Rating</strong>
-              <div>
-                <div class="rating-badge">
-                  <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                  <span>No reviews yet — be the first!</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="contact-cta-card">
-          <h3>Come See Us</h3>
-          <p>We're located in Gainesville and ready to help you find something you'll love. Stop in or give us a call to learn more.</p>
-          <a
-            class="btn btn-gold"
-            href="https://www.google.com/maps/search/Precious%20Emeralds%20Boutique%20901%20NW%208th%20Ave%20Suite%20B5-2%2C%20Gainesville%2C%20FL%2032601"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Get Directions</a>
-          <a class="phone-link" href="tel:+13528887750">(352) 888-7750</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Precious Emeralds Boutique</div>
-    <div class="footer-address">901 NW 8th Ave, Suite B5-2 &bull; Gainesville, FL 32601</div>
-    <div><a href="tel:+13528887750" style="color: rgba(255,255,255,0.6); text-decoration: none;">(352) 888-7750</a></div>
-    <div class="footer-bottom">&copy; 2024 Precious Emeralds Boutique. All rights reserved.</div>
-  </footer>
-
-  <script>
-    // Mobile nav toggle
-    var toggle = document.getElementById('navToggle');
-    var navLinks = document.getElementById('navLinks');
-    toggle.addEventListener('click', function () {
-      navLinks.classList.toggle('open');
-    });
-    // Close nav on link click
-    navLinks.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        navLinks.classList.remove('open');
-      });
-    });
-  </script>
-
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els=document.querySelectorAll('.reveal');
+  if(reduce||!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(ent){ent.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.15});
+  els.forEach(function(e){io.observe(e);});
+  // magnetic buttons + parallax hero orb
+  document.querySelectorAll('.btn,.dir').forEach(function(b){
+    b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2).toFixed(1)+'px,'+((e.clientY-r.top-r.height/2)*.3-3).toFixed(1)+'px)';});
+    b.addEventListener('pointerleave',function(){b.style.transform='';});
+  });
+})();
+</script>
 </body>
 </html>
