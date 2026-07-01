@@ -1,1020 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>University of Florida - Cuong Nhu Cypress Dojo | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy:    #1a2744;
-      --deep:    #0f1c36;
-      --gold:    #c9a84c;
-      --gold-lt: #e2c27a;
-      --white:   #ffffff;
-      --off-white: #f4f2ee;
-      --text:    #2c2c2c;
-      --muted:   #6b6b6b;
-      --border:  #ddd6c8;
-      --shadow:  rgba(0,0,0,0.15);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', serif;
-      color: var(--text);
-      background: var(--white);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--deep);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 68px;
-      box-shadow: 0 2px 12px var(--shadow);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo {
-      width: 42px;
-      height: 42px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo svg { width: 26px; height: 26px; }
-
-    .nav-name {
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      line-height: 1.2;
-    }
-
-    .nav-name span {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--gold-lt);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #c5cfe0;
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold-lt); }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--deep) !important;
-      padding: 8px 20px;
-      border-radius: 4px;
-      font-weight: 700 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover { background: var(--gold-lt) !important; color: var(--deep) !important; }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-      background: var(--deep);
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 30% 60%, rgba(201,168,76,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 75% 30%, rgba(26,39,68,0.6) 0%, transparent 60%),
-        linear-gradient(160deg, #0d1a30 0%, #1a2744 50%, #0f1c36 100%);
-    }
-
-    /* decorative circles */
-    .hero-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.15);
-      pointer-events: none;
-    }
-    .ring-1 { width: 600px; height: 600px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .ring-2 { width: 850px; height: 850px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .ring-3 { width: 1100px; height: 1100px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      padding: 120px 24px 80px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(201,168,76,0.15);
-      border: 1px solid rgba(201,168,76,0.4);
-      color: var(--gold-lt);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 6px 18px;
-      border-radius: 100px;
-      margin-bottom: 28px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
-      color: var(--white);
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 12px;
-      letter-spacing: -0.01em;
-    }
-
-    .hero h1 em {
-      font-style: normal;
-      color: var(--gold);
-    }
-
-    .hero-sub {
-      font-size: clamp(0.95rem, 2.2vw, 1.2rem);
-      color: #9db0cc;
-      margin-bottom: 16px;
-      font-family: 'Arial', sans-serif;
-      letter-spacing: 0.02em;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-      color: #c5d3e8;
-      margin-bottom: 44px;
-      max-width: 580px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 15px 36px;
-      border-radius: 5px;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.25s;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--deep);
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-lt);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(201,168,76,0.35);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border: 2px solid rgba(255,255,255,0.35);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--gold);
-      color: var(--gold-lt);
-      transform: translateY(-2px);
-    }
-
-    .hero-rating {
-      margin-top: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: #9db0cc;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.85rem;
-    }
-
-    .stars { color: var(--gold); font-size: 1.1rem; letter-spacing: 2px; }
-
-    /* ── SECTION SHELL ── */
-    section { padding: 90px 5%; }
-
-    .section-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 14px;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
-      color: var(--navy);
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 20px;
-    }
-
-    .section-title em {
-      font-style: normal;
-      color: var(--gold);
-    }
-
-    .divider {
-      width: 56px;
-      height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin-bottom: 32px;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--off-white);
-    }
-
-    .about-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 72px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      margin-bottom: 18px;
-    }
-
-    .about-text p:last-child { margin-bottom: 0; }
-
-    .about-graphic {
-      display: flex;
-      justify-content: center;
-    }
-
-    .dojo-emblem {
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 16px 48px rgba(15,28,54,0.3);
-      position: relative;
-    }
-
-    .dojo-emblem::before {
-      content: '';
-      position: absolute;
-      inset: 12px;
-      border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.3);
-    }
-
-    .dojo-emblem svg {
-      width: 120px;
-      height: 120px;
-    }
-
-    .about-pills {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 28px;
-    }
-
-    .pill {
-      background: var(--navy);
-      color: var(--gold-lt);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 7px 16px;
-      border-radius: 100px;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--white);
-    }
-
-    .services-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .services-header { margin-bottom: 56px; }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-
-    .service-card {
-      background: var(--off-white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 36px 28px;
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transition: transform 0.3s;
-      transform-origin: left;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 32px var(--shadow);
-      border-color: var(--gold);
-    }
-
-    .service-card:hover::after { transform: scaleX(1); }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: var(--navy);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 22px;
-    }
-
-    .service-icon svg { width: 28px; height: 28px; }
-
-    .service-card h3 {
-      font-size: 1.15rem;
-      color: var(--navy);
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-
-    .service-card p {
-      color: var(--muted);
-      font-size: 0.93rem;
-      line-height: 1.65;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    #contact .section-title { color: var(--white); }
-    #contact .section-label { color: var(--gold-lt); }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 72px;
-      align-items: start;
-    }
-
-    .contact-info p {
-      color: #9db0cc;
-      font-size: 1rem;
-      margin-bottom: 32px;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .info-icon {
-      width: 42px;
-      height: 42px;
-      background: rgba(201,168,76,0.15);
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .info-icon svg { width: 20px; height: 20px; }
-
-    .info-text strong {
-      display: block;
-      color: var(--gold-lt);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .info-text span {
-      color: #c5d3e8;
-      font-size: 0.97rem;
-    }
-
-    .contact-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 44px 36px;
-    }
-
-    .rating-display {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 32px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .rating-score {
-      font-size: 3.2rem;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .rating-detail .stars { font-size: 1.3rem; display: block; margin-bottom: 4px; }
-
-    .rating-detail p {
-      color: #9db0cc;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-    }
-
-    .contact-card h3 {
-      font-size: 1.3rem;
-      color: var(--white);
-      margin-bottom: 14px;
-    }
-
-    .contact-card p {
-      color: #9db0cc;
-      font-size: 0.95rem;
-      margin-bottom: 28px;
-      line-height: 1.65;
-    }
-
-    .btn-gold {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--gold);
-      color: var(--deep);
-      padding: 15px 32px;
-      border-radius: 5px;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.25s;
-    }
-
-    .btn-gold:hover {
-      background: var(--gold-lt);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(201,168,76,0.4);
-    }
-
-    .btn-gold svg { width: 18px; height: 18px; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--deep);
-      padding: 40px 5%;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .footer-logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .footer-logo-circle {
-      width: 36px;
-      height: 36px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .footer-logo-circle svg { width: 20px; height: 20px; }
-
-    .footer-name {
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-    }
-
-    .footer-tagline {
-      color: #5a6e8a;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.85rem;
-      margin-bottom: 18px;
-    }
-
-    .footer-divider {
-      width: 40px;
-      height: 1px;
-      background: rgba(201,168,76,0.35);
-      margin: 0 auto 18px;
-    }
-
-    .footer-copy {
-      color: #3d506a;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-    }
-
-    /* ── MOBILE NAV ── */
-    @media (max-width: 768px) {
-      .hamburger { display: flex; }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 68px; left: 0; right: 0;
-        background: var(--deep);
-        flex-direction: column;
-        gap: 0;
-        padding: 8px 0 16px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-links li a {
-        display: block;
-        padding: 14px 5%;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-      }
-
-      .nav-links li:last-child a { border-bottom: none; }
-
-      .nav-cta { margin: 8px 5% 0; border-radius: 4px; text-align: center; }
-
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 48px;
-      }
-
-      .about-graphic { order: -1; }
-      .dojo-emblem { width: 200px; height: 200px; }
-      .dojo-emblem svg { width: 88px; height: 88px; }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .ring-2, .ring-3 { display: none; }
-    }
-
-    @media (min-width: 769px) and (max-width: 1024px) {
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>University of Florida - Cuong Nhu Cypress Dojo | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0e1b34; --navy-2:#132548; --steel:#1a2744; --gold:#c9a84c; --gold-2:#e6cf86;
+    --ink:#eef2fa; --mut:#93a1bd; --line:rgba(201,168,76,.24);
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --rail:104px;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--navy);color:var(--ink);font-family:var(--sans);line-height:1.75;overflow-x:hidden}
+  a{color:inherit}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 clamp(1.2rem,4vw,2.4rem)}
+
+  /* SIDE RAIL NAV */
+  .siderail{position:fixed;top:0;left:0;bottom:0;width:var(--rail);z-index:60;display:flex;flex-direction:column;align-items:center;
+    justify-content:space-between;padding:1.4rem 0;background:linear-gradient(180deg,var(--steel),var(--navy));border-right:1px solid var(--line)}
+  .siderail .logo svg{width:40px;height:40px}
+  .rnav{display:flex;flex-direction:column;gap:1.4rem;align-items:center}
+  .rnav a{position:relative;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-decoration:none;
+    writing-mode:vertical-rl;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mut);transition:color .25s}
+  .rnav a .dt{writing-mode:horizontal-tb;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--mut);transition:.25s}
+  .rnav a:hover,.rnav a.active{color:var(--gold-2)}
+  .rnav a.active .dt{background:var(--gold);border-color:var(--gold);box-shadow:0 0 10px var(--gold)}
+  .siderail .vlabel{writing-mode:vertical-rl;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mut)}
+  /* scroll progress bar along rail */
+  .prog{position:fixed;left:0;top:0;width:3px;height:0;background:linear-gradient(var(--gold),var(--gold-2));z-index:61}
+
+  /* mobile top bar */
+  .topbar{display:none;position:fixed;inset:0 0 auto 0;z-index:60;align-items:center;justify-content:space-between;
+    padding:.8rem 1.2rem;background:rgba(14,27,52,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .tb{display:flex;align-items:center;gap:.5rem;font-family:var(--serif);font-weight:700}
+  .topbar .tb svg{width:30px;height:30px}
+  .topbar ul{display:flex;gap:1.1rem;list-style:none}
+  .topbar a{text-decoration:none;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+
+  main{margin-left:var(--rail)}
+  .content{max-width:1000px;margin:0 auto;padding:0 clamp(1.4rem,4vw,3rem)}
+  .label{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  h2.title{font-family:var(--serif);font-size:clamp(1.9rem,4.4vw,3rem);font-weight:700;line-height:1.12;margin:.5rem 0 1rem}
+  h2.title em{font-style:italic;color:var(--gold)}
+  .divider{width:60px;height:3px;background:var(--gold);margin-bottom:1.5rem}
+  section{padding:clamp(4.5rem,9vw,7rem) 0;position:relative}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 78% 30%,rgba(201,168,76,.14),transparent 50%),linear-gradient(135deg,var(--navy),var(--navy-2))}
+  .ring{position:absolute;border:1px solid var(--line);border-radius:50%;right:6%;top:50%;translate:0 -50%;pointer-events:none}
+  .ring.r1{width:min(360px,60vw);aspect-ratio:1;animation:spin 50s linear infinite}
+  .ring.r2{width:min(520px,80vw);aspect-ratio:1;opacity:.55;animation:spin 80s linear infinite reverse}
+  .ring.r3{width:min(700px,110vw);aspect-ratio:1;opacity:.3}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero .content{position:relative;z-index:2}
+  .hero .eye{display:inline-block;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);padding:.4rem .9rem;border-radius:999px;margin-bottom:1.6rem}
+  .hero h1{font-family:var(--serif);font-size:clamp(2.6rem,7vw,5rem);font-weight:700;line-height:1.02}
+  .hero h1 em{font-style:italic;color:var(--gold)}
+  .hero .subttl{color:var(--gold-2);font-size:clamp(1rem,2vw,1.25rem);letter-spacing:.04em;margin:1rem 0 .6rem;font-weight:600}
+  .hero .lede{color:#c5cee0;max-width:560px;font-size:1.08rem;font-weight:300}
+  .hactions{display:flex;gap:1rem;flex-wrap:wrap;margin:2rem 0 1.6rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;padding:.9rem 1.7rem;border-radius:4px;text-decoration:none;transition:transform .18s,background .25s,color .25s,box-shadow .25s}
+  .btn-g{background:var(--gold);color:var(--navy);box-shadow:0 10px 30px rgba(201,168,76,.24)}
+  .btn-g:hover{transform:translateY(-2px)}
+  .btn-o{border:1px solid var(--line);color:var(--ink)}
+  .btn-o:hover{border-color:var(--gold);color:var(--gold)}
+  .hrate{display:inline-flex;align-items:center;gap:.5rem;color:var(--mut);font-size:.9rem}
+  .hrate .stars{color:var(--gold);letter-spacing:2px}
+
+  /* ABOUT */
+  #about{background:var(--navy-2)}
+  .about{display:grid;grid-template-columns:1.3fr .7fr;gap:3rem;align-items:center}
+  .about p{color:#c5cee0;margin-bottom:1rem}
+  .pills{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+  .pills span{font-size:.72rem;letter-spacing:.06em;color:var(--gold-2);border:1px solid var(--line);padding:.4rem .85rem;border-radius:999px}
+  .emblem{aspect-ratio:1;display:grid;place-items:center;border:1px solid var(--line);border-radius:16px;background:radial-gradient(circle,rgba(201,168,76,.08),transparent)}
+  .emblem svg{width:70%;height:70%}
+
+  /* SERVICES */
+  .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:2.4rem}
+  .scard{border:1px solid var(--line);border-radius:8px;padding:1.8rem 1.5rem;background:var(--navy-2);position:relative;overflow:hidden;
+    opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s}
+  .scard.in{opacity:1;transform:none}
+  .scard:hover{border-color:var(--gold);box-shadow:0 18px 46px rgba(0,0,0,.4)}
+  .scard .n{font-family:var(--serif);font-size:2.2rem;color:rgba(201,168,76,.35);line-height:1}
+  .scard h3{font-family:var(--serif);font-size:1.2rem;margin:.4rem 0 .5rem}
+  .scard p{color:var(--mut);font-size:.92rem}
+
+  /* CONTACT */
+  #contact{background:var(--navy-2)}
+  .cgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:2.6rem;margin-top:2.2rem}
+  .cinfo p{color:#c5cee0;margin-bottom:1.4rem}
+  .citem{display:flex;gap:1rem;margin-bottom:1.4rem;align-items:flex-start}
+  .citem .ci{width:44px;height:44px;flex:none;border:1px solid var(--line);border-radius:4px;display:grid;place-items:center}
+  .citem .ci svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.5}
+  .citem strong{display:block;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+  .citem span{color:var(--ink)}
+  .ccard{border:1px solid var(--line);border-radius:14px;padding:2rem;background:linear-gradient(180deg,rgba(201,168,76,.06),transparent)}
+  .rdisp{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem}
+  .rdisp .score{font-family:var(--serif);font-size:2.6rem;color:var(--gold);line-height:1}
+  .rdisp .stars{color:var(--gold);letter-spacing:2px}
+  .rdisp p{color:var(--mut);font-size:.85rem}
+  .ccard h3{font-family:var(--serif);font-size:1.4rem;margin-bottom:.6rem}
+  .ccard>p{color:#c5cee0;margin-bottom:1.4rem}
+
+  footer{margin-left:var(--rail);text-align:center;padding:3rem 1rem;background:var(--navy);border-top:1px solid var(--line)}
+  .flogo{display:flex;align-items:center;justify-content:center;gap:.6rem;font-family:var(--serif);font-size:1.2rem;color:var(--gold-2)}
+  .flogo svg{width:30px;height:30px}
+  .ftag{color:var(--mut);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;margin:.7rem 0 1rem}
+  .fcopy{color:var(--mut);font-size:.76rem}
+
+  @media(max-width:860px){
+    .siderail,.prog{display:none}
+    .topbar{display:flex}
+    main,footer{margin-left:0}
+    main{padding-top:56px}
+    .about,.cgrid{grid-template-columns:1fr}
+    .tbtxt{display:none}
+  }
+  @media(max-width:400px){.topbar ul{gap:.8rem}.topbar a{font-size:.66rem}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.scard{opacity:1;transform:none}}
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="top">
-  <a href="#top" class="nav-brand">
-    <div class="nav-logo">
-      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="13" cy="13" r="11" stroke="#1a2744" stroke-width="1.5" fill="none"/>
-        <path d="M13 4 L13 22 M7 7.5 L19 18.5 M19 7.5 L7 18.5" stroke="#1a2744" stroke-width="1.8" stroke-linecap="round"/>
-        <circle cx="13" cy="13" r="3" fill="#1a2744"/>
-      </svg>
-    </div>
-    <div class="nav-name">
-      UF Cuong Nhu Cypress Dojo
-      <span>Gainesville, FL</span>
-    </div>
+<div class="prog" id="prog" aria-hidden="true"></div>
+
+<!-- SIDE RAIL -->
+<aside class="siderail" aria-label="Primary navigation">
+  <a class="logo" href="#hero" aria-label="Home">
+    <svg viewBox="0 0 26 26" fill="none" aria-hidden="true">
+      <circle cx="13" cy="13" r="11" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+      <path d="M13 4 L13 22 M7 7.5 L19 18.5 M19 7.5 L7 18.5" stroke="#c9a84c" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="13" cy="13" r="3" fill="#c9a84c"/>
+    </svg>
   </a>
+  <nav class="rnav" id="rnav">
+    <a href="#hero" data-t="hero"><span class="dt"></span>Home</a>
+    <a href="#about" data-t="about"><span class="dt"></span>About</a>
+    <a href="#services" data-t="services"><span class="dt"></span>Programs</a>
+    <a href="#contact" data-t="contact"><span class="dt"></span>Contact</a>
+  </nav>
+  <span class="vlabel">Gainesville, FL</span>
+</aside>
 
-  <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">
-    <span></span><span></span><span></span>
-  </button>
+<!-- MOBILE TOP BAR -->
+<div class="topbar">
+  <a class="tb" href="#hero">
+    <svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#c9a84c" stroke-width="1.5"/><path d="M13 4 L13 22 M7 7.5 L19 18.5 M19 7.5 L7 18.5" stroke="#c9a84c" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span class="tbtxt">UF Cuong Nhu Cypress Dojo</span>
+  </a>
+  <ul><li><a href="#about">About</a></li><li><a href="#services">Programs</a></li><li><a href="#contact">Contact</a></li></ul>
+</div>
 
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Programs</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#contact" class="nav-cta">Get Started</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-ring ring-1"></div>
-  <div class="hero-ring ring-2"></div>
-  <div class="hero-ring ring-3"></div>
-
-  <div class="hero-content">
-    <div class="hero-badge">Gainesville, FL &mdash; University of Florida</div>
-
-    <h1>Train with <em>Purpose</em>.<br/>Move with <em>Discipline</em>.</h1>
-
-    <p class="hero-sub">University of Florida &mdash; Cuong Nhu Cypress Dojo</p>
-
-    <p class="hero-tagline">
-      A traditional martial arts school at the University of Florida, cultivating strength,
-      focus, and character through the practice of Cuong Nhu.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#services" class="btn btn-primary">View Programs</a>
-      <a href="#contact" class="btn btn-outline">Find the Dojo</a>
-    </div>
-
-    <div class="hero-rating">
-      <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-      <span>5.0 rating &mdash; Google Maps</span>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-inner">
-    <div class="about-text">
-      <p class="section-label">About the Dojo</p>
-      <h2 class="section-title">Where Tradition Meets <em>Modern Training</em></h2>
-      <div class="divider"></div>
-
-      <p>
-        The Cuong Nhu Cypress Dojo at the University of Florida is a welcoming community
-        dedicated to the practice of Cuong Nhu &mdash; a dynamic Vietnamese-American martial
-        art that blends striking, grappling, weapons, and mindfulness into one holistic discipline.
-      </p>
-      <p>
-        Students of all experience levels are invited to develop physical fitness, mental
-        resilience, and self-confidence in a structured yet supportive environment guided
-        by certified instructors.
-      </p>
-      <p>
-        Whether you are brand new to martial arts or an experienced practitioner seeking to
-        deepen your training, the Cypress Dojo provides a path for growth, respect, and
-        lifelong learning.
-      </p>
-
-      <div class="about-pills">
-        <span class="pill">All Skill Levels</span>
-        <span class="pill">Traditional Art</span>
-        <span class="pill">UF Community</span>
-        <span class="pill">Certified Instructors</span>
+<main>
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="ring r3" aria-hidden="true"></div>
+    <div class="ring r2" aria-hidden="true"></div>
+    <div class="ring r1" aria-hidden="true"></div>
+    <div class="content">
+      <span class="eye">Gainesville, FL — University of Florida</span>
+      <h1>Train with <em>Purpose</em>.<br>Move with <em>Discipline</em>.</h1>
+      <p class="subttl">University of Florida — Cuong Nhu Cypress Dojo</p>
+      <p class="lede">A traditional martial arts school at the University of Florida, cultivating strength, focus, and character through the practice of Cuong Nhu.</p>
+      <div class="hactions">
+        <a href="#services" class="btn btn-g">View Programs</a>
+        <a href="#contact" class="btn btn-o">Find the Dojo</a>
       </div>
+      <div class="hrate"><span class="stars">★★★★★</span><span>5.0 rating — Google Maps</span></div>
     </div>
+  </section>
 
-    <div class="about-graphic">
-      <div class="dojo-emblem">
-        <!-- crane / martial art symbol -->
-        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- yin-yang-inspired emblem -->
-          <circle cx="60" cy="60" r="54" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-          <circle cx="60" cy="60" r="38" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4"/>
-          <!-- stylised figure -->
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="content about">
+      <div>
+        <p class="label">About the Dojo</p>
+        <h2 class="title">Where Tradition Meets <em>Modern Training</em></h2>
+        <div class="divider"></div>
+        <p>The Cuong Nhu Cypress Dojo at the University of Florida is a welcoming community dedicated to the practice of Cuong Nhu — a dynamic Vietnamese-American martial art that blends striking, grappling, weapons, and mindfulness into one holistic discipline.</p>
+        <p>Students of all experience levels are invited to develop physical fitness, mental resilience, and self-confidence in a structured yet supportive environment guided by certified instructors.</p>
+        <p>Whether you are brand new to martial arts or an experienced practitioner seeking to deepen your training, the Cypress Dojo provides a path for growth, respect, and lifelong learning.</p>
+        <div class="pills"><span>All Skill Levels</span><span>Traditional Art</span><span>UF Community</span><span>Certified Instructors</span></div>
+      </div>
+      <div class="emblem" aria-hidden="true">
+        <svg viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="54" stroke="#c9a84c" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="38" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
           <circle cx="60" cy="26" r="7" fill="#c9a84c"/>
-          <!-- body -->
           <path d="M60 33 L60 65" stroke="#c9a84c" stroke-width="3" stroke-linecap="round"/>
-          <!-- arms raised -->
           <path d="M60 42 L38 32" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
           <path d="M60 42 L82 32" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- legs stance -->
           <path d="M60 65 L44 90" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
           <path d="M60 65 L76 90" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- decorative base lines -->
           <path d="M28 100 L92 100" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
         </svg>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="services-inner">
-    <div class="services-header">
-      <p class="section-label">Programs &amp; Training</p>
-      <h2 class="section-title">What We <em>Offer</em></h2>
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="content">
+      <p class="label">Programs &amp; Training</p>
+      <h2 class="title">What We <em>Offer</em></h2>
       <div class="divider"></div>
+      <div class="sgrid">
+        <div class="scard"><div class="n">01</div><h3>Beginner Classes</h3><p>An introduction to the fundamentals of Cuong Nhu — stances, strikes, blocks, and basic forms — designed for those with no prior martial arts experience. Contact us for details on scheduling.</p></div>
+        <div class="scard"><div class="n">02</div><h3>Forms (Kata) Training</h3><p>Master the traditional kata of Cuong Nhu, developing precision, balance, and body awareness through rehearsed sequences that encode the art's core techniques.</p></div>
+        <div class="scard"><div class="n">03</div><h3>Sparring &amp; Self-Defense</h3><p>Controlled sparring sessions and practical self-defense scenarios to apply learned techniques in a safe, supervised environment under instructor guidance.</p></div>
+        <div class="scard"><div class="n">04</div><h3>Weapons Training</h3><p>Learn traditional weapons arts including the bo staff and other implements, deepening understanding of distance, timing, and coordination. Contact us for details.</p></div>
+        <div class="scard"><div class="n">05</div><h3>Rank Advancement</h3><p>A structured belt progression system rewards dedication and growth. Students advance through ranks as they demonstrate mastery of techniques and the principles of Cuong Nhu.</p></div>
+        <div class="scard"><div class="n">06</div><h3>Open Practice Sessions</h3><p>Supplemental open-mat and practice sessions for enrolled students to refine skills, work with training partners, and reinforce lessons outside of formal class time.</p></div>
+      </div>
     </div>
+  </section>
 
-    <div class="services-grid">
-
-      <!-- 1 -->
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="14" cy="8" r="4" stroke="#c9a84c" stroke-width="1.8" fill="none"/>
-            <path d="M7 24 C7 18 21 18 21 24" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-            <path d="M14 12 L14 20" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M10 15 L18 15" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <h3>Beginner Classes</h3>
-        <p>
-          An introduction to the fundamentals of Cuong Nhu &mdash; stances, strikes, blocks,
-          and basic forms &mdash; designed for those with no prior martial arts experience.
-          Contact us for details on scheduling.
-        </p>
-      </div>
-
-      <!-- 2 -->
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 14 L14 4 L24 14 L14 24 Z" stroke="#c9a84c" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
-            <path d="M14 9 L19 14 L14 19 L9 14 Z" stroke="#c9a84c" stroke-width="1.3" fill="none" opacity="0.6"/>
-          </svg>
-        </div>
-        <h3>Forms (Kata) Training</h3>
-        <p>
-          Master the traditional kata of Cuong Nhu, developing precision, balance, and
-          body awareness through rehearsed sequences that encode the art's core techniques.
-        </p>
-      </div>
-
-      <!-- 3 -->
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 5 L23 23" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
-            <path d="M5 23 L23 5" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
-            <circle cx="14" cy="14" r="10" stroke="#c9a84c" stroke-width="1.4" fill="none"/>
-          </svg>
-        </div>
-        <h3>Sparring &amp; Self-Defense</h3>
-        <p>
-          Controlled sparring sessions and practical self-defense scenarios to apply
-          learned techniques in a safe, supervised environment under instructor guidance.
-        </p>
-      </div>
-
-      <!-- 4 -->
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="11" width="20" height="10" rx="2" stroke="#c9a84c" stroke-width="1.8" fill="none"/>
-            <path d="M10 11 L10 8 C10 6 18 6 18 8 L18 11" stroke="#c9a84c" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-            <circle cx="14" cy="16" r="2" fill="#c9a84c" opacity="0.7"/>
-          </svg>
-        </div>
-        <h3>Weapons Training</h3>
-        <p>
-          Learn traditional weapons arts including the bo staff and other implements,
-          deepening understanding of distance, timing, and coordination.
-          Contact us for details.
-        </p>
-      </div>
-
-      <!-- 5 -->
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14 4 L16.5 10 L23 10 L18 14 L20 21 L14 17 L8 21 L10 14 L5 10 L11.5 10 Z" stroke="#c9a84c" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
-          </svg>
-        </div>
-        <h3>Rank Advancement</h3>
-        <p>
-          A structured belt progression system rewards dedication and growth.
-          Students advance through ranks as they demonstrate mastery of techniques
-          and the principles of Cuong Nhu.
-        </p>
-      </div>
-
-      <!-- 6 -->
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="14" cy="14" r="10" stroke="#c9a84c" stroke-width="1.8" fill="none"/>
-            <path d="M14 9 L14 14 L18 17" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3>Open Practice Sessions</h3>
-        <p>
-          Supplemental open-mat and practice sessions for enrolled students to
-          refine skills, work with training partners, and reinforce lessons
-          outside of formal class time.
-        </p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-inner">
-    <div class="contact-info">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Visit the <em>Dojo</em></h2>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="content">
+      <p class="label">Find Us</p>
+      <h2 class="title">Visit the <em>Dojo</em></h2>
       <div class="divider"></div>
-
-      <p>
-        The Cuong Nhu Cypress Dojo is located in Gainesville, FL as part of the University
-        of Florida community. Reach out to learn about current class schedules and how to
-        begin your training journey.
-      </p>
-
-      <div class="info-item">
-        <div class="info-icon">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2C7.24 2 5 4.24 5 7c0 4 5 11 5 11s5-7 5-11c0-2.76-2.24-5-5-5z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-            <circle cx="10" cy="7" r="2" stroke="#c9a84c" stroke-width="1.3" fill="none"/>
-          </svg>
+      <div class="cgrid">
+        <div class="cinfo">
+          <p>The Cuong Nhu Cypress Dojo is located in Gainesville, FL as part of the University of Florida community. Reach out to learn about current class schedules and how to begin your training journey.</p>
+          <div class="citem"><div class="ci"><svg viewBox="0 0 20 20"><path d="M10 2C7.24 2 5 4.24 5 7c0 4 5 11 5 11s5-7 5-11c0-2.76-2.24-5-5-5z"/><circle cx="10" cy="7" r="2"/></svg></div>
+            <div><strong>Location</strong><span>Gainesville, FL<br>University of Florida</span></div></div>
+          <div class="citem"><div class="ci"><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M3 8 L10 12 L17 8" stroke-linecap="round"/></svg></div>
+            <div><strong>Contact</strong><span>Contact us for details</span></div></div>
+          <div class="citem"><div class="ci"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/><path d="M10 5 L10 10 L13 13" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><strong>Class Schedule</strong><span>Contact us for details</span></div></div>
         </div>
-        <div class="info-text">
-          <strong>Location</strong>
-          <span>Gainesville, FL<br/>University of Florida</span>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="4" width="14" height="12" rx="2" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-            <path d="M3 8 L10 12 L17 8" stroke="#c9a84c" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="info-text">
-          <strong>Contact</strong>
-          <span>Contact us for details</span>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="10" r="8" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-            <path d="M10 5 L10 10 L13 13" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="info-text">
-          <strong>Class Schedule</strong>
-          <span>Contact us for details</span>
+        <div class="ccard">
+          <div class="rdisp"><div class="score">5.0</div><div><div class="stars">★★★★★</div><p>Google Maps Rating — 2 reviews</p></div></div>
+          <h3>Ready to Begin?</h3>
+          <p>Take the first step toward your martial arts journey. Get directions to the Cuong Nhu Cypress Dojo at the University of Florida and come see us in person.</p>
+          <a class="btn btn-g" href="https://www.google.com/maps/search/University%20of%20Florida%20-%20Cuong%20Nhu%20Cypress%20Dojo%20Gainesville%2C%20FL" target="_blank" rel="noopener noreferrer">Get Directions</a>
         </div>
       </div>
     </div>
+  </section>
+</main>
 
-    <div class="contact-card">
-      <div class="rating-display">
-        <div class="rating-score">5.0</div>
-        <div class="rating-detail">
-          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-          <p>Google Maps Rating &mdash; 2 reviews</p>
-        </div>
-      </div>
-
-      <h3>Ready to Begin?</h3>
-      <p>
-        Take the first step toward your martial arts journey. Get directions to the
-        Cuong Nhu Cypress Dojo at the University of Florida and come see us in person.
-      </p>
-
-      <a
-        class="btn-gold"
-        href="https://www.google.com/maps/search/University%20of%20Florida%20-%20Cuong%20Nhu%20Cypress%20Dojo%20Gainesville%2C%20FL"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 2C6.24 2 4 4.24 4 7c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5z" stroke="#1a2744" stroke-width="1.5" fill="none"/>
-          <circle cx="9" cy="7" r="1.8" stroke="#1a2744" stroke-width="1.3" fill="none"/>
-        </svg>
-        Get Directions
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">
-      <div class="footer-logo-circle">
-        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="10" cy="5" r="3" stroke="#1a2744" stroke-width="1.4" fill="none"/>
-          <path d="M10 8 L10 14" stroke="#1a2744" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M10 10 L6 8 M10 10 L14 8" stroke="#1a2744" stroke-width="1.4" stroke-linecap="round"/>
-          <path d="M10 14 L7 18 M10 14 L13 18" stroke="#1a2744" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="footer-name">UF Cuong Nhu Cypress Dojo</span>
-    </div>
-    <p class="footer-tagline">Traditional Martial Arts &mdash; University of Florida &mdash; Gainesville, FL</p>
-    <div class="footer-divider"></div>
-    <p class="footer-copy">&copy; 2026 University of Florida &mdash; Cuong Nhu Cypress Dojo. All rights reserved.</p>
+  <div class="flogo">
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="5" r="3" stroke="#c9a84c" stroke-width="1.4"/><path d="M10 8 L10 14" stroke="#c9a84c" stroke-width="1.6" stroke-linecap="round"/><path d="M10 10 L6 8 M10 10 L14 8" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round"/><path d="M10 14 L7 18 M10 14 L13 18" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round"/></svg>
+    UF Cuong Nhu Cypress Dojo
   </div>
+  <p class="ftag">Traditional Martial Arts — University of Florida — Gainesville, FL</p>
+  <p class="fcopy">© 2026 University of Florida — Cuong Nhu Cypress Dojo. All rights reserved.</p>
 </footer>
 
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // scroll progress along rail
+  var prog=document.getElementById('prog');
+  function upd(){ var h=document.documentElement, sc=h.scrollTop||document.body.scrollTop,
+    max=h.scrollHeight-h.clientHeight; prog.style.height=(max>0?(sc/max*100):0)+'%'; }
+  upd(); addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd);
+
+  // reveal
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.15});
+  document.querySelectorAll('.scard').forEach(function(c,i){c.style.transitionDelay=(i%3*80)+'ms';io.observe(c);});
+
+  // active rail link
+  var links=document.querySelectorAll('#rnav a');
+  var so=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){ links.forEach(function(a){a.classList.toggle('active',a.getAttribute('data-t')===e.target.id);}); }
+  });},{rootMargin:'-45% 0px -45% 0px'});
+  ['hero','about','services','contact'].forEach(function(id){var s=document.getElementById(id);if(s)so.observe(s);});
+})();
+</script>
 </body>
 </html>

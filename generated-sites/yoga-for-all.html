@@ -1,896 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yoga For All | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --sage: #7a9e7e;
-      --sage-dark: #567a5a;
-      --sage-light: #c6dbc8;
-      --cream: #f8f5f0;
-      --warm-white: #fdfaf6;
-      --charcoal: #2e2e2e;
-      --mid-gray: #5a5a5a;
-      --light-gray: #e8e4de;
-      --gold: #c9a84c;
-      --gold-light: #e8d5a3;
-      --font-serif: Georgia, 'Times New Roman', serif;
-      --font-sans: 'Helvetica Neue', Arial, sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--font-sans);
-      color: var(--charcoal);
-      background: var(--warm-white);
-      line-height: 1.6;
-    }
-
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(248, 245, 240, 0.96);
-      backdrop-filter: blur(6px);
-      border-bottom: 1px solid var(--light-gray);
-      padding: 0 1.5rem;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-brand {
-      font-family: var(--font-serif);
-      font-size: 1.35rem;
-      color: var(--sage-dark);
-      letter-spacing: 0.03em;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--mid-gray);
-      font-size: 0.9rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--sage-dark); }
-
-    .nav-cta {
-      background: var(--sage);
-      color: #fff !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: 50px;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover { background: var(--sage-dark) !important; color: #fff !important; }
-
-    /* hamburger */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--charcoal);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    @media (max-width: 700px) {
-      .nav-toggle { display: flex; }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: var(--cream);
-        flex-direction: column;
-        gap: 0;
-        border-bottom: 1px solid var(--light-gray);
-        padding: 0.5rem 0 1rem;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links li { padding: 0.6rem 1.5rem; }
-      .nav-links a { font-size: 1rem; }
-      .nav-cta { padding: 0.4rem 1rem; }
-    }
-
-    /* ===== HERO ===== */
-    #home {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      background:
-        linear-gradient(160deg, rgba(122,158,126,0.18) 0%, rgba(201,168,76,0.08) 100%),
-        var(--warm-white);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* decorative circles */
-    #home::before, #home::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.12;
-    }
-    #home::before {
-      width: 600px; height: 600px;
-      background: var(--sage);
-      top: -120px; right: -160px;
-    }
-    #home::after {
-      width: 400px; height: 400px;
-      background: var(--gold);
-      bottom: -80px; left: -100px;
-    }
-
-    .hero-inner { position: relative; max-width: 720px; }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--sage-light);
-      color: var(--sage-dark);
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 50px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-inner h1 {
-      font-family: var(--font-serif);
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      color: var(--charcoal);
-      line-height: 1.2;
-      margin-bottom: 1.1rem;
-    }
-
-    .hero-inner h1 span { color: var(--sage-dark); }
-
-    .hero-inner p {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: var(--mid-gray);
-      max-width: 560px;
-      margin: 0 auto 2.2rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-    }
-
-    .btn-primary {
-      background: var(--sage);
-      color: #fff;
-      text-decoration: none;
-      padding: 0.85rem 2rem;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      letter-spacing: 0.03em;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-    .btn-primary:hover { background: var(--sage-dark); transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--sage-dark);
-      text-decoration: none;
-      padding: 0.85rem 2rem;
-      border-radius: 50px;
-      border: 2px solid var(--sage);
-      font-size: 0.95rem;
-      letter-spacing: 0.03em;
-      transition: background 0.2s, color 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-    .btn-outline:hover { background: var(--sage); color: #fff; transform: translateY(-2px); }
-
-    /* lotus SVG decoration */
-    .hero-lotus {
-      margin-top: 3rem;
-      opacity: 0.18;
-    }
-
-    /* ===== SECTION SHELL ===== */
-    section { padding: 5rem 1.5rem; }
-    section:nth-child(even) { background: var(--cream); }
-
-    .container { max-width: 1080px; margin: 0 auto; }
-
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-family: var(--font-serif);
-      font-size: clamp(1.7rem, 4vw, 2.4rem);
-      color: var(--charcoal);
-      margin-bottom: 1.2rem;
-      line-height: 1.25;
-    }
-
-    .section-body {
-      color: var(--mid-gray);
-      font-size: 1.05rem;
-      line-height: 1.75;
-      max-width: 640px;
-    }
-
-    /* ===== DIVIDER ===== */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 1.5rem 0;
-    }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--light-gray);
-    }
-    .divider-icon { color: var(--sage); font-size: 1.1rem; }
-
-    /* ===== ABOUT ===== */
-    #about .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-visual {
-      position: relative;
-    }
-
-    .about-card {
-      background: linear-gradient(135deg, var(--sage-light) 0%, var(--gold-light) 100%);
-      border-radius: 24px;
-      padding: 3rem 2.5rem;
-      text-align: center;
-    }
-
-    .about-card .big-number {
-      font-family: var(--font-serif);
-      font-size: 5rem;
-      color: var(--sage-dark);
-      line-height: 1;
-      opacity: 0.35;
-    }
-
-    .about-card p {
-      font-size: 1.05rem;
-      color: var(--sage-dark);
-      font-style: italic;
-      margin-top: 1rem;
-    }
-
-    .about-pillars {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1.8rem;
-    }
-
-    .pillar {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.95rem;
-      color: var(--mid-gray);
-    }
-
-    .pillar-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--sage);
-      flex-shrink: 0;
-    }
-
-    @media (max-width: 700px) {
-      #about .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-    }
-
-    /* ===== SERVICES ===== */
-    #services .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .service-card {
-      background: var(--warm-white);
-      border: 1px solid var(--light-gray);
-      border-radius: 16px;
-      padding: 2rem 1.75rem;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 32px rgba(122,158,126,0.14);
-      transform: translateY(-4px);
-    }
-
-    .service-icon {
-      width: 52px; height: 52px;
-      border-radius: 14px;
-      background: var(--sage-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.1rem;
-    }
-
-    .service-icon svg { width: 26px; height: 26px; fill: var(--sage-dark); }
-
-    .service-card h3 {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
-      color: var(--charcoal);
-      margin-bottom: 0.55rem;
-    }
-
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--mid-gray);
-      line-height: 1.65;
-    }
-
-    .service-detail {
-      margin-top: 1rem;
-      font-size: 0.82rem;
-      color: var(--sage-dark);
-      font-weight: 600;
-      letter-spacing: 0.04em;
-    }
-
-    /* ===== CONTACT ===== */
-    #contact .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-      margin-top: 3rem;
-    }
-
-    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
-
-    .info-row {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .info-icon {
-      width: 42px; height: 42px;
-      border-radius: 10px;
-      background: var(--sage-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .info-icon svg { width: 20px; height: 20px; fill: var(--sage-dark); }
-
-    .info-text h4 {
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--sage-dark);
-      margin-bottom: 0.25rem;
-    }
-
-    .info-text p, .info-text a {
-      font-size: 1rem;
-      color: var(--charcoal);
-      text-decoration: none;
-    }
-
-    .info-text a:hover { color: var(--sage-dark); text-decoration: underline; }
-
-    /* rating badge */
-    .rating-badge {
-      background: linear-gradient(135deg, var(--gold-light) 0%, #f5e8c5 100%);
-      border: 1px solid var(--gold);
-      border-radius: 14px;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .rating-stars {
-      font-size: 1.3rem;
-      color: var(--gold);
-      letter-spacing: 0.05em;
-    }
-
-    .rating-text strong {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      color: var(--charcoal);
-    }
-
-    .rating-text span {
-      display: block;
-      font-size: 0.82rem;
-      color: var(--mid-gray);
-    }
-
-    /* directions button */
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: var(--charcoal);
-      color: #fff;
-      text-decoration: none;
-      padding: 0.85rem 1.75rem;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      letter-spacing: 0.03em;
-      transition: background 0.2s, transform 0.15s;
-      margin-top: 1rem;
-    }
-    .btn-directions:hover { background: var(--sage-dark); transform: translateY(-2px); }
-    .btn-directions svg { width: 18px; height: 18px; fill: #fff; }
-
-    /* contact form panel */
-    .contact-panel {
-      background: var(--warm-white);
-      border: 1px solid var(--light-gray);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
-    }
-
-    .contact-panel h3 {
-      font-family: var(--font-serif);
-      font-size: 1.3rem;
-      margin-bottom: 1.5rem;
-      color: var(--charcoal);
-    }
-
-    .form-group { margin-bottom: 1.1rem; }
-
-    .form-group label {
-      display: block;
-      font-size: 0.82rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--mid-gray);
-      margin-bottom: 0.35rem;
-    }
-
-    .form-group input, .form-group textarea, .form-group select {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--light-gray);
-      border-radius: 10px;
-      font-size: 0.97rem;
-      font-family: var(--font-sans);
-      color: var(--charcoal);
-      background: var(--cream);
-      transition: border-color 0.2s;
-      outline: none;
-    }
-
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-      border-color: var(--sage);
-    }
-
-    .form-group textarea { resize: vertical; min-height: 100px; }
-
-    .form-submit {
-      width: 100%;
-      background: var(--sage);
-      color: #fff;
-      border: none;
-      padding: 0.9rem 1.5rem;
-      border-radius: 50px;
-      font-size: 1rem;
-      cursor: pointer;
-      letter-spacing: 0.03em;
-      transition: background 0.2s;
-      margin-top: 0.5rem;
-    }
-
-    .form-submit:hover { background: var(--sage-dark); }
-
-    @media (max-width: 700px) {
-      #contact .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--charcoal);
-      color: #ccc;
-      padding: 3rem 1.5rem;
-      text-align: center;
-    }
-
-    .footer-inner { max-width: 640px; margin: 0 auto; }
-
-    .footer-brand {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      color: #fff;
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-tagline {
-      font-size: 0.9rem;
-      color: #aaa;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      list-style: none;
-      margin-bottom: 2rem;
-    }
-
-    .footer-links a {
-      text-decoration: none;
-      color: #bbb;
-      font-size: 0.88rem;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--sage-light); }
-
-    .footer-divider {
-      border: none;
-      border-top: 1px solid #444;
-      margin: 1.5rem 0;
-    }
-
-    .footer-copy {
-      font-size: 0.82rem;
-      color: #777;
-    }
-
-    /* ===== SCROLL fade-in ===== */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yoga For All | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --sage:#7a9e7e; --sage-deep:#567a5a; --sage-lite:#c6dbc8; --clay:#c98a5e;
+    --cream:#f6f3ea; --cream-2:#efe9db; --bark:#37402f; --mut:#6f7a68;
+    --font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--bark);font-family:var(--font);line-height:1.7;overflow:hidden}
+  a{color:inherit}
+
+  /* animated mesh backdrop */
+  .mesh{position:fixed;inset:0;z-index:0;background:var(--cream);overflow:hidden}
+  .mesh::before,.mesh::after{content:"";position:absolute;width:70vmax;height:70vmax;border-radius:50%;filter:blur(70px);opacity:.5}
+  .mesh::before{background:radial-gradient(circle,var(--sage-lite),transparent 65%);top:-20vmax;left:-10vmax;animation:float1 24s ease-in-out infinite}
+  .mesh::after{background:radial-gradient(circle,rgba(201,138,94,.5),transparent 65%);bottom:-25vmax;right:-15vmax;animation:float2 30s ease-in-out infinite}
+  .mesh i{position:absolute;width:50vmax;height:50vmax;border-radius:50%;filter:blur(70px);opacity:.4;
+    background:radial-gradient(circle,rgba(122,158,126,.6),transparent 65%);top:30%;left:40%;animation:float3 28s ease-in-out infinite}
+  @keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(8vw,6vh) scale(1.15)}}
+  @keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-9vw,-5vh) scale(1.2)}}
+  @keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-6vw,8vh) scale(.9)}}
+
+  /* NAV */
+  header{position:fixed;inset:0 0 auto 0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    padding:1rem clamp(1.2rem,4vw,2.6rem)}
+  .brand{font-weight:800;font-size:1.15rem;letter-spacing:.01em;text-decoration:none;color:var(--sage-deep);display:flex;align-items:center;gap:.5rem}
+  .brand svg{width:30px;height:22px}
+  nav ul{display:flex;gap:1.6rem;list-style:none;align-items:center}
+  nav a{text-decoration:none;font-size:.86rem;font-weight:600;color:var(--bark);opacity:.75;transition:opacity .2s}
+  nav a:hover{opacity:1}
+  nav a.cta{background:var(--sage-deep);color:#fff;opacity:1;padding:.5rem 1.05rem;border-radius:999px}
+  .navtog{display:none;background:none;border:0;cursor:pointer;width:36px;height:28px;flex-direction:column;justify-content:center;gap:6px}
+  .navtog span{height:3px;background:var(--sage-deep);border-radius:2px;display:block}
+
+  /* HORIZONTAL DECK */
+  .deck{position:relative;z-index:1;display:flex;height:100vh;width:100%;overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+  .deck::-webkit-scrollbar{display:none}
+  .panel{flex:0 0 100vw;height:100vh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;
+    padding:6rem clamp(1.4rem,6vw,7rem) 5rem;position:relative;overflow-y:auto}
+  .inner{width:100%;max-width:1080px}
+  .kick{font-size:.72rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--sage-deep)}
+  h1,h2{line-height:1.08;letter-spacing:-.01em}
+  h1{font-size:clamp(2.6rem,7vw,5.4rem);font-weight:800;margin:.6rem 0}
+  h1 span{color:var(--sage-deep);font-style:italic}
+  h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;margin:.5rem 0 1.2rem}
+  .lede{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--mut);max-width:560px;font-weight:300}
+  .divider{display:flex;align-items:center;gap:.6rem;margin:1.2rem 0;color:var(--clay)}
+  .divider::before{content:"";height:1px;width:56px;background:var(--sage)}
+  .actions{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;padding:.9rem 1.8rem;border-radius:999px;text-decoration:none;transition:transform .18s,box-shadow .25s,background .2s}
+  .btn-s{background:var(--sage-deep);color:#fff;box-shadow:0 10px 30px rgba(86,122,90,.28)}
+  .btn-s:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(86,122,90,.4)}
+  .btn-o{border:2px solid var(--sage);color:var(--sage-deep)}
+  .btn-o:hover{background:var(--sage);color:#fff}
+
+  /* HOME lotus */
+  .lotus{margin-top:2.4rem}
+  .lotus svg{width:150px;height:100px}
+
+  /* ABOUT */
+  .about{display:grid;grid-template-columns:1.2fr .8fr;gap:3rem;align-items:center}
+  .about p{color:var(--bark);margin-bottom:1rem;opacity:.85}
+  .pillars{display:grid;gap:.7rem;margin-top:1.4rem}
+  .pillars div{display:flex;align-items:center;gap:.7rem;font-weight:600;color:var(--sage-deep)}
+  .pillars i{width:10px;height:10px;border-radius:50%;background:var(--clay);display:block}
+  .quotecard{background:#fff;border:1px solid var(--cream-2);border-radius:24px;padding:2.4rem;box-shadow:0 24px 60px rgba(55,64,47,.12);text-align:center}
+  .quotecard .big{font-size:4rem;font-weight:800;color:var(--sage-deep);line-height:1}
+  .quotecard p{color:var(--mut);font-style:italic;margin-top:.8rem}
+
+  /* CLASSES */
+  .cscroll{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.2rem;margin-top:2rem}
+  .ccard{background:#fff;border:1px solid var(--cream-2);border-radius:20px;padding:1.6rem;transition:transform .25s,box-shadow .25s;
+    opacity:0;transform:translateY(22px)}
+  .ccard.in{opacity:1;transform:none;transition:opacity .6s,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .ccard:hover{transform:translateY(-6px);box-shadow:0 20px 46px rgba(55,64,47,.14)}
+  .ccard .ic{width:46px;height:46px;border-radius:14px;background:var(--sage-lite);display:grid;place-items:center;margin-bottom:1rem}
+  .ccard .ic svg{width:24px;height:24px;fill:var(--sage-deep)}
+  .ccard h3{font-size:1.08rem;font-weight:800;margin-bottom:.4rem}
+  .ccard p{color:var(--mut);font-size:.9rem}
+  .ccard .det{margin-top:.8rem;font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--clay)}
+
+  /* CONTACT */
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;margin-top:1.4rem}
+  .ratebadge{display:flex;align-items:center;gap:1rem;background:#fff;border:1px solid var(--cream-2);border-radius:18px;padding:1.3rem 1.5rem;margin-bottom:1.4rem}
+  .ratebadge .stars{color:var(--clay);font-size:1.2rem;letter-spacing:2px}
+  .ratebadge strong{font-size:1.8rem;font-weight:800;color:var(--sage-deep);line-height:1}
+  .ratebadge span{display:block;font-size:.84rem;color:var(--mut)}
+  .irow{display:flex;gap:1rem;margin-bottom:1.3rem;align-items:flex-start}
+  .irow .ic{width:44px;height:44px;flex:none;border-radius:12px;background:var(--sage-lite);display:grid;place-items:center}
+  .irow .ic svg{width:22px;height:22px;fill:var(--sage-deep)}
+  .irow h4{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sage-deep)}
+  .irow a,.irow p{color:var(--bark);text-decoration:none}
+  .irow a:hover{color:var(--clay)}
+  .panel-form{background:#fff;border:1px solid var(--cream-2);border-radius:22px;padding:2rem}
+  .panel-form h3{font-size:1.3rem;font-weight:800;margin-bottom:1.1rem}
+  .fg{margin-bottom:1rem}
+  .fg label{display:block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:.4rem}
+  .fg input,.fg select,.fg textarea{width:100%;background:var(--cream);border:1px solid var(--cream-2);border-radius:12px;color:var(--bark);padding:.7rem .85rem;font-family:inherit;font-size:.95rem}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--sage)}
+  .fg textarea{min-height:84px;resize:vertical}
+  .fsub{width:100%;background:var(--sage-deep);color:#fff;border:0;padding:.9rem;border-radius:12px;font-weight:800;cursor:pointer;font-size:.95rem}
+
+  /* DOT NAV + progress */
+  .dots{position:fixed;bottom:1.4rem;left:50%;translate:-50% 0;z-index:41;display:flex;gap:.7rem;background:rgba(255,255,255,.7);
+    backdrop-filter:blur(8px);padding:.6rem .9rem;border-radius:999px;box-shadow:0 8px 24px rgba(55,64,47,.14)}
+  .dots button{width:11px;height:11px;border-radius:50%;border:0;background:var(--sage-lite);cursor:pointer;padding:0;transition:.25s}
+  .dots button.active{background:var(--sage-deep);width:26px;border-radius:6px}
+  .hintx{position:fixed;bottom:1.5rem;right:1.5rem;z-index:41;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);
+    display:flex;align-items:center;gap:.4rem}
+  .hintx svg{width:20px;height:20px;fill:var(--sage-deep);animation:slide 1.6s ease-in-out infinite}
+  @keyframes slide{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+
+  footer{position:fixed;bottom:0;left:0;right:0;z-index:30;text-align:center;font-size:.72rem;color:var(--mut);padding:.5rem;pointer-events:none}
+  footer a{pointer-events:auto;color:var(--sage-deep);text-decoration:none}
+
+  @media(max-width:860px){
+    body{overflow:auto}
+    .navtog{display:flex}
+    nav ul{position:fixed;inset:56px 0 auto 0;flex-direction:column;gap:0;background:rgba(246,243,234,.98);padding:0 1.6rem;max-height:0;overflow:hidden;transition:.35s;z-index:39}
+    nav ul.open{max-height:70vh;padding:1rem 1.6rem 1.6rem}
+    nav li{width:100%;border-bottom:1px solid var(--cream-2)}
+    nav a{display:block;padding:.9rem 0}
+    nav a.cta{text-align:center}
+    .deck{display:block;height:auto;overflow:visible;scroll-snap-type:none}
+    .panel{flex:none;width:100%;height:auto;min-height:auto;padding:5rem 1.4rem 3rem;overflow:visible}
+    .about,.cgrid{grid-template-columns:1fr}
+    .dots,.hintx{display:none}
+    footer{position:static}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .ccard{opacity:1;transform:none}
+    .deck{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body>
 
-<!-- ===== NAV ===== -->
-<nav>
-  <a class="nav-brand" href="#home">Yoga For All</a>
-  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Classes</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#contact" class="nav-cta">Get Started</a></li>
-  </ul>
-</nav>
+<div class="mesh" aria-hidden="true"><i></i></div>
 
-<!-- ===== HERO ===== -->
-<section id="home">
-  <div class="hero-inner">
-    <span class="hero-badge">Gainesville, FL &mdash; Yoga Studio</span>
-    <h1>Find Your <span>Balance</span>,<br>Find Your Practice</h1>
-    <p>A welcoming space for every body and every level. Step onto the mat and discover strength, flexibility, and peace of mind.</p>
-    <div class="hero-actions">
-      <a href="#services" class="btn-primary">Explore Classes</a>
-      <a href="#contact" class="btn-outline">Contact Us</a>
-    </div>
-
-    <!-- Lotus SVG -->
-    <div class="hero-lotus" aria-hidden="true">
-      <svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="60" cy="68" rx="40" ry="8" fill="#7a9e7e" opacity="0.4"/>
-        <path d="M60 60 C60 40 40 20 20 30 C30 50 50 60 60 60Z" fill="#7a9e7e"/>
-        <path d="M60 60 C60 40 80 20 100 30 C90 50 70 60 60 60Z" fill="#7a9e7e"/>
-        <path d="M60 60 C60 30 50 10 60 5 C70 10 60 30 60 60Z" fill="#567a5a"/>
-        <path d="M60 60 C50 35 30 30 25 45 C38 55 55 60 60 60Z" fill="#c6dbc8"/>
-        <path d="M60 60 C70 35 90 30 95 45 C82 55 65 60 60 60Z" fill="#c6dbc8"/>
-      </svg>
-    </div>
-  </div>
-</section>
-
-<!-- ===== ABOUT ===== -->
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text reveal">
-        <p class="section-label">About Us</p>
-        <h2 class="section-title">Yoga for Every Body, Every Level</h2>
-        <div class="divider"><span class="divider-icon">&#10022;</span></div>
-        <p class="section-body">
-          Yoga For All is a dedicated yoga studio in Gainesville, FL, committed to creating an inclusive and nurturing environment where students of all experience levels can thrive. Whether you are stepping onto the mat for the first time or deepening an established practice, our classes are thoughtfully designed to meet you exactly where you are.
-        </p>
-        <p class="section-body" style="margin-top:1rem;">
-          We believe yoga is more than movement &mdash; it is a journey toward greater well-being, clarity, and community. Our studio fosters a supportive atmosphere so every student feels seen, welcomed, and inspired to grow.
-        </p>
-        <div class="about-pillars">
-          <div class="pillar"><span class="pillar-dot"></span> All skill levels welcome</div>
-          <div class="pillar"><span class="pillar-dot"></span> Inclusive &amp; supportive community</div>
-          <div class="pillar"><span class="pillar-dot"></span> Mind, body &amp; breath connection</div>
-        </div>
-      </div>
-      <div class="about-visual reveal">
-        <div class="about-card">
-          <div class="big-number">5.0</div>
-          <p>"A truly welcoming space where every practitioner belongs."</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SERVICES ===== -->
-<section id="services">
-  <div class="container">
-    <div class="reveal">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Our Classes &amp; Services</h2>
-      <p class="section-body">From gentle foundational sessions to energizing flows, we offer a variety of classes to support your practice at every stage. Contact us for current schedules and availability.</p>
-    </div>
-    <div class="services-grid">
-
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-        </div>
-        <h3>Beginner Yoga</h3>
-        <p>A gentle introduction to foundational postures, breathing techniques, and mindfulness. Perfect for anyone new to yoga or returning after a break.</p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg>
-        </div>
-        <h3>All-Levels Flow</h3>
-        <p>A dynamic Vinyasa-style class that links breath with movement, welcoming practitioners of varying experience with thoughtful modifications offered throughout.</p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/></svg>
-        </div>
-        <h3>Restorative Yoga</h3>
-        <p>A deeply relaxing practice using props to support the body in passive poses held for extended periods, encouraging profound physical and mental release.</p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm-1-11h2v3.59l2.21 2.2-1.42 1.42L11 12.59V8z"/></svg>
-        </div>
-        <h3>Meditation &amp; Breathwork</h3>
-        <p>Dedicated sessions focusing on pranayama (breathwork) and guided meditation to cultivate inner stillness, focus, and stress relief.</p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-        </div>
-        <h3>Private &amp; Small Group Sessions</h3>
-        <p>Personalized one-on-one or small group instruction tailored to your specific goals, whether rehabilitation, deepening your practice, or special preparation.</p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-        </div>
-        <h3>Workshops &amp; Specialty Events</h3>
-        <p>Occasional themed workshops, seasonal intensives, and special events designed to expand your practice and deepen your understanding of yoga philosophy.</p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===== CONTACT ===== -->
-<section id="contact">
-  <div class="container">
-    <div class="reveal">
-      <p class="section-label">Get In Touch</p>
-      <h2 class="section-title">Visit Us in Gainesville</h2>
-      <p class="section-body">We would love to welcome you to our studio. Reach out with any questions about classes, schedules, or how to get started on your yoga journey.</p>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-info reveal">
-
-        <div class="rating-badge">
-          <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div class="rating-text">
-            <strong>5.0</strong>
-            <span>Google Rating &mdash; 1 review</span>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          </div>
-          <div class="info-text">
-            <h4>Address</h4>
-            <p>7731 W Newberry Rd # A2<br>Gainesville, FL 32606</p>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          </div>
-          <div class="info-text">
-            <h4>Phone</h4>
-            <a href="tel:+13522562172">(352) 256-2172</a>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
-          </div>
-          <div class="info-text">
-            <h4>Hours</h4>
-            <p>Contact us for current class schedule</p>
-          </div>
-        </div>
-
-        <a
-          href="https://www.google.com/maps/search/Yoga%20For%20All%207731%20W%20Newberry%20Rd%20%23%20A2%2C%20Gainesville%2C%20FL%2032606"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-directions"
-        >
-          <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-          Get Directions
-        </a>
-
-      </div>
-
-      <div class="contact-panel reveal">
-        <h3>Send Us a Message</h3>
-        <form onsubmit="handleSubmit(event)">
-          <div class="form-group">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" placeholder="Jane Smith" required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" placeholder="jane@example.com" required />
-          </div>
-          <div class="form-group">
-            <label for="interest">I am interested in</label>
-            <select id="interest">
-              <option value="">Select a class or service...</option>
-              <option>Beginner Yoga</option>
-              <option>All-Levels Flow</option>
-              <option>Restorative Yoga</option>
-              <option>Meditation &amp; Breathwork</option>
-              <option>Private Sessions</option>
-              <option>Workshops &amp; Events</option>
-              <option>General Inquiry</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" placeholder="Tell us how we can help..."></textarea>
-          </div>
-          <button type="submit" class="form-submit">Send Message</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">Yoga For All</div>
-    <div class="footer-tagline">Find Your Balance &mdash; Gainesville, FL</div>
-    <ul class="footer-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Classes</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="tel:+13522562172">(352) 256-2172</a></li>
+<header>
+  <a class="brand" href="#panel-0">
+    <svg viewBox="0 0 30 22" aria-hidden="true"><path d="M15 20 C15 8 5 3 1 9 C6 18 12 20 15 20Z" fill="#7a9e7e"/><path d="M15 20 C15 8 25 3 29 9 C24 18 18 20 15 20Z" fill="#7a9e7e"/><path d="M15 20 C15 4 11 1 15 0 C19 1 15 4 15 20Z" fill="#567a5a"/></svg>
+    Yoga For All
+  </a>
+  <nav>
+    <ul id="menu">
+      <li><a href="#panel-1">About</a></li>
+      <li><a href="#panel-2">Classes</a></li>
+      <li><a href="#panel-3">Contact</a></li>
+      <li><a href="#panel-3" class="cta">Get Started</a></li>
     </ul>
-    <hr class="footer-divider" />
-    <p class="footer-copy">7731 W Newberry Rd # A2, Gainesville, FL 32606 &mdash; &copy; 2026 Yoga For All. All rights reserved.</p>
-  </div>
-</footer>
+  </nav>
+  <button class="navtog" id="navtog" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</header>
+
+<div class="deck" id="deck">
+
+  <!-- HOME -->
+  <section class="panel" id="panel-0">
+    <div class="inner">
+      <p class="kick">Gainesville, FL — Yoga Studio</p>
+      <h1>Find Your <span>Balance</span>,<br>Find Your Practice</h1>
+      <p class="lede">A welcoming space for every body and every level. Step onto the mat and discover strength, flexibility, and peace of mind.</p>
+      <div class="actions">
+        <a href="#panel-2" class="btn btn-s">Explore Classes</a>
+        <a href="#panel-3" class="btn btn-o">Contact Us</a>
+      </div>
+      <div class="lotus" aria-hidden="true">
+        <svg viewBox="0 0 120 80" fill="none"><ellipse cx="60" cy="68" rx="40" ry="8" fill="#7a9e7e" opacity="0.4"/><path d="M60 60 C60 40 40 20 20 30 C30 50 50 60 60 60Z" fill="#7a9e7e"/><path d="M60 60 C60 40 80 20 100 30 C90 50 70 60 60 60Z" fill="#7a9e7e"/><path d="M60 60 C60 30 50 10 60 5 C70 10 60 30 60 60Z" fill="#567a5a"/><path d="M60 60 C50 35 30 30 25 45 C38 55 55 60 60 60Z" fill="#c6dbc8"/><path d="M60 60 C70 35 90 30 95 45 C82 55 65 60 60 60Z" fill="#c6dbc8"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="panel" id="panel-1">
+    <div class="inner about">
+      <div>
+        <p class="kick">About Us</p>
+        <h2>Yoga for Every Body, Every Level</h2>
+        <div class="divider">✦</div>
+        <p>Yoga For All is a dedicated yoga studio in Gainesville, FL, committed to creating an inclusive and nurturing environment where students of all experience levels can thrive. Whether you are stepping onto the mat for the first time or deepening an established practice, our classes are thoughtfully designed to meet you exactly where you are.</p>
+        <p>We believe yoga is more than movement — it is a journey toward greater well-being, clarity, and community. Our studio fosters a supportive atmosphere so every student feels seen, welcomed, and inspired to grow.</p>
+        <div class="pillars">
+          <div><i></i>All skill levels welcome</div>
+          <div><i></i>Inclusive &amp; supportive community</div>
+          <div><i></i>Mind, body &amp; breath connection</div>
+        </div>
+      </div>
+      <div class="quotecard">
+        <div class="big">5.0</div>
+        <p>"A truly welcoming space where every practitioner belongs."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section class="panel" id="panel-2">
+    <div class="inner">
+      <p class="kick">What We Offer</p>
+      <h2>Our Classes &amp; Services</h2>
+      <p class="lede">From gentle foundational sessions to energizing flows, we offer a variety of classes to support your practice at every stage. Contact us for current schedules and availability.</p>
+      <div class="cscroll">
+        <div class="ccard"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 5h2v6h-2zm0 8h2v2h-2z"/></svg></div><h3>Beginner Yoga</h3><p>A gentle introduction to foundational postures, breathing techniques, and mindfulness. Perfect for anyone new to yoga or returning after a break.</p><div class="det">Contact us for details</div></div>
+        <div class="ccard"><div class="ic"><svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9l-1.6 8.1-4.9-1-.4 2 7 1.4 1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.5-.8-1.5-1.1-2.5-.9L6 6.3v4.7h2V7.6z"/></svg></div><h3>All-Levels Flow</h3><p>A dynamic Vinyasa-style class that links breath with movement, welcoming practitioners of varying experience with thoughtful modifications offered throughout.</p><div class="det">Contact us for details</div></div>
+        <div class="ccard"><div class="ic"><svg viewBox="0 0 24 24"><path d="M11.5 2C6.8 2 3 5.8 3 10.5S6.8 19 11.5 19h.5v3c4.9-2.3 8-7 8-11.5C20 5.8 16.2 2 11.5 2zm1 14.5h-2v-2h2zm0-4h-2c0-3.2 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2.5-3 2.7-3 5z"/></svg></div><h3>Restorative Yoga</h3><p>A deeply relaxing practice using props to support the body in passive poses held for extended periods, encouraging profound physical and mental release.</p><div class="det">Contact us for details</div></div>
+        <div class="ccard"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18zm0 16a7 7 0 110-14 7 7 0 010 14zm-1-11h2v3.6l2.2 2.2-1.4 1.4L11 12.6z"/></svg></div><h3>Meditation &amp; Breathwork</h3><p>Dedicated sessions focusing on pranayama (breathwork) and guided meditation to cultivate inner stillness, focus, and stress relief.</p><div class="det">Contact us for details</div></div>
+        <div class="ccard"><div class="ic"><svg viewBox="0 0 24 24"><path d="M16 11a3 3 0 100-6 3 3 0 000 6zm-8 0a3 3 0 100-6 3 3 0 000 6zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5c0-2.3-4.7-3.5-7-3.5zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 2 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"/></svg></div><h3>Private &amp; Small Group Sessions</h3><p>Personalized one-on-one or small group instruction tailored to your specific goals, whether rehabilitation, deepening your practice, or special preparation.</p><div class="det">Contact us for details</div></div>
+        <div class="ccard"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm0 11h7c-.5 4.1-3.3 7.8-7 8.9V12H5V6.3l7-3.1z"/></svg></div><h3>Workshops &amp; Specialty Events</h3><p>Occasional themed workshops, seasonal intensives, and special events designed to expand your practice and deepen your understanding of yoga philosophy.</p><div class="det">Contact us for details</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="panel" id="panel-3">
+    <div class="inner">
+      <p class="kick">Get In Touch</p>
+      <h2>Visit Us in Gainesville</h2>
+      <p class="lede">We would love to welcome you to our studio. Reach out with any questions about classes, schedules, or how to get started on your yoga journey.</p>
+      <div class="cgrid">
+        <div>
+          <div class="ratebadge"><div class="stars">★★★★★</div><div><strong>5.0</strong><span>Google Rating — 1 review</span></div></div>
+          <div class="irow"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg></div>
+            <div><h4>Address</h4><p>7731 W Newberry Rd # A2<br>Gainesville, FL 32606</p></div></div>
+          <div class="irow"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.5 0 1 .5 1 1V20c0 .5-.5 1-1 1-9.4 0-17-7.6-17-17 0-.5.5-1 1-1h3.5c.5 0 1 .5 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg></div>
+            <div><h4>Phone</h4><a href="tel:+13522562172">(352) 256-2172</a></div></div>
+          <div class="irow"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm4.2 16L12 15.5 7.8 18l1.1-4.8-3.7-3.2 4.9-.4L12 5l1.9 4.5 4.9.4-3.7 3.2z"/></svg></div>
+            <div><h4>Hours</h4><p>Contact us for current class schedule</p></div></div>
+          <a href="https://www.google.com/maps/search/Yoga%20For%20All%207731%20W%20Newberry%20Rd%20%23%20A2%2C%20Gainesville%2C%20FL%2032606" target="_blank" rel="noopener noreferrer" class="btn btn-s">Get Directions</a>
+        </div>
+        <div class="panel-form">
+          <h3>Send Us a Message</h3>
+          <form id="cform">
+            <div class="fg"><label for="yn">Your Name</label><input id="yn" type="text" placeholder="Jane Smith" required></div>
+            <div class="fg"><label for="ye">Email Address</label><input id="ye" type="email" placeholder="jane@example.com" required></div>
+            <div class="fg"><label for="yi">I am interested in</label>
+              <select id="yi"><option value="">Select a class or service...</option><option>Beginner Yoga</option><option>All-Levels Flow</option><option>Restorative Yoga</option><option>Meditation &amp; Breathwork</option><option>Private Sessions</option><option>Workshops &amp; Events</option><option>General Inquiry</option></select></div>
+            <div class="fg"><label for="ym">Message</label><textarea id="ym" placeholder="Tell us how we can help..."></textarea></div>
+            <button type="submit" class="fsub">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="dots" id="dots" aria-label="Panel navigation">
+  <button data-i="0" class="active" aria-label="Home"></button>
+  <button data-i="1" aria-label="About"></button>
+  <button data-i="2" aria-label="Classes"></button>
+  <button data-i="3" aria-label="Contact"></button>
+</div>
+<div class="hintx" aria-hidden="true">Scroll <svg viewBox="0 0 24 24"><path d="M8 5l8 7-8 7z"/></svg></div>
+
+<footer><p>7731 W Newberry Rd # A2, Gainesville, FL 32606 — © 2026 Yoga For All · <a href="tel:+13522562172">(352) 256-2172</a></p></footer>
 
 <script>
-  // Mobile nav toggle
-  document.getElementById('navToggle').addEventListener('click', function() {
-    document.getElementById('navLinks').classList.toggle('open');
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var deck=document.getElementById('deck');
+  var menu=document.getElementById('menu'), tog=document.getElementById('navtog');
+  tog.addEventListener('click',function(){menu.classList.toggle('open');});
+  menu.addEventListener('click',function(e){if(e.target.tagName==='A')menu.classList.remove('open');});
+
+  var panels=[].slice.call(document.querySelectorAll('.panel'));
+  var dots=[].slice.call(document.querySelectorAll('#dots button'));
+
+  function goTo(i){ var p=panels[i]; if(!p) return;
+    if(getComputedStyle(deck).display==='flex'){ deck.scrollTo({left:p.offsetLeft,behavior:reduce?'auto':'smooth'}); }
+    else { p.scrollIntoView({behavior:reduce?'auto':'smooth'}); } }
+
+  dots.forEach(function(d){ d.addEventListener('click',function(){ goTo(+d.dataset.i); }); });
+
+  // in-page anchor clicks -> horizontal scroll
+  document.querySelectorAll('a[href^="#panel-"]').forEach(function(a){
+    a.addEventListener('click',function(e){ var id=a.getAttribute('href').slice(1); var idx=panels.findIndex(function(p){return p.id===id;});
+      if(idx>-1 && getComputedStyle(deck).display==='flex'){ e.preventDefault(); goTo(idx); } });
   });
 
-  // Close mobile nav when a link is clicked
-  document.querySelectorAll('#navLinks a').forEach(function(link) {
-    link.addEventListener('click', function() {
-      document.getElementById('navLinks').classList.remove('open');
-    });
-  });
+  // active dot on horizontal scroll
+  var onScroll=function(){ var w=deck.clientWidth||1; var i=Math.round(deck.scrollLeft/w);
+    dots.forEach(function(d,k){ d.classList.toggle('active',k===i); }); };
+  deck.addEventListener('scroll',onScroll,{passive:true});
 
-  // Scroll reveal
-  var reveals = document.querySelectorAll('.reveal');
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+  // translate vertical wheel into horizontal movement on desktop,
+  // but let a panel scroll vertically first if its own content overflows
+  if(!reduce){
+    deck.addEventListener('wheel',function(e){
+      if(getComputedStyle(deck).display!=='flex') return;
+      if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;
+      var i=Math.round(deck.scrollLeft/(deck.clientWidth||1)), pane=panels[i];
+      if(pane && pane.scrollHeight>pane.clientHeight+1){
+        var atTop=pane.scrollTop<=0, atBot=pane.scrollTop+pane.clientHeight>=pane.scrollHeight-1;
+        if((e.deltaY<0&&!atTop)||(e.deltaY>0&&!atBot)) return; // allow native vertical scroll within panel
       }
-    });
-  }, { threshold: 0.12 });
-  reveals.forEach(function(el) { observer.observe(el); });
-
-  // Form submit
-  function handleSubmit(e) {
-    e.preventDefault();
-    var btn = e.target.querySelector('.form-submit');
-    btn.textContent = 'Message Sent!';
-    btn.style.background = '#567a5a';
-    btn.disabled = true;
-    setTimeout(function() {
-      btn.textContent = 'Send Message';
-      btn.style.background = '';
-      btn.disabled = false;
-      e.target.reset();
-    }, 3000);
+      deck.scrollLeft+=e.deltaY; e.preventDefault();
+    },{passive:false});
   }
+
+  // reveal class cards
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{root:null,threshold:.05});
+  document.querySelectorAll('.ccard').forEach(function(c,i){c.style.transitionDelay=(i%3*70)+'ms';io.observe(c);});
+
+  // form
+  var f=document.getElementById('cform');
+  f.addEventListener('submit',function(e){e.preventDefault();
+    var b=f.querySelector('.fsub'); b.textContent='Message Sent!'; b.style.background='#37402f'; b.disabled=true;
+    setTimeout(function(){ b.textContent='Send Message'; b.style.background=''; b.disabled=false; f.reset(); },3000);
+  });
+})();
 </script>
 </body>
 </html>
