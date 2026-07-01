@@ -1,934 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sun Fresh Style | Hair Salon – Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --blush:    #f5cfc4;
-      --rose:     #d4837a;
-      --deep:     #9b4e4a;
-      --gold:     #c8a96e;
-      --cream:    #fdf6f0;
-      --charcoal: #2e2420;
-      --mid:      #5c3d38;
-      --light-text: #7a5c58;
-      --white:    #ffffff;
-      --radius:   10px;
-      --shadow:   0 4px 20px rgba(46,36,32,.12);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: var(--cream);
-      color: var(--charcoal);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 68px;
-      background: rgba(253,246,240,.96);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--blush);
-      box-shadow: 0 2px 12px rgba(46,36,32,.08);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--rose);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--white);
-    }
-
-    .nav-logo-text {
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: .02em;
-      color: var(--deep);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: .88rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: var(--mid);
-      transition: color .2s;
-    }
-
-    .nav-links a:hover { color: var(--rose); }
-
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--mid);
-      border-radius: 2px;
-      transition: all .3s;
-    }
-
-    /* mobile nav */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      top: 68px;
-      left: 0;
-      right: 0;
-      background: var(--cream);
-      border-bottom: 1px solid var(--blush);
-      padding: 20px 5%;
-      z-index: 99;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav a {
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: .95rem;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      color: var(--mid);
-      padding: 8px 0;
-      border-bottom: 1px solid var(--blush);
-    }
-
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 5% 60px;
-      background:
-        radial-gradient(ellipse at 70% 20%, rgba(212,131,122,.18) 0%, transparent 60%),
-        radial-gradient(ellipse at 20% 80%, rgba(200,169,110,.14) 0%, transparent 55%),
-        var(--cream);
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--blush);
-      color: var(--deep);
-      font-family: 'Arial', sans-serif;
-      font-size: .78rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: 6px 18px;
-      border-radius: 20px;
-      margin-bottom: 24px;
-    }
-
-    .hero-title {
-      font-size: clamp(2.8rem, 7vw, 5.2rem);
-      font-weight: 700;
-      color: var(--charcoal);
-      line-height: 1.12;
-      margin-bottom: 22px;
-      letter-spacing: -.01em;
-    }
-
-    .hero-title span { color: var(--rose); }
-
-    .hero-tagline {
-      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-      color: var(--light-text);
-      max-width: 560px;
-      margin: 0 auto 40px;
-      font-style: italic;
-    }
-
-    .hero-cta-group {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 14px 32px;
-      border-radius: 40px;
-      font-family: 'Arial', sans-serif;
-      font-size: .9rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(155,78,74,.25); }
-
-    .btn-primary {
-      background: var(--rose);
-      color: var(--white);
-      border: 2px solid var(--rose);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--rose);
-      border: 2px solid var(--rose);
-    }
-
-    .btn-outline:hover { background: var(--blush); }
-
-    .hero-scroll {
-      margin-top: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      color: var(--light-text);
-      font-family: 'Arial', sans-serif;
-      font-size: .78rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-
-    .hero-scroll-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--rose);
-      animation: bounce 1.6s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(6px); }
-    }
-
-    /* ── SECTION WRAPPER ── */
-    section {
-      padding: 90px 5%;
-    }
-
-    .section-label {
-      font-family: 'Arial', sans-serif;
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--rose);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--charcoal);
-      line-height: 1.2;
-      margin-bottom: 20px;
-    }
-
-    .divider {
-      width: 50px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--rose), var(--gold));
-      border-radius: 2px;
-      margin-bottom: 32px;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--white);
-    }
-
-    .about-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 70px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--light-text);
-      margin-bottom: 18px;
-      font-size: 1.05rem;
-    }
-
-    .about-visual {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .about-card {
-      background: var(--cream);
-      border-left: 4px solid var(--rose);
-      border-radius: 0 var(--radius) var(--radius) 0;
-      padding: 20px 24px;
-    }
-
-    .about-card h4 {
-      font-size: 1rem;
-      color: var(--deep);
-      margin-bottom: 6px;
-    }
-
-    .about-card p {
-      font-family: 'Arial', sans-serif;
-      font-size: .9rem;
-      color: var(--light-text);
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--cream);
-    }
-
-    .services-header {
-      max-width: 1100px;
-      margin: 0 auto 50px;
-    }
-
-    .services-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 36px 28px;
-      box-shadow: var(--shadow);
-      transition: transform .25s, box-shadow .25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--rose), var(--gold));
-      transform: scaleX(0);
-      transition: transform .3s;
-    }
-
-    .service-card:hover { transform: translateY(-5px); box-shadow: 0 12px 36px rgba(46,36,32,.15); }
-    .service-card:hover::after { transform: scaleX(1); }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: var(--blush);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .service-icon svg {
-      width: 26px;
-      height: 26px;
-      stroke: var(--rose);
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--charcoal);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      font-family: 'Arial', sans-serif;
-      font-size: .88rem;
-      color: var(--light-text);
-      line-height: 1.6;
-    }
-
-    .service-note {
-      font-size: .8rem !important;
-      font-style: italic;
-      margin-top: 10px;
-      color: var(--gold) !important;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--white);
-    }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 70px;
-      align-items: start;
-    }
-
-    .contact-info h2 {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      color: var(--charcoal);
-      margin-bottom: 18px;
-    }
-
-    .contact-info > p {
-      font-family: 'Arial', sans-serif;
-      font-size: .95rem;
-      color: var(--light-text);
-      margin-bottom: 36px;
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .contact-detail-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: var(--blush);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-detail-icon svg {
-      width: 20px;
-      height: 20px;
-      stroke: var(--rose);
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .contact-detail-body strong {
-      display: block;
-      font-size: .8rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--rose);
-      font-family: 'Arial', sans-serif;
-      margin-bottom: 3px;
-    }
-
-    .contact-detail-body a,
-    .contact-detail-body span {
-      font-family: 'Arial', sans-serif;
-      font-size: .98rem;
-      color: var(--charcoal);
-      text-decoration: none;
-    }
-
-    .contact-detail-body a:hover { color: var(--rose); }
-
-    .rating-block {
-      background: var(--cream);
-      border-radius: var(--radius);
-      padding: 26px 28px;
-      margin-top: 36px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .rating-score {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: var(--charcoal);
-      line-height: 1;
-    }
-
-    .rating-details strong {
-      display: block;
-      font-family: 'Arial', sans-serif;
-      font-size: .82rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--light-text);
-      margin-bottom: 4px;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .stars svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--gold);
-    }
-
-    .rating-src {
-      font-family: 'Arial', sans-serif;
-      font-size: .8rem;
-      color: var(--light-text);
-      margin-top: 4px;
-    }
-
-    .contact-map-side {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .map-placeholder {
-      width: 100%;
-      aspect-ratio: 4/3;
-      background: linear-gradient(135deg, var(--blush) 0%, #e8c5bf 100%);
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      box-shadow: var(--shadow);
-    }
-
-    .map-placeholder svg {
-      width: 52px;
-      height: 52px;
-      stroke: var(--rose);
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .map-placeholder p {
-      font-family: 'Arial', sans-serif;
-      font-size: .9rem;
-      color: var(--deep);
-      text-align: center;
-    }
-
-    .btn-directions {
-      display: block;
-      text-align: center;
-      padding: 16px 32px;
-      background: var(--rose);
-      color: var(--white);
-      border-radius: 40px;
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: .9rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      transition: background .2s, transform .2s, box-shadow .2s;
-    }
-
-    .btn-directions:hover {
-      background: var(--deep);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(155,78,74,.3);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--charcoal);
-      color: rgba(255,255,255,.55);
-      padding: 50px 5% 30px;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .footer-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 40px;
-      padding-bottom: 36px;
-      border-bottom: 1px solid rgba(255,255,255,.1);
-      flex-wrap: wrap;
-    }
-
-    .footer-brand .nav-logo-text {
-      color: var(--white);
-      font-size: 1.3rem;
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .footer-brand p {
-      font-size: .88rem;
-      line-height: 1.6;
-      max-width: 280px;
-    }
-
-    .footer-links h4 {
-      color: var(--white);
-      font-size: .82rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .footer-links ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,.55);
-      text-decoration: none;
-      font-size: .88rem;
-      transition: color .2s;
-    }
-
-    .footer-links a:hover { color: var(--blush); }
-
-    .footer-bottom {
-      padding-top: 24px;
-      font-size: .82rem;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 50px;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 620px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-top {
-        flex-direction: column;
-      }
-
-      .hero-cta-group {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sun Fresh Style | Hair Salon – Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#2a1c10; --cream:#fff7ec; --peach:#ffe3c2; --stone:#8a6f52;
+    --amber:#f2a63b; --amber-d:#d9822a; --gold:#c98a1e; --sun:#ffd36b; --line:#efdcc2;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;overflow-x:hidden}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+  .wrap{width:90%;max-width:1140px;margin:0 auto}
+  a{color:inherit}
+  .lbl{font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--amber-d)}
+
+  /* PINNED PARALLAX HERO */
+  .stage{height:200vh;position:relative}
+  .pin{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;
+    background:linear-gradient(180deg,#fff3e0 0%,#ffe6c2 60%,var(--cream) 100%)}
+  .sun{position:absolute;top:38%;left:50%;width:min(70vw,620px);height:min(70vw,620px);border-radius:50%;
+    background:radial-gradient(circle,var(--sun) 0%,var(--amber) 45%,rgba(242,166,59,0) 72%);
+    transform:translate(-50%,-50%);will-change:transform;filter:blur(2px)}
+  .rays{position:absolute;top:38%;left:50%;width:min(120vw,1200px);height:min(120vw,1200px);transform:translate(-50%,-50%);
+    background:repeating-conic-gradient(from 0deg,rgba(255,211,107,.22) 0deg 6deg,transparent 6deg 14deg);
+    border-radius:50%;will-change:transform;animation:spin 60s linear infinite;opacity:.6}
+  @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  .hero-txt{position:relative;z-index:3;will-change:transform,opacity}
+  .hero-txt h1{font-size:clamp(2.6rem,8vw,6rem);line-height:.94}
+  .hero-txt h1 em{font-style:italic;color:var(--amber-d)}
+  .hero-txt .tag{font-family:Georgia,serif;font-style:italic;font-size:clamp(1.1rem,2.6vw,1.5rem);color:var(--stone);max-width:30ch;margin:1.4rem auto 0}
+  .hero-txt .kick{margin-bottom:1rem}
+  .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:3;font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--amber-d);animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+  .rv{opacity:0;transform:translateY(30px);transition:opacity .9s,transform .9s cubic-bezier(.16,1,.3,1)}
+  .rv.in{opacity:1;transform:none}
+
+  section{padding:6rem 0;position:relative}
+  .about{background:var(--cream)}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+  .about h2{font-size:clamp(1.8rem,4.5vw,3rem);line-height:1.08;margin-bottom:1.3rem}
+  .about h2 em{font-style:italic;color:var(--amber-d)}
+  .about p{color:var(--stone);max-width:56ch;margin-bottom:1rem}
+  .rating{display:inline-flex;align-items:center;gap:1rem;padding:1.2rem 1.6rem;border-radius:16px;background:#fff;box-shadow:0 12px 30px rgba(217,130,42,.14)}
+  .rating .sc{font-family:Georgia,serif;font-size:2.8rem;line-height:1;color:var(--amber-d)}
+  .rating .st{color:var(--gold);letter-spacing:.1em}
+  .rating .rl{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--stone)}
+  .rating .rs{font-size:.72rem;color:var(--stone);margin-top:.2rem}
+
+  .svc{background:linear-gradient(180deg,var(--peach),var(--cream))}
+  .svc h2{font-size:clamp(1.8rem,4.5vw,3rem);margin-bottom:2.4rem;text-align:center}
+  .svc h2 em{font-style:italic;color:var(--amber-d)}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+  .scard{background:#fff;border-radius:18px;padding:2rem;box-shadow:0 10px 26px rgba(217,130,42,.1);transition:transform .4s}
+  .scard:hover{transform:translateY(-6px)}
+  .scard .ic{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--sun),var(--amber));margin-bottom:1rem}
+  .scard h3{font-size:1.3rem;margin-bottom:.5rem}
+  .scard p{color:var(--stone);font-size:.94rem}
+  .note{text-align:center;margin-top:2rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--stone)}
+
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+  .visit h2{font-size:clamp(1.8rem,4.5vw,3rem);margin-bottom:1.4rem}
+  .visit h2 em{font-style:italic;color:var(--amber-d)}
+  .det{margin:1.2rem 0}
+  .det .k{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber-d);margin-bottom:.25rem}
+  .det .v a{color:var(--amber-d);text-decoration:none;border-bottom:1px solid currentColor}
+  .diri{display:inline-block;margin-top:1rem;padding:.95rem 2.1rem;background:linear-gradient(135deg,var(--amber),var(--amber-d));color:#fff;
+    text-decoration:none;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;transition:transform .3s}
+  .diri:hover{transform:translateY(-2px)}
+  .mapcard{border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(217,130,42,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2.5rem;text-align:center;aspect-ratio:3/2}
+  .mapcard svg{width:42px;height:42px;fill:var(--amber-d)}
+  .mapcard p{color:var(--stone);font-size:.9rem}
+  .mapcard a{color:var(--amber-d);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid currentColor}
+
+  footer{background:var(--ink);color:var(--peach);padding:2.4rem 0}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:#d9c3a6}
+  .foot .b{font-family:Georgia,serif;font-size:1.05rem;color:var(--sun)}
+  .foot .b em{font-style:italic}
+
+  @media(max-width:760px){
+    .about-grid,.svc-grid,.visit-grid{grid-template-columns:1fr;gap:2rem}
+    .stage{height:auto}
+    .pin{position:static;height:100vh}
+    section{padding:4rem 0}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rv{opacity:1;transform:none}
+    .stage{height:auto}.pin{position:static;height:100vh}
+    .rays{animation:none}
+  }
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#hero" class="nav-logo">
-    <div class="nav-logo-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C8 2 5 5 5 9c0 3 1.5 5.5 4 7v3h6v-3c2.5-1.5 4-4 4-7 0-4-3-7-7-7z"/>
-        <line x1="9" y1="22" x2="15" y2="22" stroke="white" stroke-width="1.5" fill="none"/>
-      </svg>
+<div class="stage" id="stage">
+  <div class="pin">
+    <div class="rays" id="rays" aria-hidden="true"></div>
+    <div class="sun" id="sun" aria-hidden="true"></div>
+    <div class="hero-txt" id="herotxt">
+      <p class="lbl kick">Hair Salon — Southwest Gainesville, FL</p>
+      <h1>Where Every Visit<br><em>Feels Like Sunshine</em></h1>
+      <p class="tag">Expert cuts, color, and care crafted to bring out your most confident, radiant self.</p>
     </div>
-    <span class="nav-logo-text">Sun Fresh Style</span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<div class="mobile-nav">
-  <a href="#about" onclick="this.parentElement.classList.remove('open')">About</a>
-  <a href="#services" onclick="this.parentElement.classList.remove('open')">Services</a>
-  <a href="#contact" onclick="this.parentElement.classList.remove('open')">Contact</a>
+    <div class="scroll-hint">Scroll</div>
+  </div>
 </div>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-badge">Hair Salon &mdash; Gainesville, FL</div>
-  <h1 class="hero-title">Where Every Visit<br><span>Feels Like Sunshine</span></h1>
-  <p class="hero-tagline">Expert cuts, color, and care crafted to bring out your most confident, radiant self.</p>
-  <div class="hero-cta-group">
-    <a href="tel:3522782973" class="btn btn-primary">Call to Book</a>
-    <a href="#services" class="btn btn-outline">Our Services</a>
-  </div>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="hero-scroll-dot"></div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-inner">
-    <div class="about-text">
-      <p class="section-label">About Us</p>
-      <h2 class="section-title">A Salon Rooted in the Heart of Gainesville</h2>
-      <div class="divider"></div>
-      <p>Sun Fresh Style is a welcoming hair salon located in Southwest Gainesville, dedicated to helping every client look and feel their absolute best. Our talented team stays current with the latest trends and techniques so you always leave the chair feeling refreshed and confident.</p>
-      <p>We take pride in creating a warm, relaxed atmosphere where both longtime locals and new faces feel right at home. Whether you are looking for a simple trim or a full transformation, we give every service the careful attention it deserves.</p>
-      <p>Conveniently situated on SW 13th St, we are proud to be a neighborhood staple for the Gainesville community. Contact us to learn more about what we can do for you.</p>
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <p class="lbl rv">The Salon</p>
+      <h2 class="rv">A neighborhood staple, <em>full of sunshine</em></h2>
+      <p class="rv">Sun Fresh Style is a welcoming hair salon located in Southwest Gainesville, dedicated to helping every client look and feel their absolute best. Our talented team stays current with the latest trends and techniques so you always leave the chair feeling refreshed and confident.</p>
+      <p class="rv">Conveniently situated on SW 13th St, we are proud to be a neighborhood staple for the Gainesville community. Contact us to learn more about what we can do for you.</p>
     </div>
-    <div class="about-visual">
-      <div class="about-card">
-        <h4>Personalized Consultations</h4>
-        <p>Every appointment begins with a conversation so we can understand exactly what you are hoping to achieve.</p>
-      </div>
-      <div class="about-card">
-        <h4>Quality Products</h4>
-        <p>We use professional-grade products chosen to deliver beautiful, long-lasting results while caring for your hair's health.</p>
-      </div>
-      <div class="about-card">
-        <h4>Welcoming Atmosphere</h4>
-        <p>Our salon is designed to be a comfortable, relaxing space where you can unwind from the moment you walk in.</p>
+    <div class="rv" style="text-align:center">
+      <div class="rating">
+        <div class="sc">4.8</div>
+        <div style="text-align:left">
+          <div class="st">★★★★★</div>
+          <div class="rl">Google Maps Rating</div>
+          <div class="rs">Based on Google Maps reviews</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="services-header">
-    <p class="section-label">What We Offer</p>
-    <h2 class="section-title">Our Services</h2>
-    <div class="divider"></div>
-  </div>
-  <div class="services-grid">
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M6 3l1 4-3 3 3 3-1 4 4-1 3 3 3-3 4 1-1-4 3-3-3-3 1-4-4 1-3-3-3 3z"/></svg>
-      </div>
-      <h3>Haircuts &amp; Styling</h3>
-      <p>Precision cuts tailored to your face shape, hair texture, and personal style — for all hair types and lengths.</p>
-      <p class="service-note">Contact us for details</p>
+<section class="svc" id="services">
+  <div class="wrap">
+    <p class="lbl rv" style="text-align:center">What We Offer</p>
+    <h2 class="rv">Services <em>&amp; Care</em></h2>
+    <div class="svc-grid">
+      <div class="scard rv"><div class="ic"></div><h3>Cuts &amp; Styling</h3><p>Fresh cuts and finished styling shaped to your features and everyday routine — your best look starts here.</p></div>
+      <div class="scard rv"><div class="ic"></div><h3>Color</h3><p>From rich, all-over color to vibrant highlights and balayage, we offer a full range of coloring services to refresh your look.</p></div>
+      <div class="scard rv"><div class="ic"></div><h3>Blowdry &amp; Finishing</h3><p>Professional blowdry and finishing services that leave your hair smooth, polished, and ready for any occasion.</p></div>
     </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
-      </div>
-      <h3>Hair Coloring</h3>
-      <p>From rich, all-over color to vibrant highlights and balayage, we offer a full range of coloring services to refresh your look.</p>
-      <p class="service-note">Contact us for details</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M9 3h6l1 5H8z"/><path d="M5 8h14l-1 13H6z"/><line x1="12" y1="8" x2="12" y2="21"/></svg>
-      </div>
-      <h3>Blowouts &amp; Finishing</h3>
-      <p>Professional blowdry and finishing services that leave your hair smooth, polished, and ready for any occasion.</p>
-      <p class="service-note">Contact us for details</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2z"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      </div>
-      <h3>Keratin Treatments</h3>
-      <p>Smoothing treatments that reduce frizz, boost shine, and make everyday styling easier for weeks at a time.</p>
-      <p class="service-note">Contact us for details</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </div>
-      <h3>Braids &amp; Updos</h3>
-      <p>Elegant updos, braids, and special-occasion styles crafted for weddings, events, or any time you want to stand out.</p>
-      <p class="service-note">Contact us for details</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 22s-8-5-8-11a8 8 0 0 1 16 0c0 6-8 11-8 11z"/></svg>
-      </div>
-      <h3>Deep Conditioning</h3>
-      <p>Restorative conditioning treatments designed to hydrate, strengthen, and revitalize dry or damaged hair.</p>
-      <p class="service-note">Contact us for details</p>
-    </div>
-
+    <p class="note rv">Contact us for current pricing &amp; availability</p>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-inner">
-    <div class="contact-info">
-      <p class="section-label">Find Us</p>
-      <h2>Visit Sun Fresh Style</h2>
-      <div class="divider"></div>
-      <p>We would love to see you. Stop by or give us a call to schedule your next appointment.</p>
-
-      <div class="contact-detail">
-        <div class="contact-detail-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 22s-8-5-8-11a8 8 0 0 1 16 0c0 6-8 11-8 11z"/><circle cx="12" cy="11" r="3"/></svg>
-        </div>
-        <div class="contact-detail-body">
-          <strong>Address</strong>
-          <span>1829 SW 13th St, Gainesville, FL 32608</span>
-        </div>
-      </div>
-
-      <div class="contact-detail">
-        <div class="contact-detail-icon">
-          <svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 4.2 2 2 0 0 1 5.1 2h3a2 2 0 0 1 2 1.7 12.8 12.8 0 0 0 .7 2.8 2 2 0 0 1-.5 2.1L9.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5 12.8 12.8 0 0 0 2.8.7A2 2 0 0 1 23 17z"/></svg>
-        </div>
-        <div class="contact-detail-body">
-          <strong>Phone</strong>
-          <a href="tel:3522782973">(352) 278-2973</a>
-        </div>
-      </div>
-
-      <div class="contact-detail">
-        <div class="contact-detail-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
-        <div class="contact-detail-body">
-          <strong>Hours</strong>
-          <span>Contact us for details</span>
-        </div>
-      </div>
-
-      <div class="rating-block">
-        <div class="rating-score">4.8</div>
-        <div class="rating-details">
-          <strong>Google Maps Rating</strong>
-          <div class="stars">
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <p class="rating-src">Based on Google Maps reviews</p>
-        </div>
-      </div>
+<section class="visit" id="visit">
+  <div class="wrap visit-grid">
+    <div>
+      <p class="lbl rv">Visit</p>
+      <h2 class="rv">Find <em>Sun Fresh Style</em></h2>
+      <div class="det rv"><div class="k">Address</div><div class="v">1829 SW 13th St<br>Gainesville, FL 32608</div></div>
+      <div class="det rv"><div class="k">Phone</div><div class="v"><a href="tel:+13522782973">(352) 278-2973</a></div></div>
+      <div class="det rv"><div class="k">Hours</div><div class="v">Contact us for current hours</div></div>
+      <a class="diri rv" href="https://www.google.com/maps/search/Sun%20Fresh%20Style%201829%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener noreferrer">Get Directions</a>
     </div>
-
-    <div class="contact-map-side">
-      <div class="map-placeholder">
-        <svg viewBox="0 0 24 24"><path d="M12 22s-8-5-8-11a8 8 0 0 1 16 0c0 6-8 11-8 11z"/><circle cx="12" cy="11" r="3"/></svg>
-        <p>1829 SW 13th St<br>Gainesville, FL 32608</p>
-      </div>
-      <a
-        href="https://www.google.com/maps/search/Sun%20Fresh%20Style%201829%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608"
-        target="_blank"
-        rel="noopener"
-        class="btn-directions"
-      >Get Directions</a>
+    <div class="mapcard rv">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      <p>1829 SW 13th St<br>Gainesville, FL 32608</p>
+      <a href="https://www.google.com/maps/search/Sun%20Fresh%20Style%201829%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <span class="nav-logo-text">Sun Fresh Style</span>
-        <p>A professional hair salon serving the Gainesville, FL community. Your best look starts here.</p>
-      </div>
-      <div class="footer-links">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="tel:3522782973">(352) 278-2973</a></li>
-          <li><a href="https://www.google.com/maps/search/Sun%20Fresh%20Style%201829%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">1829 SW 13th St, Gainesville, FL</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&copy; 2026 Sun Fresh Style. All rights reserved.</span>
-      <span>Gainesville, FL 32608</span>
-    </div>
+  <div class="wrap foot">
+    <div class="b">Sun Fresh <em>Style</em></div>
+    <div>1829 SW 13th St — Gainesville, FL 32608 · (352) 278-2973</div>
+    <div>© 2026 Sun Fresh Style</div>
   </div>
 </footer>
 
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:.14});
+    document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  if(!reduce){
+    var stage=document.getElementById('stage'), sun=document.getElementById('sun'),
+        rays=document.getElementById('rays'), txt=document.getElementById('herotxt');
+    var ticking=false;
+    function onScroll(){
+      if(ticking) return; ticking=true;
+      requestAnimationFrame(function(){
+        var rect=stage.getBoundingClientRect();
+        var total=stage.offsetHeight-window.innerHeight;
+        var p=Math.min(1,Math.max(0,(-rect.top)/(total||1)));
+        sun.style.transform='translate(-50%,'+(-50 - p*40)+'%) scale('+(1+p*0.5)+')';
+        rays.style.transform='translate(-50%,'+(-50 - p*30)+'%)';
+        txt.style.transform='translateY('+(p*-70)+'px)';
+        txt.style.opacity=String(1-p*0.9);
+        ticking=false;
+      });
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    document.querySelectorAll('.diri').forEach(function(b){
+      b.addEventListener('mousemove', function(e){
+        var r=b.getBoundingClientRect();
+        b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.22)+'px,'+((e.clientY-r.top-r.height/2)*.32)+'px)';
+      });
+      b.addEventListener('mouseleave', function(){ b.style.transform=''; });
+    });
+  }
+})();
+</script>
 </body>
 </html>

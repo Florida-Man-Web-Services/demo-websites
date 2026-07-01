@@ -1,741 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Total Image Salon | Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: #faf8f5;
-      color: #2c2424;
-      line-height: 1.7;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Total Image Salon | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#181416; --charcoal:#221c1f; --ivory:#f6f1ee; --stone:#7a6f72;
+    --rose:#c98a72; --rose-d:#b06a50; --emer:#3f6f5c; --gold:#c2a15a; --line:#e6ddd8;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--ivory);color:var(--ink);line-height:1.6;overflow-x:hidden}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+  a{color:inherit}
+  .lbl{font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--rose-d)}
 
-    /* ── Color Palette ── */
-    /* Warm rose-gold, deep plum, cream — upscale salon feel */
-    :root {
-      --plum:       #4a1942;
-      --plum-light: #6b2f63;
-      --rose-gold:  #c9956b;
-      --rose-light: #e8c8b4;
-      --cream:      #faf8f5;
-      --off-white:  #f2ede8;
-      --text-dark:  #2c2424;
-      --text-mid:   #5c4a4a;
-      --text-light: #8a7070;
-      --gold:       #c9a96e;
-    }
+  /* SPLIT SCREEN */
+  .split{display:grid;grid-template-columns:42% 58%}
+  .left{position:sticky;top:0;height:100vh;background:linear-gradient(160deg,var(--ink),var(--charcoal));
+    color:var(--ivory);display:flex;flex-direction:column;justify-content:space-between;padding:3rem 3vw}
+  .left .brand{font-family:Georgia,serif;font-size:clamp(2rem,3.4vw,3rem);line-height:1}
+  .left .brand em{font-style:italic;color:var(--gold)}
+  .left .brand small{display:block;font-family:"Helvetica Neue",Arial;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:#9a8f92;margin-top:.6rem}
+  .left .mid{align-self:flex-start}
+  .left .tag{font-family:Georgia,serif;font-style:italic;font-size:clamp(1.1rem,1.8vw,1.5rem);color:#d9cfce;max-width:26ch}
+  .ratebox{margin-top:2rem;display:inline-flex;align-items:center;gap:1rem;padding:1rem 1.4rem;border:1px solid rgba(255,255,255,.18);border-radius:14px}
+  .ratebox .sc{font-family:Georgia,serif;font-size:2.6rem;line-height:1;color:var(--gold)}
+  .ratebox .st{color:var(--gold);letter-spacing:.08em}
+  .ratebox .rl{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#c9bfbe;margin-top:.2rem}
+  .left .navmini{display:flex;gap:1.4rem;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase}
+  .left .navmini a{color:#b6abae;text-decoration:none;transition:color .3s}
+  .left .navmini a:hover{color:var(--gold)}
 
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 999;
-      background: var(--plum);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 16px rgba(74,25,66,0.35);
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-    .nav-logo-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: var(--rose-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.15rem;
-      color: #fff;
-      flex-shrink: 0;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      font-weight: bold;
-    }
-    .nav-name {
-      color: #fff;
-      font-size: 1.05rem;
-      letter-spacing: 0.08em;
-      font-style: italic;
-      font-weight: normal;
-    }
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-    .nav-links a {
-      color: var(--rose-light);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--gold); }
+  .right{padding:0}
+  .panel{min-height:100vh;padding:7rem 5vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .panel h2{font-size:clamp(2rem,4vw,3.2rem);line-height:1.05;margin-bottom:1.3rem}
+  .panel h2 em{font-style:italic;color:var(--rose-d)}
+  .panel p{color:var(--stone);max-width:56ch;margin-bottom:1rem;font-size:1.05rem}
 
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--rose-light);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
+  .svc-item{border-top:1px solid var(--line);padding:1.5rem 0;max-width:640px}
+  .svc-item:last-of-type{border-bottom:1px solid var(--line)}
+  .svc-item h3{font-size:1.4rem;margin-bottom:.4rem}
+  .svc-item h3 em{font-style:italic;color:var(--gold)}
+  .svc-item p{margin:0;font-size:.98rem}
+  .note{margin-top:1.6rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--stone)}
 
-    /* Mobile nav overlay */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 64px; left: 0; right: 0;
-      background: var(--plum);
-      padding: 1.5rem 2rem;
-      z-index: 998;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    }
-    .mobile-menu.open { display: block; }
-    .mobile-menu a {
-      display: block;
-      color: var(--rose-light);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid rgba(201,149,107,0.2);
-      transition: color 0.2s;
-    }
-    .mobile-menu a:last-child { border-bottom: none; }
-    .mobile-menu a:hover { color: var(--gold); }
+  .det{margin:1.1rem 0}
+  .det .k{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rose-d);margin-bottom:.25rem}
+  .det .v a{color:var(--rose-d);text-decoration:none;border-bottom:1px solid currentColor}
+  .diri{display:inline-block;margin-top:1.2rem;padding:.95rem 2.1rem;background:var(--rose-d);color:#fff;text-decoration:none;
+    font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;transition:background .3s,transform .3s}
+  .diri:hover{background:var(--emer);transform:translateY(-2px)}
+  .maplink{display:inline-block;margin-top:1rem;color:var(--rose-d);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid currentColor}
 
-    /* ── Hero ── */
-    #hero {
-      margin-top: 64px;
-      background: linear-gradient(135deg, var(--plum) 0%, var(--plum-light) 55%, #8b4080 100%);
-      min-height: 88vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 2rem;
-      position: relative;
-      overflow: hidden;
-    }
-    #hero::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 380px; height: 380px;
-      border-radius: 50%;
-      background: rgba(201,149,107,0.08);
-      pointer-events: none;
-    }
-    #hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -80px;
-      width: 500px; height: 500px;
-      border-radius: 50%;
-      background: rgba(201,149,107,0.06);
-      pointer-events: none;
-    }
-    .hero-inner { position: relative; z-index: 1; max-width: 740px; }
-    .hero-eyebrow {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--rose-gold);
-      margin-bottom: 1rem;
-    }
-    .hero-title {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      color: #fff;
-      font-style: italic;
-      font-weight: normal;
-      line-height: 1.2;
-      margin-bottom: 1.25rem;
-    }
-    .hero-divider {
-      width: 72px;
-      height: 2px;
-      background: var(--rose-gold);
-      margin: 0 auto 1.5rem;
-      border-radius: 2px;
-    }
-    .hero-tagline {
-      font-family: 'Arial', sans-serif;
-      font-size: clamp(1rem, 2.2vw, 1.2rem);
-      color: var(--rose-light);
-      letter-spacing: 0.04em;
-      margin-bottom: 2.5rem;
-    }
-    .hero-cta {
-      display: inline-block;
-      background: var(--rose-gold);
-      color: #fff;
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.9rem 2.4rem;
-      border-radius: 2px;
-      transition: background 0.25s, transform 0.2s;
-    }
-    .hero-cta:hover {
-      background: var(--gold);
-      transform: translateY(-2px);
-    }
+  .rv{opacity:0;transform:translateY(28px);transition:opacity .85s,transform .85s cubic-bezier(.16,1,.3,1)}
+  .rv.in{opacity:1;transform:none}
 
-    /* ── Section Wrapper ── */
-    section { padding: 5rem 1.5rem; }
-    .container { max-width: 960px; margin: 0 auto; }
-    .section-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--rose-gold);
-      margin-bottom: 0.6rem;
-    }
-    .section-title {
-      font-size: clamp(1.65rem, 3.5vw, 2.4rem);
-      color: var(--plum);
-      font-style: italic;
-      font-weight: normal;
-      margin-bottom: 1rem;
-    }
-    .section-rule {
-      width: 52px;
-      height: 2px;
-      background: var(--rose-gold);
-      border-radius: 2px;
-      margin-bottom: 2rem;
-    }
+  footer{background:var(--ink);color:var(--ivory);padding:2.4rem 5vw}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:#c9bfbe}
+  .foot .b{font-family:Georgia,serif;font-size:1.05rem;color:var(--gold)}
 
-    /* ── About ── */
-    #about { background: var(--off-white); }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    .about-text p {
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      margin-bottom: 1.1rem;
-    }
-    .about-text p:last-child { margin-bottom: 0; }
-    .about-accent {
-      background: linear-gradient(135deg, var(--plum) 0%, var(--plum-light) 100%);
-      border-radius: 4px;
-      padding: 2.5rem;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .accent-stat {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-    .accent-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: rgba(201,149,107,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 1.1rem;
-    }
-    .accent-stat-text strong {
-      display: block;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      color: var(--rose-light);
-      margin-bottom: 0.2rem;
-    }
-    .accent-stat-text span {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.75);
-    }
-
-    /* ── Services ── */
-    #services { background: var(--cream); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-    .service-card {
-      background: #fff;
-      border: 1px solid rgba(74,25,66,0.1);
-      border-radius: 4px;
-      padding: 2rem 1.75rem;
-      position: relative;
-      transition: box-shadow 0.25s, transform 0.2s;
-    }
-    .service-card:hover {
-      box-shadow: 0 8px 32px rgba(74,25,66,0.12);
-      transform: translateY(-3px);
-    }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--rose-gold);
-      border-radius: 4px 0 0 4px;
-    }
-    .service-icon {
-      font-size: 1.6rem;
-      margin-bottom: 0.8rem;
-      display: block;
-    }
-    .service-name {
-      font-size: 1.05rem;
-      color: var(--plum);
-      font-style: italic;
-      margin-bottom: 0.4rem;
-    }
-    .service-desc {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.85rem;
-      color: var(--text-light);
-      line-height: 1.5;
-    }
-    .service-note {
-      display: inline-block;
-      margin-top: 0.75rem;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.75rem;
-      color: var(--rose-gold);
-      letter-spacing: 0.06em;
-    }
-
-    /* ── Contact ── */
-    #contact { background: var(--off-white); }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 3.5rem;
-      align-items: start;
-    }
-    .contact-info { }
-    .contact-item {
-      display: flex;
-      gap: 1.1rem;
-      align-items: flex-start;
-      margin-bottom: 1.75rem;
-    }
-    .contact-item-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--plum);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--rose-light);
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-    .contact-item-body strong {
-      display: block;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 0.25rem;
-    }
-    .contact-item-body a {
-      color: var(--plum);
-      text-decoration: none;
-      font-size: 1rem;
-      transition: color 0.2s;
-    }
-    .contact-item-body a:hover { color: var(--rose-gold); }
-    .contact-item-body p {
-      color: var(--text-mid);
-      font-size: 0.98rem;
-    }
-
-    .btn-directions {
-      display: inline-block;
-      background: var(--plum);
-      color: #fff;
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.85rem 2rem;
-      border-radius: 2px;
-      margin-top: 0.5rem;
-      transition: background 0.25s, transform 0.2s;
-    }
-    .btn-directions:hover {
-      background: var(--plum-light);
-      transform: translateY(-2px);
-    }
-
-    /* Rating Card */
-    .rating-card {
-      background: #fff;
-      border-radius: 4px;
-      padding: 2.2rem 2rem;
-      border: 1px solid rgba(74,25,66,0.1);
-      box-shadow: 0 4px 20px rgba(74,25,66,0.07);
-      text-align: center;
-    }
-    .rating-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 1rem;
-    }
-    .rating-score {
-      font-size: 3.4rem;
-      color: var(--plum);
-      font-style: italic;
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    .rating-stars {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-      margin-bottom: 0.6rem;
-    }
-    .star { color: var(--gold); font-size: 1.25rem; }
-    .star.half { position: relative; display: inline-block; color: #ddd; }
-    .star.half::before {
-      content: '★';
-      color: var(--gold);
-      position: absolute;
-      left: 0;
-      width: 50%;
-      overflow: hidden;
-    }
-    .rating-count {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.85rem;
-      color: var(--text-light);
-      margin-bottom: 1.4rem;
-    }
-    .rating-source {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      color: var(--text-light);
-      text-transform: uppercase;
-      border-top: 1px solid var(--rose-light);
-      padding-top: 1rem;
-    }
-    .rating-badge {
-      display: inline-block;
-      background: #4285F4;
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-      padding: 0.3rem 0.9rem;
-      border-radius: 12px;
-      margin-top: 0.5rem;
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: var(--plum);
-      color: rgba(255,255,255,0.65);
-      text-align: center;
-      padding: 2.5rem 1.5rem;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-    }
-    footer .footer-name {
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      color: var(--rose-light);
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    footer a {
-      color: var(--rose-light);
-      text-decoration: none;
-    }
-    footer a:hover { color: var(--gold); }
-    footer .footer-sep { margin: 0 0.5rem; opacity: 0.4; }
-
-    /* ── Responsive ── */
-    @media (max-width: 720px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-      .about-accent { padding: 2rem; }
-
-      #hero { min-height: 72vh; }
-
-      section { padding: 3.5rem 1.25rem; }
-    }
-    @media (max-width: 480px) {
-      .services-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+  @media(max-width:820px){
+    .split{grid-template-columns:1fr}
+    .left{position:static;height:auto;padding:2.5rem 6vw;gap:1.6rem}
+    .left .mid{margin:1.4rem 0}
+    .panel{min-height:auto;padding:4rem 6vw}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rv{opacity:1;transform:none}
+    .left{position:static;height:auto}
+  }
+</style>
 </head>
 <body>
 
-  <!-- ── Nav ── -->
-  <nav>
-    <a href="#hero" class="nav-brand">
-      <div class="nav-logo-mark">T</div>
-      <span class="nav-name">Total Image Salon</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+<div class="split">
+  <aside class="left" id="top">
+    <div class="brand">Total Image<br><em>Salon</em><small>Gainesville, Florida</small></div>
+    <div class="mid">
+      <p class="tag">Where every visit is a fresh start — styling that brings out your best self.</p>
+      <div class="ratebox">
+        <div class="sc" id="score">4.2</div>
+        <div>
+          <div class="st">★★★★☆</div>
+          <div class="rl">Based on <span id="count">187</span> reviews · Google Maps</div>
+        </div>
+      </div>
+    </div>
+    <nav class="navmini">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#visit">Visit</a>
+    </nav>
+  </aside>
 
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="closeMenu()">About</a>
-    <a href="#services" onclick="closeMenu()">Services</a>
-    <a href="#contact" onclick="closeMenu()">Contact</a>
+  <main class="right">
+    <section class="panel" id="about">
+      <p class="lbl rv">The Salon</p>
+      <h2 class="rv">A fresh start, <em>every visit</em></h2>
+      <p class="rv">From precision cuts and color transformations to relaxing treatments, we approach every appointment with attentive skill and genuine care.</p>
+      <p class="rv">Whether you're a longtime local or visiting for the first time, you'll leave feeling refreshed and confident.</p>
+    </section>
+
+    <section class="panel" id="services">
+      <p class="lbl rv">Services</p>
+      <h2 class="rv">What We <em>Offer</em></h2>
+      <div class="svc-item rv"><h3>Color &amp; <em>Highlights</em></h3><p>Full-color services including balayage, highlights, lowlights, and root touch-ups to give your hair dimension and vibrancy.</p></div>
+      <div class="svc-item rv"><h3>Blowouts</h3><p>Sleek, voluminous, or natural-wave blowouts for any occasion — a polished finish that lasts.</p></div>
+      <div class="svc-item rv"><h3>Cuts &amp; <em>Styling</em></h3><p>Precision cuts and finished styling shaped to your features and everyday routine.</p></div>
+      <p class="note rv">Contact us for current pricing &amp; availability</p>
+    </section>
+
+    <section class="panel" id="visit">
+      <p class="lbl rv">Visit</p>
+      <h2 class="rv">Find <em>Total Image</em></h2>
+      <div class="det rv"><div class="k">Address</div><div class="v">115 NW 3rd St<br>Gainesville, FL 32601</div></div>
+      <div class="det rv"><div class="k">Phone</div><div class="v"><a href="tel:+13523735055">(352) 373-5055</a></div></div>
+      <div class="det rv"><div class="k">Hours</div><div class="v">Contact us for current hours</div></div>
+      <a class="diri rv" href="https://www.google.com/maps/search/Total%20Image%20Salon%20115%20NW%203rd%20St%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer">Get Directions</a>
+      <br>
+      <a class="maplink rv" href="https://www.google.com/maps/search/Total%20Image%20Salon%20115%20NW%203rd%20St%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="foot">
+    <div class="b">Total Image Salon</div>
+    <div>115 NW 3rd St — Gainesville, FL 32601 · (352) 373-5055 · 4.2 stars from 187 Google reviews</div>
+    <div>© 2026 Total Image Salon</div>
   </div>
+</footer>
 
-  <!-- ── Hero ── -->
-  <section id="hero">
-    <div class="hero-inner">
-      <p class="hero-eyebrow">Gainesville, Florida</p>
-      <h1 class="hero-title">Total Image Salon</h1>
-      <div class="hero-divider"></div>
-      <p class="hero-tagline">Where every visit is a fresh start — styling that brings out your best self.</p>
-      <a href="#services" class="hero-cta">Explore Our Services</a>
-    </div>
-  </section>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  <!-- ── About ── -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Our Story</p>
-          <h2 class="section-title">A Salon Built on Craft &amp; Care</h2>
-          <div class="section-rule"></div>
-          <p>Total Image Salon has been a trusted destination in downtown Gainesville for clients who want expert hair care in a welcoming, professional environment. Nestled in the heart of NW 3rd Street, our stylists take pride in delivering personalized results that suit your unique look and lifestyle.</p>
-          <p>From precision cuts and color transformations to relaxing treatments, we approach every appointment with attentive skill and genuine care. Whether you're a longtime local or visiting for the first time, you'll leave feeling refreshed and confident.</p>
-        </div>
-        <div class="about-accent">
-          <div class="accent-stat">
-            <div class="accent-icon">&#9998;</div>
-            <div class="accent-stat-text">
-              <strong>Expert Stylists</strong>
-              <span>Skilled professionals dedicated to your look</span>
-            </div>
-          </div>
-          <div class="accent-stat">
-            <div class="accent-icon">&#10084;</div>
-            <div class="accent-stat-text">
-              <strong>Personalized Service</strong>
-              <span>Consultations tailored to your style goals</span>
-            </div>
-          </div>
-          <div class="accent-stat">
-            <div class="accent-icon">&#9733;</div>
-            <div class="accent-stat-text">
-              <strong>Highly Rated</strong>
-              <span>4.2 stars from 187 Google reviews</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:.15});
+    document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); });
+  }
 
-  <!-- ── Services ── -->
-  <section id="services">
-    <div class="container">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Our Services</h2>
-      <div class="section-rule"></div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <span class="service-icon">&#9986;</span>
-          <h3 class="service-name">Haircuts &amp; Styling</h3>
-          <p class="service-desc">Precision cuts for all hair types — whether you're after a classic trim, a bold new shape, or a style refresh.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127774;</span>
-          <h3 class="service-name">Color &amp; Highlights</h3>
-          <p class="service-desc">Full-color services including balayage, highlights, lowlights, and root touch-ups to give your hair dimension and vibrancy.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#128131;</span>
-          <h3 class="service-name">Relaxers &amp; Texturizing</h3>
-          <p class="service-desc">Professional chemical services to smooth, relax, or reshape your natural texture for a manageable, polished finish.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#128167;</span>
-          <h3 class="service-name">Deep Conditioning Treatments</h3>
-          <p class="service-desc">Restorative treatments that hydrate, repair, and strengthen hair from root to tip, leaving it soft and healthy.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#128138;</span>
-          <h3 class="service-name">Blowouts &amp; Blowdries</h3>
-          <p class="service-desc">Sleek, voluminous, or natural-wave blowouts for any occasion — a polished finish that lasts.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#10024;</span>
-          <h3 class="service-name">Natural &amp; Protective Styles</h3>
-          <p class="service-desc">Expert care for natural hair, including braids, twists, and protective styles that promote healthy growth.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Contact ── -->
-  <section id="contact">
-    <div class="container">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Visit Total Image Salon</h2>
-      <div class="section-rule"></div>
-      <div class="contact-grid">
-        <div class="contact-info">
-
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128205;</div>
-            <div class="contact-item-body">
-              <strong>Address</strong>
-              <p>115 NW 3rd St<br>Gainesville, FL 32601</p>
-              <a class="btn-directions" href="https://www.google.com/maps/search/Total%20Image%20Salon%20115%20NW%203rd%20St%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer">Get Directions</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128222;</div>
-            <div class="contact-item-body">
-              <strong>Phone</strong>
-              <a href="tel:+13523735055">(352) 373-5055</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128336;</div>
-            <div class="contact-item-body">
-              <strong>Hours</strong>
-              <p>Contact us for current hours</p>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="rating-card">
-          <p class="rating-label">Customer Reviews</p>
-          <div class="rating-score">4.2</div>
-          <div class="rating-stars">
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star" style="color:#ddd; position:relative; display:inline-block;">&#9733;<span style="position:absolute;left:0;width:20%;overflow:hidden;color:var(--gold);">&#9733;</span></span>
-          </div>
-          <p class="rating-count">Based on <strong>187 reviews</strong></p>
-          <div class="rating-source">
-            Verified on
-            <span class="rating-badge">Google Maps</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Footer ── -->
-  <footer>
-    <p class="footer-name">Total Image Salon</p>
-    <p>
-      <a href="https://www.google.com/maps/search/Total%20Image%20Salon%20115%20NW%203rd%20St%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer">115 NW 3rd St, Gainesville, FL 32601</a>
-      <span class="footer-sep">|</span>
-      <a href="tel:+13523735055">(352) 373-5055</a>
-    </p>
-    <p style="margin-top:0.75rem; font-size:0.75rem; opacity:0.5;">&copy; 2026 Total Image Salon. All rights reserved.</p>
-  </footer>
-
-  <script>
-    // Hamburger toggle
-    var hamburger = document.getElementById('hamburger');
-    var mobileMenu = document.getElementById('mobileMenu');
-    hamburger.addEventListener('click', function() {
-      mobileMenu.classList.toggle('open');
-    });
-    function closeMenu() {
-      mobileMenu.classList.remove('open');
-    }
-    // Close menu on outside click
-    document.addEventListener('click', function(e) {
-      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-        mobileMenu.classList.remove('open');
+  /* count-up to REAL values only: 4.2 and 187 */
+  var scoreEl=document.getElementById('score'), countEl=document.getElementById('count');
+  var TARGET_SCORE=4.2, TARGET_COUNT=187;
+  if(reduce){
+    scoreEl.textContent='4.2'; countEl.textContent='187';
+  } else {
+    var started=false;
+    function run(){
+      if(started) return; started=true;
+      var t0=null, dur=1200;
+      function step(ts){
+        if(!t0)t0=ts;
+        var k=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-k,3);
+        scoreEl.textContent=(TARGET_SCORE*e).toFixed(1);
+        countEl.textContent=Math.round(TARGET_COUNT*e);
+        if(k<1) requestAnimationFrame(step);
+        else { scoreEl.textContent='4.2'; countEl.textContent='187'; }
       }
-    });
-  </script>
+      requestAnimationFrame(step);
+    }
+    if('IntersectionObserver' in window){
+      var co=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ run(); co.disconnect(); } }); });
+      co.observe(scoreEl);
+    } else { run(); }
+    setTimeout(run, 2500);
+  }
 
+  if(!reduce){
+    document.querySelectorAll('.diri').forEach(function(b){
+      b.addEventListener('mousemove', function(e){
+        var r=b.getBoundingClientRect();
+        b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.22)+'px,'+((e.clientY-r.top-r.height/2)*.32)+'px)';
+      });
+      b.addEventListener('mouseleave', function(){ b.style.transform=''; });
+    });
+  }
+})();
+</script>
 </body>
 </html>
