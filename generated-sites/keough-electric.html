@@ -1,1122 +1,920 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Keough Electric | Licensed Electrician in Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --yellow: #F5C518;
-      --yellow-dark: #D4A910;
-      --navy: #0D1B2A;
-      --navy-mid: #1A2E42;
-      --navy-light: #243B55;
-      --white: #FFFFFF;
-      --off-white: #F4F6F8;
-      --text-dark: #0D1B2A;
-      --text-muted: #5A6A7A;
-      --border: #DDE3EA;
-      --shadow: rgba(13, 27, 42, 0.12);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 999;
-      background: var(--navy);
-      box-shadow: 0 2px 12px var(--shadow);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--yellow);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--navy);
-    }
-
-    .nav-logo-text {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.02em;
-    }
-
-    .nav-logo-text span {
-      color: var(--yellow);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #B0BFCC;
-      text-decoration: none;
-      font-size: 0.92rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--yellow);
-    }
-
-    .nav-cta {
-      background: var(--yellow);
-      color: var(--navy) !important;
-      padding: 8px 18px;
-      border-radius: 6px;
-      font-weight: 700 !important;
-      font-size: 0.88rem !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--yellow-dark) !important;
-      color: var(--navy) !important;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #1C3A5C 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 5% 60px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg-pattern {
-      position: absolute;
-      inset: 0;
-      opacity: 0.04;
-      background-image: repeating-linear-gradient(
-        45deg,
-        var(--yellow) 0,
-        var(--yellow) 1px,
-        transparent 0,
-        transparent 50%
-      );
-      background-size: 40px 40px;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(245, 197, 24, 0.15);
-      border: 1px solid rgba(245, 197, 24, 0.35);
-      color: var(--yellow);
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 50px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-
-    .hero-badge svg {
-      width: 14px;
-      height: 14px;
-      fill: var(--yellow);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 760px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
-    }
-
-    .hero h1 span {
-      color: var(--yellow);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: #8FAFC7;
-      margin-bottom: 40px;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--yellow);
-      color: var(--navy);
-      padding: 14px 32px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-primary:hover {
-      background: var(--yellow-dark);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--white);
-      padding: 14px 32px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      text-decoration: none;
-      border: 2px solid rgba(255,255,255,0.3);
-      transition: border-color 0.2s, transform 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--yellow);
-      color: var(--yellow);
-      transform: translateY(-2px);
-    }
-
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 48px;
-      margin-top: 64px;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-number {
-      display: block;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--yellow);
-      line-height: 1;
-    }
-
-    .stat-label {
-      display: block;
-      font-size: 0.82rem;
-      color: #6B8BA8;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-top: 4px;
-    }
-
-    /* SECTIONS */
-    section {
-      padding: 80px 5%;
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      display: inline-block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--yellow-dark);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    .section-subtitle {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 560px;
-      margin-bottom: 48px;
-    }
-
-    /* ABOUT */
-    .about {
-      background: var(--off-white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-      border-radius: 16px;
-      padding: 48px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 320px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .about-visual-bg {
-      position: absolute;
-      inset: 0;
-      opacity: 0.06;
-      background-image: repeating-linear-gradient(
-        45deg,
-        var(--yellow) 0,
-        var(--yellow) 1px,
-        transparent 0,
-        transparent 40px
-      );
-      background-size: 28px 28px;
-    }
-
-    .about-icon-wrap {
-      position: relative;
-      z-index: 1;
-      width: 80px;
-      height: 80px;
-      background: var(--yellow);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .about-icon-wrap svg {
-      width: 44px;
-      height: 44px;
-      fill: var(--navy);
-    }
-
-    .about-visual-title {
-      position: relative;
-      z-index: 1;
-      color: var(--white);
-      font-size: 1.4rem;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .about-visual-sub {
-      position: relative;
-      z-index: 1;
-      color: #8FAFC7;
-      font-size: 0.9rem;
-      margin-top: 8px;
-      text-align: center;
-    }
-
-    .about-text p {
-      color: var(--text-muted);
-      margin-bottom: 18px;
-      font-size: 1.02rem;
-    }
-
-    .about-features {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-      color: var(--text-dark);
-      font-weight: 500;
-    }
-
-    .feature-check {
-      width: 22px;
-      height: 22px;
-      background: var(--yellow);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .feature-check svg {
-      width: 12px;
-      height: 12px;
-      fill: var(--navy);
-    }
-
-    /* SERVICES */
-    .services {
-      background: var(--white);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      background: var(--off-white);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 32px 28px;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 32px var(--shadow);
-      transform: translateY(-4px);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: var(--navy);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .service-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: var(--yellow);
-    }
-
-    .service-title {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 8px;
-    }
-
-    .service-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* CONTACT */
-    .contact {
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    .contact .section-title {
-      color: var(--white);
-    }
-
-    .contact .section-subtitle {
-      color: #8FAFC7;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-card {
-      background: var(--navy-mid);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 36px;
-    }
-
-    .contact-card-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--yellow);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 24px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    .contact-item-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(245, 197, 24, 0.12);
-      border: 1px solid rgba(245, 197, 24, 0.25);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-item-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--yellow);
-    }
-
-    .contact-item-label {
-      font-size: 0.78rem;
-      color: #6B8BA8;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 4px;
-    }
-
-    .contact-item-value {
-      font-size: 1rem;
-      color: var(--white);
-      font-weight: 500;
-    }
-
-    .contact-item-value a {
-      color: var(--yellow);
-      text-decoration: none;
-    }
-
-    .contact-item-value a:hover {
-      text-decoration: underline;
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 28px;
-      background: var(--yellow);
-      color: var(--navy);
-      padding: 13px 26px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .btn-directions:hover {
-      background: var(--yellow-dark);
-      transform: translateY(-2px);
-    }
-
-    .btn-directions svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--navy);
-    }
-
-    /* Rating */
-    .rating-box {
-      background: var(--navy-mid);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 36px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .rating-label {
-      font-size: 0.78rem;
-      color: #6B8BA8;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      margin-bottom: 12px;
-    }
-
-    .rating-number {
-      font-size: 4rem;
-      font-weight: 800;
-      color: var(--yellow);
-      line-height: 1;
-      margin-bottom: 10px;
-    }
-
-    .stars {
-      display: flex;
-      gap: 4px;
-      justify-content: center;
-      margin-bottom: 14px;
-    }
-
-    .stars svg {
-      width: 24px;
-      height: 24px;
-      fill: var(--yellow);
-    }
-
-    .stars svg.half {
-      fill: url(#halfGrad);
-    }
-
-    .rating-source {
-      font-size: 0.85rem;
-      color: #6B8BA8;
-    }
-
-    .rating-source span {
-      color: #8FAFC7;
-      font-weight: 500;
-    }
-
-    .rating-divider {
-      width: 40px;
-      height: 3px;
-      background: var(--yellow);
-      border-radius: 2px;
-      margin: 20px auto;
-    }
-
-    .rating-quote {
-      font-size: 0.95rem;
-      color: #8FAFC7;
-      font-style: italic;
-      max-width: 260px;
-    }
-
-    /* FOOTER */
-    footer {
-      background: #080F17;
-      color: #4A6178;
-      padding: 32px 5%;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .footer-logo-icon {
-      width: 30px;
-      height: 30px;
-      background: var(--yellow);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .footer-logo-icon svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--navy);
-    }
-
-    .footer-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #7A95AD;
-    }
-
-    .footer-copy {
-      font-size: 0.82rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 20px;
-    }
-
-    .footer-links a {
-      color: #4A6178;
-      text-decoration: none;
-      font-size: 0.82rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--yellow);
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
-      .about-visual {
-        min-height: 220px;
-      }
-
-      .hero-stats {
-        gap: 32px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      nav {
-        padding: 0 4%;
-      }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: var(--navy-mid);
-        flex-direction: column;
-        padding: 24px 5%;
-        gap: 18px;
-        border-top: 1px solid rgba(255,255,255,0.08);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links a {
-        font-size: 1rem;
-      }
-
-      .nav-cta {
-        display: inline-block;
-        text-align: center;
-        padding: 10px 18px !important;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 60px 4%;
-      }
-
-      .hero {
-        padding: 100px 4% 50px;
-      }
-
-      .hero-stats {
-        gap: 24px;
-        margin-top: 48px;
-      }
-
-      .stat-number {
-        font-size: 1.6rem;
-      }
-
-      .contact-card,
-      .rating-box {
-        padding: 28px 22px;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .footer-links {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Keough Electric — Gainesville, FL</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#050a0f;
+  --bg2:#080f18;
+  --cyan:#00d4ff;
+  --cyan2:#00aacc;
+  --yellow:#ffe000;
+  --white:#ffffff;
+  --muted:#4a6a82;
+  --rule:rgba(0,212,255,0.18);
+  --glow-cyan:0 0 40px rgba(0,212,255,0.45),0 0 80px rgba(0,212,255,0.2);
+  --glow-yellow:0 0 30px rgba(255,224,0,0.5),0 0 60px rgba(255,224,0,0.2);
+}
+
+html{scroll-behavior:smooth;background:var(--bg)}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+  line-height:1.5;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--cyan2);border-radius:2px}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5vw;height:60px;
+  background:rgba(5,10,15,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.nav-brand{
+  font-size:.9rem;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--cyan);text-decoration:none;
+}
+.nav-brand em{color:var(--yellow);font-style:normal}
+.nav-phone{
+  font-size:.85rem;font-weight:600;color:var(--white);
+  text-decoration:none;letter-spacing:.05em;
+  border:1px solid var(--cyan);border-radius:3px;
+  padding:6px 14px;transition:box-shadow .2s,background .2s;
+}
+.nav-phone:hover{background:rgba(0,212,255,.08);box-shadow:var(--glow-cyan)}
+
+/* ── HERO EDITORIAL ── */
+.hero{
+  position:relative;min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:auto;
+  padding-top:60px;
+  overflow:hidden;
+}
+
+/* big diagonal slash bg */
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,#000d1a 0%,#000d1a 55%,#021020 55%,#021020 100%);
+  z-index:0;
+}
+/* grid lines */
+.hero-grid-lines{
+  position:absolute;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+
+/* vertical rule */
+.hero-vline{
+  position:absolute;top:0;bottom:0;left:50%;
+  width:1px;background:var(--rule);z-index:1;
+}
+
+/* spark accents */
+.spark{
+  position:absolute;z-index:1;opacity:.6;
+  animation:sparkpulse 2.5s ease-in-out infinite;
+}
+.spark svg{display:block}
+@keyframes sparkpulse{
+  0%,100%{opacity:.4;transform:scale(1)}
+  50%{opacity:.9;transform:scale(1.15)}
+}
+
+/* LEFT PANEL — big editorial type */
+.hero-left{
+  grid-column:1;grid-row:1;
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:10vh 6vw 10vh 7vw;
+  min-height:calc(100vh - 60px);
+}
+
+.pre-label{
+  font-size:.7rem;font-weight:700;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--cyan);
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:2.5rem;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.pre-label.revealed{opacity:1;transform:translateY(0)}
+.pre-label::before{content:'';display:inline-block;width:32px;height:1px;background:var(--cyan)}
+
+.hero-h1{
+  font-size:clamp(4rem,10vw,11rem);
+  font-weight:900;
+  line-height:.9;
+  letter-spacing:-.04em;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
+  overflow:hidden;
+  /* animated gradient */
+  background:linear-gradient(90deg,var(--white) 0%,var(--cyan) 40%,var(--yellow) 70%,var(--white) 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:textflow 4s linear infinite;
+  opacity:0;clip-path:inset(0 0 100% 0);
+  transition:opacity .01s,clip-path .9s cubic-bezier(.22,1,.36,1);
+}
+.hero-h1.revealed{opacity:1;clip-path:inset(0 0 0% 0)}
+
+@keyframes textflow{
+  0%{background-position:0% center}
+  100%{background-position:200% center}
+}
+
+.hero-h1-line2{
+  font-size:clamp(3.5rem,9vw,10rem);
+  font-weight:900;line-height:.9;letter-spacing:-.04em;
+  text-transform:uppercase;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(0,212,255,.5);
+  margin-bottom:3.5rem;
+  opacity:0;clip-path:inset(0 0 100% 0);
+  transition:opacity .01s,clip-path .9s cubic-bezier(.22,1,.36,1) .15s;
+}
+.hero-h1-line2.revealed{opacity:1;clip-path:inset(0 0 0% 0)}
+
+.hero-sub{
+  font-size:clamp(.9rem,1.4vw,1.1rem);
+  color:rgba(255,255,255,.55);
+  max-width:380px;line-height:1.7;
+  margin-bottom:3rem;
+  opacity:0;transform:translateX(-30px);
+  transition:opacity .7s ease .4s,transform .7s ease .4s;
+}
+.hero-sub.revealed{opacity:1;transform:translateX(0)}
+
+.hero-cta-row{
+  display:flex;gap:16px;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .6s ease .55s,transform .6s ease .55s;
+}
+.hero-cta-row.revealed{opacity:1;transform:translateY(0)}
+
+/* ── MAGNETIC BUTTON ── */
+.btn-mag{
+  position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:14px 28px;font-size:.95rem;font-weight:700;
+  letter-spacing:.05em;text-decoration:none;border-radius:3px;
+  cursor:pointer;border:none;outline:none;
+  transition:transform .15s ease,box-shadow .25s ease;
+  overflow:hidden;
+}
+.btn-mag::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.15) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.btn-mag:hover::before{opacity:1}
+
+.btn-primary-mag{
+  background:var(--yellow);color:#050a0f;
+}
+.btn-primary-mag:hover{box-shadow:var(--glow-yellow);transform:translateY(-3px) scale(1.02)}
+
+.btn-outline-mag{
+  background:transparent;color:var(--cyan);
+  border:1px solid var(--cyan);
+}
+.btn-outline-mag:hover{box-shadow:var(--glow-cyan);transform:translateY(-3px) scale(1.02)}
+
+/* RIGHT PANEL — oversized numeral + info */
+.hero-right{
+  grid-column:2;grid-row:1;
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:10vh 7vw 10vh 5vw;
+  min-height:calc(100vh - 60px);
+}
+
+.big-rating{
+  font-size:clamp(7rem,14vw,18rem);
+  font-weight:900;line-height:1;
+  color:transparent;
+  -webkit-text-stroke:2px var(--yellow);
+  letter-spacing:-.05em;
+  position:absolute;top:12%;right:5vw;
+  opacity:0;transform:translateX(60px);
+  transition:opacity .8s ease .2s,transform .8s ease .2s;
+  pointer-events:none;
+  filter:drop-shadow(0 0 40px rgba(255,224,0,.3));
+}
+.big-rating.revealed{opacity:.9;transform:translateX(0)}
+
+.rating-tag{
+  font-size:.72rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--yellow);
+  margin-bottom:.75rem;
+}
+.rating-stars{display:flex;gap:3px;margin-bottom:.5rem}
+.rating-stars svg{width:18px;height:18px;fill:var(--yellow)}
+.rating-caption{font-size:.82rem;color:var(--muted);letter-spacing:.04em}
+
+.info-block{
+  margin-bottom:3rem;
+  opacity:0;transform:translateY(30px);
+  transition:opacity .7s ease .35s,transform .7s ease .35s;
+}
+.info-block.revealed{opacity:1;transform:translateY(0)}
+
+.info-rule{width:100%;height:1px;background:var(--rule);margin-bottom:2rem}
+
+.info-addr{
+  font-size:clamp(.8rem,1.1vw,.95rem);
+  color:rgba(255,255,255,.5);line-height:1.8;
+  letter-spacing:.04em;
+}
+.info-addr strong{color:var(--white);font-weight:600}
+
+/* ── HORIZONTAL RULE DIVIDER ── */
+.h-rule{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:.3;
+}
+
+/* ── MARQUEE STRIP ── */
+.marquee-strip{
+  overflow:hidden;
+  background:#000d1a;
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  padding:14px 0;
+  white-space:nowrap;
+}
+.marquee-inner{
+  display:inline-flex;gap:0;
+  animation:marquee 22s linear infinite;
+}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-item{
+  display:inline-flex;align-items:center;gap:14px;
+  padding:0 36px;
+  font-size:.75rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+}
+.marquee-item svg{width:14px;height:14px;fill:var(--cyan);flex-shrink:0}
+.marquee-item span{color:var(--cyan)}
+
+/* ── SERVICES SECTION ── */
+.services{
+  padding:12vh 7vw;
+  position:relative;
+}
+.services-bg-num{
+  position:absolute;right:-2vw;top:5%;
+  font-size:clamp(8rem,20vw,28rem);
+  font-weight:900;line-height:1;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(0,212,255,.06);
+  letter-spacing:-.06em;
+  pointer-events:none;user-select:none;
+}
+
+.editorial-label{
+  font-size:.7rem;font-weight:700;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--cyan);
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:4rem;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.editorial-label.revealed{opacity:1;transform:translateY(0)}
+.editorial-label::after{content:'';flex:1;height:1px;background:var(--rule)}
+
+.services-headline{
+  font-size:clamp(2.5rem,5vw,6rem);
+  font-weight:900;line-height:.9;
+  letter-spacing:-.03em;text-transform:uppercase;
+  margin-bottom:6rem;
+  opacity:0;clip-path:inset(0 0 100% 0);
+  transition:opacity .01s,clip-path .85s cubic-bezier(.22,1,.36,1) .1s;
+}
+.services-headline.revealed{opacity:1;clip-path:inset(0 0 0% 0)}
+.services-headline em{
+  display:block;
+  background:linear-gradient(90deg,var(--cyan),var(--yellow));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-style:normal;
+}
+
+/* asymmetric service list */
+.services-list{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border-top:1px solid var(--rule);
+}
+
+.svc-item{
+  padding:3rem 2.5rem;
+  border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateY(30px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.svc-item.revealed{opacity:1;transform:translateY(0)}
+.svc-item:nth-child(3n){border-right:none}
+/* stagger delays via nth-child (applied via JS) */
+
+.svc-item::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 0% 100%,rgba(0,212,255,.06) 0%,transparent 60%);
+  opacity:0;transition:opacity .4s;
+}
+.svc-item:hover::before{opacity:1}
+.svc-item:hover{background:rgba(0,212,255,.03)}
+
+.svc-num{
+  font-size:.7rem;font-weight:700;letter-spacing:.2em;
+  color:var(--cyan);margin-bottom:1.5rem;opacity:.6;
+}
+.svc-icon{margin-bottom:1.2rem}
+.svc-icon svg{width:30px;height:30px;fill:var(--cyan)}
+.svc-name{
+  font-size:1.05rem;font-weight:700;
+  letter-spacing:.02em;margin-bottom:.75rem;
+}
+.svc-desc{font-size:.82rem;color:var(--muted);line-height:1.7}
+
+/* ── CONTACT SECTION ── */
+.contact{
+  position:relative;
+  padding:14vh 7vw;
+  background:#020810;
+  overflow:hidden;
+}
+.contact::before{
+  content:'';position:absolute;
+  top:-200px;left:-200px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(0,212,255,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:8vw;
+  align-items:start;
+}
+
+.contact-left{}
+
+.contact-display{
+  font-size:clamp(2rem,4.5vw,5.5rem);
+  font-weight:900;line-height:.95;
+  letter-spacing:-.03em;text-transform:uppercase;
+  margin-bottom:4rem;
+  opacity:0;clip-path:inset(0 0 100% 0);
+  transition:opacity .01s,clip-path .9s cubic-bezier(.22,1,.36,1) .1s;
+}
+.contact-display.revealed{opacity:1;clip-path:inset(0 0 0% 0)}
+.contact-display .accent{
+  background:linear-gradient(90deg,var(--yellow),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.contact-items{
+  display:flex;flex-direction:column;gap:0;
+  border-top:1px solid var(--rule);
+  opacity:0;transform:translateY(20px);
+  transition:opacity .7s ease .3s,transform .7s ease .3s;
+}
+.contact-items.revealed{opacity:1;transform:translateY(0)}
+
+.contact-row{
+  display:flex;align-items:center;gap:20px;
+  padding:20px 0;
+  border-bottom:1px solid var(--rule);
+}
+.contact-row-icon{
+  width:40px;height:40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.contact-row-icon svg{width:22px;height:22px;fill:var(--cyan)}
+.contact-row-text{}
+.contact-row-label{
+  font-size:.65rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:3px;
+}
+.contact-row-value{
+  font-size:.95rem;font-weight:600;color:var(--white);
+}
+.contact-row-value a{color:var(--cyan);text-decoration:none}
+.contact-row-value a:hover{text-decoration:underline}
+
+.contact-cta{
+  margin-top:2.5rem;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .6s ease .5s,transform .6s ease .5s;
+}
+.contact-cta.revealed{opacity:1;transform:translateY(0)}
+
+/* RIGHT — rating panel */
+.rating-panel{
+  border:1px solid var(--rule);
+  padding:3rem 2.5rem;
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateX(30px);
+  transition:opacity .8s ease .25s,transform .8s ease .25s;
+}
+.rating-panel.revealed{opacity:1;transform:translateX(0)}
+.rating-panel::before{
+  content:'';position:absolute;
+  top:-60px;right:-60px;width:180px;height:180px;
+  background:radial-gradient(circle,rgba(255,224,0,.08),transparent 70%);
+}
+
+.rp-label{
+  font-size:.65rem;font-weight:700;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--yellow);margin-bottom:1.5rem;
+}
+.rp-big{
+  font-size:clamp(4rem,8vw,8rem);
+  font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--yellow),var(--white));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:.5rem;
+}
+.rp-outof{
+  font-size:.8rem;color:var(--muted);letter-spacing:.1em;margin-bottom:1.5rem;
+}
+.rp-stars{display:flex;gap:4px;margin-bottom:1.5rem}
+.rp-stars svg{width:20px;height:20px;fill:var(--yellow)}
+.rp-rule{width:100%;height:1px;background:var(--rule);margin:1.5rem 0}
+.rp-source{font-size:.75rem;color:var(--muted);line-height:1.6}
+.rp-source strong{color:var(--white)}
+
+/* ── FOOTER ── */
+footer{
+  background:#020810;
+  border-top:1px solid var(--rule);
+  padding:2rem 7vw;
+}
+.footer-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-brand{
+  font-size:.8rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);
+}
+.footer-brand em{color:var(--cyan);font-style:normal}
+.footer-copy{font-size:.75rem;color:var(--muted)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{
+  font-size:.75rem;color:var(--muted);
+  text-decoration:none;letter-spacing:.08em;text-transform:uppercase;
+  transition:color .2s;
+}
+.footer-links a:hover{color:var(--cyan)}
+
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation:none!important;
+    transition:none!important;
+  }
+  .pre-label,.hero-h1,.hero-h1-line2,.hero-sub,.hero-cta-row,
+  .big-rating,.info-block,.editorial-label,.services-headline,
+  .svc-item,.contact-display,.contact-items,.contact-cta,
+  .rating-panel{
+    opacity:1!important;
+    transform:none!important;
+    clip-path:none!important;
+  }
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-vline{display:none}
+  .hero-left{
+    grid-column:1;grid-row:1;
+    padding:12vh 7vw 6vh 7vw;
+    min-height:auto;
+  }
+  .hero-right{
+    grid-column:1;grid-row:2;
+    padding:6vh 7vw 10vh 7vw;
+    min-height:auto;
+  }
+  .big-rating{
+    position:static;
+    font-size:clamp(5rem,18vw,12rem);
+    margin-bottom:1.5rem;
+    opacity:1!important;transform:none!important;
+  }
+  .contact-grid{grid-template-columns:1fr}
+  .services-list{grid-template-columns:1fr 1fr}
+  .svc-item:nth-child(3n){border-right:1px solid var(--rule)}
+  .svc-item:nth-child(2n){border-right:none}
+}
+
+@media(max-width:640px){
+  .services-list{grid-template-columns:1fr}
+  .svc-item{border-right:none!important}
+  .hero-h1{font-size:clamp(3rem,16vw,7rem)}
+  .hero-h1-line2{font-size:clamp(2.5rem,14vw,6rem)}
+  .nav-phone{font-size:.78rem;padding:5px 10px}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+}
+</style>
 </head>
 <body>
 
-  <!-- SVG DEFS for half star gradient -->
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <linearGradient id="halfGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="50%" stop-color="#F5C518"/>
-        <stop offset="50%" stop-color="#2A4A66"/>
-      </linearGradient>
-    </defs>
-  </svg>
+<!-- NAV -->
+<nav class="nav">
+  <a href="#top" class="nav-brand">Keough <em>Electric</em></a>
+  <a href="tel:3523634078" class="nav-phone">(352) 363-4078</a>
+</nav>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#hero" class="nav-logo">
-      <div class="nav-logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9z"/>
-        </svg>
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-vline"></div>
+
+  <!-- spark accent top-right -->
+  <span class="spark" style="top:18%;right:8%;animation-delay:.4s">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <path d="M24 4L28 20H44L31 29L35 45L24 35L13 45L17 29L4 20H20L24 4Z" fill="none" stroke="#ffe000" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+  </span>
+  <!-- spark accent bottom-left -->
+  <span class="spark" style="bottom:22%;left:3%;animation-delay:1.2s">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9z" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+  </span>
+
+  <!-- LEFT -->
+  <div class="hero-left">
+    <div class="pre-label" id="preLabel">Gainesville, FL &mdash; 4824 SW 57th Dr</div>
+    <h1 class="hero-h1" id="heroH1">KEOUGH</h1>
+    <div class="hero-h1-line2" id="heroH1b">ELECTRIC</div>
+    <p class="hero-sub" id="heroSub">Residential &amp; commercial electrical work for Gainesville and surrounding areas. Code-compliant, reliable, done right.</p>
+    <div class="hero-cta-row" id="heroCta">
+      <a href="tel:3523634078" class="btn-mag btn-primary-mag">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.24 1.01z"/></svg>
+        Call Now
+      </a>
+      <a href="#services" class="btn-mag btn-outline-mag">Our Services</a>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="hero-right">
+    <div class="big-rating" id="bigRating">4.8</div>
+    <div class="info-block" id="infoBlock">
+      <div class="info-rule"></div>
+      <div class="rating-tag">Google Rating</div>
+      <div class="rating-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
       </div>
-      <span class="nav-logo-text">Keough <span>Electric</span></span>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+      <div class="rating-caption">Rated 4.8 out of 5 on Google Maps</div>
+      <div class="info-rule" style="margin-top:2rem"></div>
+      <div class="info-addr" style="margin-top:1.5rem">
+        <strong>Keough Electric</strong><br>
+        4824 SW 57th Dr<br>
+        Gainesville, FL<br>
+        <br>
+        <strong>Hours:</strong> Contact us for details
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-bg-pattern"></div>
-    <div class="hero-content">
-      <div class="hero-badge">
+<!-- MARQUEE -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-inner" id="marqueeInner">
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Residential Electrical</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Commercial Work</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> <span>Rated 4.8 ★</span></span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Panel Upgrades</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Gainesville, FL</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Lighting &amp; Wiring</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Code Compliance</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Residential Electrical</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Commercial Work</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> <span>Rated 4.8 ★</span></span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Panel Upgrades</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Gainesville, FL</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Lighting &amp; Wiring</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Code Compliance</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-bg-num" aria-hidden="true">01</div>
+
+  <div class="editorial-label" id="svcLabel">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="#00d4ff"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
+    What We Do
+  </div>
+
+  <h2 class="services-headline" id="svcHeadline">
+    Electrical<br>
+    <em>Services</em>
+  </h2>
+
+  <div class="services-list">
+    <div class="svc-item" data-svc>
+      <div class="svc-num">01</div>
+      <div class="svc-icon">
         <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
-        Licensed Electrician &mdash; Gainesville, FL
       </div>
-      <h1>Power You Can <span>Trust</span></h1>
-      <p class="hero-tagline">Keough Electric delivers reliable residential and commercial electrical services to the Gainesville community — done right, done safely.</p>
-      <div class="hero-actions">
-        <a href="tel:3523634078" class="btn-primary">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.24 1.01z"/></svg>
+      <div class="svc-name">Electrical Repairs</div>
+      <p class="svc-desc">Outlets, switches, breakers, wiring — we troubleshoot and fix residential and commercial electrical issues. Contact us for details.</p>
+    </div>
+
+    <div class="svc-item" data-svc>
+      <div class="svc-num">02</div>
+      <div class="svc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      </div>
+      <div class="svc-name">Panel Upgrades</div>
+      <p class="svc-desc">Modern panel replacements to meet today's safety codes and power demands. Contact us for details.</p>
+    </div>
+
+    <div class="svc-item" data-svc>
+      <div class="svc-num">03</div>
+      <div class="svc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </div>
+      <div class="svc-name">Lighting Installation</div>
+      <p class="svc-desc">Recessed, exterior, and fixture installs for homes and commercial spaces. Contact us for details.</p>
+    </div>
+
+    <div class="svc-item" data-svc>
+      <div class="svc-num">04</div>
+      <div class="svc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="svc-name">Residential Wiring</div>
+      <p class="svc-desc">New construction, rewires, and circuit additions to keep homes safe and code-compliant. Contact us for details.</p>
+    </div>
+
+    <div class="svc-item" data-svc>
+      <div class="svc-num">05</div>
+      <div class="svc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="svc-name">Commercial Electrical</div>
+      <p class="svc-desc">Installations, maintenance, and upgrades for offices, retail, and commercial facilities. Contact us for details.</p>
+    </div>
+
+    <div class="svc-item" data-svc>
+      <div class="svc-num">06</div>
+      <div class="svc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="svc-name">Safety &amp; Code Compliance</div>
+      <p class="svc-desc">Inspections and corrections to bring your property into full compliance with current electrical codes. Contact us for details.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-grid">
+    <div class="contact-left">
+      <div class="editorial-label" id="ctaLabel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#00d4ff"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
+        Get In Touch
+      </div>
+
+      <h2 class="contact-display" id="ctaDisplay">
+        Call<br>
+        <span class="accent">Keough</span><br>
+        Electric
+      </h2>
+
+      <div class="contact-items" id="ctaItems">
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.24 1.01z"/></svg>
+          </div>
+          <div class="contact-row-text">
+            <div class="contact-row-label">Phone</div>
+            <div class="contact-row-value"><a href="tel:3523634078">(352) 363-4078</a></div>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-row-text">
+            <div class="contact-row-label">Address</div>
+            <div class="contact-row-value">4824 SW 57th Dr, Gainesville, FL</div>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="contact-row-text">
+            <div class="contact-row-label">Hours</div>
+            <div class="contact-row-value">Contact us for details</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta" id="ctaCta">
+        <a href="tel:3523634078" class="btn-mag btn-primary-mag" style="margin-right:14px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.24 1.01z"/></svg>
           (352) 363-4078
         </a>
-        <a href="#services" class="btn-secondary">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M13 5l7 7-7 7M5 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Our Services
+        <a href="https://www.google.com/maps/search/Keough%20Electric%204824%20SW%2057th%20Dr" target="_blank" rel="noopener noreferrer" class="btn-mag btn-outline-mag">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Directions
         </a>
       </div>
-      <div class="hero-stats">
-        <div class="stat-item">
-          <span class="stat-number">4.8&#9733;</span>
-          <span class="stat-label">Google Rating</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">Local</span>
-          <span class="stat-label">Gainesville, FL</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">Lic.</span>
-          <span class="stat-label">Licensed &amp; Insured</span>
-        </div>
-      </div>
     </div>
-  </section>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-visual">
-          <div class="about-visual-bg"></div>
-          <div class="about-icon-wrap">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9z"/>
-            </svg>
-          </div>
-          <div class="about-visual-title">Keough Electric</div>
-          <div class="about-visual-sub">Gainesville, FL &bull; (352) 363-4078</div>
-        </div>
-        <div class="about-text">
-          <span class="section-label">About Us</span>
-          <h2 class="section-title">Your Gainesville Electrical Experts</h2>
-          <p>Keough Electric is a trusted electrical contractor serving homeowners and businesses throughout Gainesville and the surrounding Alachua County area. Our team is committed to delivering safe, code-compliant electrical work with clear communication from start to finish.</p>
-          <p>Whether you need a straightforward repair, a panel upgrade, or a full electrical installation, we bring professionalism and attention to detail to every job. We are fully licensed and insured to protect you and your property.</p>
-          <div class="about-features">
-            <div class="feature-item">
-              <div class="feature-check">
-                <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#0D1B2A" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              Licensed &amp; Insured
-            </div>
-            <div class="feature-item">
-              <div class="feature-check">
-                <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#0D1B2A" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              Residential &amp; Commercial Work
-            </div>
-            <div class="feature-item">
-              <div class="feature-check">
-                <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#0D1B2A" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              Serving Gainesville, FL &amp; Nearby Areas
-            </div>
-            <div class="feature-item">
-              <div class="feature-check">
-                <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#0D1B2A" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              Code-Compliant Installations
-            </div>
-          </div>
-        </div>
+    <div class="rating-panel" id="ratingPanel">
+      <div class="rp-label">Google Maps Rating</div>
+      <div class="rp-big">4.8</div>
+      <div class="rp-outof">out of 5</div>
+      <div class="rp-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
       </div>
+      <div class="rp-rule"></div>
+      <div class="rp-source">Rated <strong>4.8 out of 5</strong> on Google Maps.<br>Keough Electric, Gainesville FL.</div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="section-inner">
-      <span class="section-label">What We Do</span>
-      <h2 class="section-title">Electrical Services</h2>
-      <p class="section-subtitle">From routine repairs to full-scale installations, we handle a wide range of electrical needs for homes and businesses.</p>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
-          </div>
-          <div class="service-title">Electrical Repairs</div>
-          <p class="service-desc">Troubleshooting and repair of outlets, switches, breakers, and wiring issues throughout your home or business. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16" stroke="#F5C518" stroke-width="1.5"/><circle cx="12" cy="12" r="1" fill="#F5C518"/></svg>
-          </div>
-          <div class="service-title">Panel Upgrades &amp; Replacements</div>
-          <p class="service-desc">Upgrading outdated electrical panels to meet modern safety standards and support increased power demand. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#F5C518" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          </div>
-          <div class="service-title">Lighting Installation</div>
-          <p class="service-desc">Interior and exterior lighting upgrades, recessed lighting, and fixture installations for residential and commercial spaces. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-          <div class="service-title">Residential Wiring</div>
-          <p class="service-desc">New construction wiring, rewiring of older homes, and circuit additions to safely power your living spaces. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4" stroke="#F5C518" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          </div>
-          <div class="service-title">Commercial Electrical</div>
-          <p class="service-desc">Electrical installations, maintenance, and upgrades for offices, retail spaces, and commercial facilities. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div class="service-title">Safety Inspections &amp; Code Compliance</div>
-          <p class="service-desc">Electrical safety inspections and corrections to bring your property into compliance with current codes and standards. Contact us for details.</p>
-        </div>
-
-      </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Keough <em>Electric</em></div>
+    <div class="footer-copy">&copy; 2026 &bull; 4824 SW 57th Dr, Gainesville, FL &bull; (352) 363-4078</div>
+    <div class="footer-links">
+      <a href="#top">Top</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
     </div>
-  </section>
+  </div>
+</footer>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="section-inner">
-      <span class="section-label" style="color:#F5C518;">Get In Touch</span>
-      <h2 class="section-title">Contact Keough Electric</h2>
-      <p class="section-subtitle">Ready to schedule service or have a question? Reach out to our team today.</p>
-      <div class="contact-grid">
-        <div class="contact-card">
-          <div class="contact-card-title">Contact Information</div>
+<script>
+(function(){
+  "use strict";
 
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.24 1.01z"/></svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Phone</div>
-              <div class="contact-item-value"><a href="tel:3523634078">(352) 363-4078</a></div>
-            </div>
-          </div>
+  /* IntersectionObserver reveal */
+  var revealEls = [
+    document.getElementById('preLabel'),
+    document.getElementById('heroH1'),
+    document.getElementById('heroH1b'),
+    document.getElementById('heroSub'),
+    document.getElementById('heroCta'),
+    document.getElementById('bigRating'),
+    document.getElementById('infoBlock'),
+    document.getElementById('svcLabel'),
+    document.getElementById('svcHeadline'),
+    document.getElementById('ctaLabel'),
+    document.getElementById('ctaDisplay'),
+    document.getElementById('ctaItems'),
+    document.getElementById('ctaCta'),
+    document.getElementById('ratingPanel')
+  ];
 
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Address</div>
-              <div class="contact-item-value">4824 SW 57th Dr<br>Gainesville, FL</div>
-            </div>
-          </div>
+  var svcItems = document.querySelectorAll('[data-svc]');
 
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Hours</div>
-              <div class="contact-item-value">Contact us for details</div>
-            </div>
-          </div>
+  function revealEl(el, delay) {
+    if (!el) return;
+    setTimeout(function(){
+      el.classList.add('revealed');
+    }, delay || 0);
+  }
 
-          <a href="https://www.google.com/maps/search/Keough%20Electric%204824%20SW%2057th%20Dr" target="_blank" rel="noopener noreferrer" class="btn-directions">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Get Directions
-          </a>
-        </div>
+  /* Hero reveals on load */
+  window.addEventListener('load', function(){
+    revealEl(document.getElementById('preLabel'), 100);
+    revealEl(document.getElementById('heroH1'), 250);
+    revealEl(document.getElementById('heroH1b'), 380);
+    revealEl(document.getElementById('heroSub'), 520);
+    revealEl(document.getElementById('heroCta'), 640);
+    revealEl(document.getElementById('bigRating'), 300);
+    revealEl(document.getElementById('infoBlock'), 500);
+  });
 
-        <div class="rating-box">
-          <div class="rating-label">Google Maps Rating</div>
-          <div class="rating-number">4.8</div>
-          <div class="stars">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-            <svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-          </div>
-          <div class="rating-source">Rated <span>4.8 out of 5</span> on Google Maps</div>
-          <div class="rating-divider"></div>
-          <p class="rating-quote">"Consistently high marks from customers in the Gainesville area."</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-logo-icon">
-          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
-        </div>
-        <span class="footer-name">Keough Electric</span>
-      </div>
-      <div class="footer-copy">&copy; 2026 Keough Electric &bull; 4824 SW 57th Dr, Gainesville, FL &bull; (352) 363-4078</div>
-      <div class="footer-links">
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // Hamburger toggle
-    var hamburger = document.getElementById('hamburger');
-    var navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', function() {
-      navLinks.classList.toggle('open');
-    });
-    // Close nav on link click
-    navLinks.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        navLinks.classList.remove('open');
+  /* Scroll-triggered reveals */
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
       });
+    }, {threshold: 0.15});
+
+    var scrollEls = [
+      document.getElementById('svcLabel'),
+      document.getElementById('svcHeadline'),
+      document.getElementById('ctaLabel'),
+      document.getElementById('ctaDisplay'),
+      document.getElementById('ctaItems'),
+      document.getElementById('ctaCta'),
+      document.getElementById('ratingPanel')
+    ];
+    scrollEls.forEach(function(el){
+      if (el) observer.observe(el);
     });
-  </script>
+
+    /* stagger service items */
+    svcItems.forEach(function(item, i){
+      var itemObserver = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            setTimeout(function(){
+              entry.target.classList.add('revealed');
+            }, i * 80);
+            itemObserver.unobserve(entry.target);
+          }
+        });
+      }, {threshold: 0.1});
+      itemObserver.observe(item);
+    });
+  } else {
+    /* fallback: show everything */
+    revealEls.forEach(function(el){ if(el) el.classList.add('revealed'); });
+    svcItems.forEach(function(el){ el.classList.add('revealed'); });
+  }
+
+  /* Magnetic button glow tracking */
+  var magBtns = document.querySelectorAll('.btn-mag');
+  magBtns.forEach(function(btn){
+    btn.addEventListener('mousemove', function(e){
+      var rect = btn.getBoundingClientRect();
+      var x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+      var y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+      btn.style.setProperty('--mx', x + '%');
+      btn.style.setProperty('--my', y + '%');
+    });
+  });
+
+  /* Parallax on hero headlines on scroll */
+  var heroH1 = document.getElementById('heroH1');
+  var heroH1b = document.getElementById('heroH1b');
+  var bigRating = document.getElementById('bigRating');
+  var ticking = false;
+
+  window.addEventListener('scroll', function(){
+    if (!ticking) {
+      window.requestAnimationFrame(function(){
+        var sy = window.scrollY;
+        if (heroH1) heroH1.style.transform = 'translateY(' + (sy * 0.12) + 'px)';
+        if (heroH1b) heroH1b.style.transform = 'translateY(' + (sy * 0.08) + 'px)';
+        if (bigRating && window.innerWidth > 1024) {
+          bigRating.style.transform = 'translateX(' + (-sy * 0.05) + 'px)';
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+})();
+</script>
 </body>
 </html>

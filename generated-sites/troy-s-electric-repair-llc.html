@@ -1,828 +1,1058 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Troy's Electric Repair, LLC – Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #0f1214;
-      color: #d8dde3;
-      line-height: 1.6;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Troy's Electric Repair, LLC — Gainesville, FL</title>
+<style>
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:Georgia,'Times New Roman',Times,serif;
+  background:#0a0c10;
+  color:#c8d4e0;
+  line-height:1.6;
+  overflow-x:hidden;
+}
 
-    /* ── Color Palette ──
-       Primary:  #f5a623  (amber/electric spark)
-       Dark bg:  #0f1214
-       Mid bg:   #1a1f24
-       Card bg:  #22282f
-       Text:     #d8dde3
-       Accent:   #e8b94a
-    */
+/* ══════════════════════════════════════════
+   MASTHEAD
+══════════════════════════════════════════ */
+.masthead{
+  background:#080b0f;
+  border-bottom:4px solid #00b8ff;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+}
+/* circuit-board background pattern */
+.masthead::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(0,184,255,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,184,255,0.06) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+}
+/* neon glow bar at very top */
+.masthead-top-rule{
+  height:3px;
+  background:linear-gradient(90deg,transparent,#ffe44d 20%,#00b8ff 50%,#ffe44d 80%,transparent);
+  animation:rulepulse 3s ease-in-out infinite alternate;
+}
+@keyframes rulepulse{
+  from{opacity:0.6;}
+  to{opacity:1;}
+}
 
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 999;
-      background: rgba(15,18,20,0.96);
-      border-bottom: 2px solid #f5a623;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-      backdrop-filter: blur(6px);
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      flex-shrink: 0;
-    }
-    .nav-name {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #f5a623;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-    .nav-name span {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: #9aa3ad;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-    .nav-links a {
-      color: #c8cfd6;
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: #f5a623; }
+.masthead-meta-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 5%;
+  border-bottom:1px solid rgba(0,184,255,0.25);
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.72rem;
+  letter-spacing:0.08em;
+  color:#4a6a88;
+  text-transform:uppercase;
+}
+.masthead-meta-bar .dateline{color:#00b8ff;opacity:0.75;}
+.masthead-meta-bar .edition{color:#ffe44d;opacity:0.75;}
 
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #f5a623;
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
+.masthead-nameplate{
+  text-align:center;
+  padding:28px 5% 18px;
+  position:relative;
+}
+/* decorative bolt SVG in background of nameplate */
+.masthead-nameplate::after{
+  content:'⚡';
+  position:absolute;
+  font-size:14rem;
+  opacity:0.025;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  line-height:1;
+}
+.nameplate-eyebrow{
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.7rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:#00b8ff;
+  margin-bottom:10px;
+  opacity:0.9;
+}
+.nameplate-title{
+  font-size:clamp(2.6rem,8vw,5.8rem);
+  font-weight:900;
+  font-family:Arial,Helvetica,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:-0.02em;
+  line-height:0.95;
+  position:relative;
+  display:inline-block;
+  /* animated gradient text */
+  background:linear-gradient(90deg,#ffffff 0%,#00e5ff 35%,#ffe44d 55%,#ffffff 80%,#00b8ff 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:gradientshift 4s linear infinite;
+  /* glow */
+  filter:drop-shadow(0 0 18px rgba(0,184,255,0.55));
+}
+@keyframes gradientshift{
+  0%{background-position:0% center;}
+  100%{background-position:200% center;}
+}
+.nameplate-subtitle{
+  display:block;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(0.75rem,2vw,1.05rem);
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+  color:#8fb3cc;
+  margin-top:10px;
+}
+/* horizontal rule lines flanking subtitle */
+.nameplate-rule-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:14px 0 18px;
+  justify-content:center;
+}
+.nameplate-rule-row .rule-line{
+  flex:1;
+  max-width:220px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#00b8ff,transparent);
+}
+.nameplate-rule-row .rule-center{
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.68rem;
+  color:#ffe44d;
+  letter-spacing:0.12em;
+  white-space:nowrap;
+}
 
-    /* ── Hero ── */
-    #hero {
-      min-height: 100vh;
-      background:
-        linear-gradient(160deg, rgba(15,18,20,0.88) 40%, rgba(245,166,35,0.18) 100%),
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 30px,
-          rgba(245,166,35,0.04) 30px,
-          rgba(245,166,35,0.04) 31px
-        ),
-        #0f1214;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 5% 60px;
-    }
-    .hero-inner { max-width: 760px; }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(245,166,35,0.12);
-      border: 1px solid rgba(245,166,35,0.35);
-      border-radius: 50px;
-      padding: 6px 18px;
-      font-size: 0.78rem;
-      color: #f5a623;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-    .hero-badge svg { width: 14px; height: 14px; fill: #f5a623; }
-    .hero-title {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
-    }
-    .hero-title em {
-      font-style: normal;
-      color: #f5a623;
-    }
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: #9aa3ad;
-      max-width: 560px;
-      margin: 0 auto 40px;
-    }
-    .hero-cta-group {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: #f5a623;
-      color: #0f1214;
-      padding: 14px 32px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      letter-spacing: 0.03em;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-primary:hover { background: #e8b94a; transform: translateY(-2px); }
-    .btn-outline {
-      border: 2px solid #f5a623;
-      color: #f5a623;
-      padding: 14px 32px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      letter-spacing: 0.03em;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-outline:hover { background: rgba(245,166,35,0.12); transform: translateY(-2px); }
+/* masthead quick-info strip */
+.masthead-info-strip{
+  display:flex;
+  justify-content:center;
+  gap:clamp(16px,4vw,48px);
+  padding:10px 5% 22px;
+  flex-wrap:wrap;
+}
+.info-pill{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.8rem;
+  color:#6a8fa8;
+  letter-spacing:0.05em;
+}
+.info-pill svg{width:14px;height:14px;fill:#00b8ff;flex-shrink:0;}
+.info-pill a{color:#00e5ff;text-decoration:none;border-bottom:1px solid rgba(0,229,255,0.3);transition:color 0.2s,border-color 0.2s;}
+.info-pill a:hover{color:#ffe44d;border-color:#ffe44d;}
 
-    /* ── Section Base ── */
-    section { padding: 88px 5%; }
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #f5a623;
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-    .section-title em { font-style: normal; color: #f5a623; }
-    .section-lead {
-      font-size: 1.05rem;
-      color: #8f9ba6;
-      max-width: 620px;
-      margin-bottom: 56px;
-    }
-    .container { max-width: 1100px; margin: 0 auto; }
+/* ══════════════════════════════════════════
+   TICKER
+══════════════════════════════════════════ */
+.ticker-wrap{
+  background:#020408;
+  border-top:1px solid rgba(0,184,255,0.3);
+  border-bottom:2px solid rgba(0,184,255,0.4);
+  overflow:hidden;
+  white-space:nowrap;
+  display:flex;
+  align-items:center;
+  height:38px;
+  position:relative;
+}
+.ticker-label{
+  background:#00b8ff;
+  color:#020408;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:0.68rem;
+  font-weight:900;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  padding:0 14px;
+  height:100%;
+  display:flex;
+  align-items:center;
+  flex-shrink:0;
+  z-index:2;
+  position:relative;
+}
+.ticker-label::after{
+  content:'';
+  position:absolute;
+  right:-10px;top:0;
+  border-top:19px solid transparent;
+  border-bottom:19px solid transparent;
+  border-left:10px solid #00b8ff;
+}
+.ticker-track{
+  display:flex;
+  align-items:center;
+  animation:tickerscroll 32s linear infinite;
+  will-change:transform;
+  padding-left:32px;
+}
+.ticker-track:hover{animation-play-state:paused;}
+@keyframes tickerscroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.ticker-item{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-right:48px;
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.78rem;
+  letter-spacing:0.05em;
+  color:#8fb3cc;
+  white-space:nowrap;
+}
+.ticker-item .tick-accent{color:#ffe44d;font-weight:700;}
+.ticker-item .tick-blue{color:#00e5ff;}
+.ticker-sep{color:#00b8ff;margin-right:48px;font-size:1rem;}
 
-    /* ── About ── */
-    #about { background: #1a1f24; }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: center;
-    }
-    .about-visual {
-      background: #22282f;
-      border: 1px solid rgba(245,166,35,0.2);
-      border-radius: 12px;
-      padding: 48px 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-    .about-visual svg {
-      width: 90px;
-      height: 90px;
-      opacity: 0.85;
-    }
-    .about-stat-row {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .about-stat {
-      text-align: center;
-    }
-    .about-stat .num {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #f5a623;
-      display: block;
-    }
-    .about-stat .lbl {
-      font-size: 0.78rem;
-      color: #8f9ba6;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .about-text p { color: #9aa3ad; margin-bottom: 18px; font-size: 1.02rem; }
-    .about-text p:last-child { margin-bottom: 0; }
-    .check-list { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
-    .check-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-      color: #c8cfd6;
-    }
-    .check-list li::before {
-      content: '';
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      background: #f5a623;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%230f1214' d='M13 4L6.5 11 3 7.5l1-1 2.5 2.5 5.5-6z'/%3E%3C/svg%3E");
-      background-size: cover;
-    }
+/* ══════════════════════════════════════════
+   EDITORIAL COLUMNS LAYOUT
+══════════════════════════════════════════ */
+.editorial-wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:48px 5%;
+}
+.editorial-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:48px;
+  align-items:start;
+}
+/* section dividers editorial-style */
+.col-rule{
+  height:2px;
+  background:linear-gradient(90deg,#00b8ff,transparent);
+  margin:0 0 28px;
+}
+.section-flag{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:0.65rem;
+  font-weight:900;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:#020408;
+  background:#00b8ff;
+  display:inline-block;
+  padding:3px 10px 2px;
+  margin-bottom:18px;
+}
+.section-flag.yellow{background:#ffe44d;color:#020408;}
 
-    /* ── Services ── */
-    #services { background: #0f1214; }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-    .service-card {
-      background: #1a1f24;
-      border: 1px solid rgba(245,166,35,0.15);
-      border-radius: 10px;
-      padding: 32px 28px;
-      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #f5a623, #e8b94a);
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-    .service-card:hover {
-      border-color: rgba(245,166,35,0.45);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(245,166,35,0.1);
-    }
-    .service-card:hover::before { opacity: 1; }
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(245,166,35,0.12);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .service-icon svg { width: 26px; height: 26px; fill: #f5a623; }
-    .service-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 10px;
-    }
-    .service-card p {
-      font-size: 0.9rem;
-      color: #8f9ba6;
-      line-height: 1.6;
-    }
+.column-heading{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(1.5rem,3.5vw,2.2rem);
+  font-weight:900;
+  color:#ffffff;
+  line-height:1.1;
+  margin-bottom:14px;
+  letter-spacing:-0.01em;
+}
+.column-heading em{
+  font-style:normal;
+  color:#00e5ff;
+}
+.drop-cap-p::first-letter{
+  float:left;
+  font-size:3.8em;
+  line-height:0.75;
+  margin:4px 8px 0 0;
+  font-family:Georgia,serif;
+  font-weight:700;
+  color:#00b8ff;
+  filter:drop-shadow(0 0 6px rgba(0,184,255,0.6));
+}
+.editorial-p{
+  font-size:0.97rem;
+  color:#8fb3cc;
+  margin-bottom:16px;
+  line-height:1.75;
+}
+.editorial-p:last-child{margin-bottom:0;}
 
-    /* ── Contact ── */
-    #contact { background: #1a1f24; }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: start;
-    }
-    .contact-card {
-      background: #22282f;
-      border: 1px solid rgba(245,166,35,0.2);
-      border-radius: 12px;
-      padding: 40px 36px;
-    }
-    .contact-card h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 28px;
-    }
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-    .contact-item:last-of-type { margin-bottom: 0; }
-    .contact-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(245,166,35,0.12);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .contact-icon svg { width: 20px; height: 20px; fill: #f5a623; }
-    .contact-item-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #6b7580;
-      margin-bottom: 4px;
-    }
-    .contact-item-value {
-      font-size: 0.98rem;
-      color: #d8dde3;
-      font-weight: 500;
-    }
-    .contact-item-value a {
-      color: #f5a623;
-      text-decoration: none;
-    }
-    .contact-item-value a:hover { text-decoration: underline; }
+/* ── SERVICES block (left col) ── */
+.services-columns{
+  column-count:2;
+  column-gap:28px;
+  margin-top:32px;
+}
+.svc-item{
+  break-inside:avoid;
+  margin-bottom:22px;
+  padding-left:14px;
+  border-left:3px solid #00b8ff;
+  transition:border-color 0.25s;
+}
+.svc-item:hover{border-color:#ffe44d;}
+.svc-item h4{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:0.9rem;
+  font-weight:700;
+  color:#ffffff;
+  margin-bottom:5px;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+}
+.svc-item p{
+  font-size:0.82rem;
+  color:#5a7a92;
+  line-height:1.55;
+}
 
-    /* Rating widget */
-    .rating-widget {
-      background: rgba(245,166,35,0.07);
-      border: 1px solid rgba(245,166,35,0.25);
-      border-radius: 10px;
-      padding: 24px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-top: 28px;
-    }
-    .rating-score {
-      font-size: 2.6rem;
-      font-weight: 900;
-      color: #f5a623;
-      line-height: 1;
-    }
-    .rating-details { flex: 1; }
-    .stars {
-      display: flex;
-      gap: 3px;
-      margin-bottom: 6px;
-    }
-    .stars svg { width: 18px; height: 18px; fill: #f5a623; }
-    .stars svg.half { fill: url(#halfGrad); }
-    .rating-source {
-      font-size: 0.78rem;
-      color: #6b7580;
-    }
-    .rating-source strong { color: #9aa3ad; }
+/* ── Right sidebar ── */
+.sidebar{display:flex;flex-direction:column;gap:32px;}
 
-    /* Directions side */
-    .directions-card {
-      background: #22282f;
-      border: 1px solid rgba(245,166,35,0.2);
-      border-radius: 12px;
-      padding: 40px 36px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .directions-card h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-    .map-placeholder {
-      background: #0f1214;
-      border: 1px solid rgba(245,166,35,0.15);
-      border-radius: 8px;
-      height: 180px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: #4d5760;
-      font-size: 0.9rem;
-    }
-    .map-placeholder svg { width: 36px; height: 36px; fill: #f5a623; opacity: 0.5; }
-    .directions-meta {
-      font-size: 0.9rem;
-      color: #8f9ba6;
-    }
-    .directions-meta strong { color: #d8dde3; display: block; margin-bottom: 4px; }
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: #f5a623;
-      color: #0f1214;
-      padding: 14px 28px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: background 0.2s, transform 0.15s;
-      align-self: flex-start;
-    }
-    .btn-directions:hover { background: #e8b94a; transform: translateY(-2px); }
-    .btn-directions svg { width: 18px; height: 18px; fill: #0f1214; }
+/* RATING BOX */
+.sidebar-box{
+  border:1px solid rgba(0,184,255,0.25);
+  background:#0d1219;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+}
+.sidebar-box::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,#00b8ff,#ffe44d,#00b8ff);
+  background-size:200% auto;
+  animation:gradientshift 3s linear infinite;
+}
+.rating-big{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:4rem;
+  font-weight:900;
+  color:#ffe44d;
+  line-height:1;
+  text-shadow:0 0 20px rgba(255,228,77,0.55);
+  display:block;
+  text-align:center;
+  margin-bottom:8px;
+}
+.stars-row{
+  display:flex;
+  justify-content:center;
+  gap:3px;
+  margin-bottom:10px;
+}
+.stars-row svg{width:20px;height:20px;}
+.star-full{fill:#ffe44d;}
+.star-half{fill:url(#halfGrad);}
+.star-empty{fill:#1e2d3d;}
+.rating-caption{
+  text-align:center;
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.73rem;
+  color:#5a7a92;
+  line-height:1.5;
+  letter-spacing:0.04em;
+}
+.rating-caption strong{color:#8fb3cc;}
 
-    /* ── Footer ── */
-    footer {
-      background: #0a0d0f;
-      border-top: 1px solid rgba(245,166,35,0.15);
-      padding: 40px 5%;
-    }
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .footer-brand svg { width: 28px; height: 28px; }
-    .footer-brand-name {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #f5a623;
-    }
-    .footer-copy {
-      font-size: 0.8rem;
-      color: #4d5760;
-    }
-    .footer-links {
-      display: flex;
-      gap: 20px;
-      list-style: none;
-    }
-    .footer-links a {
-      font-size: 0.82rem;
-      color: #4d5760;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: #f5a623; }
+/* CONTACT BOX */
+.contact-list{display:flex;flex-direction:column;gap:16px;margin-top:4px;}
+.contact-row{
+  display:flex;
+  gap:11px;
+  align-items:flex-start;
+}
+.contact-icon-wrap{
+  width:32px;height:32px;
+  background:rgba(0,184,255,0.1);
+  border:1px solid rgba(0,184,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.contact-icon-wrap svg{width:14px;height:14px;fill:#00b8ff;}
+.contact-lbl{
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.65rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#3a5a72;
+  margin-bottom:3px;
+}
+.contact-val{
+  font-size:0.9rem;
+  color:#c8d4e0;
+  font-family:Arial,Helvetica,sans-serif;
+}
+.contact-val a{
+  color:#00e5ff;
+  text-decoration:none;
+  border-bottom:1px solid rgba(0,229,255,0.3);
+  transition:color 0.2s,border-color 0.2s;
+}
+.contact-val a:hover{color:#ffe44d;border-color:#ffe44d;}
 
-    /* ── Responsive ── */
-    @media (max-width: 800px) {
-      .nav-links { display: none; }
-      .nav-links.open {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 64px; left: 0; right: 0;
-        background: rgba(15,18,20,0.98);
-        padding: 24px 5% 32px;
-        border-bottom: 1px solid rgba(245,166,35,0.2);
-        gap: 20px;
-      }
-      .nav-links.open a { font-size: 1rem; }
-      .hamburger { display: flex; }
-      .about-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-      section { padding: 64px 5%; }
-    }
-    @media (max-width: 520px) {
-      .hero-cta-group { flex-direction: column; align-items: center; }
-      .btn-primary, .btn-outline { width: 100%; max-width: 320px; justify-content: center; }
-      .rating-widget { flex-direction: column; text-align: center; }
-      .stars { justify-content: center; }
-    }
-  </style>
+/* CTA BUTTON — magnetic glow */
+.glow-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  padding:14px 20px;
+  background:#00b8ff;
+  color:#020408;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:0.9rem;
+  font-weight:900;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  text-decoration:none;
+  border:none;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:background 0.2s,box-shadow 0.2s,transform 0.15s;
+  box-shadow:0 0 0 rgba(0,184,255,0);
+}
+.glow-btn svg{width:16px;height:16px;fill:#020408;flex-shrink:0;}
+.glow-btn:hover{
+  background:#00cfff;
+  box-shadow:0 0 24px rgba(0,184,255,0.7),0 0 48px rgba(0,184,255,0.3);
+  transform:translateY(-2px);
+}
+.glow-btn.yellow{background:#ffe44d;color:#020408;}
+.glow-btn.yellow svg{fill:#020408;}
+.glow-btn.yellow:hover{background:#ffe97a;box-shadow:0 0 24px rgba(255,228,77,0.6);}
+
+/* ══════════════════════════════════════════
+   SPECIALTY BANNER — full-width between sections
+══════════════════════════════════════════ */
+.specialty-banner{
+  background:#080b10;
+  border-top:1px solid rgba(0,184,255,0.2);
+  border-bottom:1px solid rgba(0,184,255,0.2);
+  padding:48px 5%;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.specialty-banner::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at center,rgba(0,184,255,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+/* animated bolt SVGs in background */
+.banner-bolt{
+  position:absolute;
+  opacity:0.06;
+  animation:boltpulse 2.5s ease-in-out infinite;
+}
+.banner-bolt:nth-child(1){left:8%;top:10%;width:60px;animation-delay:0s;}
+.banner-bolt:nth-child(2){right:8%;top:15%;width:80px;animation-delay:0.8s;}
+.banner-bolt:nth-child(3){left:50%;bottom:5%;width:48px;animation-delay:1.4s;}
+@keyframes boltpulse{
+  0%,100%{opacity:0.04;}
+  50%{opacity:0.12;}
+}
+.banner-inner{position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.banner-kicker{
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.7rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:#00b8ff;
+  margin-bottom:14px;
+}
+.banner-headline{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(1.6rem,4vw,2.8rem);
+  font-weight:900;
+  color:#ffffff;
+  line-height:1.1;
+  margin-bottom:18px;
+  letter-spacing:-0.01em;
+}
+.banner-headline span{color:#ffe44d;}
+.banner-body{
+  font-size:1rem;
+  color:#6a8fa8;
+  line-height:1.7;
+  max-width:580px;
+  margin:0 auto 28px;
+}
+.banner-cta-row{
+  display:flex;
+  gap:16px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.banner-cta-row .glow-btn{width:auto;min-width:180px;}
+
+/* ══════════════════════════════════════════
+   COUNTER SECTION
+══════════════════════════════════════════ */
+.stat-strip{
+  background:#050709;
+  border-top:2px solid rgba(255,228,77,0.2);
+  border-bottom:2px solid rgba(255,228,77,0.2);
+  padding:32px 5%;
+}
+.stat-strip-inner{
+  max-width:800px;
+  margin:0 auto;
+  display:flex;
+  gap:32px;
+  justify-content:center;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.stat-item{
+  text-align:center;
+  padding:0 24px;
+}
+.stat-item+.stat-item{
+  border-left:1px solid rgba(0,184,255,0.15);
+}
+.stat-num{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:2.4rem;
+  font-weight:900;
+  color:#ffe44d;
+  text-shadow:0 0 14px rgba(255,228,77,0.45);
+  display:block;
+  line-height:1;
+  margin-bottom:6px;
+}
+.stat-label{
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.68rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:#3a5a72;
+}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer{
+  background:#020408;
+  border-top:3px solid #00b8ff;
+  padding:32px 5%;
+}
+.footer-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:20px;
+}
+.footer-brand{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:1rem;
+  font-weight:900;
+  color:#00b8ff;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+.footer-copy{
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.72rem;
+  color:#2a4055;
+  letter-spacing:0.05em;
+}
+.footer-nav{
+  display:flex;
+  gap:20px;
+  list-style:none;
+}
+.footer-nav a{
+  font-family:'Courier New',Courier,monospace;
+  font-size:0.72rem;
+  color:#3a5a72;
+  text-decoration:none;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  transition:color 0.2s;
+}
+.footer-nav a:hover{color:#00b8ff;}
+
+/* ══════════════════════════════════════════
+   INTERSECTION OBSERVER REVEAL
+══════════════════════════════════════════ */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity 0.65s ease,transform 0.65s ease;
+}
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ══════════════════════════════════════════
+   REDUCED MOTION
+══════════════════════════════════════════ */
+@media(prefers-reduced-motion:reduce){
+  .masthead-top-rule,
+  .nameplate-title,
+  .sidebar-box::before,
+  .banner-bolt,
+  .ticker-track{animation:none!important;}
+  .nameplate-title{
+    background:none!important;
+    -webkit-text-fill-color:#ffffff!important;
+    color:#ffffff!important;
+    filter:none!important;
+  }
+  .ticker-track{transform:none!important;overflow:auto;}
+  .reveal{opacity:1!important;transform:none!important;transition:none!important;}
+  .glow-btn:hover,
+  .btn-primary:hover{transform:none!important;}
+  .stat-num[data-target]{/* show final value immediately — handled in JS */}
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:860px){
+  .editorial-grid{grid-template-columns:1fr;}
+  .services-columns{column-count:1;}
+}
+@media(max-width:600px){
+  .masthead-meta-bar{flex-direction:column;gap:4px;text-align:center;}
+  .stat-item+.stat-item{border-left:none;}
+  .banner-cta-row{flex-direction:column;align-items:center;}
+  .banner-cta-row .glow-btn{width:100%;max-width:280px;}
+  .footer-inner{flex-direction:column;text-align:center;}
+}
+</style>
 </head>
 <body>
 
-<!-- ── Nav ── -->
-<nav>
-  <a href="#hero" class="nav-brand">
-    <svg class="nav-logo-icon" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="19" cy="19" r="18" fill="rgba(245,166,35,0.12)" stroke="#f5a623" stroke-width="1.5"/>
-      <path d="M21 8l-8 13h7l-3 9 9-13h-7l2-9z" fill="#f5a623"/>
-    </svg>
-    <div class="nav-name">
-      Troy's Electric Repair
-      <span>LLC &mdash; Gainesville, FL</span>
-    </div>
-  </a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+<!-- hidden SVG defs for half-star gradient -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden;" aria-hidden="true">
+  <defs>
+    <linearGradient id="halfGrad" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="50%" stop-color="#ffe44d"/>
+      <stop offset="50%" stop-color="#1e2d3d"/>
+    </linearGradient>
+  </defs>
+</svg>
 
-<!-- ── Hero ── -->
-<section id="hero">
-  <div class="hero-inner">
-    <div class="hero-badge">
-      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M9 2L4 9h5l-2 5 7-9h-5l2-3z"/></svg>
-      Gainesville's Electric Motor Specialists
+<!-- ══════════════════════════════════════════
+     MASTHEAD
+══════════════════════════════════════════ -->
+<header class="masthead" role="banner">
+  <div class="masthead-top-rule"></div>
+  <div class="masthead-meta-bar">
+    <span class="dateline">Gainesville, FL &mdash; Alachua County &mdash; Northwest District</span>
+    <span>Est. &mdash; Electric Motor Specialists</span>
+    <span class="edition">Vol. I &mdash; Motor &amp; Generator Division</span>
+  </div>
+
+  <div class="masthead-nameplate">
+    <div class="nameplate-eyebrow">&#9889; Official Headquarters &#9889;</div>
+    <h1 class="nameplate-title">Troy's Electric<br>Repair, LLC</h1>
+    <div class="nameplate-rule-row">
+      <div class="rule-line"></div>
+      <div class="rule-center">&#9889;&nbsp; Motor &bull; Generator &bull; Alternator &nbsp;&#9889;</div>
+      <div class="rule-line"></div>
     </div>
-    <h1 class="hero-title">
-      Powering Gainesville's<br>
-      <em>Motors Back to Life</em>
-    </h1>
-    <p class="hero-tagline">
-      Expert electric motor repair and rewinding for industrial, commercial, and residential equipment — done right, built to last.
+    <span class="nameplate-subtitle">3626 NW 97th Blvd &mdash; Gainesville, Florida &mdash; (352) 258-9021</span>
+  </div>
+
+  <div class="masthead-info-strip">
+    <div class="info-pill">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      3626 NW 97th Blvd, Gainesville, FL
+    </div>
+    <div class="info-pill">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      <a href="tel:3522589021">(352) 258-9021</a>
+    </div>
+    <div class="info-pill">
+      <svg viewBox="0 0 24 24"><path d="M12 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L12 13.27l-4.77 2.44.91-5.32L4.27 6.62l5.34-.78z"/></svg>
+      4.6 / 5 &mdash; Google &mdash; 34 Reviews
+    </div>
+    <div class="info-pill">
+      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+      Hours: Contact us for details
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     NEWS TICKER
+══════════════════════════════════════════ -->
+<div class="ticker-wrap" aria-label="News ticker" role="marquee">
+  <div class="ticker-label">LIVE</div>
+  <div class="ticker-track" id="tickerTrack">
+    <!-- content duplicated for seamless loop -->
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Electric Motor Repair &amp; Rewinding</span> &mdash; All sizes, single &amp; three-phase</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> Generator &amp; Alternator Service &mdash; Standby &amp; portable systems</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Motor Diagnostics &amp; Testing</span> &mdash; Winding failures, bearing wear, insulation</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> Serving Alachua County &mdash; Businesses &amp; individuals welcome</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Call (352) 258-9021</span> &mdash; Northwest Gainesville, FL</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> General Electrical Repair &mdash; Industrial &amp; commercial</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Rated 4.6 out of 5</span> &mdash; 34 reviews on Google Maps</span>
+    <span class="ticker-sep">|</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Electric Motor Repair &amp; Rewinding</span> &mdash; All sizes, single &amp; three-phase</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> Generator &amp; Alternator Service &mdash; Standby &amp; portable systems</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Motor Diagnostics &amp; Testing</span> &mdash; Winding failures, bearing wear, insulation</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> Serving Alachua County &mdash; Businesses &amp; individuals welcome</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Call (352) 258-9021</span> &mdash; Northwest Gainesville, FL</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> General Electrical Repair &mdash; Industrial &amp; commercial</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><span class="tick-accent">&#9889;</span> <span class="tick-blue">Rated 4.6 out of 5</span> &mdash; 34 reviews on Google Maps</span>
+    <span class="ticker-sep">|</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     STAT STRIP
+══════════════════════════════════════════ -->
+<div class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat-item">
+      <span class="stat-num" data-target="4.6" data-decimal="1" id="statRating">4.6</span>
+      <span class="stat-label">Google Rating</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-target="34" id="statReviews">34</span>
+      <span class="stat-label">Reviews on Google Maps</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">GNV</span>
+      <span class="stat-label">Gainesville, FL — Local Shop</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">AC</span>
+      <span class="stat-label">Alachua County Service Area</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     EDITORIAL BODY
+══════════════════════════════════════════ -->
+<main>
+<div class="editorial-wrap">
+  <div class="editorial-grid">
+
+    <!-- LEFT COLUMN: main editorial -->
+    <div class="left-col">
+      <div class="col-rule"></div>
+      <span class="section-flag">Motor Specialists</span>
+      <h2 class="column-heading reveal">Gainesville's Home for<br><em>Electric Motor Repair</em></h2>
+
+      <p class="editorial-p drop-cap-p reveal">
+        Troy's Electric Repair, LLC has built a reputation as one of Gainesville's dedicated electric motor specialists, operating from its Northwest Gainesville facility at 3626 NW 97th Blvd. When industrial motors, pump motors, or commercial equipment fails, Troy's is the call that puts Alachua County businesses back in operation.
+      </p>
+      <p class="editorial-p reveal">
+        The shop specializes in the repair, rewinding, and rebuilding of electric motors across a wide range of sizes and configurations — from single-phase residential units to three-phase industrial workhorses. Generator and alternator service rounds out the core offering, covering standby power systems and portable generators alike.
+      </p>
+      <p class="editorial-p reveal">
+        Conveniently situated in Northwest Gainesville, Troy's serves both businesses and individuals throughout Alachua County looking for professional motor repair without shipping equipment out of the region. Contact us directly for hours and availability.
+      </p>
+
+      <!-- Services sub-section -->
+      <div style="margin-top:36px;">
+        <div class="col-rule"></div>
+        <span class="section-flag yellow">Services</span>
+        <h3 class="column-heading reveal" style="font-size:clamp(1.2rem,2.5vw,1.6rem);margin-top:8px;">
+          What We Repair &amp; Restore
+        </h3>
+        <div class="services-columns reveal">
+          <div class="svc-item">
+            <h4>Electric Motor Rewinding</h4>
+            <p>Stator and armature rewinding for single-phase and three-phase motors of all sizes — restored to original or improved specification.</p>
+          </div>
+          <div class="svc-item">
+            <h4>Motor Rebuilding &amp; Reconditioning</h4>
+            <p>Full mechanical rebuild: bearing replacement, shaft repair, housing restoration, and dynamic balancing to peak performance.</p>
+          </div>
+          <div class="svc-item">
+            <h4>Generator Service</h4>
+            <p>Winding inspection, repair, and reconditioning of generators for standby systems and industrial generating equipment.</p>
+          </div>
+          <div class="svc-item">
+            <h4>Alternator Repair</h4>
+            <p>Alternator rewinding and reconditioning for a range of applications — industrial through portable power.</p>
+          </div>
+          <div class="svc-item">
+            <h4>Motor Diagnostics &amp; Testing</h4>
+            <p>Electrical and mechanical testing to identify winding failures, bearing wear, insulation breakdown, and common motor faults.</p>
+          </div>
+          <div class="svc-item">
+            <h4>General Electrical Repair</h4>
+            <p>General electrical repair services for commercial and industrial clients throughout the Gainesville area.</p>
+          </div>
+          <div class="svc-item">
+            <h4>Pump &amp; Compressor Motors</h4>
+            <p>Repair of motors used in pump systems, air compressors, HVAC equipment, and other fluid-handling machinery.</p>
+          </div>
+          <div class="svc-item">
+            <h4>Preventive Maintenance</h4>
+            <p>Scheduled inspection, lubrication, and testing programs to extend motor life and prevent unexpected equipment failure.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Rating Box -->
+      <div class="sidebar-box reveal">
+        <span class="section-flag" style="margin-bottom:16px;display:inline-block;">Google Rating</span>
+        <span class="stat-num rating-big" id="sidebarRating">4.6</span>
+        <div class="stars-row">
+          <svg viewBox="0 0 20 20" class="star-full"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+          <svg viewBox="0 0 20 20" class="star-full"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+          <svg viewBox="0 0 20 20" class="star-full"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+          <svg viewBox="0 0 20 20" class="star-full"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+          <svg viewBox="0 0 20 20" class="star-half"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+        </div>
+        <p class="rating-caption"><strong>4.6 out of 5</strong> based on <strong>34 reviews</strong> on Google Maps</p>
+      </div>
+
+      <!-- Contact Box -->
+      <div class="sidebar-box reveal">
+        <span class="section-flag" style="margin-bottom:16px;display:inline-block;">Contact</span>
+        <div class="contact-list">
+          <div class="contact-row">
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div>
+              <div class="contact-lbl">Address</div>
+              <div class="contact-val">3626 NW 97th Blvd<br>Gainesville, FL</div>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            </div>
+            <div>
+              <div class="contact-lbl">Phone</div>
+              <div class="contact-val"><a href="tel:3522589021">(352) 258-9021</a></div>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            </div>
+            <div>
+              <div class="contact-lbl">Hours</div>
+              <div class="contact-val">Contact us for details</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+          <a href="tel:3522589021" class="glow-btn yellow">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            Call Now
+          </a>
+          <a href="https://www.google.com/maps/search/Troy's%20Electric%20Repair%2C%20LLC%203626%20NW%2097th%20Blvd" target="_blank" rel="noopener noreferrer" class="glow-btn">
+            <svg viewBox="0 0 24 24"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
+            Get Directions
+          </a>
+        </div>
+      </div>
+
+      <!-- Service Area Box -->
+      <div class="sidebar-box reveal">
+        <span class="section-flag" style="margin-bottom:14px;display:inline-block;">Service Area</span>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:0.8rem;color:#5a7a92;line-height:1.7;">
+          Serving businesses and individuals throughout<br>
+          <strong style="color:#8fb3cc;">Alachua County, Florida</strong><br>
+          including Gainesville, Archer, Hawthorne,<br>
+          Newberry, and surrounding communities.
+        </p>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SPECIALTY BANNER
+══════════════════════════════════════════ -->
+<div class="specialty-banner">
+  <!-- decorative bolt SVGs -->
+  <svg class="banner-bolt" viewBox="0 0 24 24" fill="#ffe44d"><path d="M13 2L4.09 12.26A1 1 0 005 14h7l-1 8 8.91-10.26A1 1 0 0019 10h-7l1-8z"/></svg>
+  <svg class="banner-bolt" viewBox="0 0 24 24" fill="#00b8ff"><path d="M13 2L4.09 12.26A1 1 0 005 14h7l-1 8 8.91-10.26A1 1 0 0019 10h-7l1-8z"/></svg>
+  <svg class="banner-bolt" viewBox="0 0 24 24" fill="#ffe44d"><path d="M13 2L4.09 12.26A1 1 0 005 14h7l-1 8 8.91-10.26A1 1 0 0019 10h-7l1-8z"/></svg>
+
+  <div class="banner-inner">
+    <div class="banner-kicker reveal">&#9889; Motor &bull; Generator &bull; Alternator &#9889;</div>
+    <h2 class="banner-headline reveal">
+      When Your Motor Fails,<br><span>We Bring It Back.</span>
+    </h2>
+    <p class="banner-body reveal">
+      Electric motors are the heartbeat of industrial and commercial operations. Troy's Electric Repair, LLC brings the expertise to diagnose, repair, and restore motors of all types — keeping Gainesville and Alachua County running.
     </p>
-    <div class="hero-cta-group">
-      <a href="tel:3522589021" class="btn-primary">
-        <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M2 3.5A1.5 1.5 0 013.5 2h2.382a1 1 0 01.894.553l1.447 2.894a1 1 0 01-.23 1.14L6.67 7.914a11.06 11.06 0 004.416 4.416l1.327-1.323a1 1 0 011.14-.23l2.894 1.447A1 1 0 0117 13.118V15.5A1.5 1.5 0 0115.5 17C8.044 17 2 10.956 2 3.5z"/></svg>
+    <div class="banner-cta-row reveal">
+      <a href="tel:3522589021" class="glow-btn yellow">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
         (352) 258-9021
       </a>
-      <a href="#services" class="btn-outline">
-        Our Services
+      <a href="https://www.google.com/maps/search/Troy's%20Electric%20Repair%2C%20LLC%203626%20NW%2097th%20Blvd" target="_blank" rel="noopener noreferrer" class="glow-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
+        Directions
       </a>
     </div>
   </div>
-</section>
+</div>
+</main>
 
-<!-- ── About ── -->
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-visual">
-        <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="45" cy="45" r="38" stroke="#f5a623" stroke-width="2" stroke-dasharray="8 4"/>
-          <circle cx="45" cy="45" r="12" fill="rgba(245,166,35,0.15)" stroke="#f5a623" stroke-width="2"/>
-          <circle cx="45" cy="45" r="4" fill="#f5a623"/>
-          <line x1="45" y1="7" x2="45" y2="25" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="45" y1="65" x2="45" y2="83" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="7" y1="45" x2="25" y2="45" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="65" y1="45" x2="83" y2="45" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="18" y1="18" x2="31" y2="31" stroke="#f5a623" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-          <line x1="59" y1="59" x2="72" y2="72" stroke="#f5a623" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-          <line x1="72" y1="18" x2="59" y2="31" stroke="#f5a623" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-          <line x1="18" y1="72" x2="31" y2="59" stroke="#f5a623" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-        </svg>
-        <div class="about-stat-row">
-          <div class="about-stat">
-            <span class="num">4.6</span>
-            <span class="lbl">Star Rating</span>
-          </div>
-          <div class="about-stat">
-            <span class="num">34</span>
-            <span class="lbl">Reviews</span>
-          </div>
-          <div class="about-stat">
-            <span class="num">GNV</span>
-            <span class="lbl">Local Shop</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="about-text">
-        <div class="section-label">About Us</div>
-        <h2 class="section-title">Reliable Motor Repair<br><em>in North Gainesville</em></h2>
-        <p>Troy's Electric Repair, LLC is a locally owned electric motor repair shop serving the Gainesville area, specializing in the diagnosis, rewinding, and rebuilding of electric motors for a wide range of industrial and commercial applications.</p>
-        <p>Our technicians work on motors of all sizes — from small single-phase units to large three-phase industrial motors — providing fast turnaround and dependable workmanship that keeps your equipment running efficiently.</p>
-        <p>Conveniently located on NW 97th Blvd, we are a trusted resource for businesses and individuals throughout Alachua County who need professional motor repair without the hassle of shipping equipment across the state.</p>
-        <ul class="check-list">
-          <li>Industrial &amp; commercial motor specialists</li>
-          <li>On-site diagnostics available — contact us for details</li>
-          <li>Serving Gainesville and surrounding Alachua County</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Services ── -->
-<section id="services">
-  <div class="container">
-    <div class="section-label">What We Do</div>
-    <h2 class="section-title">Our <em>Services</em></h2>
-    <p class="section-lead">We handle a comprehensive range of electric motor and related repair services. Contact us for details on pricing and turnaround time.</p>
-    <div class="services-grid">
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4.09 12.26A1 1 0 005 14h7l-1 8 8.91-10.26A1 1 0 0019 10h-7l1-8z"/></svg>
-        </div>
-        <h3>Electric Motor Rewinding</h3>
-        <p>Complete stator and armature rewinding for single-phase and three-phase electric motors of all sizes. Restored to original or improved specifications.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm0-12a4 4 0 100 8 4 4 0 000-8zm0 6a2 2 0 110-4 2 2 0 010 4z"/></svg>
-        </div>
-        <h3>Motor Rebuilding &amp; Reconditioning</h3>
-        <p>Full mechanical rebuilds including bearing replacement, shaft repair, housing restoration, and balancing to bring motors back to peak performance.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        </div>
-        <h3>Motor Testing &amp; Diagnostics</h3>
-        <p>Comprehensive electrical and mechanical testing to identify winding failures, bearing wear, insulation breakdown, and other common motor faults.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        </div>
-        <h3>Pump &amp; Compressor Motor Repair</h3>
-        <p>Repair and restoration of motors used in pump systems, air compressors, HVAC equipment, and other fluid-handling machinery commonly found in commercial settings.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg>
-        </div>
-        <h3>Preventive Maintenance</h3>
-        <p>Scheduled inspection, cleaning, lubrication, and testing programs to extend motor life and prevent unexpected failures in your critical equipment.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 17h18v2H3zm0-7h18v2H3zm0-7h18v2H3z"/></svg>
-        </div>
-        <h3>Generator &amp; Alternator Service</h3>
-        <p>Winding inspection, repair, and reconditioning of generators and alternators for standby power systems, portable generators, and industrial generating equipment.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── Contact ── -->
-<section id="contact">
-  <div class="container">
-    <div class="section-label">Get In Touch</div>
-    <h2 class="section-title">Visit or <em>Call Us</em></h2>
-    <p class="section-lead">We are located in northwest Gainesville. Give us a call or stop by to discuss your motor repair needs.</p>
-
-    <div class="contact-grid">
-      <div class="contact-card">
-        <h3>Contact Information</h3>
-
-        <div class="contact-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          </div>
-          <div>
-            <div class="contact-item-label">Address</div>
-            <div class="contact-item-value">3626 NW 97th Blvd<br>Gainesville, FL</div>
-          </div>
-        </div>
-
-        <div class="contact-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          </div>
-          <div>
-            <div class="contact-item-label">Phone</div>
-            <div class="contact-item-value"><a href="tel:3522589021">(352) 258-9021</a></div>
-          </div>
-        </div>
-
-        <div class="contact-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
-          </div>
-          <div>
-            <div class="contact-item-label">Hours</div>
-            <div class="contact-item-value">Contact us for current hours</div>
-          </div>
-        </div>
-
-        <!-- Rating Widget -->
-        <svg width="0" height="0" style="position:absolute">
-          <defs>
-            <linearGradient id="halfGrad">
-              <stop offset="50%" stop-color="#f5a623"/>
-              <stop offset="50%" stop-color="#3a4048"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        <div class="rating-widget">
-          <div class="rating-score">4.6</div>
-          <div class="rating-details">
-            <div class="stars">
-              <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
-              <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
-              <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
-              <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
-              <svg class="half" viewBox="0 0 20 20"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.44.91-5.32L2.27 6.62l5.34-.78z"/></svg>
-            </div>
-            <div class="rating-source"><strong>4.6 out of 5</strong> based on <strong>34 reviews</strong> on Google Maps</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="directions-card">
-        <h3>Find Us</h3>
-        <div class="map-placeholder">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          3626 NW 97th Blvd, Gainesville, FL
-        </div>
-        <div class="directions-meta">
-          <strong>Troy's Electric Repair, LLC</strong>
-          3626 NW 97th Blvd &mdash; Northwest Gainesville, FL<br>
-          Conveniently accessible from NW 39th Ave and nearby industrial corridors.
-        </div>
-        <a
-          href="https://www.google.com/maps/search/Troy's%20Electric%20Repair%2C%20LLC%203626%20NW%2097th%20Blvd"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-directions"
-        >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
-          Get Directions
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Footer ── -->
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-brand">
-      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="14" cy="14" r="13" fill="rgba(245,166,35,0.1)" stroke="#f5a623" stroke-width="1.5"/>
-        <path d="M15.5 6L9 17h5.5l-2 7 7.5-10H14l1.5-8z" fill="#f5a623"/>
-      </svg>
-      <span class="footer-brand-name">Troy's Electric Repair, LLC</span>
-    </div>
-    <p class="footer-copy">&copy; 2025 Troy's Electric Repair, LLC &mdash; Gainesville, FL &mdash; (352) 258-9021</p>
-    <ul class="footer-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
+    <div class="footer-brand">Troy's Electric Repair, LLC</div>
+    <p class="footer-copy">&copy; 2026 Troy's Electric Repair, LLC &mdash; 3626 NW 97th Blvd, Gainesville, FL &mdash; (352) 258-9021</p>
+    <ul class="footer-nav">
+      <li><a href="#services-section">Services</a></li>
+      <li><a href="tel:3522589021">Call</a></li>
+      <li><a href="https://www.google.com/maps/search/Troy's%20Electric%20Repair%2C%20LLC%203626%20NW%2097th%20Blvd" target="_blank" rel="noopener noreferrer">Map</a></li>
     </ul>
   </div>
 </footer>
 
 <script>
-  // Mobile nav toggle
-  const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('navLinks');
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-  });
-  // Close nav when a link is clicked
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => navLinks.classList.remove('open'));
-  });
+(function () {
+  'use strict';
+
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── IntersectionObserver reveals ── */
+  if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      io.observe(el);
+    });
+  } else {
+    /* reduced motion: show all immediately */
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      el.classList.add('visible');
+    });
+  }
+
+  /* ── Animated counters ── */
+  function animateCounter(el, target, isDecimal, duration) {
+    var start = 0;
+    var startTime = null;
+    var decimalPlaces = isDecimal ? 1 : 0;
+
+    function step(timestamp) {
+      if (!startTime) { startTime = timestamp; }
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = start + eased * (target - start);
+      el.textContent = current.toFixed(decimalPlaces);
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target.toFixed(decimalPlaces);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+    var counterObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var el = entry.target;
+          var target = parseFloat(el.getAttribute('data-target'));
+          var isDecimal = el.hasAttribute('data-decimal');
+          animateCounter(el, target, isDecimal, 1200);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-target]').forEach(function (el) {
+      counterObserver.observe(el);
+    });
+  }
+  /* reduced motion: counters already show final values in HTML */
+
+  /* ── Magnetic glow buttons ── */
+  if (!prefersReducedMotion) {
+    document.querySelectorAll('.glow-btn').forEach(function (btn) {
+      btn.addEventListener('mousemove', function (e) {
+        var rect = btn.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+        var strength = 0.18;
+        btn.style.transform = 'translate(' + (x * strength) + 'px, ' + (y * strength - 2) + 'px)';
+      });
+      btn.addEventListener('mouseleave', function () {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  /* ── Ticker: pause on prefers-reduced-motion ── */
+  if (prefersReducedMotion) {
+    var ticker = document.getElementById('tickerTrack');
+    if (ticker) {
+      ticker.style.animation = 'none';
+      ticker.style.transform = 'none';
+      /* make ticker scrollable when motion is off */
+      var wrap = ticker.parentElement;
+      if (wrap) {
+        wrap.style.overflowX = 'auto';
+        wrap.style.whiteSpace = 'nowrap';
+      }
+    }
+  }
+}());
 </script>
 </body>
 </html>
