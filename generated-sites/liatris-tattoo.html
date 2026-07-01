@@ -1,661 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Liatris Tattoo | Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: #0d0d0d;
-      color: #e8e2d9;
-      line-height: 1.7;
-    }
-    a { color: inherit; text-decoration: none; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liatris Tattoo | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0c0710; --deep:#150b1c; --mag:#d8409f; --violet:#8a4bd6; --gold:#e9c46a;
+    --ink:#f4ecf3; --mut:#a189ab; --line:#2c1c36;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:"Optima","Segoe UI",Candara,Georgia,serif;line-height:1.7;overflow-x:hidden}
+  .up{text-transform:uppercase;letter-spacing:.28em}
 
-    /* ── Palette ── */
-    :root {
-      --ink:       #0d0d0d;
-      --deep:      #161616;
-      --charcoal:  #222222;
-      --border:    #2e2e2e;
-      --ash:       #888880;
-      --parchment: #e8e2d9;
-      --cream:     #f4efe8;
-      --accent:    #c0392b;
-      --accent2:   #e74c3c;
-      --gold:      #c9a84c;
-    }
+  nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 1.6rem;background:rgba(12,7,16,.7);backdrop-filter:blur(9px);border-bottom:1px solid var(--line)}
+  .brand{font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--mag);font-size:1rem}
+  .nl{display:flex;gap:1.5rem;list-style:none}
+  .nl a{color:var(--mut);text-decoration:none;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
+  .nl a:hover{color:var(--mag)}
+  .burger{display:none;background:none;border:0;flex-direction:column;gap:5px;cursor:pointer}
+  .burger span{width:24px;height:2px;background:var(--mag);display:block}
 
-    /* ── Utility ── */
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    .section-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      color: var(--cream);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-    .section-sub {
-      color: var(--ash);
-      font-size: 1rem;
-      margin-bottom: 2.5rem;
-      font-style: italic;
-    }
-    .divider {
-      width: 50px;
-      height: 2px;
-      background: var(--accent);
-      margin: 0.8rem 0 1.4rem;
-    }
+  /* SPLIT LAYOUT */
+  .split{display:grid;grid-template-columns:44% 56%}
+  .left{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+        padding:2rem;text-align:center;background:
+        radial-gradient(circle at 50% 30%,rgba(216,64,159,.16),transparent 60%),var(--deep);border-right:1px solid var(--line)}
+  .flower{width:min(60%,260px);height:auto;margin-bottom:1.6rem}
+  .left .eyebrow{color:var(--mag);font-size:.7rem;margin-bottom:1rem}
+  .left h1{font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.02;font-weight:600}
+  .left h1 em{font-style:italic;color:var(--mag)}
+  .left .tag{color:#cbb2d2;max-width:34ch;margin:1.2rem auto 1.4rem;font-size:1rem}
+  .hero-rating{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);border-radius:24px;padding:.4rem 1rem;font-size:.82rem;color:var(--gold)}
+  .hero-rating .st{color:var(--gold);letter-spacing:.1em}
+  .left .cta{margin-top:1.6rem}
+  .btn{display:inline-block;padding:.8rem 1.7rem;border-radius:26px;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:1px solid var(--mag);transition:transform .18s,background .2s,color .2s}
+  .btn.solid{background:var(--mag);color:#fff}
+  .btn.ghost{color:var(--ink)}
+  .btn.solid:hover{background:var(--violet);border-color:var(--violet);transform:translateY(-3px)}
+  .btn.ghost:hover{background:rgba(216,64,159,.12);color:var(--mag)}
 
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 999;
-      background: rgba(13, 13, 13, 0.96);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 0;
-      backdrop-filter: blur(6px);
-    }
-    nav .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    nav .brand {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--cream);
-    }
-    nav .brand span {
-      color: var(--accent);
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-    }
-    nav ul li a {
-      font-size: 0.82rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ash);
-      transition: color 0.2s;
-    }
-    nav ul li a:hover { color: var(--cream); }
+  .right{padding:8rem 3rem 6rem}
+  .block{margin-bottom:5rem}
+  .kick{color:var(--mag);font-size:.7rem;margin-bottom:.7rem}
+  .htitle{font-size:clamp(1.7rem,3.5vw,2.6rem);line-height:1.1;margin-bottom:1.2rem}
+  .right p{color:#c3aecb;margin-bottom:1rem}
 
-    /* ── Hamburger ── */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--parchment);
-      transition: all 0.3s;
-    }
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 57px; left: 0; right: 0;
-      background: var(--ink);
-      border-bottom: 1px solid var(--border);
-      z-index: 998;
-      padding: 1.5rem 1.5rem;
-    }
-    .mobile-menu.open { display: block; }
-    .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
-    .mobile-menu ul li a {
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ash);
-    }
-    .mobile-menu ul li a:hover { color: var(--cream); }
+  .svc{border-top:1px solid var(--line);padding:1.4rem 0;display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:start;transition:padding-left .25s}
+  .svc:last-child{border-bottom:1px solid var(--line)}
+  .svc:hover{padding-left:.6rem}
+  .svc .idx{color:var(--mag);font-size:.9rem;letter-spacing:.1em;padding-top:.2rem}
+  .svc h3{font-size:1.15rem;margin-bottom:.3rem;color:var(--ink)}
+  .svc p{color:var(--mut);font-size:.92rem;margin:0}
+  .svc .note{color:var(--gold);font-size:.72rem;letter-spacing:.06em;margin-top:.4rem}
 
-    @media (max-width: 680px) {
-      nav ul { display: none; }
-      .hamburger { display: flex; }
-    }
+  .locn li{list-style:none;display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+  .locn .lbl{font-size:.66rem;color:var(--mag);text-transform:uppercase;letter-spacing:.16em}
+  .locn .val{color:var(--ink)}
+  .rating-card{margin-top:1.6rem;border:1px solid var(--line);border-radius:14px;padding:1.6rem;background:var(--deep);text-align:center}
+  .rating-card .big-stars{color:var(--gold);font-size:1.4rem;letter-spacing:.15em}
+  .rating-card .big-score{font-size:2.4rem;font-weight:600;color:var(--mag);margin-top:.3rem}
+  .rating-card .review-count{color:var(--mut);font-size:.85rem}
+  .rating-card .rating-label{color:var(--gold);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;margin-top:.3rem}
+  .directions-btn{display:inline-block;margin-top:1.4rem;padding:.8rem 1.7rem;border-radius:26px;background:var(--mag);color:#fff;text-decoration:none;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;transition:background .2s}
+  .directions-btn:hover{background:var(--violet)}
 
-    /* ── Hero ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(ellipse at 20% 60%, rgba(192, 57, 43, 0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 30%, rgba(201, 168, 76, 0.07) 0%, transparent 50%),
-        linear-gradient(160deg, #111 0%, #0d0d0d 60%, #1a1008 100%);
-      padding: 6rem 1.5rem 4rem;
-    }
+  footer{grid-column:1/-1;background:var(--deep);border-top:1px solid var(--line);text-align:center;padding:2.4rem 1.6rem}
+  .flogo{color:var(--mag);font-weight:600;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.4rem}
+  .faddr{color:var(--mut);font-size:.85rem}
+  .fbot{color:#5a4266;font-size:.72rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)}
 
-    /* Decorative ink blot SVG background */
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 15% 85%, rgba(192,57,43,0.08) 0%, transparent 35%),
-        radial-gradient(circle at 85% 15%, rgba(201,168,76,0.05) 0%, transparent 30%);
-      pointer-events: none;
-    }
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s}
+  .reveal.in{opacity:1;transform:none}
 
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 760px;
-    }
-    .hero-label {
-      display: inline-block;
-      font-size: 0.75rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      padding: 0.3rem 1rem;
-      margin-bottom: 1.8rem;
-    }
-    .hero-title {
-      font-size: clamp(3rem, 7vw, 6rem);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      line-height: 1.05;
-      color: var(--cream);
-      margin-bottom: 1rem;
-    }
-    .hero-title em {
-      font-style: normal;
-      color: var(--accent);
-    }
-    .hero-tagline {
-      font-size: clamp(1rem, 2.2vw, 1.3rem);
-      color: var(--ash);
-      font-style: italic;
-      margin-bottom: 2.5rem;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .hero-cta {
-      display: inline-block;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.8rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      padding: 0.9rem 2.4rem;
-      border: 2px solid var(--accent);
-      transition: background 0.25s, color 0.25s;
-    }
-    .hero-cta:hover {
-      background: transparent;
-      color: var(--accent);
-    }
-    .hero-rating {
-      margin-top: 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      color: var(--gold);
-    }
-    .stars { font-size: 1.1rem; letter-spacing: 2px; }
-    .rating-text { font-size: 0.85rem; color: var(--ash); }
-
-    /* ── Sections shared ── */
-    section { padding: 5rem 0; }
-    section:nth-child(even) { background: var(--deep); }
-
-    /* ── About ── */
-    #about { background: var(--charcoal); }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    .about-art {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .about-art svg {
-      width: 100%;
-      max-width: 320px;
-      opacity: 0.85;
-    }
-    .about-text p {
-      color: var(--parchment);
-      margin-bottom: 1.2rem;
-      font-size: 1.02rem;
-      line-height: 1.8;
-    }
-    @media (max-width: 720px) {
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .about-art { order: -1; }
-    }
-
-    /* ── Services ── */
-    #services { background: var(--ink); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-    .service-card {
-      background: var(--charcoal);
-      border: 1px solid var(--border);
-      padding: 2rem 1.6rem;
-      transition: border-color 0.25s, transform 0.2s;
-    }
-    .service-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-    }
-    .service-icon {
-      width: 44px;
-      height: 44px;
-      margin-bottom: 1rem;
-      color: var(--accent);
-    }
-    .service-card h3 {
-      font-size: 1.05rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--cream);
-      margin-bottom: 0.6rem;
-    }
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--ash);
-      line-height: 1.65;
-    }
-    .service-note {
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-top: 0.6rem;
-      font-style: italic;
-    }
-
-    /* ── Contact ── */
-    #contact { background: var(--deep); }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    @media (max-width: 720px) {
-      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-    .contact-info h3 {
-      font-size: 1.15rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--cream);
-      margin-bottom: 1.2rem;
-    }
-    .contact-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.9rem;
-      margin-bottom: 1.1rem;
-    }
-    .contact-row svg {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      color: var(--accent);
-      margin-top: 3px;
-    }
-    .contact-row span {
-      font-size: 0.95rem;
-      color: var(--parchment);
-      line-height: 1.55;
-    }
-    .directions-btn {
-      display: inline-block;
-      margin-top: 1.5rem;
-      background: transparent;
-      border: 2px solid var(--accent);
-      color: var(--accent);
-      font-size: 0.78rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.75rem 1.8rem;
-      transition: background 0.25s, color 0.25s;
-    }
-    .directions-btn:hover {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    /* Rating card */
-    .rating-card {
-      background: var(--charcoal);
-      border: 1px solid var(--border);
-      padding: 2rem;
-      text-align: center;
-    }
-    .rating-card .big-stars {
-      font-size: 2rem;
-      letter-spacing: 4px;
-      color: var(--gold);
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    .rating-card .big-score {
-      font-size: 3rem;
-      font-weight: 700;
-      color: var(--cream);
-      line-height: 1;
-    }
-    .rating-card .review-count {
-      font-size: 0.85rem;
-      color: var(--ash);
-      margin-top: 0.3rem;
-    }
-    .rating-card .rating-label {
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ash);
-    }
-    .rating-card .google-badge {
-      margin-top: 1.2rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.78rem;
-      color: var(--ash);
-      border: 1px solid var(--border);
-      padding: 0.35rem 0.9rem;
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: var(--ink);
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 0;
-      text-align: center;
-    }
-    footer .footer-brand {
-      font-size: 1.1rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--cream);
-      margin-bottom: 0.5rem;
-    }
-    footer .footer-brand span { color: var(--accent); }
-    footer p {
-      font-size: 0.8rem;
-      color: var(--ash);
-    }
-    footer .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin: 1rem 0 0.8rem;
-      list-style: none;
-    }
-    footer .footer-links a {
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ash);
-      transition: color 0.2s;
-    }
-    footer .footer-links a:hover { color: var(--cream); }
-  </style>
+  @media(max-width:860px){
+    .split{grid-template-columns:1fr}
+    .left{position:static;height:auto;min-height:88vh;padding-top:6rem;border-right:0;border-bottom:1px solid var(--line)}
+    .right{padding:3.5rem 1.6rem}
+    .nl{display:none;position:fixed;top:0;right:0;height:100vh;width:74%;background:var(--bg);flex-direction:column;justify-content:center;align-items:center;gap:1.4rem;z-index:70}
+    .nl.open{display:flex}.burger{display:flex}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    .btn,.svc{transition:none}
+  }
+</style>
 </head>
 <body>
+<nav>
+  <div class="brand">Liatris Tattoo</div>
+  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nl" id="nav">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#location">Location</a></li>
+  </ul>
+</nav>
 
-  <!-- ── Nav ── -->
-  <nav>
-    <div class="container nav-inner">
-      <div class="brand">Liatris <span>Tattoo</span></div>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
+<div class="split">
+  <aside class="left">
+    <svg class="flower" viewBox="0 0 120 220" fill="none" aria-hidden="true">
+      <line x1="60" y1="70" x2="60" y2="210" stroke="#8a4bd6" stroke-width="2"/>
+      <path d="M60 210 C40 190 30 200 42 178 M60 200 C82 182 92 194 78 172" stroke="#8a4bd6" stroke-width="1.4"/>
+      <g stroke="#d8409f" stroke-width="1.6" fill="none">
+        <ellipse cx="60" cy="20" rx="8" ry="12"/>
+        <ellipse cx="46" cy="34" rx="7" ry="10"/><ellipse cx="74" cy="34" rx="7" ry="10"/>
+        <ellipse cx="42" cy="52" rx="7" ry="10"/><ellipse cx="78" cy="52" rx="7" ry="10"/><ellipse cx="60" cy="46" rx="7" ry="10"/>
+        <ellipse cx="40" cy="72" rx="6" ry="9"/><ellipse cx="80" cy="72" rx="6" ry="9"/><ellipse cx="60" cy="66" rx="6" ry="9"/>
+      </g>
+    </svg>
+    <p class="eyebrow up">Gainesville, Florida</p>
+    <h1>Liatris <em>Tattoo</em></h1>
+    <p class="tag">Where every line tells a story &mdash; custom tattooing crafted with intention and artistry.</p>
+    <div class="hero-rating"><span class="st">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span>5.0 rating &bull; 5 reviews on Google</span></div>
+    <div class="cta"><a href="#location" class="btn solid magnetic">Find The Studio</a></div>
+  </aside>
+
+  <main class="right">
+    <section class="block" id="about">
+      <p class="kick up reveal">Our Story</p>
+      <h2 class="htitle reveal">Every Line Tells A Story</h2>
+      <p class="reveal">Liatris Tattoo is a custom studio rooted in intention and artistry. We collaborate closely with every client to design meaningful, lasting work that reflects who you are &mdash; from delicate fine-line pieces to bold, expressive compositions.</p>
+      <p class="reveal">Located in the heart of Gainesville, FL, our studio welcomes walk-ins when available. Every design is drawn with care, and every appointment is treated as a shared creative process from first sketch to final line.</p>
+    </section>
+
+    <section class="block" id="services">
+      <p class="kick up reveal">What We Offer</p>
+      <h2 class="htitle reveal">Services</h2>
+      <div class="reveal">
+        <div class="svc"><div class="idx">01</div><div><h3>Custom Tattoos</h3><p>Original, collaborative designs built around your ideas, aesthetic, and placement.</p><p class="note">Contact us for details</p></div></div>
+        <div class="svc"><div class="idx">02</div><div><h3>Fine Line &amp; Illustrative</h3><p>Delicate, detailed linework and illustrative compositions for subtle, refined designs.</p><p class="note">Contact us for details</p></div></div>
+        <div class="svc"><div class="idx">03</div><div><h3>Black &amp; Grey</h3><p>Smooth gradients and rich contrast rendered entirely in black and grey ink.</p><p class="note">Contact us for details</p></div></div>
+        <div class="svc"><div class="idx">04</div><div><h3>Color Tattoos</h3><p>Vibrant, saturated color work with careful attention to blending and longevity.</p><p class="note">Contact us for details</p></div></div>
+        <div class="svc"><div class="idx">05</div><div><h3>Cover-Ups &amp; Reworks</h3><p>Thoughtful cover-up and rework solutions that give existing tattoos new life.</p><p class="note">Contact us for details</p></div></div>
+        <div class="svc"><div class="idx">06</div><div><h3>Touch-Ups</h3><p>Refinements and touch-ups to keep your existing pieces looking their best.</p><p class="note">Contact us for details</p></div></div>
+      </div>
+    </section>
+
+    <section class="block" id="location">
+      <p class="kick up reveal">Find Us</p>
+      <h2 class="htitle reveal">Studio Location</h2>
+      <p class="reveal">Located in the heart of Gainesville, FL &mdash; walk-ins welcome when available.</p>
+      <ul class="locn reveal">
+        <li><div><div class="lbl">Address</div><div class="val">1002 NW 2nd St, Suite A5<br>Gainesville, FL 32601</div></div></li>
+        <li><div><div class="lbl">Hours</div><div class="val">Hours &amp; availability &mdash; contact us for details</div></div></li>
       </ul>
-      <button class="hamburger" id="hamburger" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <ul>
-      <li><a href="#about" onclick="closeMobile()">About</a></li>
-      <li><a href="#services" onclick="closeMobile()">Services</a></li>
-      <li><a href="#contact" onclick="closeMobile()">Contact</a></li>
-    </ul>
-  </div>
-
-  <script>
-    var hbg = document.getElementById('hamburger');
-    var mob = document.getElementById('mobileMenu');
-    hbg.addEventListener('click', function() { mob.classList.toggle('open'); });
-    function closeMobile() { mob.classList.remove('open'); }
-  </script>
-
-  <!-- ── Hero ── -->
-  <section id="hero">
-    <div class="hero-inner">
-      <div class="hero-label">Gainesville, FL</div>
-      <h1 class="hero-title">Liatris<br><em>Tattoo</em></h1>
-      <p class="hero-tagline">Where every line tells a story — custom tattooing crafted with intention and artistry.</p>
-      <a href="#contact" class="hero-cta">Book a Consultation</a>
-      <div class="hero-rating">
-        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-        <span class="rating-text">5.0 rating &bull; 5 reviews on Google</span>
+      <a class="directions-btn magnetic" href="https://www.google.com/maps/search/Liatris%20Tattoo%201002%20NW%202nd%20St%20a5%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener">Get Directions</a>
+      <div class="rating-card reveal">
+        <div class="big-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="big-score">5.0</div>
+        <div class="review-count">Based on 5 reviews</div>
+        <div class="rating-label">Google Maps Rating</div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- ── About ── -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-art">
-          <!-- Decorative inline SVG — abstract tattoo needle/rose motif -->
-          <svg viewBox="0 0 300 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- Outer circle frame -->
-            <circle cx="150" cy="170" r="140" stroke="#2e2e2e" stroke-width="1.5"/>
-            <circle cx="150" cy="170" r="128" stroke="#2e2e2e" stroke-width="0.6" stroke-dasharray="4 6"/>
-            <!-- Stylized flower: liatris spicata (blazing star) petals -->
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="#1e1e1e" stroke="#c0392b" stroke-width="1.2"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(30 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(60 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(90 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(120 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(150 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(180 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(210 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(240 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(270 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(300 150 170)"/>
-            <ellipse cx="150" cy="80" rx="12" ry="38" fill="none" stroke="#c0392b" stroke-width="0.6"
-                     transform="rotate(330 150 170)"/>
-            <!-- Center circle -->
-            <circle cx="150" cy="170" r="22" fill="#1e1e1e" stroke="#c9a84c" stroke-width="1.5"/>
-            <circle cx="150" cy="170" r="10" fill="#c0392b" opacity="0.85"/>
-            <!-- Studio name arc text hint (decorative dashes) -->
-            <path d="M 50 170 A 100 100 0 0 1 250 170" stroke="#888880" stroke-width="0.5" stroke-dasharray="2 5" fill="none"/>
-          </svg>
-        </div>
-        <div class="about-text">
-          <p class="section-title">About the Studio</p>
-          <div class="divider"></div>
-          <p>Liatris Tattoo is a dedicated custom tattoo studio in Gainesville, FL, committed to producing thoughtful, high-quality work across a wide range of styles. Every piece is approached as a collaboration — your vision, executed with skill and care.</p>
-          <p>Whether you are coming in for your first tattoo or adding to a growing collection, the studio provides a clean, welcoming environment where artistry is always the priority.</p>
-          <p>Walk-ins are welcome when availability allows. Consultations are encouraged for larger or more complex custom projects to ensure the best possible result.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Services ── -->
-  <section id="services">
-    <div class="container">
-      <p class="section-title" style="text-align:center;">Services</p>
-      <div class="divider" style="margin:0.8rem auto 1.4rem;"></div>
-      <p class="section-sub" style="text-align:center;">Custom work done with intention — contact us to discuss your project</p>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <!-- Icon: custom design -->
-          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-          </svg>
-          <h3>Custom Tattoos</h3>
-          <p>Original designs created specifically for you — from concept sketch through final session. No flash, no compromises.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-          </svg>
-          <h3>Fine Line &amp; Illustrative</h3>
-          <p>Delicate linework and detailed illustrative pieces with clean, precise execution that holds beautifully over time.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-          </svg>
-          <h3>Black &amp; Grey</h3>
-          <p>Classic black and grey tattooing with smooth gradients and rich tonal depth — a timeless approach for portraiture, realism, and beyond.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-          </svg>
-          <h3>Color Tattoos</h3>
-          <p>Vibrant, saturated color work designed to pop and last — from bold traditional palettes to softer watercolor-inspired treatments.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/>
-          </svg>
-          <h3>Cover-Ups &amp; Reworks</h3>
-          <p>Transforming existing tattoos you are no longer happy with into something you love. A consultation is recommended to assess the best approach.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-          <h3>Touch-Ups</h3>
-          <p>Keeping your existing tattoos looking their best. Ask about touch-up availability when booking your original appointment.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Contact ── -->
-  <section id="contact">
-    <div class="container">
-      <p class="section-title">Visit Us</p>
-      <div class="divider"></div>
-      <p class="section-sub">Located in the heart of Gainesville, FL — walk-ins welcome when available</p>
-      <div class="contact-grid">
-        <div class="contact-info">
-          <h3>Studio Location</h3>
-
-          <div class="contact-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-            </svg>
-            <span>1002 NW 2nd St, Suite A5<br>Gainesville, FL 32601</span>
-          </div>
-
-          <div class="contact-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-            <span>Hours &amp; availability — contact us for details</span>
-          </div>
-
-          <a class="directions-btn" href="https://www.google.com/maps/search/Liatris%20Tattoo%201002%20NW%202nd%20St%20a5%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener">Get Directions</a>
-        </div>
-
-        <div>
-          <div class="rating-card">
-            <span class="big-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <div class="big-score">5.0</div>
-            <div class="review-count">Based on 5 reviews</div>
-            <div class="rating-label">Google Maps Rating</div>
-            <div class="google-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M21.8 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.5c-.2 1.3-1 2.4-2 3.1v2.6h3.2c1.9-1.7 3.1-4.3 3.1-7.5z" fill="#4285F4"/>
-                <path d="M12 22c2.7 0 5-.9 6.7-2.4l-3.2-2.5c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.9v2.6C4.6 19.7 8.1 22 12 22z" fill="#34A853"/>
-                <path d="M6.2 13.8c-.2-.6-.3-1.2-.3-1.8s.1-1.2.3-1.8V7.6H2.9C2.3 8.9 2 10.4 2 12s.3 3.1.9 4.4l3.3-2.6z" fill="#FBBC05"/>
-                <path d="M12 5.9c1.5 0 2.9.5 3.9 1.6l2.9-2.9C17 2.8 14.7 2 12 2 8.1 2 4.6 4.3 2.9 7.6l3.3 2.6C7 7.7 9.3 5.9 12 5.9z" fill="#EA4335"/>
-              </svg>
-              Verified on Google Maps
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Footer ── -->
   <footer>
-    <div class="container">
-      <div class="footer-brand">Liatris <span>Tattoo</span></div>
-      <ul class="footer-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <p>1002 NW 2nd St, Suite A5 &bull; Gainesville, FL 32601</p>
-      <p style="margin-top:0.6rem;">&copy; 2026 Liatris Tattoo. All rights reserved.</p>
-    </div>
+    <div class="flogo">Liatris Tattoo</div>
+    <p class="faddr">1002 NW 2nd St, Suite A5 &bull; Gainesville, FL 32601</p>
+    <div class="fbot">&copy; 2026 Liatris Tattoo &mdash; Custom Tattooing, Gainesville, FL</div>
   </footer>
+</div>
 
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var burger=document.getElementById("burger"),nav=document.getElementById("nav");
+  burger.addEventListener("click",function(){nav.classList.toggle("open");});
+  nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){nav.classList.remove("open");});});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+  if(!reduce){
+    document.querySelectorAll(".magnetic").forEach(function(b){
+      b.addEventListener("mousemove",function(e){var r=b.getBoundingClientRect();b.style.transform="translate("+((e.clientX-r.left-r.width/2)*.22)+"px,"+((e.clientY-r.top-r.height/2)*.22)+"px)";});
+      b.addEventListener("mouseleave",function(){b.style.transform="";});
+    });
+  }
+})();
+</script>
 </body>
 </html>

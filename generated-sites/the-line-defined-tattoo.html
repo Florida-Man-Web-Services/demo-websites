@@ -1,798 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Line Defined Tattoo | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ink:       #0d0d0d;
-      --charcoal:  #1a1a1a;
-      --slate:     #252525;
-      --muted:     #3a3a3a;
-      --ash:       #5c5c5c;
-      --silver:    #b0b0b0;
-      --fog:       #e8e8e8;
-      --white:     #f5f5f5;
-      --gold:      #c9a84c;
-      --gold-light:#e0c070;
-      --red-dark:  #8b1a1a;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', serif;
-      background-color: var(--ink);
-      color: var(--fog);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ──────────────────────────────────────────── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      background: rgba(13,13,13,0.95);
-      border-bottom: 1px solid var(--muted);
-      backdrop-filter: blur(6px);
-    }
-
-    .nav-brand {
-      font-family: 'Georgia', serif;
-      font-size: 1.15rem;
-      font-weight: bold;
-      letter-spacing: 0.06em;
-      color: var(--gold);
-      text-decoration: none;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--silver);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold); }
-
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px; height: 2px;
-      background: var(--silver);
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-    .hamburger:hover span { background: var(--gold); }
-
-    /* mobile nav */
-    #mobile-nav {
-      display: none;
-      position: fixed;
-      top: 64px; left: 0; right: 0;
-      background: var(--charcoal);
-      border-bottom: 1px solid var(--muted);
-      z-index: 999;
-      padding: 1.5rem 2rem;
-    }
-    #mobile-nav.open { display: block; }
-    #mobile-nav ul { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
-    #mobile-nav a {
-      color: var(--silver);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    #mobile-nav a:hover { color: var(--gold); }
-
-    /* ── HERO ─────────────────────────────────────────── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-      background-color: var(--ink);
-    }
-
-    /* decorative crosshatch background */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 38px,
-          rgba(201,168,76,0.04) 38px,
-          rgba(201,168,76,0.04) 39px
-        ),
-        repeating-linear-gradient(
-          -45deg,
-          transparent,
-          transparent 38px,
-          rgba(201,168,76,0.04) 38px,
-          rgba(201,168,76,0.04) 39px
-        );
-      pointer-events: none;
-    }
-
-    /* radial vignette */
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, transparent 30%, rgba(13,13,13,0.85) 100%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 760px;
-    }
-
-    .hero-ornament {
-      display: block;
-      width: 60px;
-      height: 2px;
-      background: var(--gold);
-      margin: 0 auto 1.6rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      font-weight: bold;
-      letter-spacing: 0.04em;
-      color: var(--white);
-      text-transform: uppercase;
-      line-height: 1.15;
-    }
-
-    .hero h1 span {
-      color: var(--gold);
-    }
-
-    .hero-tagline {
-      margin-top: 1.4rem;
-      font-family: Arial, sans-serif;
-      font-size: clamp(0.95rem, 2.2vw, 1.2rem);
-      color: var(--silver);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .hero-divider {
-      display: block;
-      width: 40px;
-      height: 2px;
-      background: var(--gold);
-      margin: 2rem auto;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.85rem 2.4rem;
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.25s, color 0.25s;
-    }
-    .hero-cta:hover {
-      background: var(--gold);
-      color: var(--ink);
-    }
-
-    /* ── SECTION COMMON ───────────────────────────────── */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .section-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: Arial, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: bold;
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 1rem;
-    }
-
-    .title-rule {
-      width: 50px;
-      height: 2px;
-      background: var(--gold);
-      margin-bottom: 2rem;
-    }
-
-    /* ── ABOUT ────────────────────────────────────────── */
-    #about {
-      background: var(--charcoal);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--silver);
-      font-size: 1.05rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .about-text p:last-child { margin-bottom: 0; }
-
-    /* decorative panel */
-    .about-art {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .tattoo-emblem {
-      width: 100%;
-      max-width: 320px;
-      aspect-ratio: 1;
-      border: 1px solid var(--muted);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .tattoo-emblem::before {
-      content: '';
-      position: absolute;
-      inset: 10px;
-      border: 1px solid var(--muted);
-    }
-
-    .tattoo-emblem-inner {
-      text-align: center;
-      z-index: 1;
-      padding: 1rem;
-    }
-
-    .emblem-icon {
-      display: block;
-      font-size: 3.5rem;
-      line-height: 1;
-      margin-bottom: 0.8rem;
-      color: var(--gold);
-    }
-
-    .emblem-name {
-      font-family: Arial, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--ash);
-    }
-
-    /* ── SERVICES ─────────────────────────────────────── */
-    #services {
-      background: var(--ink);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--charcoal);
-      border: 1px solid var(--muted);
-      padding: 2rem 1.8rem;
-      position: relative;
-      transition: border-color 0.25s;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--gold);
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-
-    .service-card:hover {
-      border-color: var(--gold);
-    }
-
-    .service-card:hover::before {
-      opacity: 1;
-    }
-
-    .service-icon {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: bold;
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.6rem;
-    }
-
-    .service-card p {
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      color: var(--ash);
-      line-height: 1.6;
-    }
-
-    .service-note {
-      margin-top: 1rem;
-      font-family: Arial, sans-serif;
-      font-size: 0.78rem;
-      color: var(--gold);
-      letter-spacing: 0.08em;
-    }
-
-    /* ── CONTACT ──────────────────────────────────────── */
-    #contact {
-      background: var(--charcoal);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info h3 {
-      font-size: 1rem;
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 1.4rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .contact-item-icon {
-      font-size: 1.1rem;
-      margin-top: 0.1rem;
-      flex-shrink: 0;
-      color: var(--gold);
-    }
-
-    .contact-item-text {
-      font-family: Arial, sans-serif;
-      font-size: 0.95rem;
-      color: var(--silver);
-      line-height: 1.55;
-    }
-
-    .contact-item-text a {
-      color: var(--silver);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-item-text a:hover { color: var(--gold); }
-
-    .btn-directions {
-      display: inline-block;
-      margin-top: 1.8rem;
-      padding: 0.85rem 2rem;
-      background: var(--gold);
-      color: var(--ink);
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      font-weight: bold;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.25s, color 0.25s;
-    }
-
-    .btn-directions:hover {
-      background: var(--gold-light);
-    }
-
-    /* rating card */
-    .rating-card {
-      background: var(--slate);
-      border: 1px solid var(--muted);
-      padding: 2rem;
-    }
-
-    .rating-title {
-      font-family: Arial, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--ash);
-      margin-bottom: 1.2rem;
-    }
-
-    .rating-score {
-      font-size: 3.6rem;
-      font-weight: bold;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .rating-stars {
-      margin-top: 0.5rem;
-      font-size: 1.4rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-    }
-
-    .rating-count {
-      margin-top: 0.5rem;
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      color: var(--ash);
-    }
-
-    .rating-rule {
-      width: 100%;
-      height: 1px;
-      background: var(--muted);
-      margin: 1.4rem 0;
-    }
-
-    .rating-quote {
-      font-style: italic;
-      color: var(--silver);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .rating-source {
-      margin-top: 0.8rem;
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      color: var(--ash);
-      letter-spacing: 0.1em;
-    }
-
-    /* ── FOOTER ───────────────────────────────────────── */
-    footer {
-      background: var(--ink);
-      border-top: 1px solid var(--muted);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .footer-brand {
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-address {
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      color: var(--ash);
-      margin-bottom: 1.2rem;
-    }
-
-    .footer-nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      list-style: none;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-nav a {
-      font-family: Arial, sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ash);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-nav a:hover { color: var(--gold); }
-
-    .footer-copy {
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    /* ── RESPONSIVE ───────────────────────────────────── */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-art { display: none; }
-
-      section { padding: 3.5rem 1.2rem; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Line Defined Tattoo | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --paper:#f4f3ef; --ink:#0c0c0c; --red:#e01b1b; --mut:#6a6a6a; --line:#0c0c0c;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.55;overflow-x:hidden}
+  .serif{font-family:Georgia,"Times New Roman",serif}
+  .cond{font-family:"Arial Narrow","Helvetica Neue",Arial,sans-serif;font-weight:900;text-transform:uppercase}
+  .up{text-transform:uppercase;letter-spacing:.2em}
+
+  /* MASTHEAD */
+  .masthead{border-bottom:3px solid var(--ink);position:sticky;top:0;background:var(--paper);z-index:60}
+  .mast-top{display:flex;justify-content:space-between;align-items:center;padding:.4rem 1.4rem;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--ink)}
+  .mast-top .ed{color:var(--red);font-weight:700}
+  .mast-main{display:flex;align-items:center;justify-content:space-between;padding:.4rem 1.4rem;gap:1rem}
+  .mast-main h1{font-size:clamp(1.6rem,4.6vw,3rem);letter-spacing:-.01em;line-height:1}
+  .mast-main h1 .dot{color:var(--red)}
+  .nl{display:flex;gap:1.2rem;list-style:none}
+  .nl a{color:var(--ink);text-decoration:none;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+  .nl a:hover{color:var(--red)}
+  .burger{display:none;background:none;border:0;flex-direction:column;gap:5px;cursor:pointer}
+  .burger span{width:24px;height:2px;background:var(--ink);display:block}
+
+  /* MARQUEE */
+  .marquee{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;border-bottom:3px solid var(--red);padding:.5rem 0}
+  .marquee.red{background:var(--red);color:var(--paper);border-bottom:3px solid var(--ink)}
+  .track{display:inline-block;white-space:nowrap;animation:scroll 26s linear infinite}
+  .marquee.rev .track{animation-direction:reverse;animation-duration:32s}
+  .track span{font-family:"Arial Narrow",sans-serif;font-weight:900;text-transform:uppercase;font-size:1.1rem;letter-spacing:.06em;padding:0 1.2rem}
+  .track span .st{color:var(--red)}
+  .marquee.red .track span .st{color:var(--ink)}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 1.4rem}
+  section{padding:4.5rem 0}
+  .kick{color:var(--red);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;margin-bottom:.7rem;font-weight:700}
+  .htitle{font-size:clamp(2.2rem,6vw,4.6rem);line-height:.92;margin-bottom:1.2rem;letter-spacing:-.01em}
+
+  /* HERO editorial columns */
+  .hero{padding-top:3.5rem}
+  .hero .lead-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:2.5rem;border-bottom:3px solid var(--ink);padding-bottom:2.5rem}
+  .hero .huge{font-size:clamp(3rem,13vw,9rem);line-height:.84;letter-spacing:-.02em}
+  .hero .huge .red{color:var(--red)}
+  .hero .col p{color:#333;font-size:1.05rem;margin-bottom:1rem}
+  .hero .col p:first-child::first-letter{font-family:Georgia,serif;font-size:3.2rem;float:left;line-height:.8;padding:.1rem .5rem 0 0;color:var(--red);font-weight:700}
+  .cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem}
+  .btn{display:inline-block;padding:.8rem 1.7rem;font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:2px solid var(--ink);transition:transform .15s,background .2s,color .2s}
+  .btn.solid{background:var(--ink);color:var(--paper)}
+  .btn.solid:hover{background:var(--red);border-color:var(--red)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+
+  .lineart{width:100%;height:auto;border:2px solid var(--ink)}
+
+  /* SERVICES newspaper columns */
+  .services{border-bottom:3px solid var(--ink)}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink)}
+  .svc{padding:1.8rem;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);position:relative;transition:background .2s,color .2s}
+  .svc:hover{background:var(--ink);color:var(--paper)}
+  .svc:hover .note{color:var(--red)}
+  .svc .num{font-family:"Arial Narrow",sans-serif;font-weight:900;font-size:2.4rem;line-height:1;color:var(--red)}
+  .svc h3{font-size:1.15rem;text-transform:uppercase;letter-spacing:.02em;margin:.5rem 0 .5rem}
+  .svc p{font-size:.9rem;color:inherit;opacity:.85}
+  .svc .note{margin-top:.7rem;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:700}
+
+  /* CONTACT */
+  .c-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:2px solid var(--ink)}
+  .c-grid .box{padding:2.2rem}
+  .c-grid .box:first-child{border-right:2px solid var(--ink)}
+  .info li{list-style:none;padding:.9rem 0;border-bottom:1px solid var(--ink)}
+  .info li:last-child{border-bottom:0}
+  .info .lbl{font-size:.66rem;color:var(--red);text-transform:uppercase;letter-spacing:.16em;font-weight:700;margin-bottom:.15rem}
+  .info .val,.info .val a{color:var(--ink);text-decoration:none;font-size:1.05rem}
+  .info .val a:hover{color:var(--red)}
+  .rate{text-align:center;padding:1rem 0}
+  .rate .stars{color:var(--red);font-size:1.4rem;letter-spacing:.14em}
+  .rate .num{font-family:"Arial Narrow",sans-serif;font-weight:900;font-size:4rem;line-height:1;margin:.2rem 0}
+  .rate .cnt{color:var(--mut);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+  .box .btn{display:block;text-align:center;margin-top:1rem}
+
+  footer{background:var(--ink);color:var(--paper);text-align:center;padding:2.4rem 1.4rem}
+  .flogo{font-family:"Arial Narrow",sans-serif;font-weight:900;font-size:1.4rem;text-transform:uppercase;margin-bottom:.4rem}
+  .faddr{color:#bbb;font-size:.85rem}
+  .fbot{color:#777;font-size:.72rem;margin-top:1rem;padding-top:1rem;border-top:1px solid #333}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:860px){
+    .nl{display:none;position:fixed;top:0;right:0;height:100vh;width:74%;background:var(--paper);flex-direction:column;justify-content:center;align-items:center;gap:1.4rem;z-index:70;border-left:2px solid var(--ink)}
+    .nl.open{display:flex}.burger{display:flex}
+    .hero .lead-grid,.c-grid{grid-template-columns:1fr}
+    .c-grid .box:first-child{border-right:0;border-bottom:2px solid var(--ink)}
+    .svc-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:1024px) and (min-width:861px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    .track{animation:none}
+    .btn,.svc{transition:none}
+  }
+</style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <a class="nav-brand" href="#hero">The Line Defined</a>
-    <ul class="nav-links">
+<header class="masthead">
+  <div class="mast-top">
+    <span class="ed">Est. Gainesville, FL</span>
+    <span>Precision &bull; Artistry &bull; Gainesville, FL</span>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mast-main">
+    <h1 class="cond">The Line Defined<span class="dot">.</span></h1>
+    <ul class="nl" id="nav">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="hamburger" aria-label="Toggle menu" onclick="toggleNav()">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <div id="mobile-nav">
-    <ul>
-      <li><a href="#about" onclick="closeNav()">About</a></li>
-      <li><a href="#services" onclick="closeNav()">Services</a></li>
-      <li><a href="#contact" onclick="closeNav()">Contact</a></li>
+      <li><a href="tel:+13522156495" style="color:var(--red)">(352) 215-6495</a></li>
     </ul>
   </div>
+</header>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-inner">
-      <span class="hero-ornament"></span>
-      <h1>The Line<br><span>Defined</span> Tattoo</h1>
-      <p class="hero-tagline">Precision &bull; Artistry &bull; Gainesville, FL</p>
-      <span class="hero-divider"></span>
-      <a href="#contact" class="hero-cta">Book a Consultation</a>
-    </div>
-  </section>
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Custom Tattoo Design <span class="st">&#9733;</span></span><span>Fine Line &amp; Micro <span class="st">&#9733;</span></span><span>Black &amp; Grey Realism <span class="st">&#9733;</span></span><span>Cover-Up &amp; Rework <span class="st">&#9733;</span></span><span>Downtown Gainesville <span class="st">&#9733;</span></span>
+    <span>Custom Tattoo Design <span class="st">&#9733;</span></span><span>Fine Line &amp; Micro <span class="st">&#9733;</span></span><span>Black &amp; Grey Realism <span class="st">&#9733;</span></span><span>Cover-Up &amp; Rework <span class="st">&#9733;</span></span><span>Downtown Gainesville <span class="st">&#9733;</span></span>
+  </div>
+</div>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Our Studio</p>
-          <h2 class="section-title">Ink With Intention</h2>
-          <div class="title-rule"></div>
-          <p>
-            The Line Defined Tattoo is a professional tattoo studio in the heart of downtown Gainesville, committed to delivering custom artwork that tells your story with clarity and precision. From fine-line portraits to bold traditional pieces, every tattoo is approached with the same dedication to craft.
-          </p>
-          <p>
-            We believe a tattoo is more than a design — it's a permanent expression of identity. Our studio offers a clean, welcoming environment where clients feel comfortable discussing their vision and collaborating on something truly one of a kind.
-          </p>
-          <p>
-            We work by consultation to ensure every client receives individualized attention and an end result they'll carry with pride. Contact us to start the conversation about your next piece.
-          </p>
-        </div>
-        <div class="about-art">
-          <div class="tattoo-emblem">
-            <div class="tattoo-emblem-inner">
-              <span class="emblem-icon">&#9901;</span>
-              <span class="emblem-name">The Line Defined &bull; Est. Gainesville</span>
-            </div>
-          </div>
-        </div>
+<section class="hero wrap" id="home">
+  <div class="lead-grid">
+    <div class="col">
+      <p class="kick">Custom Tattoo Studio &mdash; Gainesville, FL</p>
+      <h2 class="cond huge">Every<br><span class="red">Line</span><br>Defined.</h2>
+      <div class="cta-row">
+        <a href="#contact" class="btn solid magnetic">Book a Consultation</a>
+        <a href="#services" class="btn ghost magnetic">Our Work</a>
       </div>
     </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="section-inner">
-      <p class="section-label">What We Do</p>
-      <h2 class="section-title">Our Services</h2>
-      <div class="title-rule"></div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <span class="service-icon">&#9998;</span>
-          <h3>Custom Tattoo Design</h3>
-          <p>Collaborative, one-of-a-kind artwork created around your ideas, aesthetic, and placement. Every design is original and tailored specifically to you.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#10022;</span>
-          <h3>Fine Line &amp; Micro Tattoos</h3>
-          <p>Delicate, detail-oriented work executed with precision needlework — ideal for subtle, minimalist designs that carry maximum impact.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#9775;</span>
-          <h3>Traditional &amp; Neo-Traditional</h3>
-          <p>Bold lines, rich color palettes, and timeless imagery — classic American traditional and its modern evolution done with authenticity.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#9733;</span>
-          <h3>Black &amp; Grey Realism</h3>
-          <p>Photorealistic portraits, landscapes, and illustrative pieces rendered in smooth gradients of black and grey ink.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#10000;</span>
-          <h3>Cover-Up &amp; Rework</h3>
-          <p>Breathing new life into existing tattoos — whether transforming old work into something fresh or seamlessly covering a piece you've outgrown.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#9830;</span>
-          <h3>Touch-Ups</h3>
-          <p>Keeping your existing tattoos looking their best. We offer touch-up services to restore color, crisp up lines, and maintain the integrity of your ink over time.</p>
-          <p class="service-note">Contact us for details</p>
-        </div>
-
-      </div>
+    <div class="col">
+      <p>The Line Defined Tattoo is a custom studio in downtown Gainesville built on clean linework, thoughtful composition, and lasting quality. Every piece begins as a conversation and ends as artwork made to live on your skin.</p>
+      <p>From delicate micro tattoos to bold black-and-grey realism, we treat each design as its own commission &mdash; original, considered, and precise.</p>
+      <svg class="lineart" viewBox="0 0 300 150" fill="none" aria-hidden="true">
+        <path d="M10 120 C60 20 120 20 150 80 C180 140 240 140 290 40" stroke="#0c0c0c" stroke-width="2"/>
+        <path d="M10 130 C70 60 130 60 150 95 C170 130 230 130 290 70" stroke="#e01b1b" stroke-width="1.4"/>
+        <circle cx="150" cy="80" r="5" fill="#e01b1b"/>
+      </svg>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Contact &amp; Location</h2>
-      <div class="title-rule"></div>
-      <div class="contact-grid">
+<div class="marquee red rev" aria-hidden="true">
+  <div class="track">
+    <span>Precision <span class="st">/</span></span><span>Artistry <span class="st">/</span></span><span>Original Designs <span class="st">/</span></span><span>Clean Linework <span class="st">/</span></span><span>By Appointment <span class="st">/</span></span>
+    <span>Precision <span class="st">/</span></span><span>Artistry <span class="st">/</span></span><span>Original Designs <span class="st">/</span></span><span>Clean Linework <span class="st">/</span></span><span>By Appointment <span class="st">/</span></span>
+  </div>
+</div>
 
-        <div class="contact-info">
-          <h3>Get In Touch</h3>
+<section class="services wrap" id="services">
+  <p class="kick reveal">The Menu</p>
+  <h2 class="htitle cond reveal">Services</h2>
+  <div class="svc-grid reveal">
+    <div class="svc"><div class="num">01</div><h3>Custom Tattoo Design</h3><p>Collaborative, one-of-a-kind artwork created around your ideas, aesthetic, and placement. Every design is original and tailored specifically to you.</p><p class="note">Contact us for details</p></div>
+    <div class="svc"><div class="num">02</div><h3>Fine Line &amp; Micro Tattoos</h3><p>Delicate, detail-oriented work executed with precision needlework &mdash; ideal for subtle, minimalist designs that carry maximum impact.</p><p class="note">Contact us for details</p></div>
+    <div class="svc"><div class="num">03</div><h3>Traditional &amp; Neo-Traditional</h3><p>Bold lines, rich color palettes, and timeless imagery &mdash; classic American traditional and its modern evolution done with authenticity.</p><p class="note">Contact us for details</p></div>
+    <div class="svc"><div class="num">04</div><h3>Black &amp; Grey Realism</h3><p>Photorealistic portraits, landscapes, and illustrative pieces rendered in smooth gradients of black and grey ink.</p><p class="note">Contact us for details</p></div>
+    <div class="svc"><div class="num">05</div><h3>Cover-Up &amp; Rework</h3><p>Breathing new life into existing tattoos &mdash; whether transforming old work into something fresh or seamlessly covering a piece you've outgrown.</p><p class="note">Consultation required</p></div>
+    <div class="svc"><div class="num">06</div><h3>Touch-Ups</h3><p>Refinements and touch-ups to keep your existing tattoos crisp, bold, and looking their best over time.</p><p class="note">Contact us for details</p></div>
+  </div>
+</section>
 
-          <div class="contact-item">
-            <span class="contact-item-icon">&#9742;</span>
-            <div class="contact-item-text">
-              <a href="tel:+13522156495">(352) 215-6495</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <span class="contact-item-icon">&#9679;</span>
-            <div class="contact-item-text">
-              111 SW 3rd St<br>
-              Gainesville, FL 32601
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <span class="contact-item-icon">&#9679;</span>
-            <div class="contact-item-text">
-              Hours: Contact us for details
-            </div>
-          </div>
-
-          <a
-            href="https://www.google.com/maps/search/The%20Line%20Defined%20Tattoo%20111%20SW%203rd%20St%2C%20Gainesville%2C%20FL%2032601"
-            class="btn-directions"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Get Directions</a>
-        </div>
-
-        <div>
-          <div class="rating-card">
-            <p class="rating-title">Google Rating</p>
-            <div class="rating-score">5.0</div>
-            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div class="rating-count">Based on 2 reviews</div>
-            <div class="rating-rule"></div>
-            <p class="rating-quote">
-              "A perfect 5-star rating reflects the care, professionalism, and artistry that clients experience at The Line Defined Tattoo."
-            </p>
-            <p class="rating-source">&#9679; Google Maps</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <p class="footer-brand">The Line Defined Tattoo</p>
-      <p class="footer-address">111 SW 3rd St, Gainesville, FL 32601 &nbsp;&bull;&nbsp; (352) 215-6495</p>
-      <ul class="footer-nav">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
+<section class="contact wrap" id="contact">
+  <p class="kick reveal">Get In Touch</p>
+  <h2 class="htitle cond reveal">Visit The Studio</h2>
+  <div class="c-grid reveal">
+    <div class="box">
+      <ul class="info">
+        <li><div class="lbl">Address</div><div class="val">111 SW 3rd St<br>Gainesville, FL 32601</div></li>
+        <li><div class="lbl">Phone</div><div class="val"><a href="tel:+13522156495">(352) 215-6495</a></div></li>
+        <li><div class="lbl">Hours</div><div class="val">Contact us for current hours</div></li>
       </ul>
-      <p class="footer-copy">&copy; 2026 The Line Defined Tattoo. All rights reserved.</p>
+      <a href="https://www.google.com/maps/search/The%20Line%20Defined%20Tattoo%20111%20SW%203rd%20St%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer" class="btn solid">Get Directions</a>
     </div>
-  </footer>
+    <div class="box">
+      <div class="rate">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="num cond">5.0</div>
+        <div class="cnt">Based on 2 Google reviews</div>
+      </div>
+      <a href="tel:+13522156495" class="btn ghost">Call (352) 215-6495</a>
+    </div>
+  </div>
+</section>
 
-  <script>
-    function toggleNav() {
-      var nav = document.getElementById('mobile-nav');
-      nav.classList.toggle('open');
-    }
-    function closeNav() {
-      document.getElementById('mobile-nav').classList.remove('open');
-    }
-  </script>
+<footer>
+  <div class="flogo">The Line Defined Tattoo</div>
+  <div class="faddr">111 SW 3rd St, Gainesville, FL 32601 &nbsp;&bull;&nbsp; (352) 215-6495</div>
+  <div class="fbot">&copy; 2026 The Line Defined Tattoo &mdash; Custom Tattoo Studio, Gainesville, FL</div>
+</footer>
 
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var burger=document.getElementById("burger"),nav=document.getElementById("nav");
+  burger.addEventListener("click",function(){nav.classList.toggle("open");});
+  nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){nav.classList.remove("open");});});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+  if(!reduce){
+    document.querySelectorAll(".magnetic").forEach(function(b){
+      b.addEventListener("mousemove",function(e){var r=b.getBoundingClientRect();b.style.transform="translate("+((e.clientX-r.left-r.width/2)*.22)+"px,"+((e.clientY-r.top-r.height/2)*.22)+"px)";});
+      b.addEventListener("mouseleave",function(){b.style.transform="";});
+    });
+  }
+})();
+</script>
 </body>
 </html>
