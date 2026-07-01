@@ -1,987 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dean G Poole & Co | Accountant | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy: #1a2744;
-      --navy-light: #243260;
-      --gold: #c9a84c;
-      --gold-light: #e8c96a;
-      --gray-light: #f4f5f7;
-      --gray-mid: #e2e4ea;
-      --gray-text: #5a6072;
-      --white: #ffffff;
-      --text-dark: #1a2744;
-      --font-main: Georgia, 'Times New Roman', serif;
-      --font-sans: 'Helvetica Neue', Arial, sans-serif;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 68px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--gold);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-main);
-      font-size: 1.15rem;
-      font-weight: bold;
-      color: var(--navy);
-      letter-spacing: -1px;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-text {
-      font-family: var(--font-main);
-      font-size: 1.05rem;
-      color: var(--white);
-      font-weight: normal;
-      line-height: 1.2;
-    }
-
-    .nav-logo-text span {
-      display: block;
-      font-size: 0.72rem;
-      color: var(--gold-light);
-      font-family: var(--font-sans);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 30px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.82);
-      text-decoration: none;
-      font-size: 0.88rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold-light);
-    }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--navy) !important;
-      padding: 8px 18px;
-      border-radius: 4px;
-      font-weight: bold;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--gold-light) !important;
-      color: var(--navy) !important;
-    }
-
-    /* Hamburger */
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-      background: none;
-      border: none;
-    }
-
-    .nav-hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* Mobile menu */
-    .nav-mobile-menu {
-      display: none;
-      position: fixed;
-      top: 68px;
-      left: 0;
-      right: 0;
-      background: var(--navy-light);
-      padding: 20px 5%;
-      z-index: 99;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    }
-
-    .nav-mobile-menu.open {
-      display: block;
-    }
-
-    .nav-mobile-menu a {
-      display: block;
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      font-size: 1rem;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .nav-mobile-menu a:last-child {
-      border-bottom: none;
-      color: var(--gold-light);
-      font-weight: bold;
-    }
-
-    /* ===== HERO ===== */
-    #hero {
-      margin-top: 68px;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #2a3d6e 100%);
-      color: var(--white);
-      min-height: 520px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 5% 80px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    /* Decorative grid lines */
-    #hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 50px 50px;
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(201,168,76,0.18);
-      border: 1px solid rgba(201,168,76,0.45);
-      color: var(--gold-light);
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 24px;
-      font-family: var(--font-sans);
-    }
-
-    .hero-title {
-      font-family: var(--font-main);
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: normal;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      color: var(--white);
-    }
-
-    .hero-title em {
-      color: var(--gold-light);
-      font-style: normal;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 36px;
-      line-height: 1.6;
-      max-width: 560px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--navy);
-      padding: 14px 30px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-light);
-      transform: translateY(-1px);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      padding: 14px 30px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      border: 1.5px solid rgba(255,255,255,0.45);
-      transition: border-color 0.2s, color 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--gold-light);
-      color: var(--gold-light);
-      transform: translateY(-1px);
-    }
-
-    /* ===== TRUST BAR ===== */
-    .trust-bar {
-      background: var(--gray-mid);
-      padding: 18px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: var(--gray-text);
-      letter-spacing: 0.03em;
-    }
-
-    .trust-icon {
-      color: var(--gold);
-      font-size: 1rem;
-    }
-
-    /* ===== SECTIONS SHARED ===== */
-    section {
-      padding: 80px 5%;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-family: var(--font-sans);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-family: var(--font-main);
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: normal;
-      color: var(--navy);
-      margin-bottom: 16px;
-      line-height: 1.25;
-    }
-
-    .section-divider {
-      width: 48px;
-      height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin-bottom: 24px;
-    }
-
-    /* ===== ABOUT ===== */
-    #about {
-      background: var(--white);
-    }
-
-    .about-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-content p {
-      color: var(--gray-text);
-      font-size: 1.02rem;
-      margin-bottom: 18px;
-      line-height: 1.75;
-    }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    .stat-card {
-      background: var(--gray-light);
-      border-radius: 8px;
-      padding: 28px 24px;
-      text-align: center;
-      border-top: 3px solid var(--gold);
-    }
-
-    .stat-number {
-      font-family: var(--font-main);
-      font-size: 2rem;
-      color: var(--navy);
-      font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .stat-label {
-      font-size: 0.82rem;
-      color: var(--gray-text);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* ===== SERVICES ===== */
-    #services {
-      background: var(--gray-light);
-    }
-
-    .services-header {
-      max-width: 1100px;
-      margin: 0 auto 48px;
-    }
-
-    .services-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 8px;
-      padding: 32px 28px;
-      box-shadow: 0 2px 12px rgba(26,39,68,0.07);
-      border-bottom: 3px solid transparent;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      border-bottom-color: var(--gold);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(26,39,68,0.12);
-    }
-
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(201,168,76,0.12);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-      font-size: 1.4rem;
-    }
-
-    .service-title {
-      font-family: var(--font-main);
-      font-size: 1.12rem;
-      color: var(--navy);
-      margin-bottom: 10px;
-    }
-
-    .service-desc {
-      font-size: 0.9rem;
-      color: var(--gray-text);
-      line-height: 1.65;
-    }
-
-    .service-detail {
-      margin-top: 14px;
-      font-size: 0.82rem;
-      color: var(--gold);
-      font-style: italic;
-    }
-
-    /* ===== CONTACT ===== */
-    #contact {
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    .contact-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    #contact .section-label {
-      color: var(--gold-light);
-    }
-
-    #contact .section-title {
-      color: var(--white);
-    }
-
-    #contact .section-divider {
-      background: var(--gold);
-    }
-
-    .contact-intro {
-      color: rgba(255,255,255,0.7);
-      font-size: 1rem;
-      line-height: 1.7;
-      margin-bottom: 32px;
-    }
-
-    .contact-info-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .contact-info-item {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .contact-info-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(201,168,76,0.15);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-info-text strong {
-      display: block;
-      color: var(--gold-light);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 4px;
-    }
-
-    .contact-info-text span,
-    .contact-info-text a {
-      color: rgba(255,255,255,0.85);
-      font-size: 0.97rem;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-info-text a:hover {
-      color: var(--gold-light);
-    }
-
-    .contact-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px;
-      padding: 36px 32px;
-    }
-
-    .contact-card-title {
-      font-family: var(--font-main);
-      font-size: 1.35rem;
-      color: var(--white);
-      margin-bottom: 6px;
-    }
-
-    .contact-card-sub {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 28px;
-    }
-
-    /* Rating widget */
-    .rating-widget {
-      background: rgba(201,168,76,0.1);
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: 8px;
-      padding: 20px 24px;
-      margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .rating-score {
-      font-family: var(--font-main);
-      font-size: 2.4rem;
-      color: var(--gold-light);
-      font-weight: bold;
-      line-height: 1;
-    }
-
-    .rating-details strong {
-      display: block;
-      color: var(--white);
-      font-size: 0.85rem;
-      margin-bottom: 4px;
-    }
-
-    .stars {
-      color: var(--gold);
-      font-size: 1.1rem;
-      letter-spacing: 2px;
-    }
-
-    .rating-count {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.5);
-      margin-top: 2px;
-    }
-
-    .contact-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--navy);
-      padding: 14px 24px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.95rem;
-      text-align: center;
-      transition: background 0.2s;
-      display: block;
-    }
-
-    .btn-gold:hover {
-      background: var(--gold-light);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: rgba(255,255,255,0.8);
-      padding: 13px 24px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      text-align: center;
-      border: 1.5px solid rgba(255,255,255,0.25);
-      transition: border-color 0.2s, color 0.2s;
-      display: block;
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--gold-light);
-      color: var(--gold-light);
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: #111a2e;
-      color: rgba(255,255,255,0.45);
-      text-align: center;
-      padding: 28px 5%;
-      font-size: 0.82rem;
-    }
-
-    footer strong {
-      color: rgba(255,255,255,0.7);
-    }
-
-    footer a {
-      color: var(--gold);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .about-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .nav-links {
-        display: none;
-      }
-
-      .nav-hamburger {
-        display: flex;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .about-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      section {
-        padding: 56px 5%;
-      }
-
-      .trust-bar {
-        gap: 20px;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dean G Poole &amp; Co | Accountant | Gainesville, FL</title>
+<meta name="description" content="Dean G Poole & Co — accounting services in Gainesville, Florida. 2531 NW 41 St Ste D. Call (352) 377-7905.">
+<style>
+  :root{
+    --ink:#0a1220; --panel:#0f1a2e; --panel2:#12203a; --line:rgba(120,160,220,.16);
+    --fg:#e8eefb; --muted:#93a4c4; --accent:#37e3d5; --accent2:#5b8cff; --gold:#ffce6b;
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink); color:var(--fg);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      linear-gradient(var(--line) 1px,transparent 1px) 0 0/44px 44px,
+      linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/44px 44px;
+    -webkit-mask-image:radial-gradient(circle at 30% 10%,#000,transparent 75%);
+    mask-image:radial-gradient(circle at 30% 10%,#000,transparent 75%);
+    opacity:.6;
+  }
+  .mono{font-family:ui-monospace,"Cascadia Mono","SFMono-Regular",Menlo,Consolas,monospace}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+  header{
+    position:sticky;top:0;z-index:50;
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    background:linear-gradient(180deg,rgba(10,18,32,.92),rgba(10,18,32,.6));
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.02em}
+  .mark{
+    width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04121a;font-weight:800;
+    box-shadow:0 0 0 1px rgba(255,255,255,.15),0 8px 26px rgba(55,227,213,.28);
+  }
+  .nav a.lnk{color:var(--muted);text-decoration:none;font-size:.9rem;margin-left:22px;transition:color .2s}
+  .nav a.lnk:hover{color:var(--fg)}
+  .nav-links{display:flex;align-items:center}
+  .cta{
+    display:inline-flex;align-items:center;gap:8px;margin-left:24px;
+    padding:10px 16px;border-radius:11px;text-decoration:none;font-weight:700;font-size:.9rem;
+    color:#04121a;background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 8px 24px rgba(55,227,213,.3);transition:transform .18s ease,box-shadow .18s;
+  }
+  .cta:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(55,227,213,.45)}
+  @media(max-width:760px){.nav-links a.lnk{display:none}}
+
+  .hero{padding:54px 0 12px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;color:var(--accent);font-size:.78rem;
+    letter-spacing:.28em;text-transform:uppercase;margin-bottom:18px;
+  }
+  .eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{opacity:.4;transform:scale(1.0)}50%{opacity:1;transform:scale(1.4)}}
+  h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.02;letter-spacing:-.02em;font-weight:800}
+  h1 .grad{
+    background:linear-gradient(100deg,var(--accent),var(--accent2) 60%,var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    background-size:200% 100%;animation:slide 7s ease infinite;
+  }
+  @keyframes slide{0%,100%{background-position:0 0}50%{background-position:100% 0}}
+  .lede{max-width:640px;color:var(--muted);font-size:1.08rem;margin-top:16px}
+
+  .bento{
+    display:grid;gap:16px;margin:36px 0 60px;
+    grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(96px,auto);
+  }
+  .cell{
+    position:relative;border:1px solid var(--line);border-radius:var(--r);
+    background:linear-gradient(160deg,var(--panel),var(--panel2));
+    padding:22px;overflow:hidden;
+    opacity:0;transform:translateY(22px) scale(.985);
+    transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1),border-color .3s;
+  }
+  .cell.in{opacity:1;transform:none}
+  .cell:hover{border-color:rgba(55,227,213,.5)}
+  .cell::after{
+    content:"";position:absolute;inset:0;border-radius:var(--r);opacity:0;transition:opacity .4s;
+    background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(55,227,213,.14),transparent 60%);
+    pointer-events:none;
+  }
+  .cell:hover::after{opacity:1}
+  .c-title{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+
+  .cA{grid-column:span 7;grid-row:span 3;display:flex;flex-direction:column;justify-content:space-between}
+  .cA h2{font-size:clamp(1.5rem,2.6vw,2.1rem);letter-spacing:-.01em;margin:10px 0 6px}
+  .cA p{color:var(--muted);max-width:46ch}
+  .id-row{display:flex;gap:24px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .id-row div span{display:block;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .id-row div b{font-weight:700;font-size:1.02rem}
+
+  .cRate{grid-column:span 5;grid-row:span 2;display:flex;flex-direction:column;justify-content:center}
+  .rate-top{display:flex;align-items:baseline;gap:14px}
+  .rating-score{font-size:3.4rem;font-weight:800;line-height:1;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stars{display:flex;gap:4px}
+  .stars svg{width:22px;height:22px;fill:var(--gold);filter:drop-shadow(0 0 6px rgba(255,206,107,.5))}
+  .rating-count{color:var(--muted);font-size:.92rem;margin-top:10px}
+
+  .cCall{grid-column:span 5;grid-row:span 1;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .cCall .num{font-size:1.4rem;font-weight:800;letter-spacing:.01em}
+  .mini-cta{padding:9px 15px;border-radius:11px;background:var(--accent);color:#04121a;text-decoration:none;font-weight:700;white-space:nowrap;transition:transform .18s}
+  .mini-cta:hover{transform:translateY(-2px)}
+
+  .cStat{grid-column:span 3;grid-row:span 1;display:flex;flex-direction:column;justify-content:center}
+  .cStat .big{font-size:2rem;font-weight:800}
+  .cStat .lab{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+  .cMap{grid-column:span 6;grid-row:span 2}
+  .cMap .map-grid{position:relative;height:120px;border-radius:12px;overflow:hidden;margin-top:14px;border:1px solid var(--line);background:
+     linear-gradient(rgba(91,140,255,.18) 1px,transparent 1px) 0 0/26px 26px,
+     linear-gradient(90deg,rgba(91,140,255,.18) 1px,transparent 1px) 0 0/26px 26px, #0b1526}
+  .pin{position:absolute;left:52%;top:46%;width:16px;height:16px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(55,227,213,.22),0 0 20px var(--accent);transform:translate(-50%,-50%)}
+  .pin::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--accent);animation:ripple 2.6s infinite}
+  @keyframes ripple{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+  .cMap a.maplink{display:inline-block;margin-top:12px;color:var(--accent);text-decoration:none;font-size:.9rem;font-weight:600}
+  .cMap a.maplink:hover{text-decoration:underline}
+
+  .cSvc{grid-column:span 6;grid-row:span 2}
+  .svc-list{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:14px}
+  .svc-list div{display:flex;align-items:center;gap:9px;font-size:.95rem;color:#d3ddf1}
+  .svc-list .tick{width:16px;height:16px;flex:none;border-radius:5px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#04121a;font-size:11px;font-weight:900}
+
+  .section{padding:56px 0}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:26px;border-bottom:1px solid var(--line);padding-bottom:14px}
+  .sec-head h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.01em}
+  .sec-head .idx{color:var(--accent)}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .card{border:1px solid var(--line);border-radius:14px;padding:22px;background:linear-gradient(160deg,var(--panel),var(--panel2));transition:transform .3s,border-color .3s;opacity:0;transform:translateY(20px)}
+  .card.in{opacity:1;transform:none}
+  .card:hover{transform:translateY(-6px);border-color:rgba(55,227,213,.5)}
+  .card .n{font-family:ui-monospace,monospace;color:var(--accent);font-size:.8rem}
+  .card h3{margin:8px 0 8px;font-size:1.15rem}
+  .card p{color:var(--muted);font-size:.94rem}
+
+  .contact-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  @media(max-width:820px){.contact-grid{grid-template-columns:1fr}}
+  .info{border:1px solid var(--line);border-radius:16px;padding:26px;background:linear-gradient(160deg,var(--panel),var(--panel2))}
+  .info ul{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:8px}
+  .info li{display:flex;gap:14px;align-items:flex-start}
+  .info .ic{width:40px;height:40px;flex:none;border-radius:11px;display:grid;place-items:center;background:rgba(55,227,213,.12);border:1px solid var(--line)}
+  .info .ic svg{width:19px;height:19px;stroke:var(--accent);fill:none;stroke-width:1.8}
+  .info strong{display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .info span,.info a{color:var(--fg);text-decoration:none}
+  .info a:hover{color:var(--accent)}
+  .cta-panel{border:1px solid var(--line);border-radius:16px;padding:30px;display:flex;flex-direction:column;justify-content:center;background:radial-gradient(120% 120% at 100% 0,rgba(55,227,213,.16),transparent 55%),linear-gradient(160deg,var(--panel),var(--panel2))}
+  .cta-panel h3{font-size:1.5rem;margin-bottom:8px}
+  .cta-panel p{color:var(--muted);margin-bottom:20px}
+  .btn-lg{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 22px;border-radius:13px;font-weight:800;text-decoration:none;color:#04121a;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 30px rgba(55,227,213,.35);transition:transform .18s}
+  .btn-lg:hover{transform:translateY(-3px)}
+
+  footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:.9rem}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media(max-width:820px){
+    .cA,.cRate,.cCall,.cStat,.cMap,.cSvc{grid-column:1/-1;grid-row:auto}
+    .svc-list{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .cell,.card{opacity:1!important;transform:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <a href="#hero" class="nav-logo">
-      <div class="nav-logo-icon">DGP</div>
-      <div class="nav-logo-text">
-        Dean G Poole & Co
-        <span>Certified Public Accountant</span>
-      </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-    </ul>
-    <button class="nav-hamburger" aria-label="Open menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
-
-  <div class="nav-mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="document.getElementById('mobileMenu').classList.remove('open')">About</a>
-    <a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a>
-    <a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact Us</a>
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="mark">DP</span> Dean&nbsp;G&nbsp;Poole&nbsp;&amp;&nbsp;Co</div>
+    <nav class="nav-links">
+      <a class="lnk" href="#services">Services</a>
+      <a class="lnk" href="#firm">Firm</a>
+      <a class="lnk" href="#contact">Contact</a>
+      <a class="cta" href="tel:+13523777905">Call (352) 377-7905</a>
+    </nav>
   </div>
+</header>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">Gainesville, Florida</div>
-      <h1 class="hero-title">
-        Trusted Accounting &amp; Tax Solutions<br>
-        for <em>Individuals &amp; Businesses</em>
-      </h1>
-      <p class="hero-tagline">
-        Professional, accurate, and personal financial guidance when it matters most.
-        Dean G Poole &amp; Co is here to help you navigate every number with confidence.
-      </p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary">Get in Touch</a>
-        <a href="#services" class="btn-outline">View Our Services</a>
-      </div>
-    </div>
-  </section>
+<main>
+  <section class="hero wrap">
+    <span class="eyebrow"><span class="dot"></span>Accounting &middot; Gainesville, FL</span>
+    <h1>Precision accounting for <span class="grad">Gainesville businesses &amp; families.</span></h1>
+    <p class="lede">Dean G Poole &amp; Co is a Gainesville-based accounting practice built on accuracy, discretion, and personal service.</p>
 
-  <!-- TRUST BAR -->
-  <div class="trust-bar">
-    <div class="trust-item">
-      <span class="trust-icon">&#9733;</span>
-      <span>5.0 Google Rating</span>
-    </div>
-    <div class="trust-item">
-      <span class="trust-icon">&#10003;</span>
-      <span>Local Gainesville Practice</span>
-    </div>
-    <div class="trust-item">
-      <span class="trust-icon">&#10003;</span>
-      <span>Individual &amp; Business Clients</span>
-    </div>
-    <div class="trust-item">
-      <span class="trust-icon">&#10003;</span>
-      <span>Personalized Service</span>
-    </div>
-  </div>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-grid">
-      <div class="about-content">
-        <div class="section-label">About Us</div>
-        <h2 class="section-title">A Trusted Name in Gainesville Accounting</h2>
-        <div class="section-divider"></div>
-        <p>
-          Dean G Poole &amp; Co is a full-service accounting firm serving individuals, families, and businesses throughout the Gainesville area. Our approach combines meticulous attention to detail with a commitment to clear, straightforward communication so clients always understand where they stand financially.
-        </p>
-        <p>
-          Whether you need help with annual tax preparation, small business bookkeeping, or longer-term financial planning, our team provides reliable guidance tailored to your unique situation. We take pride in building lasting relationships built on trust and accuracy.
-        </p>
-        <p>
-          Located conveniently in northwest Gainesville, we welcome clients to schedule a consultation to discuss how we can best serve their accounting needs.
-        </p>
-      </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <span class="stat-number">5.0</span>
-          <span class="stat-label">Google Rating</span>
+    <div class="bento" id="bento">
+      <div class="cell cA">
+        <div>
+          <div class="c-title">The Firm</div>
+          <h2>A trusted name in Gainesville accounting.</h2>
+          <p>Individualized attention for every return, ledger, and statement — handled with clinical accuracy from our office on NW 41 St.</p>
         </div>
-        <div class="stat-card">
-          <span class="stat-number">&#10003;</span>
-          <span class="stat-label">Verified Reviews</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number">NW</span>
-          <span class="stat-label">Gainesville Location</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number">&#128222;</span>
-          <span class="stat-label">Call Anytime</span>
+        <div class="id-row">
+          <div><span>Discipline</span><b>Accounting</b></div>
+          <div><span>Location</span><b>Gainesville, FL</b></div>
+          <div><span>Direct line</span><b>(352) 377-7905</b></div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="services-header">
-      <div class="section-label">What We Offer</div>
-      <h2 class="section-title">Our Accounting Services</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="services-grid">
-
-      <div class="service-card">
-        <div class="service-icon">&#128196;</div>
-        <div class="service-title">Tax Preparation &amp; Filing</div>
-        <p class="service-desc">
-          Accurate and timely preparation of federal and state income tax returns for individuals and businesses, ensuring compliance and maximizing allowable deductions.
-        </p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">&#128200;</div>
-        <div class="service-title">Bookkeeping &amp; Accounting</div>
-        <p class="service-desc">
-          Ongoing bookkeeping services to keep your financial records organized, up to date, and ready for tax season or any business decision.
-        </p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">&#128181;</div>
-        <div class="service-title">Payroll Services</div>
-        <p class="service-desc">
-          Reliable payroll processing for small and mid-size businesses, including calculation, reporting, and compliance with federal and Florida state requirements.
-        </p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">&#128202;</div>
-        <div class="service-title">Financial Statement Preparation</div>
-        <p class="service-desc">
-          Preparation of clear, professional financial statements including income statements, balance sheets, and cash flow reports to inform your business decisions.
-        </p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">&#128203;</div>
-        <div class="service-title">Tax Planning &amp; Strategy</div>
-        <p class="service-desc">
-          Proactive tax planning throughout the year to identify opportunities, minimize liability, and help you reach your financial goals more efficiently.
-        </p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">&#128188;</div>
-        <div class="service-title">Business Advisory Services</div>
-        <p class="service-desc">
-          Guidance on business structure, entity formation, budgeting, and cash flow management to support growth and long-term financial health.
-        </p>
-        <div class="service-detail">Contact us for details</div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="contact-grid">
-      <div>
-        <div class="section-label">Reach Out</div>
-        <h2 class="section-title">Contact Dean G Poole &amp; Co</h2>
-        <div class="section-divider"></div>
-        <p class="contact-intro">
-          Ready to get started or have a question? We'd love to hear from you. Reach out by phone or stop by our office in northwest Gainesville.
-        </p>
-        <ul class="contact-info-list">
-          <li class="contact-info-item">
-            <div class="contact-info-icon">&#128205;</div>
-            <div class="contact-info-text">
-              <strong>Address</strong>
-              <span>2531 NW 41 St Ste D<br>Gainesville, FL</span>
-            </div>
-          </li>
-          <li class="contact-info-item">
-            <div class="contact-info-icon">&#128222;</div>
-            <div class="contact-info-text">
-              <strong>Phone</strong>
-              <a href="tel:+13523777905">(352) 377-7905</a>
-            </div>
-          </li>
-          <li class="contact-info-item">
-            <div class="contact-info-icon">&#128337;</div>
-            <div class="contact-info-text">
-              <strong>Hours</strong>
-              <span>Contact us for details</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-card-title">Visit or Call Us Today</div>
-        <div class="contact-card-sub">We're here to help with all your accounting needs.</div>
-
-        <div class="rating-widget">
+      <div class="cell cRate">
+        <div class="c-title">Client Rating</div>
+        <div class="rate-top">
           <div class="rating-score">5.0</div>
-          <div class="rating-details">
-            <strong>Google Maps Rating</strong>
-            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div>
+            <div class="stars" aria-label="5.0 out of 5 stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.8L12 17.8 5.8 20.8l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.8L12 17.8 5.8 20.8l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.8L12 17.8 5.8 20.8l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.8L12 17.8 5.8 20.8l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.8L12 17.8 5.8 20.8l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+            </div>
             <div class="rating-count">Based on 2 reviews</div>
           </div>
         </div>
+      </div>
 
-        <div class="contact-actions">
-          <a href="https://www.google.com/maps/search/Dean%20G%20Poole%20%26%20Co%202531%20NW%2041%20St%20Ste%20D" target="_blank" rel="noopener" class="btn-gold">
-            &#128205; Get Directions
-          </a>
-          <a href="tel:+13523777905" class="btn-ghost">
-            &#128222; Call (352) 377-7905
-          </a>
+      <div class="cell cCall">
+        <div>
+          <div class="c-title">Call the office</div>
+          <div class="num">(352) 377-7905</div>
+        </div>
+        <a class="mini-cta" href="tel:+13523777905">Dial</a>
+      </div>
+
+      <div class="cell cStat">
+        <div class="big"><span class="counter" data-count="2">0</span></div>
+        <div class="lab">Verified Reviews</div>
+      </div>
+
+      <div class="cell cStat">
+        <div class="big">1&nbsp;on&nbsp;1</div>
+        <div class="lab">Personal Service</div>
+      </div>
+
+      <div class="cell cMap">
+        <div class="c-title">Where to find us</div>
+        <div class="map-grid"><div class="pin"></div></div>
+        <a class="maplink" href="https://www.google.com/maps/search/Dean%20G%20Poole%20%26%20Co%202531%20NW%2041%20St%20Ste%20D" target="_blank" rel="noopener">2531 NW 41 St Ste D, Gainesville, FL &rarr;</a>
+      </div>
+
+      <div class="cell cSvc">
+        <div class="c-title">Practice areas</div>
+        <div class="svc-list">
+          <div><span class="tick">&#10003;</span>Tax preparation &amp; filing</div>
+          <div><span class="tick">&#10003;</span>Bookkeeping &amp; accounting</div>
+          <div><span class="tick">&#10003;</span>Financial statements</div>
+          <div><span class="tick">&#10003;</span>Tax planning</div>
+          <div><span class="tick">&#10003;</span>Small business support</div>
+          <div><span class="tick">&#10003;</span>Individual returns</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div>
-        <strong>Dean G Poole &amp; Co</strong> &mdash; Accountant &mdash; Gainesville, FL
-      </div>
-      <div>
-        2531 NW 41 St Ste D &nbsp;|&nbsp;
-        <a href="tel:+13523777905">(352) 377-7905</a>
-      </div>
-      <div>&copy; 2026 Dean G Poole &amp; Co. All rights reserved.</div>
+  <section class="section wrap" id="services">
+    <div class="sec-head"><h2>Our accounting services</h2><span class="idx mono">01 / SERVICES</span></div>
+    <div class="cards" id="svc">
+      <div class="card"><div class="n">S-01</div><h3>Tax Preparation &amp; Filing</h3><p>Accurate individual and business tax preparation, handled with attention to every detail. Contact us for details.</p></div>
+      <div class="card"><div class="n">S-02</div><h3>Bookkeeping &amp; Accounting</h3><p>Organized, dependable bookkeeping to keep your records clean and current. Contact us for details.</p></div>
+      <div class="card"><div class="n">S-03</div><h3>Financial Statement Preparation</h3><p>Clear financial statements that give you a precise view of where things stand. Contact us for details.</p></div>
+      <div class="card"><div class="n">S-04</div><h3>Tax Planning &amp; Strategy</h3><p>Forward-looking planning to help you approach each year with confidence. Contact us for details.</p></div>
     </div>
-  </footer>
+  </section>
 
+  <section class="section wrap" id="firm">
+    <div class="sec-head"><h2>Why work with Dean G Poole &amp; Co</h2><span class="idx mono">02 / FIRM</span></div>
+    <div class="cards" id="firmcards">
+      <div class="card"><div class="n">A</div><h3>Local &amp; accessible</h3><p>A Gainesville office you can reach directly — no call centers, no run-around.</p></div>
+      <div class="card"><div class="n">B</div><h3>Precision first</h3><p>Careful, methodical work on every engagement, because accuracy is the point.</p></div>
+      <div class="card"><div class="n">C</div><h3>Personal service</h3><p>Your accounts handled with the individual attention they deserve.</p></div>
+    </div>
+  </section>
+
+  <section class="section wrap" id="contact">
+    <div class="sec-head"><h2>Contact the office</h2><span class="idx mono">03 / CONTACT</span></div>
+    <div class="contact-grid">
+      <div class="info">
+        <ul>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><strong>Address</strong><span>2531 NW 41 St Ste D, Gainesville, FL</span></div></li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.6A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/></svg></span><div><strong>Phone</strong><a href="tel:+13523777905">(352) 377-7905</a></div></li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><strong>Hours</strong><span>Contact us for details</span></div></li>
+        </ul>
+      </div>
+      <div class="cta-panel">
+        <h3>Let's talk about your books.</h3>
+        <p>Reach out to Dean G Poole &amp; Co to discuss how we can help.</p>
+        <a class="btn-lg" href="tel:+13523777905">Call (352) 377-7905</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>&copy; <span id="yr">2026</span> Dean G Poole &amp; Co &nbsp;|&nbsp; 2531 NW 41 St Ste D, Gainesville, FL</div>
+    <div class="mono">Accounting &middot; Gainesville, FL</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.counter').forEach(function(c){
+        animate(c, parseFloat(c.getAttribute('data-count')||'0'));
+      });
+      io.unobserve(e.target);
+    });
+  },{threshold:.2});
+  document.querySelectorAll('.cell,.card').forEach(function(el){ io.observe(el); });
+
+  function animate(el, target){
+    if(reduce){ el.textContent = target; return; }
+    var start=null, dur=1100;
+    function step(t){ if(!start)start=t; var p=Math.min((t-start)/dur,1); el.textContent=Math.round(target*(1-Math.pow(1-p,3))); if(p<1)requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+
+  if(!reduce){
+    document.querySelectorAll('.cell').forEach(function(c){
+      c.addEventListener('pointermove', function(e){
+        var r=c.getBoundingClientRect();
+        c.style.setProperty('--mx',(e.clientX-r.left)+'px');
+        c.style.setProperty('--my',(e.clientY-r.top)+'px');
+      });
+    });
+  }
+})();
+</script>
 </body>
 </html>
