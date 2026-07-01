@@ -1,1291 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Partners Insurance Agency | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy: #1a2e4a;
-      --navy-dark: #112136;
-      --navy-light: #243f63;
-      --blue: #2c6fad;
-      --blue-light: #3a85cc;
-      --gold: #c49a22;
-      --gold-light: #e0b52a;
-      --off-white: #f5f7fa;
-      --light-gray: #e8ecf1;
-      --mid-gray: #8a9bb0;
-      --dark-text: #1a2e4a;
-      --white: #ffffff;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Georgia', serif;
-      color: var(--dark-text);
-      background: var(--white);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: var(--navy-dark);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 68px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--gold);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 24px;
-      height: 24px;
-      fill: var(--navy-dark);
-    }
-
-    .nav-logo-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .nav-brand {
-      font-family: 'Georgia', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.03em;
-      line-height: 1.2;
-    }
-
-    .nav-tagline {
-      font-size: 0.68rem;
-      color: var(--gold);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--light-gray);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.04em;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold);
-    }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--navy-dark) !important;
-      padding: 8px 18px;
-      border-radius: 4px;
-      font-weight: 700 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--gold-light) !important;
-      color: var(--navy-dark) !important;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 68px;
-      min-height: 88vh;
-      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 45%, var(--navy-light) 100%);
-      position: relative;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 20% 80%, rgba(196,154,34,0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(44,111,173,0.2) 0%, transparent 50%);
-    }
-
-    .hero-pattern {
-      position: absolute;
-      inset: 0;
-      opacity: 0.04;
-      background-image: repeating-linear-gradient(
-        45deg,
-        var(--white) 0px,
-        var(--white) 1px,
-        transparent 1px,
-        transparent 60px
-      ),
-      repeating-linear-gradient(
-        -45deg,
-        var(--white) 0px,
-        var(--white) 1px,
-        transparent 1px,
-        transparent 60px
-      );
-    }
-
-    .hero-content {
-      position: relative;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 80px 24px;
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      align-items: center;
-      gap: 60px;
-      width: 100%;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(196,154,34,0.15);
-      border: 1px solid rgba(196,154,34,0.4);
-      color: var(--gold-light);
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 20px;
-      margin-bottom: 24px;
-    }
-
-    .hero-badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--gold);
-      border-radius: 50%;
-    }
-
-    .hero h1 {
-      font-family: 'Georgia', serif;
-      font-size: clamp(2rem, 4.5vw, 3.4rem);
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1.2;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 span {
-      color: var(--gold);
-    }
-
-    .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 36px;
-      max-width: 500px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--navy-dark);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 14px 28px;
-      border-radius: 5px;
-      letter-spacing: 0.04em;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      display: inline-block;
-      background: transparent;
-      color: var(--white);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.95rem;
-      padding: 14px 28px;
-      border-radius: 5px;
-      border: 2px solid rgba(255,255,255,0.4);
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .hero-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 36px 32px;
-      backdrop-filter: blur(8px);
-    }
-
-    .hero-card-title {
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-
-    .shield-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .shield-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: rgba(255,255,255,0.85);
-      font-family: Arial, sans-serif;
-      font-size: 0.92rem;
-    }
-
-    .shield-list li::before {
-      content: '';
-      width: 20px;
-      height: 20px;
-      background: var(--gold);
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%231a2e4a'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
-      background-size: 13px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-
-    .hero-divider {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      margin: 24px 0;
-    }
-
-    .hero-phone {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .hero-phone a {
-      color: var(--white);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      transition: color 0.2s;
-    }
-
-    .hero-phone a:hover {
-      color: var(--gold);
-    }
-
-    .hero-phone-label {
-      font-size: 0.75rem;
-      color: var(--mid-gray);
-      font-family: Arial, sans-serif;
-    }
-
-    /* ── TRUST BAR ── */
-    .trust-bar {
-      background: var(--navy);
-      padding: 20px 24px;
-    }
-
-    .trust-bar-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: rgba(255,255,255,0.7);
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-    }
-
-    .trust-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--gold);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* ── SECTION SHARED ── */
-    section {
-      padding: 90px 24px;
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: Arial, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-family: 'Georgia', serif;
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      color: var(--navy-dark);
-      margin-bottom: 16px;
-      line-height: 1.25;
-    }
-
-    .section-title span {
-      color: var(--blue);
-    }
-
-    .section-divider {
-      width: 56px;
-      height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin-bottom: 28px;
-    }
-
-    /* ── ABOUT ── */
-    .about {
-      background: var(--off-white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: #3d5068;
-      font-size: 1.05rem;
-      margin-bottom: 18px;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-feature-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .about-feature-list li {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .feature-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--navy);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .feature-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--gold);
-    }
-
-    .feature-text strong {
-      display: block;
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      color: var(--navy-dark);
-      margin-bottom: 3px;
-    }
-
-    .feature-text span {
-      font-size: 0.85rem;
-      color: var(--mid-gray);
-      font-family: Arial, sans-serif;
-    }
-
-    /* ── SERVICES ── */
-    .services {
-      background: var(--white);
-    }
-
-    .services-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
-    .services-header .section-divider {
-      margin: 0 auto 0;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-
-    .service-card {
-      background: var(--off-white);
-      border: 1px solid var(--light-gray);
-      border-radius: 10px;
-      padding: 32px 28px;
-      transition: box-shadow 0.25s, transform 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transition: transform 0.25s;
-      transform-origin: left;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 32px rgba(26,46,74,0.12);
-      transform: translateY(-4px);
-    }
-
-    .service-card:hover::after {
-      transform: scaleX(1);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: var(--navy);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .service-icon svg {
-      width: 26px;
-      height: 26px;
-      fill: var(--gold);
-    }
-
-    .service-card h3 {
-      font-family: 'Georgia', serif;
-      font-size: 1.15rem;
-      color: var(--navy-dark);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      font-family: Arial, sans-serif;
-      font-size: 0.875rem;
-      color: #5a6e84;
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ── */
-    .contact {
-      background: var(--off-white);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info-block {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .contact-item {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .contact-icon {
-      width: 46px;
-      height: 46px;
-      background: var(--navy);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--gold);
-    }
-
-    .contact-item-body strong {
-      display: block;
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--mid-gray);
-      margin-bottom: 4px;
-    }
-
-    .contact-item-body a,
-    .contact-item-body p {
-      font-family: Arial, sans-serif;
-      font-size: 1rem;
-      color: var(--navy-dark);
-      text-decoration: none;
-    }
-
-    .contact-item-body a:hover {
-      color: var(--blue);
-    }
-
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-      background: var(--blue);
-      color: var(--white);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 11px 22px;
-      border-radius: 5px;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .directions-btn:hover {
-      background: var(--blue-light);
-      transform: translateY(-2px);
-    }
-
-    .directions-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .rating-box {
-      background: var(--white);
-      border: 1px solid var(--light-gray);
-      border-radius: 10px;
-      padding: 24px 28px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .rating-score {
-      font-family: 'Georgia', serif;
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: var(--navy-dark);
-      line-height: 1;
-    }
-
-    .rating-details {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .star {
-      width: 18px;
-      height: 18px;
-      fill: var(--gold);
-    }
-
-    .star-empty {
-      fill: var(--light-gray);
-    }
-
-    .rating-count {
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      color: var(--mid-gray);
-    }
-
-    .rating-source {
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      color: var(--mid-gray);
-      letter-spacing: 0.05em;
-    }
-
-    /* Contact form side */
-    .contact-cta-panel {
-      background: var(--navy-dark);
-      border-radius: 12px;
-      padding: 44px 40px;
-    }
-
-    .contact-cta-panel h3 {
-      font-family: 'Georgia', serif;
-      font-size: 1.5rem;
-      color: var(--white);
-      margin-bottom: 12px;
-    }
-
-    .contact-cta-panel p {
-      font-family: Arial, sans-serif;
-      font-size: 0.92rem;
-      color: rgba(255,255,255,0.65);
-      margin-bottom: 30px;
-    }
-
-    .cta-row {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .cta-big-phone {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px;
-      padding: 18px 20px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-
-    .cta-big-phone:hover {
-      background: rgba(255,255,255,0.12);
-    }
-
-    .cta-phone-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .cta-phone-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--navy-dark);
-    }
-
-    .cta-phone-text span {
-      display: block;
-      font-family: Arial, sans-serif;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .cta-phone-text strong {
-      display: block;
-      font-family: Arial, sans-serif;
-      font-size: 1.15rem;
-      color: var(--white);
-    }
-
-    .cta-note {
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
-      text-align: center;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy-dark);
-      padding: 40px 24px;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .footer-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--gold);
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .footer-logo-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--navy-dark);
-    }
-
-    .footer-brand-text {
-      font-family: 'Georgia', serif;
-      font-size: 0.95rem;
-      color: var(--white);
-    }
-
-    .footer-brand-sub {
-      font-family: Arial, sans-serif;
-      font-size: 0.7rem;
-      color: var(--mid-gray);
-      margin-top: 2px;
-    }
-
-    .footer-copy {
-      font-family: Arial, sans-serif;
-      font-size: 0.78rem;
-      color: var(--mid-gray);
-      text-align: right;
-    }
-
-    /* ── MOBILE ── */
-    @media (max-width: 900px) {
-      .hero-content {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-card {
-        display: none;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 68px;
-        left: 0;
-        right: 0;
-        background: var(--navy-dark);
-        flex-direction: column;
-        padding: 16px 24px 24px;
-        gap: 0;
-        border-top: 1px solid rgba(255,255,255,0.08);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links li {
-        width: 100%;
-      }
-
-      .nav-links a {
-        display: block;
-        padding: 12px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-        font-size: 0.95rem;
-      }
-
-      .nav-cta {
-        margin-top: 8px;
-        text-align: center;
-        border-radius: 4px;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .trust-bar-inner {
-        gap: 18px;
-      }
-
-      .trust-item {
-        font-size: 0.75rem;
-      }
-    }
-
-    @media (max-width: 600px) {
-      section {
-        padding: 60px 20px;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-cta-panel {
-        padding: 32px 24px;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .footer-copy {
-        text-align: left;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Partners Insurance Agency | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#122038;--navy-2:#1a2e4a;--navy-3:#22406a;
+    --blue:#2f7bc0;--blue-2:#4f9ae0;
+    --gold:#d1a53a;--gold-2:#ecc861;
+    --ink:#0d1626;--paper:#eef2f7;--paper-2:#e2e8f1;
+    --mist:#93a4bd;--line:rgba(255,255,255,.10);
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:Georgia,'Times New Roman',serif;background:var(--ink);color:#e8edf4;
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  a{color:inherit}
+  .sans{font-family:'Segoe UI',system-ui,Arial,sans-serif}
+
+  /* animated mesh backdrop */
+  .mesh{position:fixed;inset:0;z-index:-2;background:
+    radial-gradient(60vw 60vw at 12% 8%,rgba(47,123,192,.20),transparent 60%),
+    radial-gradient(50vw 50vw at 92% 22%,rgba(209,165,58,.16),transparent 55%),
+    radial-gradient(70vw 70vw at 60% 100%,rgba(34,64,106,.35),transparent 60%),
+    var(--ink);
+    background-size:200% 200%;animation:mesh 26s ease-in-out infinite alternate}
+  @keyframes mesh{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+  .grain{position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;
+    background-image:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 46px),
+    repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 46px)}
+
+  /* top rail */
+  header.rail{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:rgba(18,32,56,.72);border-bottom:1px solid var(--line)}
+  .rail-in{max-width:1200px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:14px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+  .shield{width:38px;height:38px;flex:0 0 auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+  .shield svg{width:100%;height:100%}
+  .bname{font-weight:700;letter-spacing:.01em;font-size:1.02rem;line-height:1.05}
+  .btag{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-2)}
+  nav.links{margin-left:auto;display:flex;gap:8px;align-items:center}
+  nav.links a{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+    color:#c4d0e0;padding:8px 12px;border-radius:8px;transition:.2s}
+  nav.links a:hover{color:#fff;background:rgba(255,255,255,.06)}
+  .callbtn{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--navy)!important;
+    font-weight:700;border-radius:10px}
+  .callbtn:hover{background:var(--gold-2)!important}
+  .burger{margin-left:auto;display:none;background:none;border:1px solid var(--line);border-radius:9px;
+    padding:9px 11px;cursor:pointer;flex-direction:column;gap:4px}
+  .burger span{width:20px;height:2px;background:#dfe6f0;display:block;border-radius:2px}
+
+  /* BENTO */
+  main{max-width:1200px;margin:0 auto;padding:26px 22px 60px}
+  .kicker{font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-2)}
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(120px,auto);gap:16px}
+  .tile{position:relative;border-radius:20px;border:1px solid var(--line);overflow:hidden;
+    background:rgba(255,255,255,.045);padding:26px;backdrop-filter:blur(6px);
+    transform:translateY(26px);opacity:0;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .7s,box-shadow .3s,border-color .3s;
+    will-change:transform}
+  .tile.in{transform:none;opacity:1}
+  .tile:hover{border-color:rgba(209,165,58,.5);box-shadow:0 22px 60px rgba(0,0,0,.45)}
+  .tile .sheen{position:absolute;inset:0;background:radial-gradient(400px 200px at var(--mx,50%) var(--my,0%),rgba(255,255,255,.10),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+  .tile:hover .sheen{opacity:1}
+
+  /* spans */
+  .c12{grid-column:span 12}.c8{grid-column:span 8}.c7{grid-column:span 7}
+  .c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}
+  .r2{grid-row:span 2}
+
+  /* hero tile */
+  .hero{background:
+    linear-gradient(135deg,rgba(34,64,106,.65),rgba(18,32,56,.2)),
+    rgba(255,255,255,.03);
+    display:flex;flex-direction:column;justify-content:center;min-height:340px}
+  .hero h1{font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.08;margin:16px 0 14px;font-weight:700}
+  .grad{background:linear-gradient(100deg,var(--gold-2),var(--blue-2),var(--gold-2));
+    background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:sweep 7s linear infinite}
+  @keyframes sweep{to{background-position:220% center}}
+  .hero p{color:#c7d3e3;max-width:46ch;font-size:1.05rem}
+  .hero .cta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+  .mag{position:relative;display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+    font-family:'Segoe UI',system-ui,Arial,sans-serif;font-weight:700;font-size:.92rem;
+    padding:13px 24px;border-radius:12px;transition:transform .15s ease-out}
+  .mag.solid{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--navy)}
+  .mag.ghost{border:1.5px solid rgba(255,255,255,.35);color:#fff}
+  .mag.ghost:hover{border-color:var(--gold-2);color:var(--gold-2)}
+  .mag svg{width:17px;height:17px}
+
+  .tile h2{font-size:1.15rem;margin-bottom:6px;font-weight:700}
+  .tile h3{font-size:1.02rem;margin:12px 0 5px;font-weight:700}
+  .muted{color:var(--mist);font-size:.9rem;font-family:'Segoe UI',system-ui,Arial,sans-serif}
+
+  /* stat tiles */
+  .stat{display:flex;flex-direction:column;justify-content:center;text-align:left}
+  .num{font-size:clamp(2.2rem,4vw,3.2rem);font-weight:700;line-height:1;color:var(--gold-2)}
+  .stat .lab{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mist);margin-top:8px;font-family:'Segoe UI',system-ui,Arial,sans-serif}
+
+  /* coverage list inside a tile */
+  .cov{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .cov .item{display:flex;gap:12px;align-items:flex-start}
+  .ic{width:42px;height:42px;flex:0 0 auto;border-radius:11px;background:linear-gradient(135deg,var(--navy-3),var(--navy-2));
+    display:grid;place-items:center;border:1px solid var(--line)}
+  .ic svg{width:22px;height:22px;fill:var(--gold-2)}
+  .cov .item b{display:block;font-size:.92rem;font-family:'Segoe UI',system-ui,Arial,sans-serif}
+  .cov .item span{font-size:.8rem;color:var(--mist);font-family:'Segoe UI',system-ui,Arial,sans-serif;line-height:1.45}
+
+  /* phone tile */
+  .phone{background:linear-gradient(135deg,rgba(47,123,192,.28),rgba(18,32,56,.1)),rgba(255,255,255,.04);
+    display:flex;flex-direction:column;justify-content:center}
+  .phone a.big{font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:700;text-decoration:none;color:#fff;display:inline-flex;align-items:center;gap:12px;margin-top:6px}
+  .phone a.big:hover{color:var(--gold-2)}
+
+  /* rating tile */
+  .rate{display:flex;flex-direction:column;justify-content:center}
+  .rate .top{display:flex;align-items:center;gap:16px}
+  .score{font-size:3.2rem;font-weight:700;line-height:1;color:#fff}
+  .stars{display:flex;gap:3px}
+  .stars svg{width:20px;height:20px;fill:var(--gold)}
+  .stars .empty{fill:rgba(255,255,255,.16)}
+
+  /* map / address tile */
+  .maptile{background:linear-gradient(135deg,rgba(34,64,106,.5),rgba(18,32,56,.15)),rgba(255,255,255,.03);display:flex;flex-direction:column;justify-content:space-between}
+  .grid-lines{position:absolute;inset:0;opacity:.18;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);
+    background-size:34px 34px;mask-image:radial-gradient(circle at 70% 40%,#000,transparent 75%)}
+  .pin{position:absolute;top:38%;left:66%;width:16px;height:16px;border-radius:50%;background:var(--gold-2);box-shadow:0 0 0 6px rgba(236,200,97,.25);animation:pulse 2.2s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(236,200,97,.5)}100%{box-shadow:0 0 0 22px rgba(236,200,97,0)}}
+
+  footer{max-width:1200px;margin:0 auto;padding:30px 22px 50px;border-top:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;color:var(--mist);
+    font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:.8rem}
+
+  @media(max-width:900px){
+    nav.links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;
+      background:rgba(18,32,56,.98);padding:10px 18px 18px;border-bottom:1px solid var(--line)}
+    nav.links.open{display:flex}
+    nav.links a{padding:13px 6px;border-bottom:1px solid var(--line)}
+    .burger{display:flex}
+    .c8,.c7,.c6,.c5,.c4,.c3{grid-column:span 12}
+    .cov{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .tile{transform:none;opacity:1}
+    html{scroll-behavior:auto}
+  }
+</style>
+<noscript><style>.tile{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
+<div class="mesh"></div><div class="grain"></div>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-inner">
-      <a href="#" class="nav-logo">
-        <div class="nav-logo-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-          </svg>
-        </div>
-        <div class="nav-logo-text">
-          <span class="nav-brand">Partners Insurance Agency</span>
-          <span class="nav-tagline">Gainesville, FL</span>
-        </div>
-      </a>
-
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="tel:3523320180" class="nav-cta">Call Now</a></li>
-      </ul>
-
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-pattern"></div>
-    <div class="hero-content">
-      <div>
-        <div class="hero-badge">Licensed Insurance Agency &mdash; Gainesville, FL</div>
-        <h1>Protecting What <span>Matters Most</span> to You</h1>
-        <p class="hero-sub">Partners Insurance Agency provides personalized coverage solutions to individuals, families, and businesses throughout the Gainesville area.</p>
-        <div class="hero-buttons">
-          <a href="#contact" class="btn-primary">Get a Quote</a>
-          <a href="#services" class="btn-outline">Our Coverage Options</a>
-        </div>
-      </div>
-
-      <div class="hero-card">
-        <div class="hero-card-title">Why Choose Us</div>
-        <ul class="shield-list">
-          <li>Personalized policy guidance</li>
-          <li>Multiple carrier options</li>
-          <li>Local Gainesville expertise</li>
-          <li>Fast, responsive service</li>
-          <li>Comprehensive coverage reviews</li>
-        </ul>
-        <hr class="hero-divider" />
-        <div class="hero-phone">
-          <div>
-            <div class="hero-phone-label">Call our office</div>
-            <a href="tel:3523320180">(352) 332-0180</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRUST BAR -->
-  <div class="trust-bar">
-    <div class="trust-bar-inner">
-      <div class="trust-item"><span class="trust-dot"></span>Personal &amp; Commercial Lines</div>
-      <div class="trust-item"><span class="trust-dot"></span>Multiple Carrier Access</div>
-      <div class="trust-item"><span class="trust-dot"></span>Licensed Florida Agents</div>
-      <div class="trust-item"><span class="trust-dot"></span>Serving the Gainesville Community</div>
-    </div>
+<header class="rail">
+  <div class="rail-in">
+    <a class="brand" href="#top">
+      <span class="shield"><svg viewBox="0 0 48 48"><path d="M24 3 6 10v12c0 11 7.6 20.6 18 23 10.4-2.4 18-12 18-23V10L24 3z" fill="#1a2e4a" stroke="#d1a53a" stroke-width="1.5"/><path d="M24 3 6 10v12c0 11 7.6 20.6 18 23 10.4-2.4 18-12 18-23V10L24 3z" fill="url(#g1)" opacity=".18"/><path d="M16 24l6 6 11-12" fill="none" stroke="#ecc861" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f9ae0"/><stop offset="1" stop-color="#d1a53a"/></linearGradient></defs></svg></span>
+      <span><span class="bname">Partners Insurance Agency</span><br><span class="btag">Gainesville, FL</span></span>
+    </a>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <nav class="links" id="menu">
+      <a href="#coverage">Coverage</a>
+      <a href="#why">Why Us</a>
+      <a href="#visit">Visit</a>
+      <a class="callbtn" href="tel:3523320180">Call (352) 332-0180</a>
+    </nav>
   </div>
+</header>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <div class="section-label">About Us</div>
-          <h2 class="section-title">Your Local <span>Insurance Partners</span></h2>
-          <div class="section-divider"></div>
-          <p>Partners Insurance Agency is a full-service insurance agency serving individuals, families, and businesses across Gainesville and the surrounding North Florida region. Our agents work with a broad network of carriers to find coverage that fits your specific needs and budget.</p>
-          <p>We believe that navigating insurance should be straightforward. Our team takes the time to explain your options clearly, review your existing policies, and make sure you are never under-covered or paying more than you should be.</p>
-          <p>Whether you are protecting your home, your vehicle, your business, or your family's financial future, Partners Insurance Agency is here to guide you every step of the way. Contact us for details on coverage and pricing tailored to your situation.</p>
-        </div>
+<main id="top">
+  <div class="bento">
+
+    <!-- HERO -->
+    <section class="tile hero c8 r2" id="coverage">
+      <span class="sheen"></span>
+      <span class="kicker">Licensed Insurance Agency · Personal &amp; Commercial Lines</span>
+      <h1>Protecting what <span class="grad">matters most</span> to you.</h1>
+      <p class="sans">Partners Insurance Agency provides personalized coverage for individuals, families, and businesses across Gainesville and North Florida — shopping multiple carriers so your policy fits your needs and budget.</p>
+      <div class="cta">
+        <a class="mag solid" href="#visit" data-mag><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M13 5l7 7-7 7"/></svg>Get a Quote</a>
+        <a class="mag ghost" href="#lines" data-mag>Coverage Options</a>
+      </div>
+    </section>
+
+    <!-- phone tile -->
+    <section class="tile phone c4">
+      <span class="sheen"></span>
+      <span class="kicker">Call our office</span>
+      <a class="big" href="tel:3523320180"><svg viewBox="0 0 24 24" fill="#ecc861" style="width:26px;height:26px"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1H7.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(352) 332-0180</a>
+      <p class="muted" style="margin-top:10px">No pressure — just honest advice from licensed Florida agents.</p>
+    </section>
+
+    <!-- rating tile -->
+    <section class="tile rate c4">
+      <span class="sheen"></span>
+      <span class="kicker">Google Maps Rating</span>
+      <div class="top" style="margin-top:10px">
+        <div class="score" id="scoreNum" data-count="3.7" data-dec="1">3.7</div>
         <div>
-          <ul class="about-feature-list">
-            <li>
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-              </div>
-              <div class="feature-text">
-                <strong>Comprehensive Coverage</strong>
-                <span>Home, auto, life, health, and commercial policies under one roof.</span>
-              </div>
-            </li>
-            <li>
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-              </div>
-              <div class="feature-text">
-                <strong>Personalized Service</strong>
-                <span>A dedicated agent who knows your name and your policy details.</span>
-              </div>
-            </li>
-            <li>
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-              </div>
-              <div class="feature-text">
-                <strong>Multiple Carriers</strong>
-                <span>We shop the market so you get competitive rates and strong coverage.</span>
-              </div>
-            </li>
-            <li>
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-              </div>
-              <div class="feature-text">
-                <strong>Locally Based</strong>
-                <span>Located in Gainesville, we understand the unique needs of our community.</span>
-              </div>
-            </li>
-          </ul>
+          <div class="stars">
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.5 4.7L5.8 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.5 4.7L5.8 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.5 4.7L5.8 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.5 4.7L5.8 21z"/></svg>
+            <svg class="empty" viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.5 4.7L5.8 21z"/></svg>
+          </div>
+          <div class="muted" style="margin-top:6px">Based on 12 Google reviews</div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="section-inner">
-      <div class="services-header">
-        <div class="section-label">What We Offer</div>
-        <h2 class="section-title">Coverage for <span>Every Need</span></h2>
-        <div class="section-divider"></div>
+    <!-- coverage lines -->
+    <section class="tile c8" id="lines">
+      <span class="sheen"></span>
+      <h2>Coverage for every need</h2>
+      <p class="muted">A full-service agency with home, auto, life, health, and commercial policies under one roof.</p>
+      <div class="cov">
+        <div class="item"><span class="ic"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span><div><b>Homeowners Insurance</b><span>Protect your home and belongings from fire, storms, theft, and liability. Contact us for details.</span></div></div>
+        <div class="item"><span class="ic"><svg viewBox="0 0 24 24"><path d="M18.9 6A1.5 1.5 0 0 0 17.5 5h-11A1.5 1.5 0 0 0 5.1 6L3 12v8a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1h12v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-8L18.9 6zM6.5 16A1.5 1.5 0 1 1 8 14.5 1.5 1.5 0 0 1 6.5 16zm11 0a1.5 1.5 0 1 1 1.5-1.5 1.5 1.5 0 0 1-1.5 1.5zM5 11l1.5-4.5h11L19 11z"/></svg></span><div><b>Auto Insurance</b><span>Liability, collision, and comprehensive coverage matched to your vehicle at competitive rates.</span></div></div>
+        <div class="item"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5z"/></svg></span><div><b>Life Insurance</b><span>Term, whole, and universal life options tailored to your family's long-term goals. Contact us for details.</span></div></div>
+        <div class="item"><span class="ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a3.5 3.5 0 1 1-3.5 3.5A3.5 3.5 0 0 1 12 6zm7 13H5v-.2c0-.6.3-1.2.8-1.6C7.5 15.8 9.6 15 12 15s4.5.8 6.2 2.2c.5.4.8 1 .8 1.6z"/></svg></span><div><b>Health Insurance</b><span>Individual and family plans, ACA marketplace options, and supplemental coverage.</span></div></div>
+        <div class="item"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm6-4h6a2 2 0 0 1 2 2v0H7v0a2 2 0 0 1 2-2z"/></svg></span><div><b>Business &amp; Commercial</b><span>General liability, commercial property, workers comp, and business owner policies.</span></div></div>
+        <div class="item"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15-5-5 1.4-1.4L10 14.2l7.6-7.6L19 8z"/></svg></span><div><b>Renters &amp; Specialty</b><span>Renters, umbrella, flood, and other specialty lines for an extra layer of protection.</span></div></div>
       </div>
-      <div class="services-grid">
+    </section>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          </div>
-          <h3>Homeowners Insurance</h3>
-          <p>Protect your home and personal property from unexpected losses including fire, storm damage, theft, and liability. Contact us for details on coverage limits and options.</p>
-        </div>
+    <!-- carriers stat -->
+    <section class="tile stat c4" id="why">
+      <span class="sheen"></span>
+      <div class="num">Multiple</div>
+      <div class="lab">Carrier options shopped for you</div>
+      <div style="margin-top:20px" class="num">Local</div>
+      <div class="lab">Gainesville-based expertise</div>
+    </section>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
-          </div>
-          <h3>Auto Insurance</h3>
-          <p>From liability and collision to comprehensive coverage, we help you find the right auto policy for your vehicle and driving habits at competitive rates.</p>
-        </div>
+    <!-- why us -->
+    <section class="tile c5">
+      <span class="sheen"></span>
+      <h2>Your local insurance partners</h2>
+      <p class="muted">We believe navigating insurance should be straightforward. Our team explains your options clearly, reviews existing policies, and makes sure you're never under-covered or overpaying.</p>
+      <h3>Comprehensive coverage reviews</h3>
+      <p class="muted">Personalized policy guidance and fast, responsive service for the Gainesville community. Contact us for details on coverage and pricing tailored to your situation.</p>
+    </section>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-          </div>
-          <h3>Life Insurance</h3>
-          <p>Provide financial security for your loved ones with term, whole, or universal life coverage options tailored to your family's long-term goals. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-          </div>
-          <h3>Health Insurance</h3>
-          <p>Individual and family health insurance plans including ACA marketplace options and supplemental coverage to help fill the gaps in your existing health benefits.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36 0-2.55-2.06-4.63-4.62-4.63-1.43 0-2.71.62-3.61 1.6L8 3.56l-1.77-1.95C5.33 .62 4.05 0 2.62 0 .06 0-2 2.08-2 4.63c0 .48.11.92.18 1.37H-2v2h22V6zM3 8v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8H3z"/></svg>
-          </div>
-          <h3>Business &amp; Commercial Insurance</h3>
-          <p>General liability, commercial property, workers compensation, and business owner policies designed to protect your Gainesville business from a wide range of risks.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-          </div>
-          <h3>Renters &amp; Specialty Coverage</h3>
-          <p>Renters insurance, umbrella policies, flood coverage, and other specialty lines that provide an extra layer of protection for your unique circumstances.</p>
-        </div>
-
+    <!-- address / map -->
+    <section class="tile maptile c7 r2" id="visit">
+      <span class="sheen"></span>
+      <div class="grid-lines"></div><div class="pin"></div>
+      <div style="position:relative">
+        <span class="kicker">Visit our office</span>
+        <h2 style="margin-top:10px">4040 Newberry Rd, Ste 950</h2>
+        <p class="muted">Gainesville, FL 32607</p>
+        <p class="muted" style="margin-top:14px"><b style="color:#e8edf4">Office Hours:</b> Contact us for details</p>
       </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="section-inner">
-      <div class="contact-grid">
-        <div>
-          <div class="section-label">Get In Touch</div>
-          <h2 class="section-title">Contact <span>Our Office</span></h2>
-          <div class="section-divider"></div>
-
-          <div class="contact-info-block">
-
-            <div class="contact-item">
-              <div class="contact-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-              </div>
-              <div class="contact-item-body">
-                <strong>Address</strong>
-                <p>4040 Newberry Rd, Ste 950<br>Gainesville, FL 32607</p>
-                <a href="https://www.google.com/maps/search/Partners%20Insurance%20Agency%204040%20Newberry%20Rd%20Ste%20950%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer" class="directions-btn">
-                  <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-                  Get Directions
-                </a>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-icon">
-                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-              </div>
-              <div class="contact-item-body">
-                <strong>Phone</strong>
-                <a href="tel:3523320180">(352) 332-0180</a>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-icon">
-                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-              </div>
-              <div class="contact-item-body">
-                <strong>Office Hours</strong>
-                <p>Contact us for details</p>
-              </div>
-            </div>
-
-            <div class="rating-box">
-              <div class="rating-score">3.7</div>
-              <div class="rating-details">
-                <div class="stars">
-                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg class="star star-empty" viewBox="0 0 24 24"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>
-                </div>
-                <div class="rating-count">Based on 12 Google reviews</div>
-                <div class="rating-source">Google Maps Rating</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="contact-cta-panel">
-          <h3>Ready to Get Covered?</h3>
-          <p>Our licensed agents are ready to help you find the right policy. Reach out today to discuss your coverage needs — no pressure, just honest advice.</p>
-          <div class="cta-row">
-            <a href="tel:3523320180" class="cta-big-phone">
-              <div class="cta-phone-icon">
-                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-              </div>
-              <div class="cta-phone-text">
-                <span>Call our office</span>
-                <strong>(352) 332-0180</strong>
-              </div>
-            </a>
-            <a href="https://www.google.com/maps/search/Partners%20Insurance%20Agency%204040%20Newberry%20Rd%20Ste%20950%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-align:center;">
-              View on Google Maps
-            </a>
-            <p class="cta-note">4040 Newberry Rd, Ste 950 &bull; Gainesville, FL 32607</p>
-          </div>
-        </div>
-
+      <div style="position:relative;display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+        <a class="mag solid" data-mag target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/Partners%20Insurance%20Agency%204040%20Newberry%20Rd%20Ste%20950%2C%20Gainesville%2C%20FL%2032607"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5z"/></svg>Directions on Google Maps</a>
+        <a class="mag ghost" data-mag href="tel:3523320180">Call the office</a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-logo-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-        </div>
-        <div>
-          <div class="footer-brand-text">Partners Insurance Agency</div>
-          <div class="footer-brand-sub">4040 Newberry Rd, Ste 950 &bull; Gainesville, FL 32607</div>
-        </div>
-      </div>
-      <div class="footer-copy">
-        <div>&copy; 2024 Partners Insurance Agency. All rights reserved.</div>
-        <div style="margin-top:4px;">(352) 332-0180</div>
-      </div>
-    </div>
-  </footer>
+    <!-- ready CTA -->
+    <section class="tile c5">
+      <span class="sheen"></span>
+      <h2>Ready to get covered?</h2>
+      <p class="muted">Our licensed agents are ready to help you find the right policy. Reach out today to discuss your coverage needs.</p>
+      <a class="mag solid" data-mag href="tel:3523320180" style="margin-top:16px"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1H7.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02z"/></svg>(352) 332-0180</a>
+    </section>
 
-  <script>
-    // Mobile nav toggle
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
+  </div>
+</main>
+
+<footer>
+  <div>Partners Insurance Agency · 4040 Newberry Rd, Ste 950 · Gainesville, FL 32607 · (352) 332-0180</div>
+  <div>&copy; 2026 Partners Insurance Agency. All rights reserved.</div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // mobile menu
+  var burger=document.getElementById('burger'),menu=document.getElementById('menu');
+  burger.addEventListener('click',function(){menu.classList.toggle('open');});
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){menu.classList.remove('open');});});
+
+  // reveal + counters
+  var tiles=[].slice.call(document.querySelectorAll('.tile'));
+  if(reduce){ tiles.forEach(function(t){t.classList.add('in');}); runCounter(document.getElementById('scoreNum'),true); }
+  else{
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          var t=e.target, i=tiles.indexOf(t);
+          setTimeout(function(){t.classList.add('in');}, Math.min(i,6)*70);
+          if(t.querySelector('#scoreNum')||t.id==='scoreNum'){}
+          io.unobserve(t);
+        }
+      });
+    },{threshold:.16});
+    tiles.forEach(function(t){io.observe(t);});
+
+    var sc=document.getElementById('scoreNum');
+    var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){runCounter(sc,false);so.unobserve(e.target);}});},{threshold:.5});
+    so.observe(sc);
+  }
+
+  function runCounter(el,instant){
+    if(!el) return;
+    var target=parseFloat(el.getAttribute('data-count'));
+    var dec=parseInt(el.getAttribute('data-dec')||'0',10);
+    if(instant){el.textContent=target.toFixed(dec);return;}
+    var start=performance.now(),dur=1100;
+    function step(now){
+      var p=Math.min((now-start)/dur,1);
+      var e=1-Math.pow(1-p,3);
+      el.textContent=(target*e).toFixed(dec);
+      if(p<1)requestAnimationFrame(step);else el.textContent=target.toFixed(dec);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // pointer sheen + subtle 3D tilt (skip if reduced motion)
+  if(!reduce){
+    tiles.forEach(function(t){
+      t.addEventListener('pointermove',function(ev){
+        var r=t.getBoundingClientRect();
+        var x=(ev.clientX-r.left)/r.width, y=(ev.clientY-r.top)/r.height;
+        t.style.setProperty('--mx',(x*100)+'%');
+        t.style.setProperty('--my',(y*100)+'%');
+        var rx=(0.5-y)*4, ry=(x-0.5)*4;
+        t.style.transform='perspective(900px) rotateX('+rx+'deg) rotateY('+ry+'deg)';
+      });
+      t.addEventListener('pointerleave',function(){t.style.transform='';});
     });
-    // Close nav when a link is clicked
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('open'));
-    });
-  </script>
 
+    // magnetic buttons
+    document.querySelectorAll('[data-mag]').forEach(function(b){
+      b.addEventListener('pointermove',function(ev){
+        var r=b.getBoundingClientRect();
+        var mx=ev.clientX-r.left-r.width/2, my=ev.clientY-r.top-r.height/2;
+        b.style.transform='translate('+(mx*.18)+'px,'+(my*.3)+'px)';
+      });
+      b.addEventListener('pointerleave',function(){b.style.transform='';});
+    });
+  }
+})();
+</script>
 </body>
 </html>
