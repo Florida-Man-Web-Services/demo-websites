@@ -1,579 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Señor Bubbles Laundromat – Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Se&ntilde;or Bubbles Laundromat &ndash; Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#20233b;
+    --grape:#3a2f7a;
+    --violet:#6c5ce7;
+    --bubble:#4ec9e1;
+    --pink:#ff77c8;
+    --sun:#ffd24a;
+    --cream:#f4f1fb;
+    --radius:26px;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;overflow-x:hidden}
+  a{color:inherit}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
 
-    :root {
-      --blue:    #2a7bbf;
-      --blue-dk: #1a5a93;
-      --aqua:    #4ec9e1;
-      --foam:    #e8f6fb;
-      --white:   #ffffff;
-      --text:    #1e2d3d;
-      --muted:   #5a7186;
-      --accent:  #f5a623;
-      --radius:  10px;
-    }
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 22px;background:rgba(244,241,251,.8);backdrop-filter:blur(9px);border-bottom:2px solid rgba(108,92,231,.18);
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.4px}
+  .brand .o{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff,var(--bubble));box-shadow:0 0 0 3px rgba(108,92,231,.25);position:relative}
+  nav .links{display:flex;gap:6px;flex-wrap:wrap}
+  nav .links a{text-decoration:none;font-weight:700;font-size:.85rem;padding:7px 14px;border-radius:16px;transition:background .2s,color .2s}
+  nav .links a:hover{background:var(--violet);color:#fff}
 
-    html { scroll-behavior: smooth; }
+  /* CENTERED MONOLITH HERO WITH ORBITING BUBBLES */
+  .hero{
+    min-height:100vh;display:grid;place-items:center;position:relative;text-align:center;
+    padding:110px 20px 60px;
+    background:radial-gradient(circle at 50% 40%,rgba(108,92,231,.16),transparent 55%);
+  }
+  .orbit-field{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .orbit{
+    position:absolute;top:50%;left:50%;border:2px dashed rgba(108,92,231,.2);border-radius:50%;
+    transform:translate(-50%,-50%);animation:rot linear infinite;
+  }
+  .orbit .planet{
+    position:absolute;top:-1px;left:50%;transform:translate(-50%,-50%);
+    width:var(--sz,34px);height:var(--sz,34px);border-radius:50%;
+    background:var(--c,var(--bubble));box-shadow:inset 6px 6px 12px rgba(255,255,255,.5),0 6px 14px rgba(32,35,59,.18);
+    display:grid;place-items:center;font-size:.9rem;
+  }
+  @keyframes rot{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  @keyframes counter{to{transform:translate(-50%,-50%) rotate(-360deg)}}
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text);
-      background: var(--white);
-      line-height: 1.65;
-    }
+  .monolith{
+    position:relative;z-index:3;width:min(560px,88vw);
+    background:linear-gradient(160deg,var(--grape),var(--violet));color:#fff;
+    border-radius:50% 50% 46% 54%/54% 46% 54% 46%;
+    padding:64px 46px;box-shadow:0 30px 70px rgba(58,47,122,.4);
+  }
+  .monolith .foam{position:absolute;border-radius:50%;background:rgba(255,255,255,.22)}
+  .kicker{display:inline-block;background:rgba(255,255,255,.16);border:1.4px solid rgba(255,255,255,.4);border-radius:20px;padding:5px 15px;font-weight:800;letter-spacing:1px;font-size:.72rem;text-transform:uppercase}
+  .monolith h1{font-size:clamp(2.3rem,7vw,4rem);line-height:.98;letter-spacing:-1px;margin:14px 0 12px}
+  .monolith h1 .sun{color:var(--sun)}
+  .monolith p{color:#e5dffb;max-width:34ch;margin:0 auto 22px}
+  .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:800;padding:13px 26px;border-radius:26px;transition:transform .16s,box-shadow .16s}
+  .btn.solid{background:var(--sun);color:var(--grape);box-shadow:0 10px 24px rgba(255,210,74,.4)}
+  .btn.solid:hover{transform:translateY(-3px) scale(1.03)}
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--blue-dk);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      height: 62px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.25);
-    }
+  section{padding:74px 0}
+  .lbl{color:var(--violet);font-weight:800;letter-spacing:2px;font-size:.78rem;text-transform:uppercase;text-align:center;display:block}
+  h2.sec{font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:-.5px;text-align:center;margin:8px 0 8px}
+  .sec-sub{text-align:center;color:#5d5875;max-width:560px;margin:0 auto 34px}
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: .6rem;
-      text-decoration: none;
-    }
+  .about-card{
+    background:#fff;border-radius:var(--radius);padding:38px;text-align:center;max-width:760px;margin:0 auto;
+    box-shadow:0 16px 40px rgba(58,47,122,.1);position:relative;overflow:hidden;
+  }
+  .about-card p{color:#4b4663;max-width:60ch;margin:0 auto}
+  .chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  .chip{background:var(--cream);border:1.5px solid rgba(108,92,231,.25);border-radius:16px;padding:8px 15px;font-weight:700;font-size:.82rem}
 
-    .nav-logo .bubble-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--aqua);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      color: var(--white);
-      flex-shrink: 0;
-    }
+  .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+  .svc{
+    background:#fff;border-radius:22px;padding:26px;text-align:center;position:relative;
+    opacity:0;transform:translateY(26px) scale(.96);
+    transition:opacity .6s,transform .6s cubic-bezier(.2,.9,.3,1.2),box-shadow .25s;
+  }
+  .svc.in{opacity:1;transform:none}
+  .svc:hover{box-shadow:0 18px 38px rgba(58,47,122,.16)}
+  .svc .ic{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;font-size:1.8rem;background:radial-gradient(circle at 32% 30%,#fff,var(--bubble))}
+  .svc:nth-child(2n) .ic{background:radial-gradient(circle at 32% 30%,#fff,var(--pink))}
+  .svc:nth-child(3n) .ic{background:radial-gradient(circle at 32% 30%,#fff,var(--sun))}
+  .svc h3{font-size:1.1rem;margin-bottom:6px}
+  .svc p{font-size:.9rem;color:#5d5875}
 
-    .nav-logo span {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: .02em;
-    }
+  .find{
+    background:linear-gradient(150deg,var(--grape),var(--violet));color:#fff;border-radius:34px;
+    padding:46px;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;
+  }
+  .find h2{color:#fff;text-align:left}
+  .det{color:#e5dffb;margin:6px 0}
+  .det strong{color:#fff;display:block}
+  .rate{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:22px;padding:28px;text-align:center}
+  .rate .n{font-size:3.6rem;font-weight:900;color:var(--sun);line-height:1}
+  .rate .stars{color:var(--sun);letter-spacing:3px;font-size:1.3rem;margin:4px 0}
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.6rem;
-    }
+  footer{padding:28px 22px;text-align:center;color:#5d5875;font-size:.85rem}
 
-    nav ul a {
-      color: rgba(255,255,255,.88);
-      text-decoration: none;
-      font-size: .92rem;
-      font-weight: 500;
-      transition: color .2s;
-    }
-
-    nav ul a:hover { color: var(--aqua); }
-
-    /* hamburger */
-    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: .3rem; }
-    .nav-toggle span {
-      display: block; width: 24px; height: 2px;
-      background: var(--white); margin: 5px 0;
-      transition: .3s;
-    }
-
-    @media (max-width: 660px) {
-      .nav-toggle { display: block; }
-      nav ul {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 62px; left: 0; right: 0;
-        background: var(--blue-dk);
-        padding: 1rem 1.5rem 1.5rem;
-        gap: 1rem;
-      }
-      nav ul.open { display: flex; }
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 62px;
-      background: linear-gradient(135deg, var(--blue-dk) 0%, var(--blue) 55%, var(--aqua) 100%);
-      color: var(--white);
-      text-align: center;
-      padding: 5rem 1.5rem 4.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* decorative bubbles */
-    .hero::before, .hero::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,.07);
-    }
-    .hero::before { width: 320px; height: 320px; top: -80px; left: -80px; }
-    .hero::after  { width: 220px; height: 220px; bottom: -60px; right: -40px; }
-
-    .hero-bubbles {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .bubble {
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.35);
-      border: 2px solid rgba(255,255,255,.6);
-    }
-    .bubble.lg { width: 28px; height: 28px; }
-    .bubble.sm { width: 12px; height: 12px; margin-top: 8px; }
-
-    .hero h1 {
-      font-size: clamp(2rem, 6vw, 3.4rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: .6rem;
-      text-shadow: 0 2px 8px rgba(0,0,0,.2);
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      opacity: .9;
-      max-width: 520px;
-      margin: 0 auto 2rem;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--text);
-      font-weight: 700;
-      font-size: 1rem;
-      padding: .85rem 2.2rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: transform .2s, box-shadow .2s;
-      box-shadow: 0 4px 14px rgba(0,0,0,.2);
-    }
-
-    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.25); }
-
-    /* ── SECTION COMMON ── */
-    section { padding: 4.5rem 1.5rem; }
-
-    .container { max-width: 1040px; margin: 0 auto; }
-
-    .section-label {
-      display: inline-block;
-      background: var(--foam);
-      color: var(--blue);
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: .3rem .9rem;
-      border-radius: 50px;
-      margin-bottom: .9rem;
-    }
-
-    h2 {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: .9rem;
-    }
-
-    /* ── ABOUT ── */
-    .about { background: var(--foam); }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .about-graphic {
-      display: flex;
-      justify-content: center;
-    }
-
-    .washer-graphic {
-      width: 200px;
-      height: 200px;
-      background: linear-gradient(145deg, var(--blue) 0%, var(--blue-dk) 100%);
-      border-radius: var(--radius);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 30px rgba(26,90,147,.3);
-    }
-
-    .washer-window {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      border: 8px solid rgba(255,255,255,.25);
-      background: radial-gradient(circle at 38% 38%, rgba(78,201,225,.6), rgba(42,123,191,.2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.8rem;
-    }
-
-    .about-text p {
-      color: var(--muted);
-      margin-bottom: .8rem;
-    }
-
-    @media (max-width: 680px) {
-      .about-inner { grid-template-columns: 1fr; }
-      .about-graphic { display: none; }
-    }
-
-    /* ── SERVICES ── */
-    .services { background: var(--white); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.4rem;
-      margin-top: 2rem;
-    }
-
-    .service-card {
-      background: var(--foam);
-      border: 1.5px solid rgba(78,201,225,.25);
-      border-radius: var(--radius);
-      padding: 1.8rem 1.5rem;
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(42,123,191,.15);
-    }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: .8rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: .4rem;
-      color: var(--blue-dk);
-    }
-
-    .service-card p {
-      font-size: .9rem;
-      color: var(--muted);
-    }
-
-    /* ── CONTACT ── */
-    .contact { background: var(--foam); }
-
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    .contact-info h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: .3rem;
-      color: var(--blue-dk);
-    }
-
-    .contact-info p {
-      color: var(--muted);
-      margin-bottom: 1.2rem;
-    }
-
-    .info-row {
-      display: flex;
-      align-items: flex-start;
-      gap: .7rem;
-      margin-bottom: 1rem;
-    }
-
-    .info-icon {
-      font-size: 1.2rem;
-      margin-top: .1rem;
-      flex-shrink: 0;
-    }
-
-    .info-row a {
-      color: var(--blue);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .info-row a:hover { text-decoration: underline; }
-
-    .rating-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: var(--white);
-      border: 1.5px solid rgba(78,201,225,.35);
-      border-radius: 50px;
-      padding: .5rem 1.1rem;
-      margin-top: .5rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .stars { color: var(--accent); font-size: 1rem; letter-spacing: .05em; }
-    .rating-text { font-weight: 700; color: var(--text); font-size: .95rem; }
-    .rating-sub { font-size: .78rem; color: var(--muted); }
-
-    .btn-directions {
-      display: inline-block;
-      background: var(--blue);
-      color: var(--white);
-      font-weight: 700;
-      font-size: .95rem;
-      padding: .8rem 1.8rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: background .2s, transform .2s;
-      box-shadow: 0 3px 12px rgba(42,123,191,.3);
-    }
-
-    .btn-directions:hover { background: var(--blue-dk); transform: translateY(-2px); }
-
-    .contact-note {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 1.8rem;
-      border: 1.5px solid rgba(78,201,225,.25);
-    }
-
-    .contact-note h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: .6rem;
-      color: var(--blue-dk);
-    }
-
-    .contact-note p {
-      color: var(--muted);
-      font-size: .94rem;
-      margin-bottom: .8rem;
-    }
-
-    .contact-note .highlight {
-      display: inline-block;
-      background: var(--foam);
-      color: var(--blue-dk);
-      font-weight: 600;
-      padding: .4rem .9rem;
-      border-radius: 6px;
-      font-size: .92rem;
-    }
-
-    @media (max-width: 680px) {
-      .contact-inner { grid-template-columns: 1fr; }
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--blue-dk);
-      color: rgba(255,255,255,.7);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: .88rem;
-    }
-
-    footer strong { color: var(--white); }
-    footer a { color: var(--aqua); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-    footer .footer-divider { margin: .5rem 0; opacity: .3; }
-  </style>
+  @media(max-width:760px){
+    .find{grid-template-columns:1fr}
+    .find h2{text-align:center}
+    .orbit{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .svc{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body>
+<nav>
+  <div class="brand"><span class="o"></span> Se&ntilde;or Bubbles</div>
+  <div class="links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#find">Contact</a>
+  </div>
+</nav>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <div class="bubble-icon">&#9676;</div>
-      <span>Señor Bubbles</span>
-    </a>
-    <button class="nav-toggle" aria-label="Toggle menu" onclick="this.nextElementSibling.classList.toggle('open')">
-      <span></span><span></span><span></span>
-    </button>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-bubbles">
-      <div class="bubble sm"></div>
-      <div class="bubble lg"></div>
-      <div class="bubble"></div>
-      <div class="bubble sm"></div>
-      <div class="bubble lg"></div>
+<header class="hero">
+  <div class="orbit-field" aria-hidden="true">
+    <div class="orbit" style="width:420px;height:420px;animation-duration:26s">
+      <span class="planet" style="--sz:36px;--c:var(--bubble)">&#129530;</span>
     </div>
-    <h1>Señor Bubbles<br>Laundromat</h1>
-    <p>Clean clothes, happy days — your neighborhood laundromat in Gainesville, FL.</p>
-    <a href="#contact" class="hero-cta">Find Us Today</a>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="container about-inner">
-      <div class="about-text">
-        <span class="section-label">About Us</span>
-        <h2>Your Go-To Spot for Fresh, Clean Laundry</h2>
-        <p>Señor Bubbles Laundromat is a convenient, well-maintained facility serving the Gainesville community with reliable washing and drying machines in a comfortable environment. Whether you're a student, a busy family, or just need a quick wash, we have the capacity and equipment to get the job done right. Stop in at our SW 24th Ave location and experience the ease of getting your laundry taken care of all in one place.</p>
-      </div>
-      <div class="about-graphic">
-        <div class="washer-graphic">
-          <div class="washer-window">&#128166;</div>
-        </div>
-      </div>
+    <div class="orbit" style="width:620px;height:620px;animation-duration:38s;animation-direction:reverse">
+      <span class="planet" style="--sz:44px;--c:var(--pink)">&#128084;</span>
     </div>
-  </section>
+    <div class="orbit" style="width:820px;height:820px;animation-duration:52s">
+      <span class="planet" style="--sz:30px;--c:var(--sun)">&#128167;</span>
+    </div>
+    <div class="orbit" style="width:1000px;height:1000px;animation-duration:64s;animation-direction:reverse">
+      <span class="planet" style="--sz:40px;--c:var(--violet)">&#129532;</span>
+    </div>
+  </div>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="container">
-      <span class="section-label">What We Offer</span>
-      <h2>Our Services</h2>
-      <div class="services-grid">
+  <div class="monolith">
+    <span class="foam" style="width:40px;height:40px;top:20px;left:30px"></span>
+    <span class="foam" style="width:20px;height:20px;bottom:40px;right:44px"></span>
+    <span class="foam" style="width:28px;height:28px;bottom:26px;left:60px"></span>
+    <span class="kicker">Laundromat &bull; Gainesville, FL</span>
+    <h1>Clean clothes,<br><span class="sun">happy days.</span></h1>
+    <p>Your neighborhood laundromat on SW 24th Ave &mdash; fresh, friendly, and ready when you are.</p>
+    <a class="btn solid" href="#find">Find Us Today &rarr;</a>
+  </div>
+</header>
 
-        <div class="service-card">
-          <div class="service-icon">&#128737;</div>
-          <h3>Self-Service Washers</h3>
-          <p>Multiple washer sizes available — from small loads to large capacity machines for comforters and bulky items.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127811;</div>
-          <h3>Self-Service Dryers</h3>
-          <p>High-efficiency dryers that get your clothes dry fast so you can get back to your day.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128084;</div>
-          <h3>Drop-Off Laundry Service</h3>
-          <p>Too busy to wait? Drop off your laundry and pick it up clean and folded. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#129528;</div>
-          <h3>Large-Load & Bulky Items</h3>
-          <p>Oversized machines for blankets, comforters, rugs, and other bulky laundry that won't fit at home.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127774;</div>
-          <h3>Wash & Fold</h3>
-          <p>Let us handle it all — we wash, dry, and fold your clothes so they're ready to go when you are.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128091;</div>
-          <h3>Laundry Supplies Available</h3>
-          <p>Detergent, dryer sheets, and other essentials available on-site so you never have to make a separate trip.</p>
-        </div>
-
+<main class="wrap">
+  <section id="about">
+    <span class="lbl">About Us</span>
+    <h2 class="sec">Your go-to spot for fresh, clean laundry</h2>
+    <div class="about-card">
+      <p>Se&ntilde;or Bubbles Laundromat is a convenient, well-maintained facility serving the Gainesville community with reliable washing and drying machines in a comfortable environment. Whether you're a student, a busy family, or just need a quick wash, we have the capacity and equipment to get the job done right. Stop in at our SW 24th Ave location and experience the ease of getting your laundry taken care of all in one place.</p>
+      <div class="chips">
+        <span class="chip">&#128167; Self-Service</span>
+        <span class="chip">&#128084; Wash &amp; Fold</span>
+        <span class="chip">&#129528; Large-Load Ready</span>
+        <span class="chip">&#128205; SW 24th Ave</span>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <span class="section-label">Get In Touch</span>
-      <h2>Find Us in Gainesville</h2>
-      <div class="contact-inner">
-        <div class="contact-info">
-
-          <div class="info-row">
-            <span class="info-icon">&#128205;</span>
-            <div>
-              <h3>Address</h3>
-              <p>4080 SW 24th Ave<br>Gainesville, FL</p>
-            </div>
-          </div>
-
-          <div class="info-row">
-            <span class="info-icon">&#128222;</span>
-            <div>
-              <h3>Phone</h3>
-              <p><a href="tel:+13528104080">(352) 810-4080</a></p>
-            </div>
-          </div>
-
-          <div class="info-row">
-            <span class="info-icon">&#8987;</span>
-            <div>
-              <h3>Hours</h3>
-              <p>Contact us for current hours of operation.</p>
-            </div>
-          </div>
-
-          <div class="rating-badge">
-            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="rating-text">4.5</span>
-            <span class="rating-sub">Google Maps Rating</span>
-          </div>
-
-          <br>
-          <a
-            href="https://www.google.com/maps/search/Se%C3%B1or%20Bubbles%20Laundromat%204080%20SW%2024th%20Ave%2C%20Gainesville%2C%20FL"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-directions"
-          >
-            &#128506; Get Directions
-          </a>
-        </div>
-
-        <div class="contact-note">
-          <h3>Ready to Do Laundry?</h3>
-          <p>No appointment needed — just stop by and get started. Our machines are available on a first-come, first-served basis.</p>
-          <p>For questions about drop-off service, pricing, or anything else:</p>
-          <span class="highlight">&#128222; Call (352) 810-4080</span>
-          <br><br>
-          <p style="font-size:.85rem; color:var(--muted);">Prices and hours may vary. Contact us directly for the most up-to-date information.</p>
-        </div>
-      </div>
+  <section id="services">
+    <span class="lbl">What We Offer</span>
+    <h2 class="sec">Our Services</h2>
+    <p class="sec-sub">Everything you need to get laundry done in one bubbly, convenient stop.</p>
+    <div class="svc-grid">
+      <div class="svc"><span class="ic">&#129530;</span><h3>Self-Service Washers</h3><p>Multiple washer sizes available &mdash; from small loads to large-capacity machines for comforters and bulky items.</p></div>
+      <div class="svc"><span class="ic">&#127811;</span><h3>Self-Service Dryers</h3><p>High-efficiency dryers that get your clothes dry fast so you can get back to your day.</p></div>
+      <div class="svc"><span class="ic">&#128230;</span><h3>Drop-Off Laundry Service</h3><p>Too busy to wait? Drop off your laundry and pick it up clean and folded. Contact us for details.</p></div>
+      <div class="svc"><span class="ic">&#129528;</span><h3>Large-Load &amp; Bulky Items</h3><p>Oversized machines for blankets, comforters, rugs, and other bulky laundry that won't fit at home.</p></div>
+      <div class="svc"><span class="ic">&#127774;</span><h3>Wash &amp; Fold</h3><p>Let us handle it all &mdash; we wash, dry, and fold your clothes so they're ready to go when you are.</p></div>
+      <div class="svc"><span class="ic">&#129532;</span><h3>Laundry Supplies Available</h3><p>Detergent, dryer sheets, and other essentials available on-site so you never have to make a separate trip.</p></div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <p><strong>Señor Bubbles Laundromat</strong></p>
-    <hr class="footer-divider">
-    <p>4080 SW 24th Ave, Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13528104080">(352) 810-4080</a></p>
-    <p style="margin-top:.6rem; font-size:.8rem;">&#169; 2026 Señor Bubbles Laundromat. All rights reserved.</p>
-  </footer>
+  <section id="find">
+    <div class="find">
+      <div>
+        <h2 class="sec" style="margin-bottom:6px">Find us in Gainesville</h2>
+        <p class="det"><strong>Address</strong>4080 SW 24th Ave, Gainesville, FL</p>
+        <p class="det"><strong>Phone</strong>(352) 810-4080</p>
+        <p class="det"><strong>Hours</strong>Contact us for current hours of operation.</p>
+        <div style="margin-top:16px">
+          <a class="btn solid" href="https://www.google.com/maps/search/Se%C3%B1or%20Bubbles%20Laundromat%204080%20SW%2024th%20Ave%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener">Get Directions &rarr;</a>
+          <a class="btn solid" style="background:#fff;color:var(--grape)" href="tel:+13528104080">Call (352) 810-4080</a>
+        </div>
+      </div>
+      <div class="rate">
+        <div class="n">4.5</div>
+        <div class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div style="font-weight:800">Google Maps Rating</div>
+        <p style="color:#e5dffb;font-size:.85rem;margin-top:8px">No appointment needed &mdash; just stop by. Machines are available first-come, first-served.</p>
+      </div>
+    </div>
+  </section>
+</main>
 
+<footer>Se&ntilde;or Bubbles Laundromat &bull; 4080 SW 24th Ave, Gainesville, FL &bull; (352) 810-4080 &bull; &copy; 2026 Se&ntilde;or Bubbles Laundromat.</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* counter-rotate planets so emoji stay upright */
+  if(!reduce){
+    document.querySelectorAll('.orbit').forEach(function(o){
+      var p = o.querySelector('.planet');
+      if(!p) return;
+      var d = getComputedStyle(o).animationDuration;
+      var rev = getComputedStyle(o).animationDirection.indexOf('reverse')>-1;
+      p.style.animation = 'counter '+d+' linear infinite'+(rev?' reverse':'');
+    });
+  }
+  var svc = document.querySelectorAll('.svc');
+  if(reduce || !('IntersectionObserver' in window)){
+    svc.forEach(function(s){s.classList.add('in');});
+    return;
+  }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ var el=e.target;
+      setTimeout(function(){el.classList.add('in');}, (+el.dataset.d||0)); io.unobserve(el);} });
+  },{threshold:.15});
+  svc.forEach(function(s,i){ s.dataset.d=(i%3)*90; io.observe(s); });
+})();
+</script>
 </body>
 </html>

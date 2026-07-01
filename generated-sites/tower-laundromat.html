@@ -1,773 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tower Laundromat | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --primary: #1a6fa8;
-      --primary-dark: #135480;
-      --primary-light: #d6eaf8;
-      --accent: #29b6e8;
-      --accent-light: #e8f7fd;
-      --white: #ffffff;
-      --off-white: #f4f9fd;
-      --text-dark: #1c2c3a;
-      --text-mid: #3a5468;
-      --text-light: #6b8fa8;
-      --border: #cce0ef;
-      --shadow: 0 4px 18px rgba(26, 111, 168, 0.10);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text-dark);
-      background: var(--off-white);
-      line-height: 1.7;
-    }
-
-    /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-      background: var(--white);
-      border-bottom: 2px solid var(--primary-light);
-      box-shadow: 0 2px 12px rgba(26,111,168,0.08);
-    }
-
-    .nav-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .nav-brand {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 0.01em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-mid);
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--primary);
-    }
-
-    .nav-cta {
-      background: var(--primary);
-      color: var(--white) !important;
-      padding: 8px 20px;
-      border-radius: 24px;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--primary-dark) !important;
-      color: var(--white) !important;
-    }
-
-    /* ===== HERO ===== */
-    .hero {
-      margin-top: 64px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      min-height: 480px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 72px 24px 64px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px;
-      right: -80px;
-      width: 340px;
-      height: 340px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 50%;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px;
-      left: -60px;
-      width: 280px;
-      height: 280px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 50%;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 680px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.18);
-      color: var(--white);
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 5px 16px;
-      border-radius: 20px;
-      margin-bottom: 22px;
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 18px;
-      letter-spacing: -0.01em;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.88);
-      margin-bottom: 36px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--white);
-      color: var(--primary);
-      padding: 14px 32px;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      padding: 13px 28px;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border: 2px solid rgba(255,255,255,0.7);
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .btn-outline:hover {
-      background: rgba(255,255,255,0.12);
-      border-color: var(--white);
-    }
-
-    /* ===== SECTIONS ===== */
-    section {
-      padding: 72px 24px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-      font-weight: 800;
-      color: var(--text-dark);
-      margin-bottom: 18px;
-      line-height: 1.2;
-    }
-
-    .section-intro {
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      max-width: 640px;
-      margin-bottom: 48px;
-    }
-
-    /* ===== ABOUT ===== */
-    .about {
-      background: var(--white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-mid);
-      font-size: 1.05rem;
-      margin-bottom: 16px;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-visual {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .about-card {
-      background: var(--off-white);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px 18px;
-      text-align: center;
-    }
-
-    .about-card-icon {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .about-card h4 {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .about-card p {
-      font-size: 0.82rem;
-      color: var(--text-light);
-      margin-top: 4px;
-    }
-
-    /* ===== SERVICES ===== */
-    .services {
-      background: var(--off-white);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .service-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px 28px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius: 16px 16px 0 0;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: var(--primary-light);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-      font-size: 1.5rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 8px;
-    }
-
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      line-height: 1.6;
-    }
-
-    /* ===== CONTACT ===== */
-    .contact {
-      background: var(--white);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-
-    .contact-item-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--primary-light);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 1.2rem;
-    }
-
-    .contact-item-body h4 {
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-light);
-      margin-bottom: 4px;
-    }
-
-    .contact-item-body p,
-    .contact-item-body a {
-      font-size: 1rem;
-      color: var(--text-dark);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .contact-item-body a:hover {
-      color: var(--primary);
-    }
-
-    .rating-block {
-      background: var(--off-white);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px 28px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .rating-score {
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: var(--primary);
-      line-height: 1;
-    }
-
-    .rating-stars {
-      font-size: 1.3rem;
-      color: #f5a623;
-      margin-bottom: 4px;
-      letter-spacing: 0.05em;
-    }
-
-    .rating-label {
-      font-size: 0.85rem;
-      color: var(--text-light);
-      font-weight: 500;
-    }
-
-    .contact-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--primary);
-      color: var(--white);
-      padding: 15px 28px;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .btn-directions:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    .btn-call {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--off-white);
-      color: var(--primary);
-      padding: 14px 28px;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      border: 2px solid var(--border);
-      transition: border-color 0.2s, background 0.2s;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .btn-call:hover {
-      border-color: var(--primary);
-      background: var(--primary-light);
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--text-dark);
-      color: rgba(255,255,255,0.6);
-      text-align: center;
-      padding: 36px 24px;
-    }
-
-    footer .footer-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 6px;
-    }
-
-    footer p {
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-
-      .about-visual {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      section {
-        padding: 52px 20px;
-      }
-
-      .hero {
-        padding: 56px 20px 52px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .about-visual {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn-primary, .btn-outline {
-        width: 100%;
-        max-width: 280px;
-        text-align: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tower Laundromat | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#22201c;
+    --pine:#0f6b5c;
+    --pine-dk:#0a4b40;
+    --orange:#ff8a3d;
+    --sky:#57c7dd;
+    --sun:#ffd23f;
+    --cream:#f7f2e8;
+    --radius:24px;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;overflow-x:hidden}
+  a{color:inherit}
+
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:90;display:flex;align-items:center;justify-content:space-between;
+    padding:13px 24px;background:rgba(247,242,232,.85);backdrop-filter:blur(9px);border-bottom:2px solid rgba(15,107,92,.2);
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.4px}
+  .brand .t{width:40px;height:40px;border-radius:12px;background:var(--pine);color:#fff;display:grid;place-items:center;font-weight:900;transform:rotate(-6deg)}
+  nav .links{display:flex;gap:6px;flex-wrap:wrap}
+  nav .links a{text-decoration:none;font-weight:700;font-size:.85rem;padding:7px 14px;border-radius:16px;transition:background .2s,color .2s}
+  nav .links a:hover{background:var(--sun)}
+
+  /* HORIZONTAL SCROLL / SNAP TRACK */
+  .track{
+    display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+    height:100vh;padding-top:56px;scroll-behavior:smooth;
+    scrollbar-width:none;
+  }
+  .track::-webkit-scrollbar{display:none}
+  .panel{
+    flex:0 0 100%;scroll-snap-align:start;min-width:100%;
+    display:flex;align-items:center;justify-content:center;padding:40px;position:relative;
+  }
+  .panel .inner{max-width:820px;width:100%}
+
+  .p-hero{background:radial-gradient(circle at 20% 30%,rgba(87,199,221,.3),transparent 45%),linear-gradient(140deg,var(--pine),var(--pine-dk));color:#fff;text-align:center}
+  .p-hero .bub{position:absolute;border-radius:50%;background:rgba(255,255,255,.12)}
+  .eyebrow{display:inline-block;background:var(--sun);color:var(--pine-dk);font-weight:800;padding:6px 16px;border-radius:20px;letter-spacing:1px;font-size:.74rem;text-transform:uppercase}
+  .p-hero h1{font-size:clamp(2.6rem,8vw,5rem);line-height:.98;letter-spacing:-1.5px;margin:16px 0 12px}
+  .p-hero h1 .sun{color:var(--sun)}
+  .p-hero p{max-width:44ch;margin:0 auto 22px;color:#e2f4f0}
+  .hint{margin-top:24px;font-size:.8rem;letter-spacing:2px;color:#bfe4dd}
+  .hint b{display:inline-block;animation:sway 1.6s ease-in-out infinite}
+  @keyframes sway{50%{transform:translateX(8px)}}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:800;padding:13px 24px;border-radius:26px;transition:transform .16s,box-shadow .16s}
+  .btn.solid{background:var(--orange);color:#fff;box-shadow:0 10px 24px rgba(255,138,61,.4)}
+  .btn.line{background:transparent;color:#fff;border:1.6px solid rgba(255,255,255,.6)}
+  .btn:hover{transform:translateY(-3px)}
+
+  .p-about{background:var(--cream)}
+  .lbl{color:var(--pine);font-weight:800;letter-spacing:2px;font-size:.78rem;text-transform:uppercase}
+  .p-about h2{font-size:clamp(1.8rem,4.5vw,3rem);letter-spacing:-.5px;margin:8px 0 14px}
+  .p-about p{color:#4a463f;max-width:64ch;margin-bottom:12px}
+  .facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px;max-width:600px}
+  .fact{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 20px rgba(34,32,28,.06)}
+  .fact .e{font-size:1.6rem}
+  .fact b{display:block}
+  .fact span{font-size:.85rem;color:#6a655c}
+
+  .p-svc{background:linear-gradient(160deg,#fff,#fef6ea)}
+  .p-svc h2{font-size:clamp(1.8rem,4.5vw,2.8rem);letter-spacing:-.5px;margin:8px 0 8px;text-align:center}
+  .p-svc .sub{text-align:center;color:#6a655c;margin-bottom:22px;max-width:60ch;margin-inline:auto}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .svc{background:#fff;border-radius:18px;padding:20px;border-bottom:4px solid var(--sky)}
+  .svc:nth-child(3n-1){border-bottom-color:var(--orange)}
+  .svc:nth-child(3n){border-bottom-color:var(--sun)}
+  .svc h3{font-size:1rem;display:flex;gap:8px;align-items:center;margin-bottom:5px}
+  .svc p{font-size:.85rem;color:#6a655c}
+
+  .p-find{background:linear-gradient(150deg,var(--pine-dk),var(--pine));color:#fff;text-align:center}
+  .p-find h2{font-size:clamp(1.8rem,4.5vw,2.8rem);margin-bottom:10px}
+  .det{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin:22px 0}
+  .det div{color:#d5efe9}
+  .det strong{display:block;color:#fff;font-size:1.05rem}
+  .rate-pill{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:30px;padding:10px 20px;margin-bottom:18px}
+  .rate-pill .n{font-size:1.6rem;font-weight:900;color:var(--sun)}
+  .rate-pill .stars{color:var(--sun);letter-spacing:2px}
+
+  /* progress dots */
+  .dots{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:95;display:flex;gap:10px}
+  .dots button{width:11px;height:11px;border-radius:50%;border:2px solid var(--pine);background:transparent;cursor:pointer;padding:0;transition:background .2s,transform .2s}
+  .dots button.on{background:var(--pine);transform:scale(1.25)}
+
+  footer{position:fixed;bottom:0;left:0;right:0;text-align:center;padding:8px;font-size:.72rem;color:#8a8479;z-index:80;pointer-events:none}
+
+  @media(max-width:720px){
+    .svc-grid{grid-template-columns:1fr}
+    .facts{grid-template-columns:1fr}
+    .panel{padding:70px 24px 60px}
+    .track{height:auto;display:block;overflow:visible}
+    .panel{min-width:auto;min-height:auto}
+    .dots{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+    .track{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body>
+<nav>
+  <div class="brand"><span class="t">T</span> Tower Laundromat</div>
+  <div class="links">
+    <a href="#p1" data-go="0">Home</a>
+    <a href="#p2" data-go="1">About</a>
+    <a href="#p3" data-go="2">Services</a>
+    <a href="#p4" data-go="3">Contact</a>
+  </div>
+</nav>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-inner">
-      <a href="#" class="nav-logo">
-        <div class="nav-logo-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 2H6C4.9 2 4 2.9 4 4v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM8 4h8v1H8z"/>
-          </svg>
-        </div>
-        <span class="nav-brand">Tower Laundromat</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <span class="hero-badge">Gainesville, FL</span>
+<div class="track" id="track">
+  <section class="panel p-hero" id="p1">
+    <span class="bub" style="width:120px;height:120px;top:12%;left:12%"></span>
+    <span class="bub" style="width:70px;height:70px;bottom:16%;left:22%"></span>
+    <span class="bub" style="width:150px;height:150px;top:18%;right:10%"></span>
+    <div class="inner">
+      <span class="eyebrow">Northwest Gainesville, FL</span>
       <h1>Tower Laundromat</h1>
-      <p>Clean clothes, easy visits — your go-to laundry stop in northwest Gainesville.</p>
-      <div class="hero-buttons">
-        <a href="#services" class="btn-primary">Our Services</a>
-        <a href="#contact" class="btn-outline">Find Us</a>
+      <p>Clean clothes, easy visits &mdash; your go-to <span class="sun">laundry stop</span> in northwest Gainesville.</p>
+      <a class="btn solid" href="#p3" data-go="2">Our Services</a>
+      <div class="hint">SWIPE / SCROLL <b>&rarr;</b></div>
+    </div>
+  </section>
+
+  <section class="panel p-about" id="p2">
+    <div class="inner">
+      <div class="lbl">About Us</div>
+      <h2>A clean, convenient laundry experience</h2>
+      <p>Tower Laundromat provides Gainesville residents with a comfortable, well-maintained facility to take care of all their laundry needs quickly and efficiently. Our spacious layout fits everything from everyday loads to bulky items like comforters and blankets that won't fit in a standard home washer. We keep our machines in top condition so you spend less time waiting and more time getting on with your day.</p>
+      <p>Located at 600 NW 75th St in northwest Gainesville, we are easy to reach and ready to help with all your washing and drying needs. Contact us for current details on availability and hours.</p>
+      <div class="facts">
+        <div class="fact"><span class="e">&#128167;</span><div><b>Fresh Results</b><span>Reliable machines every time</span></div></div>
+        <div class="fact"><span class="e">&#9889;</span><div><b>Fast Cycles</b><span>High-efficiency washers &amp; dryers</span></div></div>
+        <div class="fact"><span class="e">&#128722;</span><div><b>All Loads</b><span>Small &amp; large capacity available</span></div></div>
+        <div class="fact"><span class="e">&#127968;</span><div><b>Local &amp; Trusted</b><span>Serving the Gainesville community</span></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">A Clean, Convenient Laundry Experience</h2>
-          <p>Tower Laundromat provides Gainesville residents with a comfortable, well-maintained facility to take care of all their laundry needs quickly and efficiently. Our spacious layout fits everything from everyday loads to bulky items like comforters and blankets that won't fit in a standard home washer.</p>
-          <p>We keep our machines in top condition so you spend less time waiting and more time getting on with your day. Whether you are a UF student, a busy family, or anyone in between, Tower Laundromat makes laundry day simpler.</p>
-          <p>Located at 600 NW 75th St in northwest Gainesville, we are easy to reach and ready to help with all your washing and drying needs. Contact us for current details on availability and hours.</p>
-        </div>
-        <div class="about-visual">
-          <div class="about-card">
-            <div class="about-card-icon">&#128167;</div>
-            <h4>Fresh Results</h4>
-            <p>Reliable machines every time</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">&#9889;</div>
-            <h4>Fast Cycles</h4>
-            <p>High-efficiency washers &amp; dryers</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">&#128722;</div>
-            <h4>All Loads</h4>
-            <p>Small &amp; large capacity available</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">&#127968;</div>
-            <h4>Local &amp; Trusted</h4>
-            <p>Serving the Gainesville community</p>
-          </div>
-        </div>
+  <section class="panel p-svc" id="p3">
+    <div class="inner">
+      <h2>Our Laundry Services</h2>
+      <p class="sub">From quick everyday washes to large-load laundry days, we have the equipment and space to get the job done right.</p>
+      <div class="svc-grid">
+        <div class="svc"><h3>&#128167; Self-Service Washing</h3><p>Standard and high-capacity front-load washers to tackle any size load at your own pace.</p></div>
+        <div class="svc"><h3>&#128168; Self-Service Drying</h3><p>Fast, efficient dryers in multiple sizes get your clothes dry and ready to fold quickly.</p></div>
+        <div class="svc"><h3>&#129532; Bulk &amp; Large-Load Machines</h3><p>Oversized machines accommodate comforters, blankets, rugs, and other bulky items.</p></div>
+        <div class="svc"><h3>&#128203; Drop-Off Laundry</h3><p>Too busy to wait around? Contact us for details on our drop-off wash-and-fold service options.</p></div>
+        <div class="svc"><h3>&#129509; Folding Area</h3><p>A clean, spacious folding area gives you a comfortable spot to sort and fold laundry before you head home.</p></div>
+        <div class="svc"><h3>&#129378; Detergent &amp; Supplies</h3><p>Pick up laundry detergent, fabric softener, and other essentials available on-site for your convenience.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="container">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Our Laundry Services</h2>
-      <p class="section-intro">From quick everyday washes to large-load laundry days, we have the equipment and space to get the job done right.</p>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">&#128167;</div>
-          <h3>Self-Service Washing</h3>
-          <p>Use our selection of standard and high-capacity front-load washers to tackle any size load at your own pace.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#128168;</div>
-          <h3>Self-Service Drying</h3>
-          <p>Fast, efficient dryers in multiple sizes get your clothes dry and ready to fold quickly.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#129532;</div>
-          <h3>Bulk &amp; Large-Load Machines</h3>
-          <p>Oversized machines accommodate comforters, blankets, rugs, and other bulky items that require extra room.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#128203;</div>
-          <h3>Drop-Off Laundry</h3>
-          <p>Too busy to wait around? Contact us for details on our drop-off wash-and-fold service options.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#129498;</div>
-          <h3>Folding Area</h3>
-          <p>A clean, spacious folding area gives you a comfortable spot to sort and fold laundry before you head home.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#128717;</div>
-          <h3>Detergent &amp; Supplies</h3>
-          <p>Pick up laundry detergent, fabric softener, and other essentials available on-site for your convenience.</p>
-        </div>
+  <section class="panel p-find" id="p4">
+    <div class="inner">
+      <div class="rate-pill"><span class="n">4.4</span><span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span>Google Maps Rating</span></div>
+      <h2>Visit Tower Laundromat</h2>
+      <p style="color:#d5efe9;max-width:52ch;margin:0 auto">We are conveniently located in northwest Gainesville. Stop by or give us a call &mdash; we are happy to answer any questions.</p>
+      <div class="det">
+        <div><strong>600 NW 75th St, Ste A</strong>Gainesville, FL</div>
+        <div><strong>(352) 451-4393</strong>Hours: contact us for current hours</div>
+      </div>
+      <div>
+        <a class="btn solid" href="https://www.google.com/maps/search/Tower%20Laundromat%20600%20NW%2075th%20St%20Ste%20A%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener">Get Directions &rarr;</a>
+        <a class="btn line" href="tel:+13524514393">Call (352) 451-4393</a>
       </div>
     </div>
   </section>
+</div>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <p class="section-label">Get in Touch</p>
-      <h2 class="section-title">Visit Tower Laundromat</h2>
-      <p class="section-intro">We are conveniently located in northwest Gainesville. Stop by or give us a call — we are happy to answer any questions.</p>
-      <div class="contact-grid">
-        <div class="contact-info">
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128205;</div>
-            <div class="contact-item-body">
-              <h4>Address</h4>
-              <p>600 NW 75th St, Ste A<br>Gainesville, FL</p>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128222;</div>
-            <div class="contact-item-body">
-              <h4>Phone</h4>
-              <a href="tel:+13524514393">(352) 451-4393</a>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128336;</div>
-            <div class="contact-item-body">
-              <h4>Hours</h4>
-              <p>Contact us for current hours</p>
-            </div>
-          </div>
-          <div class="rating-block">
-            <div class="rating-score">4.4</div>
-            <div>
-              <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-              <div class="rating-label">Google Maps Rating</div>
-            </div>
-          </div>
-        </div>
-        <div class="contact-actions">
-          <p style="font-size:1rem; color: var(--text-mid); margin-bottom: 8px;">Ready to visit? Get directions or call us directly — we look forward to serving you.</p>
-          <a
-            href="https://www.google.com/maps/search/Tower%20Laundromat%20600%20NW%2075th%20St%20Ste%20A%2C%20Gainesville%2C%20FL"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-directions"
-          >
-            &#128205;&nbsp; Get Directions
-          </a>
-          <a href="tel:+13524514393" class="btn-call">
-            &#128222;&nbsp; Call (352) 451-4393
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="dots" id="dots" aria-hidden="true">
+  <button data-go="0" class="on" aria-label="Panel 1"></button>
+  <button data-go="1" aria-label="Panel 2"></button>
+  <button data-go="2" aria-label="Panel 3"></button>
+  <button data-go="3" aria-label="Panel 4"></button>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p class="footer-name">Tower Laundromat</p>
-    <p>600 NW 75th St, Ste A &mdash; Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13524514393">(352) 451-4393</a></p>
-    <p style="margin-top:10px; font-size:0.8rem;">Demo website. All information is for illustration purposes.</p>
-  </footer>
+<footer>Demo website. All information is for illustration purposes.</footer>
 
+<script>
+(function(){
+  var track = document.getElementById('track');
+  var panels = track.querySelectorAll('.panel');
+  var dots = Array.prototype.slice.call(document.querySelectorAll('#dots button'));
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var beh = reduce ? 'auto' : 'smooth';
+  function goTo(i){
+    var p = panels[i];
+    if(!p) return;
+    if(window.innerWidth <= 720){ p.scrollIntoView({behavior:beh}); }
+    else { track.scrollTo({left: p.offsetLeft, behavior:beh}); }
+  }
+  document.querySelectorAll('[data-go]').forEach(function(el){
+    el.addEventListener('click', function(e){ e.preventDefault(); goTo(+el.dataset.go); });
+  });
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          var i = Array.prototype.indexOf.call(panels, e.target);
+          dots.forEach(function(d,di){ d.classList.toggle('on', di===i); });
+        }
+      });
+    },{root: window.innerWidth<=720?null:track, threshold:.6});
+    panels.forEach(function(p){ io.observe(p); });
+  }
+})();
+</script>
 </body>
 </html>
