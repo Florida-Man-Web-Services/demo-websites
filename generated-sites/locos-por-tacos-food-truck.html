@@ -1,746 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Locos por Tacos Food Truck | Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --chili:    #C0392B;
-      --chili-dk: #962d22;
-      --gold:     #F39C12;
-      --gold-lt:  #F8C471;
-      --cream:    #FDF6EC;
-      --dark:     #1A1008;
-      --mid:      #3D2B1F;
-      --text:     #2C1810;
-      --muted:    #7B5E52;
-      --white:    #FFFFFF;
-      --radius:   10px;
-      --shadow:   0 4px 24px rgba(0,0,0,0.12);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--cream);
-      color: var(--text);
-      line-height: 1.65;
-    }
-
-    /* ── Utility ── */
-    .container {
-      width: 92%;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.75rem;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-      border: none;
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
-
-    .btn-primary {
-      background: var(--chili);
-      color: var(--white);
-    }
-    .btn-primary:hover { background: var(--chili-dk); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border: 2px solid var(--white);
-    }
-    .btn-outline:hover { background: rgba(255,255,255,0.15); }
-
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 800;
-      color: var(--mid);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-subtitle {
-      font-size: 1.05rem;
-      color: var(--muted);
-      margin-bottom: 2.5rem;
-    }
-
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--dark);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      text-decoration: none;
-    }
-
-    .nav-logo .logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--chili);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .nav-logo .logo-text {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--white);
-      letter-spacing: 0.01em;
-      line-height: 1.1;
-    }
-
-    .nav-logo .logo-text span {
-      color: var(--gold);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.82);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      transition: color 0.15s;
-    }
-
-    .nav-links a:hover { color: var(--gold); }
-
-    /* Hamburger (mobile) */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .nav-toggle span {
-      display: block;
-      width: 26px;
-      height: 3px;
-      background: var(--white);
-      border-radius: 3px;
-      transition: transform 0.2s, opacity 0.2s;
-    }
-
-    @media (max-width: 700px) {
-      .nav-toggle { display: flex; }
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        gap: 0;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: var(--dark);
-        padding: 0.5rem 0 1rem;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links li a {
-        display: block;
-        padding: 0.65rem 1.5rem;
-        font-size: 1rem;
-      }
-    }
-
-    /* ── Hero ── */
-    #hero {
-      margin-top: 64px;
-      min-height: 90vh;
-      background:
-        linear-gradient(160deg, rgba(26,16,8,0.75) 0%, rgba(192,57,43,0.55) 100%),
-        repeating-linear-gradient(
-          45deg,
-          rgba(243,156,18,0.06) 0px,
-          rgba(243,156,18,0.06) 2px,
-          transparent 2px,
-          transparent 20px
-        );
-      background-color: var(--mid);
-      display: flex;
-      align-items: center;
-      padding: 4rem 0;
-    }
-
-    .hero-content {
-      max-width: 640px;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(243,156,18,0.2);
-      border: 1px solid var(--gold);
-      color: var(--gold-lt);
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.35rem 0.9rem;
-      border-radius: 50px;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero-title {
-      font-size: clamp(2.4rem, 7vw, 4rem);
-      font-weight: 900;
-      color: var(--white);
-      line-height: 1.08;
-      margin-bottom: 1.1rem;
-    }
-
-    .hero-title .accent { color: var(--gold); }
-
-    .hero-tagline {
-      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 2.2rem;
-      max-width: 520px;
-    }
-
-    .hero-ctas {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    /* Pepper graphic */
-    .hero-graphic {
-      font-size: clamp(6rem, 14vw, 10rem);
-      line-height: 1;
-      opacity: 0.18;
-      position: absolute;
-      right: 6%;
-      top: 50%;
-      transform: translateY(-50%) rotate(-15deg);
-      pointer-events: none;
-      user-select: none;
-    }
-
-    @media (max-width: 600px) { .hero-graphic { display: none; } }
-
-    /* ── About ── */
-    #about {
-      padding: 5rem 0;
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-    }
-
-    @media (max-width: 760px) {
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-    }
-
-    .about-text p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--chili) 0%, var(--gold) 100%);
-      border-radius: var(--radius);
-      padding: 2.8rem 2rem;
-      text-align: center;
-      box-shadow: var(--shadow);
-    }
-
-    .about-visual .big-emoji { font-size: 4.5rem; display: block; margin-bottom: 1rem; }
-
-    .about-visual h3 {
-      color: var(--white);
-      font-size: 1.35rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
-    .about-visual p {
-      color: rgba(255,255,255,0.85);
-      font-size: 0.95rem;
-    }
-
-    /* Rating pill */
-    .rating-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      background: var(--white);
-      border: 2px solid var(--gold);
-      border-radius: 50px;
-      padding: 0.4rem 1rem;
-      font-weight: 800;
-      font-size: 1rem;
-      color: var(--text);
-      margin-top: 1.2rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-
-    .rating-pill .stars { color: var(--gold); letter-spacing: -1px; }
-    .rating-pill .score { font-size: 1.1rem; color: var(--chili); }
-    .rating-pill .count { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
-
-    /* ── Menu / Services ── */
-    #services {
-      padding: 5rem 0;
-      background: linear-gradient(180deg, #fff5eb 0%, var(--cream) 100%);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 1.8rem 1.6rem;
-      box-shadow: var(--shadow);
-      border-top: 4px solid var(--chili);
-      transition: transform 0.18s, box-shadow 0.18s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 32px rgba(0,0,0,0.14);
-    }
-
-    .service-icon {
-      font-size: 2.2rem;
-      margin-bottom: 0.9rem;
-      display: block;
-    }
-
-    .service-card h3 {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--mid);
-      margin-bottom: 0.4rem;
-    }
-
-    .service-card p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    /* ── Contact ── */
-    #contact {
-      padding: 5rem 0;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    @media (max-width: 760px) {
-      .contact-grid { grid-template-columns: 1fr; }
-    }
-
-    .contact-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 2.2rem;
-      box-shadow: var(--shadow);
-    }
-
-    .contact-card h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--mid);
-      margin-bottom: 1.4rem;
-      padding-bottom: 0.7rem;
-      border-bottom: 2px solid var(--cream);
-    }
-
-    .contact-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.9rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .contact-row:last-child { margin-bottom: 0; }
-
-    .contact-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--cream);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .contact-info strong {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--muted);
-      margin-bottom: 0.15rem;
-    }
-
-    .contact-info a {
-      color: var(--chili);
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .contact-info a:hover { text-decoration: underline; }
-
-    .contact-info p { font-size: 0.97rem; color: var(--text); }
-
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--chili);
-      color: var(--white);
-      text-decoration: none;
-      padding: 0.7rem 1.4rem;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-top: 1.5rem;
-      transition: background 0.15s, transform 0.15s;
-    }
-    .directions-btn:hover { background: var(--chili-dk); transform: translateY(-2px); }
-
-    /* Social proof box */
-    .social-proof {
-      background: linear-gradient(135deg, var(--chili) 0%, #e74c3c 100%);
-      border-radius: var(--radius);
-      padding: 2.2rem;
-      color: var(--white);
-      text-align: center;
-      box-shadow: var(--shadow);
-    }
-
-    .social-proof .sp-label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.8;
-      margin-bottom: 0.7rem;
-    }
-
-    .social-proof .sp-score {
-      font-size: 4rem;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-
-    .social-proof .sp-stars {
-      font-size: 1.8rem;
-      letter-spacing: 2px;
-      color: var(--gold-lt);
-      margin-bottom: 0.5rem;
-    }
-
-    .social-proof .sp-count {
-      font-size: 0.95rem;
-      opacity: 0.85;
-      margin-bottom: 1.2rem;
-    }
-
-    .social-proof .sp-platform {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(255,255,255,0.15);
-      padding: 0.3rem 0.9rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: var(--dark);
-      color: rgba(255,255,255,0.6);
-      padding: 2.5rem 0 2rem;
-    }
-
-    .footer-inner {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .footer-brand {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--white);
-    }
-
-    .footer-brand span { color: var(--gold); }
-
-    .footer-copy {
-      font-size: 0.85rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      font-size: 0.88rem;
-      transition: color 0.15s;
-    }
-    .footer-links a:hover { color: var(--gold); }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Locos por Tacos Food Truck | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --pink:#ff2e88;
+    --lime:#c6ff00;
+    --cyan:#12e6d6;
+    --ink:#0a0a12;
+    --ink-2:#15121f;
+    --paper:#faf3ff;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Arial Black","Helvetica Neue",system-ui,sans-serif;
+    background:var(--ink);color:var(--paper);overflow:hidden;line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+
+  /* top marquee */
+  .ticker{position:fixed;top:0;left:0;width:100%;z-index:90;background:var(--lime);color:var(--ink);
+    border-bottom:4px solid var(--ink);overflow:hidden;white-space:nowrap}
+  .ticker__row{display:inline-flex;padding:.5rem 0;font-family:"Helvetica Neue",Arial,sans-serif;
+    font-weight:900;letter-spacing:.16em;text-transform:uppercase;font-size:.78rem;animation:mv 18s linear infinite}
+  .ticker__row span{padding:0 1.4rem}
+  @keyframes mv{to{transform:translateX(-50%)}}
+
+  /* horizontal scroller */
+  .rail{
+    display:flex;flex-wrap:nowrap;
+    height:100vh;width:100vw;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    padding-top:40px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .rail::-webkit-scrollbar{display:none}
+  .slide{
+    flex:0 0 100vw;width:100vw;height:100%;
+    scroll-snap-align:start;
+    padding:3.2rem clamp(1.4rem,6vw,7rem);
+    display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;
+  }
+  .s-hero{background:radial-gradient(circle at 30% 30%,var(--ink-2),var(--ink))}
+  .s-about{background:var(--pink);color:var(--ink)}
+  .s-serve{background:var(--ink-2)}
+  .s-rate{background:var(--cyan);color:var(--ink)}
+  .s-find{background:var(--lime);color:var(--ink)}
+
+  /* dotted texture */
+  .slide::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(rgba(255,255,255,.06) 1.5px,transparent 1.5px);background-size:22px 22px}
+  .s-about::after,.s-rate::after,.s-find::after{background-image:radial-gradient(rgba(0,0,0,.08) 1.5px,transparent 1.5px)}
+
+  .kicker{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;letter-spacing:.22em;
+    text-transform:uppercase;font-size:.7rem;margin-bottom:.8rem}
+  .s-hero .kicker{color:var(--lime)}
+  h1{font-size:clamp(2.8rem,8vw,6rem);line-height:.86;letter-spacing:-.02em;text-transform:uppercase;max-width:16ch}
+  h1 .hi{color:var(--pink)}
+  h1 .cy{color:var(--cyan)}
+  h2{font-size:clamp(2rem,5vw,3.4rem);line-height:.94;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:1.1rem;max-width:18ch}
+  p.lead{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:600;font-size:clamp(1rem,1.8vw,1.25rem);
+    max-width:44ch;margin-top:1rem}
+  .s-hero p.lead{color:rgba(250,243,255,.85)}
+
+  .reveal{opacity:0;transform:translateY(28px)}
+  html:not(.js) .reveal{opacity:1;transform:none}
+  html.js .reveal{transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+  html.js .reveal.in{opacity:1;transform:none}
+
+  .btn{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+    font-size:.82rem;padding:.9rem 1.6rem;border-radius:100px;border:3px solid var(--ink);
+    background:var(--lime);color:var(--ink);text-decoration:none;box-shadow:4px 4px 0 var(--ink);
+    transition:transform .12s,box-shadow .12s;will-change:transform}
+  .s-hero .btn{border-color:var(--paper);box-shadow:4px 4px 0 var(--pink)}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  .btn--pink{background:var(--pink);color:var(--paper)}
+  .btn--ink{background:var(--ink);color:var(--lime);border-color:var(--lime)}
+  .cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.8rem}
+
+  /* sticker */
+  .sticker{position:absolute;width:96px;height:96px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;
+    font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;line-height:1.1;border:3px solid var(--ink);
+    box-shadow:3px 3px 0 var(--ink);z-index:3}
+  .sticker--1{top:16%;right:8%;background:var(--pink);color:var(--paper);transform:rotate(12deg)}
+  .sticker--2{bottom:14%;right:12%;background:var(--cyan);color:var(--ink);transform:rotate(-9deg);width:84px;height:84px}
+
+  .rating-big{font-size:clamp(4rem,12vw,8rem);line-height:.85;font-family:"Arial Black",sans-serif}
+  .stars{font-size:1.4rem;letter-spacing:.12em}
+  .rate-sub{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:.9rem;text-transform:uppercase;letter-spacing:.06em;margin-top:.6rem}
+
+  .contact-block{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:1.05rem;line-height:1.6;margin-top:.4rem}
+  .contact-block a{text-decoration:none;border-bottom:3px solid var(--ink)}
+
+  form{max-width:440px;margin-top:1.2rem}
+  label{display:block;font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;margin:0 0 .3rem}
+  input,textarea{width:100%;padding:.7rem .8rem;border:3px solid var(--ink);border-radius:10px;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:.9rem;background:var(--paper);color:var(--ink);outline:none;margin-bottom:.8rem}
+  input:focus,textarea:focus{box-shadow:3px 3px 0 var(--pink)}
+  textarea{resize:vertical;min-height:80px}
+
+  /* nav dots + arrows */
+  .nav{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%);z-index:95;display:flex;align-items:center;gap:.7rem;
+    background:rgba(10,10,18,.7);border:2px solid var(--lime);border-radius:100px;padding:.5rem .8rem;backdrop-filter:blur(6px)}
+  .dot{width:12px;height:12px;border-radius:50%;background:rgba(250,243,255,.3);border:none;cursor:pointer;padding:0;transition:background .2s,transform .2s}
+  .dot.active{background:var(--lime);transform:scale(1.3)}
+  .arrow{background:none;border:none;color:var(--lime);font-size:1.2rem;cursor:pointer;font-family:"Arial Black",sans-serif;line-height:1;padding:0 .3rem}
+
+  .scrollhint{position:fixed;top:52px;right:1.2rem;z-index:92;font-family:"Helvetica Neue",Arial,sans-serif;
+    font-weight:900;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);opacity:.8}
+
+  @media(max-width:760px){
+    body{overflow:auto}
+    .rail{display:block;height:auto;width:auto;overflow:visible;scroll-snap-type:none;padding-top:44px}
+    .slide{flex:none;width:auto;height:auto;min-height:88vh;scroll-snap-align:none}
+    .nav{display:none}
+    .scrollhint{display:none}
+    .sticker--1{right:5%}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .rail{scroll-behavior:auto}
+    .ticker__row{animation:none}
+    .reveal,html.js .reveal{opacity:1;transform:none;transition:none}
+    .btn{transition:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="container nav-inner">
-      <a href="#hero" class="nav-logo">
-        <div class="logo-icon">🌮</div>
-        <div class="logo-text"><span>Locos</span> por Tacos</div>
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Menu</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__row">
+    <span>&#127790; Locos por Tacos &bull; Gainesville's Favorite Food Truck &bull; Tacos &bull; Street Eats &bull;</span>
+    <span>&#127790; Locos por Tacos &bull; Gainesville's Favorite Food Truck &bull; Tacos &bull; Street Eats &bull;</span>
+  </div>
+</div>
+
+<div class="scrollhint" aria-hidden="true">Scroll &rarr;</div>
+
+<div class="rail" id="rail">
 
   <!-- HERO -->
-  <section id="hero">
-    <div class="container" style="position:relative;">
-      <div class="hero-content">
-        <div class="hero-badge">🌶 Gainesville's Favorite Food Truck</div>
-        <h1 class="hero-title">
-          <span class="accent">Locos</span> por Tacos<br />Food Truck
-        </h1>
-        <p class="hero-tagline">
-          Authentic Mexican street food packed with bold flavors and made fresh to order — brought right to the streets of Gainesville.
-        </p>
-        <div class="hero-ctas">
-          <a href="#services" class="btn btn-primary">See the Menu</a>
-          <a href="#contact" class="btn btn-outline">Find Us</a>
-        </div>
+  <section class="slide s-hero" id="s0">
+    <div class="sticker sticker--1">On<br>The<br>Move</div>
+    <div class="reveal">
+      <div class="kicker">Gainesville, FL &bull; Food Truck</div>
+      <h1><span class="hi">Locos</span> por Tacos <span class="cy">Food Truck</span></h1>
+      <p class="lead">Gainesville's favorite food truck &mdash; loud flavor, fast service, straight off the street.</p>
+      <div class="cta">
+        <a class="btn" href="#s4" onclick="return goTo(4,event)">Find Us Today</a>
+        <a class="btn btn--pink" href="#s1" onclick="return goTo(1,event)">The Story</a>
       </div>
-      <div class="hero-graphic" aria-hidden="true">🌮</div>
     </div>
   </section>
 
   <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <h2 class="section-title">Real Flavor,<br />Real Streets</h2>
-          <p class="section-subtitle">A Gainesville staple on wheels</p>
-          <p>
-            Locos por Tacos brings the vibrant spirit of Mexican street food to the heart of Gainesville, FL, serving up generously loaded tacos, burritos, and more from a rolling kitchen that never cuts corners on flavor.
-          </p>
-          <p>
-            Every item is crafted with fresh ingredients, bold seasonings, and time-honored recipes that keep locals coming back again and again — whether it's a quick lunch stop or a late-night craving fix.
-          </p>
-          <p>
-            As a food truck rooted in the Gainesville community, Locos por Tacos prides itself on fast, friendly service and dishes that deliver a true taste of Mexico without the sit-down price tag.
-          </p>
-        </div>
-        <div>
-          <div class="about-visual">
-            <span class="big-emoji">🌮</span>
-            <h3>Street Food Done Right</h3>
-            <p>Fresh, bold, and always made to order — just the way it should be.</p>
-            <div class="rating-pill">
-              <span class="stars">★★★★★</span>
-              <span class="score">4.9</span>
-              <span class="count">(48 reviews)</span>
-            </div>
-          </div>
-        </div>
+  <section class="slide s-about" id="s1">
+    <div class="reveal">
+      <div class="kicker">01 &mdash; About</div>
+      <h2>Real Tacos. Real Fast.</h2>
+      <p class="lead">Locos por Tacos rolls up with bold, made-to-order tacos and the kind of street-food energy Gainesville loves. Follow the truck, grab a plate, and taste why the line is worth it.</p>
+    </div>
+  </section>
+
+  <!-- SERVE -->
+  <section class="slide s-serve" id="s2">
+    <div class="sticker sticker--2">Hot<br>&amp;<br>Fresh</div>
+    <div class="reveal">
+      <div class="kicker" style="color:var(--cyan)">02 &mdash; What We Do</div>
+      <h2>Street Tacos, Done Loud</h2>
+      <p class="lead">Tacos made fresh to order, served with a smile from the window. Roll up hungry &mdash; we will handle the rest.</p>
+    </div>
+  </section>
+
+  <!-- RATING -->
+  <section class="slide s-rate" id="s3">
+    <div class="reveal">
+      <div class="kicker">03 &mdash; The Reviews Are In</div>
+      <div class="rating-big">4.9</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="rate-sub">Google Maps Rating &bull; Based on 48 reviews</div>
+      <div class="cta">
+        <a class="btn btn--ink" href="https://www.google.com/maps/search/Locos%20por%20Tacos%20Food%20Truck%201712%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">See Us on Google Maps</a>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES / MENU -->
-  <section id="services">
-    <div class="container">
-      <h2 class="section-title" style="text-align:center;">What We Serve</h2>
-      <p class="section-subtitle" style="text-align:center;">Contact us for current offerings and daily specials</p>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <span class="service-icon">🌮</span>
-          <h3>Street Tacos</h3>
-          <p>Classic Mexican-style tacos on soft corn or flour tortillas, loaded with your choice of protein, fresh toppings, and house-made salsa.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">🌯</span>
-          <h3>Burritos</h3>
-          <p>Hearty, overstuffed burritos packed with rice, beans, cheese, and seasoned filling — a full meal wrapped up tight.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">🧆</span>
-          <h3>Quesadillas</h3>
-          <p>Crispy, golden quesadillas filled with melted cheese and savory ingredients, served with sides of salsa and crema.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">🌶</span>
-          <h3>Nachos</h3>
-          <p>Loaded nacho plates piled high with chips, toppings, and bold sauces — perfect for sharing or all to yourself.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">🥗</span>
-          <h3>Bowls</h3>
-          <p>Fresh burrito-style bowls over rice or lettuce, customizable with your favorite proteins, toppings, and house sauces.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">🥤</span>
-          <h3>Drinks &amp; Sides</h3>
-          <p>Refreshing beverages and side dishes to round out your order. Contact us for details on current drink and side offerings.</p>
-        </div>
-
+  <!-- FIND / CONTACT -->
+  <section class="slide s-find" id="s4">
+    <div class="reveal">
+      <div class="kicker">04 &mdash; Find Us</div>
+      <h2>Come Get Some</h2>
+      <div class="contact-block">
+        1712 SW 13th St, Gainesville, FL 32608<br>
+        <a href="tel:+13528701377">(352) 870-1377</a>
       </div>
+      <div class="cta">
+        <a class="btn btn--ink" href="https://www.google.com/maps/search/Locos%20por%20Tacos%20Food%20Truck%201712%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">&#128205; Get Directions</a>
+      </div>
+      <form onsubmit="return sent(event)">
+        <label for="nm">Name</label><input id="nm" type="text" placeholder="Your name" required />
+        <label for="ph">Phone</label><input id="ph" type="tel" placeholder="(352) 000-0000" />
+        <label for="ms">Message</label><textarea id="ms" placeholder="Catering, events, or just say hi..."></textarea>
+        <button class="btn btn--pink" type="submit" id="sendbtn">Send Message</button>
+      </form>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <h2 class="section-title" style="text-align:center;">Find Us</h2>
-      <p class="section-subtitle" style="text-align:center;">We're out on the road — come track us down</p>
-      <div class="contact-grid">
+</div>
 
-        <div class="contact-card">
-          <h3>Get in Touch</h3>
+<nav class="nav" aria-label="Section navigation">
+  <button class="arrow" onclick="step(-1)" aria-label="Previous">&#8249;</button>
+  <button class="dot active" onclick="goTo(0)" aria-label="Slide 1"></button>
+  <button class="dot" onclick="goTo(1)" aria-label="Slide 2"></button>
+  <button class="dot" onclick="goTo(2)" aria-label="Slide 3"></button>
+  <button class="dot" onclick="goTo(3)" aria-label="Slide 4"></button>
+  <button class="dot" onclick="goTo(4)" aria-label="Slide 5"></button>
+  <button class="arrow" onclick="step(1)" aria-label="Next">&#8250;</button>
+</nav>
 
-          <div class="contact-row">
-            <div class="contact-icon">📍</div>
-            <div class="contact-info">
-              <strong>Address</strong>
-              <p>1712 SW 13th St<br />Gainesville, FL 32608</p>
-            </div>
-          </div>
+<script>
+(function(){
+  var rail=document.getElementById('rail');
+  var slides=Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dots=Array.prototype.slice.call(document.querySelectorAll('.dot'));
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur=0;
 
-          <div class="contact-row">
-            <div class="contact-icon">📞</div>
-            <div class="contact-info">
-              <strong>Phone</strong>
-              <p><a href="tel:+13528701377">(352) 870-1377</a></p>
-            </div>
-          </div>
+  window.goTo=function(i,ev){
+    if(ev) ev.preventDefault();
+    var t=slides[i]; if(!t) return false;
+    t.scrollIntoView({behavior:reduce?'auto':'smooth',inline:'start',block:'nearest'});
+    return false;
+  };
+  window.step=function(d){ window.goTo(Math.max(0,Math.min(slides.length-1,cur+d))); };
 
-          <div class="contact-row">
-            <div class="contact-icon">🕐</div>
-            <div class="contact-info">
-              <strong>Hours</strong>
-              <p>Contact us for current schedule and location</p>
-            </div>
-          </div>
+  var els=Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if(reduce || !('IntersectionObserver' in window)){
+    els.forEach(function(e){e.classList.add('in');});
+  } else {
+    document.documentElement.classList.add('js');
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          var idx=slides.indexOf(e.target.closest('.slide'));
+          if(idx>-1){cur=idx;dots.forEach(function(d,j){d.classList.toggle('active',j===idx);});}
+        }
+      });
+    },{root:rail,threshold:.5});
+    els.forEach(function(e){io.observe(e);});
 
-          <a
-            href="https://www.google.com/maps/search/Locos%20por%20Tacos%20Food%20Truck%201712%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608"
-            class="directions-btn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            📍 Get Directions
-          </a>
-        </div>
-
-        <div class="social-proof">
-          <p class="sp-label">Google Maps Rating</p>
-          <div class="sp-score">4.9</div>
-          <div class="sp-stars">★★★★★</div>
-          <p class="sp-count">Based on 48 reviews</p>
-          <div class="sp-platform">⭐ Google Maps</div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="container footer-inner">
-      <div class="footer-brand"><span>Locos</span> por Tacos Food Truck</div>
-      <ul class="footer-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Menu</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <p class="footer-copy">1712 SW 13th St, Gainesville, FL 32608 &middot; (352) 870-1377</p>
-    </div>
-  </footer>
-
-  <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('navToggle');
-    const links  = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
-  </script>
-
+    document.querySelectorAll('.btn').forEach(function(b){
+      b.addEventListener('mousemove',function(e){
+        var r=b.getBoundingClientRect();
+        b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.18)+'px,'+((e.clientY-r.top-r.height/2)*.28-2)+'px)';
+      });
+      b.addEventListener('mouseleave',function(){b.style.transform='';});
+    });
+  }
+})();
+function sent(e){
+  e.preventDefault();
+  var b=document.getElementById('sendbtn');var t=b.textContent;
+  b.textContent='Message Sent!';b.disabled=true;
+  setTimeout(function(){b.textContent=t;b.disabled=false;e.target.reset();},2600);
+  return false;
+}
+</script>
 </body>
 </html>

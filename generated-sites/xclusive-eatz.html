@@ -1,682 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xclusive Eatz | Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --red:    #c0392b;
-      --red-dk: #96231a;
-      --gold:   #e8a020;
-      --cream:  #fdf6ec;
-      --charcoal: #1e1e1e;
-      --grey:   #4a4a4a;
-      --light:  #f5f0e8;
-      --white:  #ffffff;
-      --radius: 6px;
-      --shadow: 0 4px 20px rgba(0,0,0,0.12);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      color: var(--charcoal);
-      background: var(--cream);
-      line-height: 1.7;
-    }
-
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--charcoal);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 68px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .nav-logo .logo-text {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: var(--white);
-      letter-spacing: 0.03em;
-    }
-
-    .nav-logo .logo-text span {
-      color: var(--gold);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #ccc;
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold); }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── Mobile Nav ── */
-    @media (max-width: 700px) {
-      .hamburger { display: flex; }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 68px;
-        left: 0; right: 0;
-        background: var(--charcoal);
-        flex-direction: column;
-        gap: 0;
-        border-top: 1px solid #333;
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-links li { border-bottom: 1px solid #333; }
-
-      .nav-links a {
-        display: block;
-        padding: 1rem 2rem;
-      }
-    }
-
-    /* ── Hero ── */
-    .hero {
-      margin-top: 68px;
-      min-height: 88vh;
-      background: linear-gradient(155deg, var(--charcoal) 0%, #2c1a0e 60%, var(--red-dk) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* decorative accent circles */
-    .hero::before,
-    .hero::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.06;
-    }
-
-    .hero::before {
-      width: 550px; height: 550px;
-      background: var(--gold);
-      top: -150px; right: -150px;
-    }
-
-    .hero::after {
-      width: 380px; height: 380px;
-      background: var(--red);
-      bottom: -120px; left: -100px;
-    }
-
-    .hero-inner {
-      max-width: 780px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--red);
-      color: var(--white);
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 0.4rem 1.2rem;
-      border-radius: 50px;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.6rem, 7vw, 5rem);
-      color: var(--white);
-      line-height: 1.1;
-      margin-bottom: 0.4rem;
-    }
-
-    .hero h1 span { color: var(--gold); }
-
-    .hero-tagline {
-      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-      color: #d4c8b8;
-      margin: 1.2rem 0 2.4rem;
-      font-style: italic;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--charcoal);
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      font-size: 1rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.85rem 2.4rem;
-      border-radius: var(--radius);
-      text-decoration: none;
-      transition: background 0.25s, transform 0.2s;
-      box-shadow: 0 4px 18px rgba(232,160,32,0.35);
-    }
-
-    .hero-cta:hover {
-      background: #d08f10;
-      transform: translateY(-2px);
-    }
-
-    /* ── Section shared ── */
-    section { padding: 5rem 1.5rem; }
-
-    .container { max-width: 1060px; margin: 0 auto; }
-
-    .section-label {
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-      color: var(--charcoal);
-    }
-
-    .divider {
-      width: 52px;
-      height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin-bottom: 2rem;
-    }
-
-    /* ── About ── */
-    .about {
-      background: var(--white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--grey);
-      margin-bottom: 1.1rem;
-      font-size: 1.05rem;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--red) 0%, var(--red-dk) 50%, #5c1010 100%);
-      border-radius: 12px;
-      min-height: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--white);
-      text-align: center;
-      padding: 2.5rem;
-      box-shadow: var(--shadow);
-    }
-
-    .about-visual .big-icon {
-      font-size: 5rem;
-      margin-bottom: 1rem;
-      line-height: 1;
-    }
-
-    .about-visual h3 {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .about-visual p {
-      font-family: Arial, sans-serif;
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
-
-    @media (max-width: 720px) {
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .about-visual { min-height: 220px; }
-    }
-
-    /* ── Services ── */
-    .services {
-      background: var(--light);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 2rem 1.6rem;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
-      border-top: 4px solid var(--red);
-      transition: transform 0.22s, box-shadow 0.22s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.13);
-    }
-
-    .service-icon {
-      font-size: 2.2rem;
-      margin-bottom: 0.8rem;
-      line-height: 1;
-    }
-
-    .service-card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 0.5rem;
-      color: var(--charcoal);
-    }
-
-    .service-card p {
-      font-family: Arial, sans-serif;
-      font-size: 0.92rem;
-      color: var(--grey);
-      line-height: 1.6;
-    }
-
-    /* ── Contact ── */
-    .contact {
-      background: var(--charcoal);
-      color: var(--white);
-    }
-
-    .contact .section-title { color: var(--white); }
-    .contact .section-label { color: var(--gold); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: start;
-    }
-
-    @media (max-width: 720px) {
-      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-
-    .contact-info-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 1.3rem;
-    }
-
-    .contact-info-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      font-family: Arial, sans-serif;
-    }
-
-    .contact-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-
-    .contact-detail strong {
-      display: block;
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.15rem;
-    }
-
-    .contact-detail a {
-      color: #ddd;
-      text-decoration: none;
-    }
-
-    .contact-detail a:hover { color: var(--gold); }
-
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1.8rem;
-      background: var(--gold);
-      color: var(--charcoal);
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      font-size: 0.95rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 0.8rem 1.8rem;
-      border-radius: var(--radius);
-      text-decoration: none;
-      transition: background 0.22s, transform 0.2s;
-    }
-
-    .directions-btn:hover {
-      background: #d08f10;
-      transform: translateY(-2px);
-    }
-
-    /* Rating card */
-    .rating-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .rating-card h3 {
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-    }
-
-    .rating-score {
-      font-size: 5rem;
-      font-weight: bold;
-      color: var(--white);
-      line-height: 1;
-      margin-bottom: 0.3rem;
-    }
-
-    .stars {
-      font-size: 1.7rem;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.6rem;
-    }
-
-    .stars .filled { color: var(--gold); }
-    .stars .half   { color: var(--gold); opacity: 0.7; }
-
-    .rating-source {
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      color: #aaa;
-    }
-
-    .rating-count {
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      color: #bbb;
-      margin-top: 0.4rem;
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: #111;
-      color: #888;
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-family: Arial, sans-serif;
-      font-size: 0.85rem;
-    }
-
-    footer strong { color: #bbb; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Xclusive Eatz | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --black:#0b0b0b;
+    --white:#ffffff;
+    --acid:#d7ff2e;
+    --violet:#7b3cff;
+    --grey:#8a8a8a;
+    --panel:#141414;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Helvetica Neue",Arial,system-ui,sans-serif;
+    background:var(--black);color:var(--white);line-height:1.5;overflow-x:hidden;
+  }
+  a{color:inherit}
+  .mono{font-family:"Courier New",monospace}
+  .blk{font-family:"Arial Black","Helvetica Neue",sans-serif;font-weight:900}
+
+  /* marquee */
+  .marq{border-top:3px solid var(--acid);border-bottom:3px solid var(--acid);overflow:hidden;white-space:nowrap;background:var(--black)}
+  .marq__t{display:inline-flex;gap:1.6rem;padding:.5rem 0;font-family:"Arial Black",sans-serif;
+    font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acid);animation:mv 18s linear infinite}
+  .marq__t b{color:var(--violet)}
+  @keyframes mv{to{transform:translateX(-50%)}}
+
+  .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(1.2rem,4vw,3rem)}
+
+  /* HERO — oversized asymmetric type */
+  .hero{padding:clamp(3rem,7vw,6rem) 0 clamp(2rem,5vw,4rem);position:relative}
+  .hero .tag{font-family:"Arial Black",sans-serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acid);margin-bottom:1.2rem}
+  .giant{font-family:"Arial Black",sans-serif;font-weight:900;text-transform:uppercase;
+    font-size:clamp(4rem,22vw,17rem);line-height:.78;letter-spacing:-.03em}
+  .giant .x{color:var(--acid)}
+  .giant .eatz{display:block;margin-left:clamp(1rem,14vw,10rem);
+    background:linear-gradient(90deg,var(--violet),var(--acid));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-lede{margin-left:auto;max-width:30ch;text-align:right;margin-top:1.6rem;
+    font-size:clamp(1.05rem,2.4vw,1.5rem);font-weight:600;color:var(--white)}
+  .hero-lede em{color:var(--acid);font-style:normal}
+  .hero .idx{position:absolute;top:clamp(2rem,6vw,5rem);right:0;font-family:"Courier New",monospace;
+    font-size:.8rem;letter-spacing:.1em;color:var(--grey)}
+
+  .sticker{display:inline-flex;align-items:center;justify-content:center;text-align:center;
+    width:120px;height:120px;border-radius:50%;border:3px solid var(--black);background:var(--acid);color:var(--black);
+    font-family:"Arial Black",sans-serif;font-size:.78rem;letter-spacing:.03em;text-transform:uppercase;line-height:1.1;
+    transform:rotate(-12deg);box-shadow:5px 5px 0 var(--violet)}
+
+  /* editorial rows */
+  .row{display:grid;gap:2rem;padding:clamp(2.4rem,6vw,5rem) 0;border-top:2px solid #262626;align-items:start}
+  .row--about{grid-template-columns:0.9fr 1.6fr}
+  .row--menu{grid-template-columns:1.6fr 0.9fr}
+  .row--rate{grid-template-columns:1fr}
+  .num{font-family:"Arial Black",sans-serif;font-size:clamp(3rem,8vw,6rem);line-height:.8;color:#2a2a2a}
+  .label{font-family:"Arial Black",sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acid);margin-bottom:1rem}
+  h2{font-family:"Arial Black",sans-serif;font-size:clamp(1.9rem,5vw,3.6rem);line-height:.94;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:1.1rem}
+  h2 .v{color:var(--violet)}
+  p.body{font-size:clamp(1.02rem,1.6vw,1.2rem);line-height:1.7;color:#d8d8d8;max-width:54ch;margin-bottom:1rem}
+
+  html.js .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+  html.js .reveal.in{opacity:1;transform:none}
+
+  ul.tags{list-style:none;display:flex;flex-wrap:wrap;gap:.8rem}
+  ul.tags li{font-family:"Arial Black",sans-serif;font-size:.92rem;letter-spacing:.02em;text-transform:uppercase;
+    border:3px solid var(--acid);border-radius:100px;padding:.55rem 1.2rem;color:var(--white);transition:transform .12s ease}
+  ul.tags li:hover{transform:translate(-2px,-2px);background:var(--acid);color:var(--black)}
+
+  .rate-huge{display:flex;align-items:baseline;gap:1.4rem;flex-wrap:wrap}
+  .rate-huge .n{font-family:"Arial Black",sans-serif;font-size:clamp(6rem,20vw,15rem);line-height:.78;color:var(--acid)}
+  .rate-huge .meta .s{font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:.1em;color:var(--violet)}
+  .rate-huge .meta small{display:block;font-family:"Arial Black",sans-serif;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-top:.6rem}
+
+  /* find/contact split asymmetric */
+  .foot{display:grid;grid-template-columns:1.3fr 1fr;gap:2.4rem;padding:clamp(2.4rem,6vw,5rem) 0;border-top:2px solid #262626}
+  .addr{font-family:"Arial Black",sans-serif;font-size:clamp(1.3rem,3vw,2rem);line-height:1.4;margin-bottom:.5rem}
+  .phone a{font-family:"Arial Black",sans-serif;font-size:clamp(1.6rem,4.5vw,2.6rem);text-decoration:none;color:var(--acid)}
+
+  .btn{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;text-decoration:none;
+    font-family:"Arial Black",sans-serif;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:.9rem 1.7rem;border-radius:100px;border:3px solid var(--acid);background:var(--acid);color:var(--black);
+    box-shadow:4px 4px 0 var(--violet);transition:transform .12s ease,box-shadow .12s ease;will-change:transform}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--violet)}
+  .btn:active{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--violet)}
+  .btn--ghost{background:transparent;color:var(--acid)}
+  .cta{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1.4rem}
+
+  label{display:block;font-family:"Arial Black",sans-serif;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;margin:0 0 .3rem;color:var(--acid)}
+  input,textarea{width:100%;padding:.8rem .9rem;border:3px solid #333;border-radius:12px;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-size:.95rem;background:var(--panel);color:var(--white);outline:none;margin-bottom:.8rem}
+  input:focus,textarea:focus{border-color:var(--acid);box-shadow:3px 3px 0 var(--violet)}
+  textarea{resize:vertical;min-height:96px}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+
+  footer{border-top:3px solid var(--acid);padding:2.4rem 0;text-align:center}
+  footer .b{font-family:"Arial Black",sans-serif;font-size:1.6rem;text-transform:uppercase}
+  footer .b span{color:var(--acid)}
+  footer small{display:block;color:var(--grey);margin-top:.6rem;font-size:.82rem}
+
+  @media(max-width:820px){
+    .row--about,.row--menu,.foot{grid-template-columns:1fr}
+    .hero-lede{text-align:left;margin-left:0}
+    .giant .eatz{margin-left:0}
+    .f2{grid-template-columns:1fr}
+    .hero .idx{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .marq__t{animation:none}
+    html.js .reveal{opacity:1;transform:none;transition:none}
+    .btn{transition:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#home" class="nav-logo">
-      <div class="logo-icon">&#127869;</div>
-      <span class="logo-text"><span>Xclusive</span> Eatz</span>
-    </a>
-    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Menu & Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<div class="marq" aria-hidden="true">
+  <div class="marq__t">
+    <span>Bold Flavors &bull; <b>Real Food</b> &bull; An Experience Worth Coming Back For &bull; Gainesville, FL &bull; Bold Flavors &bull; <b>Real Food</b> &bull; An Experience Worth Coming Back For &bull; Gainesville, FL &bull; </span>
+  </div>
+</div>
+
+<div class="wrap">
 
   <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-inner">
-      <div class="hero-badge">Gainesville, FL</div>
-      <h1><span>Xclusive</span> Eatz</h1>
-      <p class="hero-tagline">Bold Flavors. Real Food. An Experience Worth Coming Back For.</p>
-      <a href="#contact" class="hero-cta">Find Us Today</a>
-    </div>
-  </section>
+  <header class="hero">
+    <div class="idx">GNV / 32641 &mdash; NO.01</div>
+    <div class="tag">Gainesville, FL</div>
+    <h1 class="giant"><span class="x">X</span>clusive<span class="eatz">Eatz</span></h1>
+    <p class="hero-lede">Bold flavors. <em>Real food.</em> An experience worth coming back for.</p>
+  </header>
 
   <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Our Story</p>
-          <h2 class="section-title">Good Food, Good Vibes, Every Time</h2>
-          <div class="divider"></div>
-          <p>Xclusive Eatz brings a unique dining experience to the heart of Gainesville, serving up bold, satisfying food crafted with quality ingredients and plenty of flavor. Whether you're grabbing a quick bite or settling in for a full meal, the menu is built to impress.</p>
-          <p>Nestled in the SE Hawthorne Road corridor, Xclusive Eatz has become a local go-to for anyone craving food that's anything but ordinary. Friendly service and a welcoming atmosphere keep guests coming back for more.</p>
-          <p>From hearty plates to satisfying flavors, every dish is prepared with care. Stop by and taste the difference — contact us for today's offerings and specials.</p>
-        </div>
-        <div class="about-visual">
-          <div class="big-icon">&#127859;</div>
-          <h3>Fresh &amp; Flavorful</h3>
-          <p>Made to order, served with pride, right here in Gainesville.</p>
-        </div>
+  <section class="row row--about">
+    <div class="reveal"><div class="num">01</div></div>
+    <div class="reveal">
+      <div class="label">The Concept</div>
+      <h2>Food That<br>Hits <span class="v">Different</span></h2>
+      <p class="body">Xclusive Eatz is a Gainesville spot built on one simple idea: bold flavors and real food, every single time. It's an experience worth coming back for.</p>
+      <p class="body">Come hungry and leave happy. Contact us to learn more about what we're cooking up.</p>
+      <div style="margin-top:1rem"><span class="sticker">Bold<br>Flavors<br>Only</span></div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="row row--menu">
+    <div class="reveal">
+      <div class="label">What We're About</div>
+      <h2>Real Food,<br>No Shortcuts</h2>
+      <ul class="tags">
+        <li>Bold Flavors</li>
+        <li>Real Food</li>
+        <li>Made to Order</li>
+        <li>Local &amp; Proud</li>
+        <li>Worth the Trip</li>
+      </ul>
+    </div>
+    <div class="reveal"><div class="num">02</div></div>
+  </section>
+
+  <!-- RATING -->
+  <section class="row row--rate reveal">
+    <div class="label">The Reviews Are In</div>
+    <div class="rate-huge">
+      <div class="n">4.5</div>
+      <div class="meta">
+        <div class="s">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <small>Google Maps Rating<br>Based on 2 reviews</small>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="container">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Menu &amp; Services</h2>
-      <div class="divider"></div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">&#127857;</div>
-          <h3>Dine-In</h3>
-          <p>Enjoy a relaxed, welcoming atmosphere where you can sit down, unwind, and savor every bite at your own pace.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128230;</div>
-          <h3>Takeout Orders</h3>
-          <p>Short on time? Call ahead and have your order ready to pick up — hot, fresh, and packed to go.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127828;</div>
-          <h3>Signature Entrees</h3>
-          <p>Our rotating selection of signature dishes puts bold flavors front and center. Contact us for today's available options.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127839;</div>
-          <h3>Sides &amp; Add-Ons</h3>
-          <p>Round out your meal with a variety of classic and creative sides to complement any main dish on the menu.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127870;</div>
-          <h3>Catering Inquiries</h3>
-          <p>Planning an event or gathering? Reach out to discuss catering options and custom orders for your occasion.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127866;</div>
-          <h3>Daily Specials</h3>
-          <p>Check in regularly or give us a call for our latest daily specials — fresh ideas and limited-time offerings.</p>
-        </div>
-
+  <!-- FIND + CONTACT -->
+  <section class="foot">
+    <div class="reveal">
+      <div class="label">Find Us</div>
+      <h2 style="font-size:clamp(1.7rem,4vw,2.8rem)">Pull Up</h2>
+      <p class="addr">1714 SE Hawthorne Rd<br>Gainesville, FL 32641</p>
+      <p class="phone"><a href="tel:+13523632782">(352) 363-2782</a></p>
+      <div class="cta">
+        <a class="btn" href="https://www.google.com/maps/search/Xclusive%20Eatz%201714%20SE%20Hawthorne%20Rd%2C%20Gainesville%2C%20FL%2032641" target="_blank" rel="noopener">&#128506; Get Directions</a>
       </div>
+    </div>
+    <div class="reveal">
+      <div class="label">Get in Touch</div>
+      <form onsubmit="return sent(event)">
+        <div class="f2">
+          <div><label for="nm">Name</label><input id="nm" type="text" placeholder="Jane Smith" required /></div>
+          <div><label for="ph">Phone</label><input id="ph" type="tel" placeholder="(352) 000-0000" /></div>
+        </div>
+        <label for="em">Email</label><input id="em" type="email" placeholder="jane@example.com" required />
+        <label for="ms">Message</label>
+        <textarea id="ms" placeholder="Tell us what you'd like to know..."></textarea>
+        <button class="btn" type="submit" id="sendbtn">Send Message</button>
+      </form>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <p class="section-label">Get In Touch</p>
-      <h2 class="section-title">Visit Xclusive Eatz</h2>
-      <div class="divider"></div>
-      <div class="contact-grid">
+</div>
 
-        <div>
-          <ul class="contact-info-list">
-            <li>
-              <div class="contact-icon">&#128205;</div>
-              <div class="contact-detail">
-                <strong>Address</strong>
-                1714 SE Hawthorne Rd<br>Gainesville, FL 32641
-              </div>
-            </li>
-            <li>
-              <div class="contact-icon">&#128222;</div>
-              <div class="contact-detail">
-                <strong>Phone</strong>
-                <a href="tel:+13523632782">(352) 363-2782</a>
-              </div>
-            </li>
-            <li>
-              <div class="contact-icon">&#128337;</div>
-              <div class="contact-detail">
-                <strong>Hours</strong>
-                Contact us for current hours
-              </div>
-            </li>
-          </ul>
-          <a
-            href="https://www.google.com/maps/search/Xclusive%20Eatz%201714%20SE%20Hawthorne%20Rd%2C%20Gainesville%2C%20FL%2032641"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="directions-btn"
-          >
-            &#128506; Get Directions
-          </a>
-        </div>
+<footer>
+  <div class="b"><span>X</span>clusive Eatz</div>
+  <small>Bold flavors. Real food. &mdash; 1714 SE Hawthorne Rd, Gainesville, FL 32641 &bull; (352) 363-2782</small>
+  <small>&copy; 2026 Xclusive Eatz</small>
+</footer>
 
-        <div class="rating-card">
-          <h3>Google Maps Rating</h3>
-          <div class="rating-score">4.5</div>
-          <div class="stars">
-            <span class="filled">&#9733;</span>
-            <span class="filled">&#9733;</span>
-            <span class="filled">&#9733;</span>
-            <span class="filled">&#9733;</span>
-            <span class="half">&#9734;</span>
-          </div>
-          <p class="rating-source">Rated on Google Maps</p>
-          <p class="rating-count">Based on 2 reviews</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p><strong>Xclusive Eatz</strong> &mdash; 1714 SE Hawthorne Rd, Gainesville, FL 32641 &mdash; <a href="tel:+13523632782" style="color:#888;">(352) 363-2782</a></p>
-    <p style="margin-top:0.5rem;">&copy; 2026 Xclusive Eatz. All rights reserved.</p>
-  </footer>
-
-  <script>
-    // Mobile nav toggle
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('nav-links');
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els=Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if(!reduce && 'IntersectionObserver' in window){
+    document.documentElement.classList.add('js');
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+    },{threshold:.16});
+    els.forEach(function(e){io.observe(e);});
+    document.querySelectorAll('.btn').forEach(function(b){
+      b.addEventListener('mousemove',function(e){
+        var r=b.getBoundingClientRect();
+        b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.3-2)+'px)';
+      });
+      b.addEventListener('mouseleave',function(){b.style.transform='';});
     });
-    // Close nav on link click (mobile)
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => navLinks.classList.remove('open'));
-    });
-  </script>
-
+  }
+})();
+function sent(e){
+  e.preventDefault();
+  var b=document.getElementById('sendbtn');var t=b.textContent;
+  b.textContent='Message Sent!';b.disabled=true;
+  setTimeout(function(){b.textContent=t;b.disabled=false;e.target.reset();},2600);
+  return false;
+}
+</script>
 </body>
 </html>

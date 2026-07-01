@@ -1,1137 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chef JJ Creations | Catering in Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C96B;
-      --dark: #1A1209;
-      --dark-mid: #2B1F0A;
-      --warm-brown: #4A2E0C;
-      --cream: #FAF3E0;
-      --cream-mid: #F0E6C8;
-      --text-dark: #1A1209;
-      --text-mid: #4A3B1F;
-      --text-light: #8C7355;
-      --white: #FFFFFF;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background-color: var(--cream);
-      color: var(--text-dark);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-      background: rgba(26, 18, 9, 0.97);
-      backdrop-filter: blur(6px);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 68px;
-      border-bottom: 2px solid var(--gold);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .nav-title {
-      color: var(--white);
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      line-height: 1.2;
-    }
-
-    .nav-title span {
-      color: var(--gold);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--cream-mid);
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-      font-family: 'Arial', sans-serif;
-      font-weight: 500;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold);
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 2px;
-      background: var(--cream-mid);
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-
-    .hamburger:hover span {
-      background: var(--gold);
-    }
-
-    /* Mobile menu */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 68px;
-      left: 0;
-      width: 100%;
-      background: var(--dark);
-      border-bottom: 2px solid var(--gold);
-      z-index: 99;
-      padding: 1.5rem 2rem;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .mobile-menu.open {
-      display: flex;
-    }
-
-    .mobile-menu a {
-      color: var(--cream-mid);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 1rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .mobile-menu a:hover {
-      color: var(--gold);
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 2rem 4rem;
-      background: linear-gradient(160deg, var(--dark) 0%, var(--dark-mid) 40%, var(--warm-brown) 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(201,168,76,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 60% at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* Decorative plate ring */
-    .hero-ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: min(600px, 90vw);
-      height: min(600px, 90vw);
-      border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.12);
-      pointer-events: none;
-    }
-
-    .hero-ring-2 {
-      width: min(750px, 110vw);
-      height: min(750px, 110vw);
-      border-color: rgba(201,168,76,0.06);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 700px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(201,168,76,0.15);
-      border: 1px solid rgba(201,168,76,0.4);
-      color: var(--gold-light);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 0.4rem 1.2rem;
-      border-radius: 100px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 2px 24px rgba(0,0,0,0.5);
-    }
-
-    .hero h1 em {
-      color: var(--gold);
-      font-style: normal;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--cream-mid);
-      margin-bottom: 2.5rem;
-      opacity: 0.9;
-      font-style: italic;
-    }
-
-    .hero-cta-group {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--dark);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      border: 2px solid var(--gold);
-      transition: background 0.2s, color 0.2s, transform 0.15s;
-      cursor: pointer;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-light);
-      border-color: var(--gold-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      display: inline-block;
-      background: transparent;
-      color: var(--cream-mid);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-weight: 600;
-      font-size: 0.9rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      border: 2px solid rgba(255,255,255,0.3);
-      transition: border-color 0.2s, color 0.2s, transform 0.15s;
-      cursor: pointer;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    /* ── SECTION COMMON ── */
-    section {
-      padding: 5rem 2rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--text-dark);
-      line-height: 1.2;
-      margin-bottom: 1.25rem;
-    }
-
-    .section-title.light {
-      color: var(--white);
-    }
-
-    .section-divider {
-      width: 60px;
-      height: 3px;
-      background: var(--gold);
-      margin-bottom: 2rem;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--cream);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--dark-mid) 0%, var(--warm-brown) 100%);
-      border-radius: 8px;
-      aspect-ratio: 4/3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      border: 2px solid rgba(201,168,76,0.25);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .about-visual::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 30% 70%, rgba(201,168,76,0.1) 0%, transparent 60%);
-    }
-
-    .about-visual-icon {
-      font-size: 5rem;
-      position: relative;
-      z-index: 1;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
-    }
-
-    .about-visual-text {
-      color: var(--gold);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 1;
-    }
-
-    .about-text p {
-      color: var(--text-mid);
-      font-size: 1.05rem;
-      margin-bottom: 1.25rem;
-      line-height: 1.8;
-    }
-
-    .about-highlights {
-      display: flex;
-      gap: 2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .highlight-item {
-      text-align: center;
-    }
-
-    .highlight-num {
-      display: block;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .highlight-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-top: 0.25rem;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: linear-gradient(160deg, var(--dark) 0%, var(--dark-mid) 100%);
-    }
-
-    .services-header {
-      text-align: center;
-      margin-bottom: 3.5rem;
-    }
-
-    .services-header .section-label {
-      color: var(--gold);
-    }
-
-    .services-header .section-divider {
-      margin: 0 auto 0;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(201,168,76,0.18);
-      border-radius: 8px;
-      padding: 2rem 1.75rem;
-      transition: background 0.25s, border-color 0.25s, transform 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-
-    .service-card:hover {
-      background: rgba(201,168,76,0.06);
-      border-color: rgba(201,168,76,0.4);
-      transform: translateY(-4px);
-    }
-
-    .service-card:hover::before {
-      opacity: 1;
-    }
-
-    .service-icon {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .service-card h3 {
-      color: var(--cream);
-      font-size: 1.15rem;
-      margin-bottom: 0.6rem;
-      font-weight: 700;
-    }
-
-    .service-card p {
-      color: rgba(240,230,200,0.65);
-      font-size: 0.92rem;
-      line-height: 1.65;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .service-link {
-      display: inline-block;
-      margin-top: 1rem;
-      color: var(--gold);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(201,168,76,0.35);
-      padding-bottom: 1px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .service-link:hover {
-      color: var(--gold-light);
-      border-color: var(--gold-light);
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--cream-mid);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info h2 {
-      font-size: clamp(1.8rem, 4vw, 2.4rem);
-      color: var(--text-dark);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .contact-info > p {
-      color: var(--text-mid);
-      margin-bottom: 2rem;
-      font-style: italic;
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .contact-detail-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--dark);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      border: 1px solid rgba(201,168,76,0.25);
-    }
-
-    .contact-detail-body {
-      flex: 1;
-    }
-
-    .contact-detail-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-detail-value {
-      color: var(--text-dark);
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    .contact-detail-value a {
-      color: var(--text-dark);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-detail-value a:hover {
-      color: var(--gold);
-    }
-
-    /* Rating card */
-    .rating-card {
-      background: var(--dark);
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: 10px;
-      padding: 1.5rem;
-      margin-top: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-    }
-
-    .rating-stars {
-      font-size: 1.3rem;
-      letter-spacing: 0.05em;
-      line-height: 1;
-    }
-
-    .rating-num {
-      font-size: 2.4rem;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .rating-meta {
-      flex: 1;
-    }
-
-    .rating-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      color: rgba(240,230,200,0.55);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-top: 0.2rem;
-    }
-
-    .rating-source {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.7rem;
-      color: rgba(240,230,200,0.35);
-      margin-top: 0.15rem;
-    }
-
-    /* Contact form card */
-    .contact-form-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 2.5rem;
-      box-shadow: 0 4px 40px rgba(0,0,0,0.07);
-      border: 1px solid rgba(0,0,0,0.06);
-    }
-
-    .contact-form-card h3 {
-      font-size: 1.4rem;
-      color: var(--text-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-form-card > p {
-      color: var(--text-light);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.9rem;
-      margin-bottom: 1.75rem;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      font-weight: 600;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      padding: 0.7rem 0.9rem;
-      border: 1.5px solid #DDD;
-      border-radius: 5px;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.92rem;
-      color: var(--text-dark);
-      background: #FAFAFA;
-      transition: border-color 0.2s, background 0.2s;
-      outline: none;
-      width: 100%;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--gold);
-      background: var(--white);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .form-submit {
-      width: 100%;
-      padding: 0.9rem;
-      background: var(--gold);
-      color: var(--dark);
-      border: none;
-      border-radius: 5px;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      margin-top: 0.5rem;
-    }
-
-    .form-submit:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
-
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1.25rem;
-      background: var(--dark);
-      color: var(--gold);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.7rem 1.4rem;
-      border-radius: 5px;
-      border: 1.5px solid rgba(201,168,76,0.35);
-      transition: background 0.2s, border-color 0.2s, transform 0.15s;
-    }
-
-    .directions-btn:hover {
-      background: rgba(201,168,76,0.1);
-      border-color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--dark);
-      border-top: 2px solid rgba(201,168,76,0.2);
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .footer-brand {
-      color: var(--white);
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    .footer-brand span {
-      color: var(--gold);
-    }
-
-    .footer-tagline {
-      color: rgba(240,230,200,0.45);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
-      font-style: italic;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      list-style: none;
-    }
-
-    .footer-links a {
-      color: rgba(240,230,200,0.5);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--gold);
-    }
-
-    .footer-copy {
-      color: rgba(240,230,200,0.3);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.75rem;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 860px) {
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-visual {
-        aspect-ratio: 16/7;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 640px) {
-      nav {
-        padding: 0 1.25rem;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      section {
-        padding: 3.5rem 1.25rem;
-      }
-
-      .hero {
-        padding: 90px 1.25rem 3rem;
-      }
-
-      .about-highlights {
-        gap: 1.5rem;
-      }
-
-      .contact-form-card {
-        padding: 1.75rem 1.25rem;
-      }
-
-      .rating-card {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.75rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chef JJ Creations | Catering in Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#151210;
+    --paper:#f6ecd8;
+    --mustard:#f2b705;
+    --tomato:#e23a24;
+    --plum:#5a2a5f;
+    --cream:#fff8ea;
+    --line:#151210;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Arial Black","Helvetica Neue",system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.5;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* dotted paper texture */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(rgba(21,18,16,.06) 1.4px,transparent 1.4px);
+    background-size:18px 18px;
+  }
+  a{color:inherit}
+  .thin{font-family:"Helvetica Neue",Arial,system-ui,sans-serif;font-weight:600}
+
+  /* ── STICKY MARQUEE BAR ── */
+  .ticker{
+    position:sticky;top:0;z-index:60;
+    background:var(--ink);color:var(--mustard);
+    border-bottom:4px solid var(--mustard);
+    overflow:hidden;white-space:nowrap;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;
+    letter-spacing:.18em;text-transform:uppercase;font-size:.8rem;
+  }
+  .ticker__row{display:inline-flex;gap:2.4rem;padding:.6rem 0;animation:slide 22s linear infinite}
+  .ticker__row span{display:inline-flex;align-items:center;gap:2.4rem}
+  .ticker__row b{color:var(--tomato)}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ── LAYOUT ── */
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:1.4rem}
+  .bento{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    grid-auto-rows:minmax(90px,auto);
+    gap:1.1rem;
+  }
+  .tile{
+    position:relative;
+    border:3px solid var(--line);
+    border-radius:20px;
+    background:var(--cream);
+    box-shadow:6px 6px 0 var(--ink);
+    padding:1.6rem;
+    overflow:hidden;
+  }
+  html.js .tile{
+    opacity:0;transform:translateY(26px) scale(.98);
+    transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  html.js .tile.in{opacity:1;transform:none}
+  .tile:hover{box-shadow:10px 10px 0 var(--tomato)}
+
+  /* sizes */
+  .t-hero{grid-column:span 4;grid-row:span 3;background:var(--ink);color:var(--cream);display:flex;flex-direction:column;justify-content:space-between;min-height:360px}
+  .t-badge{grid-column:span 2;grid-row:span 1;background:var(--mustard);display:flex;align-items:center;justify-content:center;text-align:center}
+  .t-rating{grid-column:span 2;grid-row:span 2;background:var(--tomato);color:var(--cream);display:flex;flex-direction:column;justify-content:center}
+  .t-about{grid-column:span 3;grid-row:span 2}
+  .t-map{grid-column:span 3;grid-row:span 2;background:var(--plum);color:var(--cream);display:flex;flex-direction:column;justify-content:space-between}
+  .t-svc{grid-column:span 2;grid-row:span 2}
+  .t-phone{grid-column:span 3;grid-row:span 1;background:var(--mustard);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+  .t-form{grid-column:span 3;grid-row:span 4}
+  .t-wide{grid-column:span 6}
+
+  /* sticker */
+  .sticker{
+    position:absolute;top:-14px;right:-14px;
+    width:74px;height:74px;border-radius:50%;
+    background:var(--mustard);color:var(--ink);border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    font-size:.62rem;font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;
+    letter-spacing:.06em;text-transform:uppercase;line-height:1.05;
+    transform:rotate(12deg);z-index:3;box-shadow:2px 2px 0 var(--ink);
+  }
+
+  .kicker{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;letter-spacing:.22em;text-transform:uppercase;font-size:.68rem}
+  .t-hero .kicker{color:var(--mustard)}
+  h1{font-size:clamp(2.6rem,7vw,4.6rem);line-height:.92;letter-spacing:-.02em;text-transform:uppercase}
+  h1 em{font-style:normal;color:var(--mustard);display:block}
+  .lede{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:600;font-size:1rem;color:rgba(255,248,234,.82);max-width:34ch;margin-top:.6rem}
+
+  h2{font-size:clamp(1.4rem,3vw,2rem);text-transform:uppercase;line-height:.98;letter-spacing:-.01em;margin-bottom:.7rem}
+  .t-map h2,.t-rating h2{color:var(--cream)}
+  p.body{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:500;font-size:.95rem;line-height:1.65;color:#3a332c;margin-bottom:.7rem}
+  .t-map p.body{color:rgba(255,248,234,.85)}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;
+    letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;
+    padding:.85rem 1.5rem;border-radius:100px;border:3px solid var(--ink);
+    background:var(--mustard);color:var(--ink);text-decoration:none;
+    box-shadow:3px 3px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;
+    will-change:transform;
+  }
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+  .btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+  .btn--dark{background:var(--ink);color:var(--mustard)}
+  .btn--out{background:transparent;color:var(--cream);border-color:var(--cream);box-shadow:3px 3px 0 rgba(255,255,255,.35)}
+
+  .cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.4rem}
+
+  .rating-big{font-size:4.2rem;line-height:.9;font-family:"Arial Black",sans-serif}
+  .stars{font-size:1.1rem;letter-spacing:.1em}
+  .rating-sub{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,248,234,.85);margin-top:.4rem}
+
+  .badge-num{font-size:2.4rem;line-height:1}
+  .badge-lab{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;margin-top:.3rem}
+
+  .svc-list{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-top:.5rem}
+  .svc-list li{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:.9rem;display:flex;gap:.55rem;align-items:flex-start}
+  .svc-list li::before{content:"";width:14px;height:14px;margin-top:3px;flex-shrink:0;background:var(--tomato);border:2px solid var(--ink);border-radius:4px;transform:rotate(45deg)}
+
+  .phone-num{font-size:clamp(1.3rem,3.2vw,1.9rem);text-decoration:none;letter-spacing:-.01em}
+  .phone-lab{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+
+  /* form */
+  label{display:block;font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;margin:0 0 .3rem}
+  input,select,textarea{
+    width:100%;padding:.7rem .8rem;border:3px solid var(--ink);border-radius:12px;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-weight:600;font-size:.9rem;
+    background:#fff;color:var(--ink);outline:none;margin-bottom:.9rem;
+  }
+  input:focus,select:focus,textarea:focus{background:var(--paper);box-shadow:3px 3px 0 var(--mustard)}
+  textarea{resize:vertical;min-height:88px}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+
+  .addr{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:1rem;line-height:1.5}
+
+  footer{position:relative;z-index:1;background:var(--ink);color:var(--cream);margin-top:1.4rem;padding:2.4rem 1.4rem;text-align:center}
+  .foot-brand{font-size:1.6rem;text-transform:uppercase}
+  .foot-brand span{color:var(--mustard)}
+  .foot-sub{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:600;font-size:.8rem;color:rgba(255,248,234,.6);margin-top:.6rem}
+
+  @media(max-width:820px){
+    .bento{grid-template-columns:repeat(2,1fr)}
+    .t-hero,.t-about,.t-map,.t-form,.t-wide{grid-column:span 2}
+    .t-badge,.t-rating,.t-svc,.t-phone{grid-column:span 1}
+    .t-rating,.t-form{grid-row:span 2}
+  }
+  @media(max-width:520px){
+    .bento{grid-template-columns:1fr}
+    .tile{grid-column:span 1 !important}
+    .f2{grid-template-columns:1fr}
+    h1{font-size:clamp(2.2rem,12vw,3rem)}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .ticker__row{animation:none}
+    .tile{opacity:1;transform:none;transition:none}
+    .btn{transition:none}
+    html.js .tile{opacity:1;transform:none;transition:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-brand" href="#hero">
-      <div class="nav-logo-icon">&#127859;</div>
-      <div class="nav-title"><span>Chef JJ</span> Creations</div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="hamburger" aria-label="Open menu" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="toggleMenu()">About</a>
-    <a href="#services" onclick="toggleMenu()">Services</a>
-    <a href="#contact" onclick="toggleMenu()">Contact</a>
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__row">
+    <span>Private Events <b>&#9670;</b> Weddings <b>&#9670;</b> Corporate Catering <b>&#9670;</b> Soul Food &amp; Southern Classics <b>&#9670;</b> Custom Menus <b>&#9670;</b> Gainesville, FL <b>&#9670;</b> </span>
+    <span>Private Events <b>&#9670;</b> Weddings <b>&#9670;</b> Corporate Catering <b>&#9670;</b> Soul Food &amp; Southern Classics <b>&#9670;</b> Custom Menus <b>&#9670;</b> Gainesville, FL <b>&#9670;</b> </span>
   </div>
+</div>
 
-  <!-- HERO -->
-  <section id="hero" class="hero">
-    <div class="hero-ring"></div>
-    <div class="hero-ring hero-ring-2"></div>
-    <div class="hero-content">
-      <div class="hero-badge">Gainesville, FL &mdash; Catering &amp; Events</div>
-      <h1><em>Chef JJ</em><br>Creations</h1>
-      <p class="hero-tagline">Crafting unforgettable flavors for every occasion</p>
-      <div class="hero-cta-group">
-        <a class="btn-primary" href="#services">Explore Services</a>
-        <a class="btn-outline" href="#contact">Get in Touch</a>
+<main class="wrap">
+  <div class="bento">
+
+    <!-- HERO -->
+    <section class="tile t-hero" id="top">
+      <div class="sticker">Book<br>Your<br>Date</div>
+      <div>
+        <div class="kicker">Gainesville, FL &mdash; Catering &amp; Events</div>
+        <h1>Chef JJ<em>Creations</em></h1>
       </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-visual">
-          <div class="about-visual-icon">&#127859;</div>
-          <div class="about-visual-text">Catering &bull; Events &bull; Gainesville</div>
-        </div>
-        <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">Passionate Catering, Rooted in Gainesville</h2>
-          <div class="section-divider"></div>
-          <p>Chef JJ Creations is a Gainesville-based catering service dedicated to bringing bold, soulful cuisine to private events, corporate gatherings, and community celebrations throughout North Central Florida.</p>
-          <p>Every menu is thoughtfully curated to reflect the occasion and the people it serves &mdash; whether that is an intimate family gathering or a large-scale event with hundreds of guests.</p>
-          <p>With a commitment to fresh ingredients and attentive service, Chef JJ Creations turns any event into a memorable dining experience. Contact us to discuss what we can create for you.</p>
-          <div class="about-highlights">
-            <div class="highlight-item">
-              <span class="highlight-num">4.8&#9733;</span>
-              <span class="highlight-label">Google Rating</span>
-            </div>
-            <div class="highlight-item">
-              <span class="highlight-num">100%</span>
-              <span class="highlight-label">Customizable Menus</span>
-            </div>
-            <div class="highlight-item">
-              <span class="highlight-num">GNV</span>
-              <span class="highlight-label">Local &amp; Proud</span>
-            </div>
-          </div>
+      <div>
+        <p class="lede">Crafting unforgettable flavors for every occasion.</p>
+        <div class="cta-row">
+          <a class="btn" href="#menu">See What We Do</a>
+          <a class="btn btn--out" href="#contact">Get in Touch</a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <div class="services-header">
-        <p class="section-label">What We Offer</p>
-        <h2 class="section-title light">Our Catering Services</h2>
-        <div class="section-divider"></div>
+    <!-- BADGE -->
+    <section class="tile t-badge">
+      <div>
+        <div class="badge-num">100%</div>
+        <div class="badge-lab">Customizable Menus</div>
       </div>
-      <div class="services-grid">
+    </section>
 
-        <div class="service-card">
-          <span class="service-icon">&#127860;</span>
-          <h3>Private Event Catering</h3>
-          <p>Full-service catering for birthdays, anniversaries, family reunions, and special celebrations. Custom menus tailored to your event.</p>
-          <a class="service-link" href="#contact">Contact for details &rarr;</a>
-        </div>
+    <!-- RATING -->
+    <section class="tile t-rating">
+      <div class="rating-big">4.8</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="rating-sub">Google Maps Rating<br>Based on 4 reviews</div>
+    </section>
 
-        <div class="service-card">
-          <span class="service-icon">&#128188;</span>
-          <h3>Corporate &amp; Office Catering</h3>
-          <p>Professional catering for meetings, luncheons, conferences, and company events. Dependable delivery and setup included.</p>
-          <a class="service-link" href="#contact">Contact for details &rarr;</a>
-        </div>
+    <!-- ABOUT -->
+    <section class="tile t-about">
+      <div class="kicker" style="color:var(--tomato)">About Us</div>
+      <h2>Rooted in Gainesville</h2>
+      <p class="body">Chef JJ Creations is a Gainesville-based catering service dedicated to bringing bold, soulful cuisine to private events, corporate gatherings, and community celebrations throughout North Central Florida.</p>
+      <p class="body">Every menu is thoughtfully curated to reflect the occasion and the people it serves &mdash; from an intimate family gathering to a large-scale event with hundreds of guests.</p>
+    </section>
 
-        <div class="service-card">
-          <span class="service-icon">&#128149;</span>
-          <h3>Wedding Receptions</h3>
-          <p>Elegant and personalized catering packages for wedding receptions, rehearsal dinners, and bridal parties. Let your day be delicious.</p>
-          <a class="service-link" href="#contact">Contact for details &rarr;</a>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127371;</span>
-          <h3>Drop-Off &amp; Buffet Service</h3>
-          <p>Convenient drop-off catering for any size gathering, plus full buffet setup and service for larger events. Flexible options available.</p>
-          <a class="service-link" href="#contact">Contact for details &rarr;</a>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127869;</span>
-          <h3>Custom Menu Creation</h3>
-          <p>Work directly with us to design a menu that reflects your tastes, dietary needs, and event theme. Soul food, Southern classics, and more.</p>
-          <a class="service-link" href="#contact">Contact for details &rarr;</a>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127881;</span>
-          <h3>Holiday &amp; Seasonal Events</h3>
-          <p>Festive catering for holiday parties, seasonal celebrations, and community events throughout Gainesville and the surrounding area.</p>
-          <a class="service-link" href="#contact">Contact for details &rarr;</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-grid">
-        <div class="contact-info">
-          <p class="section-label">Get in Touch</p>
-          <h2>Ready to Plan<br>Your Next Event?</h2>
-          <div class="section-divider"></div>
-          <p>We would love to hear about your event. Reach out and we will get back to you to discuss your catering needs.</p>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128205;</div>
-            <div class="contact-detail-body">
-              <div class="contact-detail-label">Address</div>
-              <div class="contact-detail-value">1225 NW 10th Ave<br>Gainesville, FL 32601</div>
-            </div>
-          </div>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128222;</div>
-            <div class="contact-detail-body">
-              <div class="contact-detail-label">Phone</div>
-              <div class="contact-detail-value">
-                <a href="tel:+13522311582">(352) 231-1582</a>
-              </div>
-            </div>
-          </div>
-
-          <a class="directions-btn" href="https://www.google.com/maps/search/Chef%20JJ%20Creations%201225%20NW%2010th%20Ave%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener">
-            &#128506; Get Directions
-          </a>
-
-          <div class="rating-card">
-            <div>
-              <div class="rating-num">4.8</div>
-            </div>
-            <div class="rating-meta">
-              <div class="rating-stars">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
-              <div class="rating-label">Google Maps Rating</div>
-              <div class="rating-source">Based on 4 reviews &bull; Chef JJ Creations</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-form-card">
-          <h3>Send Us a Message</h3>
-          <p>Tell us about your event and we will be in touch.</p>
-          <form onsubmit="handleSubmit(event)">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="fname">First Name</label>
-                <input type="text" id="fname" placeholder="Jane" required />
-              </div>
-              <div class="form-group">
-                <label for="lname">Last Name</label>
-                <input type="text" id="lname" placeholder="Smith" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" placeholder="jane@example.com" required />
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" placeholder="(352) 000-0000" />
-            </div>
-            <div class="form-group">
-              <label for="event">Event Type</label>
-              <select id="event">
-                <option value="">Select an event type...</option>
-                <option>Private Party / Celebration</option>
-                <option>Wedding Reception</option>
-                <option>Corporate / Office Event</option>
-                <option>Holiday Party</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" placeholder="Tell us about your event, expected guest count, date, and any special requests..."></textarea>
-            </div>
-            <button class="form-submit" type="submit">Send Message</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand"><span>Chef JJ</span> Creations</div>
-      <div class="footer-tagline">Crafting unforgettable flavors for every occasion &mdash; Gainesville, FL</div>
-      <ul class="footer-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="tel:+13522311582">(352) 231-1582</a></li>
+    <!-- SERVICES A -->
+    <section class="tile t-svc">
+      <div class="kicker" style="color:var(--tomato)">We Cater</div>
+      <ul class="svc-list">
+        <li>Private Event Catering</li>
+        <li>Wedding Receptions</li>
+        <li>Corporate &amp; Office Catering</li>
       </ul>
-      <div class="footer-copy">&copy; 2026 Chef JJ Creations &bull; 1225 NW 10th Ave, Gainesville, FL 32601</div>
-    </div>
-  </footer>
+    </section>
 
-  <script>
-    function toggleMenu() {
-      var menu = document.getElementById('mobileMenu');
-      menu.classList.toggle('open');
-    }
+    <!-- SERVICES B -->
+    <section class="tile t-svc" id="menu">
+      <div class="kicker" style="color:var(--tomato)">Also</div>
+      <ul class="svc-list">
+        <li>Drop-Off &amp; Buffet Service</li>
+        <li>Custom Menu Creation</li>
+        <li>Holiday &amp; Seasonal Events</li>
+      </ul>
+    </section>
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(e) {
-      var menu = document.getElementById('mobileMenu');
-      var hamburger = document.querySelector('.hamburger');
-      if (menu.classList.contains('open') && !menu.contains(e.target) && !hamburger.contains(e.target)) {
-        menu.classList.remove('open');
-      }
+    <!-- MAP -->
+    <section class="tile t-map">
+      <div>
+        <div class="kicker" style="color:var(--mustard)">Find Us</div>
+        <h2>Serving North<br>Central Florida</h2>
+        <p class="body addr" style="color:#fff">1225 NW 10th Ave<br>Gainesville, FL 32601</p>
+      </div>
+      <a class="btn" href="https://www.google.com/maps/search/Chef%20JJ%20Creations%201225%20NW%2010th%20Ave%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener">&#128506; Get Directions</a>
+    </section>
+
+    <!-- PHONE -->
+    <section class="tile t-phone" id="contact">
+      <div>
+        <div class="phone-lab">Call the Kitchen</div>
+        <a class="phone-num" href="tel:+13522311582">(352) 231-1582</a>
+      </div>
+    </section>
+
+    <!-- FORM -->
+    <section class="tile t-form">
+      <div class="kicker" style="color:var(--tomato)">Plan Your Event</div>
+      <h2>Tell Us About It</h2>
+      <p class="body">We would love to hear about your event. Reach out and we will get back to you to discuss your catering needs.</p>
+      <form onsubmit="return sent(event)">
+        <div class="f2">
+          <div><label for="fn">First Name</label><input id="fn" type="text" placeholder="Jane" required /></div>
+          <div><label for="ln">Last Name</label><input id="ln" type="text" placeholder="Smith" required /></div>
+        </div>
+        <label for="em">Email</label><input id="em" type="email" placeholder="jane@example.com" required />
+        <label for="ph">Phone</label><input id="ph" type="tel" placeholder="(352) 000-0000" />
+        <label for="ev">Event Type</label>
+        <select id="ev">
+          <option value="">Select an event type...</option>
+          <option>Private Party / Celebration</option>
+          <option>Wedding Reception</option>
+          <option>Corporate / Office Event</option>
+          <option>Holiday Party</option>
+          <option>Other</option>
+        </select>
+        <label for="ms">Message</label>
+        <textarea id="ms" placeholder="Tell us about your event, expected guest count, date, and any special requests..."></textarea>
+        <button class="btn btn--dark" type="submit" id="sendbtn">Send Message</button>
+      </form>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="foot-brand"><span>Chef JJ</span> Creations</div>
+  <div class="foot-sub">Crafting unforgettable flavors for every occasion &mdash; 1225 NW 10th Ave, Gainesville, FL 32601 &bull; (352) 231-1582</div>
+  <div class="foot-sub">&copy; 2026 Chef JJ Creations</div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
+  if(reduce || !('IntersectionObserver' in window)){
+    tiles.forEach(function(t){t.classList.add('in');});
+  } else {
+    document.documentElement.classList.add('js');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    },{threshold:.15});
+    tiles.forEach(function(t,i){ t.style.transitionDelay=(i%3*70)+'ms'; io.observe(t); });
+
+    // magnetic buttons
+    document.querySelectorAll('.btn').forEach(function(b){
+      b.addEventListener('mousemove',function(e){
+        var r=b.getBoundingClientRect();
+        var x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+        b.style.transform='translate('+(x*.18)+'px,'+(y*.28-2)+'px)';
+      });
+      b.addEventListener('mouseleave',function(){b.style.transform='';});
     });
-
-    function handleSubmit(e) {
-      e.preventDefault();
-      var btn = e.target.querySelector('.form-submit');
-      btn.textContent = 'Message Sent!';
-      btn.style.background = '#4CAF50';
-      btn.style.color = '#fff';
-      btn.disabled = true;
-      setTimeout(function() {
-        btn.textContent = 'Send Message';
-        btn.style.background = '';
-        btn.style.color = '';
-        btn.disabled = false;
-        e.target.reset();
-      }, 3000);
-    }
-  </script>
-
+  }
+})();
+function sent(e){
+  e.preventDefault();
+  var b=document.getElementById('sendbtn');
+  var t=b.textContent;
+  b.textContent='Message Sent!';b.disabled=true;
+  setTimeout(function(){b.textContent=t;b.disabled=false;e.target.reset();},2600);
+  return false;
+}
+</script>
 </body>
 </html>
