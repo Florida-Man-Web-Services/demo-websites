@@ -1,950 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flair Pro Color Lab | Video Duplication Services | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --primary: #1a1a2e;
-      --accent: #e94560;
-      --accent2: #0f3460;
-      --gold: #f5a623;
-      --light: #f4f4f8;
-      --text: #2d2d2d;
-      --muted: #666;
-      --white: #ffffff;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text);
-      background: var(--white);
-      line-height: 1.65;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 999;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-brand {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.5px;
-    }
-
-    .nav-brand span {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.82);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--accent);
-    }
-
-    .nav-cta {
-      background: var(--accent);
-      color: var(--white) !important;
-      padding: 7px 18px;
-      border-radius: 4px;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: #c73850 !important;
-      color: var(--white) !important;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    #hero {
-      margin-top: 64px;
-      min-height: calc(100vh - 64px);
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 60%, #16213e 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      padding: 60px 5%;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(233,69,96,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 20%, rgba(245,166,35,0.10) 0%, transparent 45%);
-      pointer-events: none;
-    }
-
-    /* Film-strip decorative lines */
-    #hero::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 60px;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 18px,
-        rgba(255,255,255,0.04) 18px,
-        rgba(255,255,255,0.04) 36px
-      );
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      max-width: 780px;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      background: rgba(233,69,96,0.18);
-      border: 1px solid rgba(233,69,96,0.45);
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 3px;
-      margin-bottom: 24px;
-    }
-
-    .hero-content h1 {
-      font-size: clamp(2.2rem, 5vw, 3.6rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.18;
-      margin-bottom: 20px;
-    }
-
-    .hero-content h1 em {
-      font-style: normal;
-      color: var(--gold);
-    }
-
-    .hero-content p {
-      font-size: clamp(1rem, 2.2vw, 1.2rem);
-      color: rgba(255,255,255,0.78);
-      max-width: 580px;
-      margin: 0 auto 36px;
-    }
-
-    .hero-btns {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--white);
-      text-decoration: none;
-      padding: 14px 32px;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-primary:hover {
-      background: #c73850;
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      text-decoration: none;
-      padding: 14px 32px;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: 700;
-      border: 2px solid rgba(255,255,255,0.45);
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.08);
-      transform: translateY(-2px);
-    }
-
-    /* ── SECTIONS SHARED ── */
-    section {
-      padding: 80px 5%;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--primary);
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    .section-subtitle {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 580px;
-      margin-bottom: 52px;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--light);
-    }
-
-    .about-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
-      border-radius: 10px;
-      min-height: 360px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      padding: 40px;
-    }
-
-    /* SVG film icon */
-    .about-icon {
-      width: 90px;
-      height: 90px;
-      opacity: 0.9;
-    }
-
-    .about-tagline {
-      color: rgba(255,255,255,0.75);
-      font-size: 0.95rem;
-      text-align: center;
-      font-style: italic;
-      line-height: 1.5;
-    }
-
-    .about-text p {
-      color: #444;
-      margin-bottom: 18px;
-      font-size: 1.02rem;
-    }
-
-    .about-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 28px;
-    }
-
-    .badge {
-      background: var(--white);
-      border: 1px solid #ddd;
-      color: var(--accent2);
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 20px;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--white);
-    }
-
-    .services-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
-    }
-
-    .service-card {
-      background: var(--light);
-      border-radius: 10px;
-      padding: 32px 28px;
-      border-top: 4px solid transparent;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
-      border-top-color: var(--accent);
-    }
-
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 18px;
-    }
-
-    .service-card h3 {
-      font-size: 1.12rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      font-size: 0.93rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .service-note {
-      display: inline-block;
-      margin-top: 12px;
-      font-size: 0.8rem;
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--primary);
-      color: var(--white);
-    }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    #contact .section-title {
-      color: var(--white);
-    }
-
-    #contact .section-label {
-      color: var(--gold);
-    }
-
-    #contact .section-subtitle {
-      color: rgba(255,255,255,0.68);
-    }
-
-    .contact-details {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .contact-item-icon {
-      flex-shrink: 0;
-      width: 42px;
-      height: 42px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .contact-item-icon svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .contact-item-text strong {
-      display: block;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 3px;
-    }
-
-    .contact-item-text span {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.88);
-    }
-
-    .contact-item-text a {
-      color: rgba(255,255,255,0.88);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-item-text a:hover {
-      color: var(--accent);
-    }
-
-    /* Rating */
-    .rating-block {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px;
-      padding: 22px 24px;
-      margin-top: 8px;
-    }
-
-    .stars {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 8px;
-    }
-
-    .star {
-      font-size: 1.4rem;
-      color: #ccc;
-    }
-
-    .star.full {
-      color: var(--gold);
-    }
-
-    .star.half {
-      position: relative;
-      color: #ccc;
-      display: inline-block;
-    }
-
-    .star.half::before {
-      content: '★';
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: var(--gold);
-      width: 50%;
-      overflow: hidden;
-    }
-
-    .rating-score {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--white);
-    }
-
-    .rating-count {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.55);
-      margin-top: 2px;
-    }
-
-    /* CTA panel */
-    .contact-cta-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .contact-cta-panel .info-box {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      padding: 28px;
-    }
-
-    .contact-cta-panel .info-box h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 10px;
-    }
-
-    .contact-cta-panel .info-box p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.68);
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--primary);
-      text-decoration: none;
-      padding: 13px 28px;
-      border-radius: 5px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .btn-gold:hover {
-      background: #e8961a;
-      transform: translateY(-2px);
-    }
-
-    .btn-directions {
-      background: var(--accent);
-      color: var(--white);
-      text-decoration: none;
-      padding: 13px 28px;
-      border-radius: 5px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .btn-directions:hover {
-      background: #c73850;
-      transform: translateY(-2px);
-    }
-
-    .cta-btns {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #0d0d1a;
-      color: rgba(255,255,255,0.5);
-      text-align: center;
-      padding: 30px 5%;
-      font-size: 0.85rem;
-    }
-
-    footer strong {
-      color: rgba(255,255,255,0.75);
-    }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: var(--primary);
-        flex-direction: column;
-        padding: 20px 5%;
-        gap: 0;
-        border-top: 1px solid rgba(255,255,255,0.08);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links li {
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-      }
-
-      .nav-links a {
-        display: block;
-        padding: 13px 0;
-      }
-
-      .nav-links .nav-cta {
-        margin: 12px 0;
-        text-align: center;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-
-      .about-visual {
-        min-height: 220px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      section {
-        padding: 60px 4%;
-      }
-
-      .hero-btns {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .cta-btns {
-        flex-direction: column;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flair Pro Color Lab | Video Duplication Services | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --c:#00AEEF; --m:#EC008C; --y:#FFED00; --k:#111114;
+    --ink:#f4f4f6; --mut:#a2a2ab; --line:#2a2a31;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Segoe UI",system-ui,sans-serif;
+  }
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--k);color:var(--ink);line-height:1.55;overflow:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+
+  /* top bar */
+  .bar{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+       padding:.7rem clamp(1rem,4vw,2rem);background:rgba(17,17,20,.72);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-weight:800;letter-spacing:-.02em;font-size:1.1rem;text-decoration:none;display:flex;align-items:center;gap:.55rem}
+  .brand span{background:linear-gradient(90deg,var(--c),var(--m));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand .reel{width:26px;height:26px;border:2px solid var(--y);border-radius:50%;position:relative;flex-shrink:0}
+  .brand .reel::after{content:"";position:absolute;inset:6px;border-radius:50%;border:2px solid var(--m)}
+  .bar nav{display:flex;gap:.3rem;align-items:center}
+  .bar nav a{text-decoration:none;font-size:.82rem;font-weight:600;color:#c8c8d0;padding:.4rem .7rem;border-radius:6px;cursor:pointer}
+  .bar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+  .bar nav a.cta{background:var(--y);color:#111}
+
+  /* progress */
+  .prog{position:fixed;left:0;right:0;bottom:0;z-index:60;height:5px;background:rgba(255,255,255,.08)}
+  .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c),var(--m),var(--y));transition:width .2s}
+
+  /* horizontal track */
+  .track{display:flex;height:100vh;width:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+          scrollbar-width:none}
+  .track::-webkit-scrollbar{display:none}
+  .frame{flex:0 0 100%;height:100vh;scroll-snap-align:start;position:relative;display:flex;align-items:center;
+         padding:5rem clamp(1.5rem,6vw,6rem) 3.5rem;overflow-y:auto}
+  /* sprocket edges */
+  .frame::before,.frame::after{content:"";position:absolute;left:0;right:0;height:26px;
+     background-image:radial-gradient(circle at 13px 13px, transparent 6px, var(--k) 7px);
+     background-size:26px 26px;background-repeat:repeat-x;z-index:3;pointer-events:none;background-position:0 0;
+     box-shadow:none}
+  .frame::before{top:0;background-color:#000;background-image:radial-gradient(#000 6px,transparent 7px);opacity:.6}
+  .frame::after{bottom:5px;background-color:#000;background-image:radial-gradient(#000 6px,transparent 7px);opacity:.6}
+  .frame-no{position:absolute;top:34px;right:clamp(1.5rem,6vw,6rem);font-size:.72rem;letter-spacing:.3em;color:var(--mut);font-weight:700}
+
+  .inner{max-width:920px;margin:0 auto;width:100%}
+  .eyebrow{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;font-weight:700;color:var(--c);margin-bottom:.7rem}
+  h1{font-size:clamp(2.6rem,7vw,5.4rem);font-weight:800;letter-spacing:-.03em;line-height:.98}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--c),var(--m),var(--y));-webkit-background-clip:text;background-clip:text;color:transparent}
+  h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.05}
+  .lead{color:var(--mut);font-size:clamp(1rem,2vw,1.2rem);max-width:56ch;margin-top:1.1rem}
+  .btns{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.8rem}
+  .btn{text-decoration:none;font-weight:700;padding:.85rem 1.5rem;border-radius:10px;font-size:.94rem;transition:transform .18s;display:inline-flex;gap:.5rem;align-items:center;cursor:pointer;border:0}
+  .btn svg{width:17px;height:17px}
+  .btn-p{background:linear-gradient(135deg,var(--c),var(--m));color:#fff}
+  .btn-o{border:1.5px solid rgba(255,255,255,.35);color:#fff;background:transparent}
+  .btn-y{background:var(--y);color:#111}
+  .btn:hover{transform:translateY(-2px)}
+  .hint{margin-top:2.4rem;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:.6rem}
+  .hint .arr{display:inline-block;animation:nudge 1.4s infinite}
+  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(7px)}}
+
+  /* frame accent backgrounds */
+  .f-hero{background:radial-gradient(ellipse at 75% 30%,rgba(0,174,239,.18),transparent 55%),radial-gradient(ellipse at 20% 80%,rgba(236,0,140,.16),transparent 55%)}
+  .reel-big{position:absolute;right:-60px;bottom:-60px;width:340px;height:340px;opacity:.12;stroke:var(--y);fill:none}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem;align-items:center}
+  .about-p{color:var(--mut);margin:.7rem 0}
+  .badges{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.1rem}
+  .badges span{font-size:.78rem;font-weight:600;padding:.4rem .8rem;border:1px solid var(--line);border-radius:20px;color:#d3d3d9}
+  .filmcard{aspect-ratio:4/3;border-radius:16px;border:1px solid var(--line);background:linear-gradient(135deg,#16161b,#1d1d24);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .filmcard .cbars{position:absolute;top:0;left:0;bottom:0;width:38px;display:flex;flex-direction:column}
+  .filmcard .cbars i{flex:1}
+  .filmcard svg{width:130px;height:130px}
+
+  /* services filmstrip inside a frame */
+  .svc-scroll{display:flex;gap:1.1rem;overflow-x:auto;padding:1.5rem 0 1rem;scroll-snap-type:x proximity;scrollbar-width:thin}
+  .svc{flex:0 0 clamp(230px,30vw,290px);scroll-snap-align:start;background:#16161b;border:1px solid var(--line);border-radius:16px;padding:1.5rem;position:relative}
+  .svc .num{font-size:.7rem;font-weight:700;color:var(--m);letter-spacing:.2em}
+  .svc .ic{width:46px;height:46px;border-radius:11px;background:rgba(0,174,239,.12);display:flex;align-items:center;justify-content:center;margin:.7rem 0 .9rem}
+  .svc .ic svg{width:26px;height:26px}
+  .svc h3{font-size:1.05rem;font-weight:800;margin-bottom:.4rem}
+  .svc p{font-size:.86rem;color:var(--mut)}
+  .svc .note{margin-top:.7rem;font-size:.72rem;font-weight:700;color:var(--y);letter-spacing:.05em}
+
+  /* contact */
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem}
+  .crow{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:1.1rem}
+  .crow .ci{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--c),var(--m));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .crow .ci svg{width:19px;height:19px;fill:#fff}
+  .crow strong{display:block;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:2px}
+  .crow a,.crow span{font-weight:600;text-decoration:none}
+  .rate{display:flex;flex-direction:column;gap:.3rem;margin-top:.5rem;padding:1.1rem;border:1px solid var(--line);border-radius:14px;background:#16161b}
+  .rate .stars{font-size:1.3rem;letter-spacing:2px;color:var(--y)}
+  .rate .stars .half{background:linear-gradient(90deg,var(--y) 50%,#3a3a42 50%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .rate .stars .empty{color:#3a3a42}
+  .rate .score{font-size:1.8rem;font-weight:800}
+  .rate .cnt{font-size:.84rem;color:var(--mut)}
+  .cpanel{background:linear-gradient(135deg,rgba(0,174,239,.1),rgba(236,0,140,.1));border:1px solid var(--line);border-radius:16px;padding:1.8rem;display:flex;flex-direction:column;gap:1.4rem}
+  .cbox h3{font-size:1.15rem;font-weight:800;margin-bottom:.4rem}
+  .cbox p{color:var(--mut);font-size:.9rem;margin-bottom:.9rem}
+  .foot{margin-top:1.5rem;font-size:.8rem;color:var(--mut)}
+  .foot a{color:var(--c);text-decoration:none}
+
+  @media(max-width:820px){
+    body{overflow:auto}
+    .track{display:block;height:auto;overflow:visible;scroll-snap-type:none}
+    .frame{flex:none;height:auto;min-height:auto;scroll-snap-align:none;padding:4.5rem 1.4rem 3rem;overflow:visible}
+    .frame::before,.frame::after,.reel-big{display:none}
+    .two,.cgrid{grid-template-columns:1fr}
+    .prog{display:none}
+    .hint{display:none}
+    .svc{flex-basis:80%}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .track{scroll-behavior:auto}.hint .arr{animation:none}.btn:hover{transform:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
+<div class="bar">
+  <a href="#f1" class="brand nav-jump" data-i="0"><span class="reel"></span><span>Flair</span>&nbsp;Pro Color Lab</a>
   <nav>
-    <div class="nav-brand"><span>Flair</span> Pro Color Lab</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="tel:3523364008" class="nav-cta">Call Us</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a class="nav-jump" data-i="1">About</a>
+    <a class="nav-jump" data-i="2">Services</a>
+    <a class="nav-jump" data-i="3">Contact</a>
+    <a href="tel:3523364008" class="cta">Call Us</a>
   </nav>
+</div>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-content">
-      <div class="hero-eyebrow">Gainesville, Florida</div>
+<div class="track" id="track">
+
+  <!-- FRAME 1 HERO -->
+  <section class="frame f-hero" id="f1">
+    <span class="frame-no">FRAME 01 / 04</span>
+    <svg class="reel-big" viewBox="0 0 90 90" aria-hidden="true"><circle cx="45" cy="45" r="36" stroke-width="2"/><circle cx="45" cy="45" r="12" stroke-width="2"/><circle cx="45" cy="18" r="5"/><circle cx="45" cy="72" r="5"/><circle cx="18" cy="45" r="5"/><circle cx="72" cy="45" r="5"/></svg>
+    <div class="inner">
+      <div class="eyebrow">Gainesville, Florida</div>
       <h1>Your Memories Deserve <em>Perfect Color</em></h1>
-      <p>Professional video duplication and color lab services — preserving what matters most with precision, quality, and care.</p>
-      <div class="hero-btns">
-        <a href="#contact" class="btn-primary">Get in Touch</a>
-        <a href="#services" class="btn-outline">Our Services</a>
+      <p class="lead">Professional video duplication and color lab services &mdash; preserving what matters most with precision, quality, and care.</p>
+      <div class="btns">
+        <a class="btn btn-y magnet nav-jump" data-i="3">Get in Touch</a>
+        <a class="btn btn-o magnet nav-jump" data-i="2">Our Services</a>
       </div>
+      <div class="hint">Scroll sideways to explore <span class="arr">&rarr;</span></div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-inner">
-      <div class="about-visual">
-        <svg class="about-icon" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Film reel -->
-          <circle cx="45" cy="45" r="36" stroke="rgba(255,255,255,0.6)" stroke-width="3"/>
-          <circle cx="45" cy="45" r="14" stroke="rgba(245,166,35,0.9)" stroke-width="3"/>
-          <circle cx="45" cy="20" r="5" fill="rgba(233,69,96,0.85)"/>
-          <circle cx="45" cy="70" r="5" fill="rgba(233,69,96,0.85)"/>
-          <circle cx="20" cy="45" r="5" fill="rgba(233,69,96,0.85)"/>
-          <circle cx="70" cy="45" r="5" fill="rgba(233,69,96,0.85)"/>
-          <circle cx="27.4" cy="27.4" r="5" fill="rgba(245,166,35,0.7)"/>
-          <circle cx="62.6" cy="62.6" r="5" fill="rgba(245,166,35,0.7)"/>
-          <circle cx="62.6" cy="27.4" r="5" fill="rgba(245,166,35,0.7)"/>
-          <circle cx="27.4" cy="62.6" r="5" fill="rgba(245,166,35,0.7)"/>
-          <!-- Play triangle -->
-          <polygon points="40,38 40,52 54,45" fill="rgba(255,255,255,0.9)"/>
-        </svg>
-        <p class="about-tagline">"Bringing your footage to life<br>with professional-grade duplication."</p>
-      </div>
-      <div class="about-text">
-        <div class="section-label">Who We Are</div>
-        <h2 class="section-title">A Trusted Color Lab Right Here in Gainesville</h2>
-        <p>Flair Pro Color Lab is a specialized video duplication and color lab service provider serving the Gainesville, FL community. We handle your recorded content with the professionalism and attention to detail it deserves.</p>
-        <p>Whether you need copies of personal recordings, archival duplicates, or color-corrected transfers, our team applies the right processes to ensure your media arrives in the best possible condition.</p>
-        <p>We take pride in serving individual clients and businesses throughout the North Central Florida area with reliable turnaround and consistent quality.</p>
-        <div class="about-badges">
-          <span class="badge">Video Duplication</span>
-          <span class="badge">Color Lab Services</span>
-          <span class="badge">Local Business</span>
-          <span class="badge">Gainesville, FL</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section id="services">
-    <div style="max-width:1100px; margin:0 auto;">
-      <div class="section-label">What We Do</div>
-      <h2 class="section-title">Our Services</h2>
-      <p class="section-subtitle">From duplication to color correction, we offer the core services you need to preserve and share your video content.</p>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="4" y="12" width="28" height="24" rx="3" stroke="#e94560" stroke-width="2.5"/>
-            <path d="M32 20l9-6v20l-9-6V20z" stroke="#e94560" stroke-width="2.5" stroke-linejoin="round"/>
-          </svg>
-          <h3>Video Duplication</h3>
-          <p>High-quality copies of your video recordings, suitable for distribution, archival, or sharing with family and colleagues.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="24" cy="24" r="18" stroke="#e94560" stroke-width="2.5"/>
-            <path d="M16 24h16M24 16v16" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M10 18c2-4 6-7 11-7" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
-          <h3>Color Correction</h3>
-          <p>Professional color grading and correction to restore accurate, vivid tones to your video footage or transfers.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="6" y="8" width="36" height="32" rx="3" stroke="#e94560" stroke-width="2.5"/>
-            <path d="M6 16h36" stroke="#e94560" stroke-width="2.5"/>
-            <path d="M14 8v8M34 8v8" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="24" cy="28" r="5" stroke="#f5a623" stroke-width="2"/>
-          </svg>
-          <h3>Format Transfers</h3>
-          <p>Transfer your recordings from one video format to another, maintaining quality while ensuring modern compatibility.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M8 40l10-14 8 10 6-7 8 11H8z" stroke="#e94560" stroke-width="2.5" stroke-linejoin="round"/>
-            <circle cx="34" cy="14" r="6" stroke="#f5a623" stroke-width="2.5"/>
-          </svg>
-          <h3>Media Archiving</h3>
-          <p>Preserve your important video content with proper duplication and storage solutions designed for long-term archival use.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="4" y="18" width="40" height="22" rx="3" stroke="#e94560" stroke-width="2.5"/>
-            <path d="M16 18V12a8 8 0 0116 0v6" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="24" cy="29" r="4" stroke="#f5a623" stroke-width="2"/>
-          </svg>
-          <h3>Bulk Duplication</h3>
-          <p>Need multiple copies? We accommodate bulk duplication requests for businesses, events, or distribution purposes.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M24 6v8M24 34v8M6 24h8M34 24h8" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="24" cy="24" r="10" stroke="#f5a623" stroke-width="2.5"/>
-            <circle cx="24" cy="24" r="4" fill="#e94560"/>
-          </svg>
-          <h3>Custom Lab Services</h3>
-          <p>Have a unique project or specialized requirement? Reach out to discuss custom color lab and video processing solutions tailored to your needs.</p>
-          <span class="service-note">Contact us for details</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="contact-inner">
+  <!-- FRAME 2 ABOUT -->
+  <section class="frame" id="f2">
+    <span class="frame-no">FRAME 02 / 04</span>
+    <div class="inner"><div class="two">
       <div>
-        <div class="section-label">Find Us</div>
-        <h2 class="section-title">Contact Flair Pro Color Lab</h2>
-        <p class="section-subtitle">Reach out by phone or stop by our Gainesville location to discuss your project.</p>
-        <div class="contact-details">
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M10 2C6.69 2 4 4.69 4 8c0 4.25 6 10 6 10s6-5.75 6-10c0-3.31-2.69-6-6-6zm0 8.5A2.5 2.5 0 1 1 10 5.5a2.5 2.5 0 0 1 0 5z" fill="rgba(255,255,255,0.75)"/>
-              </svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Address</strong>
-              <span>519 SW 60th Rd, Gainesville, FL</span>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M3.5 4A1.5 1.5 0 0 1 5 2.5h1.5a1.5 1.5 0 0 1 1.5 1.5v2A1.5 1.5 0 0 1 6.5 7.5H5.75A9.25 9.25 0 0 0 12.5 14.25V13.5A1.5 1.5 0 0 1 14 12h2a1.5 1.5 0 0 1 1.5 1.5V15A1.5 1.5 0 0 1 16 16.5C8.82 16.5 3.5 11.18 3.5 4z" fill="rgba(255,255,255,0.75)"/>
-              </svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Phone</strong>
-              <a href="tel:3523364008">(352) 336-4008</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="10" cy="10" r="8" stroke="rgba(255,255,255,0.75)" stroke-width="1.5"/>
-                <path d="M10 5v5l3 3" stroke="rgba(255,255,255,0.75)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="contact-item-text">
-              <strong>Hours</strong>
-              <span>Contact us for current hours</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Rating -->
-        <div class="rating-block" style="margin-top:28px;">
-          <div class="stars" aria-label="3.5 out of 5 stars">
-            <span class="star full">&#9733;</span>
-            <span class="star full">&#9733;</span>
-            <span class="star full">&#9733;</span>
-            <span class="star half">&#9733;</span>
-            <span class="star">&#9733;</span>
-          </div>
-          <div class="rating-score">3.5</div>
-          <div class="rating-count">Based on 2 Google Reviews</div>
-        </div>
+        <div class="eyebrow">Who We Are</div>
+        <h2>A Trusted Color Lab Right Here in Gainesville</h2>
+        <p class="about-p">Flair Pro Color Lab is a specialized video duplication and color lab service provider serving the Gainesville, FL community. We handle your recorded content with the professionalism and attention to detail it deserves.</p>
+        <p class="about-p">Whether you need copies of personal recordings, archival duplicates, or color-corrected transfers, our team applies the right processes to ensure your media arrives in the best possible condition.</p>
+        <p class="about-p">We take pride in serving individual clients and businesses throughout the North Central Florida area with reliable turnaround and consistent quality.</p>
+        <div class="badges"><span>Video Duplication</span><span>Color Lab Services</span><span>Local Business</span><span>Gainesville, FL</span></div>
       </div>
+      <div class="filmcard">
+        <div class="cbars"><i style="background:#00AEEF"></i><i style="background:#EC008C"></i><i style="background:#FFED00"></i><i style="background:#111114"></i></div>
+        <svg viewBox="0 0 90 90" fill="none" aria-hidden="true"><circle cx="45" cy="45" r="36" stroke="rgba(255,255,255,.6)" stroke-width="3"/><circle cx="45" cy="45" r="14" stroke="#FFED00" stroke-width="3"/><circle cx="45" cy="20" r="5" fill="#EC008C"/><circle cx="45" cy="70" r="5" fill="#EC008C"/><circle cx="20" cy="45" r="5" fill="#EC008C"/><circle cx="70" cy="45" r="5" fill="#EC008C"/><polygon points="40,38 40,52 54,45" fill="#fff"/></svg>
+      </div>
+    </div></div>
+  </section>
 
-      <div class="contact-cta-panel">
-        <div class="info-box">
-          <h3>Call to Discuss Your Project</h3>
-          <p>The best way to get started is to give us a call. We're happy to answer questions about your video duplication or color lab needs and let you know how we can help.</p>
-          <div class="cta-btns">
-            <a href="tel:3523364008" class="btn-gold">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M3.5 4A1.5 1.5 0 0 1 5 2.5h1.5a1.5 1.5 0 0 1 1.5 1.5v2A1.5 1.5 0 0 1 6.5 7.5H5.75A9.25 9.25 0 0 0 12.5 14.25V13.5A1.5 1.5 0 0 1 14 12h2a1.5 1.5 0 0 1 1.5 1.5V15A1.5 1.5 0 0 1 16 16.5C8.82 16.5 3.5 11.18 3.5 4z" fill="currentColor"/>
-              </svg>
-              (352) 336-4008
-            </a>
-          </div>
-        </div>
-
-        <div class="info-box">
-          <h3>Find Our Location</h3>
-          <p>We're located at 519 SW 60th Rd in Gainesville, FL. Use the button below to open directions in Google Maps.</p>
-          <div class="cta-btns">
-            <a href="https://www.google.com/maps/search/Flair%20Pro%20Color%20Lab%20519%20SW%2060th%20Rd" target="_blank" rel="noopener noreferrer" class="btn-directions">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M10 2C6.69 2 4 4.69 4 8c0 4.25 6 10 6 10s6-5.75 6-10c0-3.31-2.69-6-6-6zm0 8.5A2.5 2.5 0 1 1 10 5.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/>
-              </svg>
-              Get Directions
-            </a>
-          </div>
-        </div>
+  <!-- FRAME 3 SERVICES -->
+  <section class="frame" id="f3">
+    <span class="frame-no">FRAME 03 / 04</span>
+    <div class="inner">
+      <div class="eyebrow">What We Do</div>
+      <h2>Our Services</h2>
+      <p class="lead">From duplication to color correction, we offer the core services you need to preserve and share your video content.</p>
+      <div class="svc-scroll">
+        <div class="svc"><div class="num">01</div><div class="ic"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="4" y="12" width="28" height="24" rx="3" stroke="#EC008C" stroke-width="2.5"/><path d="M32 20l9-6v20l-9-6V20z" stroke="#EC008C" stroke-width="2.5" stroke-linejoin="round"/></svg></div><h3>Video Duplication</h3><p>High-quality copies of your video recordings, suitable for distribution, archival, or sharing with family and colleagues.</p><div class="note">Contact us for details</div></div>
+        <div class="svc"><div class="num">02</div><div class="ic"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="18" stroke="#EC008C" stroke-width="2.5"/><path d="M16 24h16M24 16v16" stroke="#EC008C" stroke-width="2.5" stroke-linecap="round"/><path d="M10 18c2-4 6-7 11-7" stroke="#FFED00" stroke-width="2.5" stroke-linecap="round"/></svg></div><h3>Color Correction</h3><p>Professional color grading and correction to restore accurate, vivid tones to your video footage or transfers.</p><div class="note">Contact us for details</div></div>
+        <div class="svc"><div class="num">03</div><div class="ic"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="6" y="8" width="36" height="32" rx="3" stroke="#EC008C" stroke-width="2.5"/><path d="M6 16h36" stroke="#EC008C" stroke-width="2.5"/><circle cx="24" cy="28" r="5" stroke="#FFED00" stroke-width="2"/></svg></div><h3>Format Transfers</h3><p>Transfer your recordings from one video format to another, maintaining quality while ensuring modern compatibility.</p><div class="note">Contact us for details</div></div>
+        <div class="svc"><div class="num">04</div><div class="ic"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 40l10-14 8 10 6-7 8 11H8z" stroke="#EC008C" stroke-width="2.5" stroke-linejoin="round"/><circle cx="34" cy="14" r="6" stroke="#FFED00" stroke-width="2.5"/></svg></div><h3>Media Archiving</h3><p>Preserve your important video content with proper duplication and storage solutions designed for long-term archival use.</p><div class="note">Contact us for details</div></div>
+        <div class="svc"><div class="num">05</div><div class="ic"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="4" y="18" width="40" height="22" rx="3" stroke="#EC008C" stroke-width="2.5"/><path d="M16 18V12a8 8 0 0116 0v6" stroke="#EC008C" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="29" r="4" stroke="#FFED00" stroke-width="2"/></svg></div><h3>Bulk Duplication</h3><p>Need multiple copies? We accommodate bulk duplication requests for businesses, events, or distribution purposes.</p><div class="note">Contact us for details</div></div>
+        <div class="svc"><div class="num">06</div><div class="ic"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 6v8M24 34v8M6 24h8M34 24h8" stroke="#EC008C" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="24" r="10" stroke="#FFED00" stroke-width="2.5"/><circle cx="24" cy="24" r="4" fill="#EC008C"/></svg></div><h3>Custom Lab Services</h3><p>Have a unique project or specialized requirement? Reach out to discuss custom color lab and video processing solutions tailored to your needs.</p><div class="note">Contact us for details</div></div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div>
-        &copy; <strong>Flair Pro Color Lab</strong> &mdash; 519 SW 60th Rd, Gainesville, FL &mdash;
-        <a href="tel:3523364008">(352) 336-4008</a>
+  <!-- FRAME 4 CONTACT -->
+  <section class="frame" id="f4">
+    <span class="frame-no">FRAME 04 / 04</span>
+    <div class="inner">
+      <div class="eyebrow">Find Us</div>
+      <h2>Contact Flair Pro Color Lab</h2>
+      <p class="lead" style="margin-bottom:1.6rem">Reach out by phone or stop by our Gainesville location to discuss your project.</p>
+      <div class="cgrid">
+        <div>
+          <div class="crow"><div class="ci"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2C6.69 2 4 4.69 4 8c0 4.25 6 10 6 10s6-5.75 6-10c0-3.31-2.69-6-6-6zm0 8.5A2.5 2.5 0 1 1 10 5.5a2.5 2.5 0 0 1 0 5z"/></svg></div><div><strong>Address</strong><span>519 SW 60th Rd, Gainesville, FL</span></div></div>
+          <div class="crow"><div class="ci"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 4A1.5 1.5 0 0 1 5 2.5h1.5a1.5 1.5 0 0 1 1.5 1.5v2A1.5 1.5 0 0 1 6.5 7.5H5.75A9.25 9.25 0 0 0 12.5 14.25V13.5A1.5 1.5 0 0 1 14 12h2a1.5 1.5 0 0 1 1.5 1.5V15A1.5 1.5 0 0 1 16 16.5C8.82 16.5 3.5 11.18 3.5 4z"/></svg></div><div><strong>Phone</strong><a href="tel:3523364008">(352) 336-4008</a></div></div>
+          <div class="crow"><div class="ci"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 5v5l3 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><strong>Hours</strong><span>Contact us for current hours</span></div></div>
+          <div class="rate">
+            <div class="stars" aria-label="3.5 out of 5 stars">&#9733;&#9733;&#9733;<span class="half">&#9733;</span><span class="empty">&#9733;</span></div>
+            <div class="score">3.5</div>
+            <div class="cnt">Based on 2 Google Reviews</div>
+          </div>
+        </div>
+        <div class="cpanel">
+          <div class="cbox">
+            <h3>Call to Discuss Your Project</h3>
+            <p>The best way to get started is to give us a call. We're happy to answer questions about your video duplication or color lab needs and let you know how we can help.</p>
+            <a href="tel:3523364008" class="btn btn-y magnet"><svg viewBox="0 0 20 20" style="fill:#111" aria-hidden="true"><path d="M3.5 4A1.5 1.5 0 0 1 5 2.5h1.5a1.5 1.5 0 0 1 1.5 1.5v2A1.5 1.5 0 0 1 6.5 7.5H5.75A9.25 9.25 0 0 0 12.5 14.25V13.5A1.5 1.5 0 0 1 14 12h2a1.5 1.5 0 0 1 1.5 1.5V15A1.5 1.5 0 0 1 16 16.5C8.82 16.5 3.5 11.18 3.5 4z"/></svg>(352) 336-4008</a>
+          </div>
+          <div class="cbox">
+            <h3>Find Our Location</h3>
+            <p>We're located at 519 SW 60th Rd in Gainesville, FL. Use the button below to open directions in Google Maps.</p>
+            <a href="https://www.google.com/maps/search/Flair%20Pro%20Color%20Lab%20519%20SW%2060th%20Rd" target="_blank" rel="noopener noreferrer" class="btn btn-p magnet"><svg viewBox="0 0 20 20" style="fill:#fff" aria-hidden="true"><path d="M10 2C6.69 2 4 4.69 4 8c0 4.25 6 10 6 10s6-5.75 6-10c0-3.31-2.69-6-6-6zm0 8.5A2.5 2.5 0 1 1 10 5.5a2.5 2.5 0 0 1 0 5z"/></svg>Get Directions</a>
+          </div>
+        </div>
       </div>
-      <div>
-        <a href="https://www.google.com/maps/search/Flair%20Pro%20Color%20Lab%20519%20SW%2060th%20Rd" target="_blank" rel="noopener noreferrer">View on Google Maps</a>
-      </div>
+      <div class="foot">&copy; <strong>Flair Pro Color Lab</strong> &mdash; 519 SW 60th Rd, Gainesville, FL &mdash; <a href="tel:3523364008">(352) 336-4008</a> &nbsp;|&nbsp; <a href="https://www.google.com/maps/search/Flair%20Pro%20Color%20Lab%20519%20SW%2060th%20Rd" target="_blank" rel="noopener noreferrer">View on Google Maps</a></div>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    // Mobile nav toggle
-    var hamburger = document.getElementById('hamburger');
-    var navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', function() {
-      navLinks.classList.toggle('open');
+</div>
+
+<div class="prog" id="prog"><i></i></div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var track = document.getElementById('track');
+  var frames = document.querySelectorAll('.frame');
+  var progBar = document.querySelector('#prog i');
+  var isDesktop = function(){return window.matchMedia('(min-width:821px)').matches;};
+
+  function jumpTo(i){
+    var f=frames[i]; if(!f)return;
+    if(isDesktop()){
+      track.scrollTo({left:f.offsetLeft, behavior: reduce?'auto':'smooth'});
+    } else {
+      f.scrollIntoView({behavior: reduce?'auto':'smooth'});
+    }
+  }
+  document.querySelectorAll('.nav-jump').forEach(function(a){
+    a.addEventListener('click',function(e){e.preventDefault();jumpTo(parseInt(a.getAttribute('data-i'),10));});
+  });
+
+  // progress bar based on horizontal scroll
+  function upd(){
+    if(!isDesktop()){progBar.style.width='0';return;}
+    var max=track.scrollWidth-track.clientWidth;
+    progBar.style.width=(max>0?(track.scrollLeft/max*100):0)+'%';
+  }
+  track.addEventListener('scroll',upd,{passive:true});
+  window.addEventListener('resize',upd);
+  upd();
+
+  // convert vertical wheel to horizontal on desktop for the whole track
+  if(!reduce){
+    track.addEventListener('wheel',function(e){
+      if(!isDesktop())return;
+      // let inner service strip scroll horizontally itself
+      var strip=e.target.closest('.svc-scroll');
+      if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){
+        track.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    },{passive:false});
+  }
+
+  // keyboard arrows
+  document.addEventListener('keydown',function(e){
+    if(!isDesktop())return;
+    if(e.key==='ArrowRight'){track.scrollLeft+=track.clientWidth;}
+    if(e.key==='ArrowLeft'){track.scrollLeft-=track.clientWidth;}
+  });
+
+  // magnetic buttons
+  if(!reduce && window.matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.magnet').forEach(function(b){
+      b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.3)+'px)';});
+      b.addEventListener('pointerleave',function(){b.style.transform='';});
     });
-    // Close nav on link click
-    navLinks.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        navLinks.classList.remove('open');
-      });
-    });
-  </script>
-
+  }
+})();
+</script>
 </body>
 </html>
