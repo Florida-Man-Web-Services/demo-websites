@@ -1,1048 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Critter-Free Solutions | Pest Control Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --green-dark: #1a3c2a;
-      --green-mid: #2d6a4f;
-      --green-light: #40916c;
-      --green-pale: #d8f3dc;
-      --amber: #e9a82e;
-      --amber-dark: #c47f0a;
-      --cream: #f8f5ef;
-      --text-dark: #1c2b22;
-      --text-mid: #3a4f40;
-      --text-light: #6b7c70;
-      --white: #ffffff;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      color: var(--text-dark);
-      background: var(--cream);
-      line-height: 1.6;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      background: var(--green-dark);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    }
-
-    .nav-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--amber);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--green-dark);
-    }
-
-    .nav-logo-text {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.01em;
-      line-height: 1.2;
-    }
-
-    .nav-logo-text span {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--green-pale);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--green-pale);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--amber);
-    }
-
-    .nav-cta {
-      background: var(--amber);
-      color: var(--green-dark) !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: 6px;
-      font-weight: 700 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--amber-dark) !important;
-      color: var(--white) !important;
-    }
-
-    /* hamburger */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* HERO */
-    .hero {
-      margin-top: 64px;
-      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-light) 100%);
-      padding: 5rem 1.5rem 4.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 80% 20%, rgba(233,168,46,0.12) 0%, transparent 50%),
-        radial-gradient(circle at 10% 80%, rgba(64,145,108,0.2) 0%, transparent 40%);
-      pointer-events: none;
-    }
-
-    /* subtle bug silhouette pattern */
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='8' ry='12' fill='rgba(255,255,255,0.03)'/%3E%3Ccircle cx='60' cy='50' r='6' fill='rgba(255,255,255,0.03)'/%3E%3Cline x1='52' y1='55' x2='40' y2='50' stroke='rgba(255,255,255,0.03)' stroke-width='2'/%3E%3Cline x1='68' y1='55' x2='80' y2='50' stroke='rgba(255,255,255,0.03)' stroke-width='2'/%3E%3Cline x1='52' y1='60' x2='38' y2='60' stroke='rgba(255,255,255,0.03)' stroke-width='2'/%3E%3Cline x1='68' y1='60' x2='82' y2='60' stroke='rgba(255,255,255,0.03)' stroke-width='2'/%3E%3C/svg%3E");
-      background-size: 120px 120px;
-      opacity: 1;
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      max-width: 800px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(233,168,46,0.18);
-      border: 1px solid rgba(233,168,46,0.45);
-      color: var(--amber);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 100px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.01em;
-    }
-
-    .hero h1 span {
-      color: var(--amber);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.82);
-      max-width: 560px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.6;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      background: var(--amber);
-      color: var(--green-dark);
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 0.8rem 2rem;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 4px 14px rgba(233,168,46,0.35);
-    }
-
-    .btn-primary:hover {
-      background: var(--amber-dark);
-      color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      display: inline-block;
-      background: transparent;
-      color: var(--white);
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 0.8rem 2rem;
-      border-radius: 8px;
-      text-decoration: none;
-      border: 2px solid rgba(255,255,255,0.45);
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--white);
-      background: rgba(255,255,255,0.08);
-    }
-
-    /* TRUST BAR */
-    .trust-bar {
-      background: var(--white);
-      border-bottom: 1px solid #e0ebe3;
-      padding: 1rem 1.5rem;
-    }
-
-    .trust-bar-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2.5rem;
-      flex-wrap: wrap;
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.88rem;
-      color: var(--text-mid);
-      font-weight: 500;
-    }
-
-    .trust-item svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--green-light);
-      flex-shrink: 0;
-    }
-
-    /* ABOUT */
-    .section {
-      padding: 5rem 1.5rem;
-    }
-
-    .section-alt {
-      background: var(--white);
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--green-light);
-      margin-bottom: 0.75rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--green-dark);
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-title span {
-      color: var(--green-light);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-mid);
-      font-size: 1.05rem;
-      margin-bottom: 1.1rem;
-      line-height: 1.75;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--green-pale) 0%, #b7e4c7 100%);
-      border-radius: 16px;
-      padding: 3rem 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-    }
-
-    .stat-icon {
-      width: 46px;
-      height: 46px;
-      background: var(--green-pale);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .stat-icon svg {
-      width: 24px;
-      height: 24px;
-      fill: var(--green-mid);
-    }
-
-    .stat-label {
-      font-size: 0.82rem;
-      color: var(--text-light);
-      margin-bottom: 0.1rem;
-    }
-
-    .stat-value {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--green-dark);
-    }
-
-    /* SERVICES */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border: 1px solid #ddeee4;
-      border-radius: 14px;
-      padding: 2rem 1.75rem;
-      transition: box-shadow 0.25s, transform 0.2s, border-color 0.25s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 28px rgba(45,106,79,0.12);
-      transform: translateY(-4px);
-      border-color: var(--green-light);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: var(--green-pale);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.25rem;
-    }
-
-    .service-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: var(--green-mid);
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--green-dark);
-      margin-bottom: 0.6rem;
-    }
-
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      line-height: 1.65;
-    }
-
-    /* CONTACT */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-      margin-top: 2.5rem;
-    }
-
-    .contact-card {
-      background: var(--green-dark);
-      border-radius: 16px;
-      padding: 2.5rem;
-      color: var(--white);
-    }
-
-    .contact-card h3 {
-      font-size: 1.35rem;
-      font-weight: 700;
-      margin-bottom: 1.75rem;
-      color: var(--amber);
-    }
-
-    .contact-item {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      align-items: flex-start;
-    }
-
-    .contact-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .contact-item-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-item-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--amber);
-    }
-
-    .contact-item-label {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.55);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.25rem;
-    }
-
-    .contact-item-value {
-      font-size: 1rem;
-      color: var(--white);
-      font-weight: 500;
-      line-height: 1.5;
-    }
-
-    .contact-item-value a {
-      color: var(--white);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-item-value a:hover {
-      color: var(--amber);
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--amber);
-      color: var(--green-dark);
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 0.75rem 1.75rem;
-      border-radius: 8px;
-      text-decoration: none;
-      margin-top: 1.75rem;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .btn-directions:hover {
-      background: var(--amber-dark);
-      color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .btn-directions svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
-    }
-
-    /* rating panel */
-    .rating-panel {
-      background: var(--cream);
-      border: 1px solid #ddeee4;
-      border-radius: 16px;
-      padding: 2.5rem;
-    }
-
-    .rating-panel h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--green-dark);
-      margin-bottom: 1.5rem;
-    }
-
-    .rating-display {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .rating-score {
-      font-size: 3.5rem;
-      font-weight: 800;
-      color: var(--green-dark);
-      line-height: 1;
-    }
-
-    .rating-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .star {
-      width: 22px;
-      height: 22px;
-    }
-
-    .star svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .star-full svg {
-      fill: #f5a623;
-    }
-
-    .star-partial {
-      position: relative;
-      display: inline-block;
-    }
-
-    .star-partial svg.bg {
-      fill: #ddd;
-    }
-
-    .star-partial svg.fg {
-      fill: #f5a623;
-      position: absolute;
-      top: 0;
-      left: 0;
-      clip-path: inset(0 10% 0 0);
-    }
-
-    .star-empty svg {
-      fill: #ddd;
-    }
-
-    .rating-source {
-      font-size: 0.82rem;
-      color: var(--text-light);
-    }
-
-    .rating-note {
-      font-size: 0.9rem;
-      color: var(--text-mid);
-      line-height: 1.6;
-      padding-top: 1.25rem;
-      border-top: 1px solid #ddeee4;
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--green-dark);
-      color: rgba(255,255,255,0.65);
-      padding: 2.5rem 1.5rem;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-brand {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .footer-brand span {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: rgba(255,255,255,0.5);
-      margin-top: 0.15rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      font-size: 0.88rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--amber);
-    }
-
-    .footer-copy {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.4);
-      text-align: center;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        width: 100%;
-        background: var(--green-dark);
-        padding: 1rem 1.5rem 1.5rem;
-        gap: 1.2rem;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .trust-bar-inner {
-        gap: 1.2rem;
-      }
-
-      .about-visual {
-        padding: 2rem 1.25rem;
-      }
-
-      .contact-card, .rating-panel {
-        padding: 1.75rem 1.25rem;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Critter-Free Solutions | Pest Control Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#14251b;--moss:#2f6b4c;--fern:#43926b;--leaf:#7cc79c;--pale:#e6f3ec;
+    --cream:#f4f7f1;--amber:#e8a733;--amber-dk:#bd7f0c;--card:#fff;--line:#d0e3d6;--muted:#5b7466;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;color:var(--ink);
+    background:var(--cream);line-height:1.65;overflow-x:hidden}
+  a{color:inherit}
+  .split{display:grid;grid-template-columns:42% 58%;min-height:100vh}
+
+  /* LEFT sticky panel */
+  .left{position:sticky;top:0;height:100vh;overflow:hidden;color:#fff;
+    background:linear-gradient(155deg,#0e2318,#245840 60%,#2f6b4c);
+    display:flex;flex-direction:column;justify-content:space-between;padding:2.4rem}
+  .left .frond{position:absolute;inset:0;opacity:.16;pointer-events:none}
+  .left .frond svg{position:absolute;width:520px;height:520px}
+  .lf1{top:-120px;right:-140px;animation:sway 12s ease-in-out infinite}
+  .lf2{bottom:-160px;left:-160px;animation:sway2 15s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(0)}50%{transform:rotate(6deg)}}
+  @keyframes sway2{0%,100%{transform:rotate(180deg)}50%{transform:rotate(186deg)}}
+  .brand{display:flex;gap:.7rem;align-items:center;position:relative;z-index:2}
+  .brand .mark{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--leaf),var(--moss));
+    display:grid;place-items:center}
+  .brand b{font-size:1.15rem;line-height:1.15}
+  .brand small{display:block;font-weight:400;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--leaf)}
+  .left-hero{position:relative;z-index:2}
+  .kick{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+    background:var(--amber);display:inline-block;padding:.32rem .8rem;border-radius:999px}
+  .left-hero h1{font-size:clamp(2.1rem,4vw,3.4rem);line-height:1.06;font-weight:800;margin:1rem 0 .8rem;letter-spacing:-.01em}
+  .left-hero h1 span{color:var(--leaf)}
+  .left-hero p{color:#d8ecdf;max-width:38ch}
+  .left-cta{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.3rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:700;
+    padding:.75rem 1.2rem;border-radius:999px;font-size:.95rem;border:0;cursor:pointer;
+    transition:transform .18s cubic-bezier(.2,1.4,.4,1),box-shadow .2s,background .2s,color .2s}
+  .btn-a{background:var(--amber);color:var(--ink)}
+  .btn-a:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(232,167,51,.4)}
+  .btn-b{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+  .btn-b:hover{background:#fff;color:var(--ink)}
+  .left-foot{position:relative;z-index:2;display:flex;gap:1.6rem;flex-wrap:wrap;font-size:.86rem;color:#cfe6d8}
+  .left-foot .rate{display:flex;align-items:center;gap:.5rem}
+  .left-foot .rate b{font-size:1.5rem;color:#fff}
+  .stars{color:var(--amber);letter-spacing:2px}
+
+  /* RIGHT scrolling content */
+  .right{padding:2.4rem clamp(1.4rem,4vw,4rem)}
+  .prog{position:fixed;top:0;right:0;height:4px;width:58%;background:transparent;z-index:40}
+  .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--fern),var(--amber));transition:width .1s}
+  .chunk{padding:3.4rem 0;border-bottom:1px solid var(--line);
+    opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .chunk.in{opacity:1;transform:none}
+  .chunk:first-child{padding-top:1rem}
+  .lab{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--fern);margin-bottom:.5rem}
+  .chunk h2{font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.15;margin-bottom:.9rem;letter-spacing:-.01em}
+  .chunk p{color:var(--muted);max-width:60ch}
+  .chunk p+p{margin-top:.8rem}
+
+  .svc{display:flex;gap:1rem;padding:1.2rem;border:1px solid var(--line);border-radius:16px;background:var(--card);
+    margin-top:1rem;transition:transform .2s,box-shadow .2s}
+  .svc:hover{transform:translateX(6px);box-shadow:0 12px 26px rgba(47,107,76,.14)}
+  .svc .ic{width:48px;height:48px;border-radius:13px;background:var(--pale);display:grid;place-items:center;flex-shrink:0}
+  .svc h3{font-size:1.08rem;margin-bottom:.25rem}
+  .svc p{font-size:.9rem}
+  .leaf-ic{stroke:var(--moss);stroke-width:1.6;fill:none}
+
+  .contact-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+  .cc{border:1px solid var(--line);border-radius:16px;padding:1.2rem;background:var(--card)}
+  .cc small{display:block;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fern);font-weight:700;margin-bottom:.3rem}
+  .cc a,.cc span{font-weight:600;text-decoration:none;color:var(--ink)}
+  .cc a:hover{color:var(--moss)}
+  .final{background:linear-gradient(150deg,#0e2318,#2f6b4c);color:#fff;border-radius:22px;padding:2rem;margin-top:1.4rem}
+  .final h3{font-size:1.4rem;margin-bottom:.5rem}
+  .final p{color:#d8ecdf;margin-bottom:1.1rem}
+  .dir{display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;border:2px solid rgba(255,255,255,.4);
+    color:#fff;padding:.7rem 1.1rem;border-radius:999px;font-weight:600;font-size:.9rem;margin-left:.6rem}
+  .dir:hover{background:#fff;color:var(--ink)}
+  svg{display:block}
+
+  .rfoot{padding:1.6rem 0 0;color:var(--muted);font-size:.82rem}
+
+  @media(max-width:860px){
+    .split{grid-template-columns:1fr}
+    .left{position:relative;height:auto;min-height:auto;padding:2rem 1.4rem;gap:1.6rem}
+    .prog{width:100%}
+    .contact-cards{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .chunk{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <div class="nav-inner">
-      <a href="#" class="nav-logo">
-        <div class="nav-logo-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <!-- shield with checkmark -->
-            <path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5L12 1zm-1 14l-4-4 1.41-1.41L11 12.17l6.59-6.58L19 7l-8 8z"/>
-          </svg>
-        </div>
-        <div class="nav-logo-text">
-          Critter-Free Solutions
-          <span>Pest Control &bull; Gainesville, FL</span>
-        </div>
-      </a>
-
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
-      </ul>
-
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+<div class="prog"><i id="bar"></i></div>
+<div class="split">
+  <div class="left">
+    <div class="frond" aria-hidden="true">
+      <span class="lf1"><svg viewBox="0 0 200 200" class="leaf-ic" stroke="#7cc79c"><path d="M100 190C160 150 180 80 180 20 120 30 60 60 40 130c30-10 45 0 60 60z"/><path d="M60 150C90 110 120 80 165 55" stroke-linecap="round"/></svg></span>
+      <span class="lf2"><svg viewBox="0 0 200 200" class="leaf-ic" stroke="#7cc79c"><path d="M100 190C160 150 180 80 180 20 120 30 60 60 40 130c30-10 45 0 60 60z"/></svg></span>
     </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">Serving Gainesville &amp; Surrounding Areas</div>
-      <h1>Keep Your Home &amp; Business<br><span>Critter-Free.</span></h1>
-      <p class="hero-tagline">Professional pest control solutions for Gainesville, FL residents and businesses. We tackle the bugs, rodents, and wildlife so you don't have to.</p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary">Get a Free Quote</a>
-        <a href="tel:3525809170" class="btn-secondary">Call (352) 580-9170</a>
+    <a class="brand" href="#top">
+      <span class="mark"><svg width="26" height="26" viewBox="0 0 24 24" class="leaf-ic" stroke="#0e2318"><path d="M12 21c6-2 8-8 8-15-7 0-13 2-15 8 3 0 5 1 7 3z"/><path d="M6 18c3-4 7-7 12-9" stroke-linecap="round"/></svg></span>
+      <b>Critter-Free Solutions<small>Gainesville, FL</small></b>
+    </a>
+    <div class="left-hero" id="top">
+      <span class="kick">Serving Gainesville &amp; Alachua County</span>
+      <h1>Keep Your Home &amp; Business <span>Critter-Free.</span></h1>
+      <p>Reliable, effective pest and nuisance-wildlife control for homes, rentals, and businesses across the Gainesville area.</p>
+      <div class="left-cta">
+        <a class="btn btn-a magnet" href="tel:3525809170">Call (352) 580-9170</a>
+        <a class="btn btn-b" href="#services">Our Services</a>
       </div>
     </div>
-  </section>
-
-  <!-- TRUST BAR -->
-  <div class="trust-bar">
-    <div class="trust-bar-inner">
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5L12 1zm-1 14l-4-4 1.41-1.41L11 12.17l6.59-6.58L19 7l-8 8z"/></svg>
-        Licensed &amp; Insured
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
-        Flexible Scheduling
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-        Fast Response Times
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-        Locally Owned
-      </div>
+    <div class="left-foot">
+      <div class="rate"><span class="stars">&#9733;&#9733;&#9733;&#9733;</span><b>4.1</b><span>star rating on&nbsp;Google&nbsp;Maps</span></div>
+      <div>Fast response times &bull; Family-safe methods</div>
     </div>
   </div>
 
-  <!-- ABOUT -->
-  <section class="section section-alt" id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <div class="section-label">About Us</div>
-          <h2 class="section-title">Your <span>Trusted Pest Control</span> Team in Gainesville</h2>
-          <p>Critter-Free Solutions is a Gainesville-based pest control company dedicated to keeping homes and businesses free from unwanted insects, rodents, and wildlife throughout Alachua County and the surrounding region.</p>
-          <p>Our technicians use proven, targeted treatment methods designed to eliminate pest problems at the source while minimizing impact on your family, pets, and the environment. Whether it's a routine inspection or an urgent infestation, we respond promptly and treat every property with care.</p>
-          <p>From termite prevention to wildlife exclusion, we offer a full range of residential and commercial pest management services tailored to the unique conditions of North Central Florida. Contact us to find out which treatment plan is right for you.</p>
-        </div>
-        <div class="about-visual">
-          <div class="stat-card">
-            <div class="stat-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5L12 1zm-1 14l-4-4 1.41-1.41L11 12.17l6.59-6.58L19 7l-8 8z"/></svg>
-            </div>
-            <div>
-              <div class="stat-label">Service Area</div>
-              <div class="stat-value">Gainesville &amp; Alachua County</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">
-              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-            </div>
-            <div>
-              <div class="stat-label">Residential &amp; Commercial</div>
-              <div class="stat-value">Homes, Rentals &amp; Businesses</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 17.93V18c0-.55-.45-1-1-1s-1 .45-1 1v1.93C7.06 19.44 4.56 16.94 4.07 14H6c.55 0 1-.45 1-1s-.45-1-1-1H4.07C4.56 8.06 7.06 5.56 10 5.07V7c0 .55.45 1 1 1s1-.45 1-1V5.07C15.94 5.56 18.44 8.06 18.93 11H17c-.55 0-1 .45-1 1s.45 1 1 1h1.93c-.49 2.94-2.99 5.44-5.93 5.93z"/></svg>
-            </div>
-            <div>
-              <div class="stat-label">Treatment Approach</div>
-              <div class="stat-value">Targeted, Family-Safe Methods</div>
-            </div>
-          </div>
-        </div>
+  <div class="right">
+    <section class="chunk">
+      <div class="lab">About Us</div>
+      <h2>Targeted pest control, done with care.</h2>
+      <p>Critter-Free Solutions has earned a 4.1-star rating from customers on Google Maps. We are committed to providing reliable, effective pest control service for every home and business we visit in the Gainesville area.</p>
+      <p>Our technicians use proven, targeted treatment methods designed to eliminate pest problems at the source while minimizing impact on your family, pets, and the environment. Whether it's a routine inspection or an urgent infestation, we respond promptly and treat every property with care.</p>
+    </section>
+
+    <section class="chunk" id="services">
+      <div class="lab">What We Do</div>
+      <h2>Pest &amp; wildlife solutions.</h2>
+      <p>We handle a broad range of pest and nuisance-wildlife challenges. Contact us for details on treatment options and scheduling.</p>
+      <div class="svc"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" class="leaf-ic"><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2" stroke-linecap="round"/></svg></div><div><h3>General Pest Control</h3><p>Targeted treatments for ants, roaches, spiders, and other common household and commercial pests, applied with care for people and pets.</p></div></div>
+      <div class="svc"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" class="leaf-ic"><path d="M4 14c0-3 3-6 8-6 4 0 6 2 6 4s-2 4-6 4H4z"/><circle cx="16" cy="12" r="1" fill="var(--moss)"/><path d="M4 14c-1 1-2 3-1 4" stroke-linecap="round"/></svg></div><div><h3>Rodent Exclusion</h3><p>Identification of entry points, humane trapping, and structural exclusion to keep mice and rats out of your home or business for good.</p></div></div>
+      <div class="svc"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" class="leaf-ic"><path d="M6 20c0-5 3-9 6-9s6 4 6 9M9 11c-1-3 0-6 3-6s4 3 3 6M8 15h8" stroke-linecap="round"/></svg></div><div><h3>Wildlife Removal</h3><p>Humane removal and relocation of nuisance wildlife including squirrels, raccoons, opossums, and other animals that have entered your structure.</p></div></div>
+    </section>
+
+    <section class="chunk" id="contact">
+      <div class="lab">Get in Touch</div>
+      <h2>Contact Critter-Free Solutions.</h2>
+      <div class="contact-cards">
+        <div class="cc"><small>Address</small><span>22d SE 5th Ave, Gainesville, FL 32601</span></div>
+        <div class="cc"><small>Phone</small><a href="tel:3525809170">(352) 580-9170</a></div>
+        <div class="cc"><small>Hours</small><span>Contact us for details</span></div>
+        <div class="cc"><small>Area Served</small><span>Gainesville &amp; Alachua County</span></div>
       </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="section" id="services">
-    <div class="section-inner">
-      <div class="section-label">What We Do</div>
-      <h2 class="section-title">Our <span>Pest Control Services</span></h2>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.56 1.42 4.83 3.65 6.35L5 21l3.18-1.59C9.34 19.78 10.65 20 12 20c5.52 0 10-3.58 10-9s-4.48-8-10-8zm1 13h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/></svg>
-          </div>
-          <h3>General Pest Control</h3>
-          <p>Comprehensive treatment for common household pests including ants, roaches, spiders, silverfish, and more. Contact us for details on scheduling and treatment plans.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.69 2 6 4.69 6 8c0 4.5 6 11 6 11s6-6.5 6-11c0-3.31-2.69-6-6-6zm0 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
-          </div>
-          <h3>Termite Control &amp; Prevention</h3>
-          <p>Inspection, treatment, and ongoing prevention programs to protect your property from subterranean and drywood termites common in North Central Florida.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-          </div>
-          <h3>Rodent Exclusion &amp; Removal</h3>
-          <p>Identification of entry points, humane trapping, and structural exclusion to keep mice and rats out of your home or business for good.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm3-9h-2V7h-2v4H9l3 3 3-3z"/></svg>
-          </div>
-          <h3>Mosquito &amp; Tick Treatment</h3>
-          <p>Barrier treatments and yard management programs to significantly reduce mosquito and tick populations around your outdoor living spaces. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          </div>
-          <h3>Wildlife Removal &amp; Exclusion</h3>
-          <p>Humane removal and relocation of nuisance wildlife including squirrels, raccoons, opossums, and other animals that have entered your structure.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
-          </div>
-          <h3>Commercial Pest Management</h3>
-          <p>Customized integrated pest management (IPM) programs for restaurants, offices, warehouses, and multi-unit properties to maintain compliance and protect your reputation.</p>
-        </div>
-
+      <div class="final">
+        <h3>Have a critter problem?</h3>
+        <p>Call us to schedule an inspection or ask about the right approach for your home or business.</p>
+        <a class="btn btn-a magnet" href="tel:3525809170">Call (352) 580-9170</a>
+        <a class="dir" href="https://www.google.com/maps/search/Critter-Free%20Solutions%2022d%20SE%205th%20Ave%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener">Get Directions</a>
       </div>
-    </div>
-  </section>
+      <div class="rfoot">&copy; 2026 Critter-Free Solutions &mdash; 22d SE 5th Ave, Gainesville, FL 32601 &bull; <a href="tel:3525809170" style="color:var(--amber-dk);font-weight:700;text-decoration:none">(352) 580-9170</a></div>
+    </section>
+  </div>
+</div>
 
-  <!-- CONTACT -->
-  <section class="section section-alt" id="contact">
-    <div class="section-inner">
-      <div class="section-label">Reach Out</div>
-      <h2 class="section-title">Contact <span>Critter-Free Solutions</span></h2>
-      <div class="contact-grid">
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var chunks = Array.prototype.slice.call(document.querySelectorAll('.chunk'));
+  if (reduce || !('IntersectionObserver' in window)){
+    chunks.forEach(function(c){ c.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.2});
+    chunks.forEach(function(c){ io.observe(c); });
+  }
+  var bar = document.getElementById('bar');
+  function prog(){
+    var h = document.documentElement.scrollHeight - innerHeight;
+    var p = h>0 ? (scrollY/h)*100 : 0;
+    bar.style.width = p + '%';
+  }
+  addEventListener('scroll', prog, {passive:true}); prog();
 
-        <div class="contact-card">
-          <h3>Get in Touch</h3>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Phone</div>
-              <div class="contact-item-value"><a href="tel:3525809170">(352) 580-9170</a></div>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Address</div>
-              <div class="contact-item-value">22d SE 5th Ave<br>Gainesville, FL 32601</div>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Hours</div>
-              <div class="contact-item-value">Contact us for details</div>
-            </div>
-          </div>
-
-          <a class="btn-directions" href="https://www.google.com/maps/search/Critter-Free%20Solutions%2022d%20SE%205th%20Ave%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-            Get Directions
-          </a>
-        </div>
-
-        <div class="rating-panel">
-          <h3>What Customers Are Saying</h3>
-          <div class="rating-display">
-            <div class="rating-score">4.1</div>
-            <div class="rating-meta">
-              <div class="stars">
-                <!-- 4 full stars -->
-                <div class="star star-full"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
-                <div class="star star-full"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
-                <div class="star star-full"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
-                <div class="star star-full"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
-                <!-- partial star for 0.1 — show as empty since 0.1 is negligible visually, show as 4 full + 1 empty -->
-                <div class="star star-empty"><svg viewBox="0 0 24 24"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg></div>
-              </div>
-              <div class="rating-source">Rating on Google Maps</div>
-            </div>
-          </div>
-          <div class="rating-note">
-            Critter-Free Solutions has earned a 4.1-star rating from customers on Google Maps. We are committed to providing reliable, effective pest control service for every home and business we visit in the Gainesville area.
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        Critter-Free Solutions
-        <span>22d SE 5th Ave, Gainesville, FL 32601</span>
-      </div>
-      <ul class="footer-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="tel:3525809170">(352) 580-9170</a></li>
-      </ul>
-    </div>
-    <div class="footer-copy">
-      &copy; 2026 Critter-Free Solutions. All rights reserved. Serving Gainesville, FL and surrounding areas.
-    </div>
-  </footer>
-
-  <script>
-    // Mobile nav toggle
-    var toggle = document.getElementById('navToggle');
-    var links = document.getElementById('navLinks');
-    toggle.addEventListener('click', function() {
-      links.classList.toggle('open');
-    });
-    // Close nav on link click
-    links.querySelectorAll('a').forEach(function(a) {
-      a.addEventListener('click', function() {
-        links.classList.remove('open');
+  if (!reduce){
+    document.querySelectorAll('.magnet').forEach(function(b){
+      b.addEventListener('pointermove', function(e){
+        var r=b.getBoundingClientRect(), x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+        b.style.transform='translate('+(x*0.25)+'px,'+(y*0.3)+'px)';
       });
+      b.addEventListener('pointerleave', function(){ b.style.transform=''; });
     });
-  </script>
+  }
+})();
+</script>
 </body>
 </html>
