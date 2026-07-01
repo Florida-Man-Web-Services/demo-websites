@@ -7,263 +7,267 @@
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --pink:#ff2e88;
-    --lime:#c6ff00;
-    --cyan:#12e6d6;
-    --ink:#0a0a12;
-    --ink-2:#15121f;
-    --paper:#faf3ff;
+    --ink:#141b1f;
+    --turq:#05c7c0;
+    --pink:#ff2d7e;
+    --yellow:#ffd21f;
+    --cream:#fff6e9;
+    --white:#ffffff;
   }
   html{scroll-behavior:smooth}
   body{
-    font-family:"Arial Black","Helvetica Neue",system-ui,sans-serif;
-    background:var(--ink);color:var(--paper);overflow:hidden;line-height:1.45;
-    -webkit-font-smoothing:antialiased;
+    font-family:"Helvetica Neue",Arial,system-ui,sans-serif;
+    background:var(--turq);color:var(--ink);line-height:1.5;overflow-x:hidden;
   }
   a{color:inherit}
+  .blk{font-family:"Arial Black","Helvetica Neue",sans-serif;font-weight:900}
 
   /* top marquee */
-  .ticker{position:fixed;top:0;left:0;width:100%;z-index:90;background:var(--lime);color:var(--ink);
-    border-bottom:4px solid var(--ink);overflow:hidden;white-space:nowrap}
-  .ticker__row{display:inline-flex;padding:.5rem 0;font-family:"Helvetica Neue",Arial,sans-serif;
-    font-weight:900;letter-spacing:.16em;text-transform:uppercase;font-size:.78rem;animation:mv 18s linear infinite}
-  .ticker__row span{padding:0 1.4rem}
+  .marq{position:fixed;top:0;left:0;width:100%;z-index:40;background:var(--ink);color:var(--yellow);
+    border-bottom:4px solid var(--pink);overflow:hidden;white-space:nowrap}
+  .marq__t{display:inline-flex;gap:1.8rem;padding:.5rem 0;font-family:"Arial Black",sans-serif;
+    font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;animation:mv 18s linear infinite}
+  .marq__t b{color:var(--pink)}
   @keyframes mv{to{transform:translateX(-50%)}}
 
-  /* horizontal scroller */
-  .rail{
-    display:flex;flex-wrap:nowrap;
-    height:100vh;width:100vw;
-    overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;
-    scroll-behavior:smooth;
-    padding-top:40px;
-    -webkit-overflow-scrolling:touch;
+  /* HORIZONTAL TRACK */
+  .track{
+    margin-top:38px;height:calc(100vh - 38px);
+    display:flex;overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     scrollbar-width:none;
   }
-  .rail::-webkit-scrollbar{display:none}
-  .slide{
-    flex:0 0 100vw;width:100vw;height:100%;
-    scroll-snap-align:start;
-    padding:3.2rem clamp(1.4rem,6vw,7rem);
-    display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;
+  .track::-webkit-scrollbar{display:none}
+  .hpanel{
+    flex:0 0 100vw;height:100%;scroll-snap-align:start;
+    padding:clamp(1.4rem,5vw,4.5rem);display:flex;flex-direction:column;justify-content:safe center;
+    position:relative;overflow-x:hidden;overflow-y:auto;
   }
-  .s-hero{background:radial-gradient(circle at 30% 30%,var(--ink-2),var(--ink))}
-  .s-about{background:var(--pink);color:var(--ink)}
-  .s-serve{background:var(--ink-2)}
-  .s-rate{background:var(--cyan);color:var(--ink)}
-  .s-find{background:var(--lime);color:var(--ink)}
+  .p-hero{background:radial-gradient(120% 120% at 80% 10%,var(--pink),var(--ink) 70%);color:var(--cream)}
+  .p-about{background:var(--yellow)}
+  .p-menu{background:var(--cream)}
+  .p-rate{background:var(--pink);color:var(--white)}
+  .p-find{background:var(--ink);color:var(--cream)}
+  .p-say{background:var(--turq)}
 
-  /* dotted texture */
-  .slide::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
-    background-image:radial-gradient(rgba(255,255,255,.06) 1.5px,transparent 1.5px);background-size:22px 22px}
-  .s-about::after,.s-rate::after,.s-find::after{background-image:radial-gradient(rgba(0,0,0,.08) 1.5px,transparent 1.5px)}
+  .kick{font-family:"Arial Black",sans-serif;letter-spacing:.22em;text-transform:uppercase;font-size:.72rem;margin-bottom:.7rem}
+  .p-hero .kick,.p-find .kick{color:var(--yellow)}
+  .p-rate .kick{color:var(--yellow)}
+  h1{font-family:"Arial Black",sans-serif;font-size:clamp(2.6rem,9vw,6rem);line-height:.86;
+    letter-spacing:-.02em;text-transform:uppercase;margin-bottom:1rem}
+  h1 .accent{color:var(--yellow);display:block}
+  h2{font-family:"Arial Black",sans-serif;font-size:clamp(1.9rem,5vw,3.4rem);line-height:.95;
+    text-transform:uppercase;letter-spacing:-.01em;margin-bottom:1rem}
+  p.lede{font-size:clamp(1rem,2.4vw,1.3rem);max-width:34ch;line-height:1.6}
+  p.body{font-size:1.05rem;line-height:1.7;max-width:42ch;margin-bottom:1rem}
 
-  .kicker{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;letter-spacing:.22em;
-    text-transform:uppercase;font-size:.7rem;margin-bottom:.8rem}
-  .s-hero .kicker{color:var(--lime)}
-  h1{font-size:clamp(2.8rem,8vw,6rem);line-height:.86;letter-spacing:-.02em;text-transform:uppercase;max-width:16ch}
-  h1 .hi{color:var(--pink)}
-  h1 .cy{color:var(--cyan)}
-  h2{font-size:clamp(2rem,5vw,3.4rem);line-height:.94;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:1.1rem;max-width:18ch}
-  p.lead{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:600;font-size:clamp(1rem,1.8vw,1.25rem);
-    max-width:44ch;margin-top:1rem}
-  .s-hero p.lead{color:rgba(250,243,255,.85)}
+  .hint{font-family:"Arial Black",sans-serif;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    margin-top:1.6rem;opacity:.85;display:flex;align-items:center;gap:.5rem}
+  .hint .arw{animation:nudge 1.4s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateX(8px)}}
 
-  .reveal{opacity:0;transform:translateY(28px)}
-  html:not(.js) .reveal{opacity:1;transform:none}
-  html.js .reveal{transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
-  html.js .reveal.in{opacity:1;transform:none}
+  .sticker{position:absolute;font-family:"Arial Black",sans-serif;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;text-align:center;border:3px solid var(--ink);
+    border-radius:50%;box-shadow:4px 4px 0 var(--ink);line-height:1.05}
+  .sticker--a{top:8%;right:9%;width:120px;height:120px;background:var(--yellow);color:var(--ink);
+    font-size:.8rem;letter-spacing:.05em;transform:rotate(12deg)}
+  .sticker--b{bottom:10%;left:8%;width:104px;height:104px;background:var(--turq);color:var(--ink);
+    font-size:.72rem;transform:rotate(-9deg)}
 
-  .btn{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;
-    font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
-    font-size:.82rem;padding:.9rem 1.6rem;border-radius:100px;border:3px solid var(--ink);
-    background:var(--lime);color:var(--ink);text-decoration:none;box-shadow:4px 4px 0 var(--ink);
-    transition:transform .12s,box-shadow .12s;will-change:transform}
-  .s-hero .btn{border-color:var(--paper);box-shadow:4px 4px 0 var(--pink)}
-  .btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
-  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-  .btn--pink{background:var(--pink);color:var(--paper)}
-  .btn--ink{background:var(--ink);color:var(--lime);border-color:var(--lime)}
-  .cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.8rem}
+  ul.tags{list-style:none;display:flex;flex-wrap:wrap;gap:.7rem;margin-top:.5rem;max-width:640px}
+  ul.tags li{font-family:"Arial Black",sans-serif;font-size:.86rem;text-transform:uppercase;letter-spacing:.03em;
+    background:var(--white);border:3px solid var(--ink);border-radius:100px;padding:.5rem 1.1rem;
+    box-shadow:3px 3px 0 var(--pink);transition:transform .12s ease}
+  ul.tags li:hover{transform:translate(-2px,-2px)}
 
-  /* sticker */
-  .sticker{position:absolute;width:96px;height:96px;border-radius:50%;display:flex;align-items:center;
-    justify-content:center;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;
-    font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;line-height:1.1;border:3px solid var(--ink);
-    box-shadow:3px 3px 0 var(--ink);z-index:3}
-  .sticker--1{top:16%;right:8%;background:var(--pink);color:var(--paper);transform:rotate(12deg)}
-  .sticker--2{bottom:14%;right:12%;background:var(--cyan);color:var(--ink);transform:rotate(-9deg);width:84px;height:84px}
+  .rate{display:flex;align-items:center;gap:1.4rem}
+  .rate .n{font-family:"Arial Black",sans-serif;font-size:clamp(4rem,12vw,8rem);line-height:.85;color:var(--yellow)}
+  .rate .s{font-size:1.4rem;letter-spacing:.1em}
+  .rate small{display:block;font-family:"Arial Black",sans-serif;font-size:.76rem;letter-spacing:.06em;
+    text-transform:uppercase;margin-top:.4rem}
 
-  .rating-big{font-size:clamp(4rem,12vw,8rem);line-height:.85;font-family:"Arial Black",sans-serif}
-  .stars{font-size:1.4rem;letter-spacing:.12em}
-  .rate-sub{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:.9rem;text-transform:uppercase;letter-spacing:.06em;margin-top:.6rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;text-decoration:none;
+    font-family:"Arial Black",sans-serif;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:.85rem 1.6rem;border-radius:100px;border:3px solid var(--ink);background:var(--yellow);color:var(--ink);
+    box-shadow:3px 3px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;will-change:transform}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+  .btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+  .btn--pink{background:var(--pink);color:var(--white)}
+  .cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem}
 
-  .contact-block{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:1.05rem;line-height:1.6;margin-top:.4rem}
-  .contact-block a{text-decoration:none;border-bottom:3px solid var(--ink)}
+  .addr{font-family:"Arial Black",sans-serif;font-size:1.2rem;line-height:1.5;margin-bottom:.4rem}
+  .phone a{font-family:"Arial Black",sans-serif;font-size:clamp(1.4rem,4vw,2.2rem);text-decoration:none;color:var(--yellow)}
 
-  form{max-width:440px;margin-top:1.2rem}
-  label{display:block;font-family:"Helvetica Neue",Arial,sans-serif;font-weight:900;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;margin:0 0 .3rem}
-  input,textarea{width:100%;padding:.7rem .8rem;border:3px solid var(--ink);border-radius:10px;
-    font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:.9rem;background:var(--paper);color:var(--ink);outline:none;margin-bottom:.8rem}
+  label{display:block;font-family:"Arial Black",sans-serif;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;margin:0 0 .3rem}
+  input,textarea{width:100%;padding:.65rem .8rem;border:3px solid var(--ink);border-radius:12px;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-size:.9rem;background:var(--white);color:var(--ink);outline:none;margin-bottom:.7rem}
   input:focus,textarea:focus{box-shadow:3px 3px 0 var(--pink)}
-  textarea{resize:vertical;min-height:80px}
+  textarea{resize:vertical;min-height:76px}
+  form{max-width:420px;width:100%}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 
   /* nav dots + arrows */
-  .nav{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%);z-index:95;display:flex;align-items:center;gap:.7rem;
-    background:rgba(10,10,18,.7);border:2px solid var(--lime);border-radius:100px;padding:.5rem .8rem;backdrop-filter:blur(6px)}
-  .dot{width:12px;height:12px;border-radius:50%;background:rgba(250,243,255,.3);border:none;cursor:pointer;padding:0;transition:background .2s,transform .2s}
-  .dot.active{background:var(--lime);transform:scale(1.3)}
-  .arrow{background:none;border:none;color:var(--lime);font-size:1.2rem;cursor:pointer;font-family:"Arial Black",sans-serif;line-height:1;padding:0 .3rem}
+  .navbar{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);z-index:45;display:flex;
+    align-items:center;gap:.7rem;background:var(--ink);border:3px solid var(--yellow);border-radius:100px;padding:.5rem .7rem}
+  .navbar button{cursor:pointer;border:none;background:none;padding:.2rem .4rem;color:var(--yellow);
+    font-family:"Arial Black",sans-serif;font-size:1rem;line-height:1}
+  .dots{display:flex;gap:.4rem}
+  .dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.35);border:2px solid var(--yellow);cursor:pointer;padding:0}
+  .dot.on{background:var(--yellow)}
 
-  .scrollhint{position:fixed;top:52px;right:1.2rem;z-index:92;font-family:"Helvetica Neue",Arial,sans-serif;
-    font-weight:900;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);opacity:.8}
-
-  @media(max-width:760px){
-    body{overflow:auto}
-    .rail{display:block;height:auto;width:auto;overflow:visible;scroll-snap-type:none;padding-top:44px}
-    .slide{flex:none;width:auto;height:auto;min-height:88vh;scroll-snap-align:none}
-    .nav{display:none}
-    .scrollhint{display:none}
-    .sticker--1{right:5%}
+  @media(max-width:820px){
+    .track{flex-direction:column;height:auto;overflow:visible;scroll-snap-type:y proximity}
+    .hpanel{flex:none;width:100%;min-height:88vh;scroll-snap-align:start}
+    .navbar{display:none}
+    .sticker--a{width:92px;height:92px}
+    .sticker--b{width:80px;height:80px}
+    .f2{grid-template-columns:1fr}
   }
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
-    .rail{scroll-behavior:auto}
-    .ticker__row{animation:none}
-    .reveal,html.js .reveal{opacity:1;transform:none;transition:none}
+    .marq__t,.hint .arw{animation:none}
+    .track{scroll-behavior:auto}
     .btn{transition:none}
   }
 </style>
 </head>
 <body>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__row">
-    <span>&#127790; Locos por Tacos &bull; Gainesville's Favorite Food Truck &bull; Tacos &bull; Street Eats &bull;</span>
-    <span>&#127790; Locos por Tacos &bull; Gainesville's Favorite Food Truck &bull; Tacos &bull; Street Eats &bull;</span>
+<div class="marq" aria-hidden="true">
+  <div class="marq__t">
+    <span>&#127790; Gainesville's Favorite Food Truck &bull; <b>LOCOS POR TACOS</b> &bull; Tacos &bull; Mexican Street Food &bull; &#127790; Gainesville's Favorite Food Truck &bull; <b>LOCOS POR TACOS</b> &bull; Tacos &bull; Mexican Street Food &bull; </span>
   </div>
 </div>
 
-<div class="scrollhint" aria-hidden="true">Scroll &rarr;</div>
-
-<div class="rail" id="rail">
+<div class="track" id="track">
 
   <!-- HERO -->
-  <section class="slide s-hero" id="s0">
-    <div class="sticker sticker--1">On<br>The<br>Move</div>
-    <div class="reveal">
-      <div class="kicker">Gainesville, FL &bull; Food Truck</div>
-      <h1><span class="hi">Locos</span> por Tacos <span class="cy">Food Truck</span></h1>
-      <p class="lead">Gainesville's favorite food truck &mdash; loud flavor, fast service, straight off the street.</p>
-      <div class="cta">
-        <a class="btn" href="#s4" onclick="return goTo(4,event)">Find Us Today</a>
-        <a class="btn btn--pink" href="#s1" onclick="return goTo(1,event)">The Story</a>
-      </div>
-    </div>
+  <section class="hpanel p-hero">
+    <div class="sticker sticker--a">Get<br>Loco</div>
+    <div class="kick">Gainesville, FL &mdash; Food Truck</div>
+    <h1><span class="accent">Locos</span> por Tacos<br>Food Truck</h1>
+    <p class="lede">Bold Mexican street food, rolling through Gainesville. Follow the flavor.</p>
+    <div class="hint">Scroll sideways <span class="arw">&rarr;</span></div>
   </section>
 
   <!-- ABOUT -->
-  <section class="slide s-about" id="s1">
-    <div class="reveal">
-      <div class="kicker">01 &mdash; About</div>
-      <h2>Real Tacos. Real Fast.</h2>
-      <p class="lead">Locos por Tacos rolls up with bold, made-to-order tacos and the kind of street-food energy Gainesville loves. Follow the truck, grab a plate, and taste why the line is worth it.</p>
-    </div>
+  <section class="hpanel p-about">
+    <div class="sticker sticker--b">Truck<br>Life</div>
+    <div class="kick" style="color:var(--pink)">About</div>
+    <h2>Street Tacos,<br>Big Flavor</h2>
+    <p class="body">Locos por Tacos is a Gainesville food truck serving up bold, satisfying Mexican street food. We bring the taqueria energy right to the curb.</p>
+    <p class="body">Catch us around town and dig into fresh, made-to-order tacos. Contact us to find out where we are parked.</p>
   </section>
 
-  <!-- SERVE -->
-  <section class="slide s-serve" id="s2">
-    <div class="sticker sticker--2">Hot<br>&amp;<br>Fresh</div>
-    <div class="reveal">
-      <div class="kicker" style="color:var(--cyan)">02 &mdash; What We Do</div>
-      <h2>Street Tacos, Done Loud</h2>
-      <p class="lead">Tacos made fresh to order, served with a smile from the window. Roll up hungry &mdash; we will handle the rest.</p>
-    </div>
+  <!-- MENU -->
+  <section class="hpanel p-menu">
+    <div class="kick" style="color:var(--pink)">On the Menu</div>
+    <h2>Tacos &amp;<br>Street Eats</h2>
+    <ul class="tags">
+      <li>Street Tacos</li>
+      <li>Made to Order</li>
+      <li>Mexican Street Food</li>
+      <li>Fresh Ingredients</li>
+      <li>Grab &amp; Go</li>
+      <li>Bold Salsas</li>
+    </ul>
   </section>
 
   <!-- RATING -->
-  <section class="slide s-rate" id="s3">
-    <div class="reveal">
-      <div class="kicker">03 &mdash; The Reviews Are In</div>
-      <div class="rating-big">4.9</div>
-      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      <div class="rate-sub">Google Maps Rating &bull; Based on 48 reviews</div>
-      <div class="cta">
-        <a class="btn btn--ink" href="https://www.google.com/maps/search/Locos%20por%20Tacos%20Food%20Truck%201712%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">See Us on Google Maps</a>
+  <section class="hpanel p-rate">
+    <div class="kick">Fan Favorite</div>
+    <div class="rate">
+      <div class="n">4.9</div>
+      <div>
+        <div class="s">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <small>Google Maps Rating<br>Based on 48 reviews</small>
       </div>
     </div>
   </section>
 
-  <!-- FIND / CONTACT -->
-  <section class="slide s-find" id="s4">
-    <div class="reveal">
-      <div class="kicker">04 &mdash; Find Us</div>
-      <h2>Come Get Some</h2>
-      <div class="contact-block">
-        1712 SW 13th St, Gainesville, FL 32608<br>
-        <a href="tel:+13528701377">(352) 870-1377</a>
-      </div>
-      <div class="cta">
-        <a class="btn btn--ink" href="https://www.google.com/maps/search/Locos%20por%20Tacos%20Food%20Truck%201712%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">&#128205; Get Directions</a>
-      </div>
-      <form onsubmit="return sent(event)">
-        <label for="nm">Name</label><input id="nm" type="text" placeholder="Your name" required />
-        <label for="ph">Phone</label><input id="ph" type="tel" placeholder="(352) 000-0000" />
-        <label for="ms">Message</label><textarea id="ms" placeholder="Catering, events, or just say hi..."></textarea>
-        <button class="btn btn--pink" type="submit" id="sendbtn">Send Message</button>
-      </form>
+  <!-- FIND -->
+  <section class="hpanel p-find">
+    <div class="kick">Find the Truck</div>
+    <h2 style="color:var(--yellow)">Roll Up<br>&amp; Chow Down</h2>
+    <p class="addr">1712 SW 13th St<br>Gainesville, FL 32608</p>
+    <p class="phone"><a href="tel:+13528701377">(352) 870-1377</a></p>
+    <div class="cta">
+      <a class="btn" href="https://www.google.com/maps/search/Locos%20por%20Tacos%20Food%20Truck%201712%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">&#128506; Get Directions</a>
     </div>
+  </section>
+
+  <!-- SAY -->
+  <section class="hpanel p-say">
+    <div class="kick" style="color:var(--pink)">Holler at Us</div>
+    <h2>Cater or<br>Just Say Hi</h2>
+    <form onsubmit="return sent(event)">
+      <div class="f2">
+        <div><label for="nm">Name</label><input id="nm" type="text" placeholder="Jane Smith" required /></div>
+        <div><label for="ph">Phone</label><input id="ph" type="tel" placeholder="(352) 000-0000" /></div>
+      </div>
+      <label for="em">Email</label><input id="em" type="email" placeholder="jane@example.com" required />
+      <label for="ms">Message</label>
+      <textarea id="ms" placeholder="Where should we roll up? Tell us more..."></textarea>
+      <button class="btn btn--pink" type="submit" id="sendbtn">Send It</button>
+    </form>
   </section>
 
 </div>
 
-<nav class="nav" aria-label="Section navigation">
-  <button class="arrow" onclick="step(-1)" aria-label="Previous">&#8249;</button>
-  <button class="dot active" onclick="goTo(0)" aria-label="Slide 1"></button>
-  <button class="dot" onclick="goTo(1)" aria-label="Slide 2"></button>
-  <button class="dot" onclick="goTo(2)" aria-label="Slide 3"></button>
-  <button class="dot" onclick="goTo(3)" aria-label="Slide 4"></button>
-  <button class="dot" onclick="goTo(4)" aria-label="Slide 5"></button>
-  <button class="arrow" onclick="step(1)" aria-label="Next">&#8250;</button>
-</nav>
+<div class="navbar" aria-hidden="true">
+  <button id="prev" aria-label="Previous">&#8249;</button>
+  <div class="dots" id="dots"></div>
+  <button id="next" aria-label="Next">&#8250;</button>
+</div>
 
 <script>
 (function(){
-  var rail=document.getElementById('rail');
-  var slides=Array.prototype.slice.call(document.querySelectorAll('.slide'));
-  var dots=Array.prototype.slice.call(document.querySelectorAll('.dot'));
-  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cur=0;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var track=document.getElementById('track');
+  var panels=Array.prototype.slice.call(track.querySelectorAll('.hpanel'));
+  var dots=document.getElementById('dots');
+  var isHoriz=function(){return window.innerWidth>820;};
 
-  window.goTo=function(i,ev){
-    if(ev) ev.preventDefault();
-    var t=slides[i]; if(!t) return false;
-    t.scrollIntoView({behavior:reduce?'auto':'smooth',inline:'start',block:'nearest'});
-    return false;
-  };
-  window.step=function(d){ window.goTo(Math.max(0,Math.min(slides.length-1,cur+d))); };
+  // build dots
+  panels.forEach(function(p,i){
+    var d=document.createElement('button');d.className='dot'+(i===0?' on':'');
+    d.setAttribute('aria-label','Go to panel '+(i+1));
+    d.addEventListener('click',function(){go(i);});
+    dots.appendChild(d);
+  });
+  var current=0;
+  function setDot(i){var ds=dots.querySelectorAll('.dot');ds.forEach(function(d,j){d.classList.toggle('on',j===i);});}
+  function go(i){
+    i=Math.max(0,Math.min(panels.length-1,i));current=i;setDot(i);
+    if(isHoriz()){track.scrollTo({left:i*window.innerWidth,behavior:reduce?'auto':'smooth'});}
+    else{panels[i].scrollIntoView({behavior:reduce?'auto':'smooth'});}
+  }
+  document.getElementById('next').addEventListener('click',function(){go(current+1);});
+  document.getElementById('prev').addEventListener('click',function(){go(current-1);});
 
-  var els=Array.prototype.slice.call(document.querySelectorAll('.reveal'));
-  if(reduce || !('IntersectionObserver' in window)){
-    els.forEach(function(e){e.classList.add('in');});
-  } else {
-    document.documentElement.classList.add('js');
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){
-          e.target.classList.add('in');
-          var idx=slides.indexOf(e.target.closest('.slide'));
-          if(idx>-1){cur=idx;dots.forEach(function(d,j){d.classList.toggle('active',j===idx);});}
-        }
-      });
-    },{root:rail,threshold:.5});
-    els.forEach(function(e){io.observe(e);});
+  // track scroll -> update current dot (horizontal)
+  track.addEventListener('scroll',function(){
+    if(!isHoriz())return;
+    var i=Math.round(track.scrollLeft/window.innerWidth);
+    if(i!==current){current=i;setDot(i);}
+  },{passive:true});
 
+  // convert vertical wheel to horizontal scroll on desktop
+  if(!reduce){
+    track.addEventListener('wheel',function(e){
+      if(!isHoriz())return;
+      if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){
+        track.scrollLeft+=e.deltaY;e.preventDefault();
+      }
+    },{passive:false});
+  }
+
+  // magnetic buttons
+  if(!reduce){
     document.querySelectorAll('.btn').forEach(function(b){
       b.addEventListener('mousemove',function(e){
         var r=b.getBoundingClientRect();
-        b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.18)+'px,'+((e.clientY-r.top-r.height/2)*.28-2)+'px)';
+        b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.3-2)+'px)';
       });
       b.addEventListener('mouseleave',function(){b.style.transform='';});
     });
@@ -272,7 +276,7 @@
 function sent(e){
   e.preventDefault();
   var b=document.getElementById('sendbtn');var t=b.textContent;
-  b.textContent='Message Sent!';b.disabled=true;
+  b.textContent='Sent!';b.disabled=true;
   setTimeout(function(){b.textContent=t;b.disabled=false;e.target.reset();},2600);
   return false;
 }

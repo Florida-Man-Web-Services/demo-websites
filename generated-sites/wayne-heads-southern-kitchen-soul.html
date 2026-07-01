@@ -227,7 +227,11 @@
     var io=new IntersectionObserver(function(en){
       en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
     },{threshold:.16});
-    els.forEach(function(e){io.observe(e);});
+    var vh=window.innerHeight||800;
+    els.forEach(function(e){
+      if(e.getBoundingClientRect().top < vh*0.92){ e.style.transition='none'; e.classList.add('in'); }
+      else { io.observe(e); }
+    });
     document.querySelectorAll('.btn').forEach(function(b){
       b.addEventListener('mousemove',function(e){
         var r=b.getBoundingClientRect();

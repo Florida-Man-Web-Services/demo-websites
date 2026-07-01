@@ -311,7 +311,11 @@
         if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
       });
     },{threshold:.15});
-    tiles.forEach(function(t,i){ t.style.transitionDelay=(i%3*70)+'ms'; io.observe(t); });
+    var vh = window.innerHeight || 800;
+    tiles.forEach(function(t,i){
+      if(t.getBoundingClientRect().top < vh*0.92){ t.style.transition='none'; t.classList.add('in'); }
+      else { t.style.transitionDelay=(i%3*70)+'ms'; io.observe(t); }
+    });
 
     // magnetic buttons
     document.querySelectorAll('.btn').forEach(function(b){

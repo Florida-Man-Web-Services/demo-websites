@@ -37,7 +37,7 @@
     position:sticky;top:44px;height:calc(100vh - 44px);
     background:radial-gradient(120% 90% at 30% 20%,var(--indigo),var(--ink));
     color:var(--white);padding:3rem;display:flex;flex-direction:column;justify-content:space-between;
-    overflow:hidden;border-right:4px solid var(--coral);
+    overflow-x:hidden;overflow-y:auto;border-right:4px solid var(--coral);
   }
   .stage::after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;
     right:-180px;bottom:-160px;background:radial-gradient(circle,rgba(255,59,71,.5),transparent 65%);
@@ -248,7 +248,11 @@
   var io=new IntersectionObserver(function(en){
     en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
   },{threshold:.2});
-  els.forEach(function(e){io.observe(e);});
+  var vh=window.innerHeight||800;
+  els.forEach(function(e){
+    if(e.getBoundingClientRect().top < vh*0.92){ e.style.transition='none'; e.classList.add('in'); }
+    else { io.observe(e); }
+  });
   document.querySelectorAll('.btn').forEach(function(b){
     b.addEventListener('mousemove',function(e){
       var r=b.getBoundingClientRect();

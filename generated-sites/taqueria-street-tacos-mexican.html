@@ -138,7 +138,7 @@
       <p class="body">Pull up and taste the difference. Contact us to learn more about what we're serving.</p>
     </div>
     <div class="reveal">
-      <div class="band band--ink sz-lg" style="border-radius:16px">
+      <div class="band band--ink sz-lg" style="border-radius:16px" aria-hidden="true">
         <div class="row mv-r"><span>&#127790; FRESH &#9670; BOLD &#9670; AUTHENTIC &#9670; </span><span>&#127790; FRESH &#9670; BOLD &#9670; AUTHENTIC &#9670; </span></div>
       </div>
     </div>
@@ -217,7 +217,11 @@
     var io=new IntersectionObserver(function(en){
       en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
     },{threshold:.16});
-    els.forEach(function(e){io.observe(e);});
+    var vh=window.innerHeight||800;
+    els.forEach(function(e){
+      if(e.getBoundingClientRect().top < vh*0.92){ e.style.transition='none'; e.classList.add('in'); }
+      else { io.observe(e); }
+    });
     document.querySelectorAll('.btn').forEach(function(b){
       b.addEventListener('mousemove',function(e){
         var r=b.getBoundingClientRect();
