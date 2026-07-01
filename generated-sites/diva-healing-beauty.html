@@ -1,750 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diva + Healing Beauty | Spa in Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --blush:      #e8c4c4;
-      --rose:       #c47b8c;
-      --deep-rose:  #9b4f67;
-      --plum:       #5c2d44;
-      --ivory:      #fdf7f4;
-      --sand:       #f3e8e0;
-      --text-dark:  #2e1a27;
-      --text-mid:   #5a3a4a;
-      --text-light: #8a6070;
-      --white:      #ffffff;
-      --gold:       #c8a97e;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background-color: var(--ivory);
-      color: var(--text-dark);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(92, 45, 68, 0.96);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 2rem;
-      box-shadow: 0 2px 12px rgba(92,45,68,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo .logo-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--blush) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      color: var(--plum);
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-
-    .nav-logo span {
-      font-family: 'Georgia', serif;
-      font-size: 1.15rem;
-      color: var(--blush);
-      letter-spacing: 0.04em;
-      font-style: italic;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--blush);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold); }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--blush);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background: linear-gradient(160deg, var(--plum) 0%, #7a3555 40%, var(--deep-rose) 75%, #b87290 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 7rem 2rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(200,169,126,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 60% at 80% 20%, rgba(232,196,196,0.15) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .hero-petal {
-      position: absolute;
-      border-radius: 50% 0 50% 0;
-      opacity: 0.08;
-      pointer-events: none;
-    }
-
-    .hero-petal:nth-child(1) { width: 300px; height: 300px; background: var(--gold);    top: -60px;  left: -80px;  transform: rotate(20deg); }
-    .hero-petal:nth-child(2) { width: 200px; height: 200px; background: var(--blush);  bottom: 40px; right: -40px; transform: rotate(-30deg); }
-    .hero-petal:nth-child(3) { width: 150px; height: 150px; background: var(--rose);   top: 30%;    right: 8%;   transform: rotate(55deg); }
-
-    .hero-eyebrow {
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.5rem);
-      color: var(--white);
-      line-height: 1.15;
-      font-style: italic;
-      margin-bottom: 1.2rem;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-    }
-
-    .hero h1 em {
-      color: var(--blush);
-      font-style: normal;
-    }
-
-    .hero-tagline {
-      font-family: Arial, sans-serif;
-      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
-      color: rgba(255,255,255,0.82);
-      max-width: 540px;
-      margin: 0 auto 2.5rem;
-      font-weight: 300;
-      letter-spacing: 0.02em;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--gold) 0%, #d4b896 100%);
-      color: var(--plum);
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      font-weight: 700;
-      padding: 0.9rem 2.2rem;
-      border-radius: 50px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
-    }
-
-    .hero-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
-
-    .hero-rating {
-      margin-top: 2.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: center;
-    }
-
-    .stars { color: var(--gold); font-size: 1.1rem; letter-spacing: 2px; }
-
-    .hero-rating-text {
-      font-family: Arial, sans-serif;
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.75);
-    }
-
-    /* ── SECTION COMMON ── */
-    section { padding: 5rem 1.5rem; }
-
-    .container { max-width: 1040px; margin: 0 auto; }
-
-    .section-label {
-      font-family: Arial, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--rose);
-      margin-bottom: 0.6rem;
-      display: block;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      color: var(--plum);
-      font-style: italic;
-      margin-bottom: 1.5rem;
-      line-height: 1.2;
-    }
-
-    /* ── ABOUT ── */
-    #about { background: var(--sand); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-mid);
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-
-    .about-accent {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .accent-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 1.4rem 1.6rem;
-      border-left: 4px solid var(--rose);
-      box-shadow: 0 2px 12px rgba(155,79,103,0.1);
-    }
-
-    .accent-card .icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
-    .accent-card h4 { font-size: 0.95rem; color: var(--plum); margin-bottom: 0.3rem; }
-    .accent-card p  { font-family: Arial, sans-serif; font-size: 0.84rem; color: var(--text-light); line-height: 1.5; }
-
-    /* ── SERVICES ── */
-    #services { background: var(--ivory); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 2rem 1.8rem;
-      text-align: center;
-      box-shadow: 0 3px 16px rgba(92,45,68,0.09);
-      transition: transform 0.2s, box-shadow 0.2s;
-      border-top: 3px solid var(--blush);
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(92,45,68,0.15);
-      border-top-color: var(--rose);
-    }
-
-    .service-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--sand) 0%, var(--blush) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-      font-size: 1.5rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--plum);
-      margin-bottom: 0.6rem;
-      font-style: italic;
-    }
-
-    .service-card p {
-      font-family: Arial, sans-serif;
-      font-size: 0.84rem;
-      color: var(--text-light);
-      line-height: 1.55;
-    }
-
-    .service-cta {
-      display: inline-block;
-      margin-top: 1rem;
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--rose);
-      text-decoration: none;
-      border-bottom: 1px solid var(--blush);
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .service-cta:hover { color: var(--plum); border-color: var(--plum); }
-
-    /* ── CONTACT ── */
-    #contact { background: var(--sand); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info h2 { margin-bottom: 1.6rem; }
-
-    .contact-block {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      background: var(--white);
-      border-radius: 14px;
-      padding: 1rem 1.3rem;
-      box-shadow: 0 2px 10px rgba(92,45,68,0.08);
-    }
-
-    .contact-item .ci-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--blush) 0%, var(--rose) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      color: var(--white);
-    }
-
-    .contact-item .ci-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .contact-item .ci-label {
-      font-family: Arial, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-bottom: 0.15rem;
-    }
-
-    .contact-item .ci-value {
-      font-size: 0.98rem;
-      color: var(--plum);
-    }
-
-    .contact-item .ci-value a {
-      color: var(--plum);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-item .ci-value a:hover { color: var(--rose); }
-
-    .rating-box {
-      background: var(--plum);
-      border-radius: 16px;
-      padding: 1.6rem 1.8rem;
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-    }
-
-    .rating-score {
-      font-size: 2.8rem;
-      font-style: italic;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .rating-detail {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .rating-stars { color: var(--gold); font-size: 1.1rem; }
-    .rating-label {
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.7);
-    }
-
-    .map-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: linear-gradient(135deg, var(--deep-rose) 0%, var(--plum) 100%);
-      color: var(--white);
-      text-decoration: none;
-      padding: 0.9rem 2rem;
-      border-radius: 50px;
-      font-family: Arial, sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 700;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 14px rgba(92,45,68,0.3);
-    }
-
-    .map-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 22px rgba(92,45,68,0.4);
-    }
-
-    .contact-cta-area {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .contact-cta-area .section-title { margin-bottom: 0.5rem; }
-
-    .contact-blurb {
-      font-family: Arial, sans-serif;
-      font-size: 0.95rem;
-      color: var(--text-mid);
-      line-height: 1.65;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--plum);
-      color: rgba(255,255,255,0.65);
-      text-align: center;
-      padding: 2.5rem 1.5rem;
-    }
-
-    footer .footer-logo {
-      font-family: 'Georgia', serif;
-      font-size: 1.3rem;
-      font-style: italic;
-      color: var(--blush);
-      margin-bottom: 0.5rem;
-    }
-
-    footer p {
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-    }
-
-    footer a {
-      color: var(--gold);
-      text-decoration: none;
-    }
-
-    footer a:hover { text-decoration: underline; }
-
-    .footer-divider {
-      width: 40px;
-      height: 1px;
-      background: rgba(255,255,255,0.2);
-      margin: 0.9rem auto;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: fixed;
-        top: 62px;
-        left: 0;
-        right: 0;
-        background: var(--plum);
-        flex-direction: column;
-        gap: 0;
-        padding: 1rem 0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-links li { border-bottom: 1px solid rgba(255,255,255,0.1); }
-      .nav-links a { display: block; padding: 0.9rem 2rem; }
-
-      .nav-toggle { display: flex; }
-
-      .about-grid,
-      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
-
-      .about-accent { flex-direction: row; flex-wrap: wrap; }
-      .accent-card  { flex: 1 1 calc(50% - 0.6rem); }
-
-      section { padding: 3.5rem 1.2rem; }
-    }
-
-    @media (max-width: 480px) {
-      .about-accent { flex-direction: column; }
-      .accent-card  { flex: none; }
-      .services-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Diva + Healing Beauty | Spa in Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --lav:#d9cdf2; --lav2:#c3b1ec; --sage:#c7dcc9; --sage2:#a9c7ac;
+    --plum:#4a3a63; --deep:#6b5a86; --gold:#d9c07a; --cream:#f7f3fb; --ink:#3b3348;
+    --glass:rgba(255,255,255,.5); --glassbd:rgba(255,255,255,.72);
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--ink);
+    background:var(--cream);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+  .split{display:grid;grid-template-columns:42% 58%;min-height:100vh}
+  /* ===== STICKY LEFT PANEL ===== */
+  .stage{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:3.5rem;color:#fff;overflow:hidden;
+    background:linear-gradient(155deg,#5a4880 0%,#7d6aa6 50%,#a99bcb 100%)}
+  .stage .orb{position:absolute;border-radius:50%;filter:blur(2px);opacity:.5;mix-blend-mode:screen}
+  .orb.a{width:300px;height:300px;background:radial-gradient(circle,#e7dcff,transparent 70%);top:-60px;right:-40px;animation:float1 12s ease-in-out infinite alternate}
+  .orb.b{width:240px;height:240px;background:radial-gradient(circle,var(--sage),transparent 70%);bottom:-40px;left:-30px;animation:float2 15s ease-in-out infinite alternate}
+  @keyframes float1{to{transform:translate(-24px,30px)}}
+  @keyframes float2{to{transform:translate(30px,-24px)}}
+  .stage-in{position:relative;z-index:1}
+  .eyebrow{font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:#efe7ff;opacity:.85;margin-bottom:1.1rem}
+  .stage h1{font-size:clamp(2.4rem,4.4vw,3.7rem);line-height:1.02;font-weight:800;letter-spacing:-.01em}
+  .stage h1 .plus{color:var(--sage)}
+  .stage .sub{margin-top:1rem;max-width:32ch;opacity:.9;font-style:italic}
+  .mini{margin-top:2.2rem;display:flex;gap:1.4rem;flex-wrap:wrap}
+  .mini .m{backdrop-filter:blur(6px);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+    border-radius:16px;padding:.8rem 1.1rem}
+  .mini .m b{display:block;font-size:1.5rem;line-height:1}
+  .mini .m span{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+  .stage .cta{margin-top:2.4rem;align-self:flex-start;display:inline-block;text-decoration:none;
+    background:#fff;color:var(--plum);font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    font-size:.78rem;padding:.85rem 1.9rem;border-radius:99px;transition:transform .25s}
+  .stage .cta:hover{transform:translateY(-3px)}
+
+  /* ===== SCROLLING RIGHT COLUMN ===== */
+  .flow{padding:5rem 3.5rem;background:
+    radial-gradient(40vw 40vw at 90% 8%, rgba(199,220,201,.5), transparent 60%),
+    radial-gradient(40vw 40vw at 5% 60%, rgba(217,205,242,.45), transparent 60%),
+    var(--cream)}
+  .block{margin-bottom:4.5rem;opacity:0;transform:translateY(30px);
+    transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .block.in{opacity:1;transform:none}
+  .kicker{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--deep);font-weight:700;margin-bottom:.7rem}
+  h2{font-size:clamp(1.7rem,2.6vw,2.3rem);color:var(--plum);margin-bottom:1rem;line-height:1.15}
+  .flow p{color:#54495f;font-size:1.02rem;margin-bottom:.9rem;max-width:60ch}
+  .glass{background:var(--glass);border:1px solid var(--glassbd);border-radius:22px;
+    backdrop-filter:blur(14px);box-shadow:0 12px 40px rgba(74,58,99,.09)}
+  .svcs{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .svc{padding:1.4rem 1.5rem;transition:transform .3s,box-shadow .3s}
+  .svc:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(74,58,99,.16)}
+  .svc .ic{font-size:1.7rem;display:block;margin-bottom:.5rem}
+  .svc h3{color:var(--plum);font-size:1.08rem;margin-bottom:.3rem}
+  .svc p{font-size:.9rem;color:#5d5268;margin:0}
+  .svc .cq{margin-top:.55rem;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--deep);font-weight:700;display:inline-block}
+  .rating{padding:2rem;text-align:center}
+  .score{font-size:4rem;font-weight:800;color:var(--plum);line-height:1}
+  .stars{color:var(--gold);font-size:1.3rem;letter-spacing:2px;margin:.3rem 0}
+  .revs{color:#5d5268;font-size:.9rem}
+  .contact-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.2rem}
+  .cinfo{padding:1.3rem 1.5rem;flex:1;min-width:200px}
+  .cinfo .lbl{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--deep);margin-bottom:.35rem}
+  .cinfo a{color:var(--plum);text-decoration:none;font-weight:600}
+  .cinfo a:hover{text-decoration:underline}
+  address{font-style:normal;color:#4a3f56}
+  .dir{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.3rem;text-decoration:none;
+    background:var(--plum);color:#fff;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;
+    padding:.8rem 1.6rem;border-radius:99px;transition:transform .25s,background .25s}
+  .dir:hover{transform:translateY(-2px);background:var(--deep)}
+
+  @media(max-width:860px){
+    .split{grid-template-columns:1fr}
+    .stage{position:relative;height:auto;min-height:70vh;padding:5rem 2rem 3.5rem}
+    .flow{padding:3.5rem 2rem}
+    .svcs{grid-template-columns:1fr}
+  }
+  footer{text-align:center;padding:2.4rem 1rem 3rem;color:#8478a0;font-size:.85rem;background:var(--cream)}
+  footer strong{color:var(--plum)}
+  footer .sep{margin:0 .5rem;opacity:.4}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+    .block{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <div class="logo-mark">D</div>
-      <span>Diva + Healing Beauty</span>
-    </a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-petal"></div>
-    <div class="hero-petal"></div>
-    <div class="hero-petal"></div>
-
-    <p class="hero-eyebrow">Gainesville, FL &mdash; A Healing Spa Experience</p>
-    <h1>Diva + <em>Healing</em> Beauty</h1>
-    <p class="hero-tagline">Where self-care meets ritual &mdash; unwind, restore, and rediscover your radiance.</p>
-    <a href="#services" class="hero-cta">Explore Our Services</a>
-
-    <div class="hero-rating">
-      <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-      <span class="hero-rating-text">5.0 &middot; 18 Google reviews</span>
+<div class="split">
+  <aside class="stage">
+    <div class="orb a"></div><div class="orb b"></div>
+    <div class="stage-in">
+      <div class="eyebrow">Gainesville, FL &mdash; Suite 204</div>
+      <h1>Diva <span class="plus">+</span><br>Healing Beauty</h1>
+      <p class="sub">A sanctuary for the body &amp; spirit &mdash; restorative beauty and wellness, close to home.</p>
+      <div class="mini">
+        <div class="m"><b><span data-count="5.0" data-dec="1">5.0</span></b><span>Google rating</span></div>
+        <div class="m"><b><span data-count="18">18</span></b><span>Google reviews</span></div>
+      </div>
+      <a class="cta" href="#visit">Plan a Visit</a>
     </div>
-  </section>
+  </aside>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <span class="section-label">Our Story</span>
-          <h2 class="section-title">A Sanctuary for the Body &amp; Spirit</h2>
-          <p>Diva + Healing Beauty is a boutique day spa nestled in Gainesville, FL, dedicated to providing a tranquil retreat from everyday stress. Our skilled therapists blend time-honored healing techniques with modern wellness practices to create a deeply restorative experience for every guest.</p>
-          <p>Whether you are seeking tension relief, radiant skin, or a moment of pure relaxation, our cozy suite on SW 75th Street offers a warm and welcoming environment tailored to your well-being. We believe that true beauty begins with inner healing.</p>
-          <p>Every visit is customized to your individual needs &mdash; contact us for details on available sessions and scheduling.</p>
+  <main class="flow">
+    <section class="block" id="about">
+      <div class="kicker">About</div>
+      <h2>A place to slow down &amp; be cared for</h2>
+      <p>Diva + Healing Beauty is a Gainesville spa devoted to helping you feel restored from the inside out. Every visit is designed to be calm, personal, and unhurried &mdash; a genuine escape from the everyday.</p>
+      <p>Our focus is simple: attentive, high-quality care in a serene, welcoming space. Whether you're here to relax, refresh, or prepare for a special moment, we'll tailor the experience to you.</p>
+    </section>
+
+    <section class="block" id="services">
+      <div class="kicker">Spa &amp; Wellness</div>
+      <h2>Our services</h2>
+      <div class="svcs">
+        <div class="glass svc"><span class="ic">💆</span><h3>Therapeutic Massage</h3><p>Relaxing, tension-releasing bodywork tailored to you.</p><span class="cq">Contact us for details</span></div>
+        <div class="glass svc"><span class="ic">🌿</span><h3>Facial Treatments</h3><p>Refreshing facials to cleanse, nourish, and revive skin.</p><span class="cq">Contact us for details</span></div>
+        <div class="glass svc"><span class="ic">🌸</span><h3>Body Scrubs &amp; Wraps</h3><p>Exfoliating, hydrating treatments for smooth, glowing skin.</p><span class="cq">Contact us for details</span></div>
+        <div class="glass svc"><span class="ic">🕯️</span><h3>Aromatherapy</h3><p>Soothing scent-led rituals to calm the mind and body.</p><span class="cq">Contact us for details</span></div>
+        <div class="glass svc"><span class="ic">✨</span><h3>Waxing &amp; Hair Removal</h3><p>Gentle, precise waxing for smooth, cared-for skin.</p><span class="cq">Contact us for details</span></div>
+        <div class="glass svc"><span class="ic">💅</span><h3>Hand &amp; Foot Care</h3><p>Pampering treatments to leave hands and feet renewed.</p><span class="cq">Contact us for details</span></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="kicker">Reviews</div>
+      <div class="glass rating">
+        <div class="score" data-count="5.0" data-dec="1">5.0</div>
+        <div class="stars" aria-hidden="true">★★★★★</div>
+        <div class="revs">Based on <span data-count="18">18</span> Google reviews</div>
+      </div>
+    </section>
+
+    <section class="block" id="visit">
+      <div class="kicker">Visit</div>
+      <h2>Book your experience</h2>
+      <div class="contact-row">
+        <div class="glass cinfo">
+          <div class="lbl">Location</div>
+          <address>100 SW 75th St, Suite 204<br>Gainesville, FL 32607</address>
         </div>
-        <div class="about-accent">
-          <div class="accent-card">
-            <div class="icon">&#127774;</div>
-            <h4>Holistic Approach</h4>
-            <p>Treatments designed to nurture mind, body, and spirit in harmony.</p>
-          </div>
-          <div class="accent-card">
-            <div class="icon">&#10024;</div>
-            <h4>Personalized Care</h4>
-            <p>Each session is thoughtfully tailored to your unique wellness goals.</p>
-          </div>
-          <div class="accent-card">
-            <div class="icon">&#127808;</div>
-            <h4>Tranquil Setting</h4>
-            <p>A serene, private suite environment designed to help you fully unwind.</p>
-          </div>
+        <div class="glass cinfo">
+          <div class="lbl">Phone</div>
+          <a href="tel:+18185159855">(818) 515-9855</a>
+          <div class="lbl" style="margin-top:.9rem">Hours</div>
+          <span>Contact us for current hours</span>
         </div>
       </div>
-    </div>
-  </section>
+      <a class="dir" href="https://www.google.com/maps/search/Diva%2BHealing%2BBeauty%20100%20SW%2075th%20St%20suite%20204%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">📍 Get Directions</a>
+    </section>
+  </main>
+</div>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <span class="section-label">What We Offer</span>
-      <h2 class="section-title">Spa &amp; Wellness Services</h2>
-      <div class="services-grid">
+<footer>
+  <strong>Diva + Healing Beauty</strong><span class="sep">|</span>100 SW 75th St, Suite 204, Gainesville, FL 32607<span class="sep">|</span>(818) 515-9855
+  <br><small>&copy; 2026 Diva + Healing Beauty. All rights reserved.</small>
+</footer>
 
-        <div class="service-card">
-          <div class="service-icon">&#129504;</div>
-          <h3>Therapeutic Massage</h3>
-          <p>Relieve tension and restore balance with a customized massage therapy session targeting your areas of concern.</p>
-          <a href="#contact" class="service-cta">Contact for details</a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127774;</div>
-          <h3>Facial Treatments</h3>
-          <p>Nourishing facial services designed to cleanse, hydrate, and revitalize your skin for a healthy, luminous glow.</p>
-          <a href="#contact" class="service-cta">Contact for details</a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128149;</div>
-          <h3>Body Scrubs &amp; Wraps</h3>
-          <p>Exfoliating and detoxifying body treatments that leave skin silky smooth and refreshed from head to toe.</p>
-          <a href="#contact" class="service-cta">Contact for details</a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#127807;</div>
-          <h3>Aromatherapy</h3>
-          <p>Harness the power of pure essential oils to calm the nervous system, uplift mood, and support overall wellness.</p>
-          <a href="#contact" class="service-cta">Contact for details</a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#10024;</div>
-          <h3>Waxing &amp; Hair Removal</h3>
-          <p>Professional waxing services for smooth, long-lasting results in a comfortable and hygienic setting.</p>
-          <a href="#contact" class="service-cta">Contact for details</a>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128167;</div>
-          <h3>Hand &amp; Foot Care</h3>
-          <p>Relaxing manicure and pedicure treatments to pamper your hands and feet, promoting both beauty and comfort.</p>
-          <a href="#contact" class="service-cta">Contact for details</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-grid">
-        <div class="contact-info">
-          <span class="section-label">Find Us</span>
-          <h2 class="section-title">Visit Diva + Healing Beauty</h2>
-
-          <div class="contact-block">
-            <div class="contact-item">
-              <div class="ci-icon">&#128205;</div>
-              <div class="ci-text">
-                <span class="ci-label">Address</span>
-                <span class="ci-value">100 SW 75th St, Suite 204<br>Gainesville, FL 32607</span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <div class="ci-icon">&#128222;</div>
-              <div class="ci-text">
-                <span class="ci-label">Phone</span>
-                <span class="ci-value"><a href="tel:+18185159855">(818) 515-9855</a></span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <div class="ci-icon">&#128337;</div>
-              <div class="ci-text">
-                <span class="ci-label">Hours</span>
-                <span class="ci-value">Contact us for current hours</span>
-              </div>
-            </div>
-            <div class="rating-box">
-              <div class="rating-score">5.0</div>
-              <div class="rating-detail">
-                <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <div class="rating-label">Based on 18 Google reviews</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-cta-area">
-          <span class="section-label">Ready to Relax?</span>
-          <h2 class="section-title">Book Your Experience</h2>
-          <p class="contact-blurb">We invite you to step into a space designed entirely for your healing and renewal. Call us to schedule your appointment or use the button below to get directions to our suite.</p>
-          <div>
-            <a
-              href="https://www.google.com/maps/search/Diva%2BHealing%2BBeauty%20100%20SW%2075th%20St%20suite%20204%2C%20Gainesville%2C%20FL%2032607"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="map-btn"
-            >
-              &#128205;&nbsp; Get Directions
-            </a>
-          </div>
-          <p class="contact-blurb" style="font-size:0.88rem; margin-top:0.5rem;">Or call us directly at <a href="tel:+18185159855" style="color:var(--rose); font-weight:bold;">(818) 515-9855</a> to speak with our team.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Diva + Healing Beauty</div>
-    <div class="footer-divider"></div>
-    <p>100 SW 75th St, Suite 204 &bull; Gainesville, FL 32607</p>
-    <p style="margin-top:0.4rem;"><a href="tel:+18185159855">(818) 515-9855</a></p>
-    <div class="footer-divider"></div>
-    <p style="font-size:0.74rem; opacity:0.55;">&copy; 2026 Diva + Healing Beauty. All rights reserved.</p>
-  </footer>
-
-  <script>
-    const toggle = document.getElementById('nav-toggle');
-    const links  = document.getElementById('nav-links');
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
-  </script>
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var blocks=document.querySelectorAll('.block');
+  if(reduce){blocks.forEach(function(b){b.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.2});
+  blocks.forEach(function(b){io.observe(b);});
+  function count(el){var t=parseFloat(el.dataset.count),d=+(el.dataset.dec||0),s=null,dur=1300;
+    function f(ts){if(!s)s=ts;var p=Math.min((ts-s)/dur,1),e=1-Math.pow(1-p,3);
+      el.textContent=(t*e).toFixed(d);if(p<1)requestAnimationFrame(f);else el.textContent=t.toFixed(d);}requestAnimationFrame(f);}
+  var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){count(e.target);cio.unobserve(e.target);}});},{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el);});
+})();
+</script>
 </body>
 </html>
