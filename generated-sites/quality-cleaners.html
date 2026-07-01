@@ -1,630 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quality Cleaners | Dry Cleaning in Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Georgia', serif;
-      color: #1a2332;
-      background: #f5f7fa;
-      line-height: 1.7;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quality Cleaners | Dry Cleaning in Gainesville, FL</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Color Palette ──
-       Primary:   #1c4b82  (deep navy)
-       Accent:    #4fa3c8  (clean blue)
-       Highlight: #d4eaf7  (light ice blue)
-       Neutral:   #f5f7fa  (off-white background)
-       Text:      #1a2332  (near-black)
-    */
+  :root {
+    --ink:   #101013;
+    --paper: #f6f6f3;
+    --card:  #ffffff;
+    --line:  rgba(16,16,19,0.14);
+    --line2: rgba(16,16,19,0.07);
+    --slate: #63636b;
+    --dark:  #16161a;
+  }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      background: #1c4b82;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      flex-shrink: 0;
-    }
-    .nav-brand {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 0.03em;
-    }
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-    .nav-links a {
-      color: #d4eaf7;
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 0.04em;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: #ffffff; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--paper); color: var(--ink); line-height: 1.55;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
 
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #d4eaf7;
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
+  /* NAV */
+  nav { position: fixed; inset: 0 0 auto 0; z-index: 100; height: 64px; padding: 0 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(246,246,243,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent; transition: border-color .3s; }
+  nav.scrolled { border-bottom-color: var(--line); }
+  .brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; font-weight: 800; letter-spacing: -.02em; font-size: 1.05rem; }
+  .brand .qmark { width: 34px; height: 34px; background: var(--ink); color: var(--paper); border-radius: 9px;
+    display: grid; place-items: center; font-weight: 800; font-size: 1rem; }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+  .nav-links a { text-decoration: none; font-size: .84rem; font-weight: 600; opacity: .7; transition: opacity .2s; }
+  .nav-links a:hover { opacity: 1; }
+  .burger { display: none; flex-direction: column; gap: 5px; background: none; border: 0; cursor: pointer; padding: 6px; }
+  .burger span { width: 24px; height: 2px; background: var(--ink); border-radius: 2px; }
 
-    /* Mobile menu */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 64px; left: 0; right: 0;
-      background: #1c4b82;
-      z-index: 999;
-      padding: 1rem 2rem 1.5rem;
-      flex-direction: column;
-      gap: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      color: #d4eaf7;
-      text-decoration: none;
-      font-size: 1rem;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .mobile-menu a:last-child { border-bottom: none; }
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(26px) scale(.985); transition: opacity .7s ease, transform .7s cubic-bezier(.19,1,.22,1); }
+  .reveal.in { opacity: 1; transform: none; }
 
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1c4b82 0%, #2d6aad 55%, #4fa3c8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 1.5rem 60px;
-      position: relative;
-      overflow: hidden;
-    }
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
-    }
-    .hero-inner { position: relative; max-width: 700px; }
+  /* BENTO */
+  .bento-section { padding: 6.5rem 0 2rem; }
+  .bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 200px; gap: 16px; }
+  .tile { background: var(--card); border: 1px solid var(--line2); border-radius: 22px; padding: 1.7rem;
+    position: relative; overflow: hidden; transition: box-shadow .3s, transform .12s ease; will-change: transform; }
+  .tile:hover { box-shadow: 0 18px 50px rgba(16,16,19,0.1); }
+  .tile .tag { font-size: .66rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); }
 
-    /* Hanger icon in hero */
-    .hero-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 1.5rem;
-      opacity: 0.9;
-    }
-    .hero-inner h1 {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      color: #ffffff;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: #d4eaf7;
-      margin-bottom: 2.2rem;
-      font-style: italic;
-      letter-spacing: 0.02em;
-    }
-    .hero-cta {
-      display: inline-block;
-      background: #ffffff;
-      color: #1c4b82;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 0.85rem 2.2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      letter-spacing: 0.06em;
-      transition: background 0.2s, color 0.2s, transform 0.15s;
-    }
-    .hero-cta:hover {
-      background: #d4eaf7;
-      transform: translateY(-2px);
-    }
+  .t-hero { grid-column: span 2; grid-row: span 2; background: var(--ink); color: var(--paper);
+    display: flex; flex-direction: column; justify-content: space-between; }
+  .t-hero .badge { align-self: flex-start; font-size: .66rem; font-weight: 700; letter-spacing: .22em;
+    text-transform: uppercase; border: 1px solid rgba(255,255,255,.3); border-radius: 100px; padding: .4rem 1rem; }
+  .t-hero h1 { font-size: clamp(2rem, 4.6vw, 3.4rem); font-weight: 800; letter-spacing: -.03em; line-height: .98; }
+  .t-hero h1 em { font-style: normal; -webkit-text-stroke: 1.3px var(--paper); color: transparent; }
+  .t-hero p { color: rgba(255,255,255,.72); max-width: 34ch; font-size: 1rem; margin-top: .8rem; }
+  .t-hero .cta { display: inline-flex; align-items: center; gap: .5rem; background: var(--paper); color: var(--ink);
+    text-decoration: none; font-weight: 700; font-size: .9rem; padding: .8rem 1.6rem; border-radius: 100px;
+    align-self: flex-start; margin-top: 1.2rem; transition: transform .2s; }
+  .t-hero .cta:hover { transform: translateY(-2px); }
+  .t-hero .steam { position: absolute; right: -30px; top: -30px; width: 200px; height: 200px; opacity: .12; }
+  .t-hero .steam svg { width: 100%; height: 100%; stroke: var(--paper); fill: none; stroke-width: 1; }
 
-    /* ── SECTIONS SHARED ── */
-    section { padding: 80px 1.5rem; }
-    .section-inner { max-width: 960px; margin: 0 auto; }
-    .section-label {
-      display: inline-block;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #4fa3c8;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    h2 {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      color: #1c4b82;
-      margin-bottom: 1.2rem;
-      line-height: 1.2;
-    }
+  .t-metric { display: flex; flex-direction: column; justify-content: space-between; }
+  .t-metric .big { font-size: clamp(2.6rem, 6vw, 3.6rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .t-metric .stars { display: flex; gap: 2px; margin-top: .4rem; }
+  .t-metric .stars svg { width: 17px; height: 17px; }
+  .t-metric .sub { font-size: .82rem; color: var(--slate); font-weight: 600; }
 
-    /* ── ABOUT ── */
-    #about { background: #ffffff; }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-    .about-text p {
-      color: #3a4a5c;
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-    .about-visual {
-      background: linear-gradient(135deg, #d4eaf7 0%, #edf5fc 100%);
-      border-radius: 8px;
-      padding: 3rem 2rem;
-      text-align: center;
-    }
-    .about-visual svg {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 1rem;
-      opacity: 0.7;
-    }
-    .about-visual p {
-      color: #1c4b82;
-      font-size: 0.95rem;
-      font-style: italic;
-    }
+  .t-about { grid-column: span 2; display: flex; flex-direction: column; justify-content: center; gap: .7rem; }
+  .t-about h2 { font-size: 1.15rem; font-weight: 800; letter-spacing: -.01em; }
+  .t-about p { font-size: .92rem; color: var(--slate); }
 
-    /* ── SERVICES ── */
-    #services { background: #f5f7fa; }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-    .service-card {
-      background: #ffffff;
-      border-radius: 8px;
-      padding: 2rem 1.5rem;
-      border-top: 4px solid #1c4b82;
-      box-shadow: 0 2px 12px rgba(28,75,130,0.07);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(28,75,130,0.12);
-    }
-    .service-icon {
-      width: 44px;
-      height: 44px;
-      background: #d4eaf7;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    .service-icon svg { width: 22px; height: 22px; }
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: #1c4b82;
-      margin-bottom: 0.5rem;
-    }
-    .service-card p {
-      font-size: 0.9rem;
-      color: #5a6b7d;
-    }
+  .t-contact { display: flex; flex-direction: column; justify-content: space-between; }
+  .t-contact .val { font-weight: 800; letter-spacing: -.01em; font-size: 1.02rem; text-decoration: none; }
+  .t-contact .val:hover { text-decoration: underline; }
+  .t-contact .ico { width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 10px; display: grid; place-items: center; }
+  .t-contact .ico svg { width: 18px; height: 18px; stroke: var(--ink); fill: none; stroke-width: 1.7; }
 
-    /* ── CONTACT ── */
-    #contact { background: #ffffff; }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-    .contact-info h2 { margin-bottom: 1rem; }
-    .contact-detail {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      margin-bottom: 1.2rem;
-    }
-    .contact-detail-icon {
-      flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      background: #d4eaf7;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .contact-detail-icon svg { width: 18px; height: 18px; }
-    .contact-detail-text strong {
-      display: block;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #4fa3c8;
-      margin-bottom: 0.2rem;
-    }
-    .contact-detail-text span {
-      font-size: 1rem;
-      color: #1a2332;
-    }
-    .contact-detail-text a {
-      color: #1a2332;
-      text-decoration: none;
-    }
-    .contact-detail-text a:hover { color: #1c4b82; }
+  /* second about tile wide */
+  .t-story { grid-column: span 2; grid-row: span 1; background: var(--dark); color: var(--paper);
+    display: flex; flex-direction: column; justify-content: center; gap: .6rem; }
+  .t-story p { color: rgba(255,255,255,.75); font-size: .92rem; max-width: 44ch; }
 
-    .directions-btn {
-      display: inline-block;
-      margin-top: 0.5rem;
-      background: #1c4b82;
-      color: #ffffff;
-      font-size: 0.9rem;
-      font-weight: 700;
-      padding: 0.75rem 1.8rem;
-      border-radius: 4px;
-      text-decoration: none;
-      letter-spacing: 0.05em;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .directions-btn:hover {
-      background: #2d6aad;
-      transform: translateY(-2px);
-    }
+  /* SERVICES */
+  .svc-section { padding: 4rem 0; }
+  .sec-head { margin-bottom: 2rem; }
+  .kicker { font-size: .72rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: var(--slate);
+    display: flex; align-items: center; gap: .7rem; margin-bottom: .7rem; }
+  .kicker::before { content: ''; width: 28px; height: 1.5px; background: var(--ink); }
+  .sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -.02em; }
 
-    /* Rating box */
-    .rating-box {
-      background: #f5f7fa;
-      border-radius: 8px;
-      padding: 2rem;
-      text-align: center;
-      border: 1px solid #d4eaf7;
-    }
-    .rating-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #4fa3c8;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    .rating-score {
-      font-size: 3.5rem;
-      font-weight: 700;
-      color: #1c4b82;
-      line-height: 1;
-    }
-    .rating-stars {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-      margin: 0.5rem 0;
-    }
-    .rating-stars svg { width: 22px; height: 22px; }
-    .rating-count {
-      font-size: 0.9rem;
-      color: #5a6b7d;
-      margin-bottom: 0.5rem;
-    }
-    .rating-source {
-      font-size: 0.75rem;
-      color: #8a9bb0;
-      font-style: italic;
-    }
-    .phone-link-large {
-      display: block;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #1c4b82;
-      text-decoration: none;
-      margin-top: 0.25rem;
-    }
-    .phone-link-large:hover { color: #4fa3c8; }
+  .svc-bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .svc { background: var(--card); border: 1px solid var(--line2); border-radius: 20px; padding: 1.7rem;
+    position: relative; overflow: hidden; transition: transform .12s ease, box-shadow .3s; will-change: transform; }
+  .svc:hover { box-shadow: 0 16px 44px rgba(16,16,19,0.1); }
+  .svc:nth-child(1) { grid-column: span 2; }
+  .svc:nth-child(6) { grid-column: span 2; }
+  .svc .ic { width: 46px; height: 46px; border-radius: 12px; background: var(--paper); border: 1px solid var(--line2);
+    display: grid; place-items: center; margin-bottom: 1rem; }
+  .svc .ic svg { width: 24px; height: 24px; stroke: var(--ink); fill: none; stroke-width: 1.6; }
+  .svc h3 { font-size: 1.08rem; font-weight: 800; letter-spacing: -.01em; margin-bottom: .4rem; }
+  .svc p { font-size: .9rem; color: var(--slate); }
+  .svc .num { position: absolute; top: 1.2rem; right: 1.4rem; font-size: .78rem; color: var(--line);
+    font-weight: 800; font-variant-numeric: tabular-nums; }
 
-    /* ── FOOTER ── */
-    footer {
-      background: #1a2332;
-      color: #8a9bb0;
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.85rem;
-    }
-    footer strong { color: #d4eaf7; }
+  /* CONTACT */
+  .contact-section { padding: 4rem 0 6rem; }
+  .contact-bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 180px; gap: 16px; }
+  .c-map { grid-column: span 2; grid-row: span 2; background: var(--ink); color: var(--paper);
+    display: flex; flex-direction: column; justify-content: space-between; border-radius: 22px; padding: 2rem; overflow: hidden; position: relative; }
+  .c-map h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.02; }
+  .c-map .grid-bg { position: absolute; inset: 0; opacity: .12;
+    background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+    background-size: 34px 34px; }
+  .c-map .btn { position: relative; display: inline-flex; align-items: center; gap: .5rem; background: var(--paper); color: var(--ink);
+    text-decoration: none; font-weight: 700; font-size: .92rem; padding: .85rem 1.7rem; border-radius: 100px; align-self: flex-start; transition: transform .2s; }
+  .c-map .btn:hover { transform: translateY(-2px); }
+  .c-map .btn svg { width: 15px; height: 15px; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .about-grid { grid-template-columns: 1fr; }
-      .about-visual { display: none; }
-      .contact-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+  .c-tile { background: var(--card); border: 1px solid var(--line2); border-radius: 22px; padding: 1.6rem;
+    display: flex; flex-direction: column; justify-content: space-between; }
+  .c-tile .tag { font-size: .66rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); }
+  .c-tile .val { font-weight: 800; font-size: 1.05rem; letter-spacing: -.01em; text-decoration: none; }
+  .c-tile .val:hover { text-decoration: underline; }
+  .c-rating { grid-column: span 2; background: var(--card); border: 1px solid var(--line2); border-radius: 22px;
+    padding: 1.8rem; display: flex; align-items: center; gap: 1.6rem; }
+  .c-rating .score { font-size: 3.2rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .c-rating .stars { display: flex; gap: 3px; }
+  .c-rating .stars svg { width: 20px; height: 20px; }
+  .c-rating .meta { font-size: .84rem; color: var(--slate); font-weight: 600; }
+
+  footer { border-top: 1px solid var(--line2); padding: 2.6rem 0; text-align: center; color: var(--slate); font-size: .88rem; }
+  footer strong { color: var(--ink); }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .bento, .contact-bento { grid-template-columns: repeat(2, 1fr); }
+    .t-hero, .t-about, .t-story, .c-map, .c-rating { grid-column: span 2; }
+    .svc-bento { grid-template-columns: repeat(2, 1fr); }
+    .svc:nth-child(1), .svc:nth-child(6) { grid-column: span 2; }
+  }
+  @media (max-width: 560px) {
+    .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--paper);
+      flex-direction: column; padding: 1.2rem 1.5rem; gap: 1rem; border-bottom: 1px solid var(--line); }
+    .nav-links.open { display: flex; }
+    .burger { display: flex; }
+    .bento, .contact-bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .tile, .t-hero, .c-map, .c-rating { grid-column: auto; grid-row: auto; min-height: 180px; }
+    .svc-bento { grid-template-columns: 1fr; }
+    .svc:nth-child(1), .svc:nth-child(6) { grid-column: auto; }
+    .c-rating { flex-direction: column; align-items: flex-start; gap: .8rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+<noscript><style>.reveal{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#hero" class="nav-logo">
-      <!-- Hanger SVG logo mark -->
-      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="18" cy="18" r="18" fill="rgba(255,255,255,0.12)"/>
-        <path d="M18 9a3 3 0 0 1 3 3v0.5L29 20H7l8-7.5V12a3 3 0 0 1 3-3z" stroke="#d4eaf7" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-        <line x1="18" y1="9" x2="18" y2="7" stroke="#d4eaf7" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="18" cy="6.5" r="1.5" fill="#4fa3c8"/>
-        <rect x="7" y="20" width="22" height="2" rx="1" fill="#4fa3c8"/>
-      </svg>
-      <span class="nav-brand">Quality Cleaners</span>
-    </a>
-    <ul class="nav-links">
+  <nav id="nav">
+    <a href="#top" class="brand"><span class="qmark">Q</span>Quality Cleaners</a>
+    <button class="burger" aria-label="Toggle menu" onclick="document.getElementById('navlinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navlinks">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <button class="hamburger" aria-label="Open menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">
-      <span></span><span></span><span></span>
-    </button>
   </nav>
 
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="document.getElementById('mobileMenu').classList.remove('open')">About</a>
-    <a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a>
-    <a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a>
-  </div>
+  <!-- BENTO INTRO -->
+  <section class="bento-section" id="top">
+    <div class="wrap">
+      <div class="bento" id="about">
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-inner">
-      <!-- Large hanger icon -->
-      <svg class="hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M40 18a7 7 0 0 1 7 7v1l22 18H11l22-18v-1a7 7 0 0 1 7-7z" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
-        <line x1="40" y1="18" x2="40" y2="12" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="40" cy="10" r="4" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" fill="none"/>
-        <rect x="11" y="44" width="58" height="5" rx="2.5" fill="rgba(255,255,255,0.3)"/>
-      </svg>
-      <h1>Quality Cleaners</h1>
-      <p class="hero-tagline">Crisp, fresh, and ready to wear — professional dry cleaning in Gainesville.</p>
-      <a href="#contact" class="hero-cta">Get in Touch</a>
-    </div>
-  </section>
+        <div class="tile t-hero reveal" data-tilt>
+          <div class="steam" aria-hidden="true">
+            <svg viewBox="0 0 100 100" stroke-linecap="round"><path d="M30 90c0-14 12-14 12-28S30 48 30 34s12-14 12-24"/><path d="M58 90c0-14 12-14 12-28S58 48 58 34s12-14 12-24"/></svg>
+          </div>
+          <span class="badge">Gainesville, FL</span>
+          <div>
+            <h1>Crisp, fresh,<br><em>ready to wear.</em></h1>
+            <p>Full-service dry cleaning and professional garment care for northwest Gainesville.</p>
+          </div>
+          <a href="#contact" class="cta">Get in Touch
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <span class="section-label">About Us</span>
-          <h2>Trusted Dry Cleaning in Gainesville, FL</h2>
-          <p>Quality Cleaners is a full-service dry cleaning establishment serving the northwest Gainesville community with professional garment care. We handle everything from everyday work attire to delicate fabrics, giving each item the attention it deserves.</p>
-          <p>Conveniently located on NW 43rd Street, we make drop-off and pickup easy for busy residents and students throughout the area. Whether it is a cherished suit, a formal gown, or everyday essentials, our team is committed to returning your clothes looking their best.</p>
-          <p>For current pricing, turnaround times, and service availability, please contact us directly — we are happy to answer any questions.</p>
+        <div class="tile t-metric reveal" data-tilt>
+          <span class="tag">Maps Rating</span>
+          <div>
+            <div class="big"><span data-count="3.0" data-dec="1">3.0</span></div>
+            <div class="stars" aria-label="3 out of 5 stars">
+              <svg viewBox="0 0 24 24" fill="#101013"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#101013"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#101013"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#101013" stroke-width="1.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#101013" stroke-width="1.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+            </div>
+          </div>
+          <span class="sub">Based on 29 reviews via Google Maps</span>
         </div>
-        <div class="about-visual">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Shirt icon -->
-            <path d="M35 20 L20 35 L30 35 L30 80 L70 80 L70 35 L80 35 L65 20 C62 28 38 28 35 20Z" stroke="#1c4b82" stroke-width="3" fill="#d4eaf7" stroke-linejoin="round"/>
-            <path d="M35 20 C37 30 50 32 50 32 C50 32 63 30 65 20" stroke="#1c4b82" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          </svg>
-          <p>"Fresh garments, every time."</p>
+
+        <div class="tile t-contact reveal" data-tilt>
+          <span class="ico"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <div>
+            <span class="tag">Phone</span><br>
+            <a class="val" href="tel:+13523389920">(352) 338-9920</a>
+          </div>
         </div>
+
+        <div class="tile t-about reveal" data-tilt>
+          <span class="tag">About Us</span>
+          <h2>Trusted dry cleaning in Gainesville, FL</h2>
+          <p>Quality Cleaners is a full-service dry cleaning establishment serving the northwest Gainesville community with professional garment care — handling everything from everyday work attire to delicate fabrics.</p>
+        </div>
+
+        <div class="tile t-contact reveal" data-tilt>
+          <span class="ico"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div>
+            <span class="tag">Address</span><br>
+            <span class="val">5200 NW 43rd St #101<br>Gainesville, FL</span>
+          </div>
+        </div>
+
+        <div class="tile t-story reveal" data-tilt>
+          <span class="tag" style="color:rgba(255,255,255,.6)">Convenient on NW 43rd St</span>
+          <p>Conveniently located on NW 43rd Street, we make drop-off and pickup easy for busy residents and students. For current pricing, turnaround times, and service availability, please contact us directly.</p>
+        </div>
+
       </div>
     </div>
   </section>
 
   <!-- SERVICES -->
-  <section id="services">
-    <div class="section-inner">
-      <span class="section-label">What We Offer</span>
-      <h2>Our Services</h2>
-      <div class="services-grid">
-
-        <!-- Dry Cleaning -->
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 3H5l-2 6h18l-2-6h-4"/>
-              <path d="M5 9v12h14V9"/>
-              <path d="M9 3v2a3 3 0 0 0 6 0V3"/>
-            </svg>
-          </div>
-          <h3>Dry Cleaning</h3>
-          <p>Professional solvent-based cleaning for suits, dresses, coats, and garments that require special care.</p>
-        </div>
-
-        <!-- Laundry & Press -->
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2"/>
-              <path d="M8 21h8M12 17v4"/>
-              <path d="M7 8h10M7 12h6"/>
-            </svg>
-          </div>
-          <h3>Shirt Laundry &amp; Press</h3>
-          <p>Wash, starch, and press for dress shirts and everyday tops, returned crisp and wrinkle-free.</p>
-        </div>
-
-        <!-- Alterations -->
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="6" cy="6" r="3"/>
-              <circle cx="18" cy="18" r="3"/>
-              <path d="M8.12 8.12 19 19M8.12 15.88 3 21M16 8l2-2"/>
-            </svg>
-          </div>
-          <h3>Alterations &amp; Repairs</h3>
-          <p>Hemming, resizing, zipper replacement, and general garment repairs to keep your wardrobe fitting perfectly.</p>
-        </div>
-
-        <!-- Formal Wear -->
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2L8 7H4l2 6-3 7h18l-3-7 2-6h-4L12 2z"/>
-            </svg>
-          </div>
-          <h3>Formal &amp; Bridal Wear</h3>
-          <p>Careful handling of gowns, tuxedos, and delicate formal attire with attention to detail and fabric safety.</p>
-        </div>
-
-        <!-- Household Items -->
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-          </div>
-          <h3>Household Items</h3>
-          <p>Cleaning services for comforters, blankets, drapes, and other household textiles. Contact us for details.</p>
-        </div>
-
-        <!-- Stain Treatment -->
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-              <path d="M12 8v4l3 3"/>
-            </svg>
-          </div>
-          <h3>Stain Treatment</h3>
-          <p>Spot and stain removal treatment applied before cleaning to help restore garments affected by stubborn stains.</p>
-        </div>
-
+  <section class="svc-section" id="services">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">What We Offer</div>
+        <h2>Our services.</h2>
+      </div>
+      <div class="svc-bento">
+        <div class="svc reveal"><span class="num">01</span><span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5l-2 6h18l-2-6h-4"/><path d="M5 9v12h14V9"/><path d="M9 3v2a3 3 0 0 0 6 0V3"/></svg></span><h3>Dry Cleaning</h3><p>Professional solvent-based cleaning for suits, dresses, coats, and garments that require special care.</p></div>
+        <div class="svc reveal"><span class="num">02</span><span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4M7 8h10M7 12h6"/></svg></span><h3>Shirt Laundry &amp; Press</h3><p>Wash, starch, and press for dress shirts and everyday tops, returned crisp and wrinkle-free.</p></div>
+        <div class="svc reveal"><span class="num">03</span><span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.12 8.12 19 19M8.12 15.88 3 21M16 8l2-2"/></svg></span><h3>Alterations &amp; Repairs</h3><p>Hemming, resizing, zipper replacement, and general garment repairs to keep your wardrobe fitting perfectly.</p></div>
+        <div class="svc reveal"><span class="num">04</span><span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 8 7H4l2 6-3 7h18l-3-7 2-6h-4L12 2z"/></svg></span><h3>Formal &amp; Bridal Wear</h3><p>Careful handling of gowns, tuxedos, and delicate formal attire with attention to detail and fabric safety.</p></div>
+        <div class="svc reveal"><span class="num">05</span><span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><h3>Household Items</h3><p>Cleaning services for comforters, blankets, drapes, and other household textiles. Contact us for details.</p></div>
+        <div class="svc reveal"><span class="num">06</span><span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></span><h3>Stain Treatment</h3><p>Spot and stain removal treatment applied before cleaning to help restore garments affected by stubborn stains.</p></div>
       </div>
     </div>
   </section>
 
   <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <div class="contact-grid">
-        <div class="contact-info">
-          <span class="section-label">Find Us</span>
-          <h2>Contact &amp; Location</h2>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-            </div>
-            <div class="contact-detail-text">
-              <strong>Address</strong>
-              <span>5200 NW 43rd St #101<br>Gainesville, FL</span>
-            </div>
-          </div>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-              </svg>
-            </div>
-            <div class="contact-detail-text">
-              <strong>Phone</strong>
-              <a class="phone-link-large" href="tel:+13523389920">(352) 338-9920</a>
-            </div>
-          </div>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#1c4b82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
-            </div>
-            <div class="contact-detail-text">
-              <strong>Hours</strong>
-              <span>Contact us for current hours</span>
-            </div>
-          </div>
-
-          <a class="directions-btn" href="https://www.google.com/maps/search/Quality%20Cleaners%205200%20NW%2043rd%20St%20%23101" target="_blank" rel="noopener noreferrer">
+  <section class="contact-section" id="contact">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Find Us</div>
+        <h2>Contact &amp; location.</h2>
+      </div>
+      <div class="contact-bento">
+        <div class="c-map reveal" data-tilt>
+          <div class="grid-bg" aria-hidden="true"></div>
+          <h2>Stop by<br>Quality Cleaners.</h2>
+          <a class="btn" href="https://www.google.com/maps/search/Quality%20Cleaners%205200%20NW%2043rd%20St%20%23101" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             Get Directions
           </a>
         </div>
-
-        <!-- Rating Box -->
-        <div>
-          <div class="rating-box">
-            <p class="rating-label">Google Maps Rating</p>
-            <div class="rating-score">3.0</div>
-            <div class="rating-stars" aria-label="3 out of 5 stars">
-              <!-- 3 full stars -->
-              <svg viewBox="0 0 24 24" fill="#f4b400" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#f4b400" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#f4b400" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <!-- 2 empty stars -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d0d8e4" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d0d8e4" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <div class="c-tile reveal" data-tilt>
+          <span class="tag">Address</span>
+          <span class="val">5200 NW 43rd St #101<br>Gainesville, FL</span>
+        </div>
+        <div class="c-tile reveal" data-tilt>
+          <span class="tag">Phone</span>
+          <a class="val" href="tel:+13523389920">(352) 338-9920</a>
+        </div>
+        <div class="c-tile reveal" data-tilt>
+          <span class="tag">Hours</span>
+          <span class="val">Contact us for current hours</span>
+        </div>
+        <div class="c-rating reveal" data-tilt>
+          <div class="score">3.0</div>
+          <div>
+            <div class="stars" aria-label="3 out of 5 stars">
+              <svg viewBox="0 0 24 24" fill="#101013"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#101013"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#101013"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#101013" stroke-width="1.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#101013" stroke-width="1.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
             </div>
-            <p class="rating-count">Based on 29 reviews</p>
-            <p class="rating-source">via Google Maps</p>
+            <div class="meta">Based on 29 reviews · via Google Maps</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
-    <p><strong>Quality Cleaners</strong> &mdash; 5200 NW 43rd St #101, Gainesville, FL &mdash; <a href="tel:+13523389920" style="color:#8a9bb0;">(352) 338-9920</a></p>
-    <p style="margin-top:0.5rem;">&copy; 2026 Quality Cleaners. All rights reserved.</p>
+    <div class="wrap">
+      <strong>Quality Cleaners</strong> — 5200 NW 43rd St #101, Gainesville, FL — <a href="tel:+13523389920">(352) 338-9920</a>
+      <div style="margin-top:.5rem;">&copy; 2026 Quality Cleaners. All rights reserved.</div>
+    </div>
   </footer>
 
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
+
+  // stagger siblings via CSS transition-delay (independent of observe timing)
+  document.querySelectorAll('.bento, .svc-bento, .contact-bento').forEach(function (grid) {
+    Array.prototype.forEach.call(grid.children, function (c, i) {
+      if (c.classList.contains('reveal') && !reduce) c.style.transitionDelay = (i * 55) + 'ms';
+    });
+  });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  var counted = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target, target = parseFloat(el.getAttribute('data-count')),
+          dec = parseInt(el.getAttribute('data-dec') || '0', 10), t0 = null, dur = 1200;
+      if (reduce) { el.textContent = target.toFixed(dec); counted.unobserve(el); return; }
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1), eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = (target * eased).toFixed(dec);
+        if (p < 1) requestAnimationFrame(step); else el.textContent = target.toFixed(dec);
+      }
+      requestAnimationFrame(step); counted.unobserve(el);
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach(function (el) { counted.observe(el); });
+
+  // 3D tilt
+  if (!reduce && window.matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('[data-tilt]').forEach(function (el) {
+      el.addEventListener('mousemove', function (ev) {
+        var r = el.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - 0.5, py = (ev.clientY - r.top) / r.height - 0.5;
+        el.style.transform = 'perspective(800px) rotateX(' + (-py * 4) + 'deg) rotateY(' + (px * 4) + 'deg) translateY(-3px)';
+      });
+      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+    });
+  }
+})();
+</script>
 </body>
 </html>

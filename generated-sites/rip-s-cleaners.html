@@ -1,786 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rip's Cleaners – Dry Cleaning in Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy: #1b2a4a;
-      --blue: #2c4a8a;
-      --sky: #4a90d9;
-      --light-blue: #dceeff;
-      --white: #ffffff;
-      --off-white: #f5f8fc;
-      --gray: #6b7a8d;
-      --dark-gray: #333d4a;
-      --accent: #c8a84b;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--dark-gray);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--navy);
-    }
-
-    .nav-logo-text {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.02em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.8);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--accent); }
-
-    .nav-phone {
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links, .nav-phone { display: none; }
-      .hamburger { display: flex; }
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 64px;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, var(--sky) 100%);
-      min-height: 88vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-      pointer-events: none;
-    }
-
-    /* hanger decorative */
-    .hero-hanger {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0.08;
-    }
-
-    .hero-content {
-      position: relative;
-      max-width: 700px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(200,168,75,0.2);
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 100px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.1;
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
-    }
-
-    .hero h1 span { color: var(--accent); }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.82);
-      max-width: 520px;
-      margin: 0 auto 2.5rem;
-    }
-
-    .hero-cta-group {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--navy);
-      padding: 0.85rem 2rem;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-    .btn-primary:hover { background: #dabb5c; transform: translateY(-1px); }
-
-    .btn-outline {
-      border: 2px solid rgba(255,255,255,0.6);
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: border-color 0.2s, background 0.2s;
-      display: inline-block;
-    }
-    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
-
-    /* ── SECTION SHARED ── */
-    section { padding: 5rem 1.5rem; }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1.2;
-      margin-bottom: 1.2rem;
-    }
-
-    .section-divider {
-      width: 48px;
-      height: 4px;
-      background: var(--accent);
-      border-radius: 2px;
-      margin-bottom: 1.8rem;
-    }
-
-    /* ── ABOUT ── */
-    .about { background: var(--off-white); }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--gray);
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-
-    .about-visual {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .about-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 1.5rem 1.2rem;
-      text-align: center;
-      box-shadow: 0 2px 12px rgba(27,42,74,0.08);
-      border-top: 3px solid var(--sky);
-    }
-
-    .about-card-icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .about-card h4 {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--navy);
-    }
-
-    .about-card p {
-      font-size: 0.8rem;
-      color: var(--gray);
-      margin-top: 0.25rem;
-    }
-
-    @media (max-width: 768px) {
-      .about-inner { grid-template-columns: 1fr; gap: 2rem; }
-    }
-
-    /* ── SERVICES ── */
-    .services { background: var(--white); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    .service-card {
-      background: var(--off-white);
-      border-radius: 12px;
-      padding: 2rem 1.6rem;
-      border: 1px solid rgba(44,74,138,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--sky), var(--blue));
-      border-radius: 12px 0 0 12px;
-    }
-
-    .service-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(27,42,74,0.12);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background: var(--light-blue);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-
-    /* ── CONTACT ── */
-    .contact { background: var(--off-white); }
-
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    @media (max-width: 768px) {
-      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
-    }
-
-    .contact-info-list {
-      list-style: none;
-      margin-top: 0.5rem;
-    }
-
-    .contact-info-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(27,42,74,0.08);
-    }
-
-    .contact-info-list li:last-child { border-bottom: none; }
-
-    .contact-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--light-blue);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 1.1rem;
-    }
-
-    .contact-detail strong {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 0.15rem;
-    }
-
-    .contact-detail span, .contact-detail a {
-      font-size: 1rem;
-      color: var(--dark-gray);
-      text-decoration: none;
-    }
-
-    .contact-detail a:hover { color: var(--blue); text-decoration: underline; }
-
-    /* rating */
-    .rating-box {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 2px 16px rgba(27,42,74,0.09);
-      margin-bottom: 1.5rem;
-    }
-
-    .rating-header {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 0.75rem;
-    }
-
-    .rating-stars {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-    }
-
-    .star {
-      width: 22px;
-      height: 22px;
-      position: relative;
-    }
-
-    .star svg { width: 22px; height: 22px; }
-
-    .rating-number {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1;
-    }
-
-    .rating-count {
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-
-    .rating-source {
-      font-size: 0.8rem;
-      color: var(--gray);
-      margin-top: 0.5rem;
-    }
-
-    .directions-btn {
-      display: block;
-      background: var(--blue);
-      color: var(--white);
-      text-align: center;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .directions-btn:hover { background: var(--navy); transform: translateY(-1px); }
-
-    .cta-box {
-      background: linear-gradient(135deg, var(--navy), var(--blue));
-      border-radius: 16px;
-      padding: 2.5rem;
-      color: var(--white);
-    }
-
-    .cta-box h3 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-bottom: 0.75rem;
-    }
-
-    .cta-box p {
-      opacity: 0.8;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-    }
-
-    .cta-box a.btn-primary {
-      display: inline-block;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      color: rgba(255,255,255,0.65);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .footer-name {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 0.4rem;
-    }
-
-    .footer-tagline {
-      font-size: 0.85rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      list-style: none;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--accent); }
-
-    .footer-copy {
-      font-size: 0.78rem;
-      opacity: 0.5;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rip's Cleaners – Dry Cleaning in Gainesville, FL</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:   #111114;
+    --paper: #fbfbf8;
+    --slate: #575760;
+    --line:  #111114;
+    --hair:  rgba(17,17,20,0.16);
+    --hair2: rgba(17,17,20,0.08);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--paper); color: var(--ink); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .serif { font-family: Georgia, "Times New Roman", Times, serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 1.6rem; }
+
+  /* ── TOP RIBBON ── */
+  .ribbon { border-bottom: 1px solid var(--ink); font-size: .68rem; letter-spacing: .16em;
+    text-transform: uppercase; font-weight: 700; }
+  .ribbon .wrap { display: flex; justify-content: space-between; align-items: center; height: 40px; }
+  .ribbon a { text-decoration: none; }
+  .ribbon a:hover { text-decoration: underline; }
+
+  /* ── MASTHEAD ── */
+  .masthead { text-align: center; padding: 2.4rem 1.6rem 1.6rem; border-bottom: 3px double var(--ink); position: relative; overflow: hidden; }
+  .masthead .over { font-size: .7rem; letter-spacing: .4em; text-transform: uppercase; color: var(--slate); font-weight: 700; }
+  .masthead h1 { font-size: clamp(3rem, 12vw, 8.5rem); font-weight: 800; letter-spacing: -.04em; line-height: .9;
+    margin: .5rem 0 .4rem; }
+  .masthead h1 .ch { display: inline-block; transform: translateY(120%); opacity: 0;
+    animation: chin .8s cubic-bezier(.19,1,.22,1) forwards; }
+  @keyframes chin { to { transform: none; opacity: 1; } }
+  .masthead .sub { display: flex; align-items: center; justify-content: center; gap: 1rem;
+    font-size: .74rem; letter-spacing: .22em; text-transform: uppercase; color: var(--slate); font-weight: 700; }
+  .masthead .sub::before, .masthead .sub::after { content: ''; height: 1px; width: 60px; background: var(--hair); }
+
+  /* ── TICKER ── */
+  .ticker { border-bottom: 1px solid var(--ink); background: var(--ink); color: var(--paper); overflow: hidden; }
+  .ticker .track { display: flex; white-space: nowrap; will-change: transform; animation: slide 26s linear infinite; }
+  .ticker .track span { font-size: .82rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700;
+    padding: .7rem 0; display: inline-flex; align-items: center; }
+  .ticker .track span::after { content: '✦'; margin: 0 1.6rem; opacity: .55; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  .ticker:hover .track { animation-play-state: paused; }
+
+  /* ── LEAD ── */
+  .lead { padding: 3.4rem 0; border-bottom: 1px solid var(--hair); }
+  .lead-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; align-items: start; }
+  .lead .dept { font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: var(--slate); font-weight: 700;
+    border-bottom: 1px solid var(--ink); padding-bottom: .5rem; margin-bottom: 1.2rem; display: inline-block; }
+  .lead h2 { font-size: clamp(1.8rem, 4.4vw, 3rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.04; margin-bottom: 1.2rem; }
+  .lead-body { columns: 2; column-gap: 2.2rem; }
+  .lead-body p { margin-bottom: 1rem; color: var(--slate); font-size: 1rem; break-inside: avoid; }
+  .lead-body p:first-child::first-letter { font-family: Georgia, serif; font-weight: 800; float: left;
+    font-size: 3.2rem; line-height: .82; padding: .1rem .5rem .1rem 0; color: var(--ink); }
+  .side { border-left: 3px solid var(--ink); padding-left: 1.4rem; }
+  .side h3 { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); font-weight: 700; margin-bottom: 1rem; }
+  .fact { padding: .9rem 0; border-bottom: 1px solid var(--hair2); }
+  .fact:last-child { border-bottom: none; }
+  .fact b { font-family: Georgia, serif; font-size: 1.05rem; }
+  .fact small { display: block; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--slate); }
+
+  /* ── SERVICES INDEX ── */
+  .index { padding: 3.4rem 0; border-bottom: 1px solid var(--hair); }
+  .index .dept { font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: var(--slate); font-weight: 700; }
+  .index h2 { font-size: clamp(1.8rem, 4.4vw, 3rem); font-weight: 800; letter-spacing: -.02em; margin: .4rem 0 2rem; }
+  .idx-row { display: grid; grid-template-columns: 58px 1fr 1.4fr; gap: 1.4rem; align-items: baseline;
+    padding: 1.5rem 0; border-top: 1px solid var(--ink); position: relative; }
+  .idx-row:last-child { border-bottom: 1px solid var(--ink); }
+  .idx-row .no { font-family: Georgia, serif; font-size: 1.1rem; color: var(--slate); font-weight: 700; }
+  .idx-row h3 { font-size: clamp(1.2rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -.01em; }
+  .idx-row p { color: var(--slate); font-size: .95rem; }
+  .idx-row::after { content: ''; position: absolute; left: 0; top: -1px; height: 2px; width: 0; background: var(--ink); transition: width .45s cubic-bezier(.19,1,.22,1); }
+  .idx-row:hover::after { width: 100%; }
+  .idx-row:hover h3 { font-style: italic; }
+
+  /* ── CONTACT / RATING ── */
+  .foot-feature { padding: 3.4rem 0; }
+  .ff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: stretch; }
+  .review-card { border: 1px solid var(--ink); padding: 2.4rem; display: flex; flex-direction: column; justify-content: center; gap: .8rem; }
+  .review-card .dept { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); font-weight: 700; }
+  .review-card .big { display: flex; align-items: baseline; gap: 1rem; }
+  .review-card .num { font-family: Georgia, serif; font-size: 5rem; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+  .review-card .stars { display: flex; gap: 3px; }
+  .review-card .stars svg { width: 22px; height: 22px; }
+  .review-card .meta { color: var(--slate); font-size: .9rem; font-weight: 600; }
+
+  .contact-block { display: flex; flex-direction: column; gap: 0; }
+  .cline { display: flex; align-items: flex-start; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid var(--hair2); }
+  .cline:first-child { padding-top: 0; }
+  .cline .ic { width: 40px; height: 40px; border: 1px solid var(--ink); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+  .cline .ic svg { width: 18px; height: 18px; stroke: var(--ink); fill: none; stroke-width: 1.7; }
+  .cline small { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--slate); font-weight: 700; display: block; }
+  .cline .v { font-family: Georgia, serif; font-size: 1.15rem; text-decoration: none; }
+  .cline a.v:hover { text-decoration: underline; }
+  .dir-btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; margin-top: 1.4rem;
+    background: var(--ink); color: var(--paper); text-decoration: none; font-weight: 700; font-size: .9rem;
+    letter-spacing: .06em; text-transform: uppercase; padding: 1rem 1.6rem; transition: transform .2s, opacity .2s; }
+  .dir-btn:hover { transform: translateY(-2px); opacity: .9; }
+  .dir-btn svg { width: 15px; height: 15px; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.19,1,.22,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  footer { border-top: 3px double var(--ink); text-align: center; padding: 2.4rem 1.6rem; }
+  footer .fn { font-family: Georgia, serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -.01em; }
+  footer .ft { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--slate); margin-top: .4rem; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-links { display: flex; gap: 1.6rem; justify-content: center; flex-wrap: wrap; list-style: none; margin-top: 1.2rem; font-size: .82rem; }
+
+  @media (max-width: 820px) {
+    .lead-grid, .ff-grid { grid-template-columns: 1fr; gap: 2.2rem; }
+    .lead-body { columns: 1; }
+    .idx-row { grid-template-columns: 40px 1fr; }
+    .idx-row p { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .masthead h1 .ch { transform: none; opacity: 1; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+<noscript><style>.reveal{opacity:1 !important;transform:none !important}.masthead h1 .ch{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <div class="nav-logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <!-- hanger icon -->
-          <path d="M12 3a2 2 0 0 1 2 2c0 .74-.41 1.38-1 1.72V8l8 6H3l8-6V6.72A2 2 0 0 1 12 3z"/>
-        </svg>
+  <!-- RIBBON -->
+  <div class="ribbon">
+    <div class="wrap">
+      <span>Gainesville, FL · Downtown · N Main St</span>
+      <a href="tel:3523720560">(352) 372-0560</a>
+    </div>
+  </div>
+
+  <!-- MASTHEAD -->
+  <header class="masthead" id="top">
+    <div class="over">Professional Dry Cleaning &amp; Garment Care</div>
+    <h1 class="serif" id="mast">Rip's Cleaners</h1>
+    <div class="sub">Fresh · Pressed · Done Right</div>
+  </header>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="track">
+      <span>Dry Cleaning</span><span>Formal Wear</span><span>Alterations</span><span>Household Linens</span><span>Shirt Laundry &amp; Press</span><span>Coats &amp; Outerwear</span><span>Trusted by Locals</span>
+      <span>Dry Cleaning</span><span>Formal Wear</span><span>Alterations</span><span>Household Linens</span><span>Shirt Laundry &amp; Press</span><span>Coats &amp; Outerwear</span><span>Trusted by Locals</span>
+    </div>
+  </div>
+
+  <!-- LEAD -->
+  <section class="lead" id="about">
+    <div class="wrap">
+      <div class="lead-grid">
+        <div class="reveal">
+          <span class="dept">The Front Page — About Us</span>
+          <h2>Caring for your clothes in downtown Gainesville.</h2>
+          <div class="lead-body">
+            <p>Rip's Cleaners is a neighborhood dry cleaner serving residents and businesses in downtown Gainesville from our convenient location on North Main Street. We handle everything from everyday garments to delicate fabrics that require careful, expert attention.</p>
+            <p>Whether you need a suit freshened up for a big meeting or a formal gown prepared for a special occasion, our team treats every item with care and attention to detail. We take pride in returning your clothing clean, pressed, and ready to wear.</p>
+            <p>Stop by our shop on N Main St or give us a call — we're happy to answer any questions about our garment care process. Contact us for details on turnaround times and available services.</p>
+          </div>
+        </div>
+        <aside class="side reveal">
+          <h3>At a Glance</h3>
+          <div class="fact"><b class="serif">Expert Care</b><small>Gentle treatment for all fabric types</small></div>
+          <div class="fact"><b class="serif">Quality Results</b><small>Clean, crisp garments every time</small></div>
+          <div class="fact"><b class="serif">Downtown Location</b><small>Convenient N Main St address</small></div>
+          <div class="fact"><b class="serif">Local Business</b><small>Proud part of the GNV community</small></div>
+        </aside>
       </div>
-      <span class="nav-logo-text">Rip's Cleaners</span>
-    </a>
-    <ul class="nav-links">
+    </div>
+  </section>
+
+  <!-- SERVICES INDEX -->
+  <section class="index" id="services">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="dept">The Directory — What We Do</span>
+        <h2>Our services.</h2>
+      </div>
+      <div class="idx-row reveal"><span class="no serif">01</span><h3 class="serif">Dry Cleaning</h3><p>Professional solvent-based cleaning for suits, dresses, blouses, and any garment labeled "dry clean only."</p></div>
+      <div class="idx-row reveal"><span class="no serif">02</span><h3 class="serif">Formal Wear &amp; Evening Gowns</h3><p>Delicate care for wedding dresses, bridesmaid gowns, tuxedos, and other formalwear that demands extra attention.</p></div>
+      <div class="idx-row reveal"><span class="no serif">03</span><h3 class="serif">Alterations &amp; Repairs</h3><p>Minor clothing adjustments and repairs — contact us to confirm current availability on specific alteration services.</p></div>
+      <div class="idx-row reveal"><span class="no serif">04</span><h3 class="serif">Household Linens</h3><p>Cleaning and pressing of comforters, blankets, curtains, tablecloths, and other household fabric items.</p></div>
+      <div class="idx-row reveal"><span class="no serif">05</span><h3 class="serif">Shirt Laundry &amp; Press</h3><p>Expert laundering and professional pressing for dress shirts and blouses — crisp collars and cuffs guaranteed.</p></div>
+      <div class="idx-row reveal"><span class="no serif">06</span><h3 class="serif">Coats &amp; Outerwear</h3><p>Thorough cleaning for winter coats, leather items, and specialty outerwear that needs professional treatment.</p></div>
+    </div>
+  </section>
+
+  <!-- CONTACT / RATING -->
+  <section class="foot-feature" id="contact">
+    <div class="wrap">
+      <div class="ff-grid">
+        <div class="review-card reveal">
+          <span class="dept">Reader Reviews — Google Maps</span>
+          <div class="big">
+            <span class="num serif">3.3</span>
+            <span class="stars" aria-label="3.3 out of 5 stars">
+              <svg viewBox="0 0 24 24" fill="#111114"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#111114"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#111114"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#111114" stroke-width="1.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#111114" stroke-width="1.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+            </span>
+          </div>
+          <div class="meta">Based on 66 Google reviews · via Google Maps</div>
+        </div>
+        <div class="contact-block reveal">
+          <div class="cline">
+            <span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+            <div><small>Address</small><span class="v serif">316 N Main St, Gainesville, FL</span></div>
+          </div>
+          <div class="cline">
+            <span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+            <div><small>Phone</small><a class="v serif" href="tel:3523720560">(352) 372-0560</a></div>
+          </div>
+          <div class="cline">
+            <span class="ic"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <div><small>Hours</small><span class="v serif">Contact us for current hours</span></div>
+          </div>
+          <a class="dir-btn" href="https://www.google.com/maps/search/Rip's%20Cleaners%20316%20N%20Main%20St" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            Get Directions on Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fn serif">Rip's Cleaners</div>
+    <div class="ft">Professional Dry Cleaning · 316 N Main St, Gainesville, FL</div>
+    <ul class="footer-links">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:3523720560">(352) 372-0560</a></li>
     </ul>
-    <a href="tel:3523720560" class="nav-phone">(352) 372-0560</a>
-    <button class="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="hero-badge">Gainesville, FL</div>
-      <h1>Fresh. Pressed.<br><span>Done Right.</span></h1>
-      <p class="hero-tagline">
-        Professional dry cleaning and garment care for the Gainesville community — trusted by locals for quality results on every order.
-      </p>
-      <div class="hero-cta-group">
-        <a href="tel:3523720560" class="btn-primary">Call Us Now</a>
-        <a href="#services" class="btn-outline">Our Services</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="container">
-      <div class="about-inner">
-        <div class="about-text">
-          <div class="section-label">About Us</div>
-          <h2 class="section-title">Caring for Your Clothes in Gainesville</h2>
-          <div class="section-divider"></div>
-          <p>
-            Rip's Cleaners is a neighborhood dry cleaner serving residents and businesses in downtown Gainesville from our convenient location on North Main Street. We handle everything from everyday garments to delicate fabrics that require careful, expert attention.
-          </p>
-          <p>
-            Whether you need a suit freshened up for a big meeting or a formal gown prepared for a special occasion, our team treats every item with care and attention to detail. We take pride in returning your clothing clean, pressed, and ready to wear.
-          </p>
-          <p>
-            Stop by our shop on N Main St or give us a call — we're happy to answer any questions about our garment care process. Contact us for details on turnaround times and available services.
-          </p>
-        </div>
-        <div class="about-visual">
-          <div class="about-card">
-            <div class="about-card-icon">👔</div>
-            <h4>Expert Care</h4>
-            <p>Gentle treatment for all fabric types</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">✨</div>
-            <h4>Quality Results</h4>
-            <p>Clean, crisp garments every time</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">📍</div>
-            <h4>Downtown Location</h4>
-            <p>Convenient N Main St address</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">🤝</div>
-            <h4>Local Business</h4>
-            <p>Proud part of the GNV community</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="container">
-      <div class="section-label">What We Do</div>
-      <h2 class="section-title">Our Services</h2>
-      <div class="section-divider"></div>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">👔</div>
-          <h3>Dry Cleaning</h3>
-          <p>Professional solvent-based cleaning for suits, dresses, blouses, and any garment labeled "dry clean only."</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">👗</div>
-          <h3>Formal Wear &amp; Evening Gowns</h3>
-          <p>Delicate care for wedding dresses, bridesmaid gowns, tuxedos, and other formalwear that demands extra attention.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🧣</div>
-          <h3>Alterations &amp; Repairs</h3>
-          <p>Minor clothing adjustments and repairs — contact us to confirm current availability on specific alteration services.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🛏️</div>
-          <h3>Household Linens</h3>
-          <p>Cleaning and pressing of comforters, blankets, curtains, tablecloths, and other household fabric items.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">👔</div>
-          <h3>Shirt Laundry &amp; Press</h3>
-          <p>Expert laundering and professional pressing for dress shirts and blouses — crisp collars and cuffs guaranteed.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🧥</div>
-          <h3>Coats &amp; Outerwear</h3>
-          <p>Thorough cleaning for winter coats, leather items, and specialty outerwear that needs professional treatment.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <div class="section-label">Find Us</div>
-      <h2 class="section-title">Get In Touch</h2>
-      <div class="section-divider"></div>
-      <div class="contact-inner">
-        <div>
-          <ul class="contact-info-list">
-            <li>
-              <div class="contact-icon">📍</div>
-              <div class="contact-detail">
-                <strong>Address</strong>
-                <span>316 N Main St<br>Gainesville, FL</span>
-              </div>
-            </li>
-            <li>
-              <div class="contact-icon">📞</div>
-              <div class="contact-detail">
-                <strong>Phone</strong>
-                <a href="tel:3523720560">(352) 372-0560</a>
-              </div>
-            </li>
-            <li>
-              <div class="contact-icon">🕐</div>
-              <div class="contact-detail">
-                <strong>Hours</strong>
-                <span>Contact us for current hours</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <div class="rating-box">
-            <div class="rating-header">Google Maps Rating</div>
-            <div class="rating-stars">
-              <div class="stars">
-                <!-- 3.3 stars: 3 full, 1 partial, 1 empty -->
-                <svg viewBox="0 0 24 24" class="star"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5c518" stroke="#f5c518" stroke-width="1"/></svg>
-                <svg viewBox="0 0 24 24" class="star"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5c518" stroke="#f5c518" stroke-width="1"/></svg>
-                <svg viewBox="0 0 24 24" class="star"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5c518" stroke="#f5c518" stroke-width="1"/></svg>
-                <svg viewBox="0 0 24 24" class="star">
-                  <defs>
-                    <linearGradient id="half">
-                      <stop offset="30%" stop-color="#f5c518"/>
-                      <stop offset="30%" stop-color="#ddd"/>
-                    </linearGradient>
-                  </defs>
-                  <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="url(#half)" stroke="#ccc" stroke-width="1"/>
-                </svg>
-                <svg viewBox="0 0 24 24" class="star"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#ddd" stroke="#ccc" stroke-width="1"/></svg>
-              </div>
-              <span class="rating-number">3.3</span>
-            </div>
-            <div class="rating-count">Based on 66 Google reviews</div>
-            <div class="rating-source">via Google Maps</div>
-          </div>
-          <a
-            href="https://www.google.com/maps/search/Rip's%20Cleaners%20316%20N%20Main%20St"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="directions-btn"
-          >
-            Get Directions on Google Maps
-          </a>
-
-          <div class="cta-box" style="margin-top: 1.5rem;">
-            <h3>Ready to drop off?</h3>
-            <p>Give us a call or stop by our North Main Street location. We'd be happy to help with all your garment care needs.</p>
-            <a href="tel:3523720560" class="btn-primary">Call (352) 372-0560</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-name">Rip's Cleaners</div>
-      <div class="footer-tagline">Professional Dry Cleaning · 316 N Main St, Gainesville, FL</div>
-      <ul class="footer-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="tel:3523720560">(352) 372-0560</a></li>
-      </ul>
-      <div class="footer-copy">&copy; 2026 Rip's Cleaners. All rights reserved.</div>
-    </div>
+    <div class="ft" style="margin-top:1rem;">&copy; 2026 Rip's Cleaners. All rights reserved.</div>
   </footer>
 
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Masthead letter stagger
+  var mast = document.getElementById('mast');
+  if (mast && !reduce) {
+    var text = mast.textContent, frag = document.createDocumentFragment(), d = 0;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (c === ' ') { frag.appendChild(document.createTextNode(' ')); continue; }
+      var s = document.createElement('span');
+      s.className = 'ch'; s.textContent = c;
+      s.style.animationDelay = (d * 0.028) + 's'; d++;
+      frag.appendChild(s);
+    }
+    mast.textContent = ''; mast.appendChild(frag);
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.14 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+})();
+</script>
 </body>
 </html>
