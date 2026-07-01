@@ -1,844 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Time Connection – Watch Repair | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --gold:       #b8962e;
-      --gold-light: #d4af50;
-      --dark:       #1a1410;
-      --charcoal:   #2c2420;
-      --cream:      #f5f0e8;
-      --warm-gray:  #8a7e72;
-      --white:      #ffffff;
-      --accent:     #c9a84c;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: var(--cream);
-      color: var(--charcoal);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--dark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.5);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-brand .clock-icon {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
-
-    .nav-brand span {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--gold-light);
-      letter-spacing: 0.04em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--cream);
-      text-decoration: none;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.88rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold-light); }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--cream);
-      transition: background 0.2s;
-    }
-
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      background: var(--dark);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 1.5rem 60px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(184,150,46,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* decorative gear rings */
-    .hero-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(184,150,46,0.15);
-      pointer-events: none;
-    }
-    .hero-ring-1 { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .hero-ring-2 { width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .hero-ring-3 { width: 920px; height: 920px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-
-    .hero-eyebrow {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-      position: relative;
-    }
-
-    #hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      color: var(--white);
-      line-height: 1.15;
-      max-width: 780px;
-      position: relative;
-    }
-
-    #hero h1 em {
-      font-style: normal;
-      color: var(--gold-light);
-    }
-
-    .hero-sub {
-      margin-top: 1.4rem;
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--warm-gray);
-      max-width: 560px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 400;
-      position: relative;
-    }
-
-    .hero-divider {
-      width: 60px;
-      height: 2px;
-      background: var(--gold);
-      margin: 2rem auto;
-      position: relative;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      position: relative;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2.2rem;
-      border-radius: 3px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.22s;
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--dark);
-      font-weight: 700;
-      border: 2px solid var(--gold);
-    }
-    .btn-primary:hover {
-      background: var(--gold-light);
-      border-color: var(--gold-light);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--cream);
-      border: 2px solid rgba(255,255,255,0.35);
-    }
-    .btn-outline:hover {
-      border-color: var(--gold-light);
-      color: var(--gold-light);
-    }
-
-    /* ── SECTION BASE ── */
-    section { padding: 90px 1.5rem; }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.5rem);
-      color: var(--charcoal);
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    .section-title-dark { color: var(--white); }
-
-    .title-rule {
-      width: 48px;
-      height: 2px;
-      background: var(--gold);
-      margin-bottom: 1.8rem;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: #5a5048;
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-
-    .about-text p:last-child { margin-bottom: 0; }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    .stat-card {
-      background: var(--cream);
-      border-top: 3px solid var(--gold);
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .stat-card .stat-num {
-      font-size: 2.2rem;
-      color: var(--gold);
-      font-weight: 700;
-      display: block;
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-
-    .stat-card .stat-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--warm-gray);
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--charcoal);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .service-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(184,150,46,0.2);
-      padding: 2rem 1.8rem;
-      transition: border-color 0.25s, background 0.25s;
-    }
-
-    .service-card:hover {
-      border-color: var(--gold);
-      background: rgba(184,150,46,0.06);
-    }
-
-    .service-icon {
-      width: 44px;
-      height: 44px;
-      margin-bottom: 1rem;
-      color: var(--gold);
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--white);
-      margin-bottom: 0.6rem;
-    }
-
-    .service-card p {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.9rem;
-      color: var(--warm-gray);
-      line-height: 1.6;
-    }
-
-    .service-cta {
-      display: inline-block;
-      margin-top: 0.9rem;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s;
-    }
-    .service-cta:hover { border-color: var(--gold); }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--cream);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info h2 {
-      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-      color: var(--charcoal);
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-info .subtitle {
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--warm-gray);
-      margin-bottom: 2rem;
-    }
-
-    .contact-details {
-      list-style: none;
-      margin-bottom: 2rem;
-    }
-
-    .contact-details li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.9rem;
-      margin-bottom: 1.1rem;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.97rem;
-      color: var(--charcoal);
-    }
-
-    .contact-details li svg {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      color: var(--gold);
-      margin-top: 2px;
-    }
-
-    .contact-details a {
-      color: inherit;
-      text-decoration: none;
-    }
-    .contact-details a:hover { color: var(--gold); }
-
-    /* rating */
-    .rating-block {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: var(--white);
-      border: 1px solid rgba(184,150,46,0.3);
-      padding: 0.7rem 1.1rem;
-      border-radius: 4px;
-      margin-bottom: 1.8rem;
-    }
-
-    .stars {
-      display: flex;
-      gap: 2px;
-    }
-
-    .star {
-      width: 18px;
-      height: 18px;
-      color: var(--gold);
-    }
-
-    .star-half {
-      color: var(--gold);
-      opacity: 0.6;
-    }
-
-    .rating-text {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.85rem;
-      color: var(--warm-gray);
-    }
-
-    .rating-num {
-      font-weight: 700;
-      color: var(--charcoal);
-    }
-
-    /* directions card */
-    .directions-card {
-      background: var(--dark);
-      padding: 2.2rem;
-      border-top: 4px solid var(--gold);
-    }
-
-    .directions-card h3 {
-      color: var(--white);
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .directions-card p {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.88rem;
-      color: var(--warm-gray);
-      margin-bottom: 1.4rem;
-    }
-
-    /* map placeholder */
-    .map-placeholder {
-      background: var(--charcoal);
-      border: 1px solid rgba(184,150,46,0.2);
-      height: 160px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1.4rem;
-      color: var(--warm-gray);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.85rem;
-    }
-
-    .map-placeholder svg {
-      width: 36px;
-      height: 36px;
-      color: var(--gold);
-      opacity: 0.7;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--dark);
-      padding: 40px 1.5rem;
-      text-align: center;
-    }
-
-    .footer-brand {
-      font-size: 1.1rem;
-      color: var(--gold-light);
-      margin-bottom: 0.4rem;
-    }
-
-    .footer-tagline {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.82rem;
-      color: var(--warm-gray);
-      margin-bottom: 1.2rem;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      list-style: none;
-      margin-bottom: 1.4rem;
-    }
-
-    .footer-links a {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.8rem;
-      color: var(--warm-gray);
-      text-decoration: none;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .footer-links a:hover { color: var(--gold-light); }
-
-    .footer-copy {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.75rem;
-      color: #4a4038;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0; right: 0;
-        background: var(--dark);
-        flex-direction: column;
-        gap: 0;
-        padding: 0.5rem 0 1rem;
-        border-top: 1px solid rgba(255,255,255,0.07);
-      }
-      .nav-links.open { display: flex; }
-      .nav-links a {
-        display: block;
-        padding: 0.75rem 2rem;
-        font-size: 0.9rem;
-      }
-      .nav-toggle { display: flex; }
-
-      .about-grid,
-      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-
-      .about-stats { grid-template-columns: 1fr 1fr; }
-
-      .hero-ring-2,
-      .hero-ring-3 { display: none; }
-    }
-
-    @media (max-width: 480px) {
-      .about-stats { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Connection – Watch Repair | Gainesville, FL</title>
+<meta name="description" content="Time Connection — professional watch repair and restoration in Gainesville, FL. Battery, movement service, crystal, band, and more. 403 NE 23rd Ave. Call (352) 372-6224.">
+<style>
+  :root{
+    --bg:#08070a; --panel:#100d12; --ink:#f2ecdf; --muted:#a4977f;
+    --gold:#c8a24e; --gold-lt:#ecd08b; --gold-dk:#7a5f28; --line:rgba(200,162,78,.2);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:"Futura","Century Gothic","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);
+    overflow-x:hidden;line-height:1.6}
+  ::selection{background:var(--gold);color:#08070a}
+  .bg{position:fixed;inset:0;z-index:-2;background:
+    radial-gradient(50vw 50vw at 80% 20%,rgba(200,162,78,.13),transparent 60%),
+    radial-gradient(50vw 50vw at 10% 85%,rgba(236,208,139,.09),transparent 60%),var(--bg);}
+
+  header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+    padding:16px 6vw;backdrop-filter:blur(10px);background:linear-gradient(180deg,rgba(8,7,10,.85),transparent);transition:background .3s,padding .3s}
+  header.shrunk{background:rgba(8,7,10,.95);padding:10px 6vw;border-bottom:1px solid var(--line)}
+  .brand{font-size:1.05rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-lt);font-weight:700}
+  nav a{color:var(--muted);text-decoration:none;margin-left:26px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;transition:color .3s}
+  nav a:hover{color:var(--gold-lt)}
+  .nav-links{display:flex;align-items:center}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 6vw;position:relative}
+  .gearwrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:.16}
+  .gearwrap svg{width:min(72vh,72vw);height:min(72vh,72vw);color:var(--gold)}
+  .gear-a{animation:spin 26s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero-inner{position:relative;z-index:2}
+  .hero .eye{font-size:.78rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+  .hero h1{font-size:clamp(2.4rem,7vw,5.6rem);font-weight:700;line-height:1;letter-spacing:-.01em}
+  .hero h1 .em{display:block;background:linear-gradient(100deg,var(--gold-lt),var(--gold),var(--gold-lt));
+    -webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:sheen 6s linear infinite}
+  @keyframes sheen{to{background-position:200% center}}
+  .hero p{color:var(--muted);margin-top:22px;font-size:1.15rem;max-width:46ch;margin-left:auto;margin-right:auto}
+  .hero .cta{margin-top:32px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:40px;text-decoration:none;
+    font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;transition:transform .25s,background .3s,color .3s;cursor:pointer}
+  .btn.solid{background:linear-gradient(100deg,var(--gold),var(--gold-lt));color:#14100a;font-weight:700}
+  .btn.ghost{border:1px solid var(--gold);color:var(--gold-lt)}
+  .btn:hover{transform:translateY(-3px)}
+  .btn.ghost:hover{background:rgba(200,162,78,.1)}
+
+  .container{max-width:1100px;margin:0 auto;padding:0 6vw}
+  section{padding:100px 0}
+  .kick{font-size:.76rem;letter-spacing:.36em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .stitle{font-size:clamp(1.9rem,4.4vw,3rem);font-weight:700;margin-bottom:26px;line-height:1.1}
+
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:50px;align-items:center}
+  @media(max-width:820px){.about-grid{grid-template-columns:1fr;gap:34px}}
+  .about-grid p{color:var(--muted);margin-bottom:16px;font-size:1.03rem}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .stat{border:1px solid var(--line);border-radius:12px;padding:22px;background:linear-gradient(160deg,var(--panel),#08070a);transition:transform .4s,border-color .4s}
+  .stat:hover{transform:translateY(-4px);border-color:rgba(200,162,78,.5)}
+  .stat b{display:block;font-size:1.5rem;color:var(--gold-lt);font-weight:700}
+  .stat span{color:var(--muted);font-size:.82rem}
+
+  /* HORIZONTAL SNAP SERVICES */
+  .hsec{padding:100px 0 100px}
+  .hsec .head{padding:0 6vw;max-width:1100px;margin:0 auto 30px}
+  .track-outer{position:relative}
+  .htrack{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 6vw 30px;
+    scrollbar-width:thin;scrollbar-color:var(--gold-dk) transparent}
+  .htrack::-webkit-scrollbar{height:8px}
+  .htrack::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:20px}
+  .htrack::-webkit-scrollbar-track{background:rgba(200,162,78,.08)}
+  .hcard{scroll-snap-align:center;flex:0 0 340px;max-width:80vw;border:1px solid var(--line);border-radius:18px;
+    padding:34px;background:linear-gradient(160deg,var(--panel),#08070a);position:relative;overflow:hidden;
+    transition:transform .4s,border-color .4s,box-shadow .4s}
+  .hcard:hover{transform:translateY(-6px);border-color:rgba(200,162,78,.55);box-shadow:0 22px 46px -22px rgba(200,162,78,.5)}
+  .hcard .num{font-size:3.2rem;font-weight:700;line-height:1;background:linear-gradient(180deg,var(--gold-lt),var(--gold-dk));
+    -webkit-background-clip:text;background-clip:text;color:transparent;opacity:.55}
+  .hcard h3{font-size:1.3rem;font-weight:700;margin:14px 0 12px;color:var(--gold-lt)}
+  .hcard p{color:var(--muted);font-size:.96rem}
+  .hcard .note{display:inline-block;margin-top:14px;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk)}
+  .hhint{padding:0 6vw;max-width:1100px;margin:6px auto 0;color:var(--muted);font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+  .hhint .arrow{color:var(--gold);animation:slidearrow 1.6s ease-in-out infinite}
+  @keyframes slidearrow{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+
+  /* CONTACT */
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:stretch}
+  @media(max-width:820px){.contact{grid-template-columns:1fr;gap:32px}}
+  .cbox{border:1px solid var(--line);border-radius:16px;padding:36px;background:var(--panel)}
+  .cinfo{display:flex;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .cinfo:last-of-type{border-bottom:none}
+  .cinfo .ic{font-size:1.3rem;color:var(--gold)}
+  .cinfo b{display:block;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:3px}
+  .cinfo a,.cinfo span{color:var(--ink);text-decoration:none;font-size:1rem}
+  .cinfo a:hover{color:var(--gold-lt)}
+  .rating{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    border:1px solid var(--line);border-radius:16px;padding:38px;
+    background:radial-gradient(circle at 50% 30%,rgba(200,162,78,.14),var(--panel))}
+  .rating .score{font-size:4.6rem;font-weight:700;line-height:1;background:linear-gradient(180deg,var(--gold-lt),var(--gold-dk));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .rating .stars{display:flex;gap:5px;margin:12px 0}
+  .rating .stars svg{width:24px;height:24px}
+  .rating .rt{color:var(--muted);letter-spacing:.04em}
+  .rating .btn{margin-top:22px}
+  .cbtns{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+  .park{margin-top:22px;color:var(--muted);font-size:.95rem}
+
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{border-top:1px solid var(--line);padding:44px 6vw;text-align:center;color:var(--muted);font-size:.9rem}
+  footer .fn{letter-spacing:.28em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:8px}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none} html{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body>
+<div class="bg"></div>
 
-<!-- ── NAV ── -->
-<nav id="top-nav">
-  <a href="#hero" class="nav-brand" aria-label="Time Connection home">
-    <svg class="clock-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="16" cy="16" r="13" stroke="#b8962e" stroke-width="1.8"/>
-      <circle cx="16" cy="16" r="1.8" fill="#b8962e"/>
-      <line x1="16" y1="16" x2="16" y2="7" stroke="#b8962e" stroke-width="1.8" stroke-linecap="round"/>
-      <line x1="16" y1="16" x2="22" y2="19" stroke="#d4af50" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="16" cy="4.5" r="1" fill="#b8962e"/>
-      <circle cx="16" cy="27.5" r="1" fill="#b8962e"/>
-      <circle cx="4.5" cy="16" r="1" fill="#b8962e"/>
-      <circle cx="27.5" cy="16" r="1" fill="#b8962e"/>
+<header id="hdr">
+  <div class="brand">Time Connection</div>
+  <div class="nav-links">
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="tel:+13523726224">Call Us</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="gearwrap">
+    <svg class="gear-a" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+      <circle cx="50" cy="50" r="30"></circle>
+      <circle cx="50" cy="50" r="6"></circle>
+      <g stroke-width="2">
+        <line x1="50" y1="8" x2="50" y2="20"></line>
+        <line x1="50" y1="80" x2="50" y2="92"></line>
+        <line x1="8" y1="50" x2="20" y2="50"></line>
+        <line x1="80" y1="50" x2="92" y2="50"></line>
+        <line x1="20" y1="20" x2="29" y2="29"></line>
+        <line x1="71" y1="71" x2="80" y2="80"></line>
+        <line x1="80" y1="20" x2="71" y2="29"></line>
+        <line x1="29" y1="71" x2="20" y2="80"></line>
+      </g>
+      <line x1="50" y1="50" x2="50" y2="30" stroke-width="1.6"></line>
+      <line x1="50" y1="50" x2="64" y2="56" stroke-width="1.6"></line>
     </svg>
-    <span>Time Connection</span>
-  </a>
-
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="tel:+13523726224" class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.8rem;">Call Us</a></li>
-  </ul>
-
-  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- ── HERO ── -->
-<section id="hero">
-  <div class="hero-ring hero-ring-1" aria-hidden="true"></div>
-  <div class="hero-ring hero-ring-2" aria-hidden="true"></div>
-  <div class="hero-ring hero-ring-3" aria-hidden="true"></div>
-
-  <p class="hero-eyebrow">Gainesville, Florida</p>
-  <h1>Your Watch Deserves<br><em>Expert Care</em></h1>
-  <p class="hero-sub">Professional watch repair and restoration — bringing precision timepieces back to life.</p>
-  <div class="hero-divider" aria-hidden="true"></div>
-  <div class="hero-cta">
-    <a href="#services" class="btn btn-primary">Our Services</a>
-    <a href="#contact" class="btn btn-outline">Get in Touch</a>
   </div>
-</section>
-
-<!-- ── ABOUT ── -->
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
-        <p class="section-label">About Us</p>
-        <h2 class="section-title">A Trusted Name in Watch Repair</h2>
-        <div class="title-rule"></div>
-        <p>Time Connection is Gainesville's dedicated watch repair service, offering careful, skilled attention to timepieces of all makes and styles. Whether you own a cherished heirloom or an everyday watch, we treat every repair with the same level of craftsmanship and respect for the piece.</p>
-        <p>Our focus is on providing honest assessments and quality workmanship so your watch leaves in better shape than when it arrived. We welcome walk-ins and are happy to answer any questions about your timepiece's condition.</p>
-        <p>Located conveniently in northeast Gainesville, we serve customers throughout the area looking for reliable, professional watch care close to home.</p>
-      </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <span class="stat-num">All</span>
-          <span class="stat-label">Watch Brands Accepted</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">Local</span>
-          <span class="stat-label">Gainesville Business</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">Fast</span>
-          <span class="stat-label">Turnaround Times</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-num">Free</span>
-          <span class="stat-label">Estimates Available</span>
-        </div>
-      </div>
+  <div class="hero-inner">
+    <div class="eye">Watch Repair · Gainesville, Florida</div>
+    <h1>Your Watch Deserves<span class="em">Expert Care</span></h1>
+    <p>Professional watch repair and restoration — bringing precision timepieces back to life.</p>
+    <div class="cta">
+      <a class="btn solid" href="#services">Our Services</a>
+      <a class="btn ghost" href="#contact">Get in Touch</a>
     </div>
   </div>
 </section>
 
-<!-- ── SERVICES ── -->
-<section id="services">
-  <div class="container">
-    <p class="section-label" style="color:var(--gold);">What We Do</p>
-    <h2 class="section-title section-title-dark">Watch Repair Services</h2>
-    <div class="title-rule"></div>
-
-    <div class="services-grid">
-
-      <div class="service-card">
-        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="22" cy="22" r="14" stroke="currentColor" stroke-width="1.8"/>
-          <circle cx="22" cy="22" r="2.2" fill="currentColor"/>
-          <line x1="22" y1="22" x2="22" y2="11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="22" y1="22" x2="30" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <h3>Battery Replacement</h3>
-        <p>Quick and professional battery swap for quartz watches of all sizes and styles, restoring your watch to full operation.</p>
-        <a href="#contact" class="service-cta">Contact for details</a>
-      </div>
-
-      <div class="service-card">
-        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="22" cy="22" r="14" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M15 22 C15 18 18 15 22 15 C26 15 29 18 29 22" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-          <circle cx="22" cy="22" r="2" fill="currentColor"/>
-          <line x1="22" y1="20" x2="22" y2="15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-        <h3>Movement Service &amp; Overhaul</h3>
-        <p>Complete cleaning, lubrication, and calibration of mechanical and automatic movements to restore accuracy and longevity.</p>
-        <a href="#contact" class="service-cta">Contact for details</a>
-      </div>
-
-      <div class="service-card">
-        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="10" y="18" width="24" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M15 18 V14 C15 11.2 17.2 9 20 9 H24 C26.8 9 29 11.2 29 14 V18" stroke="currentColor" stroke-width="1.8" fill="none"/>
-          <line x1="22" y1="24" x2="22" y2="27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="22" cy="23" r="1.5" fill="currentColor"/>
-        </svg>
-        <h3>Crown &amp; Stem Repair</h3>
-        <p>Replacement and repair of worn or broken crowns and stems that affect timekeeping and water resistance.</p>
-        <a href="#contact" class="service-cta">Contact for details</a>
-      </div>
-
-      <div class="service-card">
-        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="8" y="14" width="28" height="18" rx="4" stroke="currentColor" stroke-width="1.8"/>
-          <line x1="8" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="1.4"/>
-          <circle cx="16" cy="17" r="1.2" fill="currentColor"/>
-          <circle cx="22" cy="17" r="1.2" fill="currentColor"/>
-          <circle cx="28" cy="17" r="1.2" fill="currentColor"/>
-        </svg>
-        <h3>Crystal Replacement</h3>
-        <p>Replacement of scratched, cracked, or broken watch crystals with mineral or sapphire glass to protect your dial.</p>
-        <a href="#contact" class="service-cta">Contact for details</a>
-      </div>
-
-      <div class="service-card">
-        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M12 32 L20 16 L28 32" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
-          <line x1="15" y1="26" x2="29" y2="26" stroke="currentColor" stroke-width="1.4"/>
-          <line x1="22" y1="10" x2="22" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-        <h3>Band &amp; Bracelet Adjustment</h3>
-        <p>Sizing, link removal, clasp repair, and leather or metal strap replacement to ensure a comfortable, secure fit.</p>
-        <a href="#contact" class="service-cta">Contact for details</a>
-      </div>
-
-      <div class="service-card">
-        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="22" cy="22" r="14" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M17 22 Q19 18 22 18 Q25 18 27 22 Q25 26 22 26 Q19 26 17 22Z" stroke="currentColor" stroke-width="1.4" fill="none"/>
-          <circle cx="22" cy="22" r="2" fill="currentColor"/>
-        </svg>
-        <h3>Water Resistance Testing</h3>
-        <p>Pressure testing and gasket replacement to restore or verify water resistance on sport and dive watches.</p>
-        <a href="#contact" class="service-cta">Contact for details</a>
-      </div>
-
+<section id="about" class="container">
+  <div class="about-grid">
+    <div>
+      <div class="kick reveal">About Us</div>
+      <h2 class="stitle reveal">A Trusted Name in Watch Repair</h2>
+      <p class="reveal">Time Connection is Gainesville's dedicated watch repair service, offering careful, skilled attention to timepieces of all makes and styles. Whether you own a cherished heirloom or an everyday watch, we treat every repair with the same level of craftsmanship and respect for the piece.</p>
+      <p class="reveal">Our focus is on providing honest assessments and quality workmanship so your watch leaves in better shape than when it arrived. We welcome walk-ins and are happy to answer any questions about your timepiece's condition.</p>
+      <p class="reveal">Located conveniently in northeast Gainesville, we serve customers throughout the area looking for reliable, professional watch care close to home.</p>
+    </div>
+    <div class="stats">
+      <div class="stat reveal"><b>All</b><span>Watch brands accepted</span></div>
+      <div class="stat reveal"><b>Local</b><span>Gainesville business</span></div>
+      <div class="stat reveal"><b>Fast</b><span>Turnaround times</span></div>
+      <div class="stat reveal"><b>Free</b><span>Estimates available</span></div>
     </div>
   </div>
 </section>
 
-<!-- ── CONTACT ── -->
-<section id="contact">
-  <div class="container">
-    <div class="contact-grid">
-
-      <div class="contact-info">
-        <p class="section-label">Find Us</p>
-        <h2>Visit Time Connection</h2>
-        <p class="subtitle">Stop by our Gainesville location or give us a call — we are happy to discuss your repair needs.</p>
-
-        <!-- Rating -->
-        <div class="rating-block" aria-label="Google Maps rating: 2.5 out of 5, 30 reviews">
-          <div class="stars" aria-hidden="true">
-            <!-- 2 full stars -->
-            <svg class="star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <!-- 1 half star -->
-            <svg class="star star-half" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <!-- 2 empty stars -->
-            <svg class="star" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="star" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-          <span class="rating-text"><span class="rating-num">2.5</span> / 5 &nbsp;·&nbsp; 30 Google reviews</span>
-        </div>
-
-        <ul class="contact-details">
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-            <span>403 NE 23rd Ave<br>Gainesville, FL 32609</span>
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/>
-            </svg>
-            <a href="tel:+13523726224">(352) 372-6224</a>
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            <span>Hours: Contact us for details</span>
-          </li>
-        </ul>
-
-        <a href="tel:+13523726224" class="btn btn-primary">Call (352) 372-6224</a>
-      </div>
-
-      <div>
-        <div class="directions-card">
-          <h3>Get Directions</h3>
-          <p>We are located at 403 NE 23rd Ave in Gainesville. Ample street parking is available nearby.</p>
-          <div class="map-placeholder" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-            </svg>
-            <span>403 NE 23rd Ave, Gainesville, FL</span>
-          </div>
-          <a
-            href="https://www.google.com/maps/search/Time%20Connection%20403%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-primary"
-            style="width:100%;text-align:center;display:block;"
-          >
-            Open in Google Maps
-          </a>
-        </div>
-      </div>
-
+<section id="services" class="hsec">
+  <div class="head">
+    <div class="kick reveal">What We Do</div>
+    <h2 class="stitle reveal">Watch Repair Services</h2>
+  </div>
+  <div class="hhint reveal"><span class="arrow">&rarr;</span> Scroll sideways to explore</div>
+  <div class="track-outer">
+    <div class="htrack" id="htrack">
+      <article class="hcard"><div class="num">01</div><h3>Battery Replacement</h3><p>Quick and professional battery swap for quartz watches of all sizes and styles, restoring your watch to full operation.</p><span class="note">Contact for details</span></article>
+      <article class="hcard"><div class="num">02</div><h3>Movement Service &amp; Overhaul</h3><p>Complete cleaning, lubrication, and calibration of mechanical and automatic movements to restore accuracy and longevity.</p><span class="note">Contact for details</span></article>
+      <article class="hcard"><div class="num">03</div><h3>Crown &amp; Stem Repair</h3><p>Replacement and repair of worn or broken crowns and stems that affect timekeeping and water resistance.</p><span class="note">Contact for details</span></article>
+      <article class="hcard"><div class="num">04</div><h3>Crystal Replacement</h3><p>Replacement of scratched, cracked, or broken watch crystals with mineral or sapphire glass to protect your dial.</p><span class="note">Contact for details</span></article>
+      <article class="hcard"><div class="num">05</div><h3>Band &amp; Bracelet Adjustment</h3><p>Sizing, link removal, clasp repair, and leather or metal strap replacement to ensure a comfortable, secure fit.</p><span class="note">Contact for details</span></article>
+      <article class="hcard"><div class="num">06</div><h3>Water Resistance Testing</h3><p>Pressure testing and gasket replacement to restore or verify water resistance on sport and dive watches.</p><span class="note">Contact for details</span></article>
     </div>
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
+<section id="contact" class="container">
+  <div class="kick reveal">Find Us</div>
+  <h2 class="stitle reveal">Visit Time Connection</h2>
+  <div class="contact">
+    <div class="cbox reveal">
+      <div class="cinfo"><span class="ic">&#128205;</span><div><b>Address</b><span>403 NE 23rd Ave<br>Gainesville, FL 32609</span></div></div>
+      <div class="cinfo"><span class="ic">&#128222;</span><div><b>Phone</b><a href="tel:+13523726224">(352) 372-6224</a></div></div>
+      <div class="cinfo"><span class="ic">&#9200;</span><div><b>Hours</b><span>Contact us for details</span></div></div>
+      <div class="park">We are located at 403 NE 23rd Ave in Gainesville. Ample street parking is available nearby.</div>
+      <div class="cbtns">
+        <a class="btn solid" href="tel:+13523726224">Call (352) 372-6224</a>
+        <a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Time%20Connection%20403%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609">Get Directions</a>
+      </div>
+    </div>
+    <div class="rating reveal">
+      <div class="score">2.5</div>
+      <div class="stars">
+        <svg viewBox="0 0 24 24" fill="#c8a24e"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg viewBox="0 0 24 24" fill="#c8a24e"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg viewBox="0 0 24 24"><defs></defs><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="rgba(200,162,78,.3)"/><path d="M12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="#c8a24e"/></svg>
+        <svg viewBox="0 0 24 24" fill="rgba(200,162,78,.3)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg viewBox="0 0 24 24" fill="rgba(200,162,78,.3)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </div>
+      <div class="rt">2.5 / 5 &nbsp;·&nbsp; 30 Google reviews</div>
+      <a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Time%20Connection%20403%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609">Open in Google Maps</a>
+    </div>
+  </div>
+</section>
+
 <footer>
-  <p class="footer-brand">Time Connection</p>
-  <p class="footer-tagline">Watch Repair — Gainesville, FL</p>
-  <ul class="footer-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="tel:+13523726224">Call Us</a></li>
-  </ul>
-  <p class="footer-copy">403 NE 23rd Ave, Gainesville, FL 32609 &nbsp;|&nbsp; (352) 372-6224</p>
+  <div class="fn">Time Connection</div>
+  Watch Repair — Gainesville, FL<br>
+  403 NE 23rd Ave, Gainesville, FL 32609 &nbsp;|&nbsp; (352) 372-6224
 </footer>
 
 <script>
-  (function () {
-    var toggle = document.getElementById('nav-toggle');
-    var links  = document.getElementById('nav-links');
-    toggle.addEventListener('click', function () {
-      var open = links.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    links.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        links.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-  })();
-</script>
+(function(){
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hdr = document.getElementById("hdr");
+  window.addEventListener("scroll", function(){
+    if(window.scrollY>40) hdr.classList.add("shrunk"); else hdr.classList.remove("shrunk");
+  }, {passive:true});
 
+  var rev = document.querySelectorAll(".reveal");
+  if (reduce){ rev.forEach(function(r){ r.classList.add("in"); }); }
+  else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, {threshold:.14, rootMargin:"0px 0px -6% 0px"});
+    rev.forEach(function(r,i){ r.style.transitionDelay=((i%4)*0.06)+"s"; io.observe(r); });
+
+    // wheel -> horizontal on the services track
+    var track = document.getElementById("htrack");
+    if (track){
+      track.addEventListener("wheel", function(ev){
+        if (Math.abs(ev.deltaY) > Math.abs(ev.deltaX)){
+          var max = track.scrollWidth - track.clientWidth;
+          if ((track.scrollLeft>0 && track.scrollLeft<max) ||
+              (track.scrollLeft===0 && ev.deltaY>0) ||
+              (track.scrollLeft>=max && ev.deltaY<0)){
+            if (track.scrollLeft + ev.deltaY >= 0 && track.scrollLeft + ev.deltaY <= max){
+              track.scrollLeft += ev.deltaY; ev.preventDefault();
+            }
+          }
+        }
+      }, {passive:false});
+    }
+  }
+})();
+</script>
 </body>
 </html>

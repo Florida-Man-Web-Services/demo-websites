@@ -1,768 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Klaus Fine Jewelers | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --gold:       #b8860b;
-      --gold-light: #d4a017;
-      --gold-pale:  #f5e6c8;
-      --dark:       #1a1410;
-      --dark-mid:   #2e2419;
-      --charcoal:   #3d3228;
-      --cream:      #fdf8f0;
-      --text:       #2e2419;
-      --text-light: #6b5a45;
-      --white:      #ffffff;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      color: var(--text);
-      background: var(--cream);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: rgba(26, 20, 16, 0.97);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 68px;
-      border-bottom: 1px solid var(--gold);
-    }
-
-    .nav-brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .nav-brand .name {
-      font-size: 1.25rem;
-      font-weight: normal;
-      letter-spacing: 0.12em;
-      color: var(--gold-light);
-      text-transform: uppercase;
-    }
-
-    .nav-brand .tagline-nav {
-      font-size: 0.65rem;
-      letter-spacing: 0.22em;
-      color: #a08060;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: #c8b090;
-      font-size: 0.82rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      transition: color 0.25s;
-    }
-
-    .nav-links a:hover { color: var(--gold-light); }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--dark) !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: 2px;
-      font-weight: bold;
-      transition: background 0.25s !important;
-    }
-
-    .nav-cta:hover { background: var(--gold-light) !important; }
-
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--gold-light);
-      transition: 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background:
-        linear-gradient(160deg, rgba(26,20,16,0.78) 0%, rgba(46,36,25,0.65) 100%),
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 30px,
-          rgba(184,134,11,0.04) 30px,
-          rgba(184,134,11,0.04) 60px
-        ),
-        linear-gradient(135deg, #1a1410 0%, #2e2419 40%, #3d3228 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(184,134,11,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* decorative diamond */
-    .hero-diamond {
-      width: 90px;
-      height: 90px;
-      border: 2px solid var(--gold);
-      transform: rotate(45deg);
-      margin: 0 auto 2.5rem;
-      position: relative;
-      opacity: 0.85;
-    }
-    .hero-diamond::after {
-      content: '◆';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) rotate(-45deg);
-      font-size: 1.6rem;
-      color: var(--gold-light);
-    }
-
-    .hero-inner { position: relative; z-index: 1; max-width: 760px; }
-
-    .hero-eyebrow {
-      font-size: 0.72rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      font-weight: normal;
-      color: var(--white);
-      letter-spacing: 0.06em;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-
-    .hero h1 em {
-      font-style: italic;
-      color: var(--gold-light);
-    }
-
-    .hero-sub {
-      font-size: 1.05rem;
-      color: #c8b090;
-      margin-bottom: 2.6rem;
-      letter-spacing: 0.04em;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--dark);
-      text-decoration: none;
-      padding: 0.85rem 2.2rem;
-      font-size: 0.82rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      font-weight: bold;
-      font-family: inherit;
-      transition: background 0.25s, transform 0.2s;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
-
-    .btn-outline {
-      display: inline-block;
-      background: transparent;
-      color: var(--gold-light);
-      text-decoration: none;
-      padding: 0.85rem 2.2rem;
-      font-size: 0.82rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      border: 1px solid var(--gold);
-      font-family: inherit;
-      transition: background 0.25s, color 0.25s, transform 0.2s;
-      cursor: pointer;
-    }
-    .btn-outline:hover {
-      background: var(--gold);
-      color: var(--dark);
-      transform: translateY(-1px);
-    }
-
-    /* ── DIVIDER ── */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      justify-content: center;
-      margin: 0 auto 3rem;
-      max-width: 320px;
-    }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold));
-    }
-    .divider::after { background: linear-gradient(to left, transparent, var(--gold)); }
-    .divider-gem {
-      color: var(--gold);
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-    }
-
-    /* ── SECTIONS ── */
-    section { padding: 5rem 2rem; }
-
-    .section-inner { max-width: 1100px; margin: 0 auto; }
-
-    .section-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-align: center;
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: normal;
-      text-align: center;
-      color: var(--dark);
-      margin-bottom: 1rem;
-      letter-spacing: 0.04em;
-    }
-
-    .section-lead {
-      text-align: center;
-      color: var(--text-light);
-      max-width: 640px;
-      margin: 0 auto;
-      font-size: 1.05rem;
-    }
-
-    /* ── ABOUT ── */
-    #about { background: var(--white); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      margin-top: 3.5rem;
-    }
-
-    .about-text p { color: var(--text-light); margin-bottom: 1.2rem; font-size: 1.02rem; }
-    .about-text p:last-child { margin-bottom: 0; }
-
-    .about-visual {
-      position: relative;
-      padding: 2rem;
-    }
-
-    .about-frame {
-      border: 1px solid var(--gold-pale);
-      background: linear-gradient(135deg, #fdf8f0 0%, #f5e6c8 100%);
-      padding: 3rem 2rem;
-      text-align: center;
-      position: relative;
-    }
-
-    .about-frame::before, .about-frame::after {
-      content: '';
-      position: absolute;
-      width: 24px; height: 24px;
-      border-color: var(--gold);
-      border-style: solid;
-    }
-    .about-frame::before { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
-    .about-frame::after  { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
-
-    .about-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-    }
-
-    .stat-item { text-align: center; }
-    .stat-num {
-      font-size: 2.4rem;
-      color: var(--gold);
-      line-height: 1;
-      display: block;
-    }
-    .stat-desc {
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      margin-top: 0.3rem;
-      display: block;
-    }
-
-    .stat-sep { width: 40px; height: 1px; background: var(--gold-pale); margin: 0 auto; }
-
-    /* ── SERVICES ── */
-    #services { background: var(--cream); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.8rem;
-      margin-top: 3.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border: 1px solid #ede3d4;
-      padding: 2.2rem 1.8rem;
-      text-align: center;
-      position: relative;
-      transition: box-shadow 0.3s, transform 0.3s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 32px rgba(184,134,11,0.12);
-      transform: translateY(-3px);
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 2px;
-      background: var(--gold);
-    }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .service-name {
-      font-size: 1.05rem;
-      font-weight: normal;
-      letter-spacing: 0.06em;
-      color: var(--dark);
-      margin-bottom: 0.7rem;
-    }
-
-    .service-desc {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
-
-    .service-detail {
-      display: inline-block;
-      margin-top: 1rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-    }
-
-    /* ── CONTACT ── */
-    #contact { background: var(--dark); }
-
-    #contact .section-title { color: var(--white); }
-    #contact .section-label { color: var(--gold); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      margin-top: 3.5rem;
-    }
-
-    .contact-info { color: #c8b090; }
-
-    .contact-block {
-      margin-bottom: 2rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid #3d3228;
-    }
-    .contact-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-
-    .contact-block-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-block-value {
-      font-size: 1.05rem;
-      color: #e8d8c0;
-      line-height: 1.5;
-    }
-
-    .contact-block-value a {
-      color: #e8d8c0;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .contact-block-value a:hover { color: var(--gold-light); }
-
-    /* rating */
-    .rating-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.7rem;
-      background: rgba(184,134,11,0.12);
-      border: 1px solid rgba(184,134,11,0.35);
-      padding: 0.7rem 1.2rem;
-      border-radius: 3px;
-    }
-
-    .stars {
-      color: var(--gold-light);
-      font-size: 1rem;
-      letter-spacing: 1px;
-    }
-
-    .rating-num { font-size: 1.2rem; color: var(--gold-light); font-weight: bold; }
-    .rating-count { font-size: 0.82rem; color: #a08060; }
-
-    /* map placeholder */
-    .map-panel {
-      background: linear-gradient(135deg, #2e2419 0%, #1a1410 100%);
-      border: 1px solid #3d3228;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 2rem;
-      text-align: center;
-      gap: 1.5rem;
-      min-height: 320px;
-    }
-
-    .map-pin-icon {
-      width: 56px; height: 56px;
-      border: 2px solid var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      color: var(--gold-light);
-    }
-
-    .map-address-display {
-      color: #c8b090;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #0f0b08;
-      border-top: 1px solid #2e2419;
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .footer-inner { max-width: 700px; margin: 0 auto; }
-
-    .footer-brand {
-      font-size: 1rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-location {
-      font-size: 0.8rem;
-      color: #6b5a45;
-      letter-spacing: 0.12em;
-      margin-bottom: 1.2rem;
-    }
-
-    .footer-sep { width: 40px; height: 1px; background: #2e2419; margin: 1.2rem auto; }
-
-    .footer-copy {
-      font-size: 0.75rem;
-      color: #4a3c2d;
-      letter-spacing: 0.08em;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 640px) {
-      nav { padding: 0 1.2rem; }
-      .nav-links { display: none; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: rgba(26,20,16,0.98); padding: 1.5rem 2rem; gap: 1.2rem; border-bottom: 1px solid var(--gold); }
-      .nav-links.open { display: flex; }
-      .hamburger { display: flex; }
-      .services-grid { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 2rem; }
-      section { padding: 3.5rem 1.2rem; }
-      .about-grid, .contact-grid { gap: 2rem; }
-      .map-panel { min-height: 240px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klaus Fine Jewelers | Gainesville, FL</title>
+<meta name="description" content="Klaus Fine Jewelers — fine jewelry design, custom pieces, and expert repair studio in Gainesville, FL. 2441 NW 43rd St, Suite 2A. Call (352) 538-0058.">
+<style>
+  :root{
+    --bg:#08070a; --panel:#0f0d12; --ink:#f4eee2; --muted:#a89a82;
+    --gold:#cba24d; --gold-lt:#eecf88; --gold-dk:#7c6026; --line:rgba(203,162,77,.2);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:"Optima","Candara","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);
+    overflow-x:hidden;line-height:1.6}
+  ::selection{background:var(--gold);color:#08070a}
+
+  /* SPLIT LAYOUT: left sticky panel, right scrolling content */
+  .split{display:grid;grid-template-columns:44% 56%;min-height:100vh}
+  .left{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;
+    justify-content:space-between;padding:48px;border-right:1px solid var(--line);
+    background:radial-gradient(80% 60% at 30% 20%,rgba(203,162,77,.16),transparent 60%),
+      linear-gradient(160deg,#0d0b10,#08070a);}
+  .left .glow{position:absolute;width:60vh;height:60vh;border-radius:50%;
+    background:radial-gradient(circle,rgba(238,207,136,.22),transparent 65%);
+    filter:blur(20px);left:-10%;top:20%;animation:float 12s ease-in-out infinite alternate}
+  @keyframes float{to{transform:translate(30%,-15%) scale(1.15)}}
+  .brand-top{position:relative;z-index:2}
+  .brand-top .name{font-size:1.15rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-lt);font-weight:600}
+  .brand-top .loc{font-size:.75rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;margin-top:6px}
+  .left-mid{position:relative;z-index:2}
+  .left-mid h1{font-size:clamp(2rem,4.4vw,3.6rem);font-weight:600;line-height:1.05;letter-spacing:-.01em}
+  .left-mid .em{display:block;background:linear-gradient(100deg,var(--gold-lt),var(--gold),var(--gold-lt));
+    -webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:sheen 6s linear infinite}
+  @keyframes sheen{to{background-position:200% center}}
+  .left-mid p{color:var(--muted);margin-top:20px;max-width:38ch;font-size:1.05rem}
+  .left-cta{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
+  .metrics{position:relative;z-index:2;display:flex;gap:34px}
+  .metric .n{font-size:2rem;font-weight:700;background:linear-gradient(180deg,var(--gold-lt),var(--gold-dk));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .metric .l{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:2px;text-decoration:none;
+    font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;transition:transform .25s,background .3s,color .3s;cursor:pointer}
+  .btn.solid{background:linear-gradient(100deg,var(--gold),var(--gold-lt));color:#14100a;font-weight:700}
+  .btn.ghost{border:1px solid var(--gold);color:var(--gold-lt)}
+  .btn:hover{transform:translateY(-3px)}
+  .btn.ghost:hover{background:rgba(203,162,77,.1)}
+
+  .right{padding:120px 6vw}
+  .block{margin-bottom:120px}
+  .kick{font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .block h2{font-size:clamp(1.7rem,3.4vw,2.6rem);font-weight:600;margin-bottom:22px;line-height:1.1;color:var(--ink)}
+  .block p{color:var(--muted);margin-bottom:16px;font-size:1.03rem;max-width:58ch}
+
+  .svc-list{display:grid;gap:0}
+  .svc{border-top:1px solid var(--line);padding:26px 0;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;
+    transition:padding-left .35s,background .35s}
+  .svc:last-child{border-bottom:1px solid var(--line)}
+  .svc:hover{padding-left:16px;background:linear-gradient(90deg,rgba(203,162,77,.06),transparent)}
+  .svc .di{font-size:1.1rem;color:var(--gold);letter-spacing:.1em}
+  .svc h3{font-size:1.25rem;font-weight:600;margin-bottom:8px;transition:color .3s}
+  .svc:hover h3{color:var(--gold-lt)}
+  .svc p{color:var(--muted);font-size:.96rem;margin:0;max-width:none}
+  .svc .cta-note{display:inline-block;margin-top:8px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk)}
+
+  .contact-card{border:1px solid var(--line);border-radius:6px;padding:36px;background:var(--panel)}
+  .cinfo{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .cinfo:last-of-type{border-bottom:none}
+  .cinfo .ic{font-size:1.3rem;color:var(--gold)}
+  .cinfo b{display:block;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:3px}
+  .cinfo a,.cinfo span{color:var(--ink);text-decoration:none;font-size:1rem}
+  .cinfo a:hover{color:var(--gold-lt)}
+  .rating-box{display:flex;align-items:center;gap:16px;margin:24px 0;padding:20px;border-radius:6px;
+    background:radial-gradient(circle at 20% 30%,rgba(203,162,77,.14),transparent 70%);border:1px solid var(--line)}
+  .rating-box .stars{font-size:1.4rem;color:var(--gold);letter-spacing:.1em}
+  .rating-box .big{font-size:2.2rem;font-weight:700;background:linear-gradient(180deg,var(--gold-lt),var(--gold-dk));
+    -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+  .rating-box .rt{color:var(--muted);font-size:.9rem}
+  .cbtns{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{padding:44px 6vw;text-align:center;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line)}
+  footer .fn{letter-spacing:.28em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:8px}
+
+  @media(max-width:900px){
+    .split{grid-template-columns:1fr}
+    .left{position:relative;height:auto;min-height:88vh;border-right:none;border-bottom:1px solid var(--line);gap:40px}
+    .right{padding:80px 7vw}
+    .block{margin-bottom:80px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none} html{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-brand">
-      <span class="name">Klaus Fine Jewelers</span>
-      <span class="tagline-nav">Gainesville, Florida</span>
+<div class="split">
+  <aside class="left">
+    <div class="glow"></div>
+    <div class="brand-top">
+      <div class="name">Klaus Fine Jewelers</div>
+      <div class="loc">Gainesville, Florida</div>
     </div>
-    <button class="hamburger" aria-label="Toggle menu" onclick="this.nextElementSibling.classList.toggle('open')">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="tel:3525380058" class="nav-cta">Call Us</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-inner">
-      <div class="hero-diamond"></div>
-      <p class="hero-eyebrow">Gainesville, Florida</p>
-      <h1>Crafted With<br><em>Exceptional Precision</em></h1>
-      <p class="hero-sub">Fine jewelry design and expert craftsmanship — where every piece tells a story.</p>
-      <div class="hero-buttons">
-        <a href="#services" class="btn-primary">Explore Our Services</a>
-        <a href="#contact" class="btn-outline">Get in Touch</a>
+    <div class="left-mid">
+      <h1>Crafted With<span class="em">Exceptional Precision</span></h1>
+      <p>Fine jewelry design and expert craftsmanship — where every piece tells a story.</p>
+      <div class="left-cta">
+        <a class="btn solid" href="#services">Explore Services</a>
+        <a class="btn ghost" href="#contact">Get in Touch</a>
       </div>
     </div>
-  </section>
+    <div class="metrics">
+      <div class="metric"><div class="n" data-count="4.4" data-dec="1">4.4</div><div class="l">Google Rating</div></div>
+      <div class="metric"><div class="n"><span data-count="18">18</span>+</div><div class="l">Customer Reviews</div></div>
+    </div>
+  </aside>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <p class="section-label">Our Story</p>
-      <h2 class="section-title">A Tradition of Fine Craftsmanship</h2>
+  <main class="right">
+    <section class="block" id="about">
+      <div class="kick reveal">Our Story</div>
+      <h2 class="reveal">A Tradition of Fine Craftsmanship</h2>
+      <p class="reveal">Klaus Fine Jewelers is a dedicated jewelry studio serving Gainesville and the surrounding North Central Florida community. We specialize in thoughtfully designed fine jewelry, custom pieces, and expert repair work — bringing artistry and precision to every commission.</p>
+      <p class="reveal">Our studio takes pride in working closely with each client, transforming personal visions and cherished moments into lasting heirloom-quality jewelry. Whether you are searching for an engagement ring, a meaningful gift, or a one-of-a-kind creation, we approach every project with meticulous care.</p>
+      <p class="reveal">From classic elegance to contemporary design, Klaus Fine Jewelers offers a personal, studio experience that sets us apart from mass-market retail — because exceptional jewelry deserves exceptional attention.</p>
+    </section>
 
-      <div class="about-grid">
-        <div class="about-text">
-          <p>Klaus Fine Jewelers is a dedicated jewelry studio serving Gainesville and the surrounding North Central Florida community. We specialize in thoughtfully designed fine jewelry, custom pieces, and expert repair work — bringing artistry and precision to every commission.</p>
-          <p>Our studio takes pride in working closely with each client, transforming personal visions and cherished moments into lasting heirloom-quality jewelry. Whether you are searching for an engagement ring, a meaningful gift, or a one-of-a-kind creation, we approach every project with meticulous care.</p>
-          <p>From classic elegance to contemporary design, Klaus Fine Jewelers offers a personal, studio experience that sets us apart from mass-market retail — because exceptional jewelry deserves exceptional attention.</p>
-        </div>
+    <section class="block" id="services">
+      <div class="kick reveal">What We Offer</div>
+      <h2 class="reveal">Our Services</h2>
+      <div class="svc-list">
+        <div class="svc reveal"><div class="di">01</div><div><h3>Custom Jewelry Design</h3><p>Work one-on-one with our designers to create a completely unique piece — from concept sketch to finished heirloom.</p><span class="cta-note">Contact us for details</span></div></div>
+        <div class="svc reveal"><div class="di">02</div><div><h3>Engagement &amp; Bridal Rings</h3><p>Celebrate your most important milestones with a ring crafted to reflect your love story — custom or curated.</p><span class="cta-note">Contact us for details</span></div></div>
+        <div class="svc reveal"><div class="di">03</div><div><h3>Jewelry Repair &amp; Restoration</h3><p>Expert repair services including resizing, prong retipping, clasp replacement, and full restoration of heirloom pieces.</p><span class="cta-note">Contact us for details</span></div></div>
+        <div class="svc reveal"><div class="di">04</div><div><h3>Stone Setting &amp; Remounting</h3><p>Breathe new life into beloved gemstones with a fresh setting or contemporary remount crafted to your specifications.</p><span class="cta-note">Contact us for details</span></div></div>
+        <div class="svc reveal"><div class="di">05</div><div><h3>Jewelry Appraisals</h3><p>Professional appraisal services for insurance, estate planning, resale, or personal documentation of fine jewelry.</p><span class="cta-note">Contact us for details</span></div></div>
+        <div class="svc reveal"><div class="di">06</div><div><h3>Estate &amp; Vintage Jewelry</h3><p>Selection and consultation for estate and vintage pieces, with expert guidance on authenticity, value, and care.</p><span class="cta-note">Contact us for details</span></div></div>
+      </div>
+    </section>
 
-        <div class="about-visual">
-          <div class="about-frame">
-            <div class="about-stat">
-              <div class="stat-item">
-                <span class="stat-num">4.4</span>
-                <span class="stat-desc">Google Rating</span>
-              </div>
-              <div class="stat-sep"></div>
-              <div class="stat-item">
-                <span class="stat-num">18+</span>
-                <span class="stat-desc">Customer Reviews</span>
-              </div>
-              <div class="stat-sep"></div>
-              <div class="stat-item">
-                <span class="stat-num">◆</span>
-                <span class="stat-desc">Fine Jewelry Studio</span>
-              </div>
-            </div>
+    <section class="block" id="contact">
+      <div class="kick reveal">Find Us</div>
+      <h2 class="reveal">Visit Our Studio</h2>
+      <div class="contact-card reveal">
+        <div class="cinfo"><span class="ic">&#128205;</span><div><b>Address</b><span>2441 NW 43rd St, Suite 2A<br>Gainesville, FL 32606</span></div></div>
+        <div class="cinfo"><span class="ic">&#128222;</span><div><b>Phone</b><a href="tel:3525380058">(352) 538-0058</a></div></div>
+        <div class="cinfo"><span class="ic">&#9200;</span><div><b>Hours</b><span>Contact us for current hours</span></div></div>
+        <div class="rating-box">
+          <div class="big">4.4</div>
+          <div>
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            <div class="rt">4.4 / 5 &nbsp;·&nbsp; 18 reviews</div>
           </div>
+        </div>
+        <div class="cbtns">
+          <a class="btn solid" href="tel:3525380058">Call (352) 538-0058</a>
+          <a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Klaus%20Fine%20Jewelers%202441%20NW%2043rd%20St%20STE%202A%2C%20Gainesville%2C%20FL%2032606">Get Directions</a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
+</div>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="section-inner">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Our Services</h2>
-      <p class="section-lead">From custom design to expert repairs, we offer a full range of fine jewelry services tailored to your needs.</p>
+<footer>
+  <div class="fn">Klaus Fine Jewelers</div>
+  2441 NW 43rd St, Suite 2A &nbsp;·&nbsp; Gainesville, FL 32606 &nbsp;|&nbsp; (352) 538-0058<br>
+  &copy; 2026 Klaus Fine Jewelers. All rights reserved.
+</footer>
 
-      <div class="divider" style="margin-top:2rem;">
-        <span class="divider-gem">◆ ◆ ◆</span>
-      </div>
+<script>
+(function(){
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var rev = document.querySelectorAll(".reveal");
+  if (reduce){ rev.forEach(function(r){ r.classList.add("in"); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, {threshold:.15, rootMargin:"0px 0px -6% 0px"});
+  rev.forEach(function(r,i){ r.style.transitionDelay=((i%4)*0.06)+"s"; io.observe(r); });
 
-      <div class="services-grid">
-
-        <div class="service-card">
-          <span class="service-icon">💍</span>
-          <h3 class="service-name">Custom Jewelry Design</h3>
-          <p class="service-desc">Work one-on-one with our designers to create a completely unique piece — from concept sketch to finished heirloom.</p>
-          <span class="service-detail">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">💎</span>
-          <h3 class="service-name">Engagement &amp; Bridal Rings</h3>
-          <p class="service-desc">Celebrate your most important milestones with a ring crafted to reflect your love story — custom or curated.</p>
-          <span class="service-detail">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">🔧</span>
-          <h3 class="service-name">Jewelry Repair &amp; Restoration</h3>
-          <p class="service-desc">Expert repair services including resizing, prong retipping, clasp replacement, and full restoration of heirloom pieces.</p>
-          <span class="service-detail">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">✨</span>
-          <h3 class="service-name">Stone Setting &amp; Remounting</h3>
-          <p class="service-desc">Breathe new life into beloved gemstones with a fresh setting or contemporary remount crafted to your specifications.</p>
-          <span class="service-detail">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">⚖️</span>
-          <h3 class="service-name">Jewelry Appraisals</h3>
-          <p class="service-desc">Professional appraisal services for insurance, estate planning, resale, or personal documentation of fine jewelry.</p>
-          <span class="service-detail">Contact us for details</span>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon">🪙</span>
-          <h3 class="service-name">Estate &amp; Vintage Jewelry</h3>
-          <p class="service-desc">Selection and consultation for estate and vintage pieces, with expert guidance on authenticity, value, and care.</p>
-          <span class="service-detail">Contact us for details</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Visit Our Studio</h2>
-
-      <div class="contact-grid">
-        <div class="contact-info">
-
-          <div class="contact-block">
-            <p class="contact-block-label">Address</p>
-            <p class="contact-block-value">
-              2441 NW 43rd St, Suite 2A<br>
-              Gainesville, FL 32606
-            </p>
-          </div>
-
-          <div class="contact-block">
-            <p class="contact-block-label">Phone</p>
-            <p class="contact-block-value">
-              <a href="tel:3525380058">(352) 538-0058</a>
-            </p>
-          </div>
-
-          <div class="contact-block">
-            <p class="contact-block-label">Hours</p>
-            <p class="contact-block-value">Contact us for current hours</p>
-          </div>
-
-          <div class="contact-block">
-            <p class="contact-block-label">Customer Rating</p>
-            <div class="rating-box">
-              <span class="stars">★★★★☆</span>
-              <span class="rating-num">4.4</span>
-              <span class="rating-count">/ 5 &nbsp;·&nbsp; 18 reviews</span>
-            </div>
-          </div>
-
-          <div class="contact-block">
-            <a href="tel:3525380058" class="btn-primary" style="margin-right:0.8rem;">Call (352) 538-0058</a>
-            <a href="https://www.google.com/maps/search/Klaus%20Fine%20Jewelers%202441%20NW%2043rd%20St%20STE%202A%2C%20Gainesville%2C%20FL%2032606"
-               target="_blank" rel="noopener noreferrer" class="btn-outline">Get Directions</a>
-          </div>
-
-        </div>
-
-        <div class="map-panel">
-          <div class="map-pin-icon">📍</div>
-          <p class="map-address-display">
-            <strong style="color:#e8d8c0; letter-spacing:0.08em;">Klaus Fine Jewelers</strong><br>
-            2441 NW 43rd St, Suite 2A<br>
-            Gainesville, FL 32606
-          </p>
-          <a href="https://www.google.com/maps/search/Klaus%20Fine%20Jewelers%202441%20NW%2043rd%20St%20STE%202A%2C%20Gainesville%2C%20FL%2032606"
-             target="_blank" rel="noopener noreferrer" class="btn-outline" style="margin-top:0.5rem;">
-            Open in Google Maps
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <p class="footer-brand">Klaus Fine Jewelers</p>
-      <p class="footer-location">2441 NW 43rd St, Suite 2A &nbsp;·&nbsp; Gainesville, FL 32606</p>
-      <p><a href="tel:3525380058" style="color:#6b5a45; text-decoration:none; font-size:0.85rem;">(352) 538-0058</a></p>
-      <div class="footer-sep"></div>
-      <p class="footer-copy">&copy; 2026 Klaus Fine Jewelers. All rights reserved. &nbsp;|&nbsp; Gainesville, Florida</p>
-    </div>
-  </footer>
-
+  var counted = new WeakSet();
+  var cio = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting || counted.has(e.target)) return;
+      counted.add(e.target);
+      var el=e.target, end=parseFloat(el.getAttribute("data-count"));
+      var dec=parseInt(el.getAttribute("data-dec")||"0",10), t0=null, dur=1200;
+      function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1);
+        var v=end*(1-Math.pow(1-p,3));
+        el.textContent=dec? v.toFixed(dec):Math.round(v);
+        if(p<1) requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    });
+  }, {threshold:.5});
+  document.querySelectorAll("[data-count]").forEach(function(el){ cio.observe(el); });
+})();
+</script>
 </body>
 </html>

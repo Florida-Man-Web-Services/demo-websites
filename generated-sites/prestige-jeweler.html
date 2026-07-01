@@ -1,746 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prestige Jeweler | Fine Jewelry in Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --gold:       #b8922a;
-      --gold-light: #d4af6a;
-      --gold-pale:  #f5edd8;
-      --dark:       #1a1209;
-      --charcoal:   #2e2515;
-      --mid:        #6b5830;
-      --cream:      #faf6ee;
-      --white:      #ffffff;
-      --text:       #3a2e18;
-      --text-light: #7a6840;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      color: var(--text);
-      background: var(--cream);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      background: var(--dark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 66px;
-      border-bottom: 2px solid var(--gold);
-    }
-
-    .nav-logo {
-      color: var(--gold-light);
-      font-size: 1.35rem;
-      font-weight: bold;
-      letter-spacing: 0.06em;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-    }
-
-    .nav-logo span.diamond {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      background: var(--gold-light);
-      transform: rotate(45deg);
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-    }
-
-    nav ul a {
-      color: var(--gold-pale);
-      text-decoration: none;
-      font-size: 0.92rem;
-      letter-spacing: 0.05em;
-      transition: color 0.25s;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-    }
-
-    nav ul a:hover { color: var(--gold-light); }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--gold-light);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 66px;
-      min-height: calc(100vh - 66px);
-      background: linear-gradient(135deg, var(--dark) 0%, var(--charcoal) 55%, #3a2e18 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 6%;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* decorative rings */
-    .hero::before, .hero::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(184,146,42,0.18);
-    }
-    .hero::before {
-      width: 600px;
-      height: 600px;
-      top: -180px;
-      right: -160px;
-    }
-    .hero::after {
-      width: 400px;
-      height: 400px;
-      bottom: -120px;
-      left: -100px;
-    }
-
-    .hero-inner { position: relative; z-index: 1; max-width: 760px; }
-
-    .hero-ornament {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1.6rem;
-    }
-
-    .hero-ornament span {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold));
-      max-width: 120px;
-    }
-
-    .hero-ornament span:last-child {
-      background: linear-gradient(to left, transparent, var(--gold));
-    }
-
-    .hero-ornament .diamond-icon {
-      width: 18px;
-      height: 18px;
-      background: var(--gold);
-      transform: rotate(45deg);
-      flex-shrink: 0;
-    }
-
-    .hero h1 {
-      color: var(--gold-light);
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      letter-spacing: 0.04em;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 16px rgba(0,0,0,0.5);
-    }
-
-    .hero .tagline {
-      color: var(--gold-pale);
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      font-style: italic;
-      margin-bottom: 2.5rem;
-      opacity: 0.9;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2.4rem;
-      border-radius: 2px;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      font-size: 0.95rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.25s, color 0.25s, border-color 0.25s;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--dark);
-      border: 2px solid var(--gold);
-      font-weight: bold;
-    }
-
-    .btn-gold:hover {
-      background: var(--gold-light);
-      border-color: var(--gold-light);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--gold-light);
-      border: 2px solid var(--gold);
-      margin-left: 1rem;
-    }
-
-    .btn-outline:hover {
-      background: rgba(184,146,42,0.12);
-    }
-
-    /* ── SECTIONS ── */
-    section { padding: 5rem 6%; }
-
-    .section-label {
-      display: block;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
-    }
-
-    h2 {
-      font-size: clamp(1.7rem, 4vw, 2.5rem);
-      color: var(--charcoal);
-      margin-bottom: 1rem;
-      line-height: 1.25;
-    }
-
-    .divider {
-      width: 60px;
-      height: 2px;
-      background: var(--gold);
-      margin: 0 auto 2.5rem;
-    }
-
-    .divider-left { margin-left: 0; }
-
-    /* ── ABOUT ── */
-    .about {
-      background: var(--white);
-    }
-
-    .about-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text);
-      margin-bottom: 1.1rem;
-      font-size: 1.05rem;
-    }
-
-    .about-visual {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .jewel-card {
-      background: var(--gold-pale);
-      border: 1px solid rgba(184,146,42,0.3);
-      border-radius: 4px;
-      padding: 1.6rem 1.2rem;
-      text-align: center;
-    }
-
-    .jewel-card .jewel-icon {
-      width: 38px;
-      height: 38px;
-      margin: 0 auto 0.8rem;
-      background: var(--gold);
-      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-    }
-
-    .jewel-card h4 {
-      font-size: 0.88rem;
-      color: var(--mid);
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      letter-spacing: 0.06em;
-    }
-
-    /* ── SERVICES ── */
-    .services {
-      background: var(--cream);
-      text-align: center;
-    }
-
-    .services-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.8rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border: 1px solid rgba(184,146,42,0.2);
-      border-top: 3px solid var(--gold);
-      border-radius: 4px;
-      padding: 2.2rem 1.6rem 1.8rem;
-      text-align: left;
-      transition: box-shadow 0.25s, transform 0.25s;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 6px 28px rgba(184,146,42,0.15);
-      transform: translateY(-3px);
-    }
-
-    .service-icon {
-      width: 46px;
-      height: 46px;
-      background: var(--gold-pale);
-      border: 2px solid var(--gold-light);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.2rem;
-    }
-
-    .service-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--gold);
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--charcoal);
-      margin-bottom: 0.55rem;
-    }
-
-    .service-card p {
-      font-size: 0.93rem;
-      color: var(--text-light);
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ── */
-    .contact {
-      background: var(--dark);
-      color: var(--gold-pale);
-    }
-
-    .contact .section-label { color: var(--gold-light); }
-    .contact h2 { color: var(--gold-light); }
-    .contact .divider { background: var(--gold); }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info p {
-      margin-bottom: 0.55rem;
-      font-size: 1rem;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      color: rgba(245,237,216,0.85);
-    }
-
-    .contact-info a {
-      color: var(--gold-light);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-info a:hover { color: var(--gold-pale); }
-
-    .info-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.85rem;
-      margin-bottom: 1.3rem;
-    }
-
-    .info-row svg {
-      flex-shrink: 0;
-      width: 20px;
-      height: 20px;
-      fill: var(--gold);
-      margin-top: 3px;
-    }
-
-    /* Rating */
-    .rating-box {
-      background: rgba(184,146,42,0.08);
-      border: 1px solid rgba(184,146,42,0.3);
-      border-radius: 6px;
-      padding: 1.4rem 1.6rem;
-      margin-top: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-    }
-
-    .rating-score {
-      font-size: 2.6rem;
-      font-weight: bold;
-      color: var(--gold-light);
-      line-height: 1;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-      margin-bottom: 0.25rem;
-    }
-
-    .star {
-      width: 18px;
-      height: 18px;
-      fill: var(--gold);
-    }
-
-    .star-empty { fill: rgba(184,146,42,0.3); }
-
-    .rating-label {
-      font-size: 0.82rem;
-      color: rgba(245,237,216,0.6);
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-    }
-
-    .contact-cta {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .contact-cta p {
-      font-size: 1.05rem;
-      color: rgba(245,237,216,0.85);
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      margin-bottom: 0.8rem;
-    }
-
-    .btn-map {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: var(--gold);
-      color: var(--dark);
-      border: 2px solid var(--gold);
-      padding: 0.85rem 2rem;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      font-size: 0.92rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      font-weight: bold;
-      border-radius: 2px;
-      text-decoration: none;
-      transition: background 0.25s, border-color 0.25s;
-      width: fit-content;
-    }
-
-    .btn-map:hover {
-      background: var(--gold-light);
-      border-color: var(--gold-light);
-    }
-
-    .btn-map svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--dark);
-    }
-
-    .btn-call {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: transparent;
-      color: var(--gold-light);
-      border: 2px solid rgba(184,146,42,0.5);
-      padding: 0.85rem 2rem;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      font-size: 0.92rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      text-decoration: none;
-      transition: background 0.25s, border-color 0.25s;
-      width: fit-content;
-    }
-
-    .btn-call:hover {
-      background: rgba(184,146,42,0.12);
-      border-color: var(--gold-light);
-    }
-
-    .btn-call svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--gold-light);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #0e0b05;
-      color: rgba(245,237,216,0.45);
-      text-align: center;
-      padding: 2rem 6%;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      font-size: 0.82rem;
-      border-top: 1px solid rgba(184,146,42,0.2);
-    }
-
-    footer .footer-logo {
-      color: var(--gold-light);
-      font-family: Georgia, serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.5rem;
-    }
-
-    footer a { color: rgba(245,237,216,0.45); text-decoration: none; }
-    footer a:hover { color: var(--gold-light); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-visual { grid-template-columns: repeat(2, 1fr); }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-      .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-
-    @media (max-width: 640px) {
-      nav ul { display: none; flex-direction: column; position: absolute; top: 66px; left: 0; right: 0; background: var(--dark); padding: 1.2rem 5%; gap: 1.2rem; border-bottom: 2px solid var(--gold); }
-      nav ul.open { display: flex; }
-      .nav-toggle { display: flex; }
-      .services-grid { grid-template-columns: 1fr; }
-      .about-visual { grid-template-columns: 1fr 1fr; }
-      .hero .btn-outline { margin-left: 0; margin-top: 0.8rem; }
-      .hero-buttons { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prestige Jeweler | Fine Jewelry in Gainesville, FL</title>
+<meta name="description" content="Prestige Jeweler — fine jewelry, custom design, repair, appraisal, and engraving in Gainesville, FL. 2725 SW 91st St #110. Call (352) 332-3427.">
+<style>
+  :root{
+    --bg:#070606; --panel:#0f0c09; --ink:#f5eee0; --muted:#ac9d83;
+    --gold:#d0aa4e; --gold-lt:#f2d78e; --gold-dk:#7f632a; --line:rgba(208,170,78,.2);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:"Baskerville","Hoefler Text","Garamond",Georgia,serif;background:var(--bg);color:var(--ink);
+    overflow-x:hidden;line-height:1.6}
+  ::selection{background:var(--gold);color:#070606}
+
+  /* HERO full-bleed canvas */
+  .hero{position:relative;height:100vh;min-height:600px;display:flex;flex-direction:column;justify-content:center;
+    align-items:center;text-align:center;overflow:hidden}
+  #shimmer{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero-vig{position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 45%,transparent,rgba(7,6,6,.75));z-index:1}
+  .hero-inner{position:relative;z-index:2;padding:0 6vw;max-width:1000px}
+  .hero .eye{font-size:.78rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;opacity:0;animation:up .9s .2s forwards}
+  .hero h1{font-size:clamp(2.6rem,8vw,6.2rem);font-weight:400;line-height:1;letter-spacing:-.01em}
+  .hero h1 .a{display:block;opacity:0;animation:up 1s .35s forwards}
+  .hero h1 .b{display:block;font-style:italic;background:linear-gradient(100deg,var(--gold-lt),var(--gold),var(--gold-lt));
+    -webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;
+    animation:up 1s .5s forwards, sheen 6s 1.5s linear infinite;opacity:0}
+  @keyframes sheen{to{background-position:200% center}}
+  @keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+  .hero .tag{margin-top:26px;color:var(--muted);font-size:1.2rem;font-style:italic;opacity:0;animation:up 1s .7s forwards}
+  .hero .cta{margin-top:36px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:up 1s .85s forwards}
+  .scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;color:var(--muted);
+    font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;animation:bob 2.2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:40px;text-decoration:none;
+    font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;transition:transform .25s,background .3s,color .3s;cursor:pointer;will-change:transform}
+  .btn.solid{background:linear-gradient(100deg,var(--gold),var(--gold-lt));color:#150f06;font-weight:700}
+  .btn.ghost{border:1px solid var(--gold);color:var(--gold-lt);background:rgba(7,6,6,.4)}
+  .btn:hover{transform:translateY(-3px)}
+  .btn.ghost:hover{background:rgba(208,170,78,.12)}
+
+  .container{max-width:1160px;margin:0 auto;padding:0 6vw}
+  section{padding:110px 0}
+  .kick{font-size:.76rem;letter-spacing:.36em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;text-align:center}
+  .stitle{font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:400;font-style:italic;text-align:center;margin-bottom:56px}
+
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  @media(max-width:820px){.about{grid-template-columns:1fr;gap:34px}}
+  .about h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;margin-bottom:22px;line-height:1.1}
+  .about p{color:var(--muted);margin-bottom:16px;font-size:1.05rem}
+  .pillars{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .pillar{border:1px solid var(--line);border-radius:12px;padding:24px;background:linear-gradient(160deg,var(--panel),#08070a);
+    transition:transform .4s,border-color .4s,box-shadow .4s}
+  .pillar:hover{transform:translateY(-5px);border-color:rgba(208,170,78,.5);box-shadow:0 18px 40px -20px rgba(208,170,78,.4)}
+  .pillar .ic{font-size:1.7rem;color:var(--gold);margin-bottom:10px}
+  .pillar b{display:block;color:var(--gold-lt);font-size:1rem;margin-bottom:4px}
+  .pillar span{color:var(--muted);font-size:.85rem}
+
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:900px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.svc-grid{grid-template-columns:1fr}}
+  .svc{position:relative;border:1px solid var(--line);border-radius:14px;padding:30px;overflow:hidden;
+    background:linear-gradient(160deg,var(--panel),#08070a);transition:transform .4s,border-color .4s,box-shadow .4s}
+  .svc:hover{transform:translateY(-6px);border-color:rgba(208,170,78,.5);box-shadow:0 22px 46px -22px rgba(208,170,78,.45)}
+  .svc .num{font-size:.8rem;letter-spacing:.2em;color:var(--gold-dk)}
+  .svc h3{font-size:1.25rem;font-weight:400;margin:12px 0 10px;color:var(--gold-lt)}
+  .svc p{color:var(--muted);font-size:.95rem}
+
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:stretch}
+  @media(max-width:820px){.contact{grid-template-columns:1fr;gap:34px}}
+  .cbox{border:1px solid var(--line);border-radius:16px;padding:38px;background:var(--panel)}
+  .cinfo{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .cinfo:last-of-type{border-bottom:none}
+  .cinfo .ic{font-size:1.3rem;color:var(--gold)}
+  .cinfo b{display:block;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:3px}
+  .cinfo a,.cinfo span{color:var(--ink);text-decoration:none;font-size:1.02rem}
+  .cinfo a:hover{color:var(--gold-lt)}
+  .rating{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    border:1px solid var(--line);border-radius:16px;padding:38px;
+    background:radial-gradient(circle at 50% 30%,rgba(208,170,78,.16),var(--panel))}
+  .rating .score{font-size:5rem;font-weight:400;line-height:1;background:linear-gradient(180deg,var(--gold-lt),var(--gold-dk));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .rating .stars{margin:12px 0;display:flex;gap:5px}
+  .rating .stars svg{width:26px;height:26px}
+  .rating .rlabel{color:var(--muted);letter-spacing:.06em}
+  .rating .btn{margin-top:24px}
+
+  .cta-final{text-align:center}
+  .cta-final h2{font-size:clamp(1.8rem,4.5vw,3rem);font-weight:400;font-style:italic;margin-bottom:16px}
+  .cta-final p{color:var(--muted);max-width:60ch;margin:0 auto 28px;font-size:1.05rem}
+  .cta-final .cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+  .reveal{opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform .85s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{border-top:1px solid var(--line);padding:44px 6vw;text-align:center;color:var(--muted);font-size:.9rem}
+  footer .fn{letter-spacing:.3em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:8px;font-size:1.05rem}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .hero .eye,.hero h1 .a,.hero h1 .b,.hero .tag,.hero .cta{opacity:1}
+    .reveal{opacity:1;transform:none} html{scroll-behavior:auto} .scroll-cue{display:none}
+  }
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#home" class="nav-logo">
-    <span class="diamond"></span>
-    Prestige Jeweler
-  </a>
-  <button class="nav-toggle" aria-label="Toggle menu" onclick="this.nextElementSibling.classList.toggle('open')">
-    <span></span><span></span><span></span>
-  </button>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="home">
+<section class="hero">
+  <canvas id="shimmer"></canvas>
+  <div class="hero-vig"></div>
   <div class="hero-inner">
-    <div class="hero-ornament">
-      <span></span>
-      <div class="diamond-icon"></div>
-      <span></span>
+    <div class="eye">Prestige Jeweler · Gainesville, FL</div>
+    <h1><span class="a">Where Every Piece Tells</span><span class="b">a Story Worth Treasuring</span></h1>
+    <p class="tag">Fine jewelry crafted for life's most meaningful moments.</p>
+    <div class="cta">
+      <a class="btn solid magnet" href="#services">Our Services</a>
+      <a class="btn ghost magnet" href="#contact">Get In Touch</a>
     </div>
-    <h1>Prestige Jeweler</h1>
-    <p class="tagline">Where every piece tells a story worth treasuring.</p>
-    <div class="hero-buttons">
-      <a href="#contact" class="btn btn-gold">Get In Touch</a>
-      <a href="#services" class="btn btn-outline">Our Services</a>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</section>
+
+<section id="about" class="container">
+  <div class="about">
+    <div>
+      <div class="kick reveal" style="text-align:left">Our Story</div>
+      <h2 class="reveal">Craftsmanship You Can Trust</h2>
+      <p class="reveal">Prestige Jeweler is your trusted destination for fine jewelry in Gainesville, Florida. We are passionate about helping our customers find pieces that celebrate life's most meaningful moments — from engagements and anniversaries to everyday elegance.</p>
+      <p class="reveal">Our team brings deep expertise in gemstones, precious metals, and jewelry design, offering personalized guidance to ensure every visit is a memorable experience. Whether you're shopping for a timeless gift or seeking expert repair work, we approach each request with care and precision.</p>
+      <p class="reveal">Located conveniently at 2725 SW 91st St in Gainesville, we proudly serve the local community and beyond with a commitment to quality, integrity, and lasting value.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar reveal"><div class="ic">&#10022;</div><b>Fine Gemstones</b><span>Diamonds &amp; precious stones</span></div>
+      <div class="pillar reveal"><div class="ic">&#9775;</div><b>Custom Design</b><span>One-of-a-kind creations</span></div>
+      <div class="pillar reveal"><div class="ic">&#128736;</div><b>Expert Repair</b><span>Restoration &amp; resizing</span></div>
+      <div class="pillar reveal"><div class="ic">&#9878;</div><b>Trusted Value</b><span>Quality &amp; integrity</span></div>
     </div>
   </div>
 </section>
 
-<!-- ABOUT -->
-<section class="about" id="about">
-  <div class="about-inner">
-    <div class="about-text">
-      <span class="section-label">Our Story</span>
-      <h2>Craftsmanship You Can Trust</h2>
-      <div class="divider divider-left"></div>
-      <p>Prestige Jeweler is your trusted destination for fine jewelry in Gainesville, Florida. We are passionate about helping our customers find pieces that celebrate life's most meaningful moments — from engagements and anniversaries to everyday elegance.</p>
-      <p>Our team brings deep expertise in gemstones, precious metals, and jewelry design, offering personalized guidance to ensure every visit is a memorable experience. Whether you're shopping for a timeless gift or seeking expert repair work, we approach each request with care and precision.</p>
-      <p>Located conveniently at 2725 SW 91st St in Gainesville, we proudly serve the local community and beyond with a commitment to quality, integrity, and lasting value.</p>
+<section id="services" class="container">
+  <div class="kick reveal">What We Offer</div>
+  <div class="stitle reveal">Our Services</div>
+  <div class="svc-grid">
+    <div class="svc reveal"><div class="num">01</div><h3>Fine Jewelry Sales</h3><p>Browse a curated selection of rings, necklaces, bracelets, earrings, and more in gold, silver, and platinum. Contact us for current inventory.</p></div>
+    <div class="svc reveal"><div class="num">02</div><h3>Custom Jewelry Design</h3><p>Bring your vision to life with a one-of-a-kind piece crafted to your specifications. Contact us for details on our custom design process.</p></div>
+    <div class="svc reveal"><div class="num">03</div><h3>Jewelry Repair &amp; Restoration</h3><p>From ring resizing and prong retipping to full restorations, our skilled craftspeople return heirlooms and cherished pieces to their former glory.</p></div>
+    <div class="svc reveal"><div class="num">04</div><h3>Appraisal Services</h3><p>Receive a professional, accurate appraisal for insurance, estate, or resale purposes. Our appraisals are thorough and documented. Contact us for details.</p></div>
+    <div class="svc reveal"><div class="num">05</div><h3>Estate &amp; Vintage Jewelry</h3><p>Discover unique estate and vintage pieces with timeless character. We source exceptional finds and can assist with evaluating estate collections.</p></div>
+    <div class="svc reveal"><div class="num">06</div><h3>Engraving</h3><p>Add a personal message, date, or name to rings, bracelets, pendants, and more. Make any gift uniquely meaningful. Contact us for details and timelines.</p></div>
+  </div>
+</section>
+
+<section id="contact" class="container">
+  <div class="kick reveal">Find Us</div>
+  <div class="stitle reveal">Get In Touch</div>
+  <div class="contact">
+    <div class="cbox reveal">
+      <div class="cinfo"><span class="ic">&#128205;</span><div><b>Address</b><span>2725 SW 91st St #110<br>Gainesville, FL 32608</span></div></div>
+      <div class="cinfo"><span class="ic">&#128222;</span><div><b>Phone</b><a href="tel:+13523323427">(352) 332-3427</a></div></div>
+      <div class="cinfo"><span class="ic">&#9200;</span><div><b>Hours</b><span>Contact us for details</span></div></div>
     </div>
-    <div class="about-visual">
-      <div class="jewel-card">
-        <div class="jewel-icon"></div>
-        <h4>Fine Gemstones</h4>
+    <div class="rating reveal">
+      <div class="score">4.6</div>
+      <div class="stars">
+        <svg viewBox="0 0 24 24" fill="#d0aa4e"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg viewBox="0 0 24 24" fill="#d0aa4e"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg viewBox="0 0 24 24" fill="#d0aa4e"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg viewBox="0 0 24 24" fill="#d0aa4e"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg viewBox="0 0 24 24" fill="rgba(208,170,78,.3)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
       </div>
-      <div class="jewel-card">
-        <div class="jewel-icon"></div>
-        <h4>Custom Design</h4>
-      </div>
-      <div class="jewel-card">
-        <div class="jewel-icon"></div>
-        <h4>Expert Repair</h4>
-      </div>
-      <div class="jewel-card">
-        <div class="jewel-icon"></div>
-        <h4>Trusted Value</h4>
-      </div>
+      <div class="rlabel">Rated 4.6 on Google Maps</div>
+      <a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Prestige%20Jeweler%202725%20SW%2091st%20St%20%23110%2C%20Gainesville%2C%20FL%2032608">Open in Google Maps</a>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="services" id="services">
-  <span class="section-label">What We Offer</span>
-  <h2>Our Services</h2>
-  <div class="divider"></div>
-  <div class="services-grid">
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.27L4.54 6.5 12 3.73 19.46 6.5 12 9.27zM2 17l10 5 10-5-1.04-.52-8.96 4.48-8.96-4.48L2 17zm0-5l10 5 10-5-1.04-.52-8.96 4.48-8.96-4.48L2 12z"/></svg>
-      </div>
-      <h3>Fine Jewelry Sales</h3>
-      <p>Browse a curated selection of rings, necklaces, bracelets, earrings, and more in gold, silver, and platinum. Contact us for current inventory.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a1 1 0 0 0-1.41 0L1.29 18.96a1 1 0 0 0 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05a1 1 0 0 0 0-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/></svg>
-      </div>
-      <h3>Custom Jewelry Design</h3>
-      <p>Bring your vision to life with a one-of-a-kind piece crafted to your specifications. Contact us for details on our custom design process.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 7.21.4 5.27 1.57L8.85 5.15 5.14 8.86 1.56 5.28C.4 7.21.61 9.79 2.41 11.59c1.89 1.89 4.65 2.37 7 1.44l9.08 9.08c.39.39 1.02.39 1.41 0l2.7-2.7c.4-.39.4-1.02.01-1.42z"/></svg>
-      </div>
-      <h3>Jewelry Repair &amp; Restoration</h3>
-      <p>From ring resizing and prong retipping to full restorations, our skilled craftspeople return heirlooms and cherished pieces to their former glory.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M11 7H9V5h2v2zm0 4H9V9h2v2zm0 4H9v-2h2v2zm4-8h-2V5h2v2zm0 4h-2V9h2v2zm0 4h-2v-2h2v2zM7 7H5V5h2v2zm0 4H5V9h2v2zm0 4H5v-2h2v2zM15 19v-3.5c0-.83-.67-1.5-1.5-1.5S12 14.67 12 15.5V19H3V3h18v16h-6z"/></svg>
-      </div>
-      <h3>Appraisal Services</h3>
-      <p>Receive a professional, accurate appraisal for insurance, estate, or resale purposes. Our appraisals are thorough and documented. Contact us for details.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg>
-      </div>
-      <h3>Estate &amp; Vintage Jewelry</h3>
-      <p>Discover unique estate and vintage pieces with timeless character. We source exceptional finds and can assist with evaluating estate collections.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4v2l8 5 8-5V4zm0 4.236l-8 5-8-5V18h16V8.236z"/></svg>
-      </div>
-      <h3>Engraving</h3>
-      <p>Add a personal message, date, or name to rings, bracelets, pendants, and more. Make any gift uniquely meaningful. Contact us for details and timelines.</p>
-    </div>
-
+<section class="container cta-final">
+  <h2 class="reveal">Ready to Find Your Perfect Piece?</h2>
+  <p class="reveal">Stop by our Gainesville showroom or give us a call. Our knowledgeable team is here to help you find exactly what you're looking for — or create something entirely unique.</p>
+  <div class="cta reveal">
+    <a class="btn solid magnet" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Prestige%20Jeweler%202725%20SW%2091st%20St%20%23110%2C%20Gainesville%2C%20FL%2032608">Get Directions</a>
+    <a class="btn ghost magnet" href="tel:+13523323427">Call (352) 332-3427</a>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section class="contact" id="contact">
-  <div class="contact-inner">
-    <div class="contact-info">
-      <span class="section-label">Find Us</span>
-      <h2>Get In Touch</h2>
-      <div class="divider divider-left"></div>
-
-      <div class="info-row">
-        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        <p>2725 SW 91st St #110<br>Gainesville, FL 32608</p>
-      </div>
-
-      <div class="info-row">
-        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        <p><a href="tel:+13523323427">(352) 332-3427</a></p>
-      </div>
-
-      <div class="info-row">
-        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-        <p>Hours: Contact us for details</p>
-      </div>
-
-      <div class="rating-box">
-        <div class="rating-score">4.6</div>
-        <div>
-          <div class="stars">
-            <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          </div>
-          <div class="rating-label">Rated 4.6 on Google Maps</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="contact-cta">
-      <span class="section-label">Visit Us</span>
-      <h2>Ready to Find Your Perfect Piece?</h2>
-      <div class="divider divider-left"></div>
-      <p>Stop by our Gainesville showroom or give us a call. Our knowledgeable team is here to help you find exactly what you're looking for — or create something entirely unique.</p>
-      <a href="https://www.google.com/maps/search/Prestige%20Jeweler%202725%20SW%2091st%20St%20%23110%2C%20Gainesville%2C%20FL%2032608"
-         target="_blank" rel="noopener noreferrer" class="btn-map">
-        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        Get Directions
-      </a>
-      <a href="tel:+13523323427" class="btn-call">
-        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        Call (352) 332-3427
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">Prestige Jeweler</div>
-  <p>2725 SW 91st St #110, Gainesville, FL 32608 &nbsp;|&nbsp; <a href="tel:+13523323427">(352) 332-3427</a></p>
-  <p style="margin-top:0.5rem;">&copy; 2026 Prestige Jeweler. All rights reserved.</p>
+  <div class="fn">Prestige Jeweler</div>
+  2725 SW 91st St #110, Gainesville, FL 32608 &nbsp;|&nbsp; (352) 332-3427<br>
+  &copy; 2026 Prestige Jeweler. All rights reserved.
 </footer>
 
+<script>
+(function(){
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // reveals
+  var rev = document.querySelectorAll(".reveal");
+  if (reduce){ rev.forEach(function(r){ r.classList.add("in"); }); }
+  else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, {threshold:.14, rootMargin:"0px 0px -6% 0px"});
+    rev.forEach(function(r,i){ r.style.transitionDelay=((i%4)*0.06)+"s"; io.observe(r); });
+
+    document.querySelectorAll(".magnet").forEach(function(b){
+      b.addEventListener("pointermove", function(ev){ var r=b.getBoundingClientRect();
+        b.style.transform="translate("+((ev.clientX-r.left-r.width/2)*.25)+"px,"+((ev.clientY-r.top-r.height/2)*.35-3)+"px)"; });
+      b.addEventListener("pointerleave", function(){ b.style.transform=""; });
+    });
+  }
+
+  // canvas shimmer particles
+  var cv = document.getElementById("shimmer"), ctx = cv.getContext("2d");
+  var W,H,parts=[],raf=null;
+  function size(){ W=cv.width=cv.offsetWidth*devicePixelRatio; H=cv.height=cv.offsetHeight*devicePixelRatio; }
+  function make(){
+    parts=[]; var n=Math.min(140, Math.floor(W*H/26000));
+    for(var i=0;i<n;i++){ parts.push({
+      x:Math.random()*W, y:Math.random()*H, r:(Math.random()*1.6+0.4)*devicePixelRatio,
+      vy:(Math.random()*0.3+0.05)*devicePixelRatio, vx:(Math.random()-0.5)*0.2*devicePixelRatio,
+      a:Math.random(), tw:Math.random()*0.03+0.005 });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<parts.length;i++){ var p=parts[i];
+      p.y-=p.vy; p.x+=p.vx; p.a+=p.tw; if(p.a>1||p.a<0.1) p.tw*=-1;
+      if(p.y<-6){ p.y=H+6; p.x=Math.random()*W; }
+      var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);
+      g.addColorStop(0,"rgba(242,215,142,"+(p.a*0.9)+")");
+      g.addColorStop(1,"rgba(242,215,142,0)");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*4,0,Math.PI*2); ctx.fill();
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  function start(){ size(); make(); if(!reduce){ if(raf)cancelAnimationFrame(raf); draw(); } else { draw(); cancelAnimationFrame(raf); } }
+  if(reduce){ size(); make(); draw(); cancelAnimationFrame(raf); }
+  else { start(); }
+  window.addEventListener("resize", function(){ size(); make(); });
+})();
+</script>
 </body>
 </html>
