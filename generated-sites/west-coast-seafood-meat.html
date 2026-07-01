@@ -1,812 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>West Coast Seafood Meat | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy: #0d2b45;
-      --ocean: #1a5276;
-      --teal: #148f77;
-      --seafoam: #a8d5c2;
-      --sand: #f4ede4;
-      --cream: #faf7f3;
-      --white: #ffffff;
-      --coral: #e07b54;
-      --dark-text: #1a2633;
-      --mid-text: #3d5166;
-      --light-text: #6b8299;
-      --border: #d0e3ef;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background-color: var(--cream);
-      color: var(--dark-text);
-      line-height: 1.7;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: var(--navy);
-      z-index: 1000;
-      padding: 0 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      font-size: 1.6rem;
-      line-height: 1;
-    }
-
-    .nav-logo-text {
-      color: var(--white);
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-
-    .nav-logo-text span {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--seafoam);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--seafoam);
-      text-decoration: none;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--white);
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-      background: none;
-      border: none;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--seafoam);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      padding-top: 64px;
-      min-height: 100vh;
-      background: linear-gradient(160deg, var(--navy) 0%, var(--ocean) 55%, #1a6b82 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 40% at 50% 110%, rgba(20,143,119,0.25) 0%, transparent 70%),
-        radial-gradient(ellipse 80% 30% at 80% 0%, rgba(255,255,255,0.04) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .wave-decoration {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      line-height: 0;
-    }
-
-    .wave-decoration svg {
-      display: block;
-      width: 100%;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      padding: 3rem 1.5rem 6rem;
-      max-width: 780px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(168,213,194,0.18);
-      border: 1px solid rgba(168,213,194,0.4);
-      color: var(--seafoam);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      margin-bottom: 1.6rem;
-    }
-
-    .hero-title {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 1.2rem;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-    }
-
-    .hero-title em {
-      font-style: normal;
-      color: var(--seafoam);
-    }
-
-    .hero-tagline {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: rgba(168,213,194,0.9);
-      max-width: 520px;
-      margin: 0 auto 2.4rem;
-      font-weight: 300;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--coral);
-      color: var(--white);
-      text-decoration: none;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      transition: background 0.25s, transform 0.2s;
-      box-shadow: 0 4px 16px rgba(224,123,84,0.4);
-    }
-
-    .hero-cta:hover {
-      background: #c8673d;
-      transform: translateY(-2px);
-    }
-
-    /* ── SECTION BASICS ── */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .container {
-      max-width: 1060px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 0.6rem;
-      font-weight: 700;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.4rem);
-      color: var(--navy);
-      line-height: 1.25;
-      margin-bottom: 1rem;
-    }
-
-    .divider {
-      width: 48px;
-      height: 3px;
-      background: var(--coral);
-      border-radius: 2px;
-      margin-bottom: 2rem;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--mid-text);
-      margin-bottom: 1rem;
-      font-size: 1.05rem;
-    }
-
-    .about-visual {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .about-card {
-      background: var(--sand);
-      border-left: 4px solid var(--teal);
-      padding: 1.2rem 1.4rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .about-card strong {
-      display: block;
-      color: var(--navy);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.25rem;
-    }
-
-    .about-card p {
-      color: var(--mid-text);
-      font-size: 0.95rem;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--sand);
-    }
-
-    .services-intro {
-      max-width: 600px;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 8px;
-      padding: 2rem 1.6rem;
-      box-shadow: 0 2px 12px rgba(13,43,69,0.07);
-      border-top: 4px solid var(--teal);
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 28px rgba(13,43,69,0.12);
-    }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      line-height: 1;
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--navy);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-card p {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.9rem;
-      color: var(--light-text);
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--white);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
-    }
-
-    .contact-item {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .contact-item-icon {
-      flex-shrink: 0;
-      width: 42px;
-      height: 42px;
-      background: var(--navy);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
-
-    .contact-item-body strong {
-      display: block;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-item-body p,
-    .contact-item-body a {
-      color: var(--dark-text);
-      font-size: 1rem;
-      text-decoration: none;
-    }
-
-    .contact-item-body a:hover {
-      color: var(--teal);
-    }
-
-    .rating-block {
-      background: var(--sand);
-      border-radius: 8px;
-      padding: 1.4rem 1.6rem;
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      border: 1px solid var(--border);
-    }
-
-    .rating-stars {
-      font-size: 1.4rem;
-      line-height: 1;
-      color: #f5a623;
-    }
-
-    .rating-info strong {
-      display: block;
-      font-size: 1.6rem;
-      color: var(--navy);
-      line-height: 1;
-    }
-
-    .rating-info span {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.82rem;
-      color: var(--light-text);
-    }
-
-    .rating-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.78rem;
-      color: var(--mid-text);
-      margin-top: 0.25rem;
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--navy);
-      color: var(--white);
-      text-decoration: none;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      padding: 0.8rem 1.6rem;
-      border-radius: 4px;
-      transition: background 0.25s;
-      margin-top: 0.5rem;
-      align-self: flex-start;
-    }
-
-    .btn-directions:hover {
-      background: var(--ocean);
-    }
-
-    .contact-map-placeholder {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--ocean) 100%);
-      border-radius: 10px;
-      padding: 3rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 1rem;
-      min-height: 320px;
-    }
-
-    .map-icon {
-      font-size: 3.5rem;
-      line-height: 1;
-    }
-
-    .contact-map-placeholder h3 {
-      color: var(--white);
-      font-size: 1.15rem;
-    }
-
-    .contact-map-placeholder p {
-      color: var(--seafoam);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.9rem;
-      max-width: 240px;
-    }
-
-    .btn-map-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--coral);
-      color: var(--white);
-      text-decoration: none;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 0.7rem 1.4rem;
-      border-radius: 4px;
-      margin-top: 0.5rem;
-      transition: background 0.25s;
-    }
-
-    .btn-map-link:hover {
-      background: #c8673d;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      color: var(--seafoam);
-      text-align: center;
-      padding: 2.5rem 1.5rem;
-    }
-
-    .footer-logo {
-      font-size: 1.2rem;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-
-    footer p {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.85rem;
-      color: rgba(168,213,194,0.7);
-      margin-bottom: 0.25rem;
-    }
-
-    footer .footer-divider {
-      width: 40px;
-      height: 1px;
-      background: rgba(168,213,194,0.3);
-      margin: 1rem auto;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        width: 100%;
-        background: var(--navy);
-        flex-direction: column;
-        gap: 0;
-        border-top: 1px solid rgba(168,213,194,0.15);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links li a {
-        display: block;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid rgba(168,213,194,0.1);
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .contact-map-placeholder {
-        min-height: 240px;
-      }
-
-      section {
-        padding: 3.5rem 1.2rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-cta {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>West Coast Seafood Meat | Gainesville, FL</title>
+<meta name="description" content="West Coast Seafood Meat is a seafood and meat market on NE Waldo Rd, Gainesville, FL — fresh fish, shellfish, premium meat cuts, frozen seafood and bulk orders.">
+<style>
+  :root{
+    --deep:#07131c; --deep2:#0c2233; --ink:#eaf2f6; --aqua:#31c4d6; --teal:#178ba0;
+    --coral:#ff6a52; --sand:#f2e2c4; --line:rgba(255,255,255,.1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--deep);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  a{color:inherit}
+
+  header.nav{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;justify-content:space-between;align-items:center;
+    padding:14px 26px;background:linear-gradient(180deg,rgba(7,19,28,.9),transparent)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:900}
+  .brand small{display:block;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--aqua);font-weight:700}
+  header.nav nav{display:flex;gap:22px;font-size:.82rem;font-weight:700}
+  header.nav nav a{text-decoration:none;opacity:.8}
+  header.nav nav a:hover{opacity:1;color:var(--aqua)}
+  .dir{background:var(--aqua);color:#062028;font-weight:800;font-size:.78rem;padding:9px 18px;border-radius:999px;text-decoration:none}
+  @media(max-width:720px){header.nav nav{display:none}}
+
+  /* split-screen */
+  .split{display:grid;grid-template-columns:1fr 1fr}
+  @media(max-width:860px){.split{grid-template-columns:1fr}}
+  .sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;place-items:center;
+    background:linear-gradient(160deg,#0a2030,#07131c)}
+  @media(max-width:860px){.sticky{position:relative;height:70vh}}
+  .sticky canvas{position:absolute;inset:0;width:100%;height:100%}
+  .sticky .core{position:relative;z-index:2;text-align:center;padding:24px}
+  .sticky .core .fish{font-size:clamp(4rem,10vw,7rem);filter:drop-shadow(0 10px 30px rgba(49,196,214,.4));animation:bob 5s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-14px)}}
+  .sticky .core .lbl{margin-top:14px;font-size:.68rem;letter-spacing:.34em;text-transform:uppercase;color:var(--aqua);font-weight:800}
+  .sticky .core h1{font-size:clamp(1.8rem,3.4vw,2.7rem);font-weight:900;line-height:1.05;margin-top:10px;max-width:420px}
+  .sticky .live{position:absolute;bottom:26px;left:0;right:0;text-align:center;z-index:2}
+  .sticky .live .rate{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);
+    border:1px solid var(--line);border-radius:999px;padding:10px 20px;font-size:.86rem}
+  .sticky .live .rate b{color:var(--aqua);font-size:1.05rem}
+  .sticky .live .rate .stars{color:var(--coral);letter-spacing:2px}
+
+  /* scrolling content */
+  .content{padding:120px 6vw 90px}
+  @media(max-width:860px){.content{padding:70px 24px}}
+  .blk{margin-bottom:80px}
+  .k{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;font-weight:800;color:var(--aqua);margin-bottom:12px}
+  h2{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;letter-spacing:-.01em;line-height:1.05;margin-bottom:16px}
+  .blk p{color:#c2d3dc;margin-bottom:14px;font-size:1rem}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+  .reveal.in{opacity:1;transform:none}
+
+  .mini{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+  @media(max-width:560px){.mini{grid-template-columns:1fr}}
+  .mini .m{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .mini .m .em{font-size:1.6rem}
+  .mini .m h4{font-size:1rem;font-weight:800;margin:8px 0 5px}
+  .mini .m p{font-size:.86rem;color:#a9bcc6;margin:0}
+
+  .offers{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:560px){.offers{grid-template-columns:1fr}}
+  .of{position:relative;background:linear-gradient(160deg,rgba(23,139,160,.14),rgba(255,255,255,.03));
+    border:1px solid var(--line);border-radius:18px;padding:24px;overflow:hidden;transition:transform .3s,border-color .3s}
+  .of:hover{transform:translateY(-6px);border-color:var(--aqua)}
+  .of .em{font-size:1.9rem;display:block;margin-bottom:10px}
+  .of h3{font-size:1.12rem;font-weight:800;margin-bottom:7px}
+  .of p{font-size:.88rem;color:#b3c6d0}
+
+  .visit{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:22px;padding:32px}
+  .vrow{display:flex;gap:14px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+  .vrow:last-of-type{border-bottom:0}
+  .vrow .ic{font-size:1.3rem}
+  .vrow .lab{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:#7fa6b5}
+  .vrow .val{font-weight:700}
+  .vrow .val a{text-decoration:none;color:#fff}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-weight:800;text-decoration:none;
+    transition:transform .2s,box-shadow .3s;border:0;cursor:pointer;font-size:.92rem;margin-top:20px}
+  .btn.p{background:linear-gradient(135deg,var(--aqua),var(--teal));color:#062028;box-shadow:0 12px 30px rgba(49,196,214,.35)}
+  .btn.p:hover{transform:translateY(-3px)}
+
+  footer{text-align:center;padding:30px 24px;font-size:.86rem;color:#7fa6b5}
+  footer strong{color:#fff}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <span class="nav-logo-icon">&#x1F41F;</span>
-      <div class="nav-logo-text">
-        West Coast Seafood Meat
-        <span>Gainesville, FL</span>
-      </div>
-    </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<header class="nav">
+  <div class="brand"><span style="font-size:1.4rem">&#128031;</span><div>West Coast Seafood Meat<small>Gainesville, FL</small></div></div>
+  <nav><a href="#about">About</a><a href="#offer">What We Offer</a><a href="#contact">Contact</a></nav>
+  <a class="dir" href="https://www.google.com/maps/search/West%20Coast%20Seafood%20Meat%20510%20NE%20Waldo%20Rd%2C%20Gainesville%2C%20FL%2032641" target="_blank" rel="noopener">Directions</a>
+</header>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="hero-badge">Seafood &amp; Meat Market &mdash; Gainesville, FL</div>
-      <h1 class="hero-title">
-        Fresh From the Water,<br><em>Straight to Your Table</em>
-      </h1>
-      <p class="hero-tagline">
-        Quality seafood and premium cuts for Gainesville families, restaurants, and everyone in between.
-      </p>
-      <a href="#contact" class="hero-cta">
-        Find Us &rarr;
-      </a>
+<div class="split">
+  <div class="sticky">
+    <canvas id="sea"></canvas>
+    <div class="core">
+      <div class="fish">&#128031;</div>
+      <div class="lbl">Seafood &amp; Meat Market</div>
+      <h1>Fresh from the water, straight to your table</h1>
     </div>
-    <div class="wave-decoration">
-      <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#faf7f3"/>
-      </svg>
+    <div class="live">
+      <div class="rate"><b>3.9</b> / 5 &middot; 409 reviews <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></div>
     </div>
-  </section>
+  </div>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">Your Local Source for Quality Seafood &amp; Meat</h2>
-          <div class="divider"></div>
-          <p>
-            West Coast Seafood Meat has been serving the Gainesville community as a trusted neighborhood market for seafood lovers and meat enthusiasts alike. Our selection includes a wide variety of fresh fish, shellfish, and premium cuts sourced to bring real quality to your kitchen.
-          </p>
-          <p>
-            Whether you are cooking for a weeknight dinner or a weekend gathering, we stock the variety and quantity to meet your needs. Our staff is knowledgeable and happy to help you choose the right product for any occasion.
-          </p>
-          <p>
-            Conveniently located on NE Waldo Road, we serve households, home cooks, and food service customers throughout the Gainesville area. Contact us for details on availability and current selections.
-          </p>
-        </div>
-        <div class="about-visual">
-          <div class="about-card">
-            <strong>Fresh Selection</strong>
-            <p>A rotating stock of fresh seafood and quality meats to suit every taste and recipe.</p>
-          </div>
-          <div class="about-card">
-            <strong>Knowledgeable Staff</strong>
-            <p>Our team is here to help you pick the right cut or catch for your next meal.</p>
-          </div>
-          <div class="about-card">
-            <strong>Community Focused</strong>
-            <p>Proudly serving the Gainesville, FL area and surrounding communities.</p>
-          </div>
-          <div class="rating-block">
-            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div>
-              <div class="rating-info">
-                <strong>3.9</strong>
-                <span>/ 5 &nbsp;&bull;&nbsp; 409 reviews</span>
-              </div>
-              <div class="rating-label">Rated on Google Maps</div>
-            </div>
-          </div>
-        </div>
+  <div class="content">
+    <section class="blk reveal" id="about">
+      <div class="k">About Us</div>
+      <h2>Your local source for quality seafood &amp; meat</h2>
+      <p>West Coast Seafood Meat has been serving the Gainesville community as a trusted neighborhood market for seafood lovers and meat enthusiasts alike. Our selection includes a wide variety of fresh fish, shellfish, and premium cuts sourced to bring real quality to your kitchen.</p>
+      <p>Whether you are cooking for a weeknight dinner or a weekend gathering, we stock the variety and quantity to meet your needs. Our staff is knowledgeable and happy to help you choose the right product for any occasion. Conveniently located on NE Waldo Road, we serve households, home cooks, and food service customers throughout the Gainesville area. Contact us for details on availability and current selections.</p>
+      <div class="mini">
+        <div class="m"><div class="em">&#127843;</div><h4>Fresh Selection</h4><p>A rotating stock of fresh seafood and quality meats to suit every taste and recipe.</p></div>
+        <div class="m"><div class="em">&#128100;</div><h4>Knowledgeable Staff</h4><p>Our team is here to help you pick the right cut or catch for your next meal.</p></div>
+        <div class="m"><div class="em">&#127968;</div><h4>Community Focused</h4><p>Proudly serving the Gainesville, FL area and surrounding communities.</p></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <div class="services-intro">
-        <p class="section-label">What We Offer</p>
-        <h2 class="section-title">Fresh Products &amp; Market Services</h2>
-        <div class="divider"></div>
+    <section class="blk reveal" id="offer">
+      <div class="k">What We Offer</div>
+      <h2>Fresh products &amp; market services</h2>
+      <div class="offers">
+        <div class="of"><span class="em">&#128031;</span><h3>Fresh Fish</h3><p>A broad selection of whole fish and fillets, sourced for freshness and flavor. Contact us for current availability.</p></div>
+        <div class="of"><span class="em">&#129424;</span><h3>Shellfish &amp; Crustaceans</h3><p>Shrimp, crab, lobster, and more. Perfect for boils, sautees, and everything in between.</p></div>
+        <div class="of"><span class="em">&#129385;</span><h3>Premium Meat Cuts</h3><p>Quality beef, pork, and poultry cuts for grilling, roasting, or everyday cooking needs.</p></div>
+        <div class="of"><span class="em">&#129482;</span><h3>Frozen Seafood</h3><p>Convenient frozen options that maintain quality for when you need seafood on your schedule.</p></div>
+        <div class="of"><span class="em">&#128722;</span><h3>Bulk &amp; Wholesale Orders</h3><p>Serving restaurants, catering operations, and large households. Contact us for details on bulk pricing.</p></div>
+        <div class="of"><span class="em">&#128230;</span><h3>Custom Cuts &amp; Prep</h3><p>Ask our staff about custom cutting, cleaning, and preparation services for your purchase.</p></div>
       </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">&#x1F41F;</div>
-          <h3>Fresh Fish</h3>
-          <p>A broad selection of whole fish and fillets, sourced for freshness and flavor. Contact us for current availability.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#x1F990;</div>
-          <h3>Shellfish &amp; Crustaceans</h3>
-          <p>Shrimp, crab, lobster, and more. Perfect for boils, sautees, and everything in between.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#x1F969;</div>
-          <h3>Premium Meat Cuts</h3>
-          <p>Quality beef, pork, and poultry cuts for grilling, roasting, or everyday cooking needs.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#x1F9CA;</div>
-          <h3>Frozen Seafood</h3>
-          <p>Convenient frozen options that maintain quality for when you need seafood on your schedule.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#x1F6D2;</div>
-          <h3>Bulk &amp; Wholesale Orders</h3>
-          <p>Serving restaurants, catering operations, and large households. Contact us for details on bulk pricing.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#x1F4E6;</div>
-          <h3>Custom Cuts &amp; Prep</h3>
-          <p>Ask our staff about custom cutting, cleaning, and preparation services for your purchase.</p>
-        </div>
+    </section>
+
+    <section class="blk reveal" id="contact" style="margin-bottom:0">
+      <div class="k">Find Us</div>
+      <h2>Visit West Coast Seafood Meat</h2>
+      <div class="visit">
+        <div class="vrow"><span class="ic">&#128205;</span><div><div class="lab">Address</div><div class="val">510 NE Waldo Rd, Gainesville, FL 32641</div></div></div>
+        <div class="vrow"><span class="ic">&#128222;</span><div><div class="lab">Phone</div><div class="val"><a href="tel:+13523788119">(352) 378-8119</a></div></div></div>
+        <div class="vrow"><span class="ic">&#128336;</span><div><div class="lab">Hours</div><div class="val">Contact us for current hours and availability.</div></div></div>
+        <div class="vrow"><span class="ic">&#11088;</span><div><div class="lab">Google Maps Rating</div><div class="val">3.9 / 5 &middot; 409 reviews</div></div></div>
+        <a class="btn p" href="https://www.google.com/maps/search/West%20Coast%20Seafood%20Meat%20510%20NE%20Waldo%20Rd%2C%20Gainesville%2C%20FL%2032641" target="_blank" rel="noopener">Open in Google Maps &rarr;</a>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+</div>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Visit West Coast Seafood Meat</h2>
-      <div class="divider"></div>
-      <div class="contact-grid">
-        <div class="contact-info">
-          <div class="contact-item">
-            <div class="contact-item-icon">&#x1F4CD;</div>
-            <div class="contact-item-body">
-              <strong>Address</strong>
-              <p>510 NE Waldo Rd<br>Gainesville, FL 32641</p>
-              <a class="btn-directions" href="https://www.google.com/maps/search/West%20Coast%20Seafood%20Meat%20510%20NE%20Waldo%20Rd%2C%20Gainesville%2C%20FL%2032641" target="_blank" rel="noopener noreferrer">
-                &#x1F5FA; Get Directions
-              </a>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">&#x1F4DE;</div>
-            <div class="contact-item-body">
-              <strong>Phone</strong>
-              <a href="tel:+13523788119">(352) 378-8119</a>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">&#x1F552;</div>
-            <div class="contact-item-body">
-              <strong>Hours</strong>
-              <p>Contact us for current hours and availability.</p>
-            </div>
-          </div>
-          <div class="rating-block">
-            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;</div>
-            <div>
-              <div class="rating-info">
-                <strong>3.9</strong>
-                <span>/ 5 &nbsp;&bull;&nbsp; 409 reviews</span>
-              </div>
-              <div class="rating-label">Google Maps Rating</div>
-            </div>
-          </div>
-        </div>
-        <div class="contact-map-placeholder">
-          <div class="map-icon">&#x1F5FA;</div>
-          <h3>510 NE Waldo Rd<br>Gainesville, FL 32641</h3>
-          <p>Click below to open in Google Maps and get turn-by-turn directions.</p>
-          <a class="btn-map-link" href="https://www.google.com/maps/search/West%20Coast%20Seafood%20Meat%20510%20NE%20Waldo%20Rd%2C%20Gainesville%2C%20FL%2032641" target="_blank" rel="noopener noreferrer">
-            Open in Google Maps &rarr;
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+<footer>
+  <div><strong>&#128031; West Coast Seafood Meat</strong> — 510 NE Waldo Rd, Gainesville, FL 32641</div>
+  <div>(352) 378-8119</div>
+  <div style="margin-top:8px;color:#5f8494">&copy; 2026 West Coast Seafood Meat. All rights reserved.</div>
+</footer>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">&#x1F41F; West Coast Seafood Meat</div>
-    <div class="footer-divider"></div>
-    <p>510 NE Waldo Rd, Gainesville, FL 32641</p>
-    <p>(352) 378-8119</p>
-    <div class="footer-divider"></div>
-    <p>&copy; 2026 West Coast Seafood Meat. All rights reserved.</p>
-  </footer>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
-  <script>
-    const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
-    toggle.addEventListener('click', function () {
-      links.classList.toggle('open');
-    });
-    links.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        links.classList.remove('open');
-      });
-    });
-  </script>
-
+  // ocean canvas: drifting bubbles + light rays
+  var cv=document.getElementById('sea'), ctx=cv.getContext('2d');
+  var W,H,dpr,bubbles=[],raf;
+  function size(){ dpr=Math.min(devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight;
+    cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  function init(){ bubbles=[]; var n=Math.min(46,Math.round(W/12));
+    for(var i=0;i<n;i++) bubbles.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*3+1,
+      v:Math.random()*.6+.2,drift:(Math.random()-.5)*.3,a:Math.random()*.4+.15}); }
+  function bg(){ var g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#0d2a3d'); g.addColorStop(1,'#07131c'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    // light rays
+    for(var i=0;i<3;i++){ var x=W*(.2+i*.3);
+      var rg=ctx.createLinearGradient(x,0,x+60,H); rg.addColorStop(0,'rgba(49,196,214,.10)'); rg.addColorStop(1,'rgba(49,196,214,0)');
+      ctx.fillStyle=rg; ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x+90,0); ctx.lineTo(x+50,H); ctx.lineTo(x-40,H); ctx.closePath(); ctx.fill(); }
+  }
+  function draw(){ ctx.clearRect(0,0,W,H); bg();
+    bubbles.forEach(function(b){ ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7);
+      ctx.strokeStyle='rgba(180,230,240,'+b.a+')'; ctx.lineWidth=1; ctx.stroke();
+      b.y-=b.v; b.x+=b.drift; if(b.y<-6){b.y=H+6;b.x=Math.random()*W;} });
+    raf=requestAnimationFrame(draw); }
+  function drawStatic(){ bg(); bubbles.forEach(function(b){ ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7);
+    ctx.strokeStyle='rgba(180,230,240,'+b.a+')'; ctx.lineWidth=1; ctx.stroke(); }); }
+  function start(){ size(); init(); if(!reduce){ cancelAnimationFrame(raf); draw(); } else drawStatic(); }
+  addEventListener('resize', function(){ size(); init(); if(reduce) drawStatic(); });
+  start();
+})();
+</script>
 </body>
 </html>

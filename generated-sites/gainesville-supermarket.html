@@ -1,638 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gainesville Supermarket</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gainesville Supermarket | Fresh Groceries – Gainesville, FL</title>
+<meta name="description" content="Gainesville Supermarket is a full-service grocery store on W University Ave, Gainesville, FL. Fresh produce, meat, seafood, dairy, pantry and household goods.">
+<style>
+  :root{
+    --bg:#f4f7ef; --ink:#152018; --moss:#2f7d3a; --leaf:#4ba845; --lime:#a3d95a;
+    --berry:#c0356b; --sun:#f6a726; --cream:#fffdf6; --line:#e2e8d6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  a{color:inherit}
+  .shell{max-width:1240px;margin:0 auto;padding:22px}
 
-    :root {
-      --green-dark:   #1b5e2d;
-      --green-mid:    #2e7d32;
-      --green-light:  #4caf50;
-      --green-pale:   #e8f5e9;
-      --orange:       #f57c00;
-      --orange-light: #ff9800;
-      --cream:        #fafdf6;
-      --text-dark:    #1a2e1a;
-      --text-mid:     #3d5a3d;
-      --text-light:   #ffffff;
-      --shadow:       0 4px 20px rgba(0,0,0,0.10);
-    }
+  header.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 22px;background:rgba(244,247,239,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.05rem}
+  .logo .m{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--leaf),var(--moss));
+    display:grid;place-items:center;color:#fff;font-size:20px}
+  .topnav{display:flex;gap:24px;font-size:.86rem;font-weight:600}
+  .topnav a{text-decoration:none;color:#3c4a3e}
+  .topnav a:hover{color:var(--moss)}
+  @media(max-width:680px){.topnav{display:none}}
 
-    html { scroll-behavior: smooth; }
+  /* bento */
+  h1.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:22px}
+  .tile{border-radius:22px;padding:26px;position:relative;overflow:hidden;
+    border:1px solid var(--line);background:var(--cream);
+    opacity:0;transform:translateY(26px) scale(.98);transition:opacity .6s,transform .6s, box-shadow .35s}
+  .tile.in{opacity:1;transform:none}
+  .tile:hover{box-shadow:0 18px 46px rgba(47,125,58,.14)}
+  .c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}.c2{grid-column:span 2}
+  @media(max-width:900px){.bento{grid-template-columns:repeat(4,1fr)}.c6{grid-column:span 4}.c4{grid-column:span 4}.c3{grid-column:span 2}.c2{grid-column:span 2}}
+  @media(max-width:560px){.bento{grid-template-columns:1fr}.c6,.c4,.c3,.c2{grid-column:span 1}}
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--cream);
-      color: var(--text-dark);
-      line-height: 1.6;
-    }
+  /* hero tile */
+  .hero{grid-column:span 4;min-height:340px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;
+    background:linear-gradient(140deg,#1c5b2a,#2f7d3a 55%,#4ba845);border:0}
+  .hero .mesh{position:absolute;inset:0;opacity:.5;
+    background:
+      radial-gradient(circle at 18% 22%,rgba(163,217,90,.55),transparent 34%),
+      radial-gradient(circle at 82% 30%,rgba(246,167,38,.4),transparent 34%),
+      radial-gradient(circle at 60% 88%,rgba(192,53,107,.35),transparent 40%);
+    animation:mesh 14s ease-in-out infinite alternate}
+  @keyframes mesh{to{transform:translate(-4%,-3%) scale(1.1)}}
+  .hero .badge{position:relative;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;font-weight:700;
+    background:rgba(255,255,255,.18);padding:7px 14px;border-radius:999px;align-self:flex-start;margin-bottom:auto}
+  .hero h2{position:relative;font-size:clamp(1.9rem,3.4vw,2.9rem);font-weight:900;line-height:1.02;letter-spacing:-.02em;margin-top:24px}
+  .hero p{position:relative;margin-top:12px;max-width:440px;color:#eafce6;font-size:1rem}
+  .hero .cta{position:relative;margin-top:22px;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+    background:#fff;color:var(--moss);font-weight:800;padding:13px 24px;border-radius:999px;text-decoration:none;transition:transform .2s}
+  .hero .cta:hover{transform:translateY(-3px)}
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--green-dark);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-    }
+  .tile .k{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--moss);font-weight:700;margin-bottom:10px}
+  .tile h3{font-size:1.15rem;font-weight:800;margin-bottom:8px}
+  .tile p{font-size:.9rem;color:#4c5a4e}
+  .emoji{font-size:2rem;line-height:1;margin-bottom:12px;display:block;filter:saturate(1.1)}
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
+  /* stat tile */
+  .stat{background:linear-gradient(135deg,#fff,#eef6e6);display:flex;flex-direction:column;justify-content:center;text-align:center}
+  .stat .big{font-size:3.2rem;font-weight:900;line-height:1;color:var(--moss);
+    counter-reset:none}
+  .stat .stars{color:var(--sun);letter-spacing:3px;font-size:1.2rem;margin:8px 0 4px}
+  .stat .cap{font-size:.82rem;color:#556}
+  .stat .src{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:#8a988c;margin-top:10px}
 
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--orange);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
+  .about h2{font-size:clamp(1.6rem,3vw,2.3rem);font-weight:900;letter-spacing:-.01em;line-height:1.05;margin-bottom:14px}
+  .about p{color:#4c5a4e;margin-top:12px;font-size:.98rem}
 
-    .nav-logo-text {
-      color: var(--text-light);
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
+  .offer-title{grid-column:span 6;text-align:center;padding:14px 0 0;background:none;border:0;box-shadow:none!important}
+  .offer-title .k{color:var(--moss)}
+  .offer-title h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:900;letter-spacing:-.02em}
 
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
+  .offer{transition:opacity .6s,transform .6s, box-shadow .35s,background .35s}
+  .offer:hover{background:linear-gradient(160deg,#fff,#eef6e6)}
+  .offer .tag{position:absolute;top:0;right:0;width:60px;height:60px;
+    background:radial-gradient(circle at 100% 0,rgba(75,168,69,.16),transparent 70%)}
 
-    .nav-links a {
-      color: rgba(255,255,255,0.87);
-      text-decoration: none;
-      font-size: 0.92rem;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
+  /* contact tile */
+  .contact{background:linear-gradient(140deg,#22331f,#2f7d3a);color:#fff}
+  .contact .k{color:#c9edb8}
+  .contact .row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+  .contact .row:last-of-type{border-bottom:0}
+  .contact .ic{width:38px;height:38px;flex:0 0 auto;border-radius:10px;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:18px}
+  .contact .lab{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:#bfe3b0}
+  .contact .val{font-weight:700;font-size:.98rem}
+  .contact .val a{color:#fff;text-decoration:none}
+  .contact .cta{display:inline-flex;gap:8px;margin-top:16px;background:var(--sun);color:#3a2600;font-weight:800;
+    padding:12px 22px;border-radius:999px;text-decoration:none;transition:transform .2s}
+  .contact .cta:hover{transform:translateY(-3px)}
 
-    .nav-links a:hover { color: var(--orange-light); }
+  footer{text-align:center;padding:34px 22px;color:#5f6d5f;font-size:.86rem}
+  footer strong{color:var(--ink)}
+  footer .fl{display:flex;gap:18px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+  footer .fl a{color:var(--moss);text-decoration:none;font-weight:600}
 
-    /* hamburger */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-      background: none;
-      border: none;
-    }
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #fff;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 64px;
-      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-light) 100%);
-      padding: 90px 5% 80px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -80px;
-      width: 340px; height: 340px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 50%;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -60px;
-      width: 280px; height: 280px;
-      background: rgba(255,255,255,0.04);
-      border-radius: 50%;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--orange);
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 5px 16px;
-      border-radius: 20px;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 {
-      color: #fff;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 18px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    }
-
-    .hero p {
-      color: rgba(255,255,255,0.88);
-      font-size: clamp(1rem, 2.5vw, 1.22rem);
-      max-width: 580px;
-      margin: 0 auto 34px;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--orange);
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 14px 36px;
-      border-radius: 30px;
-      text-decoration: none;
-      box-shadow: 0 4px 16px rgba(245,124,0,0.40);
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .hero-cta:hover {
-      background: var(--orange-light);
-      transform: translateY(-2px);
-    }
-
-    /* ── SECTIONS (shared) ── */
-    section { padding: 72px 5%; }
-
-    .section-label {
-      display: inline-block;
-      color: var(--green-mid);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.5rem, 3.5vw, 2.1rem);
-      font-weight: 800;
-      color: var(--text-dark);
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-
-    .section-intro {
-      color: var(--text-mid);
-      font-size: 1.02rem;
-      max-width: 640px;
-      margin-bottom: 48px;
-    }
-
-    /* ── ABOUT ── */
-    .about {
-      background: #fff;
-    }
-
-    .about-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-graphic {
-      background: var(--green-pale);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 240px;
-      font-size: 7rem;
-    }
-
-    .about p {
-      color: var(--text-mid);
-      font-size: 1.02rem;
-      margin-bottom: 14px;
-    }
-
-    /* ── SERVICES ── */
-    .services {
-      background: var(--green-pale);
-    }
-
-    .services-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-    }
-
-    .service-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 30px 26px;
-      box-shadow: var(--shadow);
-      border-top: 4px solid var(--green-light);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.13);
-    }
-
-    .service-icon {
-      font-size: 2.4rem;
-      margin-bottom: 14px;
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--green-dark);
-      margin-bottom: 8px;
-    }
-
-    .service-card p {
-      font-size: 0.91rem;
-      color: var(--text-mid);
-      line-height: 1.55;
-    }
-
-    /* ── CONTACT ── */
-    .contact {
-      background: #fff;
-    }
-
-    .contact-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info h2 { margin-bottom: 8px; }
-
-    .contact-detail {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    .contact-detail-icon {
-      width: 42px;
-      height: 42px;
-      min-width: 42px;
-      background: var(--green-pale);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-    }
-
-    .contact-detail-body strong {
-      display: block;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--green-mid);
-      margin-bottom: 2px;
-    }
-
-    .contact-detail-body span, .contact-detail-body a {
-      font-size: 1rem;
-      color: var(--text-dark);
-      text-decoration: none;
-    }
-
-    .contact-detail-body a:hover { text-decoration: underline; color: var(--green-mid); }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green-mid);
-      color: #fff;
-      font-size: 0.97rem;
-      font-weight: 700;
-      padding: 13px 28px;
-      border-radius: 28px;
-      text-decoration: none;
-      margin-top: 8px;
-      transition: background 0.2s, transform 0.2s;
-      box-shadow: 0 4px 14px rgba(46,125,50,0.30);
-    }
-
-    .btn-directions:hover {
-      background: var(--green-dark);
-      transform: translateY(-2px);
-    }
-
-    /* Rating card */
-    .rating-card {
-      background: var(--green-pale);
-      border-radius: 16px;
-      padding: 34px 30px;
-      text-align: center;
-      box-shadow: var(--shadow);
-    }
-
-    .rating-card h3 {
-      font-size: 1rem;
-      color: var(--text-mid);
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    .rating-score {
-      font-size: 3.6rem;
-      font-weight: 800;
-      color: var(--green-dark);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-
-    .stars {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-      font-size: 1.6rem;
-      margin-bottom: 8px;
-    }
-
-    .star-full  { color: #f9a825; }
-    .star-half  { color: #f9a825; }
-    .star-empty { color: #ccc; }
-
-    .rating-count {
-      font-size: 0.88rem;
-      color: var(--text-mid);
-      margin-bottom: 18px;
-    }
-
-    .rating-source {
-      font-size: 0.78rem;
-      color: #888;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--green-dark);
-      color: rgba(255,255,255,0.75);
-      text-align: center;
-      padding: 32px 5%;
-      font-size: 0.88rem;
-    }
-
-    footer strong { color: #fff; }
-
-    footer .footer-links {
-      margin-top: 12px;
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    footer .footer-links a {
-      color: rgba(255,255,255,0.65);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-    }
-
-    footer .footer-links a:hover { color: var(--orange-light); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: var(--green-dark);
-        padding: 20px 5% 28px;
-        gap: 18px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      }
-      .nav-links.open { display: flex; }
-      .nav-toggle { display: flex; }
-
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
-      .about-graphic { min-height: 160px; font-size: 5rem; }
-
-      section { padding: 52px 5%; }
-    }
-  </style>
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .tile{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#hero">
-      <div class="nav-logo-icon">&#127810;</div>
-      <span class="nav-logo-text">Gainesville Supermarket</span>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+<header class="top">
+  <div class="logo"><span class="m">&#127822;</span> Gainesville Supermarket</div>
+  <nav class="topnav">
+    <a href="#about">About</a><a href="#offer">Services</a><a href="#contact">Contact</a>
   </nav>
+</header>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-badge">Gainesville, FL</div>
-    <h1>Fresh Groceries,<br>Right in Your Neighborhood</h1>
-    <p>Your full-service supermarket on W University Ave — stocked with everything your household needs, every day.</p>
-    <a href="#contact" class="hero-cta">Find Us Today</a>
-  </section>
+<h1 class="sr">Gainesville Supermarket — Fresh groceries on W University Ave, Gainesville, FL</h1>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="about-inner">
-      <div class="about-graphic">&#127815;</div>
-      <div>
-        <span class="section-label">About Us</span>
-        <h2 class="section-title">A Supermarket That Serves the Community</h2>
-        <p>Gainesville Supermarket is a full-service grocery store conveniently located on W University Ave, serving families, students, and residents throughout the Gainesville area. We carry a wide range of fresh produce, pantry staples, refrigerated and frozen goods, and everyday household essentials to meet the needs of every shopper.</p>
-        <p>Our goal is to make grocery shopping easy and accessible, with friendly staff, well-stocked shelves, and a welcoming atmosphere. Whether you are doing your weekly big shop or a quick top-up, we are here to help.</p>
-      </div>
+<main class="shell">
+  <div class="bento">
+
+    <section class="tile hero c4">
+      <div class="mesh"></div>
+      <span class="badge">Gainesville, FL &middot; W University Ave</span>
+      <h2>Fresh groceries, right in your neighborhood</h2>
+      <p>Your full-service supermarket on W University Ave &mdash; stocked with everything your household needs, every day.</p>
+      <a class="cta" href="https://www.google.com/maps/search/Gainesville%20Supermarket%207114%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener">Find Us Today &rarr;</a>
+    </section>
+
+    <section class="tile stat c2" id="statTile">
+      <div class="big" data-count="4.3">4.3</div>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      <div class="cap">Based on 100 reviews</div>
+      <div class="src">Google Maps Rating</div>
+    </section>
+
+    <section class="tile about c4" id="about">
+      <div class="k">About Us</div>
+      <h2>A supermarket that serves the community</h2>
+      <p>Gainesville Supermarket is a full-service grocery store conveniently located on W University Ave, serving families, students, and residents throughout the Gainesville area. We carry a wide range of fresh produce, pantry staples, refrigerated and frozen goods, and everyday household essentials to meet the needs of every shopper.</p>
+      <p>Our goal is to make grocery shopping easy and accessible, with friendly staff, well-stocked shelves, and a welcoming atmosphere. Whether you are doing your weekly big shop or a quick top-up, we are here to help.</p>
+    </section>
+
+    <section class="tile c2" style="background:linear-gradient(150deg,#fff,#faf3e6);display:flex;flex-direction:column;justify-content:center">
+      <span class="emoji">&#129367;</span>
+      <h3>Everything under one roof</h3>
+      <p>From farm-fresh produce to everyday household goods, we carry a broad selection to keep your household running smoothly.</p>
+    </section>
+
+    <div class="tile offer-title c6">
+      <div class="k">What We Offer</div>
+      <h2>Everything you need under one roof</h2>
     </div>
-  </section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="services-inner">
-      <span class="section-label">What We Offer</span>
-      <h2 class="section-title">Everything You Need Under One Roof</h2>
-      <p class="section-intro">From farm-fresh produce to everyday household goods, Gainesville Supermarket carries a broad selection to keep your household running smoothly.</p>
+    <section class="tile offer c2"><span class="tag"></span><span class="emoji">&#127807;</span><h3>Fresh Produce</h3><p>A wide selection of fruits, vegetables, and herbs sourced fresh to help you eat well every day.</p></section>
+    <section class="tile offer c2"><span class="tag"></span><span class="emoji">&#129385;</span><h3>Meat &amp; Seafood</h3><p>Quality cuts of beef, poultry, pork, and fresh seafood options for every meal and occasion.</p></section>
+    <section class="tile offer c2"><span class="tag"></span><span class="emoji">&#129371;</span><h3>Dairy &amp; Refrigerated Goods</h3><p>Milk, cheese, yogurt, eggs, deli meats, and chilled convenience foods all in one place.</p></section>
+    <section class="tile offer c2"><span class="tag"></span><span class="emoji">&#127838;</span><h3>Pantry &amp; Dry Goods</h3><p>Canned goods, grains, pasta, cooking oils, sauces, snacks, and everything your pantry needs.</p></section>
+    <section class="tile offer c2"><span class="tag"></span><span class="emoji">&#10052;</span><h3>Frozen Foods</h3><p>Frozen meals, vegetables, desserts, and proteins for quick and convenient dinner solutions.</p></section>
+    <section class="tile offer c2"><span class="tag"></span><span class="emoji">&#129532;</span><h3>Household &amp; Personal Care</h3><p>Cleaning supplies, paper goods, hygiene products, and household essentials alongside your groceries.</p></section>
 
-      <div class="services-grid">
+    <section class="tile contact c4" id="contact">
+      <div class="k">Get In Touch</div>
+      <h2 style="font-size:1.4rem;font-weight:900;margin-bottom:12px">Visit us today</h2>
+      <div class="row"><div class="ic">&#128205;</div><div><div class="lab">Address</div><div class="val">7114 W University Ave, Gainesville, FL 32607</div></div></div>
+      <div class="row"><div class="ic">&#128222;</div><div><div class="lab">Phone</div><div class="val"><a href="tel:+13523321550">(352) 332-1550</a></div></div></div>
+      <div class="row"><div class="ic">&#128336;</div><div><div class="lab">Hours</div><div class="val">Contact us for details</div></div></div>
+      <a class="cta" href="https://www.google.com/maps/search/Gainesville%20Supermarket%207114%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener">&#128506; Get Directions</a>
+    </section>
 
-        <div class="service-card">
-          <div class="service-icon">&#127807;</div>
-          <h3>Fresh Produce</h3>
-          <p>A wide selection of fruits, vegetables, and herbs sourced fresh to help you eat well every day.</p>
-        </div>
+    <section class="tile c2" style="background:linear-gradient(150deg,#fbe9f0,#fff);display:flex;flex-direction:column;justify-content:center">
+      <span class="emoji">&#127815;</span>
+      <p style="font-style:italic;color:#3c4a3e">Our customers appreciate a convenient, well-stocked shopping experience right in the heart of Gainesville.</p>
+    </section>
 
-        <div class="service-card">
-          <div class="service-icon">&#127830;</div>
-          <h3>Meat &amp; Seafood</h3>
-          <p>Quality cuts of beef, poultry, pork, and fresh seafood options for every meal and occasion.</p>
-        </div>
+  </div>
+</main>
 
-        <div class="service-card">
-          <div class="service-icon">&#129456;</div>
-          <h3>Dairy &amp; Refrigerated Goods</h3>
-          <p>Milk, cheese, yogurt, eggs, deli meats, and chilled convenience foods all in one place.</p>
-        </div>
+<footer>
+  <div><strong>Gainesville Supermarket</strong> — 7114 W University Ave, Gainesville, FL 32607</div>
+  <div class="fl"><a href="#about">About</a><a href="#offer">Services</a><a href="#contact">Contact</a>
+    <a href="https://www.google.com/maps/search/Gainesville%20Supermarket%207114%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener">Google Maps</a></div>
+  <div>Phone: (352) 332-1550</div>
+  <div style="margin-top:8px;color:#8a988c">&copy; 2026 Gainesville Supermarket. All rights reserved.</div>
+</footer>
 
-        <div class="service-card">
-          <div class="service-icon">&#127968;</div>
-          <h3>Pantry &amp; Dry Goods</h3>
-          <p>Canned goods, grains, pasta, cooking oils, sauces, snacks, and everything your pantry needs.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#10052;</div>
-          <h3>Frozen Foods</h3>
-          <p>Frozen meals, vegetables, desserts, and proteins for quick and convenient dinner solutions.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">&#128149;</div>
-          <h3>Household &amp; Personal Care</h3>
-          <p>Cleaning supplies, paper goods, hygiene products, and household essentials alongside your groceries.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="contact-inner">
-      <div class="contact-info">
-        <span class="section-label">Get In Touch</span>
-        <h2 class="section-title">Visit Us Today</h2>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">&#128205;</div>
-          <div class="contact-detail-body">
-            <strong>Address</strong>
-            <span>7114 W University Ave<br>Gainesville, FL 32607</span>
-          </div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">&#128222;</div>
-          <div class="contact-detail-body">
-            <strong>Phone</strong>
-            <a href="tel:+13523321550">(352) 332-1550</a>
-          </div>
-        </div>
-
-        <div class="contact-detail">
-          <div class="contact-detail-icon">&#128336;</div>
-          <div class="contact-detail-body">
-            <strong>Hours</strong>
-            <span>Contact us for details</span>
-          </div>
-        </div>
-
-        <a
-          class="btn-directions"
-          href="https://www.google.com/maps/search/Gainesville%20Supermarket%207114%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          &#128506; Get Directions
-        </a>
-      </div>
-
-      <div class="rating-card">
-        <h3>Google Maps Rating</h3>
-        <div class="rating-score">4.3</div>
-        <div class="stars">
-          <span class="star-full">&#9733;</span>
-          <span class="star-full">&#9733;</span>
-          <span class="star-full">&#9733;</span>
-          <span class="star-full">&#9733;</span>
-          <span class="star-half">&#9734;</span>
-        </div>
-        <div class="rating-count">Based on 100 reviews</div>
-        <p style="font-size:0.92rem;color:var(--text-mid);margin-bottom:18px;">Our customers appreciate a convenient, well-stocked shopping experience right in the heart of Gainesville.</p>
-        <div class="rating-source">Rating sourced from Google Maps</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div>
-      <strong>Gainesville Supermarket</strong> &mdash; 7114 W University Ave, Gainesville, FL 32607
-    </div>
-    <div>Phone: <a href="tel:+13523321550" style="color:rgba(255,255,255,0.75);text-decoration:none;">(352) 332-1550</a></div>
-    <div class="footer-links">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#contact">Contact</a>
-      <a href="https://www.google.com/maps/search/Gainesville%20Supermarket%207114%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">Google Maps</a>
-    </div>
-    <div style="margin-top:14px;font-size:0.78rem;color:rgba(255,255,255,0.40);">
-      &copy; 2026 Gainesville Supermarket. All rights reserved.
-    </div>
-  </footer>
-
-  <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('navToggle');
-    const links  = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => links.classList.remove('open'));
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tiles = document.querySelectorAll('.tile');
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e,i){
+      if(!e.isIntersecting) return;
+      e.target.style.transitionDelay = (Math.min(i,6)*40)+'ms';
+      e.target.classList.add('in');
+      if(e.target.id==='statTile'){ countUp(e.target.querySelector('.big')); }
+      io.unobserve(e.target);
     });
-  </script>
+  }, {threshold:.15});
+  tiles.forEach(function(t){ io.observe(t); });
 
+  function countUp(el){
+    if(reduce){ el.textContent='4.3'; return; }
+    var target=parseFloat(el.dataset.count), t0=null, dur=1100;
+    function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1);
+      el.textContent=(target*(1-Math.pow(1-p,3))).toFixed(1);
+      if(p<1) requestAnimationFrame(step); else el.textContent='4.3'; }
+    requestAnimationFrame(step);
+  }
+
+  // subtle 3D tilt on offer tiles
+  if(!reduce){
+    document.querySelectorAll('.offer').forEach(function(c){
+      c.addEventListener('pointermove', function(ev){
+        var r=c.getBoundingClientRect();
+        var rx=((ev.clientY-r.top)/r.height-.5)*-5, ry=((ev.clientX-r.left)/r.width-.5)*5;
+        c.style.transform='perspective(700px) rotateX('+rx+'deg) rotateY('+ry+'deg) translateY(-2px)';
+      });
+      c.addEventListener('pointerleave', function(){ c.style.transform=''; });
+    });
+  }
+})();
+</script>
 </body>
 </html>

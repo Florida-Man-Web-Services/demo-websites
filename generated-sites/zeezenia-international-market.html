@@ -1,735 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zeezenia International Market – Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --clr-bg:        #faf7f2;
-      --clr-surface:   #ffffff;
-      --clr-primary:   #2e6b3e;
-      --clr-primary-d: #1e4d2c;
-      --clr-accent:    #d4a017;
-      --clr-accent-d:  #a87c10;
-      --clr-text:      #1c1c1c;
-      --clr-muted:     #5a5a5a;
-      --clr-light:     #f0ebe1;
-      --clr-border:    #ddd4c2;
-      --radius:        10px;
-      --shadow:        0 4px 18px rgba(0,0,0,0.10);
-      --nav-h:         68px;
-      --font-main:     'Segoe UI', Arial, sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--font-main);
-      background: var(--clr-bg);
-      color: var(--clr-text);
-      line-height: 1.7;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
-
-    /* ── Nav ──────────────────────────────────────────────────── */
-    .nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      background: var(--clr-primary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--clr-accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 700;
-      color: #fff;
-      flex-shrink: 0;
-    }
-
-    .nav-name {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-
-    .nav-name span {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 400;
-      color: rgba(255,255,255,0.75);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.88);
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--clr-accent); }
-
-    /* ── Hero ─────────────────────────────────────────────────── */
-    .hero {
-      margin-top: var(--nav-h);
-      min-height: 88vh;
-      background:
-        linear-gradient(160deg, rgba(30,77,44,0.88) 0%, rgba(46,107,62,0.72) 60%, rgba(212,160,23,0.35) 100%),
-        repeating-linear-gradient(
-          135deg,
-          transparent 0px,
-          transparent 40px,
-          rgba(255,255,255,0.03) 40px,
-          rgba(255,255,255,0.03) 80px
-        ),
-        #1e4d2c;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 60px 5%;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Decorative globe pattern */
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -80px; right: -80px;
-      width: 400px; height: 400px;
-      border-radius: 50%;
-      border: 60px solid rgba(212,160,23,0.12);
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -100px; left: -60px;
-      width: 300px; height: 300px;
-      border-radius: 50%;
-      border: 50px solid rgba(255,255,255,0.06);
-    }
-
-    .hero-inner { max-width: 760px; position: relative; z-index: 1; }
-
-    .hero-eyebrow {
-      display: inline-block;
-      background: var(--clr-accent);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 5px 18px;
-      border-radius: 30px;
-      margin-bottom: 24px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.6rem);
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.15;
-      margin-bottom: 20px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      color: rgba(255,255,255,0.88);
-      margin-bottom: 38px;
-      max-width: 540px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--clr-accent);
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 15px 36px;
-      border-radius: 50px;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 4px 20px rgba(212,160,23,0.45);
-    }
-
-    .hero-cta:hover {
-      background: var(--clr-accent-d);
-      transform: translateY(-2px);
-    }
-
-    /* ── Sections ─────────────────────────────────────────────── */
-    section { padding: 80px 5%; }
-
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--clr-primary);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--clr-text);
-      margin-bottom: 18px;
-      line-height: 1.2;
-    }
-
-    .section-subtitle {
-      font-size: 1rem;
-      color: var(--clr-muted);
-      max-width: 580px;
-      margin-bottom: 50px;
-    }
-
-    /* ── About ────────────────────────────────────────────────── */
-    .about {
-      background: var(--clr-surface);
-    }
-
-    .about-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--clr-muted);
-      margin-bottom: 18px;
-      font-size: 1.05rem;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--clr-light) 0%, #e2d5c0 100%);
-      border-radius: var(--radius);
-      padding: 50px 40px;
-      text-align: center;
-      border: 1px solid var(--clr-border);
-    }
-
-    .about-visual .globe {
-      font-size: 72px;
-      margin-bottom: 18px;
-      line-height: 1;
-    }
-
-    .about-visual h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--clr-primary);
-      margin-bottom: 10px;
-    }
-
-    .about-visual p {
-      font-size: 0.9rem;
-      color: var(--clr-muted);
-    }
-
-    .flags {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .flag-tag {
-      background: var(--clr-primary);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      padding: 4px 12px;
-      border-radius: 20px;
-    }
-
-    /* ── Services ─────────────────────────────────────────────── */
-    .services {
-      background: var(--clr-bg);
-    }
-
-    .services-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      background: var(--clr-surface);
-      border: 1px solid var(--clr-border);
-      border-radius: var(--radius);
-      padding: 36px 28px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    .service-icon {
-      width: 54px;
-      height: 54px;
-      background: var(--clr-light);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      margin-bottom: 18px;
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--clr-text);
-      margin-bottom: 8px;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--clr-muted);
-      line-height: 1.6;
-    }
-
-    /* ── Contact ──────────────────────────────────────────────── */
-    .contact {
-      background: var(--clr-surface);
-    }
-
-    .contact-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info-list {
-      list-style: none;
-      margin-bottom: 32px;
-    }
-
-    .contact-info-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--clr-border);
-      font-size: 1rem;
-    }
-
-    .contact-info-list li:first-child { border-top: 1px solid var(--clr-border); }
-
-    .ci-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--clr-light);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .ci-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--clr-muted);
-      margin-bottom: 2px;
-    }
-
-    .ci-value {
-      font-weight: 600;
-      color: var(--clr-text);
-    }
-
-    .ci-value a { color: var(--clr-primary); }
-    .ci-value a:hover { text-decoration: underline; }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--clr-primary);
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-      padding: 14px 30px;
-      border-radius: 50px;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 4px 16px rgba(46,107,62,0.35);
-      margin-bottom: 32px;
-    }
-
-    .btn-directions:hover {
-      background: var(--clr-primary-d);
-      transform: translateY(-2px);
-    }
-
-    /* Rating card */
-    .rating-card {
-      background: var(--clr-light);
-      border: 1px solid var(--clr-border);
-      border-radius: var(--radius);
-      padding: 24px 26px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .rating-score {
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: var(--clr-primary);
-      line-height: 1;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-      margin-bottom: 4px;
-    }
-
-    .star {
-      color: var(--clr-accent);
-      font-size: 18px;
-    }
-
-    .star.half { opacity: 0.6; }
-
-    .rating-label {
-      font-size: 0.8rem;
-      color: var(--clr-muted);
-      font-weight: 500;
-    }
-
-    .rating-src {
-      font-size: 0.72rem;
-      color: var(--clr-muted);
-      margin-top: 2px;
-    }
-
-    /* Map placeholder */
-    .map-placeholder {
-      background: linear-gradient(135deg, #e8f5ec 0%, #d4ead9 100%);
-      border: 1px solid var(--clr-border);
-      border-radius: var(--radius);
-      height: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 12px;
-      padding: 20px;
-    }
-
-    .map-placeholder .pin { font-size: 48px; }
-
-    .map-placeholder h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--clr-primary);
-    }
-
-    .map-placeholder p {
-      font-size: 0.88rem;
-      color: var(--clr-muted);
-      max-width: 220px;
-    }
-
-    /* ── Footer ───────────────────────────────────────────────── */
-    footer {
-      background: var(--clr-primary-d);
-      color: rgba(255,255,255,0.78);
-      text-align: center;
-      padding: 36px 5%;
-      font-size: 0.88rem;
-    }
-
-    footer strong { color: #fff; }
-
-    footer .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    footer .footer-links a {
-      color: rgba(255,255,255,0.6);
-      transition: color 0.2s;
-    }
-
-    footer .footer-links a:hover { color: var(--clr-accent); }
-
-    /* ── Responsive ───────────────────────────────────────────── */
-    @media (max-width: 900px) {
-      .about-inner,
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .nav-links { display: none; }
-    }
-
-    @media (max-width: 540px) {
-      .services-grid { grid-template-columns: 1fr; }
-      section { padding: 60px 6%; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeezenia International Market – Gainesville, FL</title>
+<meta name="description" content="Zeezenia International Market on SW 13th St, Gainesville, FL — international foods, spices, grains, imported pantry goods, specialty items, beverages and sweets from around the globe.">
+<style>
+  :root{
+    --night:#0b0a18; --night2:#141230; --ivory:#f6efe2; --saffron:#f4b333; --spice:#e0562f;
+    --jade:#2fae86; --lapis:#3b6fd6; --grape:#8b4fbf; --line:rgba(255,255,255,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--night);color:var(--ivory);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  a{color:inherit}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+
+  header.nav{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;justify-content:space-between;align-items:center;
+    padding:14px 26px;background:linear-gradient(180deg,rgba(11,10,24,.92),transparent)}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:900}
+  .brand .z{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#2a1400;
+    background:conic-gradient(from 0deg,var(--saffron),var(--spice),var(--grape),var(--lapis),var(--jade),var(--saffron))}
+  .brand small{display:block;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--saffron);font-weight:700}
+  header.nav nav{display:flex;gap:22px;font-size:.82rem;font-weight:700}
+  header.nav nav a{text-decoration:none;opacity:.8}
+  header.nav nav a:hover{opacity:1;color:var(--saffron)}
+  @media(max-width:640px){header.nav nav{display:none}}
+
+  /* monolith hero with orbits */
+  .hero{min-height:100vh;display:grid;place-items:center;position:relative;overflow:hidden;padding:110px 24px 60px;
+    background:radial-gradient(60% 70% at 50% 40%,#1b1840,var(--night) 70%)}
+  .stars{position:absolute;inset:0;pointer-events:none}
+  .stage{position:relative;width:min(560px,86vw);aspect-ratio:1;display:grid;place-items:center}
+  .globe{width:44%;aspect-ratio:1;border-radius:50%;position:relative;z-index:3;
+    background:radial-gradient(circle at 34% 30%,#5be0c0,var(--jade) 40%,#0f5f4c 100%);
+    box-shadow:0 0 60px rgba(47,174,134,.5),inset -14px -14px 40px rgba(0,0,0,.4);
+    display:grid;place-items:center;overflow:hidden}
+  .globe::before{content:"";position:absolute;inset:0;border-radius:50%;
+    background:
+      radial-gradient(circle at 60% 55%,rgba(59,111,214,.55),transparent 30%),
+      radial-gradient(circle at 30% 70%,rgba(59,111,214,.5),transparent 26%),
+      radial-gradient(circle at 75% 25%,rgba(59,111,214,.5),transparent 22%);
+    mix-blend-mode:screen;animation:spin 40s linear infinite}
+  .globe span{position:relative;z-index:2;font-size:clamp(1.6rem,5vw,2.6rem)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .orbit{position:absolute;inset:0;border:1px dashed rgba(255,255,255,.14);border-radius:50%;animation:orb var(--sp,26s) linear infinite}
+  .orbit.o2{inset:14%;animation-duration:34s;animation-direction:reverse;border-color:rgba(244,179,51,.2)}
+  @keyframes orb{to{transform:rotate(360deg)}}
+  .chip{position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+    background:rgba(20,18,48,.85);border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+    font-size:.78rem;font-weight:800;letter-spacing:.02em;white-space:nowrap;backdrop-filter:blur(6px);
+    animation:counter var(--sp,26s) linear infinite}
+  .o2 .chip{animation-duration:34s;animation-direction:reverse}
+  @keyframes counter{to{transform:translateX(-50%) rotate(-360deg)}}
+  .chip.a{color:var(--saffron)}.chip.b{color:var(--jade)}.chip.c{color:var(--lapis)}
+  .chip.d{color:var(--spice)}.chip.e{color:var(--grape)}.chip.f{color:#e8c95a}
+  /* position chips around orbit */
+  .c1{top:-20px}.c2{top:auto;bottom:-20px}
+  .o2 .c3{top:50%;left:-40px;transform:translateY(-50%)}
+  .o2 .c4{top:50%;left:auto;right:-40px;transform:translateY(-50%)}
+
+  .hero .below{position:absolute;bottom:34px;left:0;right:0;text-align:center;z-index:5;padding:0 24px}
+  .tagpill{display:inline-block;font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--saffron);
+    border:1px solid rgba(244,179,51,.4);border-radius:999px;padding:7px 15px;margin-bottom:16px}
+  .hero h1{font-size:clamp(1.9rem,4.6vw,3.4rem);font-weight:900;line-height:1.02;letter-spacing:-.02em;max-width:820px;margin:0 auto}
+  .hero .sub{max-width:600px;margin:14px auto 20px;color:#cfc7b6;font-size:1.02rem}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;border-radius:999px;font-weight:800;text-decoration:none;
+    transition:transform .2s,box-shadow .3s;border:0;cursor:pointer;font-size:.92rem}
+  .btn.p{background:linear-gradient(135deg,var(--saffron),var(--spice));color:#2a1400;box-shadow:0 12px 30px rgba(224,86,47,.4)}
+  .btn.p:hover{transform:translateY(-3px)}
+
+  section{padding:90px 0;position:relative}
+  .k{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;font-weight:800;color:var(--saffron);margin-bottom:12px}
+  h2.t{font-size:clamp(1.9rem,4.4vw,3rem);font-weight:900;letter-spacing:-.02em;line-height:1.04}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+  .reveal.in{opacity:1;transform:none}
+
+  .about{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  @media(max-width:820px){.about{grid-template-columns:1fr;gap:28px}}
+  .about p{color:#cfc7b6;margin-top:14px;font-size:1rem}
+  .regions{background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--line);
+    border-radius:22px;padding:30px}
+  .regions .rt{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--saffron);font-weight:800;margin-bottom:16px}
+  .regions .tags{display:flex;flex-wrap:wrap;gap:10px}
+  .regions .tags span{font-size:.86rem;font-weight:700;padding:9px 15px;border-radius:999px;border:1px solid var(--line);
+    background:rgba(255,255,255,.03)}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+  @media(max-width:860px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:540px){.cards{grid-template-columns:1fr}}
+  .card{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+    border:1px solid var(--line);border-radius:20px;padding:28px;overflow:hidden;transition:transform .3s,border-color .3s}
+  .card::before{content:"";position:absolute;inset:0;background:radial-gradient(300px circle at var(--x,50%) var(--y,0%),rgba(244,179,51,.14),transparent 46%);opacity:0;transition:opacity .35s}
+  .card:hover{transform:translateY(-6px);border-color:var(--saffron)}
+  .card:hover::before{opacity:1}
+  .card .em{font-size:2rem;display:block;margin-bottom:12px}
+  .card h3{font-size:1.15rem;font-weight:800;margin-bottom:8px}
+  .card p{font-size:.9rem;color:#c6bdac}
+
+  .contact{background:radial-gradient(70% 90% at 80% 20%,#1a1740,var(--night))}
+  .contact .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center;margin-top:36px}
+  @media(max-width:760px){.contact .grid{grid-template-columns:1fr;gap:26px}}
+  .vrow{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+  .vrow .ic{font-size:1.3rem}
+  .vrow .lab{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:#b0a68f}
+  .vrow .val{font-weight:700}
+  .vrow .val a{text-decoration:none;color:#fff}
+  .rate{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:22px;padding:34px;text-align:center}
+  .rate .score{font-size:4.4rem;font-weight:900;line-height:1;color:var(--saffron)}
+  .rate .stars{color:var(--saffron);font-size:1.4rem;letter-spacing:4px;margin:6px 0}
+  .rate .meta{color:#cfc7b6;font-size:.95rem}
+  .rate .src{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:#9a9078;margin-top:12px}
+
+  footer{text-align:center;padding:30px 24px;font-size:.86rem;color:#9a9078}
+  footer strong{color:#fff}
+  footer .fl{display:flex;gap:18px;justify-content:center;margin:8px 0;flex-wrap:wrap}
+  footer .fl a{color:var(--saffron);text-decoration:none;font-weight:600}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- ── Nav ──────────────────────────────────────────────────── -->
-  <nav class="nav">
-    <div class="nav-brand">
-      <div class="nav-logo-icon">Z</div>
-      <div class="nav-name">
-        Zeezenia International Market
-        <span>Gainesville, FL</span>
+<header class="nav">
+  <div class="brand"><span class="z">Z</span><div>Zeezenia International Market<small>Gainesville, FL</small></div></div>
+  <nav><a href="#about">About</a><a href="#carry">What We Carry</a><a href="#contact">Contact</a></nav>
+</header>
+
+<section class="hero">
+  <canvas class="stars" id="stars"></canvas>
+  <div class="stage">
+    <div class="orbit o1" style="--sp:26s">
+      <span class="chip a c1">African</span>
+      <span class="chip b c2">Caribbean</span>
+    </div>
+    <div class="orbit o2" style="--sp:34s">
+      <span class="chip c c3">Middle Eastern</span>
+      <span class="chip d c4">Asian</span>
+    </div>
+    <div class="globe"><span>&#127758;</span></div>
+  </div>
+  <div class="below">
+    <div class="tagpill">International Grocery &middot; Gainesville, FL</div>
+    <h1>Flavors from around the world, right in your neighborhood</h1>
+    <p class="sub">Discover a vibrant selection of international foods, spices, and pantry staples sourced from across the globe &mdash; all under one roof on SW 13th St.</p>
+    <a class="btn p" href="https://www.google.com/maps/search/Zeezenia%20International%20Market%202325%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">Find Us &rarr;</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about">
+    <div class="reveal">
+      <div class="k">About Us</div>
+      <h2 class="t">Your global pantry in Gainesville</h2>
+      <p>Zeezenia International Market brings the world's culinary traditions to the heart of Gainesville. Whether you're searching for specialty grains, imported sauces, fresh produce, or hard-to-find ingredients, our shelves are stocked with authentic products from a wide range of cultures and cuisines.</p>
+      <p>We proudly serve Gainesville's diverse community of residents, students, and home cooks who want to cook with genuine, international ingredients. Our knowledgeable staff are happy to help you find exactly what you need for any dish.</p>
+      <p>From everyday staples to unique regional finds, Zeezenia International Market makes it easy to bring authentic global flavors to your table. Contact us for details on current product availability.</p>
+    </div>
+    <div class="reveal regions">
+      <div class="rt">Products from around the globe</div>
+      <div class="tags">
+        <span>African</span><span>Caribbean</span><span>Middle Eastern</span><span>Asian</span><span>Latin American</span><span>European</span>
       </div>
     </div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Carry</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+  </div>
+</section>
 
-  <!-- ── Hero ─────────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-inner">
-      <span class="hero-eyebrow">International Grocery – Gainesville, FL</span>
-      <h1>Flavors From Around the World, Right in Your Neighborhood</h1>
-      <p>Discover a vibrant selection of international foods, spices, and pantry staples sourced from across the globe — all under one roof on SW 13th St.</p>
-      <a href="#contact" class="hero-cta">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Find Us
-      </a>
+<section id="carry">
+  <div class="wrap">
+    <div class="reveal"><div class="k">What We Carry</div><h2 class="t">A world of ingredients</h2></div>
+    <div class="cards">
+      <div class="card reveal"><span class="em">&#127798;</span><h3>Spices &amp; Seasonings</h3><p>Authentic spices, spice blends, and seasonings from around the globe to elevate any dish with genuine flavor.</p></div>
+      <div class="card reveal"><span class="em">&#127834;</span><h3>Grains, Rice &amp; Legumes</h3><p>A broad selection of specialty rices, lentils, dried beans, flours, and grains sourced from international suppliers.</p></div>
+      <div class="card reveal"><span class="em">&#129387;</span><h3>Imported Pantry Goods</h3><p>Canned goods, sauces, pastes, condiments, and cooking essentials imported from dozens of countries.</p></div>
+      <div class="card reveal"><span class="em">&#129531;</span><h3>Specialty &amp; Hard-to-Find Items</h3><p>Unique ingredients and regional specialties that are difficult to find at conventional grocery stores.</p></div>
+      <div class="card reveal"><span class="em">&#129380;</span><h3>International Beverages</h3><p>Imported juices, teas, coffees, sodas, and cultural beverages representing a variety of global traditions.</p></div>
+      <div class="card reveal"><span class="em">&#127852;</span><h3>Snacks &amp; Sweets</h3><p>International snacks, cookies, candies, and confections that offer a taste of cultures from around the world.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ── About ────────────────────────────────────────────────── -->
-  <section class="about" id="about">
-    <div class="about-inner">
-      <div class="about-text">
-        <p class="section-label">About Us</p>
-        <h2 class="section-title">Your Global Pantry in Gainesville</h2>
-        <p>Zeezenia International Market brings the world's culinary traditions to the heart of Gainesville. Whether you're searching for specialty grains, imported sauces, fresh produce, or hard-to-find ingredients, our shelves are stocked with authentic products from a wide range of cultures and cuisines.</p>
-        <p>We proudly serve Gainesville's diverse community of residents, students, and home cooks who want to cook with genuine, international ingredients. Our knowledgeable staff are happy to help you find exactly what you need for any dish.</p>
-        <p>From everyday staples to unique regional finds, Zeezenia International Market makes it easy to bring authentic global flavors to your table. Contact us for details on current product availability.</p>
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="reveal"><div class="k">Contact &amp; Location</div><h2 class="t">Come visit us</h2></div>
+    <div class="grid">
+      <div class="reveal">
+        <div class="vrow"><span class="ic">&#128205;</span><div><div class="lab">Address</div><div class="val">2325 SW 13th St, Gainesville, FL 32608</div></div></div>
+        <div class="vrow"><span class="ic">&#128222;</span><div><div class="lab">Phone</div><div class="val"><a href="tel:+13523713311">(352) 371-3311</a></div></div></div>
+        <div class="vrow"><span class="ic">&#128336;</span><div><div class="lab">Hours</div><div class="val">Contact us for details</div></div></div>
+        <a class="btn p" style="margin-top:22px" href="https://www.google.com/maps/search/Zeezenia%20International%20Market%202325%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">Open in Google Maps &rarr;</a>
       </div>
-      <div class="about-visual">
-        <div class="globe">🌍</div>
-        <h3>Products from Around the Globe</h3>
-        <p>A wide variety of international grocery products representing dozens of culinary traditions.</p>
-        <div class="flags">
-          <span class="flag-tag">African</span>
-          <span class="flag-tag">Caribbean</span>
-          <span class="flag-tag">Middle Eastern</span>
-          <span class="flag-tag">Asian</span>
-          <span class="flag-tag">Latin American</span>
-          <span class="flag-tag">European</span>
+      <div class="reveal">
+        <div class="rate">
+          <div class="score">4.6</div>
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="meta">Highly Rated by Customers</div>
+          <div class="src">Google Maps Rating</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ── Services ─────────────────────────────────────────────── -->
-  <section class="services" id="services">
-    <div class="services-inner">
-      <p class="section-label">What We Carry</p>
-      <h2 class="section-title">A World of Ingredients</h2>
-      <p class="section-subtitle">Browse our wide range of international grocery products and specialty items sourced from cultures and cuisines around the world.</p>
-      <div class="services-grid">
+<footer>
+  <div><strong>Zeezenia International Market</strong> — 2325 SW 13th St, Gainesville, FL 32608 &middot; (352) 371-3311</div>
+  <div class="fl"><a href="#about">About</a><a href="#carry">What We Carry</a><a href="#contact">Contact</a>
+    <a href="https://www.google.com/maps/search/Zeezenia%20International%20Market%202325%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener">Google Maps</a></div>
+  <div style="margin-top:8px;color:#7a725e">&copy; 2026 Zeezenia International Market. All rights reserved.</div>
+</footer>
 
-        <div class="service-card">
-          <div class="service-icon">🌶️</div>
-          <h3>Spices &amp; Seasonings</h3>
-          <p>Authentic spices, spice blends, and seasonings from around the globe to elevate any dish with genuine flavor.</p>
-        </div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
-        <div class="service-card">
-          <div class="service-icon">🍚</div>
-          <h3>Grains, Rice &amp; Legumes</h3>
-          <p>A broad selection of specialty rices, lentils, dried beans, flours, and grains sourced from international suppliers.</p>
-        </div>
+  document.querySelectorAll('.card').forEach(function(c){
+    c.addEventListener('pointermove', function(ev){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--x',(ev.clientX-r.left)+'px');
+      c.style.setProperty('--y',(ev.clientY-r.top)+'px');
+    });
+  });
 
-        <div class="service-card">
-          <div class="service-icon">🥫</div>
-          <h3>Imported Pantry Goods</h3>
-          <p>Canned goods, sauces, pastes, condiments, and cooking essentials imported from dozens of countries.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">🫙</div>
-          <h3>Specialty &amp; Hard-to-Find Items</h3>
-          <p>Unique ingredients and regional specialties that are difficult to find at conventional grocery stores.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">🥤</div>
-          <h3>International Beverages</h3>
-          <p>Imported juices, teas, coffees, sodas, and cultural beverages representing a variety of global traditions.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">🍬</div>
-          <h3>Snacks &amp; Sweets</h3>
-          <p>International snacks, cookies, candies, and confections that offer a taste of cultures from around the world.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Contact ───────────────────────────────────────────────── -->
-  <section class="contact" id="contact">
-    <div class="contact-inner">
-      <div>
-        <p class="section-label">Contact &amp; Location</p>
-        <h2 class="section-title">Come Visit Us</h2>
-
-        <ul class="contact-info-list">
-          <li>
-            <div class="ci-icon">📍</div>
-            <div>
-              <div class="ci-label">Address</div>
-              <div class="ci-value">2325 SW 13th St<br>Gainesville, FL 32608</div>
-            </div>
-          </li>
-          <li>
-            <div class="ci-icon">📞</div>
-            <div>
-              <div class="ci-label">Phone</div>
-              <div class="ci-value"><a href="tel:+13523713311">(352) 371-3311</a></div>
-            </div>
-          </li>
-          <li>
-            <div class="ci-icon">🕐</div>
-            <div>
-              <div class="ci-label">Hours</div>
-              <div class="ci-value">Contact us for details</div>
-            </div>
-          </li>
-        </ul>
-
-        <a
-          href="https://www.google.com/maps/search/Zeezenia%20International%20Market%202325%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-directions"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-          Get Directions
-        </a>
-
-        <div class="rating-card">
-          <div class="rating-score">4.6</div>
-          <div>
-            <div class="stars">
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star half">★</span>
-            </div>
-            <div class="rating-label">Highly Rated by Customers</div>
-            <div class="rating-src">Google Maps Rating</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="map-placeholder">
-        <div class="pin">📍</div>
-        <h4>Zeezenia International Market</h4>
-        <p>2325 SW 13th St<br>Gainesville, FL 32608</p>
-        <a
-          href="https://www.google.com/maps/search/Zeezenia%20International%20Market%202325%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-directions"
-          style="margin-top: 14px; margin-bottom: 0;"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Open in Google Maps
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Footer ───────────────────────────────────────────────── -->
-  <footer>
-    <p><strong>Zeezenia International Market</strong> &nbsp;|&nbsp; 2325 SW 13th St, Gainesville, FL 32608 &nbsp;|&nbsp; <a href="tel:+13523713311" style="color:rgba(255,255,255,0.7)">(352) 371-3311</a></p>
-    <div class="footer-links">
-      <a href="#about">About</a>
-      <a href="#services">What We Carry</a>
-      <a href="#contact">Contact</a>
-      <a href="https://www.google.com/maps/search/Zeezenia%20International%20Market%202325%20SW%2013th%20St%2C%20Gainesville%2C%20FL%2032608" target="_blank" rel="noopener noreferrer">Google Maps</a>
-    </div>
-  </footer>
-
+  // starfield canvas
+  var cv=document.getElementById('stars'), ctx=cv.getContext('2d');
+  var W,H,dpr,st=[],raf,t=0;
+  function size(){ dpr=Math.min(devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight;
+    cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  function init(){ st=[]; var n=Math.min(120,Math.round(W*H/9000));
+    for(var i=0;i<n;i++) st.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,
+      p:Math.random()*6.28,sp:Math.random()*.03+.008}); }
+  function draw(){ ctx.clearRect(0,0,W,H);
+    st.forEach(function(s){ var a=.3+.5*Math.abs(Math.sin(s.p+t*s.sp*40));
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fillStyle='rgba(244,220,150,'+a+')'; ctx.fill(); });
+    t++; raf=requestAnimationFrame(draw); }
+  function drawStatic(){ ctx.clearRect(0,0,W,H);
+    st.forEach(function(s){ ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fillStyle='rgba(244,220,150,.5)'; ctx.fill(); }); }
+  function start(){ size(); init(); if(!reduce){ cancelAnimationFrame(raf); draw(); } else drawStatic(); }
+  addEventListener('resize', function(){ size(); init(); if(reduce) drawStatic(); });
+  start();
+})();
+</script>
 </body>
 </html>
