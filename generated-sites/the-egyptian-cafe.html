@@ -1,746 +1,497 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Egyptian Cafe | Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Egyptian Cafe &mdash; Gainesville</title>
+<style>
+  :root{
+    --brown:#2b1a0f;
+    --brown2:#3d2716;
+    --cream:#f6ead3;
+    --cream2:#efdcb8;
+    --gold:#d9a026;
+    --saffron:#e6b422;
+    --terra:#b5461f;
+    --terra2:#8f3213;
+    --ink:#22140a;
+    --rail:78px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--brown);
+    color:var(--cream);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-weight:600;letter-spacing:.5px;line-height:1.12}
+  .display{font-size:clamp(2.6rem,7vw,6rem)}
+  a{color:inherit}
 
-    :root {
-      --gold:        #C8922A;
-      --gold-light:  #E8B84B;
-      --sand:        #F5EDD6;
-      --sand-dark:   #E8D9B5;
-      --brown:       #4A2C0A;
-      --brown-mid:   #7A4A1A;
-      --charcoal:    #2B2118;
-      --white:       #FEFAF3;
-      --text:        #3A2510;
-      --text-light:  #6B4E2A;
-      --radius:      8px;
+  /* ===== grain overlay ===== */
+  .grain{
+    position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.10;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg width='140' height='140' %3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== arabesque backdrop (pure CSS) ===== */
+  .arabesque{
+    position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.06;
+    background-image:
+      radial-gradient(circle at 0 0,transparent 68%,var(--gold) 69%,var(--gold) 71%,transparent 72%),
+      radial-gradient(circle at 60px 60px,transparent 68%,var(--gold) 69%,var(--gold) 71%,transparent 72%),
+      radial-gradient(circle at 60px 0,transparent 68%,var(--terra) 69%,var(--terra) 71%,transparent 72%),
+      radial-gradient(circle at 0 60px,transparent 68%,var(--terra) 69%,var(--terra) 71%,transparent 72%);
+    background-size:120px 120px;
+  }
+
+  /* ===== side rail ===== */
+  .rail{
+    position:fixed;top:0;left:0;height:100vh;width:var(--rail);z-index:50;
+    display:flex;flex-direction:column;align-items:center;
+    background:linear-gradient(180deg,var(--brown2),var(--ink));
+    border-right:1px solid rgba(217,160,38,.3);
+    padding:18px 0;
+  }
+  .rail .brand{
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:.78rem;letter-spacing:4px;text-transform:uppercase;
+    color:var(--saffron);margin-bottom:auto;padding-top:8px;
+  }
+  .rail nav{display:flex;flex-direction:column;gap:26px;margin:auto 0}
+  .rail a{
+    position:relative;display:flex;align-items:center;justify-content:center;
+    text-decoration:none;
+  }
+  .rail .dot{
+    width:12px;height:12px;border-radius:50%;
+    background:transparent;border:2px solid var(--gold);
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1),background .35s;
+  }
+  .rail a .tip{
+    position:absolute;left:26px;white-space:nowrap;
+    background:var(--gold);color:var(--ink);font-size:.72rem;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;padding:5px 10px;border-radius:6px;
+    opacity:0;transform:translateX(-8px) scale(.9);pointer-events:none;
+    transition:opacity .25s,transform .25s;
+  }
+  .rail a:hover .tip{opacity:1;transform:translateX(0) scale(1)}
+  .rail a:hover .dot{transform:scale(1.35)}
+  .rail a.active .dot{background:var(--saffron);transform:scale(1.5);box-shadow:0 0 0 4px rgba(230,180,34,.25)}
+  .rail .num{
+    color:var(--gold);font-size:.7rem;letter-spacing:2px;margin-top:auto;
+  }
+
+  /* ===== main ===== */
+  main{margin-left:var(--rail)}
+  section{
+    position:relative;min-height:100vh;
+    display:flex;align-items:center;
+    padding:96px clamp(24px,6vw,110px);
+    overflow:hidden;
+  }
+  .kicker{
+    display:inline-block;font-size:.75rem;letter-spacing:5px;text-transform:uppercase;
+    color:var(--saffron);border-top:2px solid var(--gold);padding-top:8px;margin-bottom:18px;
+  }
+  .lead{max-width:640px;position:relative;z-index:3}
+  .muted{color:var(--cream2);opacity:.9}
+
+  /* parallax layer helper */
+  .layer{position:absolute;inset:0;z-index:1;will-change:transform}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .clip{clip-path:inset(0 100% 0 0);transition:clip-path 1s cubic-bezier(.7,0,.2,1)}
+  .clip.in{clip-path:inset(0 0 0 0)}
+
+  /* ===== HERO ===== */
+  #home{
+    background:
+      radial-gradient(120% 90% at 80% 10%,rgba(230,180,34,.20),transparent 55%),
+      radial-gradient(90% 90% at 10% 90%,rgba(181,70,31,.28),transparent 60%),
+      linear-gradient(160deg,var(--brown2),var(--ink));
+  }
+  #home .layer.sun{
+    background:radial-gradient(circle at 78% 26%,var(--saffron),var(--gold) 22%,transparent 45%);
+    opacity:.55;
+  }
+  .hero-inner{position:relative;z-index:4}
+  .hero-inner h1 span{color:var(--saffron)}
+  .rating-badge{
+    display:inline-flex;align-items:center;gap:14px;margin-top:28px;
+    background:rgba(0,0,0,.28);border:1px solid rgba(217,160,38,.4);
+    padding:12px 20px;border-radius:14px;backdrop-filter:blur(3px);
+  }
+  .stars{color:var(--saffron);letter-spacing:3px;font-size:1.1rem}
+  .rating-badge b{font-size:1.5rem;color:var(--cream)}
+  .rating-badge small{color:var(--cream2);letter-spacing:1px}
+
+  /* ===== steam / cup ===== */
+  .cup-wrap{
+    position:absolute;right:clamp(24px,7vw,120px);top:50%;transform:translateY(-50%);
+    z-index:3;width:min(38vw,360px);
+  }
+  .cup{width:100%;height:auto;display:block;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
+  .steam{position:absolute;top:2%;left:50%;transform:translateX(-50%);display:flex;gap:16px}
+  .steam span{
+    display:block;width:9px;height:70px;border-radius:50%;
+    background:linear-gradient(to top,rgba(246,234,211,.55),rgba(246,234,211,0));
+    filter:blur(4px);opacity:0;
+    animation:steam 3.6s ease-in-out infinite;
+  }
+  .steam span:nth-child(2){animation-delay:1.2s;height:88px}
+  .steam span:nth-child(3){animation-delay:2.1s;height:60px}
+  @keyframes steam{
+    0%{opacity:0;transform:translateY(10px) scaleX(1)}
+    35%{opacity:.8}
+    100%{opacity:0;transform:translateY(-70px) scaleX(1.8)}
+  }
+
+  /* ===== menu grid ===== */
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;width:100%;max-width:1100px;position:relative;z-index:3}
+  .card{
+    background:linear-gradient(160deg,rgba(61,39,22,.9),rgba(34,20,10,.9));
+    border:1px solid rgba(217,160,38,.28);border-radius:16px;padding:26px;
+    transition:transform .4s cubic-bezier(.34,1.56,.64,1),border-color .4s,box-shadow .4s;
+  }
+  .card:hover{transform:translateY(-8px) scale(1.02);border-color:var(--saffron);box-shadow:0 22px 40px rgba(0,0,0,.45)}
+  .card .ico{width:44px;height:44px;margin-bottom:14px;color:var(--saffron)}
+  .card h3{font-size:1.35rem;color:var(--cream);margin-bottom:8px}
+  .card p{font-size:.98rem;color:var(--cream2)}
+
+  #menu{background:linear-gradient(150deg,var(--ink),var(--brown2))}
+  #menu .layer.pat{
+    background-image:radial-gradient(circle at 30% 30%,rgba(230,180,34,.10),transparent 40%),
+      radial-gradient(circle at 70% 80%,rgba(181,70,31,.14),transparent 45%);
+  }
+
+  /* ===== story / lounge ===== */
+  #lounge{background:linear-gradient(150deg,var(--terra2),var(--brown))}
+  #lounge .layer.glow{background:radial-gradient(80% 80% at 20% 30%,rgba(230,180,34,.22),transparent 60%)}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;width:100%;max-width:1100px;position:relative;z-index:3}
+  .frame{
+    aspect-ratio:4/5;border-radius:18px;position:relative;overflow:hidden;
+    background:
+      repeating-linear-gradient(45deg,rgba(230,180,34,.10) 0 12px,transparent 12px 24px),
+      linear-gradient(160deg,var(--brown2),var(--terra2));
+    border:1px solid rgba(217,160,38,.35);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .frame .mark{width:46%;color:var(--saffron);opacity:.9}
+  @media(max-width:760px){.split{grid-template-columns:1fr}}
+
+  /* stats */
+  .stats{display:flex;gap:40px;flex-wrap:wrap;margin-top:30px}
+  .stat b{display:block;font-size:2.6rem;color:var(--saffron);line-height:1}
+  .stat span{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--cream2)}
+
+  /* ===== visit ===== */
+  #visit{background:linear-gradient(150deg,var(--brown2),var(--ink))}
+  #visit .layer.rings{
+    background:
+      radial-gradient(circle at 85% 80%,transparent 30%,rgba(217,160,38,.12) 31%,transparent 33%),
+      radial-gradient(circle at 85% 80%,transparent 42%,rgba(181,70,31,.12) 43%,transparent 45%);
+    background-size:cover;
+  }
+  .visit-card{
+    background:rgba(0,0,0,.3);border:1px solid rgba(217,160,38,.35);border-radius:18px;
+    padding:36px;max-width:560px;position:relative;z-index:3;backdrop-filter:blur(3px);
+  }
+  .visit-card .row{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid rgba(217,160,38,.18)}
+  .visit-card .row:last-child{border-bottom:0}
+  .visit-card .ic{color:var(--saffron);flex:0 0 26px}
+  .visit-card .lbl{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+  .visit-card a{color:var(--cream);text-decoration:none}
+  .btn{
+    display:inline-block;margin-top:22px;background:linear-gradient(120deg,var(--saffron),var(--terra));
+    color:var(--ink);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:.8rem;
+    padding:14px 26px;border-radius:12px;text-decoration:none;
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s;
+  }
+  .btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 26px rgba(0,0,0,.4)}
+
+  footer{
+    margin-left:var(--rail);text-align:center;padding:34px;
+    background:var(--ink);color:var(--cream2);font-size:.85rem;
+    border-top:1px solid rgba(217,160,38,.25);
+  }
+
+  /* ===== mobile ===== */
+  @media(max-width:720px){
+    :root{--rail:0px}
+    .rail{
+      top:auto;bottom:0;left:0;height:auto;width:100%;flex-direction:row;
+      justify-content:space-around;padding:8px 6px;
+      border-right:0;border-top:1px solid rgba(217,160,38,.3);
     }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Georgia', serif;
-      background-color: var(--white);
-      color: var(--text);
-      line-height: 1.7;
+    .rail .brand,.rail .num{display:none}
+    .rail nav{flex-direction:row;gap:0;margin:0;flex:1;justify-content:space-around}
+    .rail a .tip{
+      position:static;opacity:1;transform:none;background:transparent;color:var(--cream2);
+      font-size:.55rem;padding:0;margin-top:4px;
     }
-
-    /* ── Utility ── */
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 14px 32px;
-      border-radius: var(--radius);
-      font-size: 1rem;
-      font-family: 'Georgia', serif;
-      font-weight: bold;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
-      transition: background 0.25s, color 0.25s, transform 0.15s;
-    }
-
-    .btn:hover { transform: translateY(-2px); }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--white);
-    }
-
-    .btn-primary:hover { background: var(--gold-light); color: var(--brown); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--gold-light);
-      border: 2px solid var(--gold-light);
-    }
-
-    .btn-outline:hover {
-      background: var(--gold-light);
-      color: var(--charcoal);
-    }
-
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 999;
-      background: rgba(43, 33, 24, 0.97);
-      backdrop-filter: blur(6px);
-      border-bottom: 2px solid var(--gold);
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 42px;
-      height: 42px;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-text {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: var(--gold-light);
-      letter-spacing: 0.04em;
-      line-height: 1.2;
-    }
-
-    .nav-logo-sub {
-      font-size: 0.7rem;
-      color: var(--sand-dark);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      display: block;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--sand);
-      text-decoration: none;
-      font-size: 0.95rem;
-      letter-spacing: 0.05em;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold-light); }
-
-    /* Hamburger */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 26px;
-      height: 2px;
-      background: var(--gold-light);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── Hero ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      background: var(--charcoal);
-    }
-
-    /* Decorative geometric background */
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 50% at 50% 60%, rgba(200,146,42,0.18) 0%, transparent 70%),
-        linear-gradient(160deg, #1a0f05 0%, #2B2118 50%, #1a0f05 100%);
-    }
-
-    /* SVG pattern overlay */
-    .hero-pattern {
-      position: absolute;
-      inset: 0;
-      opacity: 0.07;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpolygon points='30,2 58,58 2,58' fill='none' stroke='%23C8922A' stroke-width='1.5'/%3E%3C/svg%3E");
-      background-size: 60px 60px;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      padding: 120px 24px 80px;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.85rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-
-    .hero-title {
-      font-size: clamp(2.6rem, 7vw, 5rem);
-      color: var(--sand);
-      line-height: 1.1;
-      margin-bottom: 20px;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.6);
-    }
-
-    .hero-title span {
-      color: var(--gold-light);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: var(--sand-dark);
-      max-width: 560px;
-      margin: 0 auto 40px;
-      font-style: italic;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    /* Decorative divider */
-    .divider {
-      text-align: center;
-      margin: 0 auto;
-      color: var(--gold);
-      font-size: 1.5rem;
-      letter-spacing: 0.4em;
-      line-height: 1;
-    }
-
-    /* ── Section Shared ── */
-    section { padding: 88px 0; }
-
-    .section-label {
-      font-size: 0.78rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.5rem);
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    /* ── About ── */
-    #about {
-      background: var(--sand);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-light);
-      margin-bottom: 18px;
-      font-size: 1.05rem;
-    }
-
-    .about-art {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* SVG illustration stand-in */
-    .about-illustration {
-      width: 100%;
-      max-width: 380px;
-    }
-
-    /* ── Services ── */
-    #services {
-      background: var(--white);
-    }
-
-    .services-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
-    }
-
-    .service-card {
-      background: var(--sand);
-      border: 1px solid var(--sand-dark);
-      border-top: 4px solid var(--gold);
-      border-radius: var(--radius);
-      padding: 32px 28px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(74, 44, 10, 0.12);
-    }
-
-    .service-icon {
-      font-size: 2.2rem;
-      margin-bottom: 14px;
-      line-height: 1;
-    }
-
-    .service-card h3 {
-      font-size: 1.15rem;
-      color: var(--brown);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      color: var(--text-light);
-      font-size: 0.95rem;
-    }
-
-    /* ── Contact ── */
-    #contact {
-      background: var(--charcoal);
-      color: var(--sand);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-    }
-
-    .contact-info .section-title { color: var(--sand); }
-
-    .contact-detail {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .contact-detail-icon {
-      font-size: 1.4rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-detail-body strong {
-      display: block;
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 4px;
-    }
-
-    .contact-detail-body span,
-    .contact-detail-body a {
-      color: var(--sand-dark);
-      text-decoration: none;
-      font-size: 1rem;
-    }
-
-    .contact-detail-body a:hover { color: var(--gold-light); }
-
-    /* Rating badge */
-    .rating-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(200,146,42,0.15);
-      border: 1px solid rgba(200,146,42,0.35);
-      border-radius: 40px;
-      padding: 10px 20px;
-      margin-top: 28px;
-    }
-
-    .rating-stars {
-      color: var(--gold-light);
-      font-size: 1.1rem;
-      letter-spacing: 2px;
-    }
-
-    .rating-score {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: var(--gold-light);
-    }
-
-    .rating-count {
-      font-size: 0.88rem;
-      color: var(--sand-dark);
-    }
-
-    /* Map card */
-    .map-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(200,146,42,0.2);
-      border-radius: var(--radius);
-      padding: 32px;
-    }
-
-    .map-card h3 {
-      font-size: 1.1rem;
-      color: var(--gold-light);
-      margin-bottom: 16px;
-    }
-
-    .map-placeholder {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: rgba(255,255,255,0.04);
-      border: 1px dashed rgba(200,146,42,0.3);
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-
-    .map-placeholder svg {
-      opacity: 0.3;
-    }
-
-    .map-card .btn { width: 100%; text-align: center; margin-top: 8px; }
-
-    /* ── Footer ── */
-    footer {
-      background: #160d04;
-      border-top: 2px solid var(--gold);
-      padding: 40px 24px;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .footer-logo {
-      font-size: 1.3rem;
-      color: var(--gold-light);
-      margin-bottom: 10px;
-    }
-
-    .footer-tagline {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      font-style: italic;
-      margin-bottom: 20px;
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-      color: #6B4E2A;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        gap: 0;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: rgba(43, 33, 24, 0.99);
-        border-top: 1px solid var(--gold);
-        padding: 8px 0;
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-links a {
-        display: block;
-        padding: 14px 24px;
-        border-bottom: 1px solid rgba(200,146,42,0.1);
-      }
-
-      .nav-toggle { display: flex; }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .about-art { display: none; }
-    }
-
-    @media (max-width: 480px) {
-      section { padding: 64px 0; }
-      .hero-content { padding: 100px 16px 64px; }
-    }
-  </style>
+    .rail a{flex-direction:column}
+    main{margin-left:0}
+    footer{margin-left:0;padding-bottom:76px}
+    .cup-wrap{position:static;transform:none;width:60%;margin:30px auto 0;opacity:.9}
+    section{padding:80px 22px 96px}
+    .frame{aspect-ratio:16/10}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .steam span{animation:none;opacity:.25}
+    .reveal{opacity:1;transform:none;transition:none}
+    .clip{clip-path:none;transition:none}
+    .layer{transform:none!important}
+    .card,.btn{transition:none}
+  }
+</style>
 </head>
 <body>
+<div class="arabesque" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 
-  <!-- ── Navigation ── -->
-  <nav id="navbar">
-    <div class="nav-inner">
-      <a href="#hero" class="nav-logo" aria-label="The Egyptian Cafe home">
-        <!-- Pyramid icon -->
-        <svg class="nav-logo-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <polygon points="21,4 38,36 4,36" fill="none" stroke="#C8922A" stroke-width="2" stroke-linejoin="round"/>
-          <line x1="4" y1="36" x2="38" y2="36" stroke="#C8922A" stroke-width="2"/>
-          <polygon points="21,13 29,30 13,30" fill="#C8922A" opacity="0.3"/>
-        </svg>
-        <span class="nav-logo-text">
-          The Egyptian Cafe
-          <span class="nav-logo-sub">Gainesville, FL</span>
-        </span>
-      </a>
-
-      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-        <span></span><span></span><span></span>
-      </button>
-
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Menu &amp; Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </div>
+<!-- ===== SIDE RAIL ===== -->
+<aside class="rail">
+  <div class="brand">The Egyptian Cafe</div>
+  <nav aria-label="Section navigation">
+    <a href="#home" data-target="home" class="active"><span class="dot"></span><span class="tip">Home</span></a>
+    <a href="#menu" data-target="menu"><span class="dot"></span><span class="tip">Menu</span></a>
+    <a href="#lounge" data-target="lounge"><span class="dot"></span><span class="tip">Lounge</span></a>
+    <a href="#visit" data-target="visit"><span class="dot"></span><span class="tip">Visit</span></a>
   </nav>
+  <div class="num">GNV</div>
+</aside>
 
-  <!-- ── Hero ── -->
-  <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-pattern"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">&#11835; Gainesville, Florida &#11835;</p>
-      <h1 class="hero-title">
-        <span>The Egyptian</span><br>Cafe
-      </h1>
-      <p class="hero-tagline">
-        Ancient flavors, warmly brewed &mdash; a taste of the Nile in the heart of North Central Florida.
+<main>
+  <!-- ===== HOME ===== -->
+  <section id="home">
+    <div class="layer sun" data-speed="0.15" aria-hidden="true"></div>
+    <div class="hero-inner lead">
+      <span class="kicker">In the heart of Gainesville</span>
+      <h1 class="display">A taste of <span>Egypt</span><br>on 2nd Place.</h1>
+      <p class="muted" style="margin-top:20px;font-size:1.15rem">
+        Traditional coffees, aromatic teas, and hearty North African &amp; Middle Eastern
+        fare in a warm, relaxed lounge. Pull up a seat and stay awhile.
       </p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary">Find Us</a>
-        <a href="#services" class="btn btn-outline">Explore the Menu</a>
+      <div class="rating-badge" aria-label="Rated 4.8 based on 40 reviews on Google Maps">
+        <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <b>4.8</b>
+        <small><span id="revcount">0</span> reviews &middot; Google Maps</small>
+      </div>
+    </div>
+    <div class="cup-wrap" aria-hidden="true">
+      <div class="steam"><span></span><span></span><span></span></div>
+      <svg class="cup" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f6ead3"/>
+            <stop offset="1" stop-color="#cbb488"/>
+          </linearGradient>
+          <linearGradient id="coff" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#5a3216"/>
+            <stop offset="1" stop-color="#2b1508"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="100" cy="176" rx="66" ry="12" fill="rgba(0,0,0,.35)"/>
+        <path d="M46 96 h108 l-12 74 a10 10 0 0 1 -10 8 H68 a10 10 0 0 1 -10 -8 Z" fill="url(#cg)"/>
+        <path d="M152 108 c34 -6 34 44 0 40" fill="none" stroke="#cbb488" stroke-width="9" stroke-linecap="round"/>
+        <ellipse cx="100" cy="98" rx="56" ry="14" fill="url(#coff)"/>
+        <ellipse cx="100" cy="96" rx="56" ry="14" fill="none" stroke="#d9a026" stroke-width="3"/>
+        <path d="M70 96 q30 14 60 0" fill="none" stroke="#e6b422" stroke-width="2" opacity=".7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== MENU ===== -->
+  <section id="menu">
+    <div class="layer pat" data-speed="0.1" aria-hidden="true"></div>
+    <div style="width:100%">
+      <span class="kicker">What we serve</span>
+      <h2 class="display clip" style="font-size:clamp(2rem,5vw,3.4rem);margin-bottom:14px">From the kitchen &amp; the kettle</h2>
+      <p class="muted reveal" style="max-width:640px;margin-bottom:36px">
+        Every plate and every cup is prepared in the traditional way. Selections vary &mdash;
+        ask us what is fresh today.
+      </p>
+      <div class="menu-grid">
+        <article class="card reveal">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2a2 2 0 0 1 0 4h-2"/><path d="M7 3v2M11 3v2M15 3v2"/></svg>
+          <h3>Traditional Coffees</h3>
+          <p>Rich, aromatic brews in the classic style &mdash; strong Turkish coffee and spiced specialty drinks. Contact us for details.</p>
+        </article>
+        <article class="card reveal">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 10h11v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5z"/><path d="M16 11h2a2 2 0 0 1 0 4h-2"/><path d="M9 3c1 1.5-1 3 0 4.5M12 3c1 1.5-1 3 0 4.5"/></svg>
+          <h3>Egyptian Teas &amp; Karkade</h3>
+          <p>Classic Egyptian black teas, hibiscus karkade, and soothing herbal blends. Contact us for details.</p>
+        </article>
+        <article class="card reveal">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11a9 9 0 0 1 18 0z"/><path d="M2 11h20"/><path d="M6 15h12M8 19h8"/></svg>
+          <h3>North African Entrees</h3>
+          <p>Hearty North African &amp; Middle Eastern plates for lunch and early dinner. Contact us for details.</p>
+        </article>
+        <article class="card reveal">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h16"/><path d="M6 20c0-6 3-9 6-9s6 3 6 9"/><path d="M12 11V6M10 4h4"/></svg>
+          <h3>Pastries &amp; Sweets</h3>
+          <p>Freshly prepared pastries and sweets inspired by Egyptian and regional recipes. Contact us for details.</p>
+        </article>
+        <article class="card reveal">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9 2.6.9-5.5-4-3.9L9.5 8z"/></svg>
+          <h3>Relaxed Lounge</h3>
+          <p>A warm, unhurried lounge atmosphere made for lingering over conversation. Contact us for details.</p>
+        </article>
+        <article class="card reveal">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10l8-6 8 6v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 20v-6h6v6"/></svg>
+          <h3>Gatherings &amp; Catering</h3>
+          <p>Available for small gatherings, celebrations, and catering inquiries. Contact us for details.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ── About ── -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <span class="section-label">Our Story</span>
-          <h2 class="section-title">A Corner of Egypt in Gainesville</h2>
-          <p>
-            The Egyptian Cafe brings the rich culinary traditions of the Middle East and North Africa to downtown Gainesville, offering a welcoming space where students, locals, and visitors can slow down and savor something extraordinary.
-          </p>
-          <p>
-            From aromatic coffees and freshly brewed loose-leaf teas to hearty savory dishes and sweet pastries, every item on the menu reflects a deep respect for authentic Egyptian flavors and warm hospitality.
-          </p>
-          <p>
-            Whether you are stopping in for a quiet afternoon coffee or sharing a meal with friends, The Egyptian Cafe offers a genuinely distinctive dining experience unlike anything else in Gainesville.
-          </p>
-          <a href="#contact" class="btn btn-primary" style="margin-top:10px;">Visit Us Today</a>
-        </div>
-        <div class="about-art">
-          <!-- Decorative SVG illustration -->
-          <svg class="about-illustration" viewBox="0 0 380 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- Background circle -->
-            <circle cx="190" cy="160" r="148" fill="#E8D9B5" opacity="0.5"/>
-            <!-- Large pyramid -->
-            <polygon points="190,30 330,270 50,270" fill="#C8922A" opacity="0.18" stroke="#C8922A" stroke-width="2"/>
-            <!-- Smaller pyramid -->
-            <polygon points="190,80 280,255 100,255" fill="#C8922A" opacity="0.13" stroke="#C8922A" stroke-width="1.5"/>
-            <!-- Ground line -->
-            <line x1="30" y1="270" x2="350" y2="270" stroke="#7A4A1A" stroke-width="2" opacity="0.4"/>
-            <!-- Sun -->
-            <circle cx="190" cy="62" r="22" fill="#E8B84B" opacity="0.5"/>
-            <!-- Sun rays -->
-            <g stroke="#E8B84B" stroke-width="1.5" opacity="0.4">
-              <line x1="190" y1="30" x2="190" y2="18"/>
-              <line x1="212" y1="38" x2="221" y2="29"/>
-              <line x1="222" y1="62" x2="234" y2="62"/>
-              <line x1="212" y1="86" x2="221" y2="95"/>
-              <line x1="190" y1="94" x2="190" y2="106"/>
-              <line x1="168" y1="86" x2="159" y2="95"/>
-              <line x1="158" y1="62" x2="146" y2="62"/>
-              <line x1="168" y1="38" x2="159" y2="29"/>
-            </g>
-            <!-- Cup of coffee / tea -->
-            <rect x="155" y="180" width="70" height="52" rx="4" fill="#7A4A1A" opacity="0.7"/>
-            <ellipse cx="190" cy="180" rx="35" ry="10" fill="#4A2C0A" opacity="0.7"/>
-            <ellipse cx="190" cy="175" rx="30" ry="8" fill="#C8922A" opacity="0.5"/>
-            <!-- Steam lines -->
-            <path d="M178 168 Q182 158 178 150" stroke="#C8922A" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
-            <path d="M190 165 Q194 155 190 147" stroke="#C8922A" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
-            <path d="M202 168 Q206 158 202 150" stroke="#C8922A" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Services ── -->
-  <section id="services">
-    <div class="container">
-      <div class="services-header">
-        <span class="section-label">What We Offer</span>
-        <h2 class="section-title">Menu &amp; Services</h2>
-        <p style="color:var(--text-light); max-width:560px; margin:0 auto; font-size:1.02rem;">
-          From morning coffee to a full midday spread, The Egyptian Cafe has something for everyone. Contact us for current offerings and details.
+  <!-- ===== LOUNGE ===== -->
+  <section id="lounge">
+    <div class="layer glow" data-speed="0.12" aria-hidden="true"></div>
+    <div class="split">
+      <div class="reveal">
+        <span class="kicker">The atmosphere</span>
+        <h2 class="display" style="font-size:clamp(2rem,5vw,3.4rem);margin-bottom:16px">Sit, sip, and slow down</h2>
+        <p class="muted">
+          The Egyptian Cafe is a corner of Gainesville where the coffee is strong,
+          the tea is fragrant, and time moves a little slower. Come for a cup, stay for
+          a plate, and let the aromas of Egypt and the wider Middle East settle in.
         </p>
+        <div class="stats">
+          <div class="stat reveal"><b><span id="revcount2">0</span></b><span>Google reviews</span></div>
+          <div class="stat reveal"><b>4.8</b><span>Average rating</span></div>
+          <div class="stat reveal"><b>&#9733;</b><span>Traditional style</span></div>
+        </div>
       </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">&#9749;</div>
-          <h3>Egyptian &amp; Middle Eastern Coffee</h3>
-          <p>Rich, aromatic coffees prepared in traditional style, from strong Turkish brews to spiced specialty drinks. Contact us for details.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127861;</div>
-          <h3>Loose-Leaf Teas &amp; Herbal Infusions</h3>
-          <p>A curated selection of teas including classic Egyptian black teas, hibiscus karkade, and soothing herbal blends. Contact us for details.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127859;</div>
-          <h3>Savory Dishes &amp; Platters</h3>
-          <p>Hearty, flavorful entrees drawing on North African and Middle Eastern tradition, perfect for a satisfying lunch or early dinner. Contact us for details.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127848;</div>
-          <h3>Pastries &amp; Sweet Treats</h3>
-          <p>Freshly prepared pastries and sweets inspired by Egyptian and regional recipes, ideal alongside any hot or cold beverage. Contact us for details.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127862;</div>
-          <h3>Hookah &amp; Shisha (Lounge)</h3>
-          <p>A relaxed lounge atmosphere for guests looking to unwind. Availability and flavors vary &mdash; contact us for current offerings.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">&#127881;</div>
-          <h3>Private Events &amp; Catering</h3>
-          <p>Available for small gatherings, celebrations, and catering inquiries. Reach out to discuss how we can accommodate your group. Contact us for details.</p>
-        </div>
+      <div class="frame reveal" aria-hidden="true">
+        <svg class="mark" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M60 8l14 28 30 4-22 21 6 31-28-16-28 16 6-31L22 40l30-4z"/>
+          <circle cx="60" cy="62" r="20"/>
+          <path d="M60 42v40M40 62h40"/>
+        </svg>
       </div>
     </div>
   </section>
 
-  <!-- ── Contact ── -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-grid">
-        <div class="contact-info">
-          <span class="section-label">Get In Touch</span>
-          <h2 class="section-title">Visit The Egyptian Cafe</h2>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128205;</div>
-            <div class="contact-detail-body">
-              <strong>Address</strong>
-              <span>21 SE 2nd Pl<br>Gainesville, FL 32601</span>
-            </div>
-          </div>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128222;</div>
-            <div class="contact-detail-body">
-              <strong>Phone</strong>
-              <a href="tel:+13524514386">(352) 451-4386</a>
-            </div>
-          </div>
-
-          <div class="contact-detail">
-            <div class="contact-detail-icon">&#128336;</div>
-            <div class="contact-detail-body">
-              <strong>Hours</strong>
-              <span>Contact us for current hours</span>
-            </div>
-          </div>
-
-          <div class="rating-badge" aria-label="Google Maps rating: 4.8 out of 5 based on 40 reviews">
-            <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="rating-score">4.8</span>
-            <span class="rating-count">/ 5 &nbsp;&bull;&nbsp; 40 Google Reviews</span>
-          </div>
+  <!-- ===== VISIT ===== -->
+  <section id="visit">
+    <div class="layer rings" data-speed="0.1" aria-hidden="true"></div>
+    <div style="width:100%">
+      <span class="kicker">Come see us</span>
+      <h2 class="display" style="font-size:clamp(2rem,5vw,3.4rem);margin-bottom:24px">Visit The Egyptian Cafe</h2>
+      <div class="visit-card reveal">
+        <div class="row">
+          <svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <div><div class="lbl">Address</div>21 SE 2nd Pl, Gainesville, FL 32601</div>
         </div>
-
-        <div class="map-card">
-          <h3>&#128205; Find Us on the Map</h3>
-          <div class="map-placeholder" aria-hidden="true">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="40" cy="34" r="16" stroke="#C8922A" stroke-width="3"/>
-              <circle cx="40" cy="34" r="5" fill="#C8922A"/>
-              <path d="M40 50 C30 60 18 68 18 68" stroke="#C8922A" stroke-width="2" stroke-linecap="round"/>
-              <path d="M40 50 C50 60 62 68 62 68" stroke="#C8922A" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <p style="color: #9a7a56; font-size:0.9rem; margin-bottom:18px; font-style:italic;">
-            Conveniently located in downtown Gainesville, just steps from the center of the city.
-          </p>
-          <a
-            href="https://www.google.com/maps/search/The%20Egyptian%20Cafe%2021%20SE%202nd%20Pl%2C%20Gainesville%2C%20FL%2032601"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-primary"
-          >
-            &#127758; Get Directions
-          </a>
-          <a href="tel:+13524514386" class="btn btn-outline" style="margin-top:12px; width:100%; text-align:center; display:block;">
-            &#128222; Call (352) 451-4386
-          </a>
+        <div class="row">
+          <svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+          <div><div class="lbl">Phone</div><a href="tel:+13524514386">(352) 451-4386</a></div>
         </div>
+        <div class="row">
+          <svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div><div class="lbl">Hours</div>Contact us for current hours</div>
+        </div>
+        <div class="row">
+          <svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4M3 17l9 4 9-4"/></svg>
+          <div><div class="lbl">Rating</div>4.8 &middot; 40 reviews on Google Maps</div>
+        </div>
+        <a class="btn" href="https://www.google.com/maps/search/The%20Egyptian%20Cafe%2021%20SE%202nd%20Pl%2C%20Gainesville%2C%20FL%2032601" target="_blank" rel="noopener noreferrer">Get Directions</a>
       </div>
     </div>
   </section>
+</main>
 
-  <!-- ── Footer ── -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">&#9651; The Egyptian Cafe</div>
-      <p class="footer-tagline">Ancient flavors, warmly brewed &mdash; Gainesville, FL</p>
-      <p class="footer-copy">
-        21 SE 2nd Pl, Gainesville, FL 32601 &nbsp;&bull;&nbsp; (352) 451-4386<br>
-        &copy; The Egyptian Cafe. All rights reserved.
-      </p>
-    </div>
-  </footer>
+<footer>
+  The Egyptian Cafe &middot; 21 SE 2nd Pl, Gainesville, FL 32601 &middot; (352) 451-4386 &middot; Contact us for current hours
+</footer>
 
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- active-link highlighting via IntersectionObserver ---- */
+  var links = {};
+  document.querySelectorAll(".rail a").forEach(function(a){ links[a.getAttribute("data-target")] = a; });
+  var sections = document.querySelectorAll("main section");
+
+  if ("IntersectionObserver" in window){
+    var navObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          Object.keys(links).forEach(function(k){ links[k].classList.remove("active"); });
+          var l = links[e.target.id];
+          if (l) l.classList.add("active");
+        }
+      });
+    }, { threshold: 0.55 });
+    sections.forEach(function(s){ navObs.observe(s); });
+
+    /* ---- reveal on scroll ---- */
+    var revObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add("in"); revObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll(".reveal, .clip").forEach(function(el){ revObs.observe(el); });
+  } else {
+    document.querySelectorAll(".reveal, .clip").forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ---- count-up to 40 ---- */
+  function countUp(el){
+    if (!el) return;
+    if (reduce){ el.textContent = "40"; return; }
+    var target = 40, cur = 0;
+    var t = setInterval(function(){
+      cur += 1;
+      if (cur >= target){ cur = target; clearInterval(t); }
+      el.textContent = cur;
+    }, 28);
+  }
+  var countEls = ["revcount", "revcount2"]
+    .map(function(id){ return document.getElementById(id); })
+    .filter(Boolean);
+  if ("IntersectionObserver" in window){
+    var cObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ countUp(e.target); cObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.4 });
+    countEls.forEach(function(el){ cObs.observe(el); });
+  } else { countEls.forEach(countUp); }
+
+  /* ---- parallax layers ---- */
+  if (!reduce){
+    var layers = document.querySelectorAll(".layer[data-speed]");
+    var ticking = false;
+    function onScroll(){
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function(){
+        layers.forEach(function(l){
+          var sec = l.parentElement;
+          var rect = sec.getBoundingClientRect();
+          var speed = parseFloat(l.getAttribute("data-speed")) || 0.1;
+          var offset = rect.top * speed * -1;
+          l.style.transform = "translate3d(0," + offset.toFixed(1) + "px,0)";
+        });
+        ticking = false;
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive:true });
+    onScroll();
+  }
+})();
+</script>
 </body>
 </html>

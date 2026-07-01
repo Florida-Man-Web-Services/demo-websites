@@ -1,743 +1,574 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>108 Vine | Coffee Shop – Gainesville, FL</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Georgia', serif;
-      background: #faf7f2;
-      color: #3a2e22;
-      line-height: 1.7;
-    }
-    img { display: block; max-width: 100%; }
-    a { color: inherit; text-decoration: none; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>108 Vine — Coffee Shop | Gainesville, FL</title>
+<style>
+  :root {
+    --espresso: #2e1a0e;
+    --mocha: #5c3d2e;
+    --latte: #c8a97e;
+    --cream: #faf7f2;
+    --accent: #d97742;
+    --accent-glow: #e8a06a;
+    --tile-radius: 22px;
+    --serif: Georgia, "Times New Roman", "Iowan Old Style", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
 
-    /* ── Palette ── */
-    :root {
-      --espresso: #2e1a0e;
-      --mocha:    #5c3d2e;
-      --latte:    #c8a97e;
-      --cream:    #faf7f2;
-      --warm:     #f3ece0;
-      --accent:   #a0522d;
-      --text:     #3a2e22;
-      --muted:    #7a6652;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Utility ── */
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    .section-title {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      color: var(--espresso);
-      letter-spacing: 0.04em;
-      margin-bottom: 0.5rem;
-    }
-    .section-sub {
-      color: var(--muted);
-      font-size: 1rem;
-      margin-bottom: 2.5rem;
-    }
-    .divider {
-      width: 60px;
-      height: 3px;
-      background: var(--latte);
-      border-radius: 2px;
-      margin: 0.6rem 0 1.2rem;
-    }
+  html { scroll-behavior: smooth; }
 
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 999;
-      background: var(--espresso);
-      padding: 1rem 0;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-    }
-    .nav-logo .leaf-icon {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
-    .nav-logo-text {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--latte);
-      letter-spacing: 0.06em;
-    }
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-    .nav-links a {
-      color: rgba(255,255,255,0.8);
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.25s;
-    }
-    .nav-links a:hover { color: var(--latte); }
+  body {
+    font-family: var(--sans);
+    background:
+      radial-gradient(circle at 15% 10%, rgba(217,119,66,0.14), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(200,169,126,0.18), transparent 50%),
+      linear-gradient(160deg, #241209 0%, #3a2416 60%, #4a2f1d 100%);
+    background-attachment: fixed;
+    color: var(--cream);
+    min-height: 100vh;
+    line-height: 1.55;
+    position: relative;
+    overflow-x: hidden;
+  }
 
-    /* Mobile nav toggle */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--latte);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
+  /* Grain overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.5) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.5) 0 1px, transparent 1px 3px);
+    background-size: 3px 3px;
+  }
 
-    @media (max-width: 680px) {
-      .nav-toggle { display: flex; }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%; left: 0; right: 0;
-        background: var(--espresso);
-        flex-direction: column;
-        gap: 0;
-        padding: 0.5rem 0 1rem;
-        border-top: 1px solid rgba(255,255,255,0.1);
-      }
-      .nav-links.open { display: flex; }
-      .nav-links li { padding: 0.6rem 1.5rem; }
-    }
+  .grain-svg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.06;
+    mix-blend-mode: soft-light;
+  }
 
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(160deg, rgba(46,26,14,0.88) 0%, rgba(92,61,46,0.72) 100%),
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 18px,
-          rgba(200,169,126,0.06) 18px,
-          rgba(200,169,126,0.06) 36px
-        );
-      background-color: var(--mocha);
-      padding: 8rem 1.5rem 4rem;
-    }
-    /* Coffee ring decorative element */
-    .hero::before {
-      content: '';
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      border: 60px solid rgba(200,169,126,0.07);
-      top: -80px;
-      right: -80px;
-      pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      border: 40px solid rgba(200,169,126,0.05);
-      bottom: -60px;
-      left: -60px;
-      pointer-events: none;
-    }
-    .hero-content { position: relative; z-index: 1; max-width: 680px; }
-    .hero-eyebrow {
-      display: inline-block;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--latte);
-      background: rgba(200,169,126,0.12);
-      border: 1px solid rgba(200,169,126,0.3);
-      border-radius: 20px;
-      padding: 0.3rem 1rem;
-      margin-bottom: 1.4rem;
-    }
-    .hero h1 {
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      color: #fff;
-      letter-spacing: 0.05em;
-      line-height: 1.1;
-      margin-bottom: 1.2rem;
-    }
-    .hero h1 span { color: var(--latte); }
-    .hero-tagline {
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      color: rgba(255,255,255,0.8);
-      max-width: 500px;
-      margin: 0 auto 2.2rem;
-      font-style: italic;
-    }
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2.2rem;
-      border-radius: 40px;
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
-      border: 2px solid transparent;
-    }
-    .btn-primary {
-      background: var(--latte);
-      color: var(--espresso);
-      font-weight: 700;
-    }
-    .btn-primary:hover {
-      background: #d4b891;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(200,169,126,0.45);
-    }
-    .btn-outline {
-      background: transparent;
-      border-color: var(--latte);
-      color: var(--latte);
-      margin-left: 1rem;
-    }
-    .btn-outline:hover {
-      background: rgba(200,169,126,0.15);
-      transform: translateY(-2px);
-    }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(18px, 4vw, 46px);
+  }
 
-    /* ── About ── */
-    .about {
-      padding: 6rem 1.5rem;
-      background: var(--warm);
-    }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    @media (max-width: 720px) {
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-    }
-    .about-text p {
-      color: var(--muted);
-      margin-bottom: 1.1rem;
-      font-size: 1.02rem;
-    }
-    /* Decorative coffee-cup illustration (pure CSS) */
-    .cup-art {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .cup-wrap {
-      position: relative;
-      width: 220px;
-      height: 280px;
-    }
-    .cup-body {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 130px;
-      height: 140px;
-      background: linear-gradient(160deg, var(--mocha), var(--espresso));
-      border-radius: 0 0 30px 30px;
-      clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
-      box-shadow: inset -6px -6px 20px rgba(0,0,0,0.3), 4px 4px 18px rgba(0,0,0,0.2);
-    }
-    .cup-rim {
-      position: absolute;
-      bottom: 158px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 148px;
-      height: 22px;
-      background: var(--mocha);
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-    .cup-saucer {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 170px;
-      height: 18px;
-      background: linear-gradient(180deg, var(--latte), #b8924a);
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .cup-handle {
-      position: absolute;
-      right: 18px;
-      bottom: 62px;
-      width: 36px;
-      height: 52px;
-      border: 10px solid var(--mocha);
-      border-left: none;
-      border-radius: 0 30px 30px 0;
-    }
-    .steam {
-      position: absolute;
-      bottom: 186px;
-      display: flex;
-      gap: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .steam-line {
-      width: 6px;
-      height: 40px;
-      background: linear-gradient(to top, rgba(200,169,126,0.6), transparent);
-      border-radius: 10px;
-      animation: steamRise 1.8s ease-in-out infinite;
-    }
-    .steam-line:nth-child(2) { animation-delay: 0.4s; height: 55px; }
-    .steam-line:nth-child(3) { animation-delay: 0.8s; }
-    @keyframes steamRise {
-      0%   { transform: scaleX(1) translateY(0); opacity: 0.7; }
-      50%  { transform: scaleX(1.3) translateY(-12px); opacity: 1; }
-      100% { transform: scaleX(0.8) translateY(-28px); opacity: 0; }
-    }
-    .coffee-surface {
-      position: absolute;
-      bottom: 168px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 112px;
-      height: 28px;
-      background: radial-gradient(ellipse, #6b3f1e 20%, var(--espresso) 80%);
-      border-radius: 50%;
-    }
-    .latte-art {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      bottom: 176px;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0.35;
-      border-radius: 50%;
-      border: 3px solid var(--latte);
-      border-top-color: transparent;
-    }
+  /* ---------- BENTO GRID ---------- */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(96px, auto);
+    gap: 16px;
+  }
 
-    /* ── Services ── */
-    .services {
-      padding: 6rem 1.5rem;
-      background: var(--cream);
-    }
-    .services-header { text-align: center; margin-bottom: 3rem; }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.8rem;
-    }
-    .service-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 2rem 1.8rem;
-      box-shadow: 0 2px 18px rgba(92,61,46,0.08);
-      transition: transform 0.3s, box-shadow 0.3s;
-      border-top: 4px solid var(--latte);
-    }
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 32px rgba(92,61,46,0.15);
-    }
-    .service-icon {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--espresso);
-      margin-bottom: 0.5rem;
-    }
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
+  .tile {
+    position: relative;
+    border-radius: var(--tile-radius);
+    padding: clamp(20px, 2.6vw, 34px);
+    background: rgba(250,247,242,0.06);
+    border: 1px solid rgba(200,169,126,0.22);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(.16,1,.3,1), box-shadow 0.4s ease, opacity 0.7s ease;
+    will-change: transform;
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
 
-    /* ── Contact ── */
-    .contact {
-      padding: 6rem 1.5rem;
-      background: var(--espresso);
-      color: #fff;
-    }
-    .contact-header { text-align: center; margin-bottom: 3rem; }
-    .contact-header .section-title { color: var(--latte); }
-    .contact-header .section-sub { color: rgba(255,255,255,0.65); }
-    .contact-header .divider { background: var(--latte); margin: 0.6rem auto 1.2rem; }
+  .tile.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-    @media (max-width: 720px) {
-      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
-    }
+  .tile:hover {
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(217,119,66,0.4) inset;
+  }
 
-    .contact-info h3 {
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--latte);
-      margin-bottom: 1.2rem;
-    }
-    .info-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.4rem;
-    }
-    .info-icon {
-      font-size: 1.3rem;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-    .info-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-      margin-bottom: 0.2rem;
-    }
-    .info-value {
-      color: rgba(255,255,255,0.9);
-      font-size: 0.98rem;
-    }
+  .tile > * { transform: translateZ(24px); }
 
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: var(--latte);
-      color: var(--espresso);
-      padding: 0.85rem 1.8rem;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: all 0.3s;
-      margin-top: 0.5rem;
-    }
-    .directions-btn:hover {
-      background: #d4b891;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(200,169,126,0.35);
-    }
+  /* Grid placement */
+  .t-hero      { grid-column: span 4; grid-row: span 3; }
+  .t-rating    { grid-column: span 2; grid-row: span 2; }
+  .t-hours     { grid-column: span 2; grid-row: span 2; }
+  .t-story     { grid-column: span 3; grid-row: span 2; }
+  .t-menu-a    { grid-column: span 3; grid-row: span 2; }
+  .t-menu-b    { grid-column: span 2; grid-row: span 2; }
+  .t-menu-c    { grid-column: span 2; grid-row: span 2; }
+  .t-menu-d    { grid-column: span 2; grid-row: span 2; }
+  .t-location  { grid-column: span 4; grid-row: span 2; }
+  .t-vibe      { grid-column: span 2; grid-row: span 2; }
 
-    .rating-box {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(200,169,126,0.25);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-    }
-    .rating-box h3 {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 1.2rem;
-    }
-    .rating-score {
-      font-size: 4rem;
-      font-weight: 700;
-      color: var(--latte);
-      line-height: 1;
-      margin-bottom: 0.3rem;
-    }
-    .stars {
-      font-size: 1.5rem;
-      color: #f5c518;
-      letter-spacing: 3px;
-      margin-bottom: 0.5rem;
-    }
-    .rating-count {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.88rem;
-    }
-    .rating-source {
-      margin-top: 1.2rem;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.05em;
-    }
-    .badge-row {
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(200,169,126,0.12);
-      border: 1px solid rgba(200,169,126,0.3);
-      color: var(--latte);
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      padding: 0.3rem 0.9rem;
-      border-radius: 20px;
-      text-transform: uppercase;
-    }
+  /* ---------- HERO TILE ---------- */
+  .t-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(217,119,66,0.35), transparent 55%),
+      linear-gradient(145deg, rgba(92,61,46,0.55), rgba(46,26,14,0.75));
+    border-color: rgba(217,119,66,0.35);
+    min-height: 320px;
+  }
 
-    /* ── Footer ── */
-    footer {
-      background: #1a0f08;
-      color: rgba(255,255,255,0.5);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.85rem;
-    }
-    footer .footer-name {
-      color: var(--latte);
-      font-size: 1.1rem;
-      margin-bottom: 0.4rem;
-    }
-    footer a { color: rgba(255,255,255,0.4); transition: color 0.2s; }
-    footer a:hover { color: var(--latte); }
+  .hero-badge {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--latte);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-badge .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
 
-    /* ── Scroll reveal via CSS animation hack ── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      animation: fadeUp 0.7s ease forwards;
+  .hero-name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(3.2rem, 9vw, 6.2rem);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    margin: 0.35em 0 0.1em;
+    background: linear-gradient(120deg, #fff5ea 10%, var(--latte) 55%, var(--accent-glow) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--cream);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: rgba(250,247,242,0.85);
+    max-width: 30ch;
+  }
+
+  .hero-cta {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    padding: 13px 24px;
+    border-radius: 100px;
+    background: linear-gradient(120deg, var(--accent), var(--accent-glow));
+    color: var(--espresso);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    box-shadow: 0 10px 26px rgba(217,119,66,0.4);
+    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease;
+  }
+  .hero-cta:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 16px 34px rgba(217,119,66,0.55); }
+  .hero-cta:active { transform: scale(0.97); }
+
+  /* Steam animation */
+  .steam {
+    position: absolute;
+    top: 18px; right: 26px;
+    width: 70px; height: 90px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .steam span {
+    position: absolute;
+    bottom: 0;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.55), transparent 70%);
+    filter: blur(4px);
+    opacity: 0;
+    animation: rise 4s ease-in-out infinite;
+  }
+  .steam span:nth-child(1) { left: 8px;  animation-delay: 0s; }
+  .steam span:nth-child(2) { left: 30px; animation-delay: 1.1s; }
+  .steam span:nth-child(3) { left: 52px; animation-delay: 2.2s; }
+
+  @keyframes rise {
+    0%   { transform: translateY(0) scale(0.7); opacity: 0; }
+    20%  { opacity: 0.7; }
+    100% { transform: translateY(-70px) scale(1.8); opacity: 0; }
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%     { transform: scale(1.5); opacity: 0.55; }
+  }
+
+  /* ---------- SECTION LABELS ---------- */
+  .label {
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent-glow);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .tile h2, .tile h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .tile h2 { font-size: 1.6rem; margin-bottom: 8px; }
+  .tile p { color: rgba(250,247,242,0.82); font-size: 0.96rem; }
+
+  /* ---------- RATING TILE ---------- */
+  .t-rating {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(217,119,66,0.28), transparent 60%),
+      rgba(250,247,242,0.05);
+  }
+  .rating-score {
+    font-family: var(--serif);
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--accent-glow);
+    text-shadow: 0 4px 18px rgba(217,119,66,0.4);
+  }
+  .stars { font-size: 1.2rem; letter-spacing: 3px; color: var(--latte); margin: 6px 0; }
+  .rating-count { font-size: 0.9rem; color: rgba(250,247,242,0.78); }
+  .rating-count b { color: var(--cream); font-size: 1.05rem; }
+  .rating-source { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(200,169,126,0.7); margin-top: 8px; }
+
+  /* ---------- HOURS TILE ---------- */
+  .t-hours {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(160deg, rgba(92,61,46,0.4), rgba(46,26,14,0.55));
+  }
+  .t-hours .clock {
+    width: 44px; height: 44px; margin-bottom: 14px;
+  }
+  .hours-text { font-family: var(--serif); font-size: 1.4rem; color: var(--cream); }
+
+  /* ---------- MENU TILES ---------- */
+  .menu-list { list-style: none; margin-top: 6px; }
+  .menu-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px dashed rgba(200,169,126,0.25);
+    gap: 12px;
+  }
+  .menu-list li:last-child { border-bottom: none; }
+  .menu-item { font-family: var(--serif); font-size: 1.08rem; color: var(--cream); }
+  .menu-note { font-size: 0.82rem; color: rgba(200,169,126,0.85); text-align: right; }
+
+  .t-menu-a { background: linear-gradient(150deg, rgba(217,119,66,0.14), rgba(46,26,14,0.4)); }
+  .icon-big { font-size: 2rem; margin-bottom: 6px; display: block; }
+
+  /* ---------- LOCATION TILE ---------- */
+  .t-location {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background:
+      radial-gradient(circle at 90% 50%, rgba(200,169,126,0.2), transparent 55%),
+      rgba(250,247,242,0.05);
+  }
+  .loc-info { max-width: 24ch; }
+  .loc-addr { font-family: var(--serif); font-size: 1.35rem; color: var(--cream); margin-top: 6px; }
+  .dir-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border-radius: 100px;
+    background: linear-gradient(120deg, var(--accent), var(--accent-glow));
+    color: var(--espresso);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 10px 26px rgba(217,119,66,0.4);
+    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease;
+    white-space: nowrap;
+  }
+  .dir-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 16px 34px rgba(217,119,66,0.55); }
+  .dir-btn:active { transform: scale(0.97); }
+
+  /* ---------- VIBE TILE ---------- */
+  .t-vibe {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(140deg, rgba(217,119,66,0.22), rgba(92,61,46,0.35));
+  }
+  .t-vibe .big-quote { font-family: var(--serif); font-size: 1.5rem; font-style: italic; color: var(--cream); line-height: 1.3; }
+
+  /* animated mesh accent inside a tile */
+  .mesh {
+    position: absolute;
+    inset: -30%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(217,119,66,0.5), transparent 40%),
+      radial-gradient(circle at 75% 65%, rgba(200,169,126,0.45), transparent 45%);
+    filter: blur(30px);
+    opacity: 0.5;
+    animation: drift 14s ease-in-out infinite alternate;
+    z-index: 0;
+  }
+  @keyframes drift {
+    0%   { transform: translate(0,0) rotate(0deg); }
+    100% { transform: translate(6%, 8%) rotate(12deg); }
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 0 12px;
+    color: rgba(200,169,126,0.7);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+  }
+  footer .fname { font-family: var(--serif); color: var(--latte); font-size: 1rem; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px) {
+    .t-hero, .t-rating, .t-hours, .t-story, .t-menu-a, .t-menu-b,
+    .t-menu-c, .t-menu-d, .t-location, .t-vibe {
+      grid-column: 1 / -1;
+      grid-row: auto;
     }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+    .bento { grid-template-columns: 1fr; }
+    .tile > * { transform: none !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
     }
-    .delay-1 { animation-delay: 0.15s; }
-    .delay-2 { animation-delay: 0.3s; }
-    .delay-3 { animation-delay: 0.45s; }
-    .delay-4 { animation-delay: 0.6s; }
-  </style>
+    .tile { opacity: 1 !important; transform: none !important; }
+    .steam { display: none; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="container nav-inner">
-      <a href="#" class="nav-logo">
-        <svg class="leaf-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="16" cy="16" r="15" fill="rgba(200,169,126,0.15)" stroke="#c8a97e" stroke-width="1.2"/>
-          <path d="M16 24 C16 24, 8 18, 8 12 C8 7, 12 5, 16 8 C20 5, 24 7, 24 12 C24 18, 16 24, 16 24Z" fill="#c8a97e" opacity="0.9"/>
-          <line x1="16" y1="24" x2="16" y2="10" stroke="#2e1a0e" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-        <span class="nav-logo-text">108 Vine</span>
+<svg class="grain-svg" preserveAspectRatio="none">
+  <filter id="grainFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grainFilter)"/>
+</svg>
+
+<div class="wrap">
+  <main class="bento">
+
+    <!-- HERO -->
+    <section class="tile t-hero" data-tilt>
+      <div class="steam" aria-hidden="true"><span></span><span></span><span></span></div>
+      <span class="hero-badge"><span class="dot"></span>Gainesville, FL · Coffee Shop</span>
+      <div>
+        <h1 class="hero-name">108 Vine</h1>
+        <p class="hero-sub">A cozy corner for slow mornings, warm cups, and unhurried conversation.</p>
+      </div>
+      <a class="hero-cta" href="https://www.google.com/maps/search/108%20Vine%203735%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">
+        Find us
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Menu & Services</a></li>
-        <li><a href="#contact">Visit Us</a></li>
+    </section>
+
+    <!-- RATING -->
+    <section class="tile t-rating" data-tilt id="ratingTile">
+      <span class="label">Loved locally</span>
+      <div class="rating-score">4.8</div>
+      <div class="stars" aria-hidden="true">★★★★★</div>
+      <div class="rating-count"><b id="countUp">0</b> reviews</div>
+      <div class="rating-source">on Google Maps</div>
+    </section>
+
+    <!-- HOURS -->
+    <section class="tile t-hours" data-tilt>
+      <svg class="clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+      </svg>
+      <span class="label">Hours</span>
+      <p class="hours-text">Contact us for current hours</p>
+    </section>
+
+    <!-- STORY -->
+    <section class="tile t-story" data-tilt>
+      <span class="label">Our story</span>
+      <h2>Where the day slows down</h2>
+      <p>108 Vine is a neighborhood coffee shop built around one simple idea: a good cup deserves a good moment. Pull up a chair, breathe in the roast, and let the world wait a little longer.</p>
+    </section>
+
+    <!-- MENU A (feature) -->
+    <section class="tile t-menu-a" data-tilt>
+      <span class="icon-big" aria-hidden="true">☕</span>
+      <span class="label">From the bar</span>
+      <h2>Espresso &amp; brews</h2>
+      <ul class="menu-list">
+        <li><span class="menu-item">Espresso</span><span class="menu-note">rich &amp; balanced</span></li>
+        <li><span class="menu-item">Cappuccino</span><span class="menu-note">velvety foam</span></li>
+        <li><span class="menu-item">Latte</span><span class="menu-note">smooth &amp; warm</span></li>
+        <li><span class="menu-item">Drip coffee</span><span class="menu-note">fresh daily</span></li>
       </ul>
-    </div>
-  </nav>
+    </section>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <span class="hero-eyebrow fade-in">Coffee Shop &mdash; Gainesville, FL</span>
-      <h1 class="fade-in delay-1"><span>108</span> Vine</h1>
-      <p class="hero-tagline fade-in delay-2">Where every cup tells a story. A warm corner of Gainesville crafted for slow mornings and good company.</p>
-      <div class="fade-in delay-3">
-        <a href="#about" class="btn btn-primary">Discover Our Story</a>
-        <a href="#contact" class="btn btn-outline">Find Us</a>
-      </div>
-    </div>
-  </section>
+    <!-- MENU B -->
+    <section class="tile t-menu-b" data-tilt>
+      <span class="icon-big" aria-hidden="true">🥶</span>
+      <span class="label">Cold &amp; bright</span>
+      <h3 style="font-size:1.3rem;margin-bottom:6px;">Iced favorites</h3>
+      <ul class="menu-list">
+        <li><span class="menu-item">Cold brew</span></li>
+        <li><span class="menu-item">Iced latte</span></li>
+        <li><span class="menu-item">Iced tea</span></li>
+      </ul>
+    </section>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-title">A Neighborhood Cafe Worth Knowing</p>
-          <div class="divider"></div>
-          <p>108 Vine is a beloved neighborhood coffee shop nestled along West University Avenue, offering Gainesville a welcoming retreat from the everyday hustle. With an emphasis on thoughtfully prepared coffee and a relaxed, unhurried atmosphere, it has become a go-to spot for students, locals, and anyone who appreciates a genuinely great cup.</p>
-          <p>The space strikes a balance between cozy and creative — the kind of place you come in for a quick espresso and end up staying for the afternoon. Whether you're settling in with a laptop, meeting a friend, or simply savoring something warm, 108 Vine feels like it was made for exactly that moment.</p>
-          <p>Committed to quality and community, 108 Vine continues to be one of Gainesville's most cherished independent coffee destinations, backed by a loyal following and a near-perfect Google rating.</p>
-        </div>
-        <div class="cup-art">
-          <div class="cup-wrap">
-            <div class="steam">
-              <div class="steam-line"></div>
-              <div class="steam-line"></div>
-              <div class="steam-line"></div>
-            </div>
-            <div class="coffee-surface"></div>
-            <div class="latte-art"></div>
-            <div class="cup-rim"></div>
-            <div class="cup-body"></div>
-            <div class="cup-handle"></div>
-            <div class="cup-saucer"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- MENU C -->
+    <section class="tile t-menu-c" data-tilt>
+      <span class="icon-big" aria-hidden="true">🥐</span>
+      <span class="label">On the shelf</span>
+      <h3 style="font-size:1.3rem;margin-bottom:6px;">Bites</h3>
+      <ul class="menu-list">
+        <li><span class="menu-item">Pastries</span></li>
+        <li><span class="menu-item">Fresh bakes</span></li>
+        <li><span class="menu-item">Sweet treats</span></li>
+      </ul>
+    </section>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="container">
-      <div class="services-header">
-        <p class="section-title">What We Offer</p>
-        <div class="divider" style="margin: 0.6rem auto 1rem;"></div>
-        <p class="section-sub">From your daily brew to a comfortable space to unwind — here's what you'll find at 108 Vine.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <span class="service-icon">&#9749;</span>
-          <h3>Espresso & Coffee Drinks</h3>
-          <p>A full range of espresso-based beverages — lattes, cappuccinos, Americanos, macchiatos, and more — prepared with care and quality beans. Contact us for current selections.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127833;</span>
-          <h3>Specialty &amp; Seasonal Drinks</h3>
-          <p>Rotating specialty drinks that reflect the season and the cafe's creative spirit. Expect unique flavor combinations and limited offerings that keep things interesting.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127861;</span>
-          <h3>Teas &amp; Non-Coffee Options</h3>
-          <p>A curated selection of teas, herbal infusions, and other non-coffee beverages for every preference and occasion. Contact us for current offerings.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127850;</span>
-          <h3>Light Bites &amp; Pastries</h3>
-          <p>Fresh pastries, snacks, and light bites to complement your drink. Perfect for a morning pick-me-up or an afternoon treat. Contact us for details on current food items.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#128187;</span>
-          <h3>Study-Friendly Seating</h3>
-          <p>A comfortable, inviting space with seating designed for staying a while — ideal for studying, remote work, or simply relaxing with a good book.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127873;</span>
-          <h3>Whole Bean &amp; Retail</h3>
-          <p>Take the 108 Vine experience home with you. Select whole bean coffees and cafe merchandise may be available. Contact us for current retail options.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- VIBE -->
+    <section class="tile t-vibe" data-tilt>
+      <div class="mesh" aria-hidden="true"></div>
+      <span class="label">The vibe</span>
+      <p class="big-quote">“Warm mugs, warmer welcomes.”</p>
+    </section>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <div class="contact-header">
-        <p class="section-title">Come Visit Us</p>
-        <div class="divider"></div>
-        <p class="section-sub">Find us on West University Avenue in the heart of Gainesville.</p>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-info">
-          <h3>Location &amp; Details</h3>
-          <div class="info-item">
-            <span class="info-icon">&#128205;</span>
-            <div>
-              <div class="info-label">Address</div>
-              <div class="info-value">3735 W University Ave<br>Gainesville, FL 32607</div>
-            </div>
-          </div>
-          <div class="info-item">
-            <span class="info-icon">&#128337;</span>
-            <div>
-              <div class="info-label">Hours</div>
-              <div class="info-value">Contact us for current hours</div>
-            </div>
-          </div>
-          <a
-            href="https://www.google.com/maps/search/108%20Vine%203735%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="directions-btn"
-          >
-            <span>&#128506;</span> Get Directions
-          </a>
-        </div>
+    <!-- MENU D -->
+    <section class="tile t-menu-d" data-tilt>
+      <span class="icon-big" aria-hidden="true">🌱</span>
+      <span class="label">Also here</span>
+      <h3 style="font-size:1.3rem;margin-bottom:6px;">More to sip</h3>
+      <ul class="menu-list">
+        <li><span class="menu-item">Hot tea</span></li>
+        <li><span class="menu-item">Hot chocolate</span></li>
+        <li><span class="menu-item">Seasonal specials</span></li>
+      </ul>
+    </section>
 
-        <div>
-          <div class="rating-box">
-            <h3>Community Rating</h3>
-            <div class="rating-score">4.8</div>
-            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div class="rating-count">Based on 281 reviews</div>
-            <div class="rating-source">Google Maps Reviews</div>
-            <div class="badge-row">
-              <span class="badge">Top Rated</span>
-              <span class="badge">Local Favorite</span>
-              <span class="badge">Gainesville, FL</span>
-            </div>
-          </div>
-        </div>
+    <!-- LOCATION -->
+    <section class="tile t-location" data-tilt>
+      <div class="loc-info">
+        <span class="label">Come by</span>
+        <p class="loc-addr">3735 W University Ave, Gainesville, FL 32607</p>
       </div>
-    </div>
-  </section>
+      <a class="dir-btn" href="https://www.google.com/maps/search/108%20Vine%203735%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        Get Directions
+      </a>
+    </section>
 
-  <!-- FOOTER -->
+  </main>
+
   <footer>
-    <div class="container">
-      <p class="footer-name">108 Vine</p>
-      <p>3735 W University Ave, Gainesville, FL 32607</p>
-      <p style="margin-top: 1rem;">
-        &copy; 2026 108 Vine &mdash; All rights reserved.
-      </p>
-    </div>
+    <div class="fname">108 Vine</div>
+    <p>3735 W University Ave, Gainesville, FL 32607 · Contact us for current hours</p>
   </footer>
+</div>
 
-  <script>
-    // Mobile nav toggle
-    var toggle = document.getElementById('navToggle');
-    var links  = document.getElementById('navLinks');
-    toggle.addEventListener('click', function() {
-      links.classList.toggle('open');
-    });
-    // Close nav when a link is clicked
-    links.querySelectorAll('a').forEach(function(a) {
-      a.addEventListener('click', function() {
-        links.classList.remove('open');
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Staggered reveal */
+  var tiles = Array.prototype.slice.call(document.querySelectorAll(".tile"));
+  if (reduce || !("IntersectionObserver" in window)) {
+    tiles.forEach(function (t) { t.classList.add("revealed"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var el = entry.target;
+          var idx = tiles.indexOf(el);
+          setTimeout(function () { el.classList.add("revealed"); }, (idx % 4) * 110);
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+    tiles.forEach(function (t) { io.observe(t); });
+  }
+
+  /* Count-up on rating tile */
+  var countEl = document.getElementById("countUp");
+  var ratingTile = document.getElementById("ratingTile");
+  var target = 281;
+  var counted = false;
+  function runCount() {
+    if (counted) return;
+    counted = true;
+    if (reduce) { countEl.textContent = String(target); return; }
+    var start = null, dur = 1600;
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      countEl.textContent = String(Math.round(eased * target));
+      if (p < 1) requestAnimationFrame(step);
+      else countEl.textContent = String(target);
+    }
+    requestAnimationFrame(step);
+  }
+  if (!("IntersectionObserver" in window)) {
+    runCount();
+  } else {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { runCount(); cio.disconnect(); } });
+    }, { threshold: 0.4 });
+    cio.observe(ratingTile);
+  }
+
+  /* 3D tilt on pointer move */
+  if (!reduce && window.matchMedia("(hover: hover)").matches) {
+    var tiltEls = document.querySelectorAll("[data-tilt]");
+    tiltEls.forEach(function (el) {
+      el.addEventListener("pointermove", function (ev) {
+        var r = el.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - 0.5;
+        var py = (ev.clientY - r.top) / r.height - 0.5;
+        var max = 7;
+        el.style.transform = "perspective(900px) rotateX(" + (-py * max).toFixed(2) +
+          "deg) rotateY(" + (px * max).toFixed(2) + "deg) translateY(-4px)";
+      });
+      el.addEventListener("pointerleave", function () {
+        el.style.transform = "";
       });
     });
-  </script>
+  }
+})();
+</script>
 </body>
 </html>

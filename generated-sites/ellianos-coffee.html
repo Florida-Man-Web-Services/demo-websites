@@ -1,607 +1,539 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ellianos Coffee – Gainesville, FL</title>
-  <style>
-    /* ===== Reset & Base ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Georgia', serif;
-      background: #fdf8f3;
-      color: #3b2a1a;
-      line-height: 1.7;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ellianos Coffee — Gainesville, FL</title>
+<style>
+  :root{
+    --espresso:#2b1a12;
+    --mocha:#4a2f21;
+    --latte:#c8a27c;
+    --cream:#f4e9db;
+    --caramel:#a9724a;
+    --foam:#fbf5ec;
+    --ink:#f4e9db;
+    --panel-pad: clamp(1.5rem, 5vw, 6rem);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    background: var(--espresso);
+    color: var(--ink);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  .ui-sans{font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;}
+
+  /* ------- Grain overlay ------- */
+  .grain{
+    position:fixed; inset:0; z-index:9000; pointer-events:none;
+    opacity:.06; mix-blend-mode:overlay;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,.9) 0, transparent .08%),
+      radial-gradient(circle at 70% 60%, rgba(255,255,255,.7) 0, transparent .08%),
+      radial-gradient(circle at 40% 80%, rgba(0,0,0,.6) 0, transparent .08%),
+      radial-gradient(circle at 85% 15%, rgba(0,0,0,.5) 0, transparent .08%);
+    background-size: 3px 3px, 4px 4px, 5px 5px, 3px 3px;
+    animation: grainshift 6s steps(6) infinite;
+  }
+  @keyframes grainshift{
+    0%{transform:translate(0,0)} 20%{transform:translate(-2%,1%)}
+    40%{transform:translate(1%,-2%)} 60%{transform:translate(-1%,2%)}
+    80%{transform:translate(2%,-1%)} 100%{transform:translate(0,0)}
+  }
+
+  /* ------- Progress bar ------- */
+  .progress-wrap{
+    position:fixed; top:0; left:0; right:0; height:5px; z-index:9500;
+    background: rgba(0,0,0,.35);
+  }
+  .progress-bar{
+    height:100%; width:0%;
+    background: linear-gradient(90deg, var(--caramel), var(--latte), var(--cream));
+    box-shadow:0 0 12px rgba(201,162,124,.6);
+    transition: width .08s linear;
+  }
+
+  /* ------- Top brand ribbon ------- */
+  .ribbon{
+    position:fixed; top:14px; left:0; right:0; z-index:9200;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 0 clamp(1rem,3vw,2.5rem); pointer-events:none;
+  }
+  .brand{
+    display:flex; align-items:center; gap:.6rem; pointer-events:auto;
+    letter-spacing:.06em;
+  }
+  .brand .mark{
+    width:34px;height:34px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
+  }
+  .brand b{font-size:1.05rem; font-weight:700}
+  .dots{display:flex; gap:.5rem; pointer-events:auto}
+  .dots button{
+    width:11px;height:11px;border-radius:50%;border:1px solid var(--latte);
+    background:transparent;cursor:pointer;padding:0;transition:transform .25s, background .25s;
+  }
+  .dots button.active{background:var(--cream);transform:scale(1.35)}
+  .dots button:hover{transform:scale(1.4)}
+
+  /* ------- Horizontal track ------- */
+  .track{
+    display:flex; flex-direction:row;
+    height:100vh; width:100vw;
+    overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+  }
+  .track::-webkit-scrollbar{display:none}
+
+  .panel{
+    position:relative;
+    flex: 0 0 100vw;
+    height:100vh;
+    scroll-snap-align:start;
+    display:flex; align-items:center;
+    padding: var(--panel-pad);
+    overflow:hidden;
+  }
+
+  .panel-inner{
+    max-width: 62rem; position:relative; z-index:3;
+    opacity:0; transform: translateY(40px);
+    transition: opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .panel.revealed .panel-inner{opacity:1; transform:none}
+
+  .kicker{
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    text-transform:uppercase; letter-spacing:.35em; font-size:.72rem;
+    color:var(--latte); margin-bottom:1.2rem; opacity:.9;
+  }
+  h1{
+    font-size: clamp(2.6rem, 8vw, 6.5rem); line-height:.95; font-weight:800;
+    letter-spacing:-.02em; margin-bottom:1.2rem;
+  }
+  h2{font-size: clamp(2rem, 5.5vw, 4rem); line-height:1; margin-bottom:1.4rem; letter-spacing:-.01em}
+  p.lead{font-size: clamp(1.05rem,2.2vw,1.4rem); line-height:1.55; max-width:40rem; color:#e9dbca}
+  p.body{font-size:1.05rem; line-height:1.65; max-width:38rem; color:#e0d0be; margin-top:1rem}
+
+  /* ------- Panel backgrounds ------- */
+  #p0{background: radial-gradient(120% 120% at 20% 20%, #3a2418 0%, var(--espresso) 60%);}
+  #p1{background: radial-gradient(120% 120% at 80% 30%, #402a1c 0%, var(--espresso) 65%);}
+  #p2{background: linear-gradient(135deg, #2b1a12 0%, #3d271a 100%);}
+  #p3{background: radial-gradient(100% 100% at 50% 40%, #4a2f21 0%, var(--espresso) 70%);}
+  #p4{background: linear-gradient(160deg, #3a2418, #241009);}
+
+  /* parallax deco */
+  .parallax{position:absolute; z-index:1; pointer-events:none; will-change:transform;}
+  .bean{
+    width: clamp(120px, 22vw, 320px); height:auto; opacity:.14;
+  }
+  .halo{
+    width: clamp(200px,40vw,560px); height:clamp(200px,40vw,560px);
+    border-radius:50%; filter:blur(40px); opacity:.35;
+    background: radial-gradient(circle, var(--caramel), transparent 70%);
+  }
+
+  .cta{
+    display:inline-flex; align-items:center; gap:.6rem; margin-top:2rem;
+    font-family: ui-sans-serif, system-ui, sans-serif; font-weight:600;
+    text-decoration:none; color:var(--espresso);
+    background: linear-gradient(90deg, var(--cream), var(--latte));
+    padding:.95rem 1.6rem; border-radius:999px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+    transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;
+  }
+  .cta:hover{transform: translateY(-3px) scale(1.04); box-shadow:0 16px 40px rgba(0,0,0,.5)}
+  .cta:active{transform: translateY(-1px) scale(.99)}
+  .cta svg{width:18px;height:18px}
+
+  .chips{display:flex; flex-wrap:wrap; gap:.7rem; margin-top:1.8rem}
+  .chip{
+    font-family: ui-sans-serif, system-ui, sans-serif; font-size:.85rem;
+    border:1px solid rgba(201,162,124,.5); border-radius:999px;
+    padding:.5rem 1rem; color:var(--cream);
+    background:rgba(201,162,124,.08);
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1), background .2s;
+  }
+  .chip:hover{transform:translateY(-4px) rotate(-1deg); background:rgba(201,162,124,.2)}
+
+  /* ------- Steam animation ------- */
+  .cup-scene{position:relative; width:min(46vw,360px); aspect-ratio:1/1; margin-top:1rem}
+  .steam{position:absolute; left:50%; bottom:58%; width:14px; height:70px;
+    border-radius:50%; background:linear-gradient(to top, rgba(255,255,255,.45), transparent);
+    filter:blur(4px); transform-origin:bottom center; opacity:0;
+    animation: rise 3.4s ease-in-out infinite;
+  }
+  .steam.s2{margin-left:-26px; animation-delay:.6s; height:60px}
+  .steam.s3{margin-left:24px; animation-delay:1.2s; height:64px}
+  @keyframes rise{
+    0%{opacity:0; transform:translateY(10px) scaleX(1)}
+    25%{opacity:.7}
+    60%{opacity:.45}
+    100%{opacity:0; transform:translateY(-70px) scaleX(1.6) skewX(8deg)}
+  }
+
+  /* ------- Rating panel ------- */
+  .rating-flex{display:flex; flex-wrap:wrap; gap:2.5rem; align-items:center; margin-top:1rem}
+  .bignum{
+    font-size: clamp(5rem, 16vw, 12rem); font-weight:800; line-height:.8;
+    background:linear-gradient(180deg, var(--cream), var(--caramel));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .stars{display:flex; gap:.25rem; margin:.6rem 0}
+  .stars svg{width:30px;height:30px}
+  .reviewcount{font-family: ui-sans-serif, system-ui, sans-serif; font-size:1.2rem; color:var(--latte)}
+  .reviewcount b{color:var(--cream); font-size:1.6rem}
+  .src{font-family: ui-sans-serif, system-ui, sans-serif; font-size:.8rem; color:#bfa78d; margin-top:.4rem; letter-spacing:.05em}
+
+  .infolist{list-style:none; margin-top:1.6rem; display:grid; gap:1rem; max-width:34rem}
+  .infolist li{display:flex; gap:1rem; align-items:flex-start}
+  .infolist svg{width:22px;height:22px;flex:0 0 auto;color:var(--latte);margin-top:2px}
+  .infolist .lab{font-family:ui-sans-serif,system-ui,sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.2em; color:var(--latte)}
+  .infolist .val{font-size:1.1rem; color:var(--foam)}
+
+  /* ------- Prev/Next affordance ------- */
+  .nav-arrows{position:fixed; bottom:26px; right:26px; z-index:9300; display:flex; gap:.6rem}
+  .nav-arrows button{
+    width:52px;height:52px;border-radius:50%;
+    border:1px solid rgba(201,162,124,.6); background:rgba(43,26,18,.7);
+    color:var(--cream); cursor:pointer; backdrop-filter:blur(6px);
+    display:grid;place-items:center; transition:transform .18s cubic-bezier(.34,1.56,.64,1), background .18s;
+  }
+  .nav-arrows button:hover{transform:scale(1.12); background:var(--mocha)}
+  .nav-arrows button:disabled{opacity:.3; cursor:default; transform:none}
+  .nav-arrows svg{width:22px;height:22px}
+
+  .hint{
+    position:fixed; bottom:30px; left:26px; z-index:9300;
+    font-family:ui-sans-serif,system-ui,sans-serif; font-size:.75rem;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--latte); opacity:.8;
+    display:flex;align-items:center;gap:.5rem;
+  }
+  .hint .arrow{animation: nudge 1.8s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+
+  .panelnum{
+    position:absolute; z-index:2; bottom:6vh; right:var(--panel-pad);
+    font-size: clamp(4rem,14vw,11rem); font-weight:800; color:rgba(201,162,124,.08);
+    line-height:1; pointer-events:none;
+  }
+
+  /* ------- Mobile / narrow fallback: vertical stacking ------- */
+  @media (max-width: 820px){
+    body{overflow:auto}
+    .track{
+      display:block; height:auto; width:100%;
+      overflow:visible; scroll-snap-type: y proximity;
     }
-
-    /* ===== Color Palette ===== */
-    :root {
-      --espresso:  #3b2a1a;
-      --dark-roast: #5c3d1e;
-      --medium-roast: #8b5e3c;
-      --latte: #c8956c;
-      --cream: #f5e6d3;
-      --warm-white: #fdf8f3;
-      --gold: #c9a84c;
-      --text-light: #7a5c3e;
+    .panel{
+      flex:none; width:100%; height:auto; min-height:100vh;
+      scroll-snap-align:start; padding: 6rem 1.4rem 4rem;
     }
+    .nav-arrows, .hint{display:none}
+    .ribbon{position:sticky; top:0; background:rgba(43,26,18,.85); backdrop-filter:blur(8px); padding:.8rem 1.2rem; height:auto}
+    .dots{display:none}
+    .parallax{transform:none !important}
+    .cup-scene{width:70vw}
+  }
 
-    /* ===== Navigation ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 2rem;
-      background: rgba(59, 42, 26, 0.97);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-    }
-
-    .nav-logo-text {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #f5e6d3;
-      letter-spacing: 0.04em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #c8956c;
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.25s;
-    }
-
-    .nav-links a:hover { color: #f5e6d3; }
-
-    /* Hamburger */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #c8956c;
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ===== Hero ===== */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8rem 1.5rem 4rem;
-      background:
-        linear-gradient(
-          160deg,
-          rgba(59, 42, 26, 0.82) 0%,
-          rgba(92, 61, 30, 0.72) 50%,
-          rgba(139, 94, 60, 0.60) 100%
-        ),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect width='600' height='600' fill='%235c3d1e'/%3E%3Ccircle cx='150' cy='150' r='120' fill='%238b5e3c' opacity='0.4'/%3E%3Ccircle cx='450' cy='300' r='160' fill='%233b2a1a' opacity='0.5'/%3E%3Ccircle cx='300' cy='480' r='100' fill='%23c8956c' opacity='0.2'/%3E%3C/svg%3E") center / cover no-repeat;
-    }
-
-    .hero-inner { max-width: 720px; }
-
-    .hero-eyebrow {
-      display: inline-block;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid var(--gold);
-      border-radius: 30px;
-      padding: 0.3rem 1rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.6rem, 7vw, 5rem);
-      color: #fdf8f3;
-      line-height: 1.15;
-      margin-bottom: 1.1rem;
-      letter-spacing: -0.01em;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: #e8d5be;
-      max-width: 520px;
-      margin: 0 auto 2.2rem;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--espresso);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.85rem 2.2rem;
-      border-radius: 4px;
-      transition: background 0.25s, transform 0.2s;
-    }
-    .btn-primary:hover { background: #e0bc5c; transform: translateY(-2px); }
-
-    /* ===== Section Shared ===== */
-    section { padding: 5rem 1.5rem; }
-
-    .section-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--latte);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.8rem);
-      color: var(--espresso);
-      margin-bottom: 1.4rem;
-      line-height: 1.2;
-    }
-
-    .divider {
-      width: 52px;
-      height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin-bottom: 2rem;
-    }
-
-    /* ===== About ===== */
-    .about { background: var(--warm-white); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-light);
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-
-    .about-visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .coffee-illustration {
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: var(--cream);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 40px rgba(139, 94, 60, 0.25);
-    }
-
-    /* ===== Services ===== */
-    .services { background: var(--cream); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
-      margin-top: 1rem;
-    }
-
-    .service-card {
-      background: var(--warm-white);
-      border-radius: 8px;
-      padding: 2rem 1.8rem;
-      border-bottom: 3px solid transparent;
-      box-shadow: 0 2px 16px rgba(59, 42, 26, 0.08);
-      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
-    }
-
-    .service-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 28px rgba(59, 42, 26, 0.14);
-    }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 0.8rem;
-      display: block;
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      color: var(--espresso);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-card p {
-      font-size: 0.92rem;
-      color: var(--text-light);
-    }
-
-    /* ===== Contact ===== */
-    .contact { background: var(--warm-white); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info h3 {
-      font-size: 1.1rem;
-      color: var(--espresso);
-      margin-bottom: 0.4rem;
-      margin-top: 1.6rem;
-    }
-
-    .contact-info h3:first-child { margin-top: 0; }
-
-    .contact-info p, .contact-info address {
-      color: var(--text-light);
-      font-style: normal;
-      font-size: 0.97rem;
-    }
-
-    .btn-directions {
-      display: inline-block;
-      margin-top: 1.6rem;
-      background: var(--dark-roast);
-      color: #fdf8f3;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.8rem 1.8rem;
-      border-radius: 4px;
-      transition: background 0.25s, transform 0.2s;
-    }
-    .btn-directions:hover { background: var(--medium-roast); transform: translateY(-2px); }
-
-    .rating-badge {
-      background: var(--cream);
-      border: 1px solid #e0c9a8;
-      border-radius: 10px;
-      padding: 1.4rem 1.8rem;
-      margin-top: 2.4rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .rating-score {
-      font-size: 2.4rem;
-      font-weight: 700;
-      color: var(--espresso);
-      line-height: 1;
-    }
-
-    .rating-stars {
-      color: var(--gold);
-      font-size: 1.1rem;
-      letter-spacing: 0.06em;
-      display: block;
-      margin-bottom: 0.2rem;
-    }
-
-    .rating-count {
-      font-size: 0.82rem;
-      color: var(--text-light);
-    }
-
-    .contact-map-placeholder {
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--cream);
-      height: 340px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 1rem;
-      border: 1px solid #e0c9a8;
-    }
-
-    .map-pin-svg { opacity: 0.45; }
-
-    .contact-map-placeholder p {
-      color: var(--text-light);
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    /* ===== Footer ===== */
-    footer {
-      background: var(--espresso);
-      color: #c8956c;
-      text-align: center;
-      padding: 2.4rem 1.5rem;
-    }
-
-    footer .footer-logo {
-      font-size: 1.3rem;
-      color: var(--cream);
-      letter-spacing: 0.05em;
-      margin-bottom: 0.6rem;
-    }
-
-    footer p {
-      font-size: 0.82rem;
-      opacity: 0.7;
-    }
-
-    footer a {
-      color: var(--latte);
-      text-decoration: none;
-    }
-
-    footer a:hover { text-decoration: underline; }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        gap: 0;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--espresso);
-        padding: 1rem 0;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links a {
-        display: block;
-        padding: 0.75rem 2rem;
-      }
-      .nav-toggle { display: flex; }
-
-      .about-grid,
-      .contact-grid { grid-template-columns: 1fr; }
-
-      .about-visual { display: none; }
-
-      .contact-map-placeholder { height: 220px; }
-
-      .rating-badge { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
-    }
-  </style>
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; scroll-behavior:auto !important; transition:none !important}
+    .panel-inner{opacity:1; transform:none}
+    .grain{display:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav id="top">
-    <a href="#top" class="nav-logo" aria-label="Ellianos Coffee home">
-      <svg class="nav-logo-icon" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="19" cy="19" r="19" fill="#8b5e3c"/>
-        <ellipse cx="19" cy="22" rx="10" ry="7" fill="#fdf8f3" opacity="0.15"/>
-        <path d="M11 16 Q13 10 19 10 Q25 10 27 16" stroke="#c9a84c" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <ellipse cx="19" cy="22" rx="9" ry="6" stroke="#f5e6d3" stroke-width="1.4" fill="none"/>
-        <path d="M28 14 Q32 12 31 18" stroke="#c8956c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      </svg>
-      <span class="nav-logo-text">Ellianos Coffee</span>
-    </a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Menu</a></li>
-      <li><a href="#contact">Visit Us</a></li>
-    </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+<div class="grain"></div>
+<div class="progress-wrap"><div class="progress-bar" id="bar"></div></div>
 
-  <!-- Hero -->
-  <section class="hero" id="hero">
-    <div class="hero-inner">
-      <span class="hero-eyebrow">Gainesville, Florida</span>
-      <h1>Your Perfect Cup,<br>Every Time.</h1>
-      <p>Handcrafted espresso drinks, freshly brewed coffee, and warm hospitality — right here in Gainesville.</p>
-      <a href="#contact" class="btn-primary">Find Us</a>
+<div class="ribbon ui-sans">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <path d="M8 22h26a8 8 0 0 1 0 16h-4" stroke="#c8a27c" stroke-width="3" fill="none"/>
+      <path d="M8 22h26v6a10 10 0 0 1-10 10H18A10 10 0 0 1 8 28z" fill="#4a2f21" stroke="#c8a27c" stroke-width="3"/>
+      <path d="M16 6c-2 3 2 5 0 8M24 5c-2 3 2 5 0 8M32 6c-2 3 2 5 0 8" stroke="#f4e9db" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    <b>ELLIANOS COFFEE</b>
+  </div>
+  <div class="dots" id="dots" role="tablist" aria-label="Panels"></div>
+</div>
+
+<main class="track" id="track">
+
+  <!-- Panel 0: Welcome -->
+  <section class="panel" id="p0" aria-label="Welcome">
+    <div class="halo parallax" data-depth="0.15" style="top:-10%; right:-8%"></div>
+    <div class="panel-inner">
+      <div class="kicker">Gainesville, Florida</div>
+      <h1>A warm cup,<br>crafted by hand.</h1>
+      <p class="lead">Ellianos Coffee is a local coffeehouse pouring handcrafted espresso drinks, freshly brewed coffee, and specialty drinks from premium beans.</p>
+      <a class="cta" href="https://www.google.com/maps/search/Ellianos%20Coffee%201521%20SW%2074th%20Dr%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
+        Get Directions
+      </a>
     </div>
+    <div class="panelnum">01</div>
   </section>
 
-  <!-- About -->
-  <section class="about" id="about">
-    <div class="section-inner about-grid">
-      <div class="about-text">
-        <p class="section-label">Our Story</p>
-        <h2 class="section-title">More Than Just Coffee</h2>
-        <div class="divider"></div>
-        <p>Ellianos Coffee is a beloved local coffeehouse serving the Gainesville community with expertly crafted espresso beverages and specialty drinks made from premium beans. Nestled on SW 74th Dr, we are a welcoming spot for students, professionals, and neighbors alike to slow down and savor the moment.</p>
-        <p>From your morning pick-me-up to an afternoon retreat, our team is dedicated to delivering a consistently exceptional experience in every cup — because great coffee is about more than what is in the cup; it is about how it makes you feel.</p>
-      </div>
-      <div class="about-visual" aria-hidden="true">
-        <div class="coffee-illustration">
-          <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="80" cy="80" r="72" fill="#f5e6d3"/>
-            <!-- Cup body -->
-            <path d="M48 70 L56 120 Q80 128 104 120 L112 70 Z" fill="#8b5e3c"/>
-            <!-- Cup rim -->
-            <rect x="44" y="64" width="72" height="10" rx="5" fill="#5c3d1e"/>
-            <!-- Handle -->
-            <path d="M112 78 Q130 78 130 95 Q130 112 112 112" stroke="#5c3d1e" stroke-width="7" fill="none" stroke-linecap="round"/>
-            <!-- Saucer -->
-            <ellipse cx="80" cy="126" rx="42" ry="8" fill="#c8956c"/>
-            <!-- Steam -->
-            <path d="M65 56 Q67 44 65 36" stroke="#c9a84c" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
-            <path d="M80 52 Q82 38 80 28" stroke="#c9a84c" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
-            <path d="M95 56 Q97 44 95 36" stroke="#c9a84c" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
-            <!-- Foam swirl -->
-            <ellipse cx="80" cy="76" rx="26" ry="6" fill="#fdf8f3" opacity="0.5"/>
-            <path d="M58 76 Q68 70 80 76 Q92 82 102 76" stroke="#fdf8f3" stroke-width="1.5" fill="none" opacity="0.6"/>
-          </svg>
-        </div>
+  <!-- Panel 1: Story -->
+  <section class="panel" id="p1" aria-label="Our story">
+    <svg class="bean parallax" data-depth="0.25" viewBox="0 0 100 140" style="bottom:-6%; left:4%" aria-hidden="true">
+      <ellipse cx="50" cy="70" rx="34" ry="60" fill="#c8a27c"/>
+      <path d="M50 12c-10 30-10 66 0 116M50 12c10 30 10 66 0 116" stroke="#2b1a12" stroke-width="4" fill="none"/>
+    </svg>
+    <div class="panel-inner">
+      <div class="kicker">Our approach</div>
+      <h2>Premium beans,<br>brewed with care.</h2>
+      <p class="body">Every drink starts with premium beans and a little patience. From freshly brewed coffee to handcrafted espresso drinks, we pour each cup the way it deserves to be poured.</p>
+      <div class="chips">
+        <span class="chip">Handcrafted espresso</span>
+        <span class="chip">Freshly brewed coffee</span>
+        <span class="chip">Specialty drinks</span>
+        <span class="chip">Premium beans</span>
       </div>
     </div>
+    <div class="panelnum">02</div>
   </section>
 
-  <!-- Services -->
-  <section class="services" id="services">
-    <div class="section-inner">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Crafted with Care</h2>
-      <div class="divider"></div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <span class="service-icon" aria-hidden="true">☕</span>
-          <h3>Espresso Drinks</h3>
-          <p>Classic lattes, cappuccinos, macchiatos, and cortados — all pulled fresh to order with premium espresso.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon" aria-hidden="true">🧊</span>
-          <h3>Iced &amp; Blended Beverages</h3>
-          <p>Refreshing iced coffees, cold brews, and blended drinks perfect for Florida's warm weather year-round.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon" aria-hidden="true">🍵</span>
-          <h3>Hot &amp; Specialty Drinks</h3>
-          <p>From smooth hot chocolates to seasonal specialty creations, there is always something new to enjoy.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon" aria-hidden="true">🥤</span>
-          <h3>Non-Coffee Options</h3>
-          <p>Smoothies, teas, and other non-coffee beverages so every guest can find their perfect drink.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon" aria-hidden="true">🚗</span>
-          <h3>Drive-Thru Service</h3>
-          <p>Quick and convenient drive-thru available so you can grab your favorite drink without missing a beat.</p>
-        </div>
-
-        <div class="service-card">
-          <span class="service-icon" aria-hidden="true">🎁</span>
-          <h3>Custom &amp; Seasonal Specials</h3>
-          <p>Rotating seasonal menus and customizable drinks to match your mood. Contact us for current offerings.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section class="contact" id="contact">
-    <div class="section-inner contact-grid">
-      <div class="contact-info">
-        <p class="section-label">Come Visit</p>
-        <h2 class="section-title">Find Us in Gainesville</h2>
-        <div class="divider"></div>
-
-        <h3>Address</h3>
-        <address>1521 SW 74th Dr<br>Gainesville, FL 32607</address>
-
-        <h3>Hours</h3>
-        <p>Contact us for current hours of operation.</p>
-
-        <a
-          href="https://www.google.com/maps/search/Ellianos%20Coffee%201521%20SW%2074th%20Dr%2C%20Gainesville%2C%20FL%2032607"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-directions"
-        >Get Directions</a>
-
-        <div class="rating-badge" aria-label="Google Maps rating: 4.7 out of 5 from 494 reviews">
-          <div class="rating-score">4.7</div>
-          <div>
-            <span class="rating-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="rating-count">Based on 494 Google reviews</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-map-placeholder" aria-label="Map placeholder">
-        <svg class="map-pin-svg" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="28" cy="24" r="14" fill="#8b5e3c"/>
-          <circle cx="28" cy="24" r="6" fill="#fdf8f3"/>
-          <path d="M28 38 L28 52" stroke="#8b5e3c" stroke-width="3" stroke-linecap="round"/>
-          <ellipse cx="28" cy="52" rx="10" ry="3" fill="#8b5e3c" opacity="0.25"/>
+  <!-- Panel 2: Menu / steam -->
+  <section class="panel" id="p2" aria-label="What we pour">
+    <div class="halo parallax" data-depth="0.2" style="bottom:-15%; right:0%; opacity:.25"></div>
+    <div class="panel-inner">
+      <div class="kicker">What we pour</div>
+      <h2>Made to warm<br>your morning.</h2>
+      <p class="body">Handcrafted espresso drinks, specialty drinks, and freshly brewed coffee — all built on premium beans. Ask us about today's pour.</p>
+      <div class="cup-scene" aria-hidden="true">
+        <span class="steam"></span><span class="steam s2"></span><span class="steam s3"></span>
+        <svg viewBox="0 0 200 200" style="width:100%;height:100%">
+          <path d="M40 90h100v40a45 45 0 0 1-45 45H85a45 45 0 0 1-45-45z" fill="#4a2f21" stroke="#c8a27c" stroke-width="4"/>
+          <path d="M140 100h14a20 20 0 0 1 0 40h-8" fill="none" stroke="#c8a27c" stroke-width="4"/>
+          <ellipse cx="90" cy="90" rx="50" ry="12" fill="#3a2418" stroke="#c8a27c" stroke-width="4"/>
+          <ellipse cx="90" cy="88" rx="38" ry="7" fill="#a9724a"/>
         </svg>
-        <p>1521 SW 74th Dr<br>Gainesville, FL 32607</p>
       </div>
     </div>
+    <div class="panelnum">03</div>
   </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-logo">Ellianos Coffee</div>
-    <p>1521 SW 74th Dr, Gainesville, FL 32607</p>
-    <p style="margin-top:0.6rem;">
-      &copy; 2026 Ellianos Coffee &nbsp;|&nbsp;
-      <a href="https://www.google.com/maps/search/Ellianos%20Coffee%201521%20SW%2074th%20Dr%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">View on Google Maps</a>
-    </p>
-  </footer>
+  <!-- Panel 3: Rating -->
+  <section class="panel" id="p3" aria-label="Ratings">
+    <div class="halo parallax" data-depth="0.3" style="top:-12%; left:-6%"></div>
+    <div class="panel-inner">
+      <div class="kicker">Loved locally</div>
+      <div class="rating-flex">
+        <div class="bignum" id="ratingNum">0.0</div>
+        <div>
+          <div class="stars" id="stars" aria-label="4.7 out of 5 stars"></div>
+          <div class="reviewcount"><b id="reviewCount">0</b> reviews</div>
+          <div class="src">Rated 4.7 on Google Maps</div>
+        </div>
+      </div>
+      <p class="body">A neighborhood favorite in Gainesville, poured one handcrafted cup at a time.</p>
+    </div>
+    <div class="panelnum">04</div>
+  </section>
 
-  <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('nav-toggle');
-    const links  = document.getElementById('nav-links');
-    toggle.addEventListener('click', () => {
-      const open = links.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', open);
-    });
-    // Close nav on link click
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        links.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
+  <!-- Panel 4: Visit -->
+  <section class="panel" id="p4" aria-label="Visit us">
+    <svg class="bean parallax" data-depth="0.18" viewBox="0 0 100 140" style="top:2%; right:6%; opacity:.1" aria-hidden="true">
+      <ellipse cx="50" cy="70" rx="34" ry="60" fill="#c8a27c"/>
+      <path d="M50 12c-10 30-10 66 0 116" stroke="#2b1a12" stroke-width="4" fill="none"/>
+    </svg>
+    <div class="panel-inner">
+      <div class="kicker">Come by</div>
+      <h2>Visit Ellianos.</h2>
+      <ul class="infolist">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
+          <div><div class="lab">Address</div><div class="val">1521 SW 74th Dr, Gainesville, FL 32607</div></div>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <div><div class="lab">Hours</div><div class="val">Contact us for current hours of operation</div></div>
+        </li>
+      </ul>
+      <a class="cta" href="https://www.google.com/maps/search/Ellianos%20Coffee%201521%20SW%2074th%20Dr%2C%20Gainesville%2C%20FL%2032607" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Get Directions
+      </a>
+    </div>
+    <div class="panelnum">05</div>
+  </section>
+
+</main>
+
+<div class="hint ui-sans">Scroll <span class="arrow">&#8594;</span></div>
+<div class="nav-arrows">
+  <button id="prev" aria-label="Previous panel"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="next" aria-label="Next panel"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var track = document.getElementById('track');
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var bar = document.getElementById('bar');
+  var dotsWrap = document.getElementById('dots');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = -1;
+
+  // Build dots
+  panels.forEach(function(p, i){
+    var b = document.createElement('button');
+    b.setAttribute('role','tab');
+    b.setAttribute('aria-label','Go to panel ' + (i+1));
+    b.addEventListener('click', function(){ goTo(i); });
+    dotsWrap.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function isHorizontal(){
+    return window.matchMedia('(min-width: 821px)').matches;
+  }
+
+  function goTo(i){
+    i = Math.max(0, Math.min(panels.length - 1, i));
+    if (isHorizontal()){
+      track.scrollTo({ left: i * window.innerWidth, behavior: reduce ? 'auto' : 'smooth' });
+    } else {
+      panels[i].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    }
+  }
+
+  function setActive(i){
+    if (i === current) return;
+    current = i;
+    dots.forEach(function(d, di){ d.classList.toggle('active', di === i); });
+    prevBtn.disabled = (i === 0);
+    nextBtn.disabled = (i === panels.length - 1);
+  }
+
+  function onScroll(){
+    var horiz = isHorizontal();
+    var pos, max, idx;
+    if (horiz){
+      pos = track.scrollLeft;
+      max = track.scrollWidth - track.clientWidth;
+      idx = Math.round(pos / window.innerWidth);
+      // parallax (skipped when the visitor prefers reduced motion)
+      if (!reduce){
+        panels.forEach(function(p){
+          var rect = p.getBoundingClientRect();
+          var off = rect.left;
+          var deco = p.querySelectorAll('.parallax');
+          deco.forEach(function(el){
+            var depth = parseFloat(el.getAttribute('data-depth')) || 0.2;
+            el.style.transform = 'translateX(' + (-off * depth) + 'px)';
+          });
+        });
+      }
+    } else {
+      pos = window.scrollY || document.documentElement.scrollTop;
+      max = document.documentElement.scrollHeight - window.innerHeight;
+      idx = Math.round(pos / window.innerHeight);
+    }
+    var pct = max > 0 ? (pos / max) * 100 : 0;
+    bar.style.width = pct + '%';
+    setActive(Math.max(0, Math.min(panels.length - 1, idx)));
+  }
+
+  track.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+
+  prevBtn.addEventListener('click', function(){ goTo(current - 1); });
+  nextBtn.addEventListener('click', function(){ goTo(current + 1); });
+
+  // Keyboard
+  window.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight') { goTo(current + 1); }
+    else if (e.key === 'ArrowLeft') { goTo(current - 1); }
+  });
+
+  // Vertical wheel -> horizontal scroll on desktop
+  track.addEventListener('wheel', function(e){
+    if (!isHorizontal()) return;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+      track.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // Reveal via IntersectionObserver
+  if ('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          en.target.classList.add('revealed');
+          if (en.target.id === 'p3') runRating();
+        }
       });
-    });
-  </script>
+    }, { threshold: 0.35 });
+    panels.forEach(function(p){ io.observe(p); });
+  } else {
+    panels.forEach(function(p){ p.classList.add('revealed'); });
+    runRating();
+  }
 
+  // Stars (4.7 -> partial fill via gradient), built as HTML string (no namespace URL needed)
+  (function buildStars(){
+    var el = document.getElementById('stars');
+    var rating = 4.7;
+    var html = '';
+    for (var i = 0; i < 5; i++){
+      var fill = Math.max(0, Math.min(1, rating - i));
+      var id = 'grad' + i;
+      var pct = Math.round(fill * 100);
+      html +=
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+          '<defs><linearGradient id="' + id + '">' +
+            '<stop offset="' + pct + '%" stop-color="#f4e9db"/>' +
+            '<stop offset="' + pct + '%" stop-color="rgba(201,162,124,0.3)"/>' +
+          '</linearGradient></defs>' +
+          '<path d="M12 2l2.9 6.3 6.8.7-5.1 4.6 1.4 6.7L12 17.8 6 20.9l1.4-6.7L2.3 9.6l6.8-.7z" fill="url(#' + id + ')" stroke="#c8a27c" stroke-width="1"/>' +
+        '</svg>';
+    }
+    el.innerHTML = html;
+  })();
+
+  var ratingDone = false;
+  function runRating(){
+    if (ratingDone) return; ratingDone = true;
+    var numEl = document.getElementById('ratingNum');
+    var revEl = document.getElementById('reviewCount');
+    if (reduce){
+      numEl.textContent = '4.7';
+      revEl.textContent = '494';
+      return;
+    }
+    var dur = 1400, start = null;
+    function step(ts){
+      if (!start) start = ts;
+      var t = Math.min(1, (ts - start) / dur);
+      var ease = 1 - Math.pow(1 - t, 3);
+      numEl.textContent = (ease * 4.7).toFixed(1);
+      revEl.textContent = Math.round(ease * 494).toString();
+      if (t < 1) requestAnimationFrame(step);
+      else { numEl.textContent = '4.7'; revEl.textContent = '494'; }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // init
+  panels[0].classList.add('revealed');
+  setActive(0);
+  prevBtn.disabled = true;
+  onScroll();
+})();
+</script>
 </body>
 </html>
