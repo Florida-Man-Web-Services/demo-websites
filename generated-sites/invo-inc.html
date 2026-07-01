@@ -1,651 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Invo Inc | Advertising &amp; Print Services | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy:   #1a2740;
-      --cobalt: #2b4d8f;
-      --gold:   #e8a020;
-      --gold-lt:#f5c355;
-      --cream:  #faf8f4;
-      --gray:   #5c6170;
-      --light:  #eef1f7;
-      --white:  #ffffff;
-      --radius: 6px;
-      --shadow: 0 4px 20px rgba(26,39,64,0.10);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--navy);
-      background: var(--white);
-      line-height: 1.65;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 66px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-    }
-
-    .nav-logo {
-      font-size: 1.55rem;
-      font-weight: 800;
-      color: var(--white);
-      letter-spacing: 0.04em;
-      text-decoration: none;
-    }
-
-    .nav-logo span { color: var(--gold); }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.82);
-      text-decoration: none;
-      font-size: 0.93rem;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--gold-lt); }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--navy) !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: var(--radius);
-      font-weight: 700 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover { background: var(--gold-lt) !important; color: var(--navy) !important; }
-
-    /* hamburger */
-    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-    .nav-toggle span { display: block; width: 25px; height: 2px; background: var(--white); border-radius: 2px; }
-
-    @media (max-width: 700px) {
-      .nav-toggle { display: flex; }
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 66px; left: 0; right: 0;
-        background: var(--navy);
-        padding: 1.2rem 5%;
-        gap: 1.1rem;
-      }
-      .nav-links.open { display: flex; }
-    }
-
-    /* ── HERO ── */
-    .hero {
-      margin-top: 66px;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--cobalt) 100%);
-      color: var(--white);
-      padding: 7rem 5% 6rem;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -80px; right: -80px;
-      width: 420px; height: 420px;
-      border-radius: 50%;
-      background: rgba(232,160,32,0.10);
-      pointer-events: none;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -120px; right: 10%;
-      width: 280px; height: 280px;
-      border-radius: 50%;
-      background: rgba(232,160,32,0.06);
-      pointer-events: none;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold-lt);
-      margin-bottom: 1rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 800;
-      line-height: 1.18;
-      max-width: 680px;
-      margin-bottom: 1.3rem;
-    }
-
-    .hero h1 em {
-      font-style: normal;
-      color: var(--gold);
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.80);
-      max-width: 540px;
-      margin-bottom: 2.2rem;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.8rem;
-      border-radius: var(--radius);
-      font-weight: 700;
-      font-size: 0.97rem;
-      text-decoration: none;
-      transition: transform 0.15s, box-shadow 0.15s;
-      cursor: pointer;
-    }
-
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
-
-    .btn-gold { background: var(--gold); color: var(--navy); }
-    .btn-gold:hover { background: var(--gold-lt); }
-
-    .btn-outline {
-      border: 2px solid rgba(255,255,255,0.5);
-      color: var(--white);
-      margin-left: 0.9rem;
-    }
-
-    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
-
-    /* ── SECTIONS ── */
-    section { padding: 5.5rem 5%; }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--cobalt);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1.2;
-      margin-bottom: 1.1rem;
-    }
-
-    .section-title span { color: var(--cobalt); }
-
-    /* ── ABOUT ── */
-    .about { background: var(--cream); }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .about-text p {
-      color: var(--gray);
-      margin-bottom: 1rem;
-      font-size: 1.02rem;
-    }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 1.6rem 1.4rem;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-
-    .stat-card .stat-num {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--cobalt);
-      line-height: 1;
-    }
-
-    .stat-card .stat-num span { color: var(--gold); }
-
-    .stat-card p {
-      font-size: 0.82rem;
-      color: var(--gray);
-      margin-top: 0.4rem;
-      font-weight: 500;
-    }
-
-    @media (max-width: 760px) {
-      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-
-    /* ── SERVICES ── */
-    .services { background: var(--white); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.6rem;
-      max-width: 1100px;
-      margin: 2.5rem auto 0;
-    }
-
-    .service-card {
-      background: var(--light);
-      border-radius: var(--radius);
-      padding: 2rem 1.7rem;
-      border-left: 4px solid var(--cobalt);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    .service-icon {
-      width: 46px; height: 46px;
-      background: var(--cobalt);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-
-    .service-icon svg { width: 24px; height: 24px; fill: none; stroke: var(--white); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: var(--navy);
-    }
-
-    .service-card p {
-      font-size: 0.91rem;
-      color: var(--gray);
-    }
-
-    /* ── CONTACT ── */
-    .contact { background: var(--cream); }
-
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .contact-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.4rem; }
-
-    .info-row {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-      margin-bottom: 1.2rem;
-    }
-
-    .info-icon {
-      width: 40px; height: 40px;
-      background: var(--cobalt);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .info-icon svg { width: 20px; height: 20px; fill: none; stroke: var(--white); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-
-    .info-row-text strong { display: block; font-size: 0.83rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-    .info-row-text span { font-size: 0.97rem; color: var(--navy); font-weight: 500; }
-    .info-row-text a { color: var(--cobalt); text-decoration: none; font-weight: 600; }
-    .info-row-text a:hover { text-decoration: underline; }
-
-    .rating-box {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 1.4rem 1.6rem;
-      box-shadow: var(--shadow);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1.6rem;
-    }
-
-    .stars { color: var(--gold); font-size: 1.4rem; letter-spacing: 2px; }
-
-    .rating-box .rating-text strong { display: block; font-size: 1.2rem; font-weight: 800; color: var(--navy); }
-    .rating-box .rating-text span { font-size: 0.83rem; color: var(--gray); }
-
-    .directions-btn {
-      display: inline-block;
-      margin-top: 1.4rem;
-      background: var(--navy);
-      color: var(--white);
-      padding: 0.7rem 1.5rem;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.93rem;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .directions-btn:hover { background: var(--cobalt); transform: translateY(-2px); }
-
-    /* contact form */
-    .contact-form-box {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 2.2rem 2rem;
-      box-shadow: var(--shadow);
-    }
-
-    .contact-form-box h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 1.4rem; }
-
-    .form-group { margin-bottom: 1.1rem; }
-
-    .form-group label {
-      display: block;
-      font-size: 0.83rem;
-      font-weight: 600;
-      color: var(--gray);
-      margin-bottom: 0.35rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 0.65rem 0.9rem;
-      border: 1.5px solid #d4d8e2;
-      border-radius: var(--radius);
-      font-size: 0.96rem;
-      color: var(--navy);
-      background: var(--cream);
-      outline: none;
-      transition: border-color 0.2s;
-      font-family: inherit;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus { border-color: var(--cobalt); background: var(--white); }
-
-    .form-group textarea { min-height: 110px; resize: vertical; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-    .submit-btn {
-      width: 100%;
-      padding: 0.82rem;
-      background: var(--cobalt);
-      color: var(--white);
-      border: none;
-      border-radius: var(--radius);
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      margin-top: 0.4rem;
-      font-family: inherit;
-    }
-
-    .submit-btn:hover { background: var(--navy); transform: translateY(-2px); }
-
-    @media (max-width: 760px) {
-      .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-      .form-row { grid-template-columns: 1fr; }
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      color: rgba(255,255,255,0.70);
-      text-align: center;
-      padding: 2.4rem 5%;
-    }
-
-    footer .footer-logo {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-
-    footer .footer-logo span { color: var(--gold); }
-
-    footer p { font-size: 0.88rem; }
-
-    footer a { color: var(--gold-lt); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invo Inc | Advertising &amp; Print Services | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --c:#00AEEF; --m:#EC008C; --y:#FFED00; --k:#151515;
+    --paper:#f0ede4; --ink:#151515; --mut:#5c5c5c; --line:#d6d1c4;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Segoe UI",system-ui,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 clamp(1.2rem,4vw,3rem)}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+      padding:.8rem clamp(1.2rem,4vw,3rem);mix-blend-mode:normal;background:rgba(240,237,228,.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .logo{font-weight:800;font-size:1.6rem;letter-spacing:-.04em;text-decoration:none}
+  .logo b{color:var(--m)}
+  .nlinks{display:flex;gap:.4rem;align-items:center}
+  .nlinks a{text-decoration:none;font-size:.85rem;font-weight:600;padding:.4rem .7rem;border-radius:6px;color:#333}
+  .nlinks a:hover{background:rgba(0,0,0,.06)}
+  .nlinks a.cta{background:var(--k);color:#fff}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:6px}
+  .burger span{width:24px;height:2px;background:#151515;display:block}
+
+  /* EDITORIAL HERO */
+  .hero{padding:8rem 0 4rem;position:relative}
+  .kicker{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;font-weight:700;color:var(--m);margin-bottom:1.4rem}
+  .hero h1{font-size:clamp(3.2rem,13vw,10.5rem);font-weight:800;letter-spacing:-.05em;line-height:.82;margin:0}
+  .hero h1 .ln{display:block}
+  .hero h1 .ind{margin-left:clamp(0px,10vw,14rem)}
+  .hero h1 em{font-style:italic;background:linear-gradient(100deg,var(--c),var(--m),var(--y));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-foot{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;margin-top:3rem;border-top:2px solid var(--k);padding-top:1.6rem}
+  .hero-foot p{max-width:44ch;color:var(--mut);font-size:1.05rem}
+  .hbtns{display:flex;gap:.7rem;flex-wrap:wrap}
+  .btn{text-decoration:none;font-weight:700;padding:.85rem 1.5rem;border-radius:2px;font-size:.9rem;transition:transform .18s;display:inline-block;border:0;cursor:pointer}
+  .btn-k{background:var(--k);color:#fff}
+  .btn-o{border:1.5px solid var(--k);color:var(--k);background:transparent}
+  .btn:hover{transform:translateY(-2px)}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .7s,transform .7s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  section{padding:clamp(4rem,8vw,7rem) 0}
+  .label{font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;font-weight:700;color:var(--m)}
+  .big-h{font-size:clamp(2.2rem,6vw,4.6rem);font-weight:800;letter-spacing:-.04em;line-height:.95}
+  .big-h span{color:var(--m)}
+
+  /* ABOUT asymmetric */
+  .about{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(2rem,6vw,6rem);align-items:start}
+  .about-text p{color:#3a3a3a;margin-top:1rem;font-size:1.05rem;max-width:52ch}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+  .stat{background:var(--paper);padding:1.6rem 1.4rem}
+  .stat .n{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .stat .n span{color:var(--m)}
+  .stat p{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:.4rem;font-weight:600}
+
+  /* SERVICES editorial list */
+  .svc-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
+  .svc-list{border-top:2px solid var(--k)}
+  .srow{display:grid;grid-template-columns:5rem 1fr 2fr;gap:1.5rem;align-items:baseline;padding:1.8rem 0;border-bottom:1px solid var(--line);position:relative;transition:padding-left .3s,color .3s}
+  .srow .idx{font-size:.9rem;font-weight:700;color:var(--m)}
+  .srow h3{font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;letter-spacing:-.03em;line-height:1}
+  .srow p{color:var(--mut);font-size:.96rem;max-width:52ch}
+  .srow::after{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:var(--y);z-index:-1;transition:width .35s}
+  .srow:hover{padding-left:1.4rem}
+  .srow:hover::after{width:100%}
+
+  /* CONTACT */
+  .contact{background:var(--k);color:#f2f2f2;border-radius:24px;padding:clamp(2rem,5vw,4rem);position:relative;overflow:hidden}
+  .contact .halftone{position:absolute;right:-60px;top:-60px;width:280px;height:280px;
+     background-image:radial-gradient(var(--m) 20%,transparent 21%);background-size:20px 20px;opacity:.4}
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);position:relative}
+  .cgrid h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.04em;line-height:.95;margin-bottom:1.6rem}
+  .cgrid h2 span{color:var(--y)}
+  .irow{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:1.2rem}
+  .irow .ci{width:42px;height:42px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .irow .ci svg{width:20px;height:20px;fill:none;stroke:var(--y);stroke-width:2}
+  .irow strong{display:block;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:#9a9a9a;margin-bottom:2px}
+  .irow a,.irow span{font-weight:600;text-decoration:none;font-size:1rem}
+  .ratebox{display:flex;align-items:center;gap:.9rem;margin-top:1.6rem;padding:1.1rem 1.3rem;border:1px solid rgba(255,255,255,.16);border-radius:12px}
+  .ratebox .stars{color:var(--y);font-size:1.3rem;letter-spacing:2px}
+  .ratebox strong{font-size:1.05rem}
+  .ratebox span{display:block;font-size:.82rem;color:#a5a5a5}
+  .dirbtn{display:inline-block;margin-top:1.6rem;background:var(--y);color:#111;font-weight:700;padding:.85rem 1.4rem;border-radius:2px;text-decoration:none;transition:transform .18s}
+  .dirbtn:hover{transform:translateY(-2px)}
+
+  .formbox{background:#fff;color:#151515;border-radius:14px;padding:1.8rem}
+  .formbox h3{font-size:1.3rem;font-weight:800;margin-bottom:1.1rem}
+  .fg{margin-bottom:1rem}
+  .fg label{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#666;margin-bottom:.35rem}
+  .fg input,.fg select,.fg textarea{width:100%;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:8px;font:inherit;font-size:.92rem;background:#faf9f5}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--m)}
+  .fg textarea{resize:vertical;min-height:90px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .subbtn{width:100%;background:var(--m);color:#fff;font-weight:700;padding:.85rem;border:0;border-radius:8px;font-size:.95rem;cursor:pointer;transition:background .2s}
+  .subbtn:hover{background:#c60077}
+
+  footer{text-align:center;padding:3rem 1rem 2.4rem;color:var(--mut)}
+  footer .fl{font-size:2.2rem;font-weight:800;letter-spacing:-.04em}
+  footer .fl b{color:var(--m)}
+  footer a{color:var(--k);text-decoration:none;font-weight:600}
+
+  @media(max-width:860px){
+    .nlinks{position:fixed;top:56px;right:0;left:0;background:var(--paper);flex-direction:column;padding:1rem;display:none;border-bottom:1px solid var(--line)}
+    .nlinks.open{display:flex}.burger{display:flex}
+    .hero h1 .ind{margin-left:0}
+    .hero-foot,.about,.cgrid,.frow{grid-template-columns:1fr}
+    .srow{grid-template-columns:3rem 1fr;gap:.8rem 1rem}
+    .srow p{grid-column:2}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.btn:hover,.dirbtn:hover{transform:none}.srow{transition:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#hero">Invo<span>.</span></a>
-    <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a class="nav-cta" href="#contact">Get a Quote</a></li>
-    </ul>
-  </nav>
+<nav>
+  <a href="#hero" class="logo">Invo<b>.</b></a>
+  <button class="burger" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')"><span></span><span></span><span></span></button>
+  <div class="nlinks" id="nav">
+    <a href="#about">About</a><a href="#services">Services</a><a href="#contact">Contact</a>
+    <a href="#contact" class="cta">Get a Quote</a>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <p class="hero-eyebrow">Gainesville, FL &mdash; Advertising &amp; Print</p>
-    <h1>Elevate Your Brand with <em>Bold, Impactful</em> Advertising</h1>
+<section class="hero wrap" id="hero">
+  <div class="kicker">Gainesville, FL &mdash; Advertising &amp; Print</div>
+  <h1>
+    <span class="ln">Bold.</span>
+    <span class="ln ind"><em>Impactful.</em></span>
+    <span class="ln">Advertising.</span>
+  </h1>
+  <div class="hero-foot">
     <p>Invo Inc delivers creative advertising and high-quality print solutions that help local businesses stand out, connect with customers, and grow.</p>
+    <div class="hbtns">
+      <a class="btn btn-k magnet" href="#services">Our Services</a>
+      <a class="btn btn-o magnet" href="#contact">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="about">
+  <div class="about">
+    <div class="about-text reveal">
+      <div class="label">Who We Are</div>
+      <h2 class="big-h" style="margin:.6rem 0 0">A Creative Partner for <span>Gainesville Businesses</span></h2>
+      <p>Invo Inc is a full-service advertising and print agency based in Gainesville, FL, dedicated to crafting compelling brand experiences that resonate with local audiences and beyond.</p>
+      <p>Our team combines strategic thinking with hands-on production expertise to deliver advertising campaigns and print materials that are polished, purposeful, and on-brand for every client we serve.</p>
+      <p>Whether you need a single print run or an end-to-end marketing push, we work closely with you to understand your goals and bring your vision to life with precision and creativity.</p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><div class="n" data-count="5.0">5.0</div><p>Google Rating</p></div>
+      <div class="stat"><div class="n" style="color:var(--c)">Local</div><p>Gainesville-Based</p></div>
+      <div class="stat"><div class="n">Full<span>&mdash;</span></div><p>Service Agency</p></div>
+      <div class="stat"><div class="n" style="font-size:1.6rem">Print &amp; Ad</div><p>Capabilities</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="services">
+  <div class="svc-head reveal">
     <div>
-      <a class="btn btn-gold" href="#services">Our Services</a>
-      <a class="btn btn-outline" href="#contact">Contact Us</a>
+      <div class="label">What We Do</div>
+      <h2 class="big-h" style="margin-top:.5rem">Services Built to <span>Make You Visible</span></h2>
     </div>
-  </section>
+  </div>
+  <div class="svc-list">
+    <div class="srow reveal"><div class="idx">01</div><h3>Print Advertising</h3><p>Eye-catching print ads designed for newspapers, magazines, and local publications that drive brand awareness. Contact us for details.</p></div>
+    <div class="srow reveal"><div class="idx">02</div><h3>Brochures &amp; Flyers</h3><p>Professional brochures, flyers, and sales sheets that present your business with clarity and style, ready for any audience.</p></div>
+    <div class="srow reveal"><div class="idx">03</div><h3>Brand Identity &amp; Design</h3><p>Logos, color systems, and brand guidelines that give your company a cohesive, memorable look across every touchpoint.</p></div>
+    <div class="srow reveal"><div class="idx">04</div><h3>Direct Mail Campaigns</h3><p>Targeted direct mail pieces designed and produced to reach the right households and businesses in the Gainesville area.</p></div>
+    <div class="srow reveal"><div class="idx">05</div><h3>Banners &amp; Signage</h3><p>Large-format banners, retractable displays, and exterior signage built for maximum visibility at events, storefronts, and trade shows.</p></div>
+    <div class="srow reveal"><div class="idx">06</div><h3>Marketing Consultation</h3><p>Strategic guidance on advertising channels, messaging, and campaigns tailored to your business goals and local market. Contact us for details.</p></div>
+  </div>
+</section>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="about-inner">
-      <div class="about-text">
-        <p class="section-label">Who We Are</p>
-        <h2 class="section-title">A Creative Partner for <span>Gainesville Businesses</span></h2>
-        <p>Invo Inc is a full-service advertising and print agency based in Gainesville, FL, dedicated to crafting compelling brand experiences that resonate with local audiences and beyond.</p>
-        <p>Our team combines strategic thinking with hands-on production expertise to deliver advertising campaigns and print materials that are polished, purposeful, and on-brand for every client we serve.</p>
-        <p>Whether you need a single print run or an end-to-end marketing push, we work closely with you to understand your goals and bring your vision to life with precision and creativity.</p>
-      </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <div class="stat-num">5<span>.0</span></div>
-          <p>Google Rating</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" style="color:var(--gold);">Local</div>
-          <p>Gainesville-Based</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">Full<span>-</span></div>
-          <p>Service Agency</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" style="font-size:1.5rem; color:var(--cobalt);">Print &amp; Ad</div>
-          <p>Capabilities</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div style="max-width:1100px; margin:0 auto;">
-      <p class="section-label">What We Do</p>
-      <h2 class="section-title">Services Built to <span>Make You Visible</span></h2>
-    </div>
-    <div class="services-grid">
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-        </div>
-        <h3>Print Advertising</h3>
-        <p>Eye-catching print ads designed for newspapers, magazines, and local publications that drive brand awareness. Contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        </div>
-        <h3>Brochures &amp; Flyers</h3>
-        <p>Professional brochures, flyers, and sales sheets that present your business with clarity and style, ready for any audience.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <h3>Brand Identity &amp; Design</h3>
-        <p>Logos, color systems, and brand guidelines that give your company a cohesive, memorable look across every touchpoint.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <h3>Direct Mail Campaigns</h3>
-        <p>Targeted direct mail pieces designed and produced to reach the right households and businesses in the Gainesville area.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </div>
-        <h3>Banners &amp; Signage</h3>
-        <p>Large-format banners, retractable displays, and exterior signage built for maximum visibility at events, storefronts, and trade shows.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <h3>Marketing Consultation</h3>
-        <p>Strategic guidance on advertising channels, messaging, and campaigns tailored to your business goals and local market. Contact us for details.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="contact-inner">
-      <div class="contact-info">
-        <p class="section-label">Reach Us</p>
-        <h2 class="section-title">Let's Start a <span>Conversation</span></h2>
-
-        <div class="info-row">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div class="info-row-text">
-            <strong>Address</strong>
-            <span>4010 Newberry Rd Ste A, Gainesville, FL</span>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.19h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          </div>
-          <div class="info-row-text">
-            <strong>Phone</strong>
-            <a href="tel:+13523754330">(352) 375-4330</a>
-          </div>
-        </div>
-
-        <div class="rating-box">
+<section class="wrap" id="contact">
+  <div class="contact reveal">
+    <div class="halftone" aria-hidden="true"></div>
+    <div class="cgrid">
+      <div>
+        <div class="label" style="color:var(--y)">Reach Us</div>
+        <h2>Let's Start a <span>Conversation</span></h2>
+        <div class="irow"><div class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><strong>Address</strong><span>4010 Newberry Rd Ste A, Gainesville, FL</span></div></div>
+        <div class="irow"><div class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.19h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><strong>Phone</strong><a href="tel:+13523754330">(352) 375-4330</a></div></div>
+        <div class="ratebox">
           <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div class="rating-text">
-            <strong>5.0 / 5.0</strong>
-            <span>Based on 1 Google review</span>
-          </div>
+          <div><strong>5.0 / 5.0</strong><span>Based on 1 Google review</span></div>
         </div>
-
-        <a class="directions-btn" href="https://www.google.com/maps/search/Invo%20Inc%204010%20Newberry%20Rd%20Ste%20A" target="_blank" rel="noopener">
-          &#8599; Get Directions on Google Maps
-        </a>
+        <a class="dirbtn magnet" href="https://www.google.com/maps/search/Invo%20Inc%204010%20Newberry%20Rd%20Ste%20A" target="_blank" rel="noopener">&#8599; Get Directions on Google Maps</a>
       </div>
-
-      <div class="contact-form-box">
+      <div class="formbox">
         <h3>Send Us a Message</h3>
-        <form onsubmit="event.preventDefault(); this.innerHTML='<p style=\'color:var(--cobalt);font-weight:700;font-size:1rem;\'>Thank you! We\'ll be in touch soon.</p>';">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="fname">First Name</label>
-              <input type="text" id="fname" placeholder="Jane" required />
-            </div>
-            <div class="form-group">
-              <label for="lname">Last Name</label>
-              <input type="text" id="lname" placeholder="Smith" required />
-            </div>
+        <form onsubmit="event.preventDefault(); this.innerHTML='<p style=&quot;color:#EC008C;font-weight:700;font-size:1rem;&quot;>Thank you! We\'ll be in touch soon.</p>';">
+          <div class="frow">
+            <div class="fg"><label for="fname">First Name</label><input type="text" id="fname" placeholder="Jane" required></div>
+            <div class="fg"><label for="lname">Last Name</label><input type="text" id="lname" placeholder="Smith" required></div>
           </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="jane@example.com" required />
-          </div>
-          <div class="form-group">
-            <label for="phone">Phone (optional)</label>
-            <input type="tel" id="phone" placeholder="(352) 000-0000" />
-          </div>
-          <div class="form-group">
-            <label for="service">Service of Interest</label>
+          <div class="fg"><label for="email">Email</label><input type="email" id="email" placeholder="jane@example.com" required></div>
+          <div class="fg"><label for="phone">Phone (optional)</label><input type="tel" id="phone" placeholder="(352) 000-0000"></div>
+          <div class="fg"><label for="service">Service of Interest</label>
             <select id="service">
               <option value="">-- Select a service --</option>
               <option>Print Advertising</option>
@@ -657,22 +217,50 @@
               <option>Other</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" placeholder="Tell us about your project..." required></textarea>
-          </div>
-          <button type="submit" class="submit-btn">Send Message</button>
+          <div class="fg"><label for="message">Message</label><textarea id="message" placeholder="Tell us about your project..." required></textarea></div>
+          <button type="submit" class="subbtn">Send Message</button>
         </form>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Invo<span>.</span></div>
-    <p>4010 Newberry Rd Ste A &mdash; Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13523754330">(352) 375-4330</a></p>
-    <p style="margin-top:0.6rem; font-size:0.80rem;">&copy; 2026 Invo Inc. All rights reserved. Demo site &mdash; for illustration purposes only.</p>
-  </footer>
+<footer>
+  <div class="fl">Invo<b>.</b></div>
+  <p style="margin-top:.6rem">4010 Newberry Rd Ste A &mdash; Gainesville, FL &nbsp;|&nbsp; <a href="tel:+13523754330">(352) 375-4330</a></p>
+  <p style="margin-top:.6rem;font-size:.8rem">&copy; 2026 Invo Inc. All rights reserved. Demo site &mdash; for illustration purposes only.</p>
+</footer>
 
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var items = document.querySelectorAll('.reveal');
+  if(reduce||!('IntersectionObserver' in window)){
+    items.forEach(function(i){i.classList.add('in');});
+  } else {
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('in');io.unobserve(e.target);
+          e.target.querySelectorAll('[data-count]').forEach(count);
+        }
+      });
+    },{threshold:.18});
+    items.forEach(function(i){io.observe(i);});
+  }
+  function count(el){
+    var t=parseFloat(el.getAttribute('data-count')),s=null;
+    function step(ts){if(!s)s=ts;var p=Math.min((ts-s)/1000,1);el.textContent=(t*(1-Math.pow(1-p,3))).toFixed(1);if(p<1)requestAnimationFrame(step);else el.textContent=t.toFixed(1);}
+    requestAnimationFrame(step);
+  }
+  if(!reduce && window.matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.magnet').forEach(function(b){
+      b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.3)+'px)';});
+      b.addEventListener('pointerleave',function(){b.style.transform='';});
+    });
+  }
+  document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('nav').classList.remove('open');});});
+})();
+</script>
 </body>
 </html>
