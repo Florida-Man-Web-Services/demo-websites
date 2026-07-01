@@ -1,1102 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FERRER General Contractors LLC | Gainesville, FL</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy: #1a2535;
-      --steel: #2e3f55;
-      --gold: #c89a3a;
-      --gold-light: #e0b84a;
-      --concrete: #e8e4df;
-      --white: #ffffff;
-      --text-dark: #1a2535;
-      --text-muted: #5a6778;
-      --section-alt: #f4f1ee;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.6;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      background: var(--navy);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-    }
-
-    .nav-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--gold);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--navy);
-    }
-
-    .nav-brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .nav-brand-name {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .nav-brand-sub {
-      font-size: 0.65rem;
-      color: var(--gold);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #bfc8d6;
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold);
-    }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--navy) !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: 4px;
-      font-weight: 700 !important;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--gold-light) !important;
-      color: var(--navy) !important;
-    }
-
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-      background: none;
-      border: none;
-    }
-
-    .hamburger span {
-      width: 26px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      background: var(--steel);
-      padding: 1rem 1.5rem;
-    }
-
-    .mobile-menu.open {
-      display: flex;
-    }
-
-    .mobile-menu a {
-      color: #bfc8d6;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      padding: 0.65rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      transition: color 0.2s;
-    }
-
-    .mobile-menu a:last-child {
-      border-bottom: none;
-    }
-
-    .mobile-menu a:hover {
-      color: var(--gold);
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 60%, #3a4f6a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      padding: 100px 1.5rem 60px;
-    }
-
-    /* Blueprint grid overlay */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(200,154,58,0.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,154,58,0.07) 1px, transparent 1px);
-      background-size: 50px 50px;
-    }
-
-    /* Diagonal accent bar */
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -60px;
-      left: -10%;
-      width: 120%;
-      height: 120px;
-      background: var(--white);
-      transform: rotate(-2deg);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 780px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(200,154,58,0.18);
-      border: 1px solid rgba(200,154,58,0.5);
-      color: var(--gold);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.4rem 1.1rem;
-      border-radius: 2px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.2rem, 5.5vw, 4rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero h1 span {
-      color: var(--gold);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.35rem);
-      color: #bfc8d6;
-      margin: 1.2rem 0 2.2rem;
-      font-weight: 400;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: var(--navy);
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      border: 2px solid rgba(255,255,255,0.4);
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition: border-color 0.2s, color 0.2s, transform 0.15s;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    /* ── SECTION SHARED ── */
-    section {
-      padding: 90px 1.5rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
-      font-weight: 800;
-      color: var(--navy);
-      line-height: 1.15;
-      text-transform: uppercase;
-    }
-
-    .title-accent {
-      display: inline-block;
-      width: 50px;
-      height: 4px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin: 1rem 0 2rem;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--white);
-      padding-top: 110px;
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-bottom: 1.1rem;
-    }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    .stat-card {
-      background: var(--navy);
-      border-radius: 6px;
-      padding: 1.8rem 1.5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: var(--gold);
-    }
-
-    .stat-number {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--gold);
-      display: block;
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-
-    .stat-label {
-      font-size: 0.8rem;
-      color: #8a9ab0;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--section-alt);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .service-card {
-      background: var(--white);
-      border-radius: 6px;
-      padding: 2rem 1.8rem;
-      border-top: 4px solid var(--gold);
-      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
-    }
-
-    .service-icon {
-      width: 50px;
-      height: 50px;
-      background: var(--navy);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.2rem;
-    }
-
-    .service-icon svg {
-      width: 26px;
-      height: 26px;
-      fill: var(--gold);
-    }
-
-    .service-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--navy);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.6rem;
-    }
-
-    .service-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ── WHY CHOOSE US STRIP ── */
-    .trust-strip {
-      background: var(--navy);
-      padding: 50px 1.5rem;
-    }
-
-    .trust-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      align-items: center;
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      color: var(--white);
-    }
-
-    .trust-item svg {
-      width: 30px;
-      height: 30px;
-      fill: var(--gold);
-      flex-shrink: 0;
-    }
-
-    .trust-item-text strong {
-      display: block;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-    }
-
-    .trust-item-text span {
-      font-size: 0.8rem;
-      color: #8a9ab0;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--white);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info-items {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .contact-item-icon {
-      width: 44px;
-      height: 44px;
-      background: var(--navy);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-item-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--gold);
-    }
-
-    .contact-item-body strong {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-item-body p,
-    .contact-item-body a {
-      font-size: 1rem;
-      color: var(--text-dark);
-      text-decoration: none;
-    }
-
-    .contact-item-body a:hover {
-      color: var(--gold);
-    }
-
-    .map-card {
-      background: var(--section-alt);
-      border-radius: 8px;
-      padding: 2rem;
-      border: 2px solid var(--concrete);
-    }
-
-    .map-placeholder {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%);
-      border-radius: 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .map-placeholder svg {
-      width: 48px;
-      height: 48px;
-      fill: var(--gold);
-      opacity: 0.8;
-    }
-
-    .map-placeholder span {
-      color: #8a9ab0;
-      font-size: 0.85rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .btn-directions {
-      display: block;
-      width: 100%;
-      text-align: center;
-      background: var(--gold);
-      color: var(--navy);
-      padding: 0.9rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .btn-directions:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-call {
-      display: block;
-      width: 100%;
-      text-align: center;
-      border: 2px solid var(--navy);
-      color: var(--navy);
-      padding: 0.9rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-top: 0.8rem;
-      transition: background 0.2s, color 0.2s, transform 0.15s;
-    }
-
-    .btn-call:hover {
-      background: var(--navy);
-      color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      padding: 40px 1.5rem 24px;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      text-align: center;
-    }
-
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .footer-logo-icon {
-      width: 34px;
-      height: 34px;
-      background: var(--gold);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .footer-logo-icon svg {
-      width: 19px;
-      height: 19px;
-      fill: var(--navy);
-    }
-
-    .footer-name {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .footer-tagline {
-      font-size: 0.82rem;
-      color: #5a6778;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .footer-divider {
-      width: 60px;
-      height: 2px;
-      background: rgba(200,154,58,0.3);
-      border-radius: 2px;
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-      color: #3d4f63;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .about-stats {
-        max-width: 420px;
-      }
-    }
-
-    @media (max-width: 680px) {
-      .nav-links {
-        display: none;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .trust-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-      }
-
-      .about-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      section {
-        padding: 70px 1.2rem;
-      }
-
-      #about {
-        padding-top: 90px;
-      }
-    }
-
-    @media (max-width: 400px) {
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn-primary,
-      .btn-outline {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FERRER General Contractors LLC | Gainesville, FL</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#14151a;--bg-2:#1c1e26;--gold:#c89a3a;--gold-l:#e0b458;--cream:#f2ede3;
+    --ink:#1a1b1f;--mut:#8a8d96;--line:rgba(200,154,58,.22);--paper:#f4f1ea;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+  a{color:inherit}
+  ::selection{background:var(--gold);color:#14151a}
+
+  .layout{display:grid;grid-template-columns:44% 56%;min-height:100vh}
+
+  .left{position:sticky;top:0;height:100vh;background:
+      radial-gradient(circle at 30% 20%,rgba(200,154,58,.14),transparent 55%),
+      linear-gradient(160deg,var(--bg),var(--bg-2));
+    color:var(--cream);display:flex;flex-direction:column;justify-content:space-between;padding:44px 46px;overflow:hidden}
+  .left::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+    background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/38px 38px,
+      linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/38px 38px}
+  .left>*{position:relative;z-index:1}
+  .l-top{display:flex;align-items:center;gap:12px}
+  .l-top .m{width:44px;height:44px;background:var(--gold);border-radius:6px;display:grid;place-items:center}
+  .l-top .m svg{width:26px;height:26px;fill:#14151a}
+  .l-top b{font-weight:800;letter-spacing:1px}
+  .l-mid .badge{display:inline-flex;align-items:center;gap:8px;font-family:ui-monospace,monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-l);border:1px solid var(--line);padding:7px 14px;border-radius:40px;margin-bottom:26px}
+  .l-mid h1{font-size:clamp(2.6rem,5vw,4.6rem);font-weight:900;line-height:.98;letter-spacing:-.01em}
+  .l-mid h1 span{display:block;color:var(--gold);font-size:.42em;letter-spacing:.16em;font-weight:700;margin-top:14px;text-transform:uppercase}
+  .l-mid p{color:#c8c3b6;font-size:1.1rem;max-width:38ch;margin-top:22px}
+  .l-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-weight:800;padding:14px 28px;border-radius:7px;transition:transform .18s,background .2s,color .2s}
+  .btn svg{width:17px;height:17px;fill:currentColor}
+  .btn-g{background:var(--gold);color:#14151a}.btn-g:hover{background:var(--gold-l);transform:translateY(-2px)}
+  .btn-o{border:2px solid var(--line);color:var(--cream)}.btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+  .l-bot{font-size:.85rem;color:#8f8b80;letter-spacing:.04em}
+  .l-bot a{color:var(--gold-l);text-decoration:none}
+
+  .right{background:var(--paper)}
+  .block{padding:80px 60px;border-bottom:1px solid #e4dfd4}
+  .block:last-child{border-bottom:none}
+  .lab{font-size:.74rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  .block h2{font-size:clamp(1.7rem,3.8vw,2.6rem);font-weight:900;letter-spacing:-.01em;margin-bottom:20px;line-height:1.1}
+  .block h2 em{font-style:normal;color:var(--gold)}
+  .block p{color:#4c4f59;margin-bottom:16px;font-size:1.03rem}
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .tags span{background:#fff;border:1px solid #e4dfd4;border-radius:40px;padding:8px 16px;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+  .tags span svg{width:15px;height:15px;fill:var(--gold)}
+
+  .svc{border-top:1px solid #e4dfd4}
+  .svc-item{padding:28px 0;border-bottom:1px solid #e4dfd4;display:flex;gap:22px;align-items:flex-start;transition:padding-left .3s}
+  .svc-item:hover{padding-left:12px}
+  .svc-item .no{font-family:ui-monospace,monospace;color:var(--gold);font-weight:800;font-size:.95rem;flex-shrink:0;width:40px}
+  .svc-item .ic{width:46px;height:46px;background:var(--bg);border-radius:9px;display:grid;place-items:center;flex-shrink:0}
+  .svc-item .ic svg{width:24px;height:24px;fill:var(--gold)}
+  .svc-item h3{font-size:1.18rem;font-weight:800;margin-bottom:6px}
+  .svc-item p{color:#5a5d67;font-size:.93rem;margin:0}
+
+  .cinfo{display:grid;gap:14px;margin:26px 0}
+  .ci{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid #e4dfd4;border-radius:12px;padding:16px 18px}
+  .ci svg{width:22px;height:22px;fill:var(--gold);flex-shrink:0}
+  .ci .k{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);font-weight:700}
+  .ci .v{font-weight:700}
+  .ci a{color:var(--ink);text-decoration:none}
+  .cbtns{display:flex;gap:12px;flex-wrap:wrap}
+  .cbtns .btn-o{border-color:#d8d2c4;color:var(--ink)}
+  .cbtns .btn-o:hover{border-color:var(--gold);color:var(--gold)}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+    .left{position:relative;height:auto;min-height:88vh;padding:80px 30px 50px}
+    .block{padding:56px 30px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+  }
+</style>
 </head>
 <body>
 
-<!-- ── NAVIGATION ── -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="nav-logo">
-      <div class="nav-logo-icon">
-        <!-- Hard hat icon -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C9.24 2 6.77 3.11 5 4.93V8H4a1 1 0 000 2h1v1a7 7 0 0014 0v-1h1a1 1 0 000-2h-1V4.93C17.23 3.11 14.76 2 12 2zm0 2c1.96 0 3.73.76 5 2H7c1.27-1.24 3.04-2 5-2zm5 8a5 5 0 01-10 0V8h10v4z"/>
-        </svg>
-      </div>
-      <div class="nav-brand">
-        <span class="nav-brand-name">FERRER</span>
-        <span class="nav-brand-sub">General Contractors</span>
-      </div>
-    </a>
-
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-    </ul>
-
-    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="closeMobile()">About</a>
-    <a href="#services" onclick="closeMobile()">Services</a>
-    <a href="#contact" onclick="closeMobile()">Contact Us</a>
-  </div>
-</nav>
-
-<!-- ── HERO ── -->
-<section class="hero" id="home">
-  <div class="hero-content">
-    <div class="hero-badge">Licensed General Contractor &mdash; Gainesville, FL</div>
-    <h1><span>FERRER</span><br>General Contractors</h1>
-    <p class="hero-tagline">Building stronger communities across North Central Florida &mdash; quality craftsmanship on every project.</p>
-    <div class="hero-buttons">
-      <a href="#contact" class="btn-primary">Get a Free Estimate</a>
-      <a href="#services" class="btn-outline">Our Services</a>
+<div class="layout">
+  <aside class="left" id="top">
+    <div class="l-top">
+      <span class="m"><svg viewBox="0 0 24 24"><path d="M2 20h20v2H2zm2-8h2v7H4zm5 0h2v7H9zm4 0h2v7h-2zm5 0h2v7h-2zM2 7l10-5 10 5v2H2z"/></svg></span>
+      <b>FERRER</b>
     </div>
-  </div>
-</section>
+    <div class="l-mid">
+      <span class="badge">Licensed General Contractor — Gainesville, FL</span>
+      <h1>FERRER<span>General Contractors</span></h1>
+      <p>Building stronger communities across North Central Florida — quality craftsmanship on every project.</p>
+      <div class="l-cta">
+        <a class="btn btn-g magnetic" href="tel:+19543836565"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1z"/></svg>Call (954) 383-6565</a>
+        <a class="btn btn-o" href="#services">Our Services</a>
+      </div>
+    </div>
+    <div class="l-bot">FERRER General Contractors LLC &mdash; Building with quality &amp; integrity &nbsp;·&nbsp; <a href="#contact">Contact</a></div>
+  </aside>
 
-<!-- ── ABOUT ── -->
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
-        <p class="section-label">About Us</p>
-        <h2 class="section-title">Trusted Contractors<br>in Gainesville</h2>
-        <div class="title-accent"></div>
+  <main class="right">
+    <section class="block" id="about">
+      <div class="reveal">
+        <div class="lab">About Us</div>
+        <h2>Trusted <em>Contractors</em> in Gainesville</h2>
         <p>FERRER General Contractors LLC is a full-service construction company serving residential and commercial clients throughout Gainesville and the surrounding North Central Florida region. We bring the same commitment to craftsmanship and reliability to every job, whether it is a ground-up build or a targeted renovation.</p>
-        <p>Our team coordinates every phase of a project &mdash; from initial planning and permitting through final inspection &mdash; so clients have a single point of contact and a clear path to completion. We take pride in transparent communication, on-schedule delivery, and work that stands the test of time.</p>
+        <p>Our team coordinates every phase of a project — from initial planning and permitting through final inspection — so clients have a single point of contact and a clear path to completion. We take pride in transparent communication, on-schedule delivery, and work that stands the test of time.</p>
         <p>As a locally focused contractor, we understand the specific building codes, soil conditions, and climate considerations that matter in the Gainesville area. Contact us to discuss how we can bring your project to life.</p>
-      </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <span class="stat-number">LLC</span>
-          <span class="stat-label">Fully Licensed</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number">FL</span>
-          <span class="stat-label">Local Expertise</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number">360&deg;</span>
-          <span class="stat-label">Full-Service Build</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number">GNV</span>
-          <span class="stat-label">Based in Gainesville</span>
+        <div class="tags">
+          <span><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Full coverage on every project</span>
+          <span><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Serving Gainesville &amp; North Central FL</span>
+          <span><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Clear timelines and milestones</span>
+          <span><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Honest estimates with no surprises</span>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ── SERVICES ── -->
-<section id="services">
-  <div class="container">
-    <p class="section-label">What We Do</p>
-    <h2 class="section-title">Our Services</h2>
-    <div class="title-accent"></div>
+    <section class="block" id="services">
+      <div class="reveal">
+        <div class="lab">What We Do</div>
+        <h2>Our Services</h2>
+      </div>
+      <div class="svc">
+        <div class="svc-item reveal"><span class="no">01</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span><div><h3>New Construction</h3><p>Ground-up residential and commercial builds managed from site preparation through final certificate of occupancy. Contact us for details.</p></div></div>
+        <div class="svc-item reveal"><span class="no">02</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></span><div><h3>Remodeling &amp; Renovation</h3><p>Interior and exterior renovation work for homes and businesses, including kitchen, bathroom, and whole-structure updates. Contact us for details.</p></div></div>
+        <div class="svc-item reveal"><span class="no">03</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M2 20h20v2H2zm2-8h2v7H4zm5 0h2v7H9zm4 0h2v7h-2zm5 0h2v7h-2zM2 7l10-5 10 5v2H2z"/></svg></span><div><h3>Structural Framing</h3><p>Wood and metal framing for new builds, additions, and structural repairs, built to Florida building code standards. Contact us for details.</p></div></div>
+        <div class="svc-item reveal"><span class="no">04</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></span><div><h3>Concrete &amp; Foundations</h3><p>Slab foundations, concrete driveways, walkways, and flatwork for both residential and light commercial applications. Contact us for details.</p></div></div>
+        <div class="svc-item reveal"><span class="no">05</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3zm0 2.7 5 4.5V18h-2v-6H9v6H7v-7.8z"/></svg></span><div><h3>Additions &amp; Expansions</h3><p>Room additions, garage conversions, and square-footage expansions designed to integrate seamlessly with your existing structure. Contact us for details.</p></div></div>
+        <div class="svc-item reveal"><span class="no">06</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M11.5 2C6.8 2 3 5.8 3 10.5S6.8 19 11.5 19h.5v3c4.9-2.3 8-7 8-11.5C20 5.8 16.2 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.3 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2.5-3 2.8-3 5z"/></svg></span><div><h3>General Contracting &amp; Project Management</h3><p>Full-scope project coordination including subcontractor management, permitting, scheduling, and quality oversight from start to finish. Contact us for details.</p></div></div>
+      </div>
+    </section>
 
-    <div class="services-grid">
-
-      <div class="service-card">
-        <div class="service-icon">
-          <!-- Building icon -->
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 21h18v-2H3v2zm0-4h18v-2H3v2zM3 9v10h4V9H3zm6-2v12h4V7H9zm6-4v16h4V3h-4z"/>
-          </svg>
+    <section class="block" id="contact">
+      <div class="reveal">
+        <div class="lab">Get In Touch</div>
+        <h2>Contact Us</h2>
+        <p>Ready to start planning? Reach out and we will walk you through the next steps for your residential or commercial project.</p>
+        <div class="cinfo">
+          <div class="ci"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5z"/></svg><div><div class="k">Address</div><div class="v">8 SW 79th Dr, Gainesville, FL</div></div></div>
+          <div class="ci"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1z"/></svg><div><div class="k">Phone</div><div class="v"><a href="tel:+19543836565">(954) 383-6565</a></div></div></div>
+          <div class="ci"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.5 2 12s4.47 10 9.99 10C17.52 22 22 17.5 22 12S17.52 2 11.99 2zM12.5 7H11v6l5.2 3.2.8-1.2-4.5-2.7z"/></svg><div><div class="k">Hours</div><div class="v" style="font-weight:600">Contact us for details</div></div></div>
         </div>
-        <h3>New Construction</h3>
-        <p>Ground-up residential and commercial builds managed from site preparation through final certificate of occupancy. Contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <!-- Renovation/refresh icon -->
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
-          </svg>
+        <div class="cbtns">
+          <a class="btn btn-g" href="tel:+19543836565">Call (954) 383-6565</a>
+          <a class="btn btn-o" href="https://www.google.com/maps/search/FERRER%20General%20Contractors%20LLC%208%20SW%2079th%20Dr" target="_blank" rel="noopener noreferrer">Get Directions</a>
         </div>
-        <h3>Remodeling &amp; Renovation</h3>
-        <p>Interior and exterior renovation work for homes and businesses, including kitchen, bathroom, and whole-structure updates. Contact us for details.</p>
       </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <!-- Framing icon -->
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H5V5h14v14zM7 7h2v2H7V7zm0 4h2v2H7v-2zm0 4h2v2H7v-2zm4-8h6v2h-6V7zm0 4h6v2h-6v-2zm0 4h6v2h-6v-2z"/>
-          </svg>
-        </div>
-        <h3>Structural Framing</h3>
-        <p>Wood and metal framing for new builds, additions, and structural repairs, built to Florida building code standards. Contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <!-- Concrete icon -->
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5a2 2 0 00-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/>
-          </svg>
-        </div>
-        <h3>Concrete &amp; Foundations</h3>
-        <p>Slab foundations, concrete driveways, walkways, and flatwork for both residential and light commercial applications. Contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <!-- Additions / expand icon -->
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-          </svg>
-        </div>
-        <h3>Additions &amp; Expansions</h3>
-        <p>Room additions, garage conversions, and square-footage expansions designed to integrate seamlessly with your existing structure. Contact us for details.</p>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">
-          <!-- Project management / clipboard icon -->
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 0a1 1 0 110 2 1 1 0 010-2zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-          </svg>
-        </div>
-        <h3>General Contracting &amp; Project Management</h3>
-        <p>Full-scope project coordination including subcontractor management, permitting, scheduling, and quality oversight from start to finish. Contact us for details.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── TRUST STRIP ── -->
-<div class="trust-strip">
-  <div class="trust-inner">
-
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
-      </svg>
-      <div class="trust-item-text">
-        <strong>Licensed &amp; Insured</strong>
-        <span>Full coverage on every project</span>
-      </div>
-    </div>
-
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-      </svg>
-      <div class="trust-item-text">
-        <strong>Local Team</strong>
-        <span>Serving Gainesville &amp; North Central FL</span>
-      </div>
-    </div>
-
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
-      </svg>
-      <div class="trust-item-text">
-        <strong>On-Schedule Delivery</strong>
-        <span>Clear timelines and milestones</span>
-      </div>
-    </div>
-
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 4H4c-1.11 0-2 .89-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-      </svg>
-      <div class="trust-item-text">
-        <strong>Transparent Pricing</strong>
-        <span>Honest estimates with no surprises</span>
-      </div>
-    </div>
-
-  </div>
+    </section>
+  </main>
 </div>
 
-<!-- ── CONTACT ── -->
-<section id="contact">
-  <div class="container">
-    <p class="section-label">Reach Us</p>
-    <h2 class="section-title">Contact Us</h2>
-    <div class="title-accent"></div>
-
-    <div class="contact-grid">
-      <div>
-        <div class="contact-info-items">
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Address</strong>
-              <p>8 SW 79th Dr<br>Gainesville, FL</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C9.61 21 3 14.39 3 6.5a1 1 0 011-1H7.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.02l-2.21 2.2z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Phone</strong>
-              <a href="tel:+19543836565">(954) 383-6565</a>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Estimates</strong>
-              <p>Contact us for details</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
-              </svg>
-            </div>
-            <div class="contact-item-body">
-              <strong>Hours</strong>
-              <p>Contact us for details</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="map-card">
-        <div class="map-placeholder">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
-          </svg>
-          <span>8 SW 79th Dr &mdash; Gainesville, FL</span>
-        </div>
-
-        <a
-          href="https://www.google.com/maps/search/FERRER%20General%20Contractors%20LLC%208%20SW%2079th%20Dr"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-directions"
-        >
-          Get Directions
-        </a>
-
-        <a href="tel:+19543836565" class="btn-call">
-          Call (954) 383-6565
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── FOOTER ── -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-logo">
-      <div class="footer-logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C9.24 2 6.77 3.11 5 4.93V8H4a1 1 0 000 2h1v1a7 7 0 0014 0v-1h1a1 1 0 000-2h-1V4.93C17.23 3.11 14.76 2 12 2zm0 2c1.96 0 3.73.76 5 2H7c1.27-1.24 3.04-2 5-2zm5 8a5 5 0 01-10 0V8h10v4z"/>
-        </svg>
-      </div>
-      <span class="footer-name">FERRER General Contractors LLC</span>
-    </div>
-    <p class="footer-tagline">Gainesville, FL &mdash; Building with quality &amp; integrity</p>
-    <div class="footer-divider"></div>
-    <p class="footer-copy">&copy; 2026 FERRER General Contractors LLC. All rights reserved.</p>
-  </div>
-</footer>
-
 <script>
-  var btn = document.getElementById('hamburgerBtn');
-  var menu = document.getElementById('mobileMenu');
-
-  btn.addEventListener('click', function() {
-    menu.classList.toggle('open');
-  });
-
-  function closeMobile() {
-    menu.classList.remove('open');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(el=>{reduce?el.classList.add('in'):io.observe(el);});
+  if(!reduce){
+    document.querySelectorAll('.magnetic').forEach(btn=>{
+      btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();
+        btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)/7}px,${(e.clientY-r.top-r.height/2)/7}px)`;});
+      btn.addEventListener('mouseleave',()=>{btn.style.transform='';});
+    });
   }
 </script>
-
 </body>
 </html>
