@@ -1,1012 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DIY Jeff Gainesville | Handyman Services</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy: #1a2b3c;
-      --steel: #2e4057;
-      --amber: #e07b39;
-      --amber-light: #f0954f;
-      --tan: #c8a882;
-      --cream: #f5f0e8;
-      --white: #ffffff;
-      --gray: #6b7280;
-      --light-gray: #e5e7eb;
-      --dark-text: #1f2937;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--dark-text);
-      background-color: var(--cream);
-      line-height: 1.6;
-    }
-
-    /* ====== NAV ====== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background-color: var(--navy);
-      padding: 0 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background-color: var(--amber);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .nav-logo-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .nav-logo-text {
-      color: var(--white);
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
-
-    .nav-logo-text span {
-      color: var(--amber);
-    }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 1.8rem;
-    }
-
-    .nav-links a {
-      color: var(--light-gray);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--amber);
-    }
-
-    .nav-cta {
-      background-color: var(--amber);
-      color: var(--white) !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: 6px;
-      font-weight: 600 !important;
-      transition: background-color 0.2s !important;
-    }
-
-    .nav-cta:hover {
-      background-color: var(--amber-light) !important;
-      color: var(--white) !important;
-    }
-
-    /* Hamburger - hidden by default */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 25px;
-      height: 2px;
-      background-color: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ====== HERO ====== */
-    #hero {
-      margin-top: 64px;
-      min-height: 88vh;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 60%, #3d5570 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image:
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 40px,
-          rgba(255,255,255,0.02) 40px,
-          rgba(255,255,255,0.02) 41px
-        );
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background-color: rgba(224,123,57,0.18);
-      border: 1px solid rgba(224,123,57,0.4);
-      color: var(--amber);
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.35rem 1rem;
-      border-radius: 999px;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .hero-badge svg {
-      width: 14px;
-      height: 14px;
-      fill: var(--amber);
-    }
-
-    .hero-title {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-
-    .hero-title span {
-      color: var(--amber);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 2.2rem;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background-color: var(--amber);
-      color: var(--white);
-      text-decoration: none;
-      padding: 0.8rem 2rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      transition: background-color 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-
-    .btn-primary:hover {
-      background-color: var(--amber-light);
-      transform: translateY(-1px);
-    }
-
-    .btn-outline {
-      border: 2px solid rgba(255,255,255,0.5);
-      color: var(--white);
-      text-decoration: none;
-      padding: 0.78rem 2rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: border-color 0.2s, background-color 0.2s;
-      display: inline-block;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--amber);
-      background-color: rgba(224,123,57,0.12);
-    }
-
-    /* ====== SECTION COMMON ====== */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--amber);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .section-desc {
-      font-size: 1.05rem;
-      color: var(--gray);
-      max-width: 620px;
-      line-height: 1.7;
-    }
-
-    /* ====== ABOUT ====== */
-    #about {
-      background-color: var(--white);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-visual {
-      background: linear-gradient(135deg, var(--navy), var(--steel));
-      border-radius: 16px;
-      padding: 3rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      min-height: 320px;
-    }
-
-    .about-icon-wrap {
-      width: 88px;
-      height: 88px;
-      background-color: var(--amber);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .about-icon-wrap svg {
-      width: 46px;
-      height: 46px;
-      fill: var(--white);
-    }
-
-    .about-stats {
-      display: flex;
-      gap: 2rem;
-    }
-
-    .about-stat {
-      text-align: center;
-    }
-
-    .about-stat-number {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--amber);
-    }
-
-    .about-stat-label {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.7);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .about-text p {
-      color: var(--gray);
-      font-size: 1.05rem;
-      line-height: 1.75;
-      margin-bottom: 1rem;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-highlights {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-    }
-
-    .highlight-item {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.95rem;
-      color: var(--dark-text);
-      font-weight: 500;
-    }
-
-    .highlight-item svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--amber);
-      flex-shrink: 0;
-    }
-
-    /* ====== SERVICES ====== */
-    #services {
-      background-color: var(--cream);
-    }
-
-    .services-header {
-      margin-bottom: 3rem;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background-color: var(--white);
-      border-radius: 12px;
-      padding: 2rem;
-      border: 1px solid var(--light-gray);
-      transition: box-shadow 0.2s, transform 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background-color: var(--amber);
-      border-radius: 4px 0 0 4px;
-    }
-
-    .service-card:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      transform: translateY(-3px);
-    }
-
-    .service-icon {
-      width: 52px;
-      height: 52px;
-      background-color: rgba(224,123,57,0.1);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-
-    .service-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: var(--amber);
-    }
-
-    .service-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-desc {
-      font-size: 0.92rem;
-      color: var(--gray);
-      line-height: 1.6;
-    }
-
-    /* ====== CONTACT ====== */
-    #contact {
-      background-color: var(--navy);
-    }
-
-    #contact .section-title {
-      color: var(--white);
-    }
-
-    #contact .section-label {
-      color: var(--amber);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .contact-card {
-      background-color: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 1.4rem 1.6rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .contact-card-icon {
-      width: 44px;
-      height: 44px;
-      background-color: var(--amber);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-card-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--white);
-    }
-
-    .contact-card-body {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .contact-card-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.5);
-      margin-bottom: 0.25rem;
-    }
-
-    .contact-card-value {
-      font-size: 1rem;
-      color: var(--white);
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    a.contact-card-value:hover {
-      color: var(--amber);
-    }
-
-    .rating-box {
-      background-color: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 1.4rem 1.6rem;
-    }
-
-    .rating-header {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.5);
-      margin-bottom: 0.75rem;
-    }
-
-    .rating-display {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .rating-score {
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1;
-    }
-
-    .rating-stars-col {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .stars {
-      display: flex;
-      gap: 2px;
-    }
-
-    .stars svg {
-      width: 20px;
-      height: 20px;
-      fill: #f59e0b;
-    }
-
-    .rating-source {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.5);
-    }
-
-    .contact-action {
-      margin-top: 1rem;
-    }
-
-    .contact-right p {
-      color: rgba(255,255,255,0.65);
-      font-size: 1rem;
-      line-height: 1.7;
-      margin-bottom: 2rem;
-    }
-
-    .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background-color: var(--amber);
-      color: var(--white);
-      text-decoration: none;
-      padding: 0.85rem 1.8rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      transition: background-color 0.2s, transform 0.15s;
-      margin-bottom: 1.5rem;
-    }
-
-    .directions-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--white);
-    }
-
-    .directions-btn:hover {
-      background-color: var(--amber-light);
-      transform: translateY(-1px);
-    }
-
-    .call-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      border: 2px solid rgba(255,255,255,0.4);
-      color: var(--white);
-      text-decoration: none;
-      padding: 0.83rem 1.8rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: border-color 0.2s, background-color 0.2s;
-      margin-left: 0.75rem;
-    }
-
-    .call-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--white);
-    }
-
-    .call-btn:hover {
-      border-color: var(--amber);
-      background-color: rgba(224,123,57,0.12);
-    }
-
-    .contact-cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .contact-cta-row .call-btn {
-      margin-left: 0;
-    }
-
-    /* ====== FOOTER ====== */
-    footer {
-      background-color: #111a25;
-      color: rgba(255,255,255,0.5);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.88rem;
-    }
-
-    footer a {
-      color: var(--amber);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        gap: 0;
-        position: fixed;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background-color: var(--navy);
-        padding: 1rem 1.5rem 1.5rem;
-        border-top: 1px solid rgba(255,255,255,0.08);
-        z-index: 999;
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links li {
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-      }
-
-      .nav-links a {
-        display: block;
-        padding: 0.75rem 0;
-        font-size: 1rem;
-      }
-
-      .nav-links .nav-cta {
-        border-radius: 0;
-        margin-top: 0.5rem;
-        text-align: center;
-        padding: 0.75rem 0;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      section {
-        padding: 3.5rem 1.25rem;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn-primary, .btn-outline {
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-      }
-
-      .about-stats {
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .contact-cta-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .directions-btn, .call-btn {
-        justify-content: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DIY Jeff Gainesville | Handyman Services</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#15110c;--wood:#2a2017;--wood2:#3a2c1e;
+    --saw:#f08a24;--saw-dk:#cf6f12;--ember:#ffb454;
+    --cream:#f3ece1;--paper:#f7f1e7;--line:#d8cbb6;
+    --gray:#6f6555;--white:#fff;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .mono{font-family:ui-monospace,"Consolas",monospace}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 1.4rem}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.4rem;background:rgba(21,17,12,.4);backdrop-filter:blur(8px);transition:background .3s}
+  nav.solid{background:rgba(21,17,12,.95)}
+  .brand{display:flex;align-items:center;gap:.6rem;color:#fff;text-decoration:none}
+  .brand .mk{width:38px;height:38px;border-radius:9px;background:var(--saw);display:grid;place-items:center}
+  .brand .mk svg{width:22px;height:22px;fill:var(--ink)}
+  .brand b{font-weight:900;letter-spacing:.3px}
+  .nlinks{display:flex;gap:1.4rem;align-items:center}
+  .nlinks a{color:rgba(255,255,255,.82);text-decoration:none;font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+  .nlinks a:hover{color:var(--ember)}
+  .nlinks .call{background:var(--saw);color:var(--ink);padding:.5rem .95rem;border-radius:7px;font-weight:800}
+  .ntog{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px}
+  .ntog span{width:26px;height:2px;background:#fff;display:block}
+
+  /* HERO CANVAS */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;background:radial-gradient(900px 600px at 70% 30%,#3a2c1e,var(--ink));overflow:hidden}
+  #fx{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero .wrap{position:relative;z-index:2;color:#fff;padding-top:5rem;padding-bottom:4rem}
+  .eyebrow{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--ember);border:1px solid rgba(255,180,84,.4);background:rgba(240,138,36,.12);padding:.35rem .8rem;border-radius:30px}
+  .hero h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;line-height:1;letter-spacing:-1.5px;margin:1.2rem 0 1rem}
+  .hero h1 span{color:var(--saw)}
+  .hero p{color:rgba(255,255,255,.82);font-size:1.15rem;max-width:52ch}
+  .cta{margin-top:1.9rem;display:flex;gap:.8rem;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:9px;font-weight:800;text-decoration:none;font-size:.98rem;border:2px solid transparent;cursor:pointer;transition:transform .15s,background .2s,box-shadow .2s,color .2s,border-color .2s}
+  .btn-saw{background:var(--saw);color:var(--ink)}
+  .btn-saw:hover{background:#ff9d3c;box-shadow:0 10px 26px rgba(240,138,36,.4)}
+  .btn-ghost{border-color:rgba(255,255,255,.4);color:#fff}
+  .btn-ghost:hover{border-color:var(--ember);color:var(--ember)}
+  .herostats{display:flex;gap:2.4rem;margin-top:2.4rem;flex-wrap:wrap}
+  .hs .v{font-size:2rem;font-weight:900;color:var(--saw);line-height:1}
+  .hs .k{font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6)}
+  .scrollcue{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,.6);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+  .scrollcue svg{width:20px;height:20px;fill:var(--ember);animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+  section{padding:5rem 0}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  .kicker{font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--saw-dk)}
+  .stitle{font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:900;letter-spacing:-.5px;margin:.4rem 0 1rem}
+  .stitle span{color:var(--saw-dk)}
+  .lead{color:var(--gray);max-width:60ch;margin-bottom:2rem}
+
+  /* ABOUT */
+  #about{background:var(--cream)}
+  .about-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:2.8rem;align-items:center}
+  .about-grid p{color:var(--gray);margin-bottom:1rem}
+  .ratebox{background:var(--wood);color:#fff;border-radius:18px;padding:2rem;text-align:center}
+  .ratebox .score{font-size:3.6rem;font-weight:900;color:var(--saw);line-height:1}
+  .ratebox .stars{display:flex;gap:3px;justify-content:center;margin:.5rem 0}
+  .ratebox .stars svg{width:24px;height:24px;fill:var(--saw)}
+  .ratebox .src{color:rgba(255,255,255,.7);font-size:.9rem}
+  .ratebox .where{display:inline-block;margin-top:1rem;font-weight:800;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:var(--ember)}
+
+  /* SERVICES */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+  .svc{position:relative;background:var(--white);border:1px solid var(--line);border-radius:15px;padding:1.6rem;overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .svc:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(21,17,12,.14);border-color:var(--saw)}
+  .svc .bg{position:absolute;right:-12px;bottom:-14px;font-weight:900;font-size:4.5rem;color:var(--cream);z-index:0;line-height:1}
+  .svc>*{position:relative;z-index:1}
+  .svc .si{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--wood),var(--wood2));display:grid;place-items:center;margin-bottom:.9rem}
+  .svc .si svg{width:25px;height:25px;fill:var(--saw)}
+  .svc h3{font-size:1.05rem;font-weight:800;margin-bottom:.35rem}
+  .svc p{font-size:.88rem;color:var(--gray)}
+
+  /* CONTACT */
+  #contact{background:var(--wood);color:#fff}
+  #contact .kicker{color:var(--ember)}
+  #contact .stitle span{color:var(--ember)}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;align-items:center}
+  .ccard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:1.3rem;display:flex;gap:.9rem;align-items:flex-start;margin-bottom:1rem}
+  .ccard .ic{width:42px;height:42px;border-radius:10px;background:rgba(240,138,36,.18);display:grid;place-items:center;flex-shrink:0}
+  .ccard .ic svg{width:21px;height:21px;fill:var(--ember)}
+  .ccard .l{font-size:.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6)}
+  .ccard .v,.ccard a{font-weight:700;color:#fff;text-decoration:none;font-size:1.05rem}
+  .ccard a:hover{color:var(--ember)}
+  #contact .lead{color:rgba(255,255,255,.75)}
+
+  footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;padding:2rem 1.4rem;font-size:.85rem}
+  footer a{color:var(--ember);text-decoration:none;font-weight:700}
+  footer strong{color:#fff}
+
+  @media(max-width:820px){
+    .nlinks{display:none}.ntog{display:flex}
+    nav.open .nlinks{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--ink);padding:1rem 1.4rem;gap:.7rem}
+    .about-grid,.svc-grid,.contact-grid{grid-template-columns:1fr}
+    .svc-grid{gap:1rem}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}.reveal{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
 
-  <!-- ====== NAV ====== -->
-  <nav>
-    <a href="#hero" class="nav-logo">
-      <div class="nav-logo-icon">
-        <!-- Wrench icon -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-        </svg>
-      </div>
-      <span class="nav-logo-text">DIY Jeff <span>Gainesville</span></span>
-    </a>
-    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
-    </ul>
-  </nav>
+<nav id="nav">
+  <a href="#top" class="brand"><span class="mk"><svg viewBox="0 0 24 24"><path d="M22.7 19.3l-8.1-8.1A5.96 5.96 0 0 0 9 2C6.2 2 3.8 3.8 3 6.3l3.8 3.8-1.4 1.4L1.6 7.7A6 6 0 0 0 8 16a5.96 5.96 0 0 0 3.8-1.4l8.1 8.1a1 1 0 0 0 1.4 0l1.4-1.4a1 1 0 0 0 0-1.4z"/></svg></span><b>DIY Jeff Gainesville</b></a>
+  <div class="nlinks">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+    <a href="tel:+19044521209" class="call">(904) 452-1209</a>
+  </div>
+  <button class="ntog" id="ntog" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
 
-  <!-- ====== HERO ====== -->
-  <section id="hero">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <!-- Star icon -->
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        5.0 Stars on Google Maps
+<header class="hero" id="top">
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <span class="eyebrow">Gainesville, FL Handyman</span>
+    <h1>Your Trusted <span>Handyman</span> in Gainesville</h1>
+    <p>Dependable repairs, improvements, and maintenance for homes and businesses across Gainesville, FL — done right the first time.</p>
+    <div class="cta">
+      <a href="tel:+19044521209" class="btn btn-saw mag">Call (904) 452-1209</a>
+      <a href="#services" class="btn btn-ghost">What We Do</a>
+    </div>
+    <div class="herostats">
+      <div class="hs"><div class="v" data-count="5.0" data-dec="1">5.0</div><div class="k">Google Rating</div></div>
+      <div class="hs"><div class="v">GNV</div><div class="k">Gainesville, FL</div></div>
+    </div>
+  </div>
+  <div class="scrollcue">Scroll<svg viewBox="0 0 24 24"><path d="M12 5v12l-4-4-1.4 1.4L12 20l5.4-5.6L16 13l-4 4z"/></svg></div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div>
+        <span class="kicker">About Us</span>
+        <h2 class="stitle">Reliable Hands for <span>Every Job</span></h2>
+        <p>DIY Jeff Gainesville is a locally operated handyman service dedicated to serving homeowners and businesses throughout the Gainesville area. Whether it is a quick fix or a more involved project, we bring skill, reliability, and attention to detail to every job we take on.</p>
+        <p>We understand that your home is your biggest investment, and we treat every property with the same respect we would give our own. Our goal is straightforward — show up on time, do the work right, and leave your space better than we found it.</p>
       </div>
-      <h1 class="hero-title">Your Trusted<br /><span>Handyman</span> in Gainesville</h1>
-      <p class="hero-tagline">Dependable repairs, improvements, and maintenance for homes and businesses across Gainesville, FL — done right the first time.</p>
-      <div class="hero-buttons">
-        <a href="#contact" class="btn-primary">Get a Free Quote</a>
-        <a href="#services" class="btn-outline">See Our Services</a>
+      <div class="ratebox">
+        <div class="score" data-count="5.0" data-dec="1">5.0</div>
+        <div class="stars" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        </div>
+        <div class="src">Google Rating</div>
+        <span class="where">Rated on Google Maps</span>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ====== ABOUT ====== -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-visual">
-          <div class="about-icon-wrap">
-            <!-- Hard hat / builder icon -->
-            <svg viewBox="0 0 24 24"><path d="M12 1a9 9 0 0 0-9 9v1h18v-1a9 9 0 0 0-9-9zM3 13a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H3zm1 4v2a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4v-2H4z"/></svg>
-          </div>
-          <div class="about-stats">
-            <div class="about-stat">
-              <div class="about-stat-number">5.0</div>
-              <div class="about-stat-label">Google Rating</div>
-            </div>
-            <div class="about-stat">
-              <div class="about-stat-number">GNV</div>
-              <div class="about-stat-label">Gainesville, FL</div>
-            </div>
-          </div>
-        </div>
-        <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">Reliable Hands for Every Job</h2>
-          <p>DIY Jeff Gainesville is a locally operated handyman service dedicated to serving homeowners and businesses throughout the Gainesville area. Whether it is a quick fix or a more involved project, we bring skill, reliability, and attention to detail to every job we take on.</p>
-          <p>We understand that your home is your biggest investment, and we treat every property with the same respect we would give our own. Our goal is straightforward — show up on time, do the work right, and leave your space better than we found it.</p>
-          <div class="about-highlights">
-            <div class="highlight-item">
-              <!-- Check icon -->
-              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-              Locally owned and operated in Gainesville
-            </div>
-            <div class="highlight-item">
-              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-              Honest pricing — contact us for details
-            </div>
-            <div class="highlight-item">
-              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-              Residential and light commercial work
-            </div>
-            <div class="highlight-item">
-              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-              5-star rated on Google Maps
-            </div>
-          </div>
-        </div>
-      </div>
+<section id="services">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="kicker">What We Do</span>
+      <h2 class="stitle">Our <span>Services</span></h2>
+      <p class="lead">From minor repairs to bigger home improvement tasks, we handle a wide range of projects. Contact us to discuss your specific needs.</p>
     </div>
-  </section>
-
-  <!-- ====== SERVICES ====== -->
-  <section id="services">
-    <div class="section-inner">
-      <div class="services-header">
-        <p class="section-label">What We Do</p>
-        <h2 class="section-title">Our Services</h2>
-        <p class="section-desc">From minor repairs to bigger home improvement tasks, we handle a wide range of projects. Contact us to discuss your specific needs.</p>
-      </div>
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Wrench icon -->
-            <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-          </div>
-          <div class="service-name">General Repairs</div>
-          <div class="service-desc">Doors, windows, drywall patches, hardware replacement, and other everyday household repairs handled quickly and cleanly.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Plumbing / faucet icon -->
-            <svg viewBox="0 0 24 24"><path d="M21 6H9a6 6 0 0 0 0 12h1v2h4v-2h2v2h4v-2h1a3 3 0 0 0 0-6h-1V9h1a1 1 0 0 0 0-2h-1V6zm-5 4v4H9a2 2 0 0 1 0-4h7zm5 4h-3v-2h3a1 1 0 0 1 0 2z"/></svg>
-          </div>
-          <div class="service-name">Plumbing Fixes</div>
-          <div class="service-desc">Leaky faucets, running toilets, fixture installation, and minor pipe repairs to keep your plumbing working properly.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Electrical / lightning icon -->
-            <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
-          </div>
-          <div class="service-name">Electrical Handyman Work</div>
-          <div class="service-desc">Outlet and switch replacement, light fixture installation, ceiling fans, and other minor electrical tasks. Contact us for details.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Paint roller icon -->
-            <svg viewBox="0 0 24 24"><path d="M18 4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H6.5L5 14.5V20H3v-6.5A2 2 0 0 1 5 11.5V6a2 2 0 0 1 2-2h11zm-1 2H7v4h10V6zm-5 10v5h2v-5h-2z"/></svg>
-          </div>
-          <div class="service-name">Painting &amp; Patching</div>
-          <div class="service-desc">Interior and exterior touch-ups, drywall repair, caulking, and painting to refresh any room or surface on your property.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Tile / grid icon -->
-            <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>
-          </div>
-          <div class="service-name">Flooring &amp; Tile</div>
-          <div class="service-desc">Installation, repair, or replacement of tile, laminate, and other flooring materials for kitchens, bathrooms, and living areas.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Assembly / shelf icon -->
-            <svg viewBox="0 0 24 24"><path d="M2 4h20v2H2V4zm0 7h20v2H2v-2zm0 7h20v2H2v-2z"/></svg>
-          </div>
-          <div class="service-name">Assembly &amp; Installation</div>
-          <div class="service-desc">Furniture assembly, shelving installation, TV mounting, curtain rods, and other interior setup tasks done efficiently.</div>
-        </div>
-
-      </div>
+    <div class="svc-grid reveal">
+      <article class="svc"><span class="bg mono">01</span><div class="si"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v16h18V5a2 2 0 00-2-2zM5 19V5h14v14H5zm8-7a1 1 0 11-2 0 1 1 0 012 0z"/></svg></div><h3>General Repairs</h3><p>Doors, windows, drywall patches, hardware replacement, and other everyday household repairs handled quickly and cleanly.</p></article>
+      <article class="svc"><span class="bg mono">02</span><div class="si"><svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm-2 4H6l-2 9h16l-2-9zm-1.27 7H7.27l1.33-6h6.8l1.33 6z"/></svg></div><h3>Plumbing Fixes</h3><p>Leaky faucets, running toilets, fixture installation, and minor pipe repairs to keep your plumbing working properly.</p></article>
+      <article class="svc"><span class="bg mono">03</span><div class="si"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-4 12.74V17a1 1 0 001 1h6a1 1 0 001-1v-2.26A7 7 0 0012 2zm-1 15v1h2v-1h-2z"/></svg></div><h3>Electrical Handyman Work</h3><p>Outlet and switch replacement, light fixture installation, ceiling fans, and other minor electrical tasks. Contact us for details.</p></article>
+      <article class="svc"><span class="bg mono">04</span><div class="si"><svg viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34a1 1 0 00-1.41 0L9 12.25 11.75 15l8.96-8.96a1 1 0 000-1.41z"/></svg></div><h3>Painting &amp; Patching</h3><p>Interior and exterior touch-ups, drywall repair, caulking, and painting to refresh any room or surface on your property.</p></article>
+      <article class="svc"><span class="bg mono">05</span><div class="si"><svg viewBox="0 0 24 24"><path d="M3 5h18v4H3zm0 6h18v8H3zm2 2v4h6v-4z"/></svg></div><h3>Flooring &amp; Tile</h3><p>Installation, repair, or replacement of tile, laminate, and other flooring materials for kitchens, bathrooms, and living areas.</p></article>
+      <article class="svc"><span class="bg mono">06</span><div class="si"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></div><h3>Assembly &amp; Installation</h3><p>Furniture assembly, shelving installation, TV mounting, curtain rods, and other interior setup tasks done efficiently.</p></article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ====== CONTACT ====== -->
-  <section id="contact">
-    <div class="section-inner">
-      <div class="contact-grid">
-        <div>
-          <p class="section-label">Reach Out</p>
-          <h2 class="section-title">Get in Touch</h2>
-          <div class="contact-info">
-            <div class="contact-card">
-              <div class="contact-card-icon">
-                <!-- Location pin icon -->
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-              </div>
-              <div class="contact-card-body">
-                <span class="contact-card-label">Address</span>
-                <span class="contact-card-value">3515 NW 39th Ln, Gainesville, FL</span>
-              </div>
-            </div>
-            <div class="contact-card">
-              <div class="contact-card-icon">
-                <!-- Phone icon -->
-                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-              </div>
-              <div class="contact-card-body">
-                <span class="contact-card-label">Phone</span>
-                <a href="tel:+19044521209" class="contact-card-value">(904) 452-1209</a>
-              </div>
-            </div>
-            <div class="rating-box">
-              <div class="rating-header">Google Maps Rating</div>
-              <div class="rating-display">
-                <span class="rating-score">5.0</span>
-                <div class="rating-stars-col">
-                  <div class="stars">
-                    <!-- 5 stars -->
-                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  </div>
-                  <span class="rating-source">Rated on Google Maps</span>
-                </div>
-              </div>
-            </div>
-          </div>
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-grid reveal">
+      <div>
+        <span class="kicker">Reach Out</span>
+        <h2 class="stitle">Get in <span>Touch</span></h2>
+        <p class="lead">Ready to get started? Give us a call or use the button below to find us on Google Maps. We serve Gainesville and surrounding areas — reach out to discuss your project and we will get back to you promptly.</p>
+        <a href="https://www.google.com/maps/search/DIY%20Jeff%20Gainesville%203515%20NW%2039th%20Ln" target="_blank" rel="noopener" class="btn btn-saw mag">Find Us on Google Maps</a>
+      </div>
+      <div>
+        <div class="ccard">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24a11.36 11.36 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1C9.61 21 3 14.39 3 6a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.02l-2.21 2.2z"/></svg></span>
+          <div><div class="l">Phone</div><a href="tel:+19044521209">(904) 452-1209</a></div>
         </div>
-        <div class="contact-right">
-          <p style="margin-top:3.5rem;">Ready to get started? Give us a call or use the button below to find us on Google Maps. We serve Gainesville and surrounding areas — reach out to discuss your project and we will get back to you promptly.</p>
-          <div class="contact-cta-row">
-            <a
-              href="https://www.google.com/maps/search/DIY%20Jeff%20Gainesville%203515%20NW%2039th%20Ln"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="directions-btn"
-            >
-              <!-- Map/directions icon -->
-              <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-              Get Directions
-            </a>
-            <a href="tel:+19044521209" class="call-btn">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-              Call Now
-            </a>
-          </div>
+        <div class="ccard">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg></span>
+          <div><div class="l">Address</div><div class="v">3515 NW 39th Ln, Gainesville, FL</div></div>
+        </div>
+        <div class="ccard">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></span>
+          <div><div class="l">Hours</div><div class="v">Contact us for details</div></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ====== FOOTER ====== -->
-  <footer>
-    <p>&copy; 2026 DIY Jeff Gainesville &mdash; 3515 NW 39th Ln, Gainesville, FL &mdash; <a href="tel:+19044521209">(904) 452-1209</a></p>
-  </footer>
+<footer>
+  <p>&copy; 2026 DIY Jeff Gainesville — <strong>3515 NW 39th Ln, Gainesville, FL</strong> — <a href="tel:+19044521209">(904) 452-1209</a></p>
+</footer>
 
-  <script>
-    // Mobile nav toggle
-    var hamburger = document.getElementById('hamburger');
-    var navLinks = document.getElementById('nav-links');
-    hamburger.addEventListener('click', function() {
-      navLinks.classList.toggle('open');
+<script>
+(function(){
+  "use strict";
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // nav
+  var nav=document.getElementById("nav"),ntog=document.getElementById("ntog");
+  ntog.addEventListener("click",function(){nav.classList.toggle("open");});
+  nav.querySelectorAll(".nlinks a").forEach(function(a){a.addEventListener("click",function(){nav.classList.remove("open");});});
+  window.addEventListener("scroll",function(){nav.classList.toggle("solid",window.scrollY>40);},{passive:true});
+
+  // reveal
+  var rev=document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window && !reduce){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");e.target.querySelectorAll("[data-count]").forEach(countUp);io.unobserve(e.target);}});},{threshold:.15});
+    rev.forEach(function(r){io.observe(r);});
+  }else{rev.forEach(function(r){r.classList.add("in");});}
+
+  function countUp(el){
+    var t=parseFloat(el.getAttribute("data-count")),dec=parseInt(el.getAttribute("data-dec")||"0",10);
+    if(reduce){el.textContent=t.toFixed(dec);return;}
+    var s=null,dur=1100;
+    function step(ts){if(!s)s=ts;var p=Math.min((ts-s)/dur,1),e=1-Math.pow(1-p,3);el.textContent=(t*e).toFixed(dec);if(p<1)requestAnimationFrame(step);else el.textContent=t.toFixed(dec);}
+    requestAnimationFrame(step);
+  }
+  document.querySelectorAll(".hero [data-count]").forEach(countUp);
+
+  // magnetic
+  if(!reduce && window.matchMedia("(hover:hover)").matches){
+    document.querySelectorAll(".mag").forEach(function(b){
+      b.addEventListener("mousemove",function(ev){var r=b.getBoundingClientRect();b.style.transform="translate("+(ev.clientX-r.left-r.width/2)*0.2+"px,"+(ev.clientY-r.top-r.height/2)*0.2+"px)";});
+      b.addEventListener("mouseleave",function(){b.style.transform="";});
     });
-    // Close nav when a link is clicked
-    navLinks.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        navLinks.classList.remove('open');
-      });
-    });
-  </script>
+  }
 
+  // CANVAS — floating sawdust / ember particles
+  var cv=document.getElementById("fx"),ctx=cv.getContext("2d"),parts=[],raf=null,W=0,H=0,dpr=Math.min(window.devicePixelRatio||1,2);
+  function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  function build(){
+    parts=[];var n=Math.round(Math.min(90,W/14));
+    for(var i=0;i<n;i++){
+      parts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.4+.6,
+        vx:(Math.random()-.5)*.25,vy:-(Math.random()*.4+.12),
+        a:Math.random()*.5+.15,ember:Math.random()<.35});
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<parts.length;i++){
+      var p=parts[i];p.x+=p.vx;p.y+=p.vy;
+      if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
+      if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.ember?"rgba(255,180,84,"+p.a+")":"rgba(240,138,36,"+(p.a*.7)+")";
+      ctx.fill();
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  function start(){if(!cv)return;size();build();if(!reduce){if(raf)cancelAnimationFrame(raf);draw();}else{ctx.clearRect(0,0,W,H);}}
+  if(cv){
+    start();
+    var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(start,180);});
+    document.addEventListener("visibilitychange",function(){
+      if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null;}}
+      else if(!reduce&&!raf){draw();}
+    });
+  }
+})();
+</script>
 </body>
 </html>
