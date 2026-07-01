@@ -5,571 +5,312 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lillian's Music Store | Gainesville, FL</title>
   <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-dark:      #0f0e11;
-      --bg-section:   #16151a;
-      --bg-card:      #1e1c24;
-      --accent:       #c9a84c;
-      --accent-light: #e8c96a;
-      --text-primary: #f0eee8;
-      --text-muted:   #9b9490;
-      --border:       #2e2b36;
-      --nav-height:   64px;
+      --bg:        #07060a;
+      --bg2:       #0d0b14;
+      --ink:       #f3f0ea;
+      --muted:     #8d8798;
+      --neon:      #ff2e88;
+      --neon2:     #00e5ff;
+      --gold:      #f5c542;
+      --line:      rgba(255,255,255,0.08);
+      --display:   "Helvetica Neue", Arial, "Segoe UI", system-ui, sans-serif;
+      --serif:     Georgia, "Times New Roman", serif;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
+    html { scroll-behavior: smooth; }
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-primary);
-      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
       line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+    a { color: inherit; text-decoration: none; }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* ===== NAV ===== */
-    nav {
+    /* animated mesh gradient backdrop */
+    body::before {
+      content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: var(--nav-height);
-      background: rgba(15, 14, 17, 0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
+      inset: -25%;
+      z-index: -2;
+      background:
+        radial-gradient(40% 35% at 18% 22%, rgba(255,46,136,0.20), transparent 60%),
+        radial-gradient(45% 40% at 82% 30%, rgba(0,229,255,0.16), transparent 60%),
+        radial-gradient(50% 50% at 50% 88%, rgba(245,197,66,0.10), transparent 65%);
+      filter: blur(20px);
+      animation: drift 22s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      0%   { transform: translate3d(0,0,0) scale(1); }
+      50%  { transform: translate3d(3%,-2%,0) scale(1.08); }
+      100% { transform: translate3d(-3%,2%,0) scale(1.04); }
+    }
+    /* fine grain overlay */
+    body::after {
+      content: "";
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 3px);
+      mix-blend-mode: overlay;
     }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--accent);
+    /* ===== NAV (offset, minimal) ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.2rem, 5vw, 3.5rem);
+      background: rgba(7,6,10,0.55);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
     }
-
-    .nav-logo-icon {
-      width: 34px;
-      height: 34px;
-      background: var(--accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      color: var(--bg-dark);
-      flex-shrink: 0;
+    .brand {
+      font-family: var(--display);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-size: 1.05rem;
+      display: flex; align-items: center; gap: 0.55rem;
     }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
+    .brand .note {
+      color: var(--neon);
+      text-shadow: 0 0 12px var(--neon);
+      font-size: 1.2rem;
     }
-
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
     .nav-links a {
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      transition: color 0.2s;
+      font-family: var(--display);
+      font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); transition: color 0.2s; position: relative;
     }
-
-    .nav-links a:hover {
-      color: var(--accent-light);
+    .nav-links a::after {
+      content: ""; position: absolute; left: 0; bottom: -6px; height: 1px; width: 0;
+      background: var(--neon); box-shadow: 0 0 8px var(--neon); transition: width 0.3s;
     }
-
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { width: 100%; }
     .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 5px;
-      padding: 4px;
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px; padding: 4px;
     }
+    .nav-toggle span { display: block; width: 26px; height: 2px; background: var(--ink); border-radius: 2px; }
 
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text-primary);
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* ===== HERO ===== */
+    /* ===== HERO — asymmetric editorial, oversized type ===== */
     #hero {
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: calc(var(--nav-height) + 2rem) 1.5rem 4rem;
+      padding: clamp(7rem, 14vh, 11rem) clamp(1.2rem, 5vw, 3.5rem) 4rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+      grid-template-rows: 1fr auto;
+      gap: 1rem 2rem;
+      align-items: end;
       position: relative;
-      overflow: hidden;
-      background: var(--bg-dark);
     }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(201, 168, 76, 0.12) 0%, transparent 70%),
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 60px,
-          rgba(201, 168, 76, 0.03) 60px,
-          rgba(201, 168, 76, 0.03) 61px
-        ),
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 60px,
-          rgba(201, 168, 76, 0.03) 60px,
-          rgba(201, 168, 76, 0.03) 61px
-        );
-      pointer-events: none;
+    .hero-kicker {
+      grid-column: 1 / -1;
+      font-family: var(--display);
+      font-size: clamp(0.62rem, 1.4vw, 0.8rem);
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--neon2);
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 0.4rem;
     }
+    .hero-kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--neon2), transparent); }
 
-    .hero-content {
-      position: relative;
-      max-width: 760px;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
+    .hero-display {
+      grid-column: 1 / -1;
+      font-family: var(--display);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.86;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.2rem;
+      margin-left: clamp(0rem, -1.5vw, -0.6rem);
     }
-
-    .hero-title {
-      font-size: clamp(2.6rem, 6vw, 5rem);
-      font-weight: 700;
-      line-height: 1.1;
-      color: var(--text-primary);
-      margin-bottom: 1.4rem;
+    .hero-display .l1 {
+      display: block;
+      font-size: clamp(3.4rem, 16vw, 13rem);
+      background: linear-gradient(100deg, var(--ink) 30%, var(--neon) 65%, var(--neon2) 95%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      background-size: 220% auto;
+      animation: shimmer 9s linear infinite;
     }
-
-    .hero-title span {
-      color: var(--accent);
+    .hero-display .l2 {
+      display: block;
+      font-size: clamp(2.1rem, 9.5vw, 7.6rem);
+      margin-left: clamp(2rem, 22vw, 16rem);
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255,255,255,0.55);
+      letter-spacing: -0.02em;
     }
+    @keyframes shimmer { to { background-position: 220% center; } }
 
-    .hero-tagline {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      color: var(--text-muted);
+    .hero-lede {
+      grid-column: 1 / 2;
+      max-width: 30ch;
       font-style: italic;
-      margin-bottom: 2.4rem;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      color: var(--muted);
+      align-self: start;
     }
-
+    .hero-aside {
+      grid-column: 2 / 3;
+      align-self: end;
+      text-align: right;
+      font-family: var(--display);
+    }
     .hero-cta {
       display: inline-block;
-      background: var(--accent);
-      color: var(--bg-dark);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.85rem 2.2rem;
+      font-family: var(--display);
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 0.95rem 2rem;
+      color: var(--bg);
+      background: var(--neon);
       border-radius: 2px;
-      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 0 24px rgba(255,46,136,0.45);
+      transition: transform 0.18s, box-shadow 0.25s;
     }
+    .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 0 40px rgba(255,46,136,0.7); }
+    .hero-meta { margin-top: 1.1rem; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
 
-    .hero-cta:hover {
-      background: var(--accent-light);
-      transform: translateY(-2px);
+    /* reveal util */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ===== generic editorial section ===== */
+    section.block { padding: clamp(4rem, 11vh, 8rem) clamp(1.2rem, 5vw, 3.5rem); position: relative; }
+    .eyebrow {
+      font-family: var(--display);
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--neon2);
+      margin-bottom: 1rem;
     }
-
-    /* ===== SECTION SHARED ===== */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
+    .big-head {
+      font-family: var(--display); font-weight: 800; letter-spacing: -0.03em; line-height: 0.95;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.6rem;
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
     }
 
-    .section-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .section-divider {
-      width: 48px;
-      height: 3px;
-      background: var(--accent);
-      margin-bottom: 2rem;
-    }
-
-    /* ===== ABOUT ===== */
-    #about {
-      background: var(--bg-section);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .about-grid {
+    /* ABOUT — off-axis two-column with hanging index numbers */
+    #about .about-wrap {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      font-size: 1.02rem;
-    }
-
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-visual {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .about-stat {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      padding: 1.2rem 1.5rem;
-      border-radius: 2px;
-    }
-
-    .about-stat-value {
-      font-size: 1.9rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-
-    .about-stat-label {
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    /* ===== SERVICES ===== */
-    #services {
-      background: var(--bg-dark);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .service-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 2rem 1.8rem;
-      transition: border-color 0.25s, transform 0.2s;
-    }
-
-    .service-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-    }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .service-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-
-    .service-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ===== CONTACT ===== */
-    #contact {
-      background: var(--bg-section);
-      border-top: 1px solid var(--border);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(2rem, 6vw, 6rem);
       align-items: start;
     }
+    #about .about-head { position: sticky; top: 100px; }
+    #about .about-head .big-head { font-size: clamp(2.4rem, 6vw, 4.6rem); }
+    #about .about-head .big-head em { font-style: normal; color: var(--neon); text-shadow: 0 0 22px rgba(255,46,136,0.4); }
+    .about-body p {
+      color: #cdc7d4; font-size: clamp(1.02rem, 1.5vw, 1.22rem); margin-bottom: 1.6rem; max-width: 56ch;
+    }
+    .about-body p:first-of-type { font-size: clamp(1.15rem, 2vw, 1.5rem); color: var(--ink); }
+    .about-index { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 2.5rem; background: var(--line); border: 1px solid var(--line); }
+    .idx-cell { background: var(--bg2); padding: 1.4rem 1.5rem; }
+    .idx-num { font-family: var(--display); font-weight: 800; font-size: 1.6rem; color: var(--gold); line-height: 1; }
+    .idx-lbl { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.4rem; }
 
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
+    /* RATING — oversized pull-quote */
+    #rating { text-align: left; }
+    #rating .rate-wrap { max-width: 1100px; margin: 0 auto; }
+    .pull {
+      font-family: var(--display); font-weight: 800; letter-spacing: -0.03em; line-height: 0.95;
+      font-size: clamp(2.6rem, 10vw, 9rem); text-transform: uppercase;
+      display: flex; align-items: baseline; gap: clamp(0.5rem, 2vw, 1.5rem); flex-wrap: wrap;
+    }
+    .pull .score {
+      background: linear-gradient(120deg, var(--gold), var(--neon));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .pull .of { font-size: clamp(1.2rem, 4vw, 3rem); -webkit-text-stroke: 1px var(--muted); color: transparent; }
+    .pull .stars { color: var(--gold); font-size: clamp(1.5rem, 5vw, 3.4rem); letter-spacing: 0.1em; text-shadow: 0 0 18px rgba(245,197,66,0.45); }
+    .rate-sub {
+      margin-top: 1.4rem; font-family: var(--display); font-size: 0.9rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+      display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+    }
+    .rate-sub .count { color: var(--ink); }
+    .rate-badge {
+      border: 1px solid rgba(245,197,66,0.4); color: var(--gold); padding: 0.35rem 0.9rem; border-radius: 999px;
+      font-size: 0.72rem; letter-spacing: 0.08em;
     }
 
-    .contact-item {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
+    /* OFFERINGS — asymmetric editorial list, alternating offset */
+    #offerings .off-list { margin-top: 3rem; border-top: 1px solid var(--line); }
+    .off-row {
+      display: grid;
+      grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: clamp(1rem, 4vw, 3rem);
+      align-items: baseline;
+      padding: clamp(1.6rem, 3vw, 2.6rem) 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.3s, padding-left 0.3s;
     }
+    .off-row:hover { background: rgba(255,46,136,0.04); padding-left: 0.8rem; }
+    .off-no { font-family: var(--display); font-weight: 800; color: var(--neon2); font-size: 1rem; opacity: 0.7; }
+    .off-name { font-family: var(--display); font-weight: 700; letter-spacing: -0.01em; font-size: clamp(1.3rem, 3vw, 2.2rem); text-transform: uppercase; }
+    .off-row:nth-child(even) .off-name { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.5); }
+    .off-desc { color: var(--muted); font-size: 1rem; }
 
-    .contact-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      margin-top: 2px;
+    /* CONTACT — split asymmetric */
+    #contact .c-wrap { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+    #contact .big-head { margin-bottom: 2.5rem; }
+    .c-line { display: flex; gap: 1rem; padding: 1.3rem 0; border-bottom: 1px solid var(--line); align-items: flex-start; }
+    .c-ico { font-size: 1.2rem; filter: drop-shadow(0 0 8px var(--neon2)); }
+    .c-k { font-family: var(--display); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--neon2); margin-bottom: 0.25rem; }
+    .c-v { color: var(--ink); font-size: 1.05rem; }
+    .dir-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 2rem;
+      font-family: var(--display); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 1rem 2.1rem; color: var(--bg); background: linear-gradient(100deg, var(--neon2), var(--gold));
+      border-radius: 2px; box-shadow: 0 0 26px rgba(0,229,255,0.35); transition: transform 0.18s, box-shadow 0.25s;
     }
-
-    .contact-item-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.2rem;
+    .dir-btn:hover { transform: translateY(-3px); box-shadow: 0 0 44px rgba(0,229,255,0.6); }
+    .c-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 6px;
+      padding: 2rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     }
-
-    .contact-item-value {
-      color: var(--text-primary);
-      font-size: 0.95rem;
-    }
-
-    .btn-directions {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: transparent;
-      color: var(--accent);
-      border: 2px solid var(--accent);
-      font-family: inherit;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.75rem 1.8rem;
-      border-radius: 2px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      margin-top: 0.4rem;
-    }
-
-    .btn-directions:hover {
-      background: var(--accent);
-      color: var(--bg-dark);
-    }
-
-    /* Rating card */
-    .rating-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 2.5rem 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .rating-card-title {
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .rating-score {
-      font-size: 4rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-    }
-
-    .rating-stars {
-      display: flex;
-      gap: 4px;
-    }
-
-    .star {
-      color: var(--accent);
-      font-size: 1.3rem;
-    }
-
-    .star.half {
-      color: var(--accent);
-      opacity: 0.55;
-    }
-
-    .rating-count {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .rating-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(201, 168, 76, 0.12);
-      border: 1px solid rgba(201, 168, 76, 0.3);
-      padding: 0.4rem 0.9rem;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-
-    .rating-source {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 0.2rem;
-    }
+    .c-card .lbl { font-family: var(--display); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+    .c-card .num { font-family: var(--display); font-weight: 800; font-size: 3.4rem; line-height: 1; color: var(--gold); }
+    .c-card .cap { color: var(--muted); font-size: 0.85rem; margin-top: 0.6rem; }
 
     /* ===== FOOTER ===== */
-    footer {
-      background: #0a090c;
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
-    .footer-logo {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.04em;
-    }
-
-    .footer-address {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    .footer-copy {
-      font-size: 0.75rem;
-      color: #555;
-      margin-top: 0.4rem;
-    }
+    footer { padding: 3rem clamp(1.2rem, 5vw, 3.5rem); border-top: 1px solid var(--line); text-align: center; }
+    .f-logo { font-family: var(--display); font-weight: 800; letter-spacing: -0.02em; font-size: 1.4rem; }
+    .f-logo .note { color: var(--neon); text-shadow: 0 0 12px var(--neon); }
+    .f-addr { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; }
+    .f-copy { font-size: 0.72rem; color: #4a4654; margin-top: 0.8rem; }
 
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
+    @media (max-width: 880px) {
+      #hero { grid-template-columns: 1fr; align-items: start; gap: 1.4rem; }
+      .hero-display .l2 { margin-left: clamp(1.5rem, 14vw, 5rem); }
+      .hero-lede, .hero-aside { grid-column: 1 / -1; text-align: left; }
+      .hero-aside { align-self: start; }
+      #about .about-wrap { grid-template-columns: 1fr; }
+      #about .about-head { position: static; }
+      #contact .c-wrap { grid-template-columns: 1fr; }
+      .off-row { grid-template-columns: 2.5rem 1fr; }
+      .off-desc { grid-column: 1 / -1; margin-left: 2.5rem; }
+    }
+    @media (max-width: 640px) {
       .nav-links {
-        display: none;
-        position: absolute;
-        top: var(--nav-height);
-        left: 0;
-        right: 0;
-        background: rgba(15, 14, 17, 0.98);
-        flex-direction: column;
-        gap: 0;
-        border-bottom: 1px solid var(--border);
-        padding: 1rem 0;
+        display: none; position: absolute; top: 68px; left: 0; right: 0;
+        flex-direction: column; gap: 0; background: rgba(7,6,10,0.97);
+        border-bottom: 1px solid var(--line); padding: 0.6rem 0;
       }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links li {
-        padding: 0;
-      }
-
-      .nav-links a {
-        display: block;
-        padding: 0.85rem 2rem;
-        font-size: 0.9rem;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; padding: 0.9rem clamp(1.2rem,5vw,3.5rem); }
+      .nav-toggle { display: flex; }
+      .about-index { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 520px) {
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      nav {
-        padding: 0 1.2rem;
-      }
-
-      section {
-        padding: 3.5rem 1.2rem;
-      }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+      body::before { animation: none; }
     }
   </style>
 </head>
@@ -577,174 +318,183 @@
 
   <!-- ===== NAV ===== -->
   <nav>
-    <a href="#hero" class="nav-logo">
-      <div class="nav-logo-icon">&#9835;</div>
-      Lillian's Music Store
-    </a>
+    <a href="#hero" class="brand"><span class="note">&#9835;</span> Lillian's Music Store</a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#rating">Reviews</a></li>
+      <li><a href="#offerings">Offerings</a></li>
+      <li><a href="#contact">Find Us</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
   </nav>
 
   <!-- ===== HERO ===== -->
   <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">Gainesville, FL &mdash; Downtown</p>
-      <h1 class="hero-title">Lillian's<br /><span>Music Store</span></h1>
-      <p class="hero-tagline">Where the music never stops and every night has its own rhythm.</p>
-      <a href="#about" class="hero-cta">Discover More</a>
+    <p class="hero-kicker">Live Music Bar &mdash; Downtown Gainesville, FL</p>
+    <h1 class="hero-display">
+      <span class="l1">Lillian's</span>
+      <span class="l2">Music Store</span>
+    </h1>
+    <p class="hero-lede">Where the music never stops and every night finds its own rhythm in the heart of downtown.</p>
+    <div class="hero-aside">
+      <a href="#contact" class="hero-cta">Find Us Tonight</a>
+      <div class="hero-meta">112 SE 1st St</div>
     </div>
   </section>
 
   <!-- ===== ABOUT ===== -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Our Story</p>
-          <h2 class="section-title">A Live Music Bar in the Heart of Gainesville</h2>
-          <div class="section-divider"></div>
-          <p>Lillian's Music Store is a beloved fixture of Gainesville's vibrant downtown scene, serving as a gathering place for locals and visitors who share a passion for live music and good drinks. Nestled on SE 1st St, our stage has hosted an eclectic mix of local talent and touring acts spanning every genre imaginable.</p>
-          <p>Whether you're unwinding after a long day or dancing into the early hours, Lillian's offers a warm, intimate atmosphere that keeps people coming back. We take pride in being a true community bar where the music is always the main event.</p>
-        </div>
-        <div class="about-visual">
-          <div class="about-stat">
-            <div class="about-stat-value">4.4</div>
-            <div class="about-stat-label">Google Maps Rating</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-value">148+</div>
-            <div class="about-stat-label">Community Reviews</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-value">Live</div>
-            <div class="about-stat-label">Music Venue &amp; Full Bar</div>
-          </div>
+  <section id="about" class="block">
+    <div class="about-wrap">
+      <div class="about-head reveal">
+        <p class="eyebrow">Our Story</p>
+        <h2 class="big-head">A Live<br />Music <em>Bar</em></h2>
+      </div>
+      <div class="about-body reveal">
+        <p>Lillian's Music Store is a beloved fixture of Gainesville's vibrant downtown scene &mdash; a gathering place for locals and visitors who share a passion for live music and good drinks.</p>
+        <p>Nestled on SE 1st St, our stage has hosted an eclectic mix of local talent and touring acts across every genre imaginable. Whether you're unwinding after a long day or dancing into the early hours, Lillian's offers a warm, intimate atmosphere that keeps people coming back.</p>
+        <p>We take pride in being a true community bar where the music is always the main event.</p>
+        <div class="about-index">
+          <div class="idx-cell"><div class="idx-num">Live</div><div class="idx-lbl">Music Venue &amp; Full Bar</div></div>
+          <div class="idx-cell"><div class="idx-num">Downtown</div><div class="idx-lbl">Gainesville, FL</div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== SERVICES ===== -->
-  <section id="services">
-    <div class="container">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Everything You'd Expect from a Great Bar</h2>
-      <div class="section-divider"></div>
-      <div class="services-grid">
-        <div class="service-card">
-          <span class="service-icon">&#127917;</span>
-          <div class="service-name">Live Music Performances</div>
-          <p class="service-desc">Regular live acts on our intimate stage featuring local and regional artists across multiple genres. Contact us for the current lineup.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127867;</span>
-          <div class="service-name">Full Bar Service</div>
-          <p class="service-desc">A well-stocked bar with draft beers, craft cocktails, wine, and spirits to keep the night going. Contact us for details.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127911;</span>
-          <div class="service-name">DJ Nights</div>
-          <p class="service-desc">When the bands take a break, our DJs keep the dance floor alive with curated sets spanning classic rock, indie, and more.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127881;</span>
-          <div class="service-name">Private Events &amp; Buyouts</div>
-          <p class="service-desc">Host your next birthday, work event, or private party in our unique venue. Contact us for availability and details.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127897;</span>
-          <div class="service-name">Open Mic Nights</div>
-          <p class="service-desc">We welcome emerging local talent to take the stage during our regularly scheduled open mic events. All genres welcome.</p>
-        </div>
-        <div class="service-card">
-          <span class="service-icon">&#127939;</span>
-          <div class="service-name">Happy Hour Specials</div>
-          <p class="service-desc">Kick off your evening with happy hour drink specials. Contact us for current hours and featured offerings.</p>
-        </div>
+  <!-- ===== RATING (oversized pull-quote) ===== -->
+  <section id="rating" class="block">
+    <div class="rate-wrap reveal">
+      <p class="eyebrow">What the City Says</p>
+      <div class="pull">
+        <span class="score" id="scoreNum">0.0</span>
+        <span class="of">/ 5</span>
+        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
       </div>
+      <div class="rate-sub">
+        Based on <span class="count" id="countNum">0</span>&nbsp;reviews
+        <span class="rate-badge">Sourced from Google Maps</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OFFERINGS ===== -->
+  <section id="offerings" class="block">
+    <p class="eyebrow reveal">What We Offer</p>
+    <h2 class="big-head reveal">On The Bill</h2>
+    <div class="off-list">
+      <div class="off-row reveal"><div class="off-no">01</div><div class="off-name">Live Music</div><div class="off-desc">Regular live acts on our intimate stage featuring local and regional artists across multiple genres. Contact us for the current lineup.</div></div>
+      <div class="off-row reveal"><div class="off-no">02</div><div class="off-name">Full Bar Service</div><div class="off-desc">A well-stocked bar with draft beers, craft cocktails, wine, and spirits to keep the night going. Contact us for details.</div></div>
+      <div class="off-row reveal"><div class="off-no">03</div><div class="off-name">DJ Nights</div><div class="off-desc">When the bands take a break, our DJs keep the floor alive with curated sets spanning classic rock, indie, and more.</div></div>
+      <div class="off-row reveal"><div class="off-no">04</div><div class="off-name">Open Mic Nights</div><div class="off-desc">We welcome emerging local talent to take the stage during our regularly scheduled open mic events. All genres welcome.</div></div>
+      <div class="off-row reveal"><div class="off-no">05</div><div class="off-name">Private Events</div><div class="off-desc">Host your next birthday, work event, or private party in our unique venue. Contact us for availability and details.</div></div>
+      <div class="off-row reveal"><div class="off-no">06</div><div class="off-name">Happy Hour</div><div class="off-desc">Kick off your evening with happy hour drink specials. Contact us for current hours and featured offerings.</div></div>
     </div>
   </section>
 
   <!-- ===== CONTACT ===== -->
-  <section id="contact">
-    <div class="container">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Come See Us in Downtown Gainesville</h2>
-      <div class="section-divider"></div>
-      <div class="contact-grid">
-        <div class="contact-info">
-          <div class="contact-item">
-            <div class="contact-icon">&#128205;</div>
-            <div>
-              <div class="contact-item-label">Address</div>
-              <div class="contact-item-value">112 SE 1st St<br />Gainesville, FL 32601</div>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-icon">&#128337;</div>
-            <div>
-              <div class="contact-item-label">Hours</div>
-              <div class="contact-item-value">Contact us for current hours</div>
-            </div>
-          </div>
-          <a
-            href="https://www.google.com/maps/search/Lillian's%20Music%20Store%20112%20SE%201st%20St%2C%20Gainesville%2C%20FL%2032601"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-directions"
-          >
-            &#128506; Get Directions
-          </a>
+  <section id="contact" class="block">
+    <h2 class="big-head reveal">Come<br />See Us</h2>
+    <div class="c-wrap">
+      <div class="reveal">
+        <div class="c-line">
+          <span class="c-ico">&#128205;</span>
+          <div><div class="c-k">Address</div><div class="c-v">112 SE 1st St<br />Gainesville, FL 32601</div></div>
         </div>
-        <div class="rating-card">
-          <div class="rating-card-title">Community Rating</div>
-          <div class="rating-score">4.4</div>
-          <div class="rating-stars">
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star half">&#9733;</span>
-          </div>
-          <div class="rating-count">Based on 148 reviews</div>
-          <div>
-            <span class="rating-badge">&#10003; Highly Rated Local Bar</span>
-          </div>
-          <div class="rating-source">Rating sourced from Google Maps</div>
+        <div class="c-line">
+          <span class="c-ico">&#128337;</span>
+          <div><div class="c-k">Hours</div><div class="c-v">Contact us for current hours</div></div>
         </div>
+        <a
+          href="https://www.google.com/maps/search/Lillian's%20Music%20Store%20112%20SE%201st%20St%2C%20Gainesville%2C%20FL%2032601"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="dir-btn"
+        >&#128506; Get Directions</a>
+      </div>
+      <div class="c-card reveal">
+        <div class="lbl">Community Rating</div>
+        <div class="num">4.4</div>
+        <div class="cap">Based on 148 reviews on Google Maps &mdash; a highly rated local bar.</div>
       </div>
     </div>
   </section>
 
   <!-- ===== FOOTER ===== -->
   <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">&#9835; Lillian's Music Store</div>
-      <div class="footer-address">112 SE 1st St, Gainesville, FL 32601</div>
-      <div class="footer-copy">&copy; 2026 Lillian's Music Store. All rights reserved.</div>
-    </div>
+    <div class="f-logo"><span class="note">&#9835;</span> Lillian's Music Store</div>
+    <div class="f-addr">112 SE 1st St, Gainesville, FL 32601</div>
+    <div class="f-copy">&copy; 2026 Lillian's Music Store. All rights reserved.</div>
   </footer>
 
   <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('open');
-    });
-    // Close nav on link click
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => links.classList.remove('open'));
-    });
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Mobile nav
+      var toggle = document.getElementById('navToggle');
+      var links = document.getElementById('navLinks');
+      toggle.addEventListener('click', function () { links.classList.toggle('open'); });
+      links.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { links.classList.remove('open'); });
+      });
+
+      // Reveal on scroll
+      var revs = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        revs.forEach(function (r) { r.classList.add('in'); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.18 });
+        revs.forEach(function (r) { io.observe(r); });
+      }
+
+      // Animated counters for the pull-quote rating
+      var scoreEl = document.getElementById('scoreNum');
+      var countEl = document.getElementById('countNum');
+      function animate(el, target, decimals, dur) {
+        if (reduce) { el.textContent = decimals ? target.toFixed(decimals) : target.toLocaleString(); return; }
+        var start = null;
+        function step(ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          var val = target * eased;
+          el.textContent = decimals ? val.toFixed(decimals) : Math.round(val).toLocaleString();
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = decimals ? target.toFixed(decimals) : target.toLocaleString();
+        }
+        requestAnimationFrame(step);
+      }
+      var rateSection = document.getElementById('rating');
+      var counted = false;
+      function runCounters() {
+        if (counted) return; counted = true;
+        animate(scoreEl, 4.4, 1, 1200);
+        animate(countEl, 148, 0, 1400);
+      }
+      if (reduce || !('IntersectionObserver' in window)) {
+        runCounters();
+      } else {
+        var io2 = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { runCounters(); io2.disconnect(); } });
+        }, { threshold: 0.4 });
+        io2.observe(rateSection);
+      }
+
+      // Subtle parallax on hero display type
+      if (!reduce) {
+        var disp = document.querySelector('.hero-display');
+        window.addEventListener('scroll', function () {
+          var y = window.scrollY;
+          if (y < window.innerHeight) disp.style.transform = 'translateY(' + (y * 0.12) + 'px)';
+        }, { passive: true });
+      }
+    })();
   </script>
 
 </body>

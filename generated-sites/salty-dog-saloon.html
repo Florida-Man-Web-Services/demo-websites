@@ -12,94 +12,98 @@
     }
 
     :root {
-      --dark-bg: #0f0f0f;
-      --dark-surface: #1a1a1a;
-      --dark-card: #222222;
-      --amber: #c9820a;
-      --amber-light: #e8a020;
-      --amber-glow: #f0b84a;
-      --rust: #8b3a1a;
-      --cream: #f5ede0;
-      --muted: #a89880;
-      --text-main: #e8ddd0;
-      --text-light: #c5b8a8;
-      --border: #333;
+      --bg:          #04040e;
+      --surface:     #080817;
+      --card:        #0d0d22;
+      --pink:        #ff1a6e;
+      --pink-glow:   rgba(255,26,110,0.35);
+      --pink-dim:    rgba(255,26,110,0.12);
+      --cyan:        #00e5ff;
+      --cyan-glow:   rgba(0,229,255,0.28);
+      --cyan-dim:    rgba(0,229,255,0.08);
+      --amber:       #ffaa00;
+      --amber-glow:  rgba(255,170,0,0.35);
+      --amber-dim:   rgba(255,170,0,0.1);
+      --purple:      #9b00ee;
+      --purple-glow: rgba(155,0,238,0.3);
+      --purple-dim:  rgba(155,0,238,0.08);
+      --text:        #e8e8f0;
+      --muted:       #7878a0;
+      --border:      rgba(255,255,255,0.06);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background-color: var(--dark-bg);
-      color: var(--text-main);
+      font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.7;
+      overflow-x: hidden;
     }
 
-    /* ===== NAV ===== */
+    /* ====================================================
+       NAV
+    ==================================================== */
     nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(10, 10, 10, 0.95);
-      border-bottom: 1px solid var(--amber);
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 2rem;
-      height: 64px;
-      backdrop-filter: blur(6px);
+      background: rgba(4,4,14,0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,26,110,0.18);
     }
 
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
       text-decoration: none;
     }
 
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--amber);
-      border-radius: 50%;
+    .nav-logo {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       flex-shrink: 0;
+      box-shadow: 0 0 12px var(--pink-glow);
     }
 
     .nav-name {
-      font-size: 1.15rem;
-      font-weight: bold;
-      color: var(--amber-glow);
-      letter-spacing: 0.04em;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--pink);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
+      text-shadow: 0 0 10px var(--pink-glow);
     }
 
     .nav-links {
       display: flex;
-      gap: 1.8rem;
+      gap: 2rem;
       list-style: none;
     }
 
     .nav-links a {
-      color: var(--text-light);
+      color: var(--muted);
       text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       transition: color 0.2s;
     }
 
-    .nav-links a:hover {
-      color: var(--amber-glow);
-    }
+    .nav-links a:hover { color: var(--cyan); }
 
     .nav-toggle {
       display: none;
@@ -113,158 +117,332 @@
 
     .nav-toggle span {
       display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--amber-glow);
+      width: 24px; height: 2px;
+      background: var(--pink);
       border-radius: 2px;
       transition: all 0.3s;
     }
 
-    /* ===== HERO ===== */
+    /* ====================================================
+       HERO
+    ==================================================== */
     .hero {
       min-height: 100vh;
-      background: linear-gradient(160deg, #0a0a0a 0%, #1a0d00 50%, #0a0500 100%);
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-      position: relative;
       overflow: hidden;
+      background: var(--bg);
+      padding-top: 60px;
     }
 
-    .hero::before {
+    /* Animated radial background */
+    .hero-radial {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(155,0,238,0.11) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 35% at 18% 75%, rgba(255,26,110,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 35% at 82% 25%, rgba(0,229,255,0.07) 0%, transparent 55%),
+        var(--bg);
+      animation: radial-breathe 9s ease-in-out infinite alternate;
+    }
+
+    @keyframes radial-breathe {
+      0%   { opacity: 0.75; }
+      100% { opacity: 1; }
+    }
+
+    /* Scanline texture */
+    .hero-radial::after {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 60% 40% at 50% 60%, rgba(201, 130, 10, 0.12) 0%, transparent 70%),
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 3px,
-          rgba(201, 130, 10, 0.02) 3px,
-          rgba(201, 130, 10, 0.02) 4px
-        );
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(255,255,255,0.01) 3px,
+        rgba(255,255,255,0.01) 4px
+      );
+    }
+
+    /* ---- Orbit System ---- */
+    .orbit-system {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    /* Decorative rings */
+    .o-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+      transform: translate(-50%, -50%);
       pointer-events: none;
     }
+    .o-ring-1 { width: 360px; height: 360px; border-color: rgba(255,26,110,0.1); }
+    .o-ring-2 { width: 440px; height: 440px; border-color: rgba(0,229,255,0.07); }
+    .o-ring-3 { width: 524px; height: 524px; border-color: rgba(155,0,238,0.06); }
 
-    .hero-content {
+    /* Orbiting wrappers: positioned at center 0,0 of orbit-system */
+    .ow {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+    }
+
+    /* Orbiting icon pill */
+    .oi {
+      position: absolute;
+      width: 46px; height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(4,4,14,0.7);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    /* ---- Track 1: radius 178px, 9 s CW ---- */
+    .ow-a { animation: orb-178 9s linear infinite;  animation-delay: 0s; }
+    .ow-a .oi {
+      animation: c-cw 9s linear infinite;
+      animation-delay: 0s;
+      border-color: rgba(255,26,110,0.45);
+      box-shadow: 0 0 12px var(--pink-glow);
+    }
+    .ow-b { animation: orb-178 9s linear infinite;  animation-delay: -4.5s; }
+    .ow-b .oi {
+      animation: c-cw 9s linear infinite;
+      animation-delay: -4.5s;
+      border-color: rgba(0,229,255,0.4);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    /* ---- Track 2: radius 220px, 14 s CW ---- */
+    .ow-c { animation: orb-220 14s linear infinite;  animation-delay: -2.33s; }
+    .ow-c .oi {
+      animation: c-cw 14s linear infinite;
+      animation-delay: -2.33s;
+      border-color: rgba(155,0,238,0.45);
+      box-shadow: 0 0 12px var(--purple-glow);
+    }
+    .ow-d { animation: orb-220 14s linear infinite;  animation-delay: -9.33s; }
+    .ow-d .oi {
+      animation: c-cw 14s linear infinite;
+      animation-delay: -9.33s;
+      border-color: rgba(255,170,0,0.45);
+      box-shadow: 0 0 12px var(--amber-glow);
+    }
+
+    /* ---- Track 3: radius 262px, 20 s mixed ---- */
+    .ow-e { animation: orb-262 20s linear infinite;  animation-delay: -3.33s; }
+    .ow-e .oi {
+      animation: c-cw 20s linear infinite;
+      animation-delay: -3.33s;
+      border-color: rgba(0,229,255,0.35);
+      box-shadow: 0 0 10px var(--cyan-glow);
+    }
+    .ow-f { animation: orb-262-ccw 20s linear infinite; animation-delay: -10s; }
+    .ow-f .oi {
+      animation: c-ccw 20s linear infinite;
+      animation-delay: -10s;
+      border-color: rgba(255,26,110,0.35);
+      box-shadow: 0 0 10px var(--pink-glow);
+    }
+
+    @keyframes orb-178 {
+      from { transform: rotate(0deg)    translateX(178px); }
+      to   { transform: rotate(360deg)  translateX(178px); }
+    }
+    @keyframes orb-220 {
+      from { transform: rotate(0deg)    translateX(220px); }
+      to   { transform: rotate(360deg)  translateX(220px); }
+    }
+    @keyframes orb-262 {
+      from { transform: rotate(0deg)    translateX(262px); }
+      to   { transform: rotate(360deg)  translateX(262px); }
+    }
+    @keyframes orb-262-ccw {
+      from { transform: rotate(0deg)    translateX(262px); }
+      to   { transform: rotate(-360deg) translateX(262px); }
+    }
+    @keyframes c-cw {
+      from { transform: translate(-50%, -50%) rotate(0deg);    }
+      to   { transform: translate(-50%, -50%) rotate(-360deg); }
+    }
+    @keyframes c-ccw {
+      from { transform: translate(-50%, -50%) rotate(0deg);   }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* ---- The Monolith ---- */
+    .monolith {
       position: relative;
-      max-width: 700px;
+      z-index: 5;
+      width: min(248px, 84vw);
+      padding: 2.6rem 1.8rem;
+      text-align: center;
+      background: linear-gradient(155deg,
+        rgba(15,5,35,0.97) 0%,
+        rgba(8,8,20,0.99) 100%
+      );
+      border: 1px solid rgba(255,26,110,0.22);
+      border-radius: 4px;
+      box-shadow:
+        0 0 40px  rgba(255,26,110,0.14),
+        0 0 80px  rgba(155,0,238,0.09),
+        0 0 130px rgba(0,229,255,0.05),
+        inset 0 0 50px rgba(155,0,238,0.04);
+      animation: mono-pulse 5s ease-in-out infinite alternate;
     }
 
-    .hero-eyebrow {
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.25em;
+    @keyframes mono-pulse {
+      0% {
+        box-shadow:
+          0 0 40px  rgba(255,26,110,0.14),
+          0 0 80px  rgba(155,0,238,0.09),
+          0 0 130px rgba(0,229,255,0.05),
+          inset 0 0 50px rgba(155,0,238,0.04);
+        border-color: rgba(255,26,110,0.22);
+      }
+      100% {
+        box-shadow:
+          0 0 60px  rgba(255,26,110,0.26),
+          0 0 100px rgba(155,0,238,0.16),
+          0 0 150px rgba(0,229,255,0.09),
+          inset 0 0 60px rgba(155,0,238,0.08);
+        border-color: rgba(255,26,110,0.42);
+      }
+    }
+
+    .mono-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 1rem;
+      color: var(--cyan);
+      text-shadow: 0 0 8px var(--cyan-glow);
+      margin-bottom: 0.7rem;
     }
 
-    .hero-title {
-      font-size: clamp(2.8rem, 8vw, 5.5rem);
-      font-weight: bold;
-      color: var(--cream);
-      line-height: 1.1;
-      margin-bottom: 0.3rem;
-      text-shadow: 0 0 40px rgba(201, 130, 10, 0.3);
+    .mono-title {
+      font-size: clamp(1.75rem, 5.5vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 0.4rem;
+      background: linear-gradient(130deg, var(--pink) 0%, #ff88b8 42%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .hero-title span {
-      color: var(--amber-glow);
+    .mono-rule {
+      width: 56px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--pink), var(--cyan), transparent);
+      margin: 0.9rem auto;
     }
 
-    .hero-divider {
-      width: 80px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--amber), transparent);
-      margin: 1.4rem auto;
+    .mono-tagline {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
     }
 
-    .hero-tagline {
-      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-      color: var(--text-light);
-      font-style: italic;
-      margin-bottom: 2.2rem;
-    }
-
-    .hero-cta {
+    .mono-cta {
       display: inline-block;
-      background: var(--amber);
-      color: #0a0500;
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      font-size: 0.9rem;
-      letter-spacing: 0.12em;
+      background: linear-gradient(130deg, var(--pink), var(--purple));
+      color: #fff;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       text-decoration: none;
-      padding: 0.85rem 2.2rem;
+      padding: 0.65rem 1.7rem;
       border-radius: 2px;
-      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 0 18px var(--pink-glow);
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.15s;
+      margin-bottom: 1.3rem;
     }
 
-    .hero-cta:hover {
-      background: var(--amber-glow);
+    .mono-cta:hover {
+      opacity: 0.88;
+      box-shadow: 0 0 30px rgba(255,26,110,0.55);
       transform: translateY(-2px);
     }
 
-    .hero-rating-badge {
+    .mono-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 2.2rem;
-      background: rgba(201, 130, 10, 0.1);
-      border: 1px solid rgba(201, 130, 10, 0.3);
-      border-radius: 30px;
-      padding: 0.45rem 1.1rem;
-      font-family: Arial, sans-serif;
-      font-size: 0.85rem;
-      color: var(--amber-light);
-    }
-
-    .stars {
-      color: var(--amber-glow);
-      letter-spacing: 1px;
-    }
-
-    /* ===== SECTIONS COMMON ===== */
-    section {
-      padding: 5rem 2rem;
-    }
-
-    .section-inner {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: Arial, sans-serif;
+      gap: 0.4rem;
+      background: rgba(255,170,0,0.08);
+      border: 1px solid rgba(255,170,0,0.24);
+      border-radius: 20px;
+      padding: 0.32rem 0.85rem;
       font-size: 0.75rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
       color: var(--amber);
-      margin-bottom: 0.6rem;
+      text-shadow: 0 0 6px rgba(255,170,0,0.4);
     }
 
-    .section-title {
-      font-size: clamp(1.7rem, 4vw, 2.6rem);
-      color: var(--cream);
-      margin-bottom: 1rem;
-      line-height: 1.2;
+    /* ====================================================
+       SECTIONS — COMMON
+    ==================================================== */
+    section { padding: 5.5rem 2rem; }
+
+    .si { max-width: 1000px; margin: 0 auto; }
+
+    .s-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      text-shadow: 0 0 8px var(--cyan-glow);
+      margin-bottom: 0.45rem;
     }
 
-    .section-divider {
-      width: 50px;
-      height: 2px;
-      background: var(--amber);
-      margin-bottom: 2rem;
+    .s-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.8rem;
+      background: linear-gradient(135deg, var(--text) 0%, rgba(200,200,220,0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    /* ===== ABOUT ===== */
+    .s-rule {
+      width: 48px; height: 2px;
+      background: linear-gradient(90deg, var(--pink), var(--cyan));
+      border-radius: 2px;
+      margin-bottom: 2.6rem;
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ====================================================
+       ABOUT
+    ==================================================== */
     #about {
-      background: var(--dark-surface);
+      background: var(--surface);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
@@ -272,318 +450,359 @@
     .about-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
+      gap: 4rem;
       align-items: center;
     }
 
     .about-text p {
-      color: var(--text-light);
-      margin-bottom: 1.1rem;
-      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      font-size: 1rem;
     }
 
-    .about-visual {
+    .about-cards {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
-    .about-badge {
-      background: var(--dark-card);
+    .a-card {
+      background: var(--card);
       border: 1px solid var(--border);
-      border-left: 3px solid var(--amber);
-      padding: 1.1rem 1.4rem;
+      border-left: 2px solid var(--pink);
+      padding: 0.95rem 1.3rem;
       border-radius: 2px;
+      transition: border-left-color 0.3s, background 0.3s;
     }
 
-    .about-badge strong {
+    .a-card:hover {
+      border-left-color: var(--cyan);
+      background: rgba(0,229,255,0.03);
+    }
+
+    .a-card strong {
       display: block;
-      color: var(--amber-glow);
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin-bottom: 0.25rem;
+      color: var(--cyan);
+      margin-bottom: 0.2rem;
     }
 
-    .about-badge span {
-      color: var(--text-light);
-      font-size: 0.95rem;
-    }
+    .a-card span { color: var(--muted); font-size: 0.9rem; }
 
-    /* ===== SERVICES ===== */
-    #services {
-      background: var(--dark-bg);
-    }
+    /* ====================================================
+       OFFERINGS
+    ==================================================== */
+    #offerings { background: var(--bg); }
 
-    .services-grid {
+    .offerings-head { text-align: center; }
+    .offerings-head .s-rule { margin-left: auto; margin-right: auto; }
+
+    .off-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+      gap: 1.1rem;
     }
 
-    .service-card {
-      background: var(--dark-card);
+    .off-card {
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 1.8rem;
-      transition: border-color 0.25s, transform 0.2s;
+      padding: 1.8rem 1.5rem;
+      text-align: center;
       position: relative;
       overflow: hidden;
+      transition: border-color 0.3s, transform 0.2s;
     }
 
-    .service-card::after {
+    .off-card::before {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--amber);
-      transform: scaleX(0);
-      transition: transform 0.3s;
-      transform-origin: left;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--pink), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
 
-    .service-card:hover {
-      border-color: var(--amber);
-      transform: translateY(-3px);
+    .off-card:hover {
+      border-color: rgba(255,26,110,0.28);
+      transform: translateY(-4px);
     }
 
-    .service-card:hover::after {
-      transform: scaleX(1);
-    }
+    .off-card:hover::before { opacity: 1; }
 
-    .service-icon {
-      font-size: 1.8rem;
-      margin-bottom: 0.9rem;
+    .off-icon {
+      font-size: 2rem;
       display: block;
+      margin-bottom: 0.85rem;
+      filter: drop-shadow(0 0 6px rgba(255,26,110,0.4));
     }
 
-    .service-card h3 {
-      color: var(--cream);
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
+    .off-card h3 {
+      font-size: 0.98rem;
+      color: var(--text);
+      font-weight: 700;
+      margin-bottom: 0.45rem;
     }
 
-    .service-card p {
+    .off-card p {
       color: var(--muted);
-      font-family: Arial, sans-serif;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       line-height: 1.6;
     }
 
-    /* ===== CONTACT ===== */
-    #contact {
-      background: var(--dark-surface);
+    /* ====================================================
+       RATING
+    ==================================================== */
+    #rating {
+      background: var(--surface);
       border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
     }
+
+    #rating .s-label,
+    #rating .s-title { display: block; }
+
+    #rating .s-rule { margin: 0 auto 2.2rem; }
+
+    .rating-slab {
+      display: inline-block;
+      background: var(--card);
+      border: 1px solid rgba(255,170,0,0.18);
+      border-radius: 8px;
+      padding: 3rem 4.5rem;
+      box-shadow:
+        0 0 60px rgba(255,170,0,0.05),
+        0 0 0 1px rgba(255,170,0,0.05) inset;
+    }
+
+    .r-number {
+      font-size: 5.5rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--amber);
+      text-shadow: 0 0 40px rgba(255,170,0,0.55);
+      margin-bottom: 0.4rem;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .r-stars {
+      font-size: 1.8rem;
+      letter-spacing: 4px;
+      color: var(--amber);
+      margin-bottom: 0.55rem;
+      text-shadow: 0 0 12px rgba(255,170,0,0.45);
+    }
+
+    .r-reviews {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .r-count { color: var(--amber); font-weight: 700; }
+
+    .r-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border-top: 1px solid var(--border);
+      padding-top: 1.1rem;
+    }
+
+    /* ====================================================
+       CONTACT / FIND US
+    ==================================================== */
+    #contact { background: var(--bg); }
 
     .contact-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3rem;
+      gap: 3.5rem;
       align-items: start;
     }
 
     .contact-info {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.55rem;
     }
 
-    .contact-item {
+    .c-item {
       display: flex;
       gap: 1rem;
       align-items: flex-start;
     }
 
-    .contact-item-icon {
-      width: 42px;
-      height: 42px;
-      background: rgba(201, 130, 10, 0.12);
-      border: 1px solid rgba(201, 130, 10, 0.3);
+    .c-icon {
+      width: 44px; height: 44px;
+      flex-shrink: 0;
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0,229,255,0.18);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.1rem;
-      flex-shrink: 0;
       margin-top: 2px;
     }
 
-    .contact-item-text strong {
+    .c-text strong {
       display: block;
-      color: var(--amber-glow);
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
+      color: var(--cyan);
       margin-bottom: 0.2rem;
     }
 
-    .contact-item-text span {
-      color: var(--text-light);
-      font-size: 0.98rem;
+    .c-text span {
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.5;
     }
 
-    .directions-btn {
+    .dir-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       background: transparent;
-      border: 1px solid var(--amber);
-      color: var(--amber-glow);
-      font-family: Arial, sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       text-decoration: none;
-      padding: 0.75rem 1.6rem;
+      padding: 0.72rem 1.6rem;
       border-radius: 2px;
-      transition: background 0.2s, color 0.2s;
-      margin-top: 0.5rem;
-      width: fit-content;
+      box-shadow: 0 0 10px rgba(0,229,255,0.1);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     }
 
-    .directions-btn:hover {
-      background: var(--amber);
-      color: #0a0500;
+    .dir-btn:hover {
+      background: var(--cyan);
+      color: var(--bg);
+      box-shadow: 0 0 24px rgba(0,229,255,0.32);
     }
 
-    .rating-card {
-      background: var(--dark-card);
+    .map-panel {
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 2rem;
+      padding: 2.5rem 2rem;
+      min-height: 230px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
+      gap: 1rem;
     }
 
-    .rating-number {
-      font-size: 4rem;
-      font-weight: bold;
-      color: var(--amber-glow);
-      line-height: 1;
-      margin-bottom: 0.4rem;
+    .map-pin { font-size: 3rem; filter: drop-shadow(0 0 12px var(--pink-glow)); }
+
+    .map-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.25rem;
     }
 
-    .rating-stars-large {
-      font-size: 1.6rem;
-      color: var(--amber-glow);
-      letter-spacing: 3px;
-      margin-bottom: 0.6rem;
+    .map-addr { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+
+    .map-note {
+      font-size: 0.78rem;
+      font-style: italic;
+      color: rgba(120,120,160,0.7);
     }
 
-    .rating-count {
-      color: var(--muted);
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .rating-label {
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--amber);
-      border-top: 1px solid var(--border);
-      padding-top: 1rem;
-    }
-
-    /* ===== FOOTER ===== */
+    /* ====================================================
+       FOOTER
+    ==================================================== */
     footer {
-      background: #080808;
-      border-top: 1px solid var(--amber);
+      background: #020209;
+      border-top: 1px solid rgba(255,26,110,0.18);
       padding: 2.5rem 2rem;
       text-align: center;
     }
 
-    .footer-inner {
-      max-width: 700px;
-      margin: 0 auto;
-    }
+    .footer-inner { max-width: 600px; margin: 0 auto; }
 
-    .footer-name {
-      font-size: 1.2rem;
-      color: var(--amber-glow);
-      letter-spacing: 0.08em;
+    .f-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--pink);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+      text-shadow: 0 0 12px var(--pink-glow);
       margin-bottom: 0.4rem;
     }
 
-    .footer-address {
-      color: var(--muted);
-      font-family: Arial, sans-serif;
-      font-size: 0.85rem;
-      margin-bottom: 1.2rem;
-    }
+    .f-addr { color: var(--muted); font-size: 0.84rem; margin-bottom: 1.4rem; }
 
-    .footer-copy {
-      color: #555;
-      font-family: Arial, sans-serif;
-      font-size: 0.78rem;
-      border-top: 1px solid #1e1e1e;
+    .f-copy {
+      color: #2a2a44;
+      font-size: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
       padding-top: 1.2rem;
-      margin-top: 1.2rem;
+      margin-top: 0.8rem;
     }
 
-    /* ===== RESPONSIVE ===== */
+    /* ====================================================
+       RESPONSIVE
+    ==================================================== */
     @media (max-width: 768px) {
       .nav-links {
         display: none;
         position: absolute;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: rgba(10, 10, 10, 0.98);
+        top: 60px; left: 0; right: 0;
+        background: rgba(4,4,14,0.97);
         flex-direction: column;
         gap: 0;
-        border-bottom: 1px solid var(--amber);
+        border-bottom: 1px solid rgba(255,26,110,0.18);
       }
-
-      .nav-links.open {
-        display: flex;
-      }
-
+      .nav-links.open { display: flex; }
       .nav-links li a {
         display: block;
         padding: 1rem 2rem;
         border-bottom: 1px solid var(--border);
       }
+      .nav-toggle { display: flex; }
 
-      .nav-toggle {
-        display: flex;
-      }
+      .orbit-system { display: none; }
 
       .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
 
-      .hero {
-        padding-top: 5rem;
-      }
+      .rating-slab { padding: 2rem 2.5rem; }
 
-      section {
-        padding: 3.5rem 1.2rem;
-      }
+      section { padding: 4rem 1.4rem; }
+
+      .monolith { width: min(290px, 88vw); }
     }
 
     @media (max-width: 480px) {
-      .hero-title {
-        font-size: 2.5rem;
-      }
+      .r-number   { font-size: 4.2rem; }
+      .rating-slab { padding: 1.8rem 1.6rem; }
+      .off-grid   { grid-template-columns: 1fr; }
+    }
 
-      .services-grid {
-        grid-template-columns: 1fr;
+    /* ====================================================
+       REDUCED MOTION
+    ==================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
-
-      nav {
-        padding: 0 1.2rem;
-      }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
@@ -592,33 +811,54 @@
   <!-- NAV -->
   <nav>
     <a class="nav-brand" href="#hero">
-      <div class="nav-logo-icon">&#127863;</div>
+      <div class="nav-logo">&#128021;</div>
       <span class="nav-name">Salty Dog Saloon</span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
+      <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#offerings">What We Offer</a></li>
+      <li><a href="#rating">Rating</a></li>
+      <li><a href="#contact">Find Us</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO: CENTERED MONOLITH WITH ORBITING ELEMENTS -->
   <section class="hero" id="hero">
-    <div class="hero-content">
-      <p class="hero-eyebrow">Gainesville, Florida</p>
-      <h1 class="hero-title">Salty<br /><span>Dog Saloon</span></h1>
-      <div class="hero-divider"></div>
-      <p class="hero-tagline">Your neighborhood watering hole on University Ave &mdash; cold drinks, good company, no pretense.</p>
-      <a href="#contact" class="hero-cta">Find Us</a>
+    <div class="hero-radial"></div>
+
+    <div class="orbit-system" aria-hidden="true">
+      <!-- Decorative rings -->
+      <div class="o-ring o-ring-1"></div>
+      <div class="o-ring o-ring-2"></div>
+      <div class="o-ring o-ring-3"></div>
+
+      <!-- Track 1 (178 px) -->
+      <div class="ow ow-a"><span class="oi">&#127866;</span></div>
+      <div class="ow ow-b"><span class="oi">&#127864;</span></div>
+
+      <!-- Track 2 (220 px) -->
+      <div class="ow ow-c"><span class="oi">&#127928;</span></div>
+      <div class="ow ow-d"><span class="oi">&#9733;</span></div>
+
+      <!-- Track 3 (262 px) -->
+      <div class="ow ow-e"><span class="oi">&#127918;</span></div>
+      <div class="ow ow-f"><span class="oi">&#128062;</span></div>
+    </div>
+
+    <!-- The Monolith -->
+    <div class="monolith">
+      <p class="mono-eyebrow">Gainesville, Florida</p>
+      <h1 class="mono-title">Salty Dog<br/>Saloon</h1>
+      <div class="mono-rule"></div>
+      <p class="mono-tagline">Your neighborhood watering hole on University Ave &mdash; cold drinks, good company, no pretense.</p>
+      <a href="#contact" class="mono-cta">Find Us</a>
       <div>
-        <span class="hero-rating-badge">
-          <span class="stars">&#9733;&#9733;&#9733;&#9733;</span>
-          4.0 &nbsp;|&nbsp; 522 Google reviews
+        <span class="mono-badge">
+          <span>&#9733;&#9733;&#9733;&#9733;</span>
+          4.0 &nbsp;&bull;&nbsp; 522 Google reviews
         </span>
       </div>
     </div>
@@ -626,36 +866,30 @@
 
   <!-- ABOUT -->
   <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
+    <div class="si">
+      <div class="about-grid reveal">
         <div class="about-text">
-          <p class="section-label">About Us</p>
-          <h2 class="section-title">A True Gainesville Saloon</h2>
-          <div class="section-divider"></div>
-          <p>
-            Salty Dog Saloon is a beloved dive bar in the heart of Gainesville, FL, sitting right on West University Avenue where the Gator spirit runs deep. Whether you are winding down after a long day or gearing up for a big game, this is the kind of place that feels like home the moment you walk through the door.
-          </p>
-          <p>
-            We keep things unpretentious &mdash; great drinks, friendly faces, and a laid-back atmosphere that locals have come to rely on. From students to longtime residents, everyone finds their place at the Salty Dog.
-          </p>
-          <p>
-            Contact us for details on upcoming events, specials, and hours.
-          </p>
+          <p class="s-label">About Us</p>
+          <h2 class="s-title">A True Gainesville Saloon</h2>
+          <div class="s-rule"></div>
+          <p>Salty Dog Saloon is a beloved dive bar in the heart of Gainesville, FL, sitting right on West University Avenue where the Gator spirit runs deep. Whether you are winding down after a long day or gearing up for a big game, this is the kind of place that feels like home the moment you walk through the door.</p>
+          <p>We keep things unpretentious &mdash; great drinks, friendly faces, and a laid-back atmosphere that locals have come to rely on. From students to longtime residents, everyone finds their place at the Salty Dog.</p>
+          <p>Contact us for details on upcoming events, specials, and hours.</p>
         </div>
-        <div class="about-visual">
-          <div class="about-badge">
+        <div class="about-cards">
+          <div class="a-card">
             <strong>Location</strong>
             <span>1712 W University Ave, Gainesville, FL 32603</span>
           </div>
-          <div class="about-badge">
+          <div class="a-card">
             <strong>Vibe</strong>
             <span>Classic dive bar &mdash; casual, welcoming, no-frills</span>
           </div>
-          <div class="about-badge">
+          <div class="a-card">
             <strong>Community</strong>
             <span>A neighborhood staple on University Ave</span>
           </div>
-          <div class="about-badge">
+          <div class="a-card">
             <strong>Hours</strong>
             <span>Contact us for current hours</span>
           </div>
@@ -664,47 +898,48 @@
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="section-inner">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Ice-Cold Drinks &amp; Good Times</h2>
-      <div class="section-divider"></div>
+  <!-- OFFERINGS -->
+  <section id="offerings">
+    <div class="si">
+      <div class="offerings-head reveal">
+        <p class="s-label">What We Offer</p>
+        <h2 class="s-title">Ice-Cold Drinks &amp; Good Times</h2>
+        <div class="s-rule"></div>
+      </div>
+      <div class="off-grid">
 
-      <div class="services-grid">
-
-        <div class="service-card">
-          <span class="service-icon">&#127866;</span>
+        <div class="off-card reveal">
+          <span class="off-icon">&#127866;</span>
           <h3>Draft &amp; Bottled Beer</h3>
           <p>A rotating selection of domestic and craft beers on draft, plus a full lineup of bottles and cans to suit every taste.</p>
         </div>
 
-        <div class="service-card">
-          <span class="service-icon">&#127864;</span>
+        <div class="off-card reveal">
+          <span class="off-icon">&#127864;</span>
           <h3>Cocktails &amp; Spirits</h3>
           <p>Classic cocktails, whiskeys, rum, vodka, and more &mdash; mixed to order by our bartenders. Contact us for current offerings.</p>
         </div>
 
-        <div class="service-card">
-          <span class="service-icon">&#127861;</span>
+        <div class="off-card reveal">
+          <span class="off-icon">&#127861;</span>
           <h3>Shots &amp; Shooters</h3>
           <p>A true saloon staple. Whether you are celebrating or commiserating, we have the shots for the occasion.</p>
         </div>
 
-        <div class="service-card">
-          <span class="service-icon">&#127918;</span>
+        <div class="off-card reveal">
+          <span class="off-icon">&#127918;</span>
           <h3>Bar Games &amp; Entertainment</h3>
           <p>Pool tables, darts, jukeboxes, and more &mdash; the kind of in-bar entertainment that keeps the night going.</p>
         </div>
 
-        <div class="service-card">
-          <span class="service-icon">&#127944;</span>
+        <div class="off-card reveal">
+          <span class="off-icon">&#127944;</span>
           <h3>Game Day Atmosphere</h3>
           <p>TVs throughout the bar keep you locked in on every Gator game, playoff run, and big sporting event of the season.</p>
         </div>
 
-        <div class="service-card">
-          <span class="service-icon">&#127881;</span>
+        <div class="off-card reveal">
+          <span class="off-icon">&#127881;</span>
           <h3>Events &amp; Specials</h3>
           <p>Live music nights, drink specials, and local events throughout the year. Contact us for the latest schedule and details.</p>
         </div>
@@ -713,49 +948,80 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Come On In</h2>
-      <div class="section-divider"></div>
+  <!-- RATING -->
+  <section id="rating">
+    <div class="si">
+      <p class="s-label">What Gainesville Says</p>
+      <h2 class="s-title">Rated by Our Community</h2>
+      <div class="s-rule"></div>
+      <div class="rating-slab reveal">
+        <div class="r-number" id="ratingNum">4.0</div>
+        <div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="r-reviews">Based on <span class="r-count" id="reviewCount">522</span> Google reviews</div>
+        <div class="r-label">&#10003;&nbsp; Verified Google Maps Rating</div>
+      </div>
+    </div>
+  </section>
 
-      <div class="contact-grid">
+  <!-- FIND US / CONTACT -->
+  <section id="contact">
+    <div class="si">
+      <p class="s-label">Find Us</p>
+      <h2 class="s-title">Come On In</h2>
+      <div class="s-rule"></div>
+
+      <div class="contact-grid reveal">
+
         <div class="contact-info">
 
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128205;</div>
-            <div class="contact-item-text">
+          <div class="c-item">
+            <div class="c-icon">&#128205;</div>
+            <div class="c-text">
               <strong>Address</strong>
-              <span>1712 W University Ave<br />Gainesville, FL 32603</span>
+              <span>1712 W University Ave<br/>Gainesville, FL 32603</span>
             </div>
           </div>
 
-          <div class="contact-item">
-            <div class="contact-item-icon">&#128337;</div>
-            <div class="contact-item-text">
+          <div class="c-item">
+            <div class="c-icon">&#128337;</div>
+            <div class="c-text">
               <strong>Hours</strong>
               <span>Contact us for current hours</span>
             </div>
           </div>
 
+          <div class="c-item">
+            <div class="c-icon">&#128172;</div>
+            <div class="c-text">
+              <strong>Contact</strong>
+              <span>Contact us for details on events, specials, and reservations</span>
+            </div>
+          </div>
+
           <a
-            class="directions-btn"
+            class="dir-btn"
             href="https://www.google.com/maps/search/Salty%20Dog%20Saloon%201712%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032603"
             target="_blank"
             rel="noopener noreferrer"
-          >
-            &#128204; &nbsp;Get Directions
-          </a>
+          >&#128204;&nbsp; Get Directions</a>
 
         </div>
 
-        <div class="rating-card">
-          <div class="rating-number">4.0</div>
-          <div class="rating-stars-large">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-          <div class="rating-count">Based on 522 Google reviews</div>
-          <div class="rating-label">&#10003; &nbsp;Verified Google Maps Rating</div>
+        <div class="map-panel">
+          <div class="map-pin">&#128205;</div>
+          <div>
+            <p class="map-name">Salty Dog Saloon</p>
+            <p class="map-addr">1712 W University Ave<br/>Gainesville, FL 32603</p>
+            <p class="map-note">Near campus on University Ave</p>
+          </div>
+          <a
+            class="dir-btn"
+            href="https://www.google.com/maps/search/Salty%20Dog%20Saloon%201712%20W%20University%20Ave%2C%20Gainesville%2C%20FL%2032603"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open in Maps</a>
         </div>
+
       </div>
     </div>
   </section>
@@ -763,23 +1029,72 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
-      <p class="footer-name">Salty Dog Saloon</p>
-      <p class="footer-address">1712 W University Ave &nbsp;&bull;&nbsp; Gainesville, FL 32603</p>
-      <p class="footer-copy">&copy; 2026 Salty Dog Saloon. All rights reserved.</p>
+      <p class="f-name">Salty Dog Saloon</p>
+      <p class="f-addr">1712 W University Ave &bull; Gainesville, FL 32603</p>
+      <p class="f-copy">&copy; 2026 Salty Dog Saloon. All rights reserved.</p>
     </div>
   </footer>
 
   <script>
     // Mobile nav toggle
-    const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('open');
+    var navToggle = document.getElementById('navToggle');
+    var navLinks  = document.getElementById('navLinks');
+    navToggle.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
     });
-    // Close nav when a link is clicked
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => links.classList.remove('open'));
+    navLinks.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() { navLinks.classList.remove('open'); });
     });
+
+    // Scroll-reveal via IntersectionObserver
+    var reveals = document.querySelectorAll('.reveal');
+    var revealObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+    reveals.forEach(function(el) { revealObs.observe(el); });
+
+    // Animated counters (rating + review count)
+    function animCount(el, target, decimals, duration) {
+      var startTime = null;
+      var isFloat = decimals > 0;
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var elapsed  = ts - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased    = 1 - Math.pow(1 - progress, 3);
+        var value    = target * eased;
+        el.textContent = isFloat
+          ? value.toFixed(decimals)
+          : String(Math.round(value));
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = isFloat ? target.toFixed(decimals) : String(target);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    var ratingEl   = document.getElementById('ratingNum');
+    var reviewEl   = document.getElementById('reviewCount');
+    var countersRun = false;
+
+    var counterObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !countersRun) {
+          countersRun = true;
+          animCount(ratingEl, 4.0, 1, 1200);
+          animCount(reviewEl, 522, 0, 1500);
+          counterObs.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    counterObs.observe(document.getElementById('rating'));
   </script>
 
 </body>

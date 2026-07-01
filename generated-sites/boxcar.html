@@ -5,874 +5,593 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Boxcar | Bar — Gainesville, FL</title>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-dark: #0f0e0d;
-      --bg-mid: #1a1816;
-      --bg-card: #222019;
-      --accent: #d4a843;
-      --accent-hover: #e8be62;
-      --text-primary: #f0ece4;
-      --text-secondary: #a89f90;
-      --border: #2e2b26;
-      --nav-height: 68px;
+      --bg:      #08070a;
+      --bg2:     #0f0d14;
+      --panel:   #14111c;
+      --amber:   #ffb347;
+      --amber-hi:#ffd27a;
+      --neon:    #43e8ff;
+      --neon-dim:#2ba6bd;
+      --ink:     #f3eee4;
+      --muted:   #9a9182;
+      --line:    rgba(255,179,71,0.18);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
+    html { scroll-behavior: smooth; }
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-primary);
+      background: var(--bg);
+      color: var(--ink);
       font-family: 'Georgia', 'Times New Roman', serif;
       line-height: 1.7;
+      overflow-x: hidden;
     }
 
-    /* ── NAV ── */
-    nav {
+    /* ── animated mesh backdrop ── */
+    .mesh {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: var(--nav-height);
-      background: rgba(15, 14, 13, 0.95);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-mark {
-      width: 36px;
-      height: 36px;
-      background: var(--accent);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-logo-mark svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--bg-dark);
-    }
-
-    .nav-logo-text {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-primary);
-      font-family: 'Georgia', serif;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-family: Arial, Helvetica, sans-serif;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--accent);
-    }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 5px;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text-primary);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: calc(var(--nav-height) + 2rem) 2rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
+      inset: -20%;
+      z-index: 0;
       background:
-        radial-gradient(ellipse at 60% 40%, rgba(212, 168, 67, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 20% 70%, rgba(212, 168, 67, 0.05) 0%, transparent 50%),
-        linear-gradient(180deg, #0f0e0d 0%, #1a1816 100%);
+        radial-gradient(40% 35% at 18% 22%, rgba(255,179,71,0.16) 0%, transparent 60%),
+        radial-gradient(45% 40% at 82% 30%, rgba(67,232,255,0.12) 0%, transparent 60%),
+        radial-gradient(50% 45% at 50% 88%, rgba(255,179,71,0.10) 0%, transparent 65%);
+      filter: blur(20px);
+      animation: drift 26s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes drift {
+      0%   { transform: translate3d(-2%,-1%,0) scale(1.05); }
+      50%  { transform: translate3d(3%,2%,0) scale(1.15); }
+      100% { transform: translate3d(-1%,3%,0) scale(1.08); }
     }
 
-    .hero-tracks {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: repeating-linear-gradient(
-        90deg,
-        var(--accent) 0px,
-        var(--accent) 40px,
-        transparent 40px,
-        transparent 60px
-      );
-      opacity: 0.35;
+    /* ── scroll progress rail ── */
+    .progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+      transform-origin: 0 50%; transform: scaleX(0);
+      background: linear-gradient(90deg, var(--amber), var(--neon));
+      box-shadow: 0 0 12px rgba(67,232,255,0.6);
+      z-index: 1200;
+      animation: grow linear both;
+      animation-timeline: scroll(root);
     }
+    @keyframes grow { to { transform: scaleX(1); } }
 
-    .hero-content {
-      position: relative;
-      max-width: 760px;
+    /* ── NAV (overlay) ── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.8rem; z-index: 1100;
+      background: rgba(8,7,10,0.55);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
     }
+    .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--amber), var(--neon));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 14px rgba(255,179,71,0.5);
+    }
+    .brand-mark svg { width: 20px; height: 20px; fill: var(--bg); }
+    .brand-text {
+      font-size: 1.25rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--ink);
+    }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+    .nav-links a:hover { color: var(--neon); text-shadow: 0 0 8px rgba(67,232,255,0.6); }
+    .nav-toggle {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .nav-toggle span { width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: 0.3s; }
 
+    .wrap { position: relative; z-index: 1; }
+
+    /* ── HERO (pinned) ── */
+    .hero-pin { height: 220vh; position: relative; }
+    .hero-stage {
+      position: sticky; top: 0; height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .layer { position: absolute; inset: 0; pointer-events: none; will-change: transform; }
+    .layer-sky {
+      background:
+        radial-gradient(80% 60% at 50% 18%, rgba(67,232,255,0.10) 0%, transparent 60%),
+        linear-gradient(180deg, #08070a 0%, #100b16 55%, #08070a 100%);
+    }
+    .layer-glow {
+      background: radial-gradient(35% 30% at 50% 64%, rgba(255,179,71,0.30) 0%, transparent 70%);
+    }
+    /* depot lamps */
+    .lamp { position: absolute; bottom: 18%; width: 4px; height: 90px; background: linear-gradient(var(--muted), #2a2620); }
+    .lamp::after {
+      content: ''; position: absolute; top: -10px; left: -7px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--amber-hi);
+      box-shadow: 0 0 22px 6px rgba(255,179,71,0.6);
+      animation: flick 4s ease-in-out infinite;
+    }
+    .lamp.l1 { left: 8%; }
+    .lamp.l2 { right: 9%; height: 70px; }
+    @keyframes flick { 0%,100% { opacity: 1; } 48% { opacity: 0.75; } 52% { opacity: 1; } }
+
+    /* neon boxcar on rails */
+    .train-band { position: absolute; bottom: 16%; left: 0; width: 100%; height: 150px; }
+    .rail {
+      position: absolute; left: 0; width: 200%; height: 4px; bottom: 0;
+      background: repeating-linear-gradient(90deg, var(--amber) 0 38px, transparent 38px 60px);
+      opacity: 0.45;
+      animation: roll 3.5s linear infinite;
+    }
+    .rail.r2 { bottom: 10px; opacity: 0.2; animation-duration: 5s; }
+    @keyframes roll { to { transform: translateX(-60px); } }
+    .boxcar-svg {
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+      width: min(360px, 70vw); height: auto;
+      filter: drop-shadow(0 0 16px rgba(67,232,255,0.45));
+      animation: bob 4.5s ease-in-out infinite;
+    }
+    @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
+
+    .hero-content { position: relative; z-index: 5; text-align: center; padding: 0 1.5rem; margin-bottom: 8rem; }
     .hero-eyebrow {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.2rem;
+      font-family: Arial, Helvetica, sans-serif; font-size: 0.74rem;
+      letter-spacing: 0.34em; text-transform: uppercase; color: var(--neon);
+      margin-bottom: 1.1rem;
     }
-
     .hero-title {
-      font-size: clamp(3.5rem, 10vw, 7rem);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      line-height: 0.95;
-      color: var(--text-primary);
-      margin-bottom: 1.5rem;
+      font-size: clamp(3.4rem, 12vw, 8rem); font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; line-height: 0.9;
+      background: linear-gradient(100deg, var(--amber-hi), var(--neon), var(--amber-hi));
+      background-size: 220% auto;
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      animation: sheen 7s linear infinite;
+      text-shadow: 0 0 40px rgba(255,179,71,0.25);
     }
-
-    .hero-title span {
-      color: var(--accent);
-    }
-
+    @keyframes sheen { to { background-position: 220% center; } }
     .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--text-secondary);
-      max-width: 500px;
-      margin: 0 auto 2.5rem;
-      font-style: italic;
+      font-style: italic; color: var(--muted);
+      font-size: clamp(1rem, 2.4vw, 1.3rem); max-width: 520px; margin: 1.2rem auto 0;
     }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2.2rem;
-      border-radius: 3px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.25s;
-      cursor: pointer;
-      border: none;
+    .scroll-hint {
+      position: absolute; bottom: 2.4rem; left: 50%; transform: translateX(-50%);
+      font-family: Arial, Helvetica, sans-serif; font-size: 0.7rem;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem; z-index: 6;
     }
+    .scroll-hint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); animation: sink 1.8s ease-in-out infinite; }
+    @keyframes sink { 0%,100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(8px); opacity: 0.3; } }
 
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg-dark);
-      font-weight: 700;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212, 168, 67, 0.35);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* ── SECTIONS BASE ── */
-    section {
-      padding: 5rem 2rem;
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
+    /* ── shared section bits ── */
     .section-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
+      font-family: Arial, Helvetica, sans-serif; font-size: 0.72rem;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.7rem;
     }
-
     .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      margin-bottom: 1.5rem;
-      line-height: 1.15;
+      font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 700; letter-spacing: 0.03em;
+      line-height: 1.12; margin-bottom: 1.4rem;
     }
+    .section-title em { color: var(--neon); font-style: normal; }
+    .divider { width: 54px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--amber), var(--neon)); margin-bottom: 2rem; }
 
-    .divider {
-      width: 48px;
-      height: 3px;
-      background: var(--accent);
-      margin-bottom: 2rem;
-      border-radius: 2px;
-    }
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
 
-    /* ── ABOUT ── */
-    #about {
-      background: var(--bg-mid);
+    /* ── ON TAP ── */
+    #tap { padding: 7rem 1.6rem; background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
+    .inner { max-width: 1120px; margin: 0 auto; }
+    .tap-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.4rem; margin-top: 3rem;
     }
+    .tap-card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+      padding: 2rem 1.8rem; position: relative; overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .tap-card::after {
+      content: ''; position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+      background: radial-gradient(120% 80% at 50% -10%, rgba(67,232,255,0.10), transparent 55%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .tap-card:hover { transform: translateY(-6px); border-color: rgba(67,232,255,0.5); box-shadow: 0 14px 40px rgba(0,0,0,0.5); }
+    .tap-card:hover::after { opacity: 1; }
+    .tap-icon {
+      width: 48px; height: 48px; border-radius: 10px; margin-bottom: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,179,71,0.12); box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .tap-icon svg { width: 24px; height: 24px; fill: var(--amber); }
+    .tap-card h3 { font-size: 1.12rem; letter-spacing: 0.03em; margin-bottom: 0.55rem; }
+    .tap-card p { font-family: Arial, Helvetica, sans-serif; font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
 
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
+    /* ── STORY chapters (sticky stack) ── */
+    #story { position: relative; background: var(--bg2); }
+    .story-head { max-width: 1120px; margin: 0 auto; padding: 6rem 1.6rem 1rem; }
+    .chapters { max-width: 1120px; margin: 0 auto; padding: 0 1.6rem 6rem; }
+    .chapter {
+      position: sticky; top: 18vh; margin-bottom: 12vh;
+      background: linear-gradient(135deg, rgba(20,17,28,0.96), rgba(15,13,20,0.96));
+      border: 1px solid var(--line); border-radius: 16px;
+      padding: 2.6rem 2.2rem; backdrop-filter: blur(4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
     }
+    .chapter .ch-num {
+      font-family: Arial, Helvetica, sans-serif; font-size: 0.74rem; letter-spacing: 0.28em;
+      color: var(--neon); margin-bottom: 0.7rem;
+    }
+    .chapter h3 { font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 0.8rem; letter-spacing: 0.02em; }
+    .chapter p { color: var(--muted); font-size: 1.05rem; }
+    .chapter .bar {
+      height: 4px; width: 0; margin-top: 1.4rem; border-radius: 2px;
+      background: linear-gradient(90deg, var(--amber), var(--neon));
+      animation: fill linear both; animation-timeline: view(); animation-range: cover 10% cover 60%;
+    }
+    @keyframes fill { from { width: 0; } to { width: 100%; } }
 
-    .about-text p {
-      color: var(--text-secondary);
-      font-size: 1.05rem;
-      margin-bottom: 1.2rem;
+    /* ── FIND US ── */
+    #find { padding: 7rem 1.6rem; background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%); }
+    .find-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: stretch; margin-top: 2.6rem; }
+    .info { display: flex; flex-direction: column; gap: 1.3rem; }
+    .info-row { display: flex; gap: 1rem; align-items: flex-start; }
+    .info-ic {
+      width: 42px; height: 42px; border-radius: 9px; flex-shrink: 0; margin-top: 2px;
+      background: rgba(67,232,255,0.10); display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 0 0 1px rgba(67,232,255,0.25);
     }
+    .info-ic svg { width: 18px; height: 18px; fill: var(--neon); }
+    .info-label { font-family: Arial, Helvetica, sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.25rem; }
+    .info-val { color: var(--ink); font-size: 0.98rem; line-height: 1.5; }
 
-    .about-text p:last-child {
-      margin-bottom: 0;
+    .rating-card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+      padding: 2.4rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      box-shadow: 0 0 50px rgba(255,179,71,0.07) inset;
     }
-
-    .about-stat-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+    .rating-num {
+      font-size: 4.2rem; font-weight: 700; line-height: 1;
+      background: linear-gradient(120deg, var(--amber-hi), var(--neon));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 0 30px rgba(255,179,71,0.2);
     }
-
-    .about-stat {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .about-stat-number {
-      font-size: 2.4rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-
-    .about-stat-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-    }
-
-    /* ── SERVICES ── */
-    #services {
-      background: var(--bg-dark);
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .service-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 2rem;
-      transition: border-color 0.25s, transform 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--accent);
-      transform: scaleY(0);
-      transform-origin: bottom;
-      transition: transform 0.3s;
-    }
-
-    .service-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-    }
-
-    .service-card:hover::before {
-      transform: scaleY(1);
-    }
-
-    .service-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(212, 168, 67, 0.12);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.2rem;
-    }
-
-    .service-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--accent);
-    }
-
-    .service-card h3 {
-      font-size: 1.1rem;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.6rem;
-      color: var(--text-primary);
-    }
-
-    .service-card p {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--bg-mid);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .contact-item {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .contact-item-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(212, 168, 67, 0.1);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .contact-item-icon svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--accent);
-    }
-
-    .contact-item-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.25rem;
-    }
-
-    .contact-item-value {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .rating-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .rating-score {
-      font-size: 3rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-    }
-
-    .stars {
-      display: flex;
-      gap: 3px;
-      margin-bottom: 0.3rem;
-    }
-
-    .stars svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--accent);
-    }
-
-    .rating-label {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      letter-spacing: 0.05em;
-    }
-
-    .contact-cta {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2.5rem;
-    }
-
-    .contact-cta h3 {
-      font-size: 1.4rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .contact-cta p {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
+    .stars { display: flex; gap: 3px; margin: 0.7rem 0; }
+    .stars svg { width: 18px; height: 18px; fill: var(--amber); filter: drop-shadow(0 0 4px rgba(255,179,71,0.5)); }
+    .rating-sub { font-family: Arial, Helvetica, sans-serif; font-size: 0.82rem; color: var(--muted); letter-spacing: 0.04em; }
 
     .directions-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.9rem 2rem;
-      background: var(--accent);
-      color: var(--bg-dark);
-      text-decoration: none;
-      border-radius: 3px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      transition: all 0.25s;
+      display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 2rem;
+      padding: 0.95rem 2.1rem; border-radius: 40px; text-decoration: none;
+      background: linear-gradient(100deg, var(--amber), var(--amber-hi));
+      color: var(--bg); font-family: Arial, Helvetica, sans-serif; font-weight: 700;
+      font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: transform 0.25s, box-shadow 0.25s;
     }
-
-    .directions-btn:hover {
-      background: var(--accent-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212, 168, 67, 0.35);
-    }
-
-    .directions-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--bg-dark);
-    }
+    .directions-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,179,71,0.4); }
+    .directions-btn svg { width: 16px; height: 16px; fill: var(--bg); }
 
     /* ── FOOTER ── */
-    footer {
-      background: var(--bg-dark);
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-logo {
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-primary);
-    }
-
-    .footer-logo span {
-      color: var(--accent);
-    }
-
-    .footer-address {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-    }
-
-    .footer-copy {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      opacity: 0.6;
-    }
+    footer { background: var(--bg); border-top: 1px solid var(--line); padding: 2.6rem 1.6rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+    .footer-logo span { background: linear-gradient(90deg, var(--amber), var(--neon)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .footer-addr, .footer-copy { font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem; color: var(--muted); }
+    .footer-copy { opacity: 0.6; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .nav-links {
-        display: none;
-        position: absolute;
-        top: var(--nav-height);
-        left: 0;
-        width: 100%;
-        background: rgba(15, 14, 13, 0.98);
-        flex-direction: column;
-        padding: 1.5rem 2rem;
-        gap: 1.2rem;
-        border-bottom: 1px solid var(--border);
+        display: none; position: absolute; top: 64px; left: 0; width: 100%;
+        flex-direction: column; gap: 1.1rem; padding: 1.4rem 1.8rem;
+        background: rgba(8,7,10,0.97); border-bottom: 1px solid var(--line);
       }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .about-stat-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        text-align: center;
-      }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: flex; }
+      .find-grid { grid-template-columns: 1fr; gap: 2.2rem; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .chapter { top: 12vh; }
+    }
+    @media (max-width: 480px) {
+      .hero-pin { height: 180vh; }
+      #tap, #find { padding: 4.5rem 1.2rem; }
     }
 
-    @media (max-width: 480px) {
-      section {
-        padding: 3.5rem 1.25rem;
-      }
-
-      .about-stat-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .rating-box {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.75rem;
-      }
+    /* ── reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .mesh, .lamp::after, .rail, .boxcar-svg, .scroll-hint .dot, .hero-title { animation: none !important; }
+      .hero-title { background-position: 0 center; }
+      .progress { animation: none; transform: scaleX(0); }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .chapter .bar { animation: none; width: 100%; }
+      .chapter { position: static; }
     }
   </style>
 </head>
 <body>
 
+  <div class="mesh"></div>
+  <div class="progress"></div>
+
   <!-- NAV -->
   <nav>
-    <a href="#hero" class="nav-logo">
-      <div class="nav-logo-mark">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 17h18v2H3v-2zm0-5h18v2H3v-2zM3 7h18v2H3V7zm0 3h18v1H3v-1z"/>
-        </svg>
-      </div>
-      <span class="nav-logo-text">Boxcar</span>
+    <a href="#hero" class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 17h18v2H3v-2zm0-5h18v2H3v-2zM3 7h18v2H3V7zm0 3h18v1H3v-1z"/></svg>
+      </span>
+      <span class="brand-text">Boxcar</span>
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Find Us</a></li>
+      <li><a href="#tap">On Tap</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#find">Find Us</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-tracks"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">Gainesville, Florida</p>
-      <h1 class="hero-title">Box<span>car</span></h1>
-      <p class="hero-tagline">Where the rails meet the rounds — your neighborhood bar off Depot Ave.</p>
-      <a href="#contact" class="btn btn-primary">Find Us</a>
-    </div>
-  </section>
+  <div class="wrap">
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">Our Story</p>
-          <h2 class="section-title">A Bar Built for Gainesville</h2>
-          <div class="divider"></div>
+    <!-- HERO (pinned/parallax) -->
+    <section id="hero" class="hero-pin">
+      <div class="hero-stage">
+        <div class="layer layer-sky" data-depth="0.15"></div>
+        <div class="layer layer-glow" data-depth="0.35"></div>
+        <span class="lamp l1" data-depth="0.6"></span>
+        <span class="lamp l2" data-depth="0.6"></span>
+
+        <div class="train-band" data-depth="0.5">
+          <div class="rail r1"></div>
+          <div class="rail r2"></div>
+          <svg class="boxcar-svg" viewBox="0 0 360 150" aria-label="Neon boxcar">
+            <rect x="20" y="30" width="320" height="80" rx="8" fill="none" stroke="#43e8ff" stroke-width="3"/>
+            <line x1="20" y1="62" x2="340" y2="62" stroke="#ffb347" stroke-width="2" opacity="0.8"/>
+            <rect x="150" y="44" width="60" height="50" rx="4" fill="none" stroke="#ffd27a" stroke-width="2.5"/>
+            <line x1="180" y1="44" x2="180" y2="94" stroke="#ffd27a" stroke-width="2"/>
+            <rect x="44" y="48" width="34" height="26" rx="3" fill="none" stroke="#43e8ff" stroke-width="2"/>
+            <rect x="282" y="48" width="34" height="26" rx="3" fill="none" stroke="#43e8ff" stroke-width="2"/>
+            <line x1="40" y1="112" x2="320" y2="112" stroke="#9a9182" stroke-width="4"/>
+            <circle cx="90" cy="124" r="12" fill="none" stroke="#ffb347" stroke-width="3"/>
+            <circle cx="270" cy="124" r="12" fill="none" stroke="#ffb347" stroke-width="3"/>
+          </svg>
+        </div>
+
+        <div class="hero-content">
+          <p class="hero-eyebrow">Gainesville, Florida &middot; Depot Park</p>
+          <h1 class="hero-title">Boxcar</h1>
+          <p class="hero-tagline">Where the rails meet the rounds — your neighborhood bar off Depot Ave.</p>
+        </div>
+
+        <div class="scroll-hint">
+          <span>Scroll</span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ON TAP -->
+    <section id="tap">
+      <div class="inner">
+        <p class="section-label reveal">What We Offer</p>
+        <h2 class="section-title reveal">What's <em>On Tap</em></h2>
+        <div class="divider reveal"></div>
+
+        <div class="tap-grid">
+          <div class="tap-card reveal">
+            <div class="tap-icon"><svg viewBox="0 0 24 24"><path d="M5 3h14l-1 17H6L5 3zm2 2 .8 13h8.4L17 5H7zm9 2h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2V7z"/></svg></div>
+            <h3>Draft Beer Selection</h3>
+            <p>A rotating lineup of local craft brews and beloved classics served cold and fresh on tap. Contact us for current selections.</p>
+          </div>
+          <div class="tap-card reveal">
+            <div class="tap-icon"><svg viewBox="0 0 24 24"><path d="M12 14.121 4.172 6.293A1 1 0 0 1 4.879 4.5h14.242a1 1 0 0 1 .707 1.707L12 14.121zM11 15v4H8v2h8v-2h-3v-4l-1-1z"/></svg></div>
+            <h3>Craft Cocktails</h3>
+            <p>Thoughtfully mixed drinks made with quality spirits. Ask your bartender for seasonal specials and house favorites.</p>
+          </div>
+          <div class="tap-card reveal">
+            <div class="tap-icon"><svg viewBox="0 0 24 24"><path d="M7 2h10l-1 8a5 5 0 0 1-10 0L7 2zm5 13a7 7 0 0 0 6.93-6H5.07A7 7 0 0 0 12 15zm-1 1v4H8v2h8v-2h-3v-4h-2z"/></svg></div>
+            <h3>Wine &amp; Spirits</h3>
+            <p>A curated selection of wines and premium spirits to suit every taste. Contact us for details on current offerings.</p>
+          </div>
+          <div class="tap-card reveal">
+            <div class="tap-icon"><svg viewBox="0 0 24 24"><path d="M9 3v10.55A4 4 0 1 0 11 17V7h6V3H9zm-2 16a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></div>
+            <h3>Live Music &amp; Events</h3>
+            <p>Regular live entertainment and themed nights that bring the Gainesville community together. Contact us for the current schedule.</p>
+          </div>
+          <div class="tap-card reveal">
+            <div class="tap-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+            <h3>Private &amp; Group Bookings</h3>
+            <p>Hosting a birthday, team outing, or private event? Boxcar can accommodate your group. Contact us for details.</p>
+          </div>
+          <div class="tap-card reveal">
+            <div class="tap-icon"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 9.5A2.5 2.5 0 1 0 12 6a2.5 2.5 0 0 0 0 5z"/></svg></div>
+            <h3>Outdoor &amp; Patio Seating</h3>
+            <p>Enjoy Gainesville's weather with relaxed outdoor seating near Depot Park. Perfect for an evening drink under the Florida sky.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY (sticky chapters) -->
+    <section id="story">
+      <div class="story-head">
+        <p class="section-label reveal">Our Story</p>
+        <h2 class="section-title reveal">A Bar Built for <em>Gainesville</em></h2>
+        <div class="divider reveal"></div>
+      </div>
+      <div class="chapters">
+        <article class="chapter">
+          <div class="ch-num">CHAPTER 01</div>
+          <h3>Rooted in Depot Park</h3>
           <p>Boxcar is a full-service bar nestled in the heart of Gainesville's vibrant Depot Park neighborhood, offering a laid-back atmosphere that draws locals, students, and visitors alike.</p>
+          <div class="bar"></div>
+        </article>
+        <article class="chapter">
+          <div class="ch-num">CHAPTER 02</div>
+          <h3>Unpretentious &amp; Welcoming</h3>
           <p>Whether you're stopping in for a cold craft beer after a long day or settling in for a night out with friends, Boxcar delivers the kind of unpretentious, welcoming vibe that keeps guests coming back.</p>
+          <div class="bar"></div>
+        </article>
+        <article class="chapter">
+          <div class="ch-num">CHAPTER 03</div>
+          <h3>A Gathering Place</h3>
           <p>Situated at the crossroads of Gainesville's arts and outdoor community, we pride ourselves on being a gathering place where good drinks and good company are always on tap.</p>
-        </div>
-        <div class="about-stat-grid">
-          <div class="about-stat">
-            <div class="about-stat-number">4.8</div>
-            <div class="about-stat-label">Google Rating</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-number">104</div>
-            <div class="about-stat-label">Reviews</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-number">GNV</div>
-            <div class="about-stat-label">Hometown Bar</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-number">FL</div>
-            <div class="about-stat-label">Depot Park</div>
-          </div>
-        </div>
+          <div class="bar"></div>
+        </article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="section-inner">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Drinks, Vibes &amp; More</h2>
-      <div class="divider"></div>
+    <!-- FIND US -->
+    <section id="find">
+      <div class="inner">
+        <p class="section-label reveal">Find Us</p>
+        <h2 class="section-title reveal">Come Have a <em>Drink</em></h2>
+        <div class="divider reveal"></div>
 
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Beer mug -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 3h14l-1 17H6L5 3zm2 2 .8 13h8.4L17 5H7zm9 2h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2V7z"/>
-            </svg>
-          </div>
-          <h3>Draft Beer Selection</h3>
-          <p>A rotating lineup of local craft brews and beloved classics served cold and fresh on tap. Contact us for current selections.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Cocktail glass -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 14.121 4.172 6.293A1 1 0 0 1 4.879 4.5h14.242a1 1 0 0 1 .707 1.707L12 14.121zM11 15v4H8v2h8v-2h-3v-4l-1-1z"/>
-            </svg>
-          </div>
-          <h3>Craft Cocktails</h3>
-          <p>Thoughtfully mixed drinks made with quality spirits. Ask your bartender for seasonal specials and house favorites.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Wine glass -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 2h10l-1 8a5 5 0 0 1-10 0L7 2zm5 13a7 7 0 0 0 6.93-6H5.07A7 7 0 0 0 12 15zm-1 1v4H8v2h8v-2h-3v-4h-2z"/>
-            </svg>
-          </div>
-          <h3>Wine &amp; Spirits</h3>
-          <p>A curated selection of wines and premium spirits to suit every taste. Contact us for details on current offerings.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Music note -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 3v10.55A4 4 0 1 0 11 17V7h6V3H9zm-2 16a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
-            </svg>
-          </div>
-          <h3>Live Music &amp; Events</h3>
-          <p>Regular live entertainment and themed nights that bring the Gainesville community together. Contact us for the current schedule.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Users / private events -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-            </svg>
-          </div>
-          <h3>Private &amp; Group Bookings</h3>
-          <p>Hosting a birthday, team outing, or private event? Boxcar can accommodate your group. Contact us for details.</p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <!-- Outdoor / patio -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 9.5A2.5 2.5 0 1 0 12 6a2.5 2.5 0 0 0 0 5z"/>
-            </svg>
-          </div>
-          <h3>Outdoor &amp; Patio Seating</h3>
-          <p>Enjoy Gainesville's weather with relaxed outdoor seating near Depot Park. Perfect for an evening drink under the Florida sky.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-title">Come Have a Drink</h2>
-      <div class="divider"></div>
-
-      <div class="contact-grid">
-        <div class="contact-info">
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5z"/>
-              </svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Address</div>
-              <div class="contact-item-value">201 SE Depot Ave<br>Gainesville, FL 32601</div>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-item-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8.001 8.001 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8.001 8.001 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8.001 8.001 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8.001 8.001 0 0 1 13 19.93z"/>
-              </svg>
-            </div>
-            <div>
-              <div class="contact-item-label">Hours</div>
-              <div class="contact-item-value">Contact us for current hours</div>
-            </div>
-          </div>
-
-          <div class="rating-box">
-            <div class="rating-score">4.8</div>
-            <div>
-              <div class="stars">
-                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <div class="find-grid">
+          <div class="info reveal">
+            <div class="info-row">
+              <span class="info-ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5z"/></svg></span>
+              <div>
+                <div class="info-label">Address</div>
+                <div class="info-val">201 SE Depot Ave<br>Gainesville, FL 32601</div>
               </div>
-              <div class="rating-label">4.8 out of 5 &mdash; 104 Google reviews</div>
             </div>
+            <div class="info-row">
+              <span class="info-ic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8.001 8.001 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8.001 8.001 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8.001 8.001 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8.001 8.001 0 0 1 13 19.93z"/></svg></span>
+              <div>
+                <div class="info-label">Hours</div>
+                <div class="info-val">Contact us for current hours</div>
+              </div>
+            </div>
+            <div class="info-row">
+              <span class="info-ic"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 9.5A2.5 2.5 0 1 0 12 6a2.5 2.5 0 0 0 0 5z"/></svg></span>
+              <div>
+                <div class="info-label">Neighborhood</div>
+                <div class="info-val">Depot Park &middot; relaxed outdoor seating</div>
+              </div>
+            </div>
+            <a
+              href="https://www.google.com/maps/search/Boxcar%20201%20SE%20Depot%20Ave%2C%20Gainesville%2C%20FL%2032601"
+              target="_blank" rel="noopener noreferrer" class="directions-btn">
+              <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+              Get Directions
+            </a>
           </div>
 
-        </div>
-
-        <div class="contact-cta">
-          <h3>Ready to Visit?</h3>
-          <p>We're located in Gainesville's Depot Park area — easy to find and always worth the trip. Tap the button below for turn-by-turn directions.</p>
-          <a
-            href="https://www.google.com/maps/search/Boxcar%20201%20SE%20Depot%20Ave%2C%20Gainesville%2C%20FL%2032601"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="directions-btn"
-          >
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/>
-            </svg>
-            Get Directions
-          </a>
+          <div class="rating-card reveal">
+            <div class="rating-num"><span id="ratingScore">4.8</span></div>
+            <div class="stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="rating-sub">4.8 out of 5 &mdash; <span id="ratingCount">104</span> Google reviews</div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">Box<span>car</span></div>
-      <div class="footer-address">201 SE Depot Ave, Gainesville, FL 32601</div>
-      <div class="footer-copy">&copy; 2026 Boxcar. All rights reserved.</div>
-    </div>
-  </footer>
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-logo"><span>Boxcar</span></div>
+        <div class="footer-addr">201 SE Depot Ave, Gainesville, FL 32601</div>
+        <div class="footer-copy">&copy; 2026 Boxcar. All rights reserved.</div>
+      </div>
+    </footer>
+
+  </div>
 
   <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('open');
-    });
-    // Close nav on link click
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => links.classList.remove('open'));
-    });
+    (function () {
+      'use strict';
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Mobile nav
+      var toggle = document.getElementById('navToggle');
+      var links = document.getElementById('navLinks');
+      toggle.addEventListener('click', function () { links.classList.toggle('open'); });
+      links.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { links.classList.remove('open'); });
+      });
+
+      // Reveal on scroll
+      var reveals = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        reveals.forEach(function (el) { el.classList.add('in'); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.18 });
+        reveals.forEach(function (el) { io.observe(el); });
+      }
+
+      // Animated counters
+      function animateCount(el, target, decimals) {
+        if (reduce) { el.textContent = target.toFixed(decimals); return; }
+        var start = null, dur = 1300;
+        function step(ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = (target * eased).toFixed(decimals);
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = target.toFixed(decimals);
+        }
+        requestAnimationFrame(step);
+      }
+      var ratingCard = document.querySelector('.rating-card');
+      var counted = false;
+      function fireCounts() {
+        if (counted) return; counted = true;
+        animateCount(document.getElementById('ratingScore'), 4.8, 1);
+        animateCount(document.getElementById('ratingCount'), 104, 0);
+      }
+      if (reduce || !('IntersectionObserver' in window)) {
+        fireCounts();
+      } else {
+        var cio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { fireCounts(); cio.disconnect(); } });
+        }, { threshold: 0.5 });
+        cio.observe(ratingCard);
+      }
+
+      // Parallax layers in hero (JS fallback / enhancement)
+      if (!reduce) {
+        var stage = document.querySelector('.hero-stage');
+        var layers = Array.prototype.slice.call(document.querySelectorAll('.layer, .train-band, .lamp'));
+        var ticking = false;
+        function onScroll() {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(function () {
+            var rect = stage.getBoundingClientRect();
+            var prog = Math.min(Math.max(-rect.top / window.innerHeight, 0), 1.2);
+            layers.forEach(function (l) {
+              var d = parseFloat(l.getAttribute('data-depth')) || 0.2;
+              l.style.transform = 'translateY(' + (prog * d * 120) + 'px)';
+            });
+            ticking = false;
+          });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+    })();
   </script>
 
 </body>

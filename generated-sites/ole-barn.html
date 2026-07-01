@@ -3,755 +3,832 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ole Barn | Bar in Gainesville, FL</title>
+  <title>Ole Barn | Neighborhood Bar in Gainesville, FL</title>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --dark-bg: #1a1208;
-      --dark-surface: #251c0e;
-      --dark-card: #2e2210;
-      --accent-amber: #c8882a;
-      --accent-gold: #e6a93a;
-      --accent-light: #f5c76a;
-      --text-primary: #f0e4cc;
-      --text-secondary: #b8a07a;
-      --text-muted: #7a6448;
-      --border: #3d2e18;
-      --hero-overlay: rgba(20, 12, 4, 0.78);
+      --neon-cyan:   #00f5ff;
+      --neon-purple: #bf00ff;
+      --neon-pink:   #ff007f;
+      --neon-gold:   #ffd700;
+      --dark0: #050510;
+      --dark1: #0a0a1a;
+      --dark2: #0f0f28;
+      --dark3: #13132e;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.10);
+      --text: #e8e8ff;
+      --text-dim: #9999bb;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background-color: var(--dark-bg);
-      color: var(--text-primary);
-      line-height: 1.7;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: var(--dark0);
+      color: var(--text);
+      overflow-x: hidden;
     }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(26, 18, 8, 0.95);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--accent-amber);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-    }
-
-    .nav-logo-text {
-      font-size: 1.35rem;
-      font-weight: bold;
-      color: var(--accent-gold);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--accent-light);
-    }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 5px;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--accent-gold);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background:
-        linear-gradient(var(--hero-overlay), var(--hero-overlay)),
-        repeating-linear-gradient(
-          135deg,
-          #3d2408 0px,
-          #3d2408 2px,
-          #2a1a06 2px,
-          #2a1a06 30px
-        );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
+    /* ── ANIMATED GRADIENT BG ── */
+    body::before {
       content: '';
-      position: absolute;
+      position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(200, 136, 42, 0.12) 0%, transparent 70%);
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(191,0,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(0,245,255,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,0,127,0.06) 0%, transparent 70%);
+      animation: bgPulse 8s ease-in-out infinite alternate;
       pointer-events: none;
     }
 
-    .hero-content {
-      max-width: 720px;
+    @keyframes bgPulse {
+      0%   { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 1;   transform: scale(1.05); }
+    }
+
+    /* ── DECK WRAPPER ── */
+    .deck-wrapper {
       position: relative;
       z-index: 1;
     }
 
-    .hero-eyebrow {
-      display: inline-block;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent-amber);
-      border: 1px solid var(--accent-amber);
-      padding: 0.3rem 1rem;
-      border-radius: 2px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: bold;
-      color: var(--accent-gold);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-shadow: 0 2px 20px rgba(200, 136, 42, 0.4);
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: var(--text-secondary);
-      font-style: italic;
-      margin-bottom: 2.5rem;
-      letter-spacing: 0.03em;
-    }
-
-    .hero-divider {
-      width: 80px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
-      margin: 0 auto 2.5rem;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 2.2rem;
-      border-radius: 3px;
-      font-family: 'Arial', sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.25s;
-      cursor: pointer;
-    }
-
-    .btn-primary {
-      background: var(--accent-amber);
-      color: var(--dark-bg);
-      font-weight: bold;
-      border: 2px solid var(--accent-amber);
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-gold);
-      border-color: var(--accent-gold);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(200, 136, 42, 0.35);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--accent-gold);
-      border: 2px solid var(--accent-amber);
-    }
-
-    .btn-outline:hover {
-      background: var(--accent-amber);
-      color: var(--dark-bg);
-      transform: translateY(-2px);
-    }
-
-    /* ── SECTIONS SHARED ── */
-    section {
-      padding: 5rem 1.5rem;
-    }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent-amber);
-      margin-bottom: 0.6rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--text-primary);
-      font-weight: bold;
-      letter-spacing: 0.02em;
-      margin-bottom: 1rem;
-    }
-
-    .section-divider {
-      width: 56px;
-      height: 2px;
-      background: var(--accent-amber);
-      margin-bottom: 2.5rem;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--dark-surface);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+    /* Each card: sticky + stacks */
+    .card {
+      position: sticky;
+      top: 0;
+      min-height: 100vh;
+      display: flex;
       align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      transform-origin: top center;
+      transition: transform 0.1s linear, filter 0.1s linear;
+      will-change: transform;
+      overflow: hidden;
     }
 
-    .about-text p {
-      color: var(--text-secondary);
-      font-size: 1.05rem;
+    /* Card backgrounds */
+    .card-hero   { background: linear-gradient(160deg, #05051a 0%, #0a0520 50%, #130a30 100%); z-index: 1; }
+    .card-offer  { background: linear-gradient(160deg, #070718 0%, #0c0a22 50%, #150c35 100%); z-index: 2; }
+    .card-story  { background: linear-gradient(160deg, #080820 0%, #0e0b25 50%, #17103a 100%); z-index: 3; }
+    .card-visit  { background: linear-gradient(160deg, #090922 0%, #0f0c28 50%, #18123f 100%); z-index: 4; }
+
+    /* Card top-edge glow accent */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 3px 3px 0 0;
+    }
+    .card-hero::after   { background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink), var(--neon-cyan)); }
+    .card-offer::after  { background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); }
+    .card-story::after  { background: linear-gradient(90deg, var(--neon-pink), var(--neon-gold)); }
+    .card-visit::after  { background: linear-gradient(90deg, var(--neon-gold), var(--neon-cyan)); }
+
+    /* Card inner */
+    .card-inner {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NEON TEXT ── */
+    .neon-title {
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 45%, var(--neon-pink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(191,0,255,0.5)) drop-shadow(0 0 40px rgba(0,245,255,0.3));
+      animation: neonFlicker 6s ease-in-out infinite;
+    }
+
+    @keyframes neonFlicker {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(191,0,255,0.5)) drop-shadow(0 0 40px rgba(0,245,255,0.3)); }
+      45%       { filter: drop-shadow(0 0 30px rgba(191,0,255,0.8)) drop-shadow(0 0 60px rgba(0,245,255,0.5)); }
+      50%       { filter: drop-shadow(0 0 18px rgba(191,0,255,0.4)) drop-shadow(0 0 35px rgba(0,245,255,0.25)); }
+      55%       { filter: drop-shadow(0 0 32px rgba(191,0,255,0.9)) drop-shadow(0 0 65px rgba(0,245,255,0.6)); }
+    }
+
+    .neon-sub {
+      font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px rgba(0,245,255,0.4);
       margin-bottom: 1.2rem;
     }
 
-    .about-text p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-visual {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .about-stat {
-      background: var(--dark-card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent-amber);
-      padding: 1.2rem 1.5rem;
-      border-radius: 4px;
-    }
-
-    .about-stat-number {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--accent-gold);
-      line-height: 1;
-    }
-
-    .about-stat-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
+    /* ── EYEBROW PILL ── */
+    .pill {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--text-muted);
-      margin-top: 0.3rem;
+      padding: 0.3rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,245,255,0.4);
+      color: var(--neon-cyan);
+      background: rgba(0,245,255,0.06);
+      margin-bottom: 1.5rem;
     }
 
-    /* ── SERVICES ── */
-    #services {
-      background: var(--dark-bg);
+    /* ── HERO CARD ── */
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-dim);
+      margin: 1.5rem 0 2.5rem;
+      max-width: 560px;
+      line-height: 1.7;
     }
 
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+    /* Neon scan-line overlay on hero */
+    .card-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,245,255,0.015) 3px,
+        rgba(0,245,255,0.015) 4px
+      );
+      pointer-events: none;
     }
 
-    .service-card {
-      background: var(--dark-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 2rem 1.8rem;
-      transition: border-color 0.25s, transform 0.25s;
+    /* ── BUTTONS ── */
+    .btn-neon {
+      display: inline-block;
+      padding: 0.85rem 2.4rem;
+      border-radius: 3px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      background: rgba(0,245,255,0.08);
+      box-shadow: 0 0 12px rgba(0,245,255,0.3), inset 0 0 12px rgba(0,245,255,0.05);
+      transition: all 0.25s;
       position: relative;
       overflow: hidden;
     }
 
-    .service-card::before {
+    .btn-neon::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent-amber), var(--accent-gold));
-      opacity: 0;
-      transition: opacity 0.25s;
+      inset: 0;
+      background: rgba(0,245,255,0.15);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
     }
 
-    .service-card:hover {
-      border-color: var(--accent-amber);
+    .btn-neon:hover::before { transform: translateX(0); }
+
+    .btn-neon:hover {
+      box-shadow: 0 0 24px rgba(0,245,255,0.6), inset 0 0 24px rgba(0,245,255,0.1);
+      color: #fff;
+    }
+
+    .btn-neon-pink {
+      border-color: var(--neon-pink);
+      color: var(--neon-pink);
+      background: rgba(255,0,127,0.08);
+      box-shadow: 0 0 12px rgba(255,0,127,0.3), inset 0 0 12px rgba(255,0,127,0.05);
+    }
+
+    .btn-neon-pink::before { background: rgba(255,0,127,0.15); }
+
+    .btn-neon-pink:hover {
+      box-shadow: 0 0 24px rgba(255,0,127,0.6), inset 0 0 24px rgba(255,0,127,0.1);
+      color: #fff;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .card-heading {
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .gradient-cyan-purple {
+      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-pink-gold {
+      background: linear-gradient(135deg, var(--neon-pink) 0%, var(--neon-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-gold-cyan {
+      background: linear-gradient(135deg, var(--neon-gold) 0%, var(--neon-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── GLASS PANELS ── */
+    .glass {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* ── OFFER GRID ── */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .offer-item {
+      padding: 1.6rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.03);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .offer-item:hover {
+      border-color: rgba(0,245,255,0.3);
+      box-shadow: 0 0 20px rgba(0,245,255,0.1);
       transform: translateY(-4px);
     }
 
-    .service-card:hover::before {
-      opacity: 1;
-    }
+    .offer-item:hover::before { opacity: 1; }
 
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    .offer-icon {
+      font-size: 1.8rem;
       display: block;
+      margin-bottom: 0.8rem;
     }
 
-    .service-card h3 {
-      font-size: 1.15rem;
-      color: var(--accent-gold);
-      margin-bottom: 0.6rem;
-      font-weight: bold;
+    .offer-item h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 8px rgba(0,245,255,0.4);
     }
 
-    .service-card p {
-      color: var(--text-muted);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.92rem;
+    .offer-item p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
       line-height: 1.6;
     }
 
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--dark-surface);
+    /* ── STORY / ABOUT ── */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 2.5rem;
+      align-items: center;
+      margin-top: 2rem;
     }
 
-    .contact-grid {
+    .story-text p {
+      color: var(--text-dim);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+
+    .story-text p:last-child { margin-bottom: 0; }
+
+    .story-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .stat-card {
+      padding: 1.4rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(191,0,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .stat-num {
+      font-size: 2.4rem;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--neon-gold) 0%, var(--neon-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 8px rgba(255,215,0,0.4));
+    }
+
+    .stat-lbl {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 0.3rem;
+    }
+
+    /* ── VISIT CARD ── */
+    .visit-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      gap: 2rem;
       align-items: start;
+      margin-top: 2rem;
     }
 
-    .contact-info h3 {
-      font-size: 1.1rem;
-      color: var(--accent-gold);
+    .visit-info-block {
+      margin-bottom: 1.5rem;
+    }
+
+    .visit-info-block h3 {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--neon-gold);
+      text-shadow: 0 0 8px rgba(255,215,0,0.4);
       margin-bottom: 0.4rem;
-      font-weight: bold;
     }
 
-    .contact-block {
-      margin-bottom: 2rem;
-    }
-
-    .contact-block p {
-      color: var(--text-secondary);
-      font-family: 'Arial', sans-serif;
+    .visit-info-block p {
+      color: var(--text-dim);
       font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    .rating-box {
-      background: var(--dark-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+    /* Rating block */
+    .rating-panel {
       padding: 1.5rem;
+      border-radius: 12px;
+      background: rgba(255,215,0,0.04);
+      border: 1px solid rgba(255,215,0,0.2);
       display: flex;
       align-items: center;
       gap: 1.2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 0 20px rgba(255,215,0,0.08);
     }
 
-    .rating-stars {
-      font-size: 1.4rem;
-      color: var(--accent-gold);
-      letter-spacing: 2px;
-      flex-shrink: 0;
-    }
+    .stars-row { font-size: 1.3rem; letter-spacing: 2px; color: var(--neon-gold); }
 
-    .rating-details .rating-number {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: var(--accent-gold);
+    .rating-num {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--neon-gold);
       line-height: 1;
+      text-shadow: 0 0 15px rgba(255,215,0,0.5);
     }
 
-    .rating-details .rating-label {
-      font-family: 'Arial', sans-serif;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+    .rating-meta {
+      font-size: 0.78rem;
+      color: var(--text-dim);
       letter-spacing: 0.05em;
     }
 
-    .contact-map-placeholder {
-      background: var(--dark-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      height: 300px;
+    /* Map placeholder */
+    .map-box {
+      border-radius: 12px;
+      border: 1px solid rgba(0,245,255,0.2);
+      background: rgba(0,245,255,0.03);
+      height: 260px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
-      color: var(--text-muted);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.9rem;
+      gap: 0.8rem;
+      box-shadow: 0 0 20px rgba(0,245,255,0.06);
+      position: relative;
+      overflow: hidden;
     }
 
-    .map-icon {
-      font-size: 3rem;
+    /* CSS grid map pin SVG drawn via background */
+    .map-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,245,255,0.05) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,245,255,0.05) 40px);
     }
 
-    .map-address {
+    .map-pin-svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    .map-addr {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.88rem;
-      line-height: 1.5;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      line-height: 1.6;
     }
+
+    .map-addr strong { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0,245,255,0.4); }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--dark-bg);
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 1.5rem;
+      position: relative;
+      z-index: 5;
+      background: var(--dark0);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 3rem 1.5rem 2rem;
       text-align: center;
     }
 
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
     .footer-logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--accent-gold);
+      font-size: 2rem;
+      font-weight: 900;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
     }
 
-    .footer-tagline {
-      color: var(--text-muted);
-      font-family: 'Arial', sans-serif;
+    .footer-sub {
+      color: var(--text-dim);
       font-size: 0.85rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-address {
-      color: var(--text-muted);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.82rem;
       margin-bottom: 1rem;
     }
 
+    .footer-addr {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
     .footer-copy {
-      color: var(--text-muted);
-      font-family: 'Arial', sans-serif;
-      font-size: 0.78rem;
-      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.2);
+      border-top: 1px solid rgba(255,255,255,0.05);
       padding-top: 1rem;
       margin-top: 1rem;
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: rgba(26, 18, 8, 0.98);
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-        border-bottom: 1px solid var(--border);
-        padding: 1rem 0;
+    /* ── SECTION DIVIDER LINE ── */
+    .neon-hr {
+      height: 1px;
+      border: none;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      margin: 1.2rem 0 0;
+      opacity: 0.4;
+    }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── REDUCED MOTION: cards become normal stacked flow ── */
+    @media (prefers-reduced-motion: reduce) {
+      body::before { animation: none; }
+
+      .neon-title { animation: none; }
+
+      @keyframes bgPulse { 0%, 100% { opacity: 1; transform: none; } }
+      @keyframes neonFlicker { 0%, 100% { filter: none; } }
+
+      .card {
+        position: relative;
+        top: auto;
+        min-height: auto;
+        padding: 4rem 1.5rem;
       }
 
-      .nav-links.open {
-        display: flex;
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
       }
 
-      .nav-links li {
-        width: 100%;
-        text-align: center;
-      }
-
-      .nav-links a {
-        display: block;
-        padding: 0.75rem 1.5rem;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      section {
-        padding: 3.5rem 1.2rem;
+      .offer-item:hover, .btn-neon:hover, .btn-neon-pink:hover {
+        transform: none;
       }
     }
 
-    @media (max-width: 480px) {
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
+    /* ── MOBILE ── */
+    @media (max-width: 700px) {
+      .story-grid { grid-template-columns: 1fr; }
+      .visit-grid  { grid-template-columns: 1fr; }
+      .offer-grid  { grid-template-columns: 1fr; }
+      .story-stats { flex-direction: row; flex-wrap: wrap; }
+      .story-stats .stat-card { flex: 1 1 40%; }
+      .card { padding: 2rem 1.2rem; }
+    }
 
-      .hero h1 {
-        font-size: 2.8rem;
-      }
+    @media (max-width: 480px) {
+      .neon-title { font-size: 2.8rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#hero">
-      <div class="nav-logo-icon">&#127867;</div>
-      <span class="nav-logo-text">Ole Barn</span>
-    </a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">What We Offer</a></li>
-      <li><a href="#contact">Visit Us</a></li>
-    </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+<div class="deck-wrapper">
 
-  <!-- HERO -->
-  <section id="hero" class="hero">
-    <div class="hero-content">
-      <span class="hero-eyebrow">Gainesville, FL</span>
-      <h1>Ole Barn</h1>
-      <div class="hero-divider"></div>
-      <p class="hero-tagline">Cold drinks, good company, and that worn-in comfort you keep coming back for.</p>
-      <a href="#contact" class="btn btn-primary">Find Us</a>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-label">About Ole Barn</p>
-          <h2 class="section-title">A Gainesville Neighborhood Bar</h2>
-          <div class="section-divider"></div>
-          <p>Ole Barn is a laid-back neighborhood bar on the northeast side of Gainesville where locals come to unwind, catch the game, and share a round with familiar faces. The atmosphere is easygoing and unpretentious — exactly what a good bar should be.</p>
-          <p>Whether you're stopping in for a cold beer after work or settling in for an evening with friends, Ole Barn delivers the kind of relaxed, welcoming vibe that keeps regulars coming back week after week.</p>
-          <p>Situated at 1791 NE 23rd Ave, the bar is a convenient gathering spot for Gainesville residents looking for somewhere comfortable to kick back without the fuss.</p>
-        </div>
-        <div class="about-visual">
-          <div class="about-stat">
-            <div class="about-stat-number">4.7</div>
-            <div class="about-stat-label">Google Maps Rating</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-number">84</div>
-            <div class="about-stat-label">Customer Reviews</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-number">NE Gainesville</div>
-            <div class="about-stat-label">Neighborhood Favorite</div>
-          </div>
-        </div>
+  <!-- CARD 1: HERO -->
+  <div class="card card-hero" id="hero">
+    <div class="card-inner">
+      <div class="reveal">
+        <span class="pill">Gainesville, FL &nbsp;&#8226;&nbsp; NE Side</span>
+      </div>
+      <div class="reveal neon-title">Ole<br>Barn</div>
+      <p class="neon-sub reveal">Neighborhood Bar</p>
+      <hr class="neon-hr">
+      <p class="hero-tagline reveal">Cold drinks, good company, and the worn-in comfort you keep coming back for. A real Gainesville spot.</p>
+      <div class="reveal" style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.5rem;">
+        <a href="#offer" class="btn-neon">What We Offer</a>
+        <a href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609" target="_blank" rel="noopener noreferrer" class="btn-neon btn-neon-pink">Get Directions</a>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="section-inner">
-      <p class="section-label">What We Offer</p>
-      <h2 class="section-title">Drinks &amp; Good Times</h2>
-      <div class="section-divider"></div>
-      <div class="services-grid">
+  <!-- CARD 2: WHAT WE OFFER -->
+  <div class="card card-offer" id="offer">
+    <div class="card-inner">
+      <div class="reveal">
+        <span class="pill">What We Offer</span>
+      </div>
+      <h2 class="card-heading gradient-cyan-purple reveal">Drinks &amp; Good Times</h2>
+      <p class="reveal" style="color:var(--text-dim);max-width:560px;line-height:1.7;font-size:0.95rem;">Everything you need for a great night out — without the attitude.</p>
 
-        <div class="service-card">
-          <span class="service-icon">&#127866;</span>
+      <div class="offer-grid">
+        <div class="offer-item reveal">
+          <span class="offer-icon">&#127866;</span>
           <h3>Draft &amp; Bottled Beer</h3>
-          <p>A solid selection of domestic and craft beers on draft and in the bottle — always cold and ready to pour.</p>
+          <p>Domestic and craft beers on draft and in the bottle — always cold.</p>
         </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127864;</span>
+        <div class="offer-item reveal">
+          <span class="offer-icon">&#127864;</span>
           <h3>Cocktails &amp; Mixed Drinks</h3>
-          <p>Classic mixed drinks and cocktails made to order. Contact us for details on the current lineup.</p>
+          <p>Classic mixed drinks made to order. Contact us for details on the current lineup.</p>
         </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127870;</span>
+        <div class="offer-item reveal">
+          <span class="offer-icon">&#127870;</span>
           <h3>Spirits &amp; Shots</h3>
-          <p>A well-stocked bar with a range of whiskeys, bourbons, vodkas, rums, and more — for sipping or sharing.</p>
+          <p>Whiskeys, bourbons, vodkas, rums and more — for sipping or sharing.</p>
         </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127953;</span>
+        <div class="offer-item reveal">
+          <span class="offer-icon">&#127953;</span>
           <h3>Game Day Viewing</h3>
-          <p>Catch the big game in a casual, energetic bar environment. Pull up a stool and cheer with the crowd.</p>
+          <p>Catch the big game in a casual, energetic bar environment. Pull up a stool.</p>
         </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127932;</span>
-          <h3>Live Entertainment &amp; Events</h3>
-          <p>Periodic live music, themed nights, and special events. Contact us for details on upcoming happenings.</p>
+        <div class="offer-item reveal">
+          <span class="offer-icon">&#127932;</span>
+          <h3>Live Entertainment</h3>
+          <p>Periodic live music, themed nights, and special events. Contact us for upcoming details.</p>
         </div>
-
-        <div class="service-card">
-          <span class="service-icon">&#127944;</span>
+        <div class="offer-item reveal">
+          <span class="offer-icon">&#127944;</span>
           <h3>Bar Games</h3>
-          <p>Pool, darts, and other bar-room staples to keep the evening going and the competitive spirits high.</p>
+          <p>Pool, darts, and bar-room staples to keep the evening going.</p>
         </div>
-
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <p class="section-label">Visit Us</p>
-      <h2 class="section-title">Come Find Ole Barn</h2>
-      <div class="section-divider"></div>
-      <div class="contact-grid">
-        <div class="contact-info">
+  <!-- CARD 3: STORY / ABOUT -->
+  <div class="card card-story" id="story">
+    <div class="card-inner">
+      <div class="reveal">
+        <span class="pill">Our Story</span>
+      </div>
+      <h2 class="card-heading gradient-pink-gold reveal">A Gainesville<br>Neighborhood Bar</h2>
 
-          <div class="rating-box">
-            <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div class="rating-details">
-              <div class="rating-number">4.7</div>
-              <div class="rating-label">Rated on Google &bull; 84 reviews</div>
+      <div class="story-grid">
+        <div class="story-text">
+          <p class="reveal">Ole Barn is a laid-back neighborhood bar on the northeast side of Gainesville where locals come to unwind, catch the game, and share a round with familiar faces.</p>
+          <p class="reveal">The atmosphere is easygoing and unpretentious — exactly what a good bar should be. Whether you're stopping in for a cold beer after work or settling in for an evening with friends, Ole Barn delivers the kind of relaxed, welcoming vibe that keeps regulars coming back week after week.</p>
+          <p class="reveal">Situated at 1791 NE 23rd Ave, the bar is a convenient gathering spot for Gainesville residents looking for somewhere comfortable to kick back without the fuss.</p>
+        </div>
+        <div class="story-stats">
+          <div class="stat-card reveal">
+            <div class="stat-num" id="stat-rating">4.7</div>
+            <div class="stat-lbl">Google Rating</div>
+          </div>
+          <div class="stat-card reveal">
+            <div class="stat-num" id="stat-reviews">84</div>
+            <div class="stat-lbl">Customer Reviews</div>
+          </div>
+          <div class="stat-card reveal">
+            <div class="stat-num" style="font-size:1.1rem;padding:0.3rem 0;">NE Gainesville</div>
+            <div class="stat-lbl">Neighborhood Favorite</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4: VISIT -->
+  <div class="card card-visit" id="visit">
+    <div class="card-inner">
+      <div class="reveal">
+        <span class="pill">Visit Us</span>
+      </div>
+      <h2 class="card-heading gradient-gold-cyan reveal">Come Find<br>Ole Barn</h2>
+
+      <div class="visit-grid">
+        <div>
+          <div class="rating-panel reveal">
+            <div>
+              <div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+            <div>
+              <div class="rating-num">4.7</div>
+              <div class="rating-meta">Rated on Google &bull; 84 reviews</div>
             </div>
           </div>
 
-          <div class="contact-block">
+          <div class="visit-info-block reveal">
             <h3>Address</h3>
-            <p>1791 NE 23rd Ave<br />Gainesville, FL 32609</p>
+            <p>1791 NE 23rd Ave<br>Gainesville, FL 32609</p>
           </div>
 
-          <div class="contact-block">
+          <div class="visit-info-block reveal">
             <h3>Hours</h3>
             <p>Contact us for details on current operating hours.</p>
           </div>
 
-          <a
-            href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-primary"
-          >Get Directions</a>
+          <div class="reveal" style="display:flex;gap:1rem;flex-wrap:wrap;">
+            <a href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609" target="_blank" rel="noopener noreferrer" class="btn-neon">Get Directions</a>
+          </div>
         </div>
 
-        <div class="contact-map-placeholder">
-          <div class="map-icon">&#128205;</div>
-          <div class="map-address">
-            <strong style="color: var(--accent-gold);">Ole Barn</strong><br />
-            1791 NE 23rd Ave<br />
-            Gainesville, FL 32609
+        <div class="reveal">
+          <div class="map-box">
+            <!-- CSS-drawn map pin SVG -->
+            <svg class="map-pin-svg" width="40" height="52" viewBox="0 0 40 52" fill="none" aria-hidden="true">
+              <ellipse cx="20" cy="49" rx="8" ry="3" fill="rgba(0,245,255,0.2)"/>
+              <path d="M20 2C11.163 2 4 9.163 4 18c0 12 16 32 16 32s16-20 16-32C36 9.163 28.837 2 20 2Z" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1.5"/>
+              <circle cx="20" cy="18" r="6" fill="#00f5ff" opacity="0.8"/>
+            </svg>
+            <div class="map-addr">
+              <strong>Ole Barn</strong><br>
+              1791 NE 23rd Ave<br>
+              Gainesville, FL 32609
+            </div>
+            <a href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609" target="_blank" rel="noopener noreferrer" class="btn-neon" style="font-size:0.75rem;padding:0.6rem 1.4rem;position:relative;z-index:1;">View on Google Maps</a>
           </div>
-          <a
-            href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-outline"
-            style="margin-top: 0.5rem;"
-          >View on Google Maps</a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">Ole Barn</div>
-      <div class="footer-tagline">Your neighborhood bar in Gainesville, FL</div>
-      <div class="footer-address">1791 NE 23rd Ave &bull; Gainesville, FL 32609</div>
-      <div class="footer-copy">&copy; 2026 Ole Barn. All rights reserved.</div>
-    </div>
-  </footer>
+</div><!-- /deck-wrapper -->
 
-  <script>
-    const toggle = document.getElementById('nav-toggle');
-    const links = document.getElementById('nav-links');
-    toggle.addEventListener('click', function () {
-      links.classList.toggle('open');
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ole Barn</div>
+  <div class="footer-sub">Your neighborhood bar in Gainesville, FL</div>
+  <div class="footer-addr">1791 NE 23rd Ave &bull; Gainesville, FL 32609</div>
+  <div class="footer-copy">&copy; 2026 Ole Barn. All rights reserved.</div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── STICKY DECK SCALE/ROTATE ON SCROLL ── */
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var totalCards = cards.length;
+
+  function onScroll() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    var winH = window.innerHeight;
+
+    cards.forEach(function (card, i) {
+      if (i >= totalCards - 1) return; // last card doesn't shrink
+      var rect = card.getBoundingClientRect();
+      var topOffset = rect.top;
+      var ratio = Math.min(Math.max(-topOffset / winH, 0), 1);
+      // As user scrolls past, shrink and rotate slightly
+      var scale = 1 - ratio * 0.06 * (i + 1);
+      var rotate = ratio * 1.5 * (i % 2 === 0 ? -1 : 1);
+      scale = Math.max(scale, 0.85);
+      card.style.transform = 'scale(' + scale + ') rotate(' + rotate + 'deg)';
+      card.style.filter = 'brightness(' + (1 - ratio * 0.25) + ')';
     });
-    links.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        links.classList.remove('open');
+  }
+
+  // Reduced motion: skip JS transforms
+  var mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!mediaQuery.matches) {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ── INTERSECTIONOBSERVER REVEALS ── */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
       });
-    });
-  </script>
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    // Fallback: show all
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  }
+
+  /* ── ANIMATED COUNTER FOR RATING + REVIEWS ── */
+  function animateCounter(el, target, decimals, duration) {
+    var start = 0;
+    var startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      var current = start + (target - start) * eased;
+      el.textContent = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toString();
+      if (progress < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  var ratingEl  = document.getElementById('stat-rating');
+  var reviewsEl = document.getElementById('stat-reviews');
+  var countersStarted = false;
+
+  function maybeStartCounters() {
+    if (countersStarted) return;
+    var storyCard = document.getElementById('story');
+    if (!storyCard) return;
+    var rect = storyCard.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.8) {
+      countersStarted = true;
+      if (ratingEl)  animateCounter(ratingEl,  4.7, 1, 1200);
+      if (reviewsEl) animateCounter(reviewsEl, 84,  0, 1400);
+    }
+  }
+
+  window.addEventListener('scroll', maybeStartCounters, { passive: true });
+  maybeStartCounters();
+
+}());
+</script>
 
 </body>
 </html>
