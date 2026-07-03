@@ -21,10 +21,19 @@ def slugify(name: str) -> str:
 
 
 def normalize_phone(phone: str) -> str:
-    """Reduce any phone formatting to a bare 10-digit US number."""
+    """Reduce any phone formatting to a bare 10-digit US number.
+
+    Drops a leading US country code and any trailing extension digits
+    ('352-555-1234 x67' -> '3525551234') so extension/long entries stay
+    dialable and still match an inbound 10-digit caller ID.
+    """
     digits = re.sub(r"\D", "", phone or "")
     if len(digits) == 11 and digits.startswith("1"):
         digits = digits[1:]
+    elif len(digits) == 11:
+        digits = digits[:10]  # 10 digits + a 1-digit extension, no country code
+    elif len(digits) > 11:
+        digits = digits[1:11] if digits.startswith("1") else digits[:10]
     return digits
 
 

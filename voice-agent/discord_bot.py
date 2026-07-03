@@ -116,6 +116,7 @@ class Call:
         self.last_packet: dict[int, float] = {}
         self.busy = asyncio.Lock()  # one turn at a time
         self.mic_open = False  # half-duplex: only capture while the agent listens
+        self.watcher_task = None  # strong ref so the GC can't collect it
 
     def clear_audio(self):
         self.buffers.clear()
@@ -139,6 +140,12 @@ def _load_opus():
 
 
 async def _play_file(vc, path) -> None:
+    # discord.py's `after` callback can fire a hair before is_playing() clears;
+    # calling play() in that window raises "Already playing audio". Wait it out.
+    for _ in range(100):
+        if not vc.is_playing():
+            break
+        await asyncio.sleep(0.02)
     done = asyncio.Event()
     vc.play(
         discord.FFmpegPCMAudio(str(path)),
@@ -154,52 +161,64 @@ async def run_agent_turn(vc, call: Call, heard: str | None):
     """
     async with call.busy:
         call.mic_open = False  # stop capturing while we think and talk
-        if heard:
-            await call.text_channel.send(f"👤 *Heard:* {heard}")
+        try:
+            if heard:
+                await call.text_channel.send(f"👤 *Heard:* {heard}")
 
-        loop = asyncio.get_running_loop()
-        synth_queue: asyncio.Queue = asyncio.Queue()  # (sentence, synth_task) in order
+            loop = asyncio.get_running_loop()
+            synth_queue: asyncio.Queue = asyncio.Queue()  # (sentence, task) in order
 
-        def on_sentence(sentence: str):  # called from run_turn's worker thread
-            def enqueue():
-                synth_queue.put_nowait(
-                    (sentence, asyncio.create_task(asyncio.to_thread(tts.synthesize, sentence)))
-                )
-            loop.call_soon_threadsafe(enqueue)
+            def on_sentence(sentence: str):  # called from run_turn's worker thread
+                def enqueue():
+                    synth_queue.put_nowait(
+                        (sentence, asyncio.create_task(asyncio.to_thread(tts.synthesize, sentence)))
+                    )
+                loop.call_soon_threadsafe(enqueue)
 
-        async def produce():
+            async def produce():
+                try:
+                    return await asyncio.to_thread(run_turn, call.state, heard, on_sentence)
+                finally:
+                    loop.call_soon_threadsafe(synth_queue.put_nowait, None)
+
+            producer = asyncio.create_task(produce())
+
+            while True:
+                item = await synth_queue.get()
+                if item is None:
+                    break
+                sentence, synth_task = item
+                try:
+                    key = await synth_task
+                    await _play_file(vc, tts.audio_path(key))
+                except Exception as e:
+                    log.warning("TTS failed for %r: %s", sentence, e)
+                    await call.text_channel.send(f"🗣️ *(voice failed)* {sentence}")
+
+            reply = await producer
+            if reply:
+                await call.text_channel.send(f"🗣️ **Agent:** {reply}")
+        except Exception:
+            # A turn error must NOT kill the listener or leave the mic shut —
+            # that's the "bot goes permanently deaf" failure. Log and recover.
+            log.exception("turn failed")
             try:
-                return await asyncio.to_thread(run_turn, call.state, heard, on_sentence)
-            finally:
-                loop.call_soon_threadsafe(synth_queue.put_nowait, None)
-
-        producer = asyncio.create_task(produce())
-
-        while True:
-            item = await synth_queue.get()
-            if item is None:
-                break
-            sentence, synth_task = item
-            try:
-                key = await synth_task
-                await _play_file(vc, tts.audio_path(key))
-            except Exception as e:
-                log.warning("TTS failed for %r: %s", sentence, e)
-                await call.text_channel.send(f"🗣️ *(voice failed)* {sentence}")
-
-        reply = await producer
-        await call.text_channel.send(f"🗣️ **Agent:** {reply}")
-
-        if call.state.ended:
-            await call.text_channel.send("📞 *Agent hung up.*")
-            calls.pop(call.text_channel.guild.id, None)
-            await vc.disconnect()
-            return
-        # Fresh start for the caller's turn: drop anything captured while the
-        # agent was speaking (echo, backchannel, cross-talk), then open the mic.
-        await asyncio.sleep(0.3)
-        call.clear_audio()
-        call.mic_open = True
+                await call.text_channel.send("⚠️ *(hiccup on my end — go ahead)*")
+            except Exception:
+                pass
+        finally:
+            if call.state.ended:
+                try:
+                    await call.text_channel.send("📞 *Agent hung up.*")
+                finally:
+                    calls.pop(call.text_channel.guild.id, None)
+                    await vc.disconnect()
+            else:
+                # Fresh start for the caller's turn: drop audio captured while
+                # the agent was speaking (echo/backchannel), then reopen the mic.
+                await asyncio.sleep(0.3)
+                call.clear_audio()
+                call.mic_open = True
 
 
 async def silence_watcher(vc, call: Call):
@@ -214,16 +233,24 @@ async def silence_watcher(vc, call: Call):
             if not buf or now - call.last_packet.get(uid, now) < SILENCE_SECS:
                 continue
             pcm = bytes(buf)
-            call.clear_audio()  # one turn per pause, even with multiple speakers
             if len(pcm) < MIN_SPEECH_SECS * bytes_per_sec:
-                break
+                # A blip (cough, echo tail). Drop just this speaker and keep
+                # scanning — don't wipe another speaker's real utterance.
+                buf.clear()
+                call.last_packet.pop(uid, None)
+                continue
+            call.clear_audio()  # real utterance: take it, reset everyone
             try:
                 heard = await asyncio.to_thread(transcribe, pcm)
             except Exception as e:
                 await call.text_channel.send(f"⚠️ transcription failed: {e}")
                 break
             if heard:
-                await run_agent_turn(vc, call, heard)
+                try:
+                    await run_agent_turn(vc, call, heard)
+                except Exception:  # belt-and-suspenders: never let the watcher die
+                    log.exception("run_agent_turn crashed")
+                    call.mic_open = True
             break
 
 
@@ -271,7 +298,9 @@ async def start_call(ctx, slug: str, direction: str):
         call.last_packet[user.id] = time.monotonic()
 
     vc.listen(voice_recv.BasicSink(on_voice))
-    asyncio.create_task(silence_watcher(vc, call))
+    # Keep a strong reference — asyncio only weakly references tasks, so a bare
+    # create_task() can be garbage-collected mid-run and silently stop.
+    call.watcher_task = asyncio.create_task(silence_watcher(vc, call))
 
     await ctx.send(
         f"📞 **{direction.title()} call with {business.name}** ({business.category}) — "
@@ -314,9 +343,8 @@ async def tts_keepalive():
 @bot.event
 async def on_ready():
     log.info("logged in as %s — invite it and type !call in a text channel", bot.user)
-    if not getattr(bot, "_keepalive_started", False):
-        bot._keepalive_started = True
-        asyncio.create_task(tts_keepalive())
+    if not getattr(bot, "_keepalive_task", None):
+        bot._keepalive_task = asyncio.create_task(tts_keepalive())  # strong ref
 
 
 if __name__ == "__main__":

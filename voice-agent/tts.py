@@ -10,6 +10,7 @@ import base64
 import hashlib
 import logging
 import os
+import re
 
 import httpx
 
@@ -28,14 +29,44 @@ MAX_AUDIO_MS = int(os.getenv("SESAME_MAX_AUDIO_MS", "30000"))
 
 
 def _cache_key(text: str) -> str:
-    return hashlib.sha256(f"{SESAME_VOICE}|{text}".encode()).hexdigest()[:24]
+    # Voice and length cap are part of the output, so key on them too —
+    # otherwise changing SESAME_MAX_AUDIO_MS keeps serving stale/truncated WAVs.
+    return hashlib.sha256(
+        f"{SESAME_VOICE}|{MAX_AUDIO_MS}|{text}".encode()
+    ).hexdigest()[:24]
+
+
+# Abbreviations that end in a period but do NOT end a sentence. Used to avoid
+# splitting "123 Main St. Gainesville" into a choppy "St." fragment.
+_ABBREV = {
+    "st", "ave", "rd", "blvd", "ln", "ct", "pl", "hwy", "apt", "ste", "no",
+    "mr", "mrs", "ms", "dr", "jr", "sr", "vs", "etc", "inc", "ltd", "co",
+    "dept", "gen", "fig", "approx", "min",
+}
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+
+
+def split_sentences(text: str) -> list[str]:
+    """Split into sentences for per-sentence TTS, without chopping on
+    abbreviations or initials. Shared by the streaming and TwiML paths."""
+    out: list[str] = []
+    for piece in _SENTENCE_SPLIT.split(text.strip()):
+        if not piece:
+            continue
+        if out and out[-1].endswith("."):
+            last = out[-1].rsplit(None, 1)[-1].rstrip(".").lower()
+            if last in _ABBREV or len(last) == 1:  # "St." or an initial "J."
+                out[-1] = f"{out[-1]} {piece}"
+                continue
+        out.append(piece)
+    return out or [text]
 
 
 def _decode_audio(payload) -> bytes:
     """DeepInfra returns audio as a data URI or bare base64 string."""
     if isinstance(payload, str):
         if payload.startswith("data:"):
-            payload = payload.split(",", 1)[1]
+            _, _, payload = payload.partition(",")  # tolerate a malformed URI
         return base64.b64decode(payload)
     raise ValueError(f"Unexpected audio payload type: {type(payload)}")
 

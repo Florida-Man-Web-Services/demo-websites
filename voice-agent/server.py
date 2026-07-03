@@ -11,7 +11,6 @@ Then point your Twilio number's Voice webhook at {PUBLIC_BASE_URL}/voice/inbound
 """
 
 import logging
-import re
 from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI, Form, Response
@@ -40,25 +39,24 @@ UNKNOWN_BUSINESS = Business(
 _TTS_POOL = ThreadPoolExecutor(max_workers=4)
 
 
-def _sentences(text: str) -> list[str]:
-    parts = re.split(r"(?<=[.!?])\s+", text.strip())
-    return [p for p in parts if p] or [text]
-
-
 def _speak(vr_or_gather, text: str) -> None:
-    """Attach spoken audio: Sesame TTS if it works, Twilio <Say> as fallback.
+    """Attach spoken audio: Sesame TTS per sentence, Twilio <Say> as a
+    per-sentence fallback.
 
     Sentences are synthesized in parallel and played back-to-back, so wall
-    time is the slowest sentence rather than the sum, and short lines cache
-    individually across calls.
+    time is the slowest sentence rather than the sum. A failure on one
+    sentence falls back to <Say> for THAT sentence only — the rest still
+    play in the Sesame voice.
     """
-    try:
-        keys = list(_TTS_POOL.map(tts.synthesize, _sentences(text)))
-        for key in keys:
+    sentences = tts.split_sentences(text)
+    futures = [(s, _TTS_POOL.submit(tts.synthesize, s)) for s in sentences]
+    for sentence, fut in futures:
+        try:
+            key = fut.result()
             vr_or_gather.play(f"{config.PUBLIC_BASE_URL}/audio/{key}.wav")
-    except Exception as e:
-        log.warning("TTS failed (%s); falling back to <Say>", e)
-        vr_or_gather.say(text)
+        except Exception as e:
+            log.warning("TTS failed for %r (%s); <Say> fallback", sentence, e)
+            vr_or_gather.say(sentence)
 
 
 def _twiml_turn(state: CallState, text: str) -> Response:

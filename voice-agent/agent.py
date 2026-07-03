@@ -8,7 +8,6 @@ the agent should speak next.
 
 import csv
 import logging
-import re
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -17,6 +16,7 @@ from twilio.rest import Client as TwilioClient
 
 import config
 from businesses import Business
+from tts import split_sentences
 
 log = logging.getLogger("voice-agent.agent")
 
@@ -214,11 +214,21 @@ class CallState:
     turns: int = 0
 
 
+_twilio_client = None
+
+
+def _twilio() -> TwilioClient:
+    global _twilio_client
+    if _twilio_client is None:  # build once, reuse the HTTP session
+        _twilio_client = TwilioClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
+    return _twilio_client
+
+
 def _send_sms(state: CallState, to_number: str | None) -> str:
     to = to_number or state.caller_number
     if not to:
         return "Error: no destination number known; ask the caller for their number."
-    twilio = TwilioClient(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
+    twilio = _twilio()
     body = (
         f"Hi from {config.OWNER_NAME} (Gainesville web developer) - here's the free demo "
         f"website for {state.business.name}: {state.business.demo_url} "
@@ -270,9 +280,6 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
     return f"Unknown tool {name}"
 
 
-_SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
-
-
 def run_turn(
     state: CallState,
     user_speech: str | None,
@@ -306,27 +313,35 @@ def run_turn(
     reply_parts: list[str] = []
     pending = ""  # streamed text not yet emitted as a full sentence
 
+    # System prompt is constant for the whole call — build it once, not on
+    # every stream round (a tool turn would otherwise rebuild it 2-3x).
+    sys_prompt = system_prompt(state.business, state.direction, state.caller_number)
+
     def emit(final: bool = False):
+        """Hand completed sentences to on_sentence as they finish streaming.
+        Keeps the last (possibly incomplete) sentence buffered until `final`."""
         nonlocal pending
         if on_sentence is None:
             return
-        while True:
-            m = _SENTENCE_END.search(pending)
-            if not m:
-                break
-            sentence, pending = pending[: m.start()], pending[m.end():]
+        if not pending.strip():
+            if final:
+                pending = ""
+            return
+        pieces = split_sentences(pending)
+        if not final:
+            pending = pieces.pop()  # last may still be growing
+        else:
+            pending = ""
+        for sentence in pieces:
             if sentence.strip():
                 on_sentence(sentence.strip())
-        if final and pending.strip():
-            on_sentence(pending.strip())
-            pending = ""
 
     while True:
         with client.messages.stream(
             model=config.CLAUDE_MODEL,
             max_tokens=500,  # spoken replies are deliberately short
             output_config={"effort": "low"},  # latency matters on a live call
-            system=system_prompt(state.business, state.direction, state.caller_number),
+            system=sys_prompt,
             tools=TOOLS,
             messages=state.messages,
         ) as stream:
@@ -354,9 +369,18 @@ def run_turn(
                 )
         state.messages.append({"role": "user", "content": tool_results})
 
-    if not reply_parts:
-        fallback = "Sorry, could you say that again?"
-        if on_sentence:
-            on_sentence(fallback)
-        return fallback
-    return " ".join(reply_parts)
+        # end_call fired: stop now rather than paying another model round-trip
+        # (and a second spoken goodbye) just to hang up.
+        if state.ended:
+            break
+
+    if reply_parts:
+        return " ".join(reply_parts)
+    # No spoken text this turn. Only re-prompt if the call is still live —
+    # a silent end_call/tool turn shouldn't say "could you say that again?".
+    if state.ended:
+        return ""
+    fallback = "Sorry, could you say that again?"
+    if on_sentence:
+        on_sentence(fallback)
+    return fallback
