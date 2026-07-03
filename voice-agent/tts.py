@@ -75,6 +75,19 @@ def audio_path(key: str):
     return config.AUDIO_CACHE_DIR / f"{key}.wav"
 
 
+def prewarm_phrases(phrases) -> None:
+    """Synthesize a list of stock phrases into the disk cache (idempotent).
+
+    Run at startup so the agent's fixed openers play with zero synthesis
+    delay on every call.
+    """
+    for phrase in phrases:
+        try:
+            synthesize(phrase)
+        except Exception as e:
+            log.warning("prewarm failed for %r: %s", phrase, e)
+
+
 def warm() -> None:
     """Nudge DeepInfra so the model stays loaded on a GPU.
 

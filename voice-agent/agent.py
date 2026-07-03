@@ -8,6 +8,7 @@ the agent should speak next.
 
 import csv
 import logging
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -95,6 +96,25 @@ TOOLS = [
 ]
 
 
+# Fixed openers the agent leads every reply with. They're pre-synthesized to
+# the disk cache (tts.prewarm_phrases), so the first thing the caller hears
+# plays instantly while the rest of the reply is still being generated.
+OPENERS = [
+    "Hi there!",
+    "Sure thing.",
+    "Absolutely.",
+    "Of course.",
+    "Totally fair question.",
+    "Good question.",
+    "No problem at all.",
+    "Totally understand.",
+    "Sounds good.",
+    "Got it.",
+    "Thanks so much.",
+    "Sorry about that.",
+]
+
+
 def _spoken_url(demo_url: str) -> str:
     return demo_url.removeprefix("https://")
 
@@ -119,6 +139,11 @@ THE BUSINESS ON THIS CALL
 
 HOW TO SPEAK
 - 1-3 short sentences per turn. Never monologue. Ask one question at a time.
+- Open every reply with one of these exact opener sentences (pick whichever
+  fits, vary them, punctuation included): {" | ".join(OPENERS)}
+  These are pre-recorded so they play instantly and cover the synthesis
+  pause — like natural phone rhythm. Only improvise a different opener if
+  none of them fits at all.
 - Plain conversational English: no bullet points, no markdown, no emoji.
 - Spell things for the ear: say the demo address as "{_spoken_url(business.demo_url)}"
   and offer to text it instead of making them write it down.
@@ -245,12 +270,27 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
     return f"Unknown tool {name}"
 
 
-def run_turn(state: CallState, user_speech: str | None) -> str:
-    """One conversational turn. Returns the text the agent should speak."""
+_SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
+
+
+def run_turn(
+    state: CallState,
+    user_speech: str | None,
+    on_sentence=None,
+) -> str:
+    """One conversational turn. Returns the text the agent should speak.
+
+    If `on_sentence` is given, each completed sentence is passed to it while
+    Claude is still generating — lets the caller start TTS on sentence one
+    before the reply is finished.
+    """
     state.turns += 1
     if state.turns > MAX_TURNS:
         state.ended = True
-        return "Sorry, I have to run — thanks so much for your time. Have a great day!"
+        closing = "Sorry, I have to run — thanks so much for your time. Have a great day!"
+        if on_sentence:
+            on_sentence(closing)
+        return closing
 
     if user_speech:
         state.messages.append({"role": "user", "content": user_speech})
@@ -264,15 +304,38 @@ def run_turn(state: CallState, user_speech: str | None) -> str:
         )
 
     reply_parts: list[str] = []
+    pending = ""  # streamed text not yet emitted as a full sentence
+
+    def emit(final: bool = False):
+        nonlocal pending
+        if on_sentence is None:
+            return
+        while True:
+            m = _SENTENCE_END.search(pending)
+            if not m:
+                break
+            sentence, pending = pending[: m.start()], pending[m.end():]
+            if sentence.strip():
+                on_sentence(sentence.strip())
+        if final and pending.strip():
+            on_sentence(pending.strip())
+            pending = ""
+
     while True:
-        response = client.messages.create(
+        with client.messages.stream(
             model=config.CLAUDE_MODEL,
             max_tokens=500,  # spoken replies are deliberately short
             output_config={"effort": "low"},  # latency matters on a live call
             system=system_prompt(state.business, state.direction, state.caller_number),
             tools=TOOLS,
             messages=state.messages,
-        )
+        ) as stream:
+            for text in stream.text_stream:
+                pending += text
+                emit()
+            response = stream.get_final_message()
+        emit(final=True)  # text blocks never span tool-use boundaries
+
         state.messages.append({"role": "assistant", "content": response.content})
 
         for block in response.content:
@@ -291,4 +354,9 @@ def run_turn(state: CallState, user_speech: str | None) -> str:
                 )
         state.messages.append({"role": "user", "content": tool_results})
 
-    return " ".join(reply_parts) or "Sorry, could you say that again?"
+    if not reply_parts:
+        fallback = "Sorry, could you say that again?"
+        if on_sentence:
+            on_sentence(fallback)
+        return fallback
+    return " ".join(reply_parts)

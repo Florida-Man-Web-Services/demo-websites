@@ -21,6 +21,7 @@ In Discord (while you're in a voice channel):
 Then just talk — pause ~1 second and the agent answers.
 """
 
+import array
 import asyncio
 import io
 import logging
@@ -48,9 +49,11 @@ WHISPER_URL = os.getenv(
 )
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "")
 
-SILENCE_SECS = float(os.getenv("TURN_SILENCE_SECS", "1.2"))  # pause that ends your turn
+SILENCE_SECS = float(os.getenv("TURN_SILENCE_SECS", "1.0"))  # pause that ends your turn
 MIN_SPEECH_SECS = 0.5     # ignore blips shorter than this
+MAX_SPEECH_SECS = 30      # cap a single utterance
 PCM_RATE, PCM_CHANNELS, PCM_WIDTH = 48000, 2, 2  # what discord hands us
+WHISPER_RATE = 16000      # downsample before upload: 6x smaller, same accuracy
 
 # A single malformed voice packet raises OpusError inside voice_recv's router
 # thread, killing it — after which the bot is permanently deaf ("it just
@@ -75,13 +78,17 @@ agent_mod._send_sms = lambda state, to: (
 )[1]
 
 
-def pcm_to_wav(pcm: bytes) -> bytes:
+def pcm_to_whisper_wav(pcm: bytes) -> bytes:
+    """48kHz stereo int16 -> 16kHz mono WAV (Whisper resamples to 16k anyway)."""
+    samples = array.array("h")
+    samples.frombytes(pcm[: len(pcm) // 2 * 2])
+    mono_16k = samples[0::2][::3]  # left channel, every 3rd sample
     buf = io.BytesIO()
     with wave.open(buf, "wb") as w:
-        w.setnchannels(PCM_CHANNELS)
+        w.setnchannels(1)
         w.setsampwidth(PCM_WIDTH)
-        w.setframerate(PCM_RATE)
-        w.writeframes(pcm)
+        w.setframerate(WHISPER_RATE)
+        w.writeframes(mono_16k.tobytes())
     return buf.getvalue()
 
 
@@ -89,7 +96,7 @@ def transcribe(pcm: bytes) -> str:
     resp = httpx.post(
         WHISPER_URL,
         headers={"Authorization": f"bearer {config.DEEPINFRA_API_KEY}"},
-        files={"audio": ("speech.wav", pcm_to_wav(pcm), "audio/wav")},
+        files={"audio": ("speech.wav", pcm_to_whisper_wav(pcm), "audio/wav")},
         timeout=60,
     )
     resp.raise_for_status()
@@ -128,11 +135,6 @@ def _load_opus():
         discord.opus._load_default()
 
 
-def _sentences(text: str) -> list[str]:
-    parts = re.split(r"(?<=[.!?])\s+", text.strip())
-    return [p for p in parts if p] or [text]
-
-
 async def _play_file(vc, path) -> None:
     done = asyncio.Event()
     vc.play(
@@ -142,32 +144,49 @@ async def _play_file(vc, path) -> None:
     await done.wait()
 
 
-async def speak(vc, call: Call, text: str):
-    """Speak sentence-by-sentence: synthesize sentence N+1 while N plays.
-
-    First audio starts after one sentence of synthesis instead of the whole
-    reply, and short sentences cache individually so common lines get faster
-    over time.
-    """
-    await call.text_channel.send(f"🗣️ **Agent:** {text}")
-    parts = _sentences(text)
-    next_key = asyncio.create_task(asyncio.to_thread(tts.synthesize, parts[0]))
-    for i in range(len(parts)):
-        key = await next_key
-        if i + 1 < len(parts):
-            next_key = asyncio.create_task(
-                asyncio.to_thread(tts.synthesize, parts[i + 1])
-            )
-        await _play_file(vc, tts.audio_path(key))
-
-
 async def run_agent_turn(vc, call: Call, heard: str | None):
+    """Fully pipelined turn: Claude streams sentences -> each one goes to TTS
+    the moment it completes -> finished audio plays in order. Sentence one is
+    usually playing while Claude is still writing sentence three.
+    """
     async with call.busy:
         call.mic_open = False  # stop capturing while we think and talk
         if heard:
             await call.text_channel.send(f"👤 *Heard:* {heard}")
-        reply = await asyncio.to_thread(run_turn, call.state, heard)
-        await speak(vc, call, reply)
+
+        loop = asyncio.get_running_loop()
+        synth_queue: asyncio.Queue = asyncio.Queue()  # (sentence, synth_task) in order
+
+        def on_sentence(sentence: str):  # called from run_turn's worker thread
+            def enqueue():
+                synth_queue.put_nowait(
+                    (sentence, asyncio.create_task(asyncio.to_thread(tts.synthesize, sentence)))
+                )
+            loop.call_soon_threadsafe(enqueue)
+
+        async def produce():
+            try:
+                return await asyncio.to_thread(run_turn, call.state, heard, on_sentence)
+            finally:
+                loop.call_soon_threadsafe(synth_queue.put_nowait, None)
+
+        producer = asyncio.create_task(produce())
+
+        while True:
+            item = await synth_queue.get()
+            if item is None:
+                break
+            sentence, synth_task = item
+            try:
+                key = await synth_task
+                await _play_file(vc, tts.audio_path(key))
+            except Exception as e:
+                log.warning("TTS failed for %r: %s", sentence, e)
+                await call.text_channel.send(f"🗣️ *(voice failed)* {sentence}")
+
+        reply = await producer
+        await call.text_channel.send(f"🗣️ **Agent:** {reply}")
+
         if call.state.ended:
             await call.text_channel.send("📞 *Agent hung up.*")
             calls.pop(call.text_channel.guild.id, None)
@@ -243,7 +262,9 @@ async def start_call(ctx, slug: str, direction: str):
             return
         if user.id not in call.buffers:
             log.info("hearing %s", user)
-        call.buffers.setdefault(user.id, bytearray()).extend(data.pcm)
+        buf = call.buffers.setdefault(user.id, bytearray())
+        if len(buf) < MAX_SPEECH_SECS * PCM_RATE * PCM_CHANNELS * PCM_WIDTH:
+            buf.extend(data.pcm)
         call.last_packet[user.id] = time.monotonic()
 
     vc.listen(voice_recv.BasicSink(on_voice))
@@ -276,7 +297,9 @@ async def hangup_cmd(ctx):
 
 
 async def tts_keepalive():
-    """Keep the Sesame model loaded on DeepInfra while the bot runs."""
+    """Keep the Sesame model loaded and the stock openers cached."""
+    await asyncio.to_thread(tts.prewarm_phrases, agent_mod.OPENERS)
+    log.info("opener phrases cached")
     while True:
         try:
             await asyncio.to_thread(tts.warm)
