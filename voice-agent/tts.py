@@ -9,6 +9,7 @@ objection responses) cost nothing after the first call.
 import base64
 import hashlib
 import logging
+import os
 
 import httpx
 
@@ -18,9 +19,16 @@ log = logging.getLogger("voice-agent.tts")
 
 config.AUDIO_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+# CSM-1B without conditioning ("none") produces a random voice per utterance.
+# Pin a preset so the agent sounds like one consistent person. DeepInfra
+# options: conversational_a, conversational_b, read_speech_a..d, none.
+SESAME_VOICE = os.getenv("SESAME_VOICE", "conversational_a")
+# Default cap is 10s, which truncates longer replies mid-sentence.
+MAX_AUDIO_MS = int(os.getenv("SESAME_MAX_AUDIO_MS", "30000"))
+
 
 def _cache_key(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:24]
+    return hashlib.sha256(f"{SESAME_VOICE}|{text}".encode()).hexdigest()[:24]
 
 
 def _decode_audio(payload) -> bytes:
@@ -45,7 +53,11 @@ def synthesize(text: str) -> str:
     resp = httpx.post(
         config.SESAME_TTS_URL,
         headers={"Authorization": f"bearer {config.DEEPINFRA_API_KEY}"},
-        json={"text": text},
+        json={
+            "text": text,
+            "preset_voice": SESAME_VOICE,
+            "max_audio_length_ms": MAX_AUDIO_MS,
+        },
         timeout=60,
     )
     resp.raise_for_status()

@@ -158,7 +158,16 @@ async def start_call(ctx, slug: str, direction: str):
         return
     business = by_slug(slug)
     if business is None:
-        await ctx.send(f"Unknown business slug `{slug}` — see `outreach-data.csv`.")
+        import difflib
+
+        from businesses import all_businesses
+
+        close = difflib.get_close_matches(
+            slug, [b.slug for b in all_businesses()], n=5, cutoff=0.4
+        )
+        hint = ("Did you mean: " + ", ".join(f"`{s}`" for s in close)) if close else \
+            "Slugs are the generated-sites filenames, e.g. `hayes-jewelry-ltd`."
+        await ctx.send(f"Unknown business slug `{slug}`. {hint}")
         return
     if ctx.guild.id in calls:
         await ctx.send("A call is already active here — `!hangup` first.")
