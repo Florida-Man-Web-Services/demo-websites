@@ -85,6 +85,6 @@ def warm() -> None:
     httpx.post(
         config.SESAME_TTS_URL,
         headers={"Authorization": f"bearer {config.DEEPINFRA_API_KEY}"},
-        json={"text": ".", "preset_voice": SESAME_VOICE, "max_audio_length_ms": 1000},
+        json={"text": "okay", "preset_voice": SESAME_VOICE, "max_audio_length_ms": 2000},
         timeout=120,
     )
