@@ -73,3 +73,18 @@ def synthesize(text: str) -> str:
 
 def audio_path(key: str):
     return config.AUDIO_CACHE_DIR / f"{key}.wav"
+
+
+def warm() -> None:
+    """Nudge DeepInfra so the model stays loaded on a GPU.
+
+    Idle models get unloaded, and reloading costs a 60-90s cold start on the
+    next real request. Calling this every few minutes (cost: ~$0.00001) keeps
+    first-reply latency in the warm 3-5s range. Bypasses the disk cache.
+    """
+    httpx.post(
+        config.SESAME_TTS_URL,
+        headers={"Authorization": f"bearer {config.DEEPINFRA_API_KEY}"},
+        json={"text": ".", "preset_voice": SESAME_VOICE, "max_audio_length_ms": 1000},
+        timeout=120,
+    )

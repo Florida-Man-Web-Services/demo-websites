@@ -25,6 +25,7 @@ import asyncio
 import io
 import logging
 import os
+import re
 import time
 import wave
 
@@ -105,15 +106,37 @@ def _load_opus():
         discord.opus._load_default()
 
 
-async def speak(vc, call: Call, text: str):
-    await call.text_channel.send(f"🗣️ **Agent:** {text}")
-    key = await asyncio.to_thread(tts.synthesize, text)
+def _sentences(text: str) -> list[str]:
+    parts = re.split(r"(?<=[.!?])\s+", text.strip())
+    return [p for p in parts if p] or [text]
+
+
+async def _play_file(vc, path) -> None:
     done = asyncio.Event()
     vc.play(
-        discord.FFmpegPCMAudio(str(tts.audio_path(key))),
+        discord.FFmpegPCMAudio(str(path)),
         after=lambda err: bot.loop.call_soon_threadsafe(done.set),
     )
     await done.wait()
+
+
+async def speak(vc, call: Call, text: str):
+    """Speak sentence-by-sentence: synthesize sentence N+1 while N plays.
+
+    First audio starts after one sentence of synthesis instead of the whole
+    reply, and short sentences cache individually so common lines get faster
+    over time.
+    """
+    await call.text_channel.send(f"🗣️ **Agent:** {text}")
+    parts = _sentences(text)
+    next_key = asyncio.create_task(asyncio.to_thread(tts.synthesize, parts[0]))
+    for i in range(len(parts)):
+        key = await next_key
+        if i + 1 < len(parts):
+            next_key = asyncio.create_task(
+                asyncio.to_thread(tts.synthesize, parts[i + 1])
+            )
+        await _play_file(vc, tts.audio_path(key))
 
 
 async def run_agent_turn(vc, call: Call, heard: str | None):
@@ -218,9 +241,22 @@ async def hangup_cmd(ctx):
     await ctx.send("📞 Call ended.")
 
 
+async def tts_keepalive():
+    """Keep the Sesame model loaded on DeepInfra while the bot runs."""
+    while True:
+        try:
+            await asyncio.to_thread(tts.warm)
+        except Exception as e:
+            log.warning("tts keepalive failed: %s", e)
+        await asyncio.sleep(240)
+
+
 @bot.event
 async def on_ready():
     log.info("logged in as %s — invite it and type !call in a text channel", bot.user)
+    if not getattr(bot, "_keepalive_started", False):
+        bot._keepalive_started = True
+        asyncio.create_task(tts_keepalive())
 
 
 if __name__ == "__main__":
