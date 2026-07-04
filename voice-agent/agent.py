@@ -285,11 +285,14 @@ def run_turn(
     user_speech: str | None,
     on_sentence=None,
 ) -> str:
-    """One conversational turn. Returns the text the agent should speak.
+    """One conversational turn. Returns the full reply text.
 
-    If `on_sentence` is given, each completed sentence is passed to it while
-    Claude is still generating — lets the caller start TTS on sentence one
-    before the reply is finished.
+    If `on_sentence` is given, each completed sentence is ALSO passed to it
+    while Claude is still generating — so TTS can start on sentence one before
+    the reply is finished. In that case the sentences have already been handed
+    off for speaking: use the return value only for display/logging, do NOT
+    speak it again (doing so would play the whole turn twice). Callers that
+    want to speak the return themselves must NOT pass on_sentence.
     """
     state.turns += 1
     if state.turns > MAX_TURNS:

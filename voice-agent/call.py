@@ -20,6 +20,22 @@ import config
 from businesses import by_slug, call_queue, normalize_phone, slugify
 
 
+def slug_from_row(row: dict) -> str:
+    """Canonical slug for a call-order row.
+
+    Derive it from the demo_url filename — that's the exact slug the site and
+    outreach-data use, so it always resolves via by_slug. Falls back to
+    slugify(name) only if demo_url is missing (which could mismatch or collide).
+    """
+    url = (row.get("demo_url") or "").rstrip("/")
+    if url:
+        stem = url.rsplit("/", 1)[-1]
+        stem = stem[:-5] if stem.endswith(".html") else stem
+        if stem:
+            return stem
+    return slugify(row["name"])
+
+
 def already_called() -> set[str]:
     if not config.CALL_LOG.exists():
         return set()
@@ -27,15 +43,14 @@ def already_called() -> set[str]:
         return {
             row["slug"]
             for row in csv.DictReader(f)
-            if not row["call_sid"].startswith("TEST-")  # chat.py simulations don't count
+            if not row.get("call_sid", "").startswith("TEST-")  # sims don't count
         }
 
 
 def pick_next():
     done = already_called()
     for row in call_queue():
-        slug = slugify(row["name"])
-        if slug not in done:
+        if slug_from_row(row) not in done:
             return row
     return None
 
@@ -53,7 +68,7 @@ def main():
         done = already_called()
         shown = 0
         for row in call_queue():
-            if slugify(row["name"]) in done:
+            if slug_from_row(row) in done:
                 continue
             print(f"{row['rank']:>4}. {row['name']}  {row['phone']}  ({row['category']})")
             shown += 1
@@ -61,11 +76,12 @@ def main():
                 break
         return
 
+    row = None
     if args.next:
         row = pick_next()
         if row is None:
             sys.exit("Queue exhausted — every business in call-order.csv has a log entry.")
-        slug = slugify(row["name"])
+        slug = slug_from_row(row)
     elif args.slug:
         slug = args.slug
     else:
@@ -75,7 +91,9 @@ def main():
     if business is None:
         sys.exit(f"No business found for slug {slug!r}")
 
-    to = args.to or business.phone
+    # Prefer an explicit --to, then the queue row's own phone (correct even when
+    # two businesses share a slugged demo), then the resolved business phone.
+    to = args.to or (row and row.get("phone")) or business.phone
     digits = normalize_phone(to)
     if len(digits) != 10:
         sys.exit(f"{business.name} has no usable phone number ({to!r})")
