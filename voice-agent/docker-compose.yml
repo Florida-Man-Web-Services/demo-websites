@@ -1,0 +1,24 @@
+# Deploy the voice sales agent server.
+#
+#   cp .env.example .env    # fill in the five keys + PUBLIC_BASE_URL
+#   docker compose up -d --build
+#
+# Build context is the repo root (..) so the fallback business JSON in
+# ../gainesville-no-website is available to COPY; the Dockerfile lives here.
+services:
+  voice-agent:
+    build:
+      context: ..
+      dockerfile: voice-agent/Dockerfile
+    image: demo-websites-voice-agent
+    ports:
+      - "8035:8035"
+    env_file:
+      - .env
+    volumes:
+      # Audio cache + call-log.csv persist across restarts/redeploys.
+      - voice-agent-data:/data
+    restart: unless-stopped
+
+volumes:
+  voice-agent-data:

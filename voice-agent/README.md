@@ -53,6 +53,42 @@ In the Twilio console, set the phone number's **Voice webhook** to
 `{PUBLIC_BASE_URL}/voice/inbound` (POST) and the **status callback** to
 `{PUBLIC_BASE_URL}/voice/status`.
 
+## Deploy with Docker
+
+The server is containerized (`Dockerfile` + `docker-compose.yml`). The build
+context is the repo root so the fallback business list
+(`../gainesville-no-website/gainesville_no_website.json`) ships in the image.
+
+```bash
+cd voice-agent
+cp .env.example .env      # fill in the five keys + PUBLIC_BASE_URL
+docker compose up -d --build
+```
+
+The server listens on `8035` (published to the host). Point Twilio's webhooks
+at your `PUBLIC_BASE_URL` exactly as above — the URL must resolve to this
+container from the public internet (a VPS with a domain + TLS, or a tunnel like
+`cloudflared` / `ngrok` in front of `localhost:8035`).
+
+The `audio_cache/` and `call-log.csv` live on a named volume
+(`voice-agent-data`, mounted at `/data`), so synthesized audio and call
+outcomes survive restarts and redeploys. Health is exposed at `/health` and
+wired to a container `HEALTHCHECK`.
+
+Run the one-at-a-time dialer from inside the running container:
+
+```bash
+docker compose exec voice-agent python call.py --next
+```
+
+To build/run without compose (still from the repo root):
+
+```bash
+docker build -f voice-agent/Dockerfile -t demo-websites-voice-agent .
+docker run -d -p 8035:8035 --env-file voice-agent/.env \
+  -v voice-agent-data:/data demo-websites-voice-agent
+```
+
 ### Test it on yourself first
 
 Call your Twilio number — the agent answers as an inbound call. Then try an
