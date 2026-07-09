@@ -5,6 +5,8 @@ Run: MCP_AUTH_TOKEN=... python server.py   → http://0.0.0.0:8036/mcp
 """
 
 import contextlib
+import hmac
+import logging
 import os
 import sys
 from pathlib import Path
@@ -19,9 +21,13 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Mount, Route
 
+import businesses
+import config
 from calllog import append_outcome, history_for
 from lookup import find_business
 from pitch import get_pitch
+
+logger = logging.getLogger("demo-mcp")
 
 mcp = FastMCP(
     "florida-man-web-services", stateless_http=True, json_response=True
@@ -87,7 +93,6 @@ def log_call_outcome(
                 "error": f"unknown business {business!r}",
                 "suggestions": hit.get("suggestions", []),
             }
-        import businesses
         return append_outcome(
             businesses.by_slug(hit["slug"]), outcome, notes, email, callback_time
         )
@@ -110,13 +115,13 @@ class BearerAuth:
         self.token = token
 
     async def __call__(self, scope, receive, send):
-        if scope["type"] == "http" and scope["path"] != "/health":
+        if scope["type"] in ("http", "websocket") and scope["path"] != "/health":
             auth = next(
                 (v.decode() for k, v in scope.get("headers", [])
                  if k == b"authorization"),
                 "",
             )
-            if not self.token or auth != f"Bearer {self.token}":
+            if not self.token or not hmac.compare_digest(auth, f"Bearer {self.token}"):
                 await JSONResponse(
                     {"error": "unauthorized"}, status_code=401
                 )(scope, receive, send)
@@ -149,6 +154,11 @@ def build_app() -> Starlette:
 def main():
     if not os.getenv("MCP_AUTH_TOKEN"):
         raise SystemExit("MCP_AUTH_TOKEN must be set")
+    if not config.OWNER_CALLBACK_NUMBER:
+        logger.warning(
+            "OWNER_CALLBACK_NUMBER is empty — callers who ask for a human "
+            "callback won't get a number to call"
+        )
     uvicorn.run(
         build_app(), host="0.0.0.0", port=int(os.getenv("PORT", "8036"))
     )

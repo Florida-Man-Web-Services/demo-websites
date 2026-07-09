@@ -15,6 +15,8 @@ def _profile(b) -> dict:
         "phone": b.phone,
         "rating": b.rating,
         "demo_url": b.demo_url,
+        "google_maps_url": b.google_maps_url,
+        "shared_demo": b.shared_demo,
     }
 
 

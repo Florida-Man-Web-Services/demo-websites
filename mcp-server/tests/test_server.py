@@ -61,3 +61,21 @@ def test_log_tool_resolves_business(monkeypatch, tmp_path):
     unknown = server.log_call_outcome("zzzzqqqq", "interested", "n")
     assert unknown["logged"] is False
     assert "suggestions" in unknown
+
+
+def test_empty_token_fails_closed(monkeypatch):
+    monkeypatch.setenv("MCP_AUTH_TOKEN", "")
+    import server
+    importlib.reload(server)
+    with TestClient(server.build_app()) as c:
+        r = c.post("/mcp", json={}, headers={"Authorization": "Bearer "})
+        assert r.status_code == 401
+        assert c.get("/health").status_code == 200
+
+
+def test_main_refuses_without_token(monkeypatch):
+    monkeypatch.delenv("MCP_AUTH_TOKEN", raising=False)
+    import server
+    importlib.reload(server)
+    with pytest.raises(SystemExit):
+        server.main()

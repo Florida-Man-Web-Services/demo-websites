@@ -33,3 +33,16 @@ def test_lookup_hopeless_miss():
     result = lookup.find_business("zzzzqqqq")
     assert result["found"] is False
     assert result["suggestions"] == []
+
+
+def test_lookup_includes_maps_url_and_shared_demo_flag():
+    result = lookup.find_business("Ole Barn")
+    assert result["google_maps_url"].startswith("https://www.google.com/maps/")
+    assert result["shared_demo"] is False
+
+
+def test_lookup_shared_demo_true_for_shared_slug():
+    import businesses
+    shared = next((b for b in businesses.all_businesses() if b.shared_demo), None)
+    assert shared is not None, "outreach-data.csv should have shared_demo=yes rows"
+    assert lookup.find_business(shared.slug)["shared_demo"] is True

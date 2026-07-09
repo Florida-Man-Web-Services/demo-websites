@@ -46,6 +46,8 @@ class Business:
     rating: str = ""
     demo_url: str = ""
     slug: str = field(default="")
+    google_maps_url: str = ""
+    shared_demo: bool = False
 
     def __post_init__(self):
         if not self.slug:
@@ -65,6 +67,8 @@ def load_businesses() -> list[Business]:
                     address=row.get("address", ""),
                     rating=row.get("rating", ""),
                     demo_url=row.get("demo_url", ""),
+                    google_maps_url=row.get("google_maps_url", ""),
+                    shared_demo=row.get("shared_demo", "") == "yes",
                 )
                 for row in csv.DictReader(f)
             ]

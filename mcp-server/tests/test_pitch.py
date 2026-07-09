@@ -21,3 +21,11 @@ def test_pitch_compliance_rules():
 
 def test_pitch_sms_caveat():
     assert "cannot" in pitch.get_pitch()["sms_caveat"].lower()
+
+
+def test_pitch_callback_number_present(monkeypatch):
+    import config
+    monkeypatch.setattr(config, "OWNER_CALLBACK_NUMBER", "+13525550100")
+    p = pitch.get_pitch()
+    assert p["callback_number"] == "+13525550100"
+    assert "+13525550100" in p["sms_caveat"]
