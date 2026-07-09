@@ -69,6 +69,32 @@ Claude-only installs never need it at runtime.
 - Malformed streamed tool-call JSON: treated as `{}` so `_run_tool` returns a
   readable error string to the model instead of crashing the call.
 
+## Addendum: Grok realtime voice bridge (same day)
+
+The user followed up with a JS snippet for `wss://api.x.ai/v1/realtime` and a
+console voice-agent id — the fuller intent is speech-to-speech. Added
+`VOICE_BACKEND=grok-realtime`:
+
+- `/voice/inbound|outbound` return `<Connect><Stream url=wss://…/voice/stream>`
+  TwiML with direction/number/slug `<Parameter>`s instead of the Gather loop.
+- `realtime.py` bridges Twilio Media Streams to the xAI realtime API. Both
+  sides use G.711 μ-law 8 kHz base64 (`audio/pcmu` is natively supported), so
+  media payloads pass through untouched.
+- Per-call `session.update` carries the shared `system_prompt()` (minus the
+  pre-recorded-opener rules, which only exist to mask TTS latency) plus the
+  same three tools converted to the realtime flat function format; VAD is
+  `server_vad` with configurable `silence_duration_ms`.
+- Barge-in: `input_audio_buffer.speech_started` → Twilio `clear`.
+- Hangup: after `end_call`, on `response.done` a Twilio `mark` is sent; when
+  Twilio echoes it (farewell audio finished) the socket closes, which ends
+  the call since nothing follows `<Connect>`. A 10 s watchdog covers a lost
+  mark.
+- `XAI_VOICE_AGENT_ID` connects with `?agent_id=…` (console voice/config),
+  otherwise `?model=grok-voice-latest`; instructions/tools are still applied
+  per call either way.
+- `realtime_chat.py`: text-mode session smoke test (no Twilio/audio), SMS
+  stubbed like `chat.py`.
+
 ## Testing
 
 - Mocked-stream unit check of `_GrokBackend` (delta accumulation, tool-call

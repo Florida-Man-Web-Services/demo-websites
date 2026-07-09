@@ -40,6 +40,26 @@ XAI_API_KEY = os.getenv("XAI_API_KEY", "")
 GROK_MODEL = os.getenv("GROK_MODEL", "grok-4.3")
 XAI_BASE_URL = os.getenv("XAI_BASE_URL", "https://api.x.ai/v1")
 
+# --- Voice backend ------------------------------------------------------------
+# "pipeline" (default): Twilio speech-to-text -> LLM -> Sesame TTS, one webhook
+#   per spoken turn.
+# "grok-realtime": bidirectional Twilio Media Stream bridged to xAI's realtime
+#   speech-to-speech API (wss://api.x.ai/v1/realtime). Needs XAI_API_KEY; the
+#   LLM_PROVIDER / Sesame settings are unused in this mode.
+VOICE_BACKEND = os.getenv("VOICE_BACKEND", "pipeline").strip().lower()
+
+XAI_REALTIME_URL = os.getenv("XAI_REALTIME_URL", "wss://api.x.ai/v1/realtime")
+XAI_REALTIME_MODEL = os.getenv("XAI_REALTIME_MODEL", "grok-voice-latest")
+# A voice agent pre-configured at console.x.ai; when set we connect with
+# ?agent_id=... (its voice/config applies) but still override instructions
+# and tools per call so the model knows which business it is talking to.
+XAI_VOICE_AGENT_ID = os.getenv("XAI_VOICE_AGENT_ID", "")
+# Built-in voices: eve, ara, rex, sal, leo — or a custom voice ID. Left empty,
+# the session (or console agent) default is used.
+GROK_VOICE = os.getenv("GROK_VOICE", "")
+# Server-side VAD: how much silence ends the caller's turn.
+GROK_VAD_SILENCE_MS = int(os.getenv("GROK_VAD_SILENCE_MS", "600"))
+
 # Sesame CSM-1B served by DeepInfra ($7 per 1M characters). Point this at any
 # endpoint that accepts {"text": ...} and returns {"audio": <wav>} — e.g. a
 # self-hosted csm-1b — without touching the rest of the code.

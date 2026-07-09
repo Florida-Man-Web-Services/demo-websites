@@ -58,6 +58,33 @@ Claude remains the default (`LLM_PROVIDER=anthropic`); with Grok selected the
 Anthropic key is unused. Grok tool calls arrive via xAI's OpenAI-compatible
 API (`https://api.x.ai/v1`).
 
+### Grok realtime voice (speech-to-speech)
+
+`VOICE_BACKEND=grok-realtime` replaces the whole per-turn pipeline
+(Twilio speech-to-text → LLM → Sesame TTS) with a bidirectional bridge:
+Twilio streams the call's raw audio to `/voice/stream`, which pumps it to
+[xAI's realtime API](https://docs.x.ai/developers/model-capabilities/audio/voice-agent)
+and plays Grok's spoken replies back. Both sides talk G.711 μ-law at 8 kHz,
+so audio passes through untranscoded — turn latency drops to well under a
+second, with real barge-in (the agent stops when interrupted).
+
+```bash
+VOICE_BACKEND=grok-realtime
+XAI_API_KEY=xai-...
+# XAI_VOICE_AGENT_ID=agent_...   # optional: a console.x.ai voice agent
+# GROK_VOICE=eve                 # eve | ara | rex | sal | leo | custom ID
+# GROK_VAD_SILENCE_MS=600
+```
+
+The same per-call system prompt and the same three tools (SMS the demo link,
+log the outcome, hang up) are wired into the realtime session, so behavior
+and `call-log.csv` records match the pipeline. DeepInfra/Sesame and the
+Anthropic key are unused in this mode. Test without a phone:
+
+```bash
+python realtime_chat.py <business-slug>   # text in, spoken transcript out
+```
+
 Expose the server and start it:
 
 ```bash

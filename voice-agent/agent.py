@@ -118,8 +118,23 @@ def _spoken_url(demo_url: str) -> str:
     return demo_url.removeprefix("https://")
 
 
-def system_prompt(business: Business, direction: str, caller_number: str) -> str:
-    """Build the per-call system prompt from the campaign's phone script."""
+def _opener_rule() -> str:
+    return f"""- Open every reply with one of these exact opener sentences (pick whichever
+  fits, vary them, punctuation included): {" | ".join(OPENERS)}
+  These are pre-recorded so they play instantly and cover the synthesis
+  pause — like natural phone rhythm. Only improvise a different opener if
+  none of them fits at all.
+"""
+
+
+def system_prompt(
+    business: Business, direction: str, caller_number: str, openers: bool = True
+) -> str:
+    """Build the per-call system prompt from the campaign's phone script.
+
+    openers=False drops the pre-recorded-opener instructions — the realtime
+    speech backend speaks natively and has no synthesis pause to cover.
+    """
     ctx = f"""You are {config.OWNER_NAME}'s AI phone assistant, selling websites for a one-person
 web development business in Gainesville, Florida. {config.OWNER_NAME} builds free demo
 websites for local businesses that don't have one, then charges a flat one-time
@@ -138,12 +153,7 @@ THE BUSINESS ON THIS CALL
 
 HOW TO SPEAK
 - 1-3 short sentences per turn. Never monologue. Ask one question at a time.
-- Open every reply with one of these exact opener sentences (pick whichever
-  fits, vary them, punctuation included): {" | ".join(OPENERS)}
-  These are pre-recorded so they play instantly and cover the synthesis
-  pause — like natural phone rhythm. Only improvise a different opener if
-  none of them fits at all.
-- Plain conversational English: no bullet points, no markdown, no emoji.
+{_opener_rule() if openers else ""}- Plain conversational English: no bullet points, no markdown, no emoji.
 - Spell things for the ear: say the demo address as "{_spoken_url(business.demo_url)}"
   and offer to text it instead of making them write it down.
 - You are talking to a busy small-business owner or their staff. Be warm,
