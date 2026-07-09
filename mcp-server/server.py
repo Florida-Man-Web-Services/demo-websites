@@ -48,7 +48,10 @@ def get_pitch_info() -> dict:
     objection-handling lines, compliance rules you must follow on every
     call, and what to do instead of texting (this server cannot send SMS).
     """
-    return get_pitch()
+    try:
+        return get_pitch()
+    except Exception as e:
+        return {"error": _unavailable(e)}
 
 
 @mcp.tool()
