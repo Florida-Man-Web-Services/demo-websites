@@ -118,7 +118,8 @@ speakable results:
   the image so pushes to `main` auto-deploy.
 - **New manifests:** `deployment-mcp.yaml`, `service-mcp.yaml`,
   `httproute-mcp.yaml`, `external-secret-mcp.yaml` (MCP_AUTH_TOKEN from a
-  Bitwarden item via the `bitwarden-fields` ClusterSecretStore),
+  Bitwarden item via the `bitwarden-login` ClusterSecretStore, the same one
+  theswamp's zot-pull-secret uses),
   `pvc-mcp.yaml` (Longhorn, for the call log).
 
 ## Testing
