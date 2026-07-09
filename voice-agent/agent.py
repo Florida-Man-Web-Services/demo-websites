@@ -1,12 +1,13 @@
-"""The conversation brain: Claude runs the sales call, one spoken turn at a time.
+"""The conversation brain: an LLM runs the sales call, one spoken turn at a time.
 
 Each call holds a CallState (message history + business context). run_turn()
-feeds the caller's transcribed speech to Claude, executes any tool calls
-(text the demo link, log the outcome, hang up), and returns the sentence(s)
-the agent should speak next.
+feeds the caller's transcribed speech to the model (Claude by default, Grok
+with LLM_PROVIDER=grok), executes any tool calls (text the demo link, log the
+outcome, hang up), and returns the sentence(s) the agent should speak next.
 """
 
 import csv
+import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -19,8 +20,6 @@ from businesses import Business
 from tts import split_sentences
 
 log = logging.getLogger("voice-agent.agent")
-
-client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY or None)
 
 MAX_TURNS = 40  # hard stop so a stuck call can't loop forever
 
@@ -119,8 +118,23 @@ def _spoken_url(demo_url: str) -> str:
     return demo_url.removeprefix("https://")
 
 
-def system_prompt(business: Business, direction: str, caller_number: str) -> str:
-    """Build the per-call system prompt from the campaign's phone script."""
+def _opener_rule() -> str:
+    return f"""- Open every reply with one of these exact opener sentences (pick whichever
+  fits, vary them, punctuation included): {" | ".join(OPENERS)}
+  These are pre-recorded so they play instantly and cover the synthesis
+  pause — like natural phone rhythm. Only improvise a different opener if
+  none of them fits at all.
+"""
+
+
+def system_prompt(
+    business: Business, direction: str, caller_number: str, openers: bool = True
+) -> str:
+    """Build the per-call system prompt from the campaign's phone script.
+
+    openers=False drops the pre-recorded-opener instructions — the realtime
+    speech backend speaks natively and has no synthesis pause to cover.
+    """
     ctx = f"""You are {config.OWNER_NAME}'s AI phone assistant, selling websites for a one-person
 web development business in Gainesville, Florida. {config.OWNER_NAME} builds free demo
 websites for local businesses that don't have one, then charges a flat one-time
@@ -139,12 +153,7 @@ THE BUSINESS ON THIS CALL
 
 HOW TO SPEAK
 - 1-3 short sentences per turn. Never monologue. Ask one question at a time.
-- Open every reply with one of these exact opener sentences (pick whichever
-  fits, vary them, punctuation included): {" | ".join(OPENERS)}
-  These are pre-recorded so they play instantly and cover the synthesis
-  pause — like natural phone rhythm. Only improvise a different opener if
-  none of them fits at all.
-- Plain conversational English: no bullet points, no markdown, no emoji.
+{_opener_rule() if openers else ""}- Plain conversational English: no bullet points, no markdown, no emoji.
 - Spell things for the ear: say the demo address as "{_spoken_url(business.demo_url)}"
   and offer to text it instead of making them write it down.
 - You are talking to a busy small-business owner or their staff. Be warm,
@@ -203,13 +212,202 @@ log_call_outcome with voicemail, then end_call."""
     return ctx
 
 
+# --- LLM backends ------------------------------------------------------------
+# One conversation = one backend instance owning the message history in its
+# provider's native format. run_turn() only sees the normalized _TurnResult.
+
+MAX_REPLY_TOKENS = 500  # spoken replies are deliberately short
+
+
+@dataclass
+class ToolCall:
+    id: str
+    name: str
+    args: dict
+
+
+@dataclass
+class _TurnResult:
+    text_parts: list
+    tool_calls: list
+
+
+_anthropic_client = None
+_xai_client = None
+
+
+def _anthropic() -> anthropic.Anthropic:
+    global _anthropic_client
+    if _anthropic_client is None:  # build once, reuse the HTTP session
+        _anthropic_client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY or None)
+    return _anthropic_client
+
+
+def _xai():
+    global _xai_client
+    if _xai_client is None:
+        if not config.XAI_API_KEY:
+            raise SystemExit(
+                "LLM_PROVIDER=grok needs XAI_API_KEY in voice-agent/.env "
+                "(create one at console.x.ai)."
+            )
+        # Imported lazily: openai is only needed when the grok backend is used.
+        from openai import OpenAI
+
+        _xai_client = OpenAI(api_key=config.XAI_API_KEY, base_url=config.XAI_BASE_URL)
+    return _xai_client
+
+
+class _ClaudeBackend:
+    def __init__(self):
+        self.messages: list = []
+
+    def has_history(self) -> bool:
+        return bool(self.messages)
+
+    def add_user(self, text: str) -> None:
+        self.messages.append({"role": "user", "content": text})
+
+    def add_tool_results(self, results: list) -> None:
+        self.messages.append(
+            {
+                "role": "user",
+                "content": [
+                    {"type": "tool_result", "tool_use_id": call_id, "content": text}
+                    for call_id, text in results
+                ],
+            }
+        )
+
+    def stream(self, sys_prompt: str, on_delta) -> _TurnResult:
+        with _anthropic().messages.stream(
+            model=config.CLAUDE_MODEL,
+            max_tokens=MAX_REPLY_TOKENS,
+            output_config={"effort": "low"},  # latency matters on a live call
+            system=sys_prompt,
+            tools=TOOLS,
+            messages=self.messages,
+        ) as stream:
+            for text in stream.text_stream:
+                on_delta(text)
+            response = stream.get_final_message()
+        self.messages.append({"role": "assistant", "content": response.content})
+        return _TurnResult(
+            text_parts=[
+                b.text.strip()
+                for b in response.content
+                if b.type == "text" and b.text.strip()
+            ],
+            tool_calls=[
+                ToolCall(b.id, b.name, dict(b.input))
+                for b in response.content
+                if b.type == "tool_use"
+            ],
+        )
+
+
+def _openai_tools() -> list:
+    """TOOLS stays in Anthropic schema; convert for the OpenAI-format API."""
+    return [
+        {
+            "type": "function",
+            "function": {
+                "name": t["name"],
+                "description": t["description"],
+                "parameters": t["input_schema"],
+            },
+        }
+        for t in TOOLS
+    ]
+
+
+class _GrokBackend:
+    def __init__(self):
+        self.messages: list = []
+
+    def has_history(self) -> bool:
+        return bool(self.messages)
+
+    def add_user(self, text: str) -> None:
+        self.messages.append({"role": "user", "content": text})
+
+    def add_tool_results(self, results: list) -> None:
+        for call_id, text in results:
+            self.messages.append(
+                {"role": "tool", "tool_call_id": call_id, "content": text}
+            )
+
+    def stream(self, sys_prompt: str, on_delta) -> _TurnResult:
+        stream = _xai().chat.completions.create(
+            model=config.GROK_MODEL,
+            max_tokens=MAX_REPLY_TOKENS,
+            stream=True,
+            messages=[{"role": "system", "content": sys_prompt}, *self.messages],
+            tools=_openai_tools(),
+        )
+        text = ""
+        by_index: dict[int, dict] = {}  # streamed tool calls arrive as deltas
+        for chunk in stream:
+            if not chunk.choices:
+                continue
+            delta = chunk.choices[0].delta
+            if delta is None:
+                continue
+            if delta.content:
+                text += delta.content
+                on_delta(delta.content)
+            for tc in delta.tool_calls or []:
+                acc = by_index.setdefault(tc.index, {"id": "", "name": "", "args": ""})
+                if tc.id:
+                    acc["id"] = tc.id
+                if tc.function and tc.function.name:
+                    acc["name"] = tc.function.name
+                if tc.function and tc.function.arguments:
+                    acc["args"] += tc.function.arguments
+
+        assistant: dict = {"role": "assistant", "content": text or None}
+        if by_index:
+            assistant["tool_calls"] = [
+                {
+                    "id": acc["id"],
+                    "type": "function",
+                    "function": {"name": acc["name"], "arguments": acc["args"] or "{}"},
+                }
+                for _, acc in sorted(by_index.items())
+            ]
+        self.messages.append(assistant)
+
+        tool_calls = []
+        for _, acc in sorted(by_index.items()):
+            try:
+                args = json.loads(acc["args"]) if acc["args"].strip() else {}
+            except ValueError:
+                log.warning("Grok sent unparseable tool args: %r", acc["args"])
+                args = {}  # _run_tool copes with missing keys
+            tool_calls.append(ToolCall(acc["id"], acc["name"], args))
+        return _TurnResult(
+            text_parts=[text.strip()] if text.strip() else [],
+            tool_calls=tool_calls,
+        )
+
+
+def make_backend():
+    if config.LLM_PROVIDER == "anthropic":
+        return _ClaudeBackend()
+    if config.LLM_PROVIDER == "grok":
+        return _GrokBackend()
+    raise SystemExit(
+        f"Unknown LLM_PROVIDER {config.LLM_PROVIDER!r}; use 'anthropic' or 'grok'."
+    )
+
+
 @dataclass
 class CallState:
     call_sid: str
     business: Business
     direction: str  # "inbound" | "outbound"
     caller_number: str = ""
-    messages: list = field(default_factory=list)
+    llm: object = field(default_factory=make_backend)
     ended: bool = False
     turns: int = 0
 
@@ -288,7 +486,7 @@ def run_turn(
     """One conversational turn. Returns the full reply text.
 
     If `on_sentence` is given, each completed sentence is ALSO passed to it
-    while Claude is still generating — so TTS can start on sentence one before
+    while the model is still generating — so TTS can start on sentence one before
     the reply is finished. In that case the sentences have already been handed
     off for speaking: use the return value only for display/logging, do NOT
     speak it again (doing so would play the whole turn twice). Callers that
@@ -303,15 +501,11 @@ def run_turn(
         return closing
 
     if user_speech:
-        state.messages.append({"role": "user", "content": user_speech})
-    elif not state.messages:
-        state.messages.append(
-            {"role": "user", "content": "<call connected — greet them now>"}
-        )
+        state.llm.add_user(user_speech)
+    elif not state.llm.has_history():
+        state.llm.add_user("<call connected — greet them now>")
     else:
-        state.messages.append(
-            {"role": "user", "content": "<silence — the line is quiet; check in briefly>"}
-        )
+        state.llm.add_user("<silence — the line is quiet; check in briefly>")
 
     reply_parts: list[str] = []
     pending = ""  # streamed text not yet emitted as a full sentence
@@ -332,45 +526,34 @@ def run_turn(
             return
         pieces = split_sentences(pending)
         if not final:
-            pending = pieces.pop()  # last may still be growing
+            tail = pieces.pop()  # last may still be growing
+            # Keep the raw tail, not the stripped piece: a delta ending in
+            # whitespace ("Hi! ") must not fuse with the next chunk ("Hi!This").
+            cut = pending.rfind(tail)
+            pending = pending[cut:] if cut != -1 else tail
         else:
             pending = ""
         for sentence in pieces:
             if sentence.strip():
                 on_sentence(sentence.strip())
 
+    def on_delta(text: str):
+        nonlocal pending
+        pending += text
+        emit()
+
     while True:
-        with client.messages.stream(
-            model=config.CLAUDE_MODEL,
-            max_tokens=500,  # spoken replies are deliberately short
-            output_config={"effort": "low"},  # latency matters on a live call
-            system=sys_prompt,
-            tools=TOOLS,
-            messages=state.messages,
-        ) as stream:
-            for text in stream.text_stream:
-                pending += text
-                emit()
-            response = stream.get_final_message()
-        emit(final=True)  # text blocks never span tool-use boundaries
+        result = state.llm.stream(sys_prompt, on_delta)
+        emit(final=True)  # text never spans tool-use boundaries
 
-        state.messages.append({"role": "assistant", "content": response.content})
+        reply_parts.extend(result.text_parts)
 
-        for block in response.content:
-            if block.type == "text" and block.text.strip():
-                reply_parts.append(block.text.strip())
-
-        if response.stop_reason != "tool_use":
+        if not result.tool_calls:
             break
 
-        tool_results = []
-        for block in response.content:
-            if block.type == "tool_use":
-                result = _run_tool(state, block.name, dict(block.input))
-                tool_results.append(
-                    {"type": "tool_result", "tool_use_id": block.id, "content": result}
-                )
-        state.messages.append({"role": "user", "content": tool_results})
+        state.llm.add_tool_results(
+            [(tc.id, _run_tool(state, tc.name, tc.args)) for tc in result.tool_calls]
+        )
 
         # end_call fired: stop now rather than paying another model round-trip
         # (and a second spoken goodbye) just to hang up.

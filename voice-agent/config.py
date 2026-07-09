@@ -25,10 +25,40 @@ TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER", "")
 PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "").rstrip("/")
 
 # --- Models -----------------------------------------------------------------
-# Claude drives the conversation. Opus 4.8 with effort=low keeps per-turn
-# latency reasonable; override with VOICE_AGENT_MODEL if you want to trade
-# quality for speed.
+# Which LLM drives the conversation: "anthropic" (Claude, default) or "grok"
+# (xAI's OpenAI-compatible API at https://api.x.ai/v1 — needs XAI_API_KEY).
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "anthropic").strip().lower()
+
+# Claude: Opus 4.8 with effort=low keeps per-turn latency reasonable;
+# override with VOICE_AGENT_MODEL if you want to trade quality for speed.
 CLAUDE_MODEL = os.getenv("VOICE_AGENT_MODEL", "claude-opus-4-8")
+
+# Grok (LLM_PROVIDER=grok): grok-4.3 is the current flagship ($1.25/$2.50
+# per 1M tokens, 1M context); xAI bills grok-4.5 as faster if per-turn
+# latency matters more than cost.
+XAI_API_KEY = os.getenv("XAI_API_KEY", "")
+GROK_MODEL = os.getenv("GROK_MODEL", "grok-4.3")
+XAI_BASE_URL = os.getenv("XAI_BASE_URL", "https://api.x.ai/v1")
+
+# --- Voice backend ------------------------------------------------------------
+# "pipeline" (default): Twilio speech-to-text -> LLM -> Sesame TTS, one webhook
+#   per spoken turn.
+# "grok-realtime": bidirectional Twilio Media Stream bridged to xAI's realtime
+#   speech-to-speech API (wss://api.x.ai/v1/realtime). Needs XAI_API_KEY; the
+#   LLM_PROVIDER / Sesame settings are unused in this mode.
+VOICE_BACKEND = os.getenv("VOICE_BACKEND", "pipeline").strip().lower()
+
+XAI_REALTIME_URL = os.getenv("XAI_REALTIME_URL", "wss://api.x.ai/v1/realtime")
+XAI_REALTIME_MODEL = os.getenv("XAI_REALTIME_MODEL", "grok-voice-latest")
+# A voice agent pre-configured at console.x.ai; when set we connect with
+# ?agent_id=... (its voice/config applies) but still override instructions
+# and tools per call so the model knows which business it is talking to.
+XAI_VOICE_AGENT_ID = os.getenv("XAI_VOICE_AGENT_ID", "")
+# Built-in voices: eve, ara, rex, sal, leo — or a custom voice ID. Left empty,
+# the session (or console agent) default is used.
+GROK_VOICE = os.getenv("GROK_VOICE", "")
+# Server-side VAD: how much silence ends the caller's turn.
+GROK_VAD_SILENCE_MS = int(os.getenv("GROK_VAD_SILENCE_MS", "600"))
 
 # Sesame CSM-1B served by DeepInfra ($7 per 1M characters). Point this at any
 # endpoint that accepts {"text": ...} and returns {"audio": <wav>} — e.g. a
