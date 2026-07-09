@@ -39,6 +39,10 @@ pip install -r requirements.txt
 cp .env.example .env   # fill in the five keys
 ```
 
+On Nix: `nix develop` from anywhere in the repo (or `nix-shell` in this
+directory) replaces the venv/pip steps — it bootstraps `.venv` and brings in
+ffmpeg + libopus with nixpkgs pinned by the root `flake.lock`.
+
 You need: an Anthropic API key, a DeepInfra API key, and a Twilio account with
 a voice+SMS phone number (~$1.15/mo; buy a 352 number so callbacks look local).
 
