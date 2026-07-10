@@ -8,7 +8,11 @@ RUN pip install --no-cache-dir -r mcp-server/requirements.txt
 
 # Shared data layer + baked-in business data (refreshed on image rebuild).
 COPY voice-agent/businesses.py voice-agent/config.py voice-agent/
-COPY correspondences/outreach-data.csv correspondences/call-order.csv correspondences/
+# NOTE: correspondences/*.csv (outreach + call-order) are intentionally NOT baked
+# into the image (they're uncommitted business data). load_businesses() falls back
+# to gainesville-no-website/gainesville_no_website.json and call_queue() returns []
+# when they're absent. Supply real data at runtime via the OUTREACH_CSV /
+# CALL_ORDER_CSV env vars pointing at a mounted volume.
 COPY gainesville-no-website/gainesville_no_website.json gainesville-no-website/
 COPY mcp-server/*.py mcp-server/
 
