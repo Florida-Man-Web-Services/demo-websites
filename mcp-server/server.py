@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import uvicorn
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Mount, Route
@@ -30,7 +31,13 @@ from pitch import get_pitch
 logger = logging.getLogger("demo-mcp")
 
 mcp = FastMCP(
-    "florida-man-web-services", stateless_http=True, json_response=True
+    "florida-man-web-services",
+    stateless_http=True,
+    json_response=True,
+    # Streamable-HTTP DNS-rebinding guard trusts only localhost by default and
+    # 421s a public deployment. This endpoint is bearer-auth protected and
+    # Cloudflare-fronted, so disable the host/origin check.
+    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
 )
 
 
