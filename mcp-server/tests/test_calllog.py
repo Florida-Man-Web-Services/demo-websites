@@ -27,10 +27,21 @@ def test_append_creates_header_and_row(tmp_log):
     assert rows[0]["slug"] == "ole-barn"
     assert rows[0]["outcome"] == "interested"
     assert rows[0]["call_sid"].startswith("XAI-")
+    assert rows[0]["direction"] == ""
+    assert rows[0]["phone"] == biz().phone
     assert list(rows[0].keys()) == [
         "timestamp", "call_sid", "direction", "business", "slug",
         "phone", "outcome", "email", "callback_time", "notes",
     ]
+
+
+def test_append_caller_phone_used_for_do_not_call(tmp_log):
+    result = calllog.append_outcome(
+        biz(), "do_not_call", "opt out", caller_phone="+13529990000"
+    )
+    assert result == {"logged": True}
+    rows = list(csv.DictReader(open(tmp_log, encoding="utf-8")))
+    assert rows[0]["phone"] == "+13529990000"
 
 
 def test_append_rejects_bad_outcome(tmp_log):

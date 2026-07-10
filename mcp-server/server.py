@@ -5,6 +5,7 @@ Run: MCP_AUTH_TOKEN=... python server.py   → http://0.0.0.0:8036/mcp
 """
 
 import contextlib
+import functools
 import hmac
 import logging
 import os
@@ -15,8 +16,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "voice-agent"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import anyio
 import uvicorn
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Mount, Route
@@ -29,62 +32,113 @@ from pitch import get_pitch
 
 logger = logging.getLogger("demo-mcp")
 
+
+def _build_transport_security() -> TransportSecuritySettings:
+    """Explicit Host/Origin allowlist for the DNS-rebinding-protection
+    middleware the SDK enables by default (fastmcp/server.py ~177-183).
+
+    Without this, FastMCP's default host="127.0.0.1" triggers an auto
+    allowlist of only 127.0.0.1/localhost/::1 — any production request with
+    Host: mcp.flmanbiosci.net gets a 421. TransportSecurityMiddleware
+    (mcp.server.transport_security) matches a Host header either by exact
+    string or, for entries ending ":*", by "base_host:" prefix — so a bare
+    hostname entry only matches a Host header with no port, and a ":*"
+    entry matches any port on that host.
+    """
+    hosts_env = os.getenv(
+        "MCP_ALLOWED_HOSTS",
+        "mcp.flmanbiosci.net,mcp.flmanbiosci.net:443,"
+        "localhost,localhost:*,127.0.0.1,127.0.0.1:*",
+    )
+    hosts = [h.strip() for h in hosts_env.split(",") if h.strip()]
+
+    def _origin_for(host: str) -> str:
+        local = host.startswith("localhost") or host.startswith("127.0.0.1")
+        scheme = "http" if local else "https"
+        return f"{scheme}://{host}"
+
+    origins = [_origin_for(h) for h in hosts]
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=hosts,
+        allowed_origins=origins,
+    )
+
+
 mcp = FastMCP(
-    "florida-man-web-services", stateless_http=True, json_response=True
+    "florida-man-web-services",
+    stateless_http=True,
+    json_response=True,
+    transport_security=_build_transport_security(),
 )
 
 
-@mcp.tool()
-def lookup_business(query: str) -> dict:
-    """Look up a Gainesville business by name, slug, or phone number.
-
-    Returns the business profile including its live demo website URL, or
-    {"found": false, "suggestions": [...]} with close matches to offer the
-    caller ("did you mean ...?").
-    """
+def _lookup_business_sync(query: str) -> dict:
     try:
         return find_business(query)
     except Exception as e:  # keep failures speakable, never raise
+        logger.exception("tool %s failed", "lookup_business")
         return {"found": False, "suggestions": [], "error": _unavailable(e)}
 
 
 @mcp.tool()
-def get_pitch_info() -> dict:
-    """The Florida Man Web Services sales cheat sheet: the offer and price,
-    objection-handling lines, compliance rules you must follow on every
-    call, and what to do instead of texting (this server cannot send SMS).
+async def lookup_business(query: str) -> dict:
+    """Look up a Gainesville business by name, slug, or phone number.
+
+    Returns the business profile including its live demo website URL, or
+    {"found": false, "suggestions": [...]} with close matches to offer the
+    caller ("did you mean ...?"). If multiple businesses share a phone
+    number the result is ambiguous_phone with the candidates — ask the
+    caller which business they are.
     """
+    return await anyio.to_thread.run_sync(_lookup_business_sync, query)
+
+
+def _get_pitch_info_sync() -> dict:
     try:
         return get_pitch()
     except Exception as e:
+        logger.exception("tool %s failed", "get_pitch_info")
         return {"error": _unavailable(e)}
 
 
 @mcp.tool()
-def get_call_history(business: str) -> dict:
-    """Past call-log entries for a business (by name, slug, or phone), oldest
-    first — check before pitching so you know prior contact and outcomes."""
+async def get_pitch_info() -> dict:
+    """The Florida Man Web Services sales cheat sheet: the offer and price,
+    objection-handling lines, compliance rules you must follow on every
+    call, and what to do instead of texting (this server cannot send SMS).
+    """
+    return await anyio.to_thread.run_sync(_get_pitch_info_sync)
+
+
+def _get_call_history_sync(business: str) -> dict:
     try:
         hit = find_business(business)
         if not hit.get("found"):
             return {"found": False, "suggestions": hit.get("suggestions", [])}
         return {"found": True, "slug": hit["slug"], "calls": history_for(hit["slug"])}
     except Exception as e:
+        logger.exception("tool %s failed", "get_call_history")
         return {"found": False, "suggestions": [], "error": _unavailable(e)}
 
 
 @mcp.tool()
-def log_call_outcome(
+async def get_call_history(business: str) -> dict:
+    """Past call-log entries for a business (by name, slug, or phone), oldest
+    first — check before pitching so you know prior contact and outcomes.
+    Covers only calls logged through this server."""
+    return await anyio.to_thread.run_sync(_get_call_history_sync, business)
+
+
+def _log_call_outcome_sync(
     business: str,
     outcome: str,
     notes: str,
     email: str = "",
     callback_time: str = "",
+    caller_phone: str = "",
+    direction: str = "",
 ) -> dict:
-    """Record how the call went. Call exactly once near the end of every
-    call. Outcomes: interested, wants_email, callback_requested, sent_sms,
-    not_interested, do_not_call, wrong_number, voicemail, other. Use
-    do_not_call whenever the person asks not to be contacted again."""
     try:
         hit = find_business(business)
         if not hit.get("found"):
@@ -94,10 +148,48 @@ def log_call_outcome(
                 "suggestions": hit.get("suggestions", []),
             }
         return append_outcome(
-            businesses.by_slug(hit["slug"]), outcome, notes, email, callback_time
+            businesses.by_slug(hit["slug"]),
+            outcome,
+            notes,
+            email,
+            callback_time,
+            caller_phone,
+            direction,
         )
     except Exception as e:
+        logger.exception("tool %s failed", "log_call_outcome")
         return {"logged": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def log_call_outcome(
+    business: str,
+    outcome: str,
+    notes: str,
+    email: str = "",
+    callback_time: str = "",
+    caller_phone: str = "",
+    direction: str = "",
+) -> dict:
+    """Record how the call went. Call exactly once near the end of every
+    call. Outcomes: interested, wants_email, callback_requested, sent_sms,
+    not_interested, do_not_call, wrong_number, voicemail, other. Use
+    do_not_call whenever the person asks not to be contacted again.
+    caller_phone: the phone number the caller is actually calling from, if
+    known — REQUIRED for do_not_call so the right number is protected.
+    direction: 'inbound' or 'outbound' if known."""
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _log_call_outcome_sync,
+            business,
+            outcome,
+            notes,
+            email,
+            callback_time,
+            caller_phone,
+            direction,
+        )
+    )
 
 
 def _unavailable(e: Exception) -> str:
@@ -108,14 +200,16 @@ def _unavailable(e: Exception) -> str:
 
 
 class BearerAuth:
-    """401 everything except /health unless Authorization: Bearer matches."""
+    """401 everything reaching this middleware unless Authorization: Bearer
+    matches. /health bypasses auth by being a sibling Route mounted outside
+    this middleware (see build_app), not via a path exemption here."""
 
     def __init__(self, app, token: str):
         self.app = app
         self.token = token
 
     async def __call__(self, scope, receive, send):
-        if scope["type"] in ("http", "websocket") and scope["path"] != "/health":
+        if scope["type"] in ("http", "websocket"):
             auth = next(
                 (v.decode() for k, v in scope.get("headers", [])
                  if k == b"authorization"),

@@ -68,7 +68,8 @@ def load_businesses() -> list[Business]:
                     rating=row.get("rating", ""),
                     demo_url=row.get("demo_url", ""),
                     google_maps_url=row.get("google_maps_url", ""),
-                    shared_demo=row.get("shared_demo", "") == "yes",
+                    shared_demo=row.get("shared_demo", "").strip().lower()
+                    in ("yes", "true", "1"),
                 )
                 for row in csv.DictReader(f)
             ]
@@ -81,6 +82,7 @@ def load_businesses() -> list[Business]:
                 phone=b.get("phone", ""),
                 address=b.get("address", ""),
                 rating=b.get("rating", ""),
+                google_maps_url=b.get("google_maps_url", ""),
             )
             for b in data
         ]
@@ -111,6 +113,14 @@ def by_phone(phone: str) -> Business | None:
     return next(
         (b for b in all_businesses() if normalize_phone(b.phone) == digits), None
     )
+
+
+def by_phone_all(phone: str) -> list[Business]:
+    """All businesses sharing this phone number (same match as by_phone)."""
+    digits = normalize_phone(phone)
+    if not digits:
+        return []
+    return [b for b in all_businesses() if normalize_phone(b.phone) == digits]
 
 
 def call_queue() -> list[dict]:
