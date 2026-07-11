@@ -157,6 +157,28 @@ with an actual TCPA attorney first.
 - Sesame TTS via DeepInfra (~1,200 chars): ~$0.008
 - **Total ≈ $0.15–0.25 per call** — one converted site pays for hundreds.
 
+## Server deployment (hwcopeland's cluster)
+
+Push to `main` → GitHub Actions builds
+`zot.hwcopeland.net/florida-man-bioscience/voice-agent:main` → Flux image
+automation rolls out the `voice-agent` Deployment in `theswamp`
+(manifests: iac repo, `rke2/tooling/flux/theswamp/*-voice.yaml`), serving
+`https://voice.flmanbiosci.net`. Same pipeline as `mcp-server/`.
+
+- `PUBLIC_BASE_URL=https://voice.flmanbiosci.net` is set in the Deployment;
+  point the Twilio number's Voice webhook at
+  `https://voice.flmanbiosci.net/voice/inbound` and the status callback at
+  `/voice/status` (one-time Twilio console change, replacing the ngrok URL).
+- API keys come from the Bitwarden item `voice-agent-keys` via
+  External Secrets (custom fields, one per env var).
+- `call-log.csv` and the audio cache persist on a Longhorn PVC at `/data`.
+  To migrate laptop history (do-not-call permanence lives there):
+  `kubectl -n theswamp cp voice-agent/call-log.csv <pod>:/data/call-log.csv`
+  before pointing Twilio at the cluster.
+- `call.py` keeps working from anywhere — it talks to Twilio's REST API, and
+  Twilio then webhooks whichever server `PUBLIC_BASE_URL` names. Run it
+  locally with `PUBLIC_BASE_URL=https://voice.flmanbiosci.net`.
+
 ## Notes & limits
 
 - Turn latency is ~2–4 s (TTS is generated per-utterance, not streamed).
@@ -164,7 +186,8 @@ with an actual TCPA attorney first.
   If you outgrow this, the streaming upgrade path is Vogent's hosted CSM or a
   Pipecat pipeline with a self-hosted model.
 - Call state lives in server memory — restart the server and in-flight calls
-  drop. Fine for one call at a time.
-- Webhook signature validation is off for simplicity; the URL is unguessable
-  via ngrok, but add Twilio's `RequestValidator` before running this on a
-  stable public domain.
+  drop. Fine for one call at a time (`replicas: 1` in the Deployment).
+- Webhook posts are rejected unless Twilio's `X-Twilio-Signature` validates
+  against `PUBLIC_BASE_URL` (see `VALIDATE_TWILIO_WEBHOOKS`, on by default).
+  If webhooks 403 after a domain change, the base URL and the Twilio console
+  URL have drifted apart.
