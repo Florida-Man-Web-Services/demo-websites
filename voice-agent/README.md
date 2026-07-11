@@ -78,7 +78,7 @@ second, with real barge-in (the agent stops when interrupted).
 ```bash
 VOICE_BACKEND=grok-realtime
 XAI_API_KEY=xai-...
-# XAI_VOICE_AGENT_ID=agent_...   # optional: a console.x.ai voice agent
+# XAI_VOICE_AGENT_ID=agent_...   # see warning below before setting this
 # GROK_VOICE=eve                 # eve | ara | rex | sal | leo | custom ID
 # GROK_VAD_SILENCE_MS=600
 ```
@@ -86,7 +86,16 @@ XAI_API_KEY=xai-...
 The same per-call system prompt and the same three tools (SMS the demo link,
 log the outcome, hang up) are wired into the realtime session, so behavior
 and `call-log.csv` records match the pipeline. DeepInfra/Sesame and the
-Anthropic key are unused in this mode. Test without a phone:
+Anthropic key are unused in this mode.
+
+> **Leave `XAI_VOICE_AGENT_ID` unset.** A console-configured voice agent
+> auto-starts its own greeting the moment the socket connects — in its
+> default 24 kHz PCM16 format, racing (and usually beating) this bridge's
+> mu-law `session.update`. Twilio plays that PCM as mu-law: a loud static
+> blast at the top of every call. The bridge supplies its own instructions,
+> tools, and voice, so a console agent adds nothing here anyway.
+
+Test without a phone:
 
 ```bash
 python realtime_chat.py <business-slug>   # text in, spoken transcript out

@@ -10,6 +10,9 @@ RUN pip install --no-cache-dir -r voice-agent/requirements.txt
 # mcp-server/Dockerfile) — load_businesses() falls back to the committed JSON;
 # mount real outreach data and point OUTREACH_CSV/CALL_ORDER_CSV at it.
 COPY gainesville-no-website/gainesville_no_website.json gainesville-no-website/
+# Demo pages: needed to compute hash-style URLs (DEMO_URL_STYLE=hash) — the
+# URL is sha256(page)[:12], so the pages themselves must be readable.
+COPY generated-sites generated-sites/
 COPY voice-agent/*.py voice-agent/
 
 # Call log and synthesized-audio cache live on a mounted volume so outcomes
