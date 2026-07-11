@@ -59,8 +59,8 @@ call-log.csv                                                       (Longhorn PVC
 2. **`get_pitch_info()`** — no arguments. Returns the static sales knowledge:
    - Business identity: **Florida Man Web Services**, owner Noah, callback
      number (from `OWNER_CALLBACK_NUMBER`).
-   - The offer: free demo already built and live; **$999 flat one-time fee**
-     to go live (own domain + Google listing pointing at it); no monthly fees.
+   - The offer: free demo already built and live; **$999 per month** to go
+     live (own domain + Google listing pointing at it).
    - Objection-handling lines distilled from `correspondences/phone-script.md`.
    - Compliance rules: identify as an AI in the first sentence; honor
      do-not-call permanently.
@@ -140,5 +140,6 @@ speakable results:
 - Hosting: originally standalone + ngrok; **revised** to hwcopeland's RKE2
   cluster, `theswamp` namespace — user directed after pointing at `~/iac`.
 - Pricing: agent quotes a real price; **$999** flat one-time fee (raised from
-  the initially selected $250).
+  the initially selected $250). **Revised 2026-07-11: $999 per month** — Noah
+  confirmed the fee is monthly, not one-time.
 - Business name: **Florida Man Web Services**.

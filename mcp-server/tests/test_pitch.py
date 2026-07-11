@@ -8,8 +8,8 @@ def test_pitch_has_price_and_identity():
     assert p["business"] == "Florida Man Web Services"
     text = json.dumps(p)
     assert "$999" in text
-    assert "one-time" in text
-    assert "no monthly" in text.lower()
+    assert "per month" in text.lower()
+    assert "one-time" not in text.lower()
 
 
 def test_pitch_compliance_rules():

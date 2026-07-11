@@ -14,9 +14,9 @@ def get_pitch() -> dict:
                 "business we contact — no cost, no obligation to look."
             ),
             "price": (
-                "Going live is a flat $999 one-time fee: their own domain "
-                "name, professional setup and hosting, and their Google "
-                "listing pointing at the new site. No monthly fees, ever."
+                "Going live is $999 per month: their own domain name, "
+                "professional setup and hosting, and their Google "
+                "listing pointing at the new site."
             ),
             "keep_either_way": (
                 "The demo is theirs to look at either way — if they change "
@@ -30,8 +30,8 @@ def get_pitch() -> dict:
             ),
             "how_much": (
                 "The demo is completely free. Taking it live — real domain, "
-                "hosting, Google finding you — is a flat $999 one time. "
-                "No subscriptions, no surprises."
+                "hosting, Google finding you — is $999 a month. "
+                "No hidden fees, no surprises."
             ),
             "send_to_email": (
                 "Absolutely — what's the best email for you? "
