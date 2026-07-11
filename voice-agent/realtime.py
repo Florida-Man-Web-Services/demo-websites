@@ -80,16 +80,20 @@ def xai_url() -> str:
     return f"{config.XAI_REALTIME_URL}?model={config.XAI_REALTIME_MODEL}"
 
 
-async def run_call(twilio, xai, state: CallState) -> None:
+async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
     """Pump events both ways until the call ends.
 
     `twilio` and `xai` are adapters exposing `async send(dict)`, async
     iteration yielding dicts, and `stream_sid` on the Twilio side. Closing the
     Twilio websocket is what ends the phone call (nothing follows <Connect>
     in the TwiML), so this returns when the call should hang up.
+
+    `primed` means the webhook already configured the session and requested
+    the greeting while Twilio was still setting up its media stream.
     """
-    await xai.send(session_update(state))
-    await xai.send({"type": "response.create"})  # model speaks first, both directions
+    if not primed:
+        await xai.send(session_update(state))
+        await xai.send({"type": "response.create"})  # model speaks first, both directions
 
     done = asyncio.Event()
 
