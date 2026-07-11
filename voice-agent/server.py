@@ -55,35 +55,100 @@ PRIMED_XAI: dict = {}  # CallSid -> concurrent.futures.Future[websocket]
 PRIME_TTL_S = 30  # closed unclaimed after this (call never reached /voice/stream)
 _LOOP: "asyncio.AbstractEventLoop | None" = None
 
+# On top of priming, keep ONE spare pre-opened xAI connection at all times:
+# the TLS + websocket handshake to api.x.ai costs ~2s, so a call that claims
+# the spare skips it entirely and only pays greeting generation (~1s), which
+# Twilio's own stream setup fully hides. xAI silently drops idle sessions
+# (keepalive pings go unanswered), so a watcher reopens the spare whenever it
+# dies — and because a dead socket can look open for tens of seconds, claims
+# are verified with a round-trip in _prime_xai before being trusted.
+_SPARE_XAI: "asyncio.Task | None" = None
+
+
+async def _open_xai():
+    import websockets
+
+    ws = await websockets.connect(
+        realtime.xai_url(),
+        additional_headers={"Authorization": f"Bearer {config.XAI_API_KEY}"},
+    )
+    # Eat the session.created greeting: the bridge doesn't need it, and an
+    # empty receive buffer is what lets a claim-time recv() prove liveness.
+    await asyncio.wait_for(ws.recv(), timeout=10)
+    return ws
+
+
+def _restock_spare() -> None:
+    global _SPARE_XAI
+    task = asyncio.ensure_future(_open_xai())
+    _SPARE_XAI = task
+
+    async def watch():
+        try:
+            ws = await task
+            await ws.wait_closed()
+        except Exception:
+            pass
+        await asyncio.sleep(1)  # backoff so a flapping network can't spin us
+        if _SPARE_XAI is task:  # died while still parked -> replace it
+            _restock_spare()
+
+    asyncio.ensure_future(watch())
+
+
+async def _take_xai():
+    """The spare connection if it's alive (fresh connect otherwise), and
+    restock for the next call either way."""
+    global _SPARE_XAI
+    spare, _SPARE_XAI = _SPARE_XAI, None
+    _restock_spare()
+    if spare is not None:
+        try:
+            ws = await spare  # usually already done; else it's ahead of a fresh dial
+            if ws.close_code is None:
+                return ws
+        except Exception:
+            pass
+    return await _open_xai()
+
 
 @app.on_event("startup")
 async def _capture_loop():
     global _LOOP
     _LOOP = asyncio.get_running_loop()
+    if config.VOICE_BACKEND == "grok-realtime":
+        _restock_spare()
 
 
 def _prime_xai(call_sid: str, business: Business, direction: str, number: str) -> None:
     """Kick off the xAI session from the (sync, threadpool) webhook handler."""
     if _LOOP is None or not call_sid:
         return
-    import websockets
 
     async def connect():
-        ws = await websockets.connect(
-            realtime.xai_url(),
-            additional_headers={"Authorization": f"Bearer {config.XAI_API_KEY}"},
+        state = CallState(
+            call_sid=call_sid, business=business,
+            direction=direction, caller_number=number,
         )
-        try:
-            state = CallState(
-                call_sid=call_sid, business=business,
-                direction=direction, caller_number=number,
-            )
-            await ws.send(json.dumps(realtime.session_update(state)))
-            await ws.send(json.dumps({"type": "response.create"}))
-        except BaseException:
-            await ws.close()
-            raise
-        return ws
+        ws = await _take_xai()
+        for retry in (False, True):
+            try:
+                await ws.send(json.dumps(realtime.session_update(state)))
+                await ws.send(json.dumps({"type": "response.create"}))
+                # A silently-dead socket accepts sends; only a live server can
+                # reply (session.updated / response.created — the bridge needs
+                # neither). No reply in time = spare died undetected: redial.
+                await asyncio.wait_for(ws.recv(), timeout=2)
+                return ws
+            except BaseException:
+                try:
+                    await ws.close()
+                except Exception:
+                    pass
+                if retry:
+                    raise
+                log.warning("call %s: spare xAI socket was dead; redialing", call_sid)
+                ws = await _open_xai()
 
     PRIMED_XAI[call_sid] = asyncio.run_coroutine_threadsafe(connect(), _LOOP)
     _LOOP.call_soon_threadsafe(_LOOP.call_later, PRIME_TTL_S, _expire_primed, call_sid)
@@ -238,8 +303,6 @@ class _XaiSocket:
 @app.websocket("/voice/stream")
 async def voice_stream(ws: WebSocket):
     """Bidirectional Twilio Media Stream endpoint (grok-realtime backend)."""
-    import websockets
-
     await ws.accept()
     # Twilio opens with "connected" then "start" (params + streamSid).
     start = None
@@ -284,10 +347,7 @@ async def voice_stream(ws: WebSocket):
             )
     try:
         if xai_ws is None:
-            xai_ws = await websockets.connect(
-                realtime.xai_url(),
-                additional_headers={"Authorization": f"Bearer {config.XAI_API_KEY}"},
-            )
+            xai_ws = await _take_xai()
         await realtime.run_call(
             _TwilioSocket(ws, start.get("streamSid", "")),
             _XaiSocket(xai_ws),
