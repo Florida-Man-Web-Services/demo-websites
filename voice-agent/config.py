@@ -24,6 +24,12 @@ TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER", "")
 # Public HTTPS base URL Twilio uses to reach this server (ngrok/cloudflared/VPS).
 PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "").rstrip("/")
 
+# Verify X-Twilio-Signature on every webhook post (on by default). Only turn
+# this off (=0) for local experiments that fake Twilio requests by hand.
+VALIDATE_TWILIO_WEBHOOKS = os.getenv(
+    "VALIDATE_TWILIO_WEBHOOKS", "1"
+).strip().lower() not in ("0", "false", "no")
+
 # --- Models -----------------------------------------------------------------
 # Which LLM drives the conversation: "anthropic" (Claude, default) or "grok"
 # (xAI's OpenAI-compatible API at https://api.x.ai/v1 — needs XAI_API_KEY).

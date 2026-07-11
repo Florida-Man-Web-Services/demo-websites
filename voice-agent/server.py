@@ -20,8 +20,9 @@ import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
-from fastapi import FastAPI, Form, Response, WebSocket
+from fastapi import Depends, FastAPI, Form, HTTPException, Request, Response, WebSocket
 from fastapi.responses import FileResponse, PlainTextResponse
+from twilio.request_validator import RequestValidator
 from twilio.twiml.voice_response import Connect, Gather, VoiceResponse
 
 import config
@@ -186,6 +187,33 @@ def _expire_primed(call_sid: str) -> None:
     fut.cancel()
 
 
+_SIGNATURE_VALIDATOR = RequestValidator(config.TWILIO_AUTH_TOKEN)
+
+
+async def _twilio_signature(request: Request) -> None:
+    """Reject webhook posts that weren't signed by our Twilio account.
+
+    On a stable public domain anyone who finds the URL could otherwise drive
+    the agent (LLM turns, SMS sends). Twilio signs every request over the
+    exact public URL plus the sorted form params; we reconstruct the URL from
+    PUBLIC_BASE_URL because the app sits behind a proxy and never sees the
+    original scheme/host.
+    """
+    if not config.VALIDATE_TWILIO_WEBHOOKS:
+        return
+    url = config.PUBLIC_BASE_URL + request.url.path
+    if request.url.query:
+        url += "?" + request.url.query
+    form = await request.form()  # cached by Starlette; Form(...) params still work
+    signature = request.headers.get("X-Twilio-Signature", "")
+    if not _SIGNATURE_VALIDATOR.validate(url, dict(form), signature):
+        log.warning("rejected unsigned webhook post to %s", request.url.path)
+        raise HTTPException(status_code=403, detail="invalid Twilio signature")
+
+
+_SIGNED = [Depends(_twilio_signature)]
+
+
 def _speak(vr_or_gather, text: str) -> None:
     """Attach spoken audio: Sesame TTS per sentence, Twilio <Say> as a
     per-sentence fallback.
@@ -244,7 +272,7 @@ def _twiml_stream(direction: str, number: str, slug: str = "") -> Response:
     return Response(content=str(vr), media_type="application/xml")
 
 
-@app.post("/voice/inbound")
+@app.post("/voice/inbound", dependencies=_SIGNED)
 def voice_inbound(CallSid: str = Form(...), From: str = Form("")):
     business = by_phone(From) or UNKNOWN_BUSINESS
     log.info("inbound call %s from %s -> matched %s", CallSid, From, business.name)
@@ -258,7 +286,7 @@ def voice_inbound(CallSid: str = Form(...), From: str = Form("")):
     return _twiml_turn(state, run_turn(state, None))
 
 
-@app.post("/voice/outbound")
+@app.post("/voice/outbound", dependencies=_SIGNED)
 def voice_outbound(slug: str, CallSid: str = Form(...), To: str = Form("")):
     business = by_slug(slug)
     if business is None:
@@ -385,7 +413,7 @@ async def voice_stream(ws: WebSocket):
             pass
 
 
-@app.post("/voice/turn")
+@app.post("/voice/turn", dependencies=_SIGNED)
 def voice_turn(CallSid: str = Form(...), SpeechResult: str = Form("")):
     state = CALLS.get(CallSid)
     if state is None:
@@ -397,7 +425,7 @@ def voice_turn(CallSid: str = Form(...), SpeechResult: str = Form("")):
     return _twiml_turn(state, run_turn(state, SpeechResult or None))
 
 
-@app.post("/voice/status")
+@app.post("/voice/status", dependencies=_SIGNED)
 def voice_status(CallSid: str = Form(...), CallStatus: str = Form("")):
     if CallStatus in ("completed", "failed", "busy", "no-answer", "canceled"):
         CALLS.pop(CallSid, None)
