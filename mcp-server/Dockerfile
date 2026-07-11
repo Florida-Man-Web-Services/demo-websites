@@ -14,6 +14,9 @@ COPY voice-agent/businesses.py voice-agent/config.py voice-agent/
 # when they're absent. Supply real data at runtime via the OUTREACH_CSV /
 # CALL_ORDER_CSV env vars pointing at a mounted volume.
 COPY gainesville-no-website/gainesville_no_website.json gainesville-no-website/
+# Demo pages: needed to compute hash-style URLs (DEMO_URL_STYLE=hash) — the
+# URL is sha256(page)[:12], so the pages themselves must be readable.
+COPY generated-sites generated-sites/
 COPY mcp-server/*.py mcp-server/
 
 # Call log lives on a mounted volume so outcomes survive restarts.

@@ -1,19 +1,15 @@
 ---
-name: Build demo-mcp
+name: Build demo-sites
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'mcp-server/**'
-      - 'voice-agent/businesses.py'
-      - 'voice-agent/config.py'
-      - 'correspondences/outreach-data.csv'
-      - 'correspondences/call-order.csv'
-      - 'gainesville-no-website/gainesville_no_website.json'
       - 'generated-sites/**'
-      - '.github/workflows/build-demo-mcp.yml'
+      - 'hosting/**'
+      - '.dockerignore'
+      - '.github/workflows/build-demo-sites.yml'
   workflow_dispatch:
 
 permissions:
@@ -40,8 +36,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: mcp-server/Dockerfile
+          file: hosting/Dockerfile
           push: true
-          tags: zot.hwcopeland.net/florida-man-bioscience/demo-mcp:main
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: zot.hwcopeland.net/florida-man-bioscience/demo-sites:main

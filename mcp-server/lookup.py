@@ -2,7 +2,7 @@
 
 import difflib
 
-from businesses import all_businesses, by_phone, by_slug, slugify
+from businesses import all_businesses, by_phone_all, by_slug, slugify
 
 
 def _profile(b) -> dict:
@@ -24,9 +24,15 @@ def find_business(query: str) -> dict:
     q = (query or "").strip()
     digits = sum(ch.isdigit() for ch in q)
     if digits >= 7:  # looks like a phone number
-        b = by_phone(q)
-        if b:
-            return _profile(b)
+        matches = by_phone_all(q)
+        if len(matches) == 1:
+            return _profile(matches[0])
+        if len(matches) > 1:
+            return {
+                "found": False,
+                "ambiguous_phone": True,
+                "suggestions": [{"name": b.name, "slug": b.slug} for b in matches],
+            }
     b = by_slug(slugify(q))
     if b:
         return _profile(b)

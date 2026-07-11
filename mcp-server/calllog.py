@@ -1,11 +1,16 @@
 """Append-only call-outcome logging + history reads for the MCP server.
 
-Shares the CSV schema and outcome enum with voice-agent/agent.py so the
-Twilio agent and the xAI agent write to interchangeable logs.
+Shares the CSV schema and outcome enum with voice-agent/agent.py, but each
+deployment writes its own file: the Twilio agent logs to
+voice-agent/call-log.csv locally, while this MCP server logs to
+/data/call-log.csv on its PVC. The logs are not merged or synchronized —
+get_call_history (and history_for below) only covers calls logged through
+this server.
 """
 
 import csv
 import threading
+import uuid
 from datetime import datetime
 
 import config
@@ -39,7 +44,13 @@ def history_for(slug: str) -> list[dict]:
 
 
 def append_outcome(
-    business, outcome: str, notes: str, email: str = "", callback_time: str = ""
+    business,
+    outcome: str,
+    notes: str,
+    email: str = "",
+    callback_time: str = "",
+    caller_phone: str = "",
+    direction: str = "",
 ) -> dict:
     if outcome not in VALID_OUTCOMES:
         return {
@@ -56,11 +67,11 @@ def append_outcome(
                 writer.writerow(COLUMNS)
             writer.writerow([
                 now.isoformat(timespec="seconds"),
-                f"XAI-{now.strftime('%Y%m%dT%H%M%S')}-{business.slug}",
-                "xai",
+                f"XAI-{now.strftime('%Y%m%dT%H%M%S')}-{business.slug}-{uuid.uuid4().hex[:8]}",
+                direction,
                 business.name,
                 business.slug,
-                business.phone,
+                caller_phone or business.phone,
                 outcome,
                 email,
                 callback_time,

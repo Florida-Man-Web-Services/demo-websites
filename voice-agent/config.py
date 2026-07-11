@@ -88,7 +88,21 @@ BUSINESS_JSON = Path(
 CALL_LOG = Path(os.getenv("CALL_LOG", AGENT_DIR / "call-log.csv"))
 AUDIO_CACHE_DIR = Path(os.getenv("AUDIO_CACHE_DIR", AGENT_DIR / "audio_cache"))
 
-DEMO_BASE_URL = "https://florida-man-bioscience.github.io/demo-websites/generated-sites"
+# --- Demo site URLs ---------------------------------------------------------
+# "slug" (default): {DEMO_BASE_URL}/{slug}.html — the GitHub Pages layout.
+# "hash": {DEMO_BASE_URL}/{sha256(page)[:12]}/ — the floridamanweb.online
+#   layout served by hosting/Dockerfile; links are unguessable but change
+#   whenever the page content changes.
+DEMO_URL_STYLE = os.getenv("DEMO_URL_STYLE", "slug").strip().lower()
+DEMO_BASE_URL = os.getenv(
+    "DEMO_BASE_URL",
+    "https://florida-man-bioscience.github.io/demo-websites/generated-sites",
+).rstrip("/")
+# Where the generated demo pages live; hash-style URLs are computed from
+# these files, so they must be present (they're baked into the demo-mcp image).
+GENERATED_SITES_DIR = Path(
+    os.getenv("GENERATED_SITES_DIR", REPO_ROOT / "generated-sites")
+)
 
 
 def require(*names: str) -> None:

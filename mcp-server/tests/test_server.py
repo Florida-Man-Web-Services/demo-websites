@@ -37,6 +37,35 @@ def test_mcp_accepts_right_token(client):
     assert r.status_code != 401
 
 
+def test_mcp_production_host_not_rejected(client):
+    # Regression for the 421 Invalid Host bug: FastMCP's default DNS-rebinding
+    # allowlist only covers 127.0.0.1/localhost/::1, so a real request with
+    # Host: mcp.flmanbiosci.net (as sent in production) would 421 unless
+    # transport_security is configured with the production hostname.
+    r = client.post(
+        "/mcp",
+        json={},
+        headers={
+            "Authorization": "Bearer test-token-123",
+            "Host": "mcp.flmanbiosci.net",
+        },
+    )
+    assert r.status_code not in (401, 421)
+
+    # Discriminating check: an unlisted Host must still 421. Without this,
+    # the assertion above would pass vacuously if DNS-rebinding protection
+    # weren't engaged at all — this proves the allowlist is actually wired.
+    bad = client.post(
+        "/mcp",
+        json={},
+        headers={
+            "Authorization": "Bearer test-token-123",
+            "Host": "evil.example.com",
+        },
+    )
+    assert bad.status_code == 421
+
+
 def test_tools_registered(monkeypatch):
     monkeypatch.setenv("MCP_AUTH_TOKEN", "t")
     import server
@@ -56,9 +85,10 @@ def test_log_tool_resolves_business(monkeypatch, tmp_path):
     monkeypatch.setenv("MCP_AUTH_TOKEN", "t")
     import server
     importlib.reload(server)
-    result = server.log_call_outcome("Ole Barn", "interested", "great call")
+    import anyio
+    result = anyio.run(server.log_call_outcome, "Ole Barn", "interested", "great call")
     assert result == {"logged": True}
-    unknown = server.log_call_outcome("zzzzqqqq", "interested", "n")
+    unknown = anyio.run(server.log_call_outcome, "zzzzqqqq", "interested", "n")
     assert unknown["logged"] is False
     assert "suggestions" in unknown
 

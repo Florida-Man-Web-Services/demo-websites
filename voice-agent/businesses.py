@@ -6,6 +6,7 @@ CSV isn't present. call-order.csv supplies the prioritized outbound queue.
 """
 
 import csv
+import hashlib
 import json
 import re
 from dataclasses import dataclass, field
@@ -18,6 +19,19 @@ def slugify(name: str) -> str:
     slug = name.lower()
     slug = re.sub(r"[^a-z0-9]+", "-", slug)
     return slug.strip("-")
+
+
+def demo_site_hash(slug: str) -> str | None:
+    """Content hash addressing a demo page on floridamanweb.online.
+
+    Must stay in lockstep with hosting/Dockerfile, which lays the pages out as
+    /<hash>/index.html using `sha256sum <file> | cut -c1-12`. Returns None when
+    the page isn't on disk (then callers fall back to the slug-style URL).
+    """
+    path = config.GENERATED_SITES_DIR / f"{slug}.html"
+    if not path.is_file():
+        return None
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
 
 
 def normalize_phone(phone: str) -> str:
@@ -52,6 +66,12 @@ class Business:
     def __post_init__(self):
         if not self.slug:
             self.slug = slugify(self.name)
+        if config.DEMO_URL_STYLE == "hash":
+            # Hash mode overrides even CSV-supplied URLs: outreach-data.csv
+            # predates floridamanweb.online and carries slug-style links.
+            page_hash = demo_site_hash(self.slug)
+            if page_hash:
+                self.demo_url = f"{config.DEMO_BASE_URL}/{page_hash}/"
         if not self.demo_url:
             self.demo_url = f"{config.DEMO_BASE_URL}/{self.slug}.html"
 
@@ -68,7 +88,8 @@ def load_businesses() -> list[Business]:
                     rating=row.get("rating", ""),
                     demo_url=row.get("demo_url", ""),
                     google_maps_url=row.get("google_maps_url", ""),
-                    shared_demo=row.get("shared_demo", "") == "yes",
+                    shared_demo=row.get("shared_demo", "").strip().lower()
+                    in ("yes", "true", "1"),
                 )
                 for row in csv.DictReader(f)
             ]
@@ -81,6 +102,7 @@ def load_businesses() -> list[Business]:
                 phone=b.get("phone", ""),
                 address=b.get("address", ""),
                 rating=b.get("rating", ""),
+                google_maps_url=b.get("google_maps_url", ""),
             )
             for b in data
         ]
@@ -111,6 +133,14 @@ def by_phone(phone: str) -> Business | None:
     return next(
         (b for b in all_businesses() if normalize_phone(b.phone) == digits), None
     )
+
+
+def by_phone_all(phone: str) -> list[Business]:
+    """All businesses sharing this phone number (same match as by_phone)."""
+    digits = normalize_phone(phone)
+    if not digits:
+        return []
+    return [b for b in all_businesses() if normalize_phone(b.phone) == digits]
 
 
 def call_queue() -> list[dict]:

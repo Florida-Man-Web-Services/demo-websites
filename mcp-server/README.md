@@ -16,8 +16,8 @@ Gainesville demo-websites campaign.
 | Tool | Purpose |
 | --- | --- |
 | `lookup_business(query)` | Profile + demo URL by name/slug/phone; suggestions on miss |
-| `get_pitch_info()` | Offer ($999 one-time), objections, compliance rules |
-| `get_call_history(business)` | Prior call-log rows for the business |
+| `get_pitch_info()` | Offer ($999/month), objections, compliance rules |
+| `get_call_history(business)` | Prior call-log rows for the business (this server's log only) |
 | `log_call_outcome(business, outcome, notes, email?, callback_time?)` | Append to call-log.csv |
 
 ## Local development
