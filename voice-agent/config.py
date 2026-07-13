@@ -77,6 +77,23 @@ SESAME_TTS_URL = os.getenv(
 OWNER_NAME = os.getenv("OWNER_NAME", "Noah")
 OWNER_CALLBACK_NUMBER = os.getenv("OWNER_CALLBACK_NUMBER", TWILIO_PHONE_NUMBER)
 
+# --- Agent mode ---------------------------------------------------------------
+# "sales" (default): Florida Man Web Services demo-website pitch agent.
+# "ai411": Gainesville AI 411 directory/events/broadcast operator (issue #51).
+# VOICE_AGENT_MODE is accepted as an alias for AGENT_MODE.
+_raw_agent_mode = (
+    os.getenv("AGENT_MODE") or os.getenv("VOICE_AGENT_MODE") or "sales"
+).strip().lower()
+if _raw_agent_mode not in ("sales", "ai411"):
+    raise SystemExit(
+        f"Unknown AGENT_MODE {_raw_agent_mode!r}; use 'sales' or 'ai411'."
+    )
+AGENT_MODE = _raw_agent_mode
+
+
+def is_ai411() -> bool:
+    return AGENT_MODE == "ai411"
+
 # --- Data files -------------------------------------------------------------
 OUTREACH_CSV = Path(
     os.getenv("OUTREACH_CSV", REPO_ROOT / "correspondences" / "outreach-data.csv")
