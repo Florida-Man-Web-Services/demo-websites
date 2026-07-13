@@ -1,6 +1,6 @@
 """MCP server for Florida Man Web Services sales/support agents.
 
-Streamable HTTP transport, bearer-token auth (except /health), four tools.
+Streamable HTTP transport, bearer-token auth (except /health), business tools.
 Run: MCP_AUTH_TOKEN=... python server.py   → http://0.0.0.0:8036/mcp
 """
 
@@ -27,6 +27,10 @@ from starlette.routing import Mount, Route
 import businesses
 import config
 from calllog import append_outcome, history_for
+from knowledge import (
+    get_business_snapshot as knowledge_snapshot,
+    search_business_knowledge as knowledge_search,
+)
 from lookup import find_business
 from pitch import get_pitch
 
@@ -190,6 +194,48 @@ async def log_call_outcome(
             direction,
         )
     )
+
+
+def _search_business_knowledge_sync(query: str, limit: int = 5) -> dict:
+    try:
+        return knowledge_search(query, limit=limit)
+    except Exception as e:
+        logger.exception("tool %s failed", "search_business_knowledge")
+        return {"ok": False, "results": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def search_business_knowledge(query: str, limit: int = 5) -> dict:
+    """Search local demo-site knowledge for facts about Gainesville businesses.
+
+    Indexes generated-sites HTML (no live crawl). Returns ranked text snippets
+    with slug/title and fetched_at (file mtime). Use when the caller asks
+    about services, hours language on the page, address details, or anything
+    beyond the short lookup_business profile. Scoring is keyword/TF-IDF v1
+    and may be swapped for embeddings later.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_search_business_knowledge_sync, query, limit)
+    )
+
+
+def _get_business_snapshot_sync(slug: str) -> dict:
+    try:
+        return knowledge_snapshot(slug)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_business_snapshot")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_business_snapshot(slug: str) -> dict:
+    """Load a compact text snapshot of one business demo page by slug.
+
+    Prefer after lookup_business when you need the fuller page content
+    (about, services, contact copy). Slug is the generated-sites filename
+    stem (e.g. aaa-refrigeration). fetched_at is the HTML file mtime.
+    """
+    return await anyio.to_thread.run_sync(_get_business_snapshot_sync, slug)
 
 
 def _unavailable(e: Exception) -> str:

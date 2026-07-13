@@ -19,6 +19,8 @@ Gainesville demo-websites campaign.
 | `get_pitch_info()` | Offer ($999/month), objections, compliance rules |
 | `get_call_history(business)` | Prior call-log rows for the business (this server's log only) |
 | `log_call_outcome(business, outcome, notes, email?, callback_time?)` | Append to call-log.csv |
+| `search_business_knowledge(query, limit?)` | Keyword/TF-IDF search over local `generated-sites` HTML chunks |
+| `get_business_snapshot(slug)` | Compact text snapshot of one demo page (slug = filename stem) |
 
 ## Local development
 
