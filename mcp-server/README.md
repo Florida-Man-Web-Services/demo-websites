@@ -25,6 +25,10 @@ Gainesville demo-websites campaign.
 | `update_caller_profile(phone, patch)` | Create/merge name, prefs, consent, topics |
 | `forget_caller(phone)` | Hard-delete caller profile ("forget me") |
 | `add_caller_note(phone, note)` | Append freeform note (created if needed) |
+| `create_change_request(business_slug, summary, items?, …)` | Persist a pending owner site ChangeRequest (JSONL) |
+| `list_open_change_requests(slug?)` | List open ChangeRequests (optional slug filter) |
+| `cancel_change_request(request_id)` | Mark a ChangeRequest cancelled |
+| `get_site_outline(slug)` | Title + headings from `generated-sites/<slug>.html` |
 
 ## Local development
 
