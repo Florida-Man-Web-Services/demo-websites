@@ -32,6 +32,11 @@ Gainesville demo-websites campaign.
 | `search_events(query?, when?, tags?, free_only?, limit?)` | Local Gainesville events (seed JSON); when=tonight/tomorrow/this_weekend |
 | `get_event(event_id)` | Full event record by id |
 | `list_event_sources()` | Event source names with counts (seed, community, …) |
+| `submit_event_broadcast(title, when_start, venue, phone, …)` | Community event post (JSONL; auto-approve + rate limit) |
+| `submit_notice_broadcast(text, category, phone, expires_at?)` | Short notice/gossip (≤280 chars; categories) |
+| `list_recent_broadcasts(category?, limit?)` | Approved non-expired broadcasts, newest first |
+| `report_broadcast(id, reason, reporter_phone?)` | Flag a post for review (pulls from public list) |
+| `delete_own_broadcast(id, phone)` | Soft-delete own post by author phone |
 
 ## Local development
 
