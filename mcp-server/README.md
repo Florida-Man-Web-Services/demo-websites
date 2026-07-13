@@ -21,6 +21,10 @@ Gainesville demo-websites campaign.
 | `log_call_outcome(business, outcome, notes, email?, callback_time?)` | Append to call-log.csv |
 | `search_business_knowledge(query, limit?)` | Keyword/TF-IDF search over local `generated-sites` HTML chunks |
 | `get_business_snapshot(slug)` | Compact text snapshot of one demo page (slug = filename stem) |
+| `get_caller_profile(phone)` | Caller memory by phone; redacts when `consent.memory_ok` is false |
+| `update_caller_profile(phone, patch)` | Create/merge name, prefs, consent, topics |
+| `forget_caller(phone)` | Hard-delete caller profile ("forget me") |
+| `add_caller_note(phone, note)` | Append freeform note (created if needed) |
 
 ## Local development
 

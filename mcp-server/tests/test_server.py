@@ -77,6 +77,8 @@ def test_tools_registered(monkeypatch):
         "lookup_business", "get_pitch_info", "get_call_history",
         "log_call_outcome",
         "search_business_knowledge", "get_business_snapshot",
+        "get_caller_profile", "update_caller_profile", "forget_caller",
+        "add_caller_note",
     }
 
 
