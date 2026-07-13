@@ -43,6 +43,7 @@ from events import (
     list_event_sources as list_event_sources_sync,
     search_events as search_events_sync,
 )
+import broadcasts as broadcasts_mod
 from lookup import find_business
 from pitch import get_pitch
 
@@ -521,6 +522,191 @@ def _list_event_sources_tool_sync() -> dict:
 async def list_event_sources() -> dict:
     """List event sources in the local store with counts (e.g. seed, community)."""
     return await anyio.to_thread.run_sync(_list_event_sources_tool_sync)
+
+
+def _submit_event_broadcast_sync(
+    title: str,
+    when_start: str,
+    venue: str,
+    phone: str,
+    when_end: str = "",
+    free: bool = True,
+    tags: str = "",
+    url: str = "",
+    text: str = "",
+) -> dict:
+    try:
+        return submit_event_broadcast_sync(
+            title=title,
+            when_start=when_start,
+            venue=venue,
+            phone=phone,
+            when_end=when_end,
+            free=free,
+            tags=tags,
+            url=url,
+            text=text,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "submit_event_broadcast")
+        return {"submitted": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def submit_event_broadcast(
+    title: str,
+    when_start: str,
+    venue: str,
+    phone: str,
+    when_end: str = "",
+    free: bool = True,
+    tags: str = "",
+    url: str = "",
+    text: str = "",
+) -> dict:
+    """Post a community event broadcast (title, when, venue, free?, tags, url?).
+
+    Auto-approved in v1 if it passes the keyword safety filter. Rate-limited
+    per phone per day. when_start/when_end are ISO datetimes. phone attributes
+    the post (E.164 or US 10-digit).
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _submit_event_broadcast_sync,
+            title,
+            when_start,
+            venue,
+            phone,
+            when_end,
+            free,
+            tags,
+            url,
+            text,
+        )
+    )
+
+
+def _submit_notice_broadcast_sync(
+    text: str,
+    category: str,
+    phone: str,
+    expires_at: str = "",
+) -> dict:
+    try:
+        return submit_notice_broadcast_sync(
+            text=text,
+            category=category,
+            phone=phone,
+            expires_at=expires_at,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "submit_notice_broadcast")
+        return {"submitted": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def submit_notice_broadcast(
+    text: str,
+    category: str,
+    phone: str,
+    expires_at: str = "",
+) -> dict:
+    """Post a short community notice (≤280 chars). Categories: tips, music,
+    food, traffic, general. Optional expires_at (ISO); default 14 days.
+    Auto-approved if safety filter passes; rate-limited per phone per day.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _submit_notice_broadcast_sync,
+            text,
+            category,
+            phone,
+            expires_at,
+        )
+    )
+
+
+def _list_recent_broadcasts_sync(category: str = "", limit: int = 20) -> dict:
+    try:
+        return list_recent_broadcasts_sync(category=category, limit=limit)
+    except Exception as e:
+        logger.exception("tool %s failed", "list_recent_broadcasts")
+        return {
+            "ok": False,
+            "count": 0,
+            "broadcasts": [],
+            "error": _unavailable(e),
+        }
+
+
+@mcp.tool()
+async def list_recent_broadcasts(category: str = "", limit: int = 20) -> dict:
+    """List approved, non-expired community broadcasts (newest first).
+
+    category empty = all; use tips|music|food|traffic|general for notices,
+    or 'event' for event posts only.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_list_recent_broadcasts_sync, category, limit)
+    )
+
+
+def _report_broadcast_sync(
+    broadcast_id: str,
+    reason: str,
+    reporter_phone: str = "",
+) -> dict:
+    try:
+        return report_broadcast_sync(
+            broadcast_id=broadcast_id,
+            reason=reason,
+            reporter_phone=reporter_phone,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "report_broadcast")
+        return {"reported": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def report_broadcast(
+    broadcast_id: str,
+    reason: str,
+    reporter_phone: str = "",
+) -> dict:
+    """Flag a community broadcast for review (removes from public list).
+
+    reason is required. Optional reporter_phone for attribution.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _report_broadcast_sync,
+            broadcast_id,
+            reason,
+            reporter_phone,
+        )
+    )
+
+
+def _delete_own_broadcast_sync(broadcast_id: str, phone: str) -> dict:
+    try:
+        return delete_own_broadcast_sync(
+            broadcast_id=broadcast_id,
+            phone=phone,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "delete_own_broadcast")
+        return {"deleted": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def delete_own_broadcast(broadcast_id: str, phone: str) -> dict:
+    """Soft-delete a broadcast the caller authored (status → deleted).
+
+    phone must match the author. Idempotent if already deleted.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_delete_own_broadcast_sync, broadcast_id, phone)
+    )
 
 
 def _unavailable(e: Exception) -> str:
