@@ -19,6 +19,10 @@ Gainesville demo-websites campaign.
 | `get_pitch_info()` | Offer ($999/month), objections, compliance rules |
 | `get_call_history(business)` | Prior call-log rows for the business (this server's log only) |
 | `log_call_outcome(business, outcome, notes, email?, callback_time?)` | Append to call-log.csv |
+| `create_change_request(business_slug, summary, items?, …)` | Persist a pending owner site ChangeRequest (JSONL) |
+| `list_open_change_requests(slug?)` | List open ChangeRequests (optional slug filter) |
+| `cancel_change_request(request_id)` | Mark a ChangeRequest cancelled |
+| `get_site_outline(slug)` | Title + headings from `generated-sites/<slug>.html` |
 
 ## Local development
 

@@ -27,6 +27,12 @@ from starlette.routing import Mount, Route
 import businesses
 import config
 from calllog import append_outcome, history_for
+from changerequests import (
+    cancel_change_request as cancel_change_request_sync,
+    create_change_request as create_change_request_sync,
+    get_site_outline as get_site_outline_sync,
+    list_open_change_requests as list_open_change_requests_sync,
+)
 from lookup import find_business
 from pitch import get_pitch
 
@@ -190,6 +196,117 @@ async def log_call_outcome(
             direction,
         )
     )
+
+
+def _create_change_request_sync(
+    business_slug: str,
+    summary: str,
+    items: str = "[]",
+    caller_phone: str = "",
+    source: str = "voice",
+    confirmation_spoken: bool = True,
+    priority: str = "normal",
+    call_sid: str = "",
+    transcript_ref: str = "",
+) -> dict:
+    try:
+        # MCP clients often pass structured args as JSON strings.
+        parsed_items: object = items
+        if isinstance(items, str):
+            parsed_items = items
+        return create_change_request_sync(
+            business_slug=business_slug,
+            summary=summary,
+            items=parsed_items,
+            caller_phone=caller_phone,
+            source=source,
+            confirmation_spoken=confirmation_spoken,
+            priority=priority,
+            call_sid=call_sid,
+            transcript_ref=transcript_ref,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "create_change_request")
+        return {"created": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def create_change_request(
+    business_slug: str,
+    summary: str,
+    items: str = "[]",
+    caller_phone: str = "",
+    source: str = "voice",
+    confirmation_spoken: bool = True,
+    priority: str = "normal",
+    call_sid: str = "",
+    transcript_ref: str = "",
+) -> dict:
+    """Create a pending owner site ChangeRequest for a business slug.
+
+    items: JSON array string of objects like
+    {"type":"hours|copy|phone|...","target":"...","after":"...","before?":"...","notes?":"..."}.
+    Call after the owner confirms the change list on the phone.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _create_change_request_sync,
+            business_slug,
+            summary,
+            items,
+            caller_phone,
+            source,
+            confirmation_spoken,
+            priority,
+            call_sid,
+            transcript_ref,
+        )
+    )
+
+
+def _list_open_change_requests_sync(slug: str = "") -> dict:
+    try:
+        return list_open_change_requests_sync(slug or None)
+    except Exception as e:
+        logger.exception("tool %s failed", "list_open_change_requests")
+        return {"count": 0, "requests": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def list_open_change_requests(slug: str = "") -> dict:
+    """List open (non-terminal) ChangeRequests. Optional slug filters to one business."""
+    return await anyio.to_thread.run_sync(_list_open_change_requests_sync, slug)
+
+
+def _cancel_change_request_sync(request_id: str) -> dict:
+    try:
+        return cancel_change_request_sync(request_id)
+    except Exception as e:
+        logger.exception("tool %s failed", "cancel_change_request")
+        return {"cancelled": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def cancel_change_request(request_id: str) -> dict:
+    """Cancel a pending/open ChangeRequest by id (status → cancelled)."""
+    return await anyio.to_thread.run_sync(_cancel_change_request_sync, request_id)
+
+
+def _get_site_outline_tool_sync(slug: str) -> dict:
+    try:
+        return get_site_outline_sync(slug)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_site_outline")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_site_outline(slug: str) -> dict:
+    """Read-only outline of generated-sites/<slug>.html: page title and headings.
+
+    Use before capturing change requests so you know current sections/hours/CTAs.
+    """
+    return await anyio.to_thread.run_sync(_get_site_outline_tool_sync, slug)
 
 
 def _unavailable(e: Exception) -> str:
