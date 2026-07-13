@@ -19,6 +19,10 @@ Gainesville demo-websites campaign.
 | `get_pitch_info()` | Offer ($999/month), objections, compliance rules |
 | `get_call_history(business)` | Prior call-log rows for the business (this server's log only) |
 | `log_call_outcome(business, outcome, notes, email?, callback_time?)` | Append to call-log.csv |
+| `get_caller_profile(phone)` | Caller memory by phone; redacts when `consent.memory_ok` is false |
+| `update_caller_profile(phone, patch)` | Create/merge name, prefs, consent, topics |
+| `forget_caller(phone)` | Hard-delete caller profile ("forget me") |
+| `add_caller_note(phone, note)` | Append freeform note (created if needed) |
 
 ## Local development
 

@@ -76,6 +76,8 @@ def test_tools_registered(monkeypatch):
     assert names == {
         "lookup_business", "get_pitch_info", "get_call_history",
         "log_call_outcome",
+        "get_caller_profile", "update_caller_profile", "forget_caller",
+        "add_caller_note",
     }
 
 

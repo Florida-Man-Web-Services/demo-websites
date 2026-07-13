@@ -25,6 +25,7 @@ from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Mount, Route
 
 import businesses
+import callers as callers_mod
 import config
 from calllog import append_outcome, history_for
 from lookup import find_business
@@ -189,6 +190,84 @@ async def log_call_outcome(
             caller_phone,
             direction,
         )
+    )
+
+
+def _get_caller_profile_sync(phone: str) -> dict:
+    try:
+        return callers_mod.get_profile(phone)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_caller_profile")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_caller_profile(phone: str) -> dict:
+    """Load a caller's remembered profile by phone (E.164 or US 10-digit).
+
+    When consent.memory_ok is false, only phone + consent (and timestamps)
+    are returned — names, preferences, notes, and last_topics are redacted.
+    Use after greeting to personalize if memory is allowed.
+    """
+    return await anyio.to_thread.run_sync(_get_caller_profile_sync, phone)
+
+
+def _update_caller_profile_sync(phone: str, patch: dict | None = None) -> dict:
+    try:
+        return callers_mod.update_profile(phone, patch)
+    except Exception as e:
+        logger.exception("tool %s failed", "update_caller_profile")
+        return {"updated": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def update_caller_profile(phone: str, patch: dict | None = None) -> dict:
+    """Create or merge-patch a caller profile by phone.
+
+    patch may include display_name, preferred_name, preferences (interests,
+    avoid, preferred_areas, sms_ok, mobility, accessibility), last_topics,
+    last_call_at, consent (memory_ok, marketing_ok). Creates the profile if
+    missing. Nested preference/consent keys are shallow-merged.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_update_caller_profile_sync, phone, patch)
+    )
+
+
+def _forget_caller_sync(phone: str) -> dict:
+    try:
+        return callers_mod.forget_profile(phone)
+    except Exception as e:
+        logger.exception("tool %s failed", "forget_caller")
+        return {"forgotten": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def forget_caller(phone: str) -> dict:
+    """Permanently delete a caller profile (hard delete — \"forget me\").
+
+    Idempotent: returns forgotten=true even if no profile existed.
+    """
+    return await anyio.to_thread.run_sync(_forget_caller_sync, phone)
+
+
+def _add_caller_note_sync(phone: str, note: str) -> dict:
+    try:
+        return callers_mod.add_note(phone, note)
+    except Exception as e:
+        logger.exception("tool %s failed", "add_caller_note")
+        return {"added": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def add_caller_note(phone: str, note: str) -> dict:
+    """Append a short freeform note to the caller's profile (creates if needed).
+
+    Notes are only returned by get_caller_profile when consent.memory_ok is
+    true. Use for durable call takeaways the caller wants remembered.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_add_caller_note_sync, phone, note)
     )
 
 
