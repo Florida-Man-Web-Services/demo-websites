@@ -19,7 +19,7 @@ import json
 import logging
 
 import config
-from agent import TOOLS, CallState, _run_tool, system_prompt
+from agent import CallState, _run_tool, get_tools, system_prompt
 
 log = logging.getLogger("voice-agent.realtime")
 
@@ -37,7 +37,7 @@ REALTIME VOICE NOTES
 
 
 def realtime_tools() -> list:
-    """agent.TOOLS (Anthropic schema) in the realtime API's flat format."""
+    """Active-mode tools (Anthropic schema) in the realtime API's flat format."""
     return [
         {
             "type": "function",
@@ -45,7 +45,7 @@ def realtime_tools() -> list:
             "description": t["description"],
             "parameters": t["input_schema"],
         }
-        for t in TOOLS
+        for t in get_tools()
     ]
 
 

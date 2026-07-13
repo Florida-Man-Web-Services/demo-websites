@@ -166,6 +166,36 @@ with an actual TCPA attorney first.
 - Sesame TTS via DeepInfra (~1,200 chars): ~$0.008
 - **Total ≈ $0.15–0.25 per call** — one converted site pays for hundreds.
 
+## AI 411 mode (`AGENT_MODE=ai411`)
+
+The default agent is the **sales** pitch for Florida Man Web Services demo
+sites. Set `AGENT_MODE=ai411` (or `VOICE_AGENT_MODE=ai411`) to run as
+**Gainesville AI 411** — a local directory / events / community-broadcast
+operator with **no** $999 sales pitch.
+
+```bash
+# voice-agent/.env
+AGENT_MODE=ai411
+# same Twilio / LLM / VOICE_BACKEND keys as sales mode
+```
+
+| | Sales (default) | AI 411 |
+|---|---|---|
+| Identity | Owner's AI assistant pitching free demos | Gainesville AI 411 community operator |
+| Greeting flavor | Sales disclosure + demo offer | "Gainesville AI 411 — events, businesses, or post something?" |
+| Tools | `send_demo_link_sms`, `log_call_outcome`, `end_call` | `search_business_knowledge`, `lookup_business`, `search_events`, `get_event`, `get_caller_profile`, `update_caller_profile`, `forget_caller`, `submit_event_broadcast`, `submit_notice_broadcast`, `list_recent_broadcasts`, `send_sms_links`, `end_call` |
+| Safety | AI disclosure; TCPA / do-not-call | AI disclosure; emergencies → 911; no medical/legal advice |
+
+**Stub status (#51):** prompt + tool *names* match the planned MCP surface so
+Grok/Claude realtime can call them when MCP is attached. In-process handlers
+for most AI 411 tools still return a speakable "not wired" result until the
+MCP bridge is complete; `send_sms_links` and `end_call` work locally when
+Twilio is configured. Sales mode is unchanged when `AGENT_MODE` is unset or
+`sales`.
+
+Implementation lives in `ai411.py` (prompt + tool schemas) and is selected
+from `agent.system_prompt` / `agent.get_tools()` via `config.AGENT_MODE`.
+
 ## Server deployment (hwcopeland's cluster)
 
 Push to `main` → GitHub Actions builds
