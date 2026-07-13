@@ -79,6 +79,8 @@ def test_tools_registered(monkeypatch):
         "search_business_knowledge", "get_business_snapshot",
         "get_caller_profile", "update_caller_profile", "forget_caller",
         "add_caller_note",
+        "create_change_request", "list_open_change_requests",
+        "cancel_change_request", "get_site_outline",
     }
 
 
