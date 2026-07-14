@@ -112,17 +112,21 @@ def test_end_call_sets_ended_in_ai411():
     assert "end" in msg.lower()
 
 
-def test_ai411_stub_tools_speakable():
+def test_ai411_search_events_not_stub():
+    """search_events should hit mcp-server seed data (or JSON), not the stub."""
     _, agent, _ = _reload_mode("ai411")
     state = agent.CallState(
         call_sid="TEST",
         business=_Biz(),
         direction="inbound",
-        caller_number="+13555550100",
+        caller_number="+13525550100",
     )
     state.llm = mock.Mock()
-    out = agent._run_tool(state, "search_events", {"query": "free this weekend"})
-    assert "not available" in out.lower() or "not wired" in out.lower() or "MCP" in out
+    out = agent._run_tool(state, "search_events", {"query": "", "limit": 5})
+    assert "not available" not in out.lower()
+    assert "not wired" not in out.lower()
+    # JSON result with ok/events from events.search_events
+    assert "events" in out or "ok" in out
 
 
 @pytest.fixture(autouse=True)

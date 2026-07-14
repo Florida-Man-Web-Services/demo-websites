@@ -534,8 +534,12 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
     if config.is_ai411():
         if name == "send_sms_links":
             return _send_sms_links(state, args)
-        # MCP-backed AI 411 tools are not executed in-process yet; speakable stub.
-        return ai411.stub_tool_result(name, args)
+        # In-process mcp-server stores (knowledge/events/callers/broadcasts/lookup).
+        import mcp_bridge
+
+        return mcp_bridge.run_ai411_tool(
+            name, args, caller_number=state.caller_number or ""
+        )
 
     if name == "send_demo_link_sms":
         return _send_sms(state, args.get("phone"))

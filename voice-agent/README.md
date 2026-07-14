@@ -186,15 +186,27 @@ AGENT_MODE=ai411
 | Tools | `send_demo_link_sms`, `log_call_outcome`, `end_call` | `search_business_knowledge`, `lookup_business`, `search_events`, `get_event`, `get_caller_profile`, `update_caller_profile`, `forget_caller`, `submit_event_broadcast`, `submit_notice_broadcast`, `list_recent_broadcasts`, `send_sms_links`, `end_call` |
 | Safety | AI disclosure; TCPA / do-not-call | AI disclosure; emergencies → 911; no medical/legal advice |
 
-**Stub status (#51):** prompt + tool *names* match the planned MCP surface so
-Grok/Claude realtime can call them when MCP is attached. In-process handlers
-for most AI 411 tools still return a speakable "not wired" result until the
-MCP bridge is complete; `send_sms_links` and `end_call` work locally when
-Twilio is configured. Sales mode is unchanged when `AGENT_MODE` is unset or
-`sales`.
+**Live stores (#51):** when `AGENT_MODE=ai411`, tool calls dispatch **in-process**
+to the same modules as `mcp-server/` (`knowledge`, `events`, `callers`,
+`broadcasts`, `lookup`) via `mcp_bridge.py`. No separate MCP HTTP hop on the
+voice path. Results are JSON strings for the LLM. If those modules fail to
+import, tools fall back to a speakable stub so calls do not crash.
+`send_sms_links` / `end_call` stay local in `agent.py` (Twilio when configured).
 
-Implementation lives in `ai411.py` (prompt + tool schemas) and is selected
-from `agent.system_prompt` / `agent.get_tools()` via `config.AGENT_MODE`.
+Store paths (env, same as mcp-server):
+
+| Env | Default / notes |
+|---|---|
+| `KNOWLEDGE_DIR` | `generated-sites/` (HTML knowledge index) |
+| `EVENTS_PATH` | `/data/events.json` or repo `data/events.json` (auto-seeded) |
+| `CALLERS_PATH` | `/data/callers.json` |
+| `BROADCASTS_PATH` | `/data/broadcasts.jsonl` |
+
+Sales mode is unchanged when `AGENT_MODE` is unset or `sales`.
+
+Implementation: `ai411.py` (prompt + tool schemas), `mcp_bridge.py` (dispatch),
+selected from `agent.system_prompt` / `agent.get_tools()` / `_run_tool` via
+`config.AGENT_MODE`.
 
 ## Server deployment (hwcopeland's cluster)
 

@@ -1,10 +1,9 @@
-"""Gainesville AI 411 voice mode — prompt + tool schemas (issue #51 stub).
+"""Gainesville AI 411 voice mode — prompt + tool schemas (issue #51).
 
 When AGENT_MODE=ai411 the voice agent is a local directory/events operator,
-not the Florida Man Web Services sales pitch. Tool *names* match the planned
-MCP surface so Grok/Claude realtime can call them when MCP is attached.
-Local _run_tool stubs return speakable "not wired" results until those MCP
-tools land end-to-end.
+not the Florida Man Web Services sales pitch. Tool *names* match the MCP
+surface; agent._run_tool dispatches in-process to mcp-server stores via
+mcp_bridge (knowledge / events / callers / broadcasts / lookup).
 """
 
 from __future__ import annotations
@@ -74,26 +73,37 @@ TOOLS = [
         "name": "search_events",
         "description": (
             "Search cached local events/calendars (what's on this weekend, "
-            "free outdoor events, etc.). May be empty until the events MCP "
-            "cache is populated."
+            "free outdoor events, etc.). Seed data is always available."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
                 "query": {
                     "type": "string",
-                    "description": "Event search query or topic.",
+                    "description": "Event search query or topic (may be empty).",
                 },
                 "when": {
                     "type": "string",
-                    "description": "Optional time window, e.g. this weekend.",
+                    "description": (
+                        "Optional time window: tonight, tomorrow, "
+                        "this_weekend, or empty for all upcoming."
+                    ),
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional tags filter (e.g. music, free, outdoor).",
+                },
+                "free_only": {
+                    "type": "boolean",
+                    "description": "If true, only free events (default false).",
                 },
                 "limit": {
                     "type": "integer",
                     "description": "Max events to return (default 5).",
                 },
             },
-            "required": ["query"],
+            "required": [],
             "additionalProperties": False,
         },
     },
@@ -175,37 +185,75 @@ TOOLS = [
         "description": (
             "Submit a moderated community event broadcast (title, when, where, "
             "summary). Reject harassment, spam, illegal content, or medical/legal "
-            "advice posts. Confirm details with the caller first."
+            "advice posts. Confirm details with the caller first. when_start "
+            "should be ISO datetime when possible."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
                 "title": {"type": "string"},
-                "when": {"type": "string", "description": "Date/time description."},
+                "when": {
+                    "type": "string",
+                    "description": "Date/time description or ISO when_start.",
+                },
+                "when_start": {
+                    "type": "string",
+                    "description": "ISO datetime start (preferred over when).",
+                },
+                "when_end": {
+                    "type": "string",
+                    "description": "Optional ISO datetime end.",
+                },
                 "where": {"type": "string", "description": "Venue or area."},
+                "venue": {"type": "string", "description": "Venue (alias for where)."},
                 "summary": {"type": "string"},
+                "text": {"type": "string", "description": "Event description (alias for summary)."},
+                "free": {"type": "boolean", "description": "Whether the event is free."},
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                "url": {"type": "string"},
+                "phone": {
+                    "type": "string",
+                    "description": "Author phone; omit to use caller's number.",
+                },
                 "contact": {
                     "type": "string",
                     "description": "Optional contact for the event.",
                 },
             },
-            "required": ["title", "summary"],
+            "required": ["title"],
             "additionalProperties": False,
         },
     },
     {
         "name": "submit_notice_broadcast",
         "description": (
-            "Submit a short community notice / lightweight gossip item for "
-            "moderation. Same policy rules as event broadcasts."
+            "Submit a short community notice (≤280 chars). Categories: tips, "
+            "music, food, traffic, general. Same policy rules as event broadcasts."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
-                "summary": {"type": "string"},
+                "summary": {"type": "string", "description": "Notice text."},
+                "text": {"type": "string", "description": "Notice text (alias for summary)."},
+                "category": {
+                    "type": "string",
+                    "enum": ["tips", "music", "food", "traffic", "general"],
+                    "description": "Notice category (default general).",
+                },
                 "area": {
                     "type": "string",
-                    "description": "Optional neighborhood or area.",
+                    "description": "Optional neighborhood; folded into text if not a category.",
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Author phone; omit to use caller's number.",
+                },
+                "expires_at": {
+                    "type": "string",
+                    "description": "Optional ISO expiry; default ~14 days.",
                 },
             },
             "required": ["summary"],
@@ -226,6 +274,13 @@ TOOLS = [
                     "type": "string",
                     "enum": ["event", "notice", "all"],
                     "description": "Filter by broadcast kind (default all).",
+                },
+                "category": {
+                    "type": "string",
+                    "description": (
+                        "Filter: empty/all, 'event', or notice category "
+                        "(tips|music|food|traffic|general)."
+                    ),
                 },
             },
             "additionalProperties": False,
@@ -336,14 +391,15 @@ CONVERSATION FLOW
    for businesses — do not run a sales pitch unless they clearly ask how to get
    a site built, and even then keep it one sentence and offer an owner callback.
 
-TOOLS (MCP names — use when available)
+TOOLS (in-process MCP store names)
 - search_business_knowledge, lookup_business
-- search_events, get_event
+- search_events (when: tonight|tomorrow|this_weekend|empty; free_only; tags), get_event
 - get_caller_profile, update_caller_profile, forget_caller
-- submit_event_broadcast, submit_notice_broadcast, list_recent_broadcasts
+- submit_event_broadcast (prefer ISO when_start + venue), submit_notice_broadcast,
+  list_recent_broadcasts
 - send_sms_links, end_call
-If a tool returns that it is not wired yet, apologize briefly and offer what
-you can without inventing data. Call end_call with your final goodbye.
+If a tool returns an error, apologize briefly and offer what you can without
+inventing data. Call end_call with your final goodbye.
 """
     if direction == "inbound":
         ctx += """
