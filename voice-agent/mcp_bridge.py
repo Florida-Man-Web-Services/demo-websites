@@ -1,8 +1,10 @@
-"""In-process dispatch from AI 411 voice tools to mcp-server stores (#51).
+"""In-process dispatch from voice tools to mcp-server stores (#51 / #52).
 
-Imports knowledge / events / callers / broadcasts / lookup from REPO_ROOT/mcp-server
-(plus voice-agent businesses for lookup). On import or execution failure, returns a
-speakable stub so live calls never crash.
+AI 411: knowledge / events / callers / broadcasts / lookup.
+Owner updates: changerequests / lookup (site outline + ChangeRequest CRUD/apply).
+
+Imports from REPO_ROOT/mcp-server (plus voice-agent businesses for lookup).
+On import or execution failure, returns a speakable stub so live calls never crash.
 """
 
 from __future__ import annotations
@@ -14,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 import ai411
+import owner_updates
 
 log = logging.getLogger("voice-agent.mcp_bridge")
 
@@ -24,6 +27,8 @@ _MCP_DIR = _REPO_ROOT / "mcp-server"
 _paths_ready = False
 _import_error: str | None = None
 _mods: dict[str, Any] = {}
+_owner_mods: dict[str, Any] = {}
+_owner_import_error: str | None = None
 
 
 def _ensure_import_paths() -> None:
@@ -32,7 +37,7 @@ def _ensure_import_paths() -> None:
     if _paths_ready:
         return
     # voice-agent first (businesses, config), then mcp-server at front for
-    # knowledge/events/callers/broadcasts/lookup.
+    # knowledge/events/callers/broadcasts/lookup/changerequests.
     va = str(_AGENT_DIR)
     mcp = str(_MCP_DIR)
     if va not in sys.path:
@@ -77,6 +82,27 @@ def _load_modules() -> str | None:
         return _import_error
 
 
+def _load_owner_modules() -> str | None:
+    """Lazy-import changerequests + lookup for owner_updates mode."""
+    global _owner_import_error
+    if _owner_mods:
+        return None
+    if _owner_import_error is not None and not _owner_mods:
+        _owner_import_error = None
+    _ensure_import_paths()
+    try:
+        import changerequests as changerequests_mod
+        from lookup import find_business
+
+        _owner_mods["changerequests"] = changerequests_mod
+        _owner_mods["find_business"] = find_business
+        return None
+    except Exception as e:  # noqa: BLE001
+        _owner_import_error = f"{e.__class__.__name__}: {e}"
+        log.warning("mcp-server owner_updates imports failed: %s", _owner_import_error)
+        return _owner_import_error
+
+
 def _json(result: Any) -> str:
     if isinstance(result, str):
         return result
@@ -85,7 +111,7 @@ def _json(result: Any) -> str:
 
 def _phone(args: dict, caller_number: str) -> str:
     """Prefer explicit phone arg; fall back to call state number."""
-    raw = args.get("phone") or caller_number or ""
+    raw = args.get("phone") or args.get("caller_phone") or caller_number or ""
     return str(raw).strip()
 
 
@@ -102,6 +128,22 @@ def _kind_to_category(args: dict) -> str:
         # Store filters notices by notice category (tips/music/…); empty lists all.
         return ""
     return kind
+
+
+def _parse_items(items: Any) -> Any:
+    """Accept list or JSON string for create_change_request items."""
+    if items is None:
+        return None
+    if isinstance(items, str):
+        s = items.strip()
+        if not s:
+            return []
+        try:
+            return json.loads(s)
+        except json.JSONDecodeError:
+            # Let changerequests._normalize_items report the error.
+            return items
+    return items
 
 
 def _dispatch(name: str, args: dict, *, caller_number: str) -> Any:
@@ -234,6 +276,65 @@ def _dispatch(name: str, args: dict, *, caller_number: str) -> Any:
     return ai411.stub_tool_result(name, args)
 
 
+def _dispatch_owner(
+    name: str,
+    args: dict,
+    *,
+    caller_number: str,
+    call_sid: str = "",
+) -> Any:
+    err = _load_owner_modules()
+    if err:
+        return owner_updates.stub_tool_result(name, args)
+
+    cr = _owner_mods["changerequests"]
+    find_business = _owner_mods["find_business"]
+
+    if name == "lookup_business":
+        query = args.get("query") or args.get("phone") or caller_number or ""
+        return find_business(str(query))
+
+    if name == "get_site_outline":
+        slug = args.get("slug") or args.get("business_slug") or ""
+        return cr.get_site_outline(str(slug))
+
+    if name == "create_change_request":
+        conf = args.get("confirmation_spoken", True)
+        if isinstance(conf, str):
+            conf = conf.strip().lower() in ("1", "true", "yes", "on")
+        return cr.create_change_request(
+            business_slug=str(args.get("business_slug") or args.get("slug") or ""),
+            summary=str(args.get("summary") or ""),
+            items=_parse_items(args.get("items")),
+            caller_phone=_phone(args, caller_number),
+            source=str(args.get("source") or "voice"),
+            confirmation_spoken=bool(conf),
+            priority=str(args.get("priority") or "normal"),
+            call_sid=str(args.get("call_sid") or call_sid or ""),
+            transcript_ref=str(args.get("transcript_ref") or ""),
+        )
+
+    if name == "list_open_change_requests":
+        slug = args.get("slug") or args.get("business_slug")
+        if slug is not None:
+            slug = str(slug).strip() or None
+        return cr.list_open_change_requests(slug=slug)
+
+    if name == "cancel_change_request":
+        rid = args.get("request_id") or args.get("id") or ""
+        return cr.cancel_change_request(str(rid))
+
+    if name == "apply_change_request":
+        rid = args.get("request_id") or args.get("id") or ""
+        return cr.apply_change_request(str(rid))
+
+    if name == "get_change_request":
+        rid = args.get("request_id") or args.get("id") or ""
+        return cr.get_change_request(str(rid))
+
+    return owner_updates.stub_tool_result(name, args)
+
+
 def run_ai411_tool(name: str, args: dict | None, *, caller_number: str = "") -> str:
     """Run an AI 411 tool; always returns a string safe to feed back to the LLM."""
     args = dict(args or {})
@@ -245,9 +346,33 @@ def run_ai411_tool(name: str, args: dict | None, *, caller_number: str = "") -> 
         return ai411.stub_tool_result(name, args)
 
 
+def run_owner_updates_tool(
+    name: str,
+    args: dict | None,
+    *,
+    caller_number: str = "",
+    call_sid: str = "",
+) -> str:
+    """Run an owner_updates tool; always returns a string safe for the LLM."""
+    args = dict(args or {})
+    try:
+        result = _dispatch_owner(
+            name,
+            args,
+            caller_number=caller_number or "",
+            call_sid=call_sid or "",
+        )
+        return _json(result)
+    except Exception as e:  # noqa: BLE001
+        log.warning("owner_updates tool %s raised: %s", name, e, exc_info=True)
+        return owner_updates.stub_tool_result(name, args)
+
+
 def reset_for_tests() -> None:
     """Drop cached imports (tests that change env / sys.path)."""
-    global _import_error, _paths_ready
+    global _import_error, _owner_import_error, _paths_ready
     _mods.clear()
+    _owner_mods.clear()
     _import_error = None
+    _owner_import_error = None
     # Keep paths; re-import is enough.
