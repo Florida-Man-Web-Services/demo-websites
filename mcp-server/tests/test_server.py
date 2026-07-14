@@ -82,6 +82,7 @@ def test_tools_registered(monkeypatch):
         "create_change_request", "list_open_change_requests",
         "cancel_change_request", "get_site_outline",
         "get_change_request", "apply_change_request", "mark_request_shipped",
+        "open_site_update_pr",
         "search_events", "get_event", "list_event_sources",
         "submit_event_broadcast", "submit_notice_broadcast",
         "list_recent_broadcasts", "report_broadcast", "delete_own_broadcast",

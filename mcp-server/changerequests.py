@@ -661,8 +661,9 @@ def apply_change_request(request_id: str) -> dict[str, Any]:
         "before_after": change_summary,
         "request": updated,
         "note": (
-            "HTML updated on disk under generated-sites; GitHub PR open is deferred "
-            "to a later agent/slice."
+            "HTML updated on disk under generated-sites. "
+            "Call open_site_update_pr(request_id) to open a GitHub PR "
+            "(SITE_PR_ENABLED=1 required to push; default is dry-run plan)."
         ),
     }
 

@@ -30,8 +30,9 @@ Gainesville demo-websites campaign.
 | `cancel_change_request(request_id)` | Mark a ChangeRequest cancelled |
 | `get_site_outline(slug)` | Title + headings from `generated-sites/<slug>.html` |
 | `get_change_request(request_id)` | Load one ChangeRequest by id (any status) |
-| `apply_change_request(request_id)` | Apply structured hours/phone/address/copy items to local HTML; mark shipped (no GitHub PR yet) |
+| `apply_change_request(request_id)` | Apply structured hours/phone/address/copy items to local HTML; mark shipped. Optional SITE_PR_AUTO=1 to chain open_site_update_pr |
 | `mark_request_shipped(request_id, note?)` | Manually mark a request shipped after external edits |
+| `open_site_update_pr(request_id, dry_run?, base_branch?)` | After shipped: branch+commit `generated-sites/<slug>.html` and open GitHub PR (`gh` or REST). Default dry-run unless `SITE_PR_ENABLED=1` |
 | `search_events(query?, when?, tags?, free_only?, limit?)` | Local Gainesville events (seed JSON); when=tonight/tomorrow/this_weekend |
 | `get_event(event_id)` | Full event record by id |
 | `list_event_sources()` | Event source names with counts (seed, community, …) |

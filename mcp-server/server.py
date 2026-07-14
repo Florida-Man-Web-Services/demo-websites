@@ -41,6 +41,7 @@ from changerequests import (
     list_open_change_requests as list_open_change_requests_sync,
     mark_request_shipped as mark_request_shipped_sync,
 )
+from sitepr import open_site_update_pr as open_site_update_pr_sync
 from events import (
     get_event as get_event_sync,
     list_event_sources as list_event_sources_sync,
@@ -459,10 +460,37 @@ async def get_change_request(request_id: str) -> dict:
 
 def _apply_change_request_tool_sync(request_id: str) -> dict:
     try:
-        return apply_change_request_sync(request_id)
+        result = apply_change_request_sync(request_id)
     except Exception as e:
         logger.exception("tool %s failed", "apply_change_request")
         return {"applied": False, "error": _unavailable(e)}
+    # Optional auto-PR: only when SITE_PR_AUTO=1 and apply just shipped.
+    # Default off — never open PRs from apply without explicit env opt-in.
+    try:
+        from sitepr import site_pr_auto, open_site_update_pr as _pr
+
+        if (
+            result.get("applied")
+            and result.get("status") == "shipped"
+            and not result.get("already_shipped")
+            and site_pr_auto()
+        ):
+            pr = _pr(request_id, dry_run=False)
+            result = dict(result)
+            result["site_pr"] = pr
+            if pr.get("pr_url"):
+                result["pr_url"] = pr.get("pr_url")
+                result["pr_branch"] = pr.get("branch")
+            elif pr.get("dry_run"):
+                result["note"] = (
+                    (result.get("note") or "")
+                    + " SITE_PR_AUTO set but SITE_PR_ENABLED off or dry plan only."
+                ).strip()
+    except Exception as e:
+        logger.exception("optional SITE_PR_AUTO after apply failed")
+        result = dict(result)
+        result["site_pr_error"] = _unavailable(e)
+    return result
 
 
 @mcp.tool()
@@ -471,8 +499,9 @@ async def apply_change_request(request_id: str) -> dict:
 
     MVP supports structured items: hours, phone, address, copy (before→after
     or section heuristics). Updates status pending|approved → in_progress →
-    shipped|failed. Writes HTML locally only — does NOT open a GitHub PR
-    (deferred to a later slice). Returns before/after summary.
+    shipped|failed. Writes HTML locally; does not open a GitHub PR unless
+    SITE_PR_AUTO=1 (then best-effort open_site_update_pr). Prefer calling
+    open_site_update_pr explicitly after apply. Returns before/after summary.
     """
     return await anyio.to_thread.run_sync(
         _apply_change_request_tool_sync, request_id
@@ -496,6 +525,43 @@ async def mark_request_shipped(request_id: str, note: str = "") -> dict:
     """
     return await anyio.to_thread.run_sync(
         functools.partial(_mark_request_shipped_sync, request_id, note)
+    )
+
+
+def _open_site_update_pr_sync(
+    request_id: str,
+    dry_run: bool = False,
+    base_branch: str = "main",
+) -> dict:
+    try:
+        return open_site_update_pr_sync(
+            request_id, dry_run=dry_run, base_branch=base_branch
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "open_site_update_pr")
+        return {"ok": False, "opened": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def open_site_update_pr(
+    request_id: str,
+    dry_run: bool = False,
+    base_branch: str = "main",
+) -> dict:
+    """Open a GitHub PR for a shipped ChangeRequest's generated-sites HTML.
+
+    Requires status=shipped (run apply_change_request first). Creates branch
+    site-update/<slug>-<shortid>, commits only that HTML file, pushes, and
+    opens a PR via `gh` or GitHub REST (GITHUB_TOKEN/GH_TOKEN).
+
+    Safe by default: SITE_PR_ENABLED must be 1 to push; otherwise returns a
+    dry-run plan (branch name, commit message, diff stats). Pass dry_run=true
+    to force plan-only. Saves pr_url + branch on the ChangeRequest record.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _open_site_update_pr_sync, request_id, dry_run, base_branch
+        )
     )
 
 
