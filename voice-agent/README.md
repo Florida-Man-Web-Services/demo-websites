@@ -217,6 +217,38 @@ Implementation: `ai411.py` (prompt + tool schemas), `mcp_bridge.py` (inproc +
 HTTP dispatch), selected from `agent.system_prompt` / `agent.get_tools()` /
 `_run_tool` via `config.AGENT_MODE`.
 
+## Owner updates mode (`AGENT_MODE=owner_updates`)
+
+Phone intake desk for **business owners** filing structured site
+`ChangeRequest`s against demo pages — not the sales pitch and not AI 411.
+
+```bash
+# voice-agent/.env
+AGENT_MODE=owner_updates
+# same Twilio / LLM / VOICE_BACKEND keys as other modes
+```
+
+| | Sales (default) | AI 411 | Owner updates |
+|---|---|---|---|
+| Identity | Pitch free demos | Gainesville AI 411 | Owner site-updates desk |
+| Auth | Outbound target business | Optional caller memory | Weak: match caller phone → business (`lookup_business`); ambiguous → ask which; spoken warning |
+| Tools | SMS demo, log outcome, end | Directory / events / broadcasts | `lookup_business`, `get_site_outline`, `create_change_request`, `list_open_change_requests`, `cancel_change_request`, `apply_change_request` (optional), `send_sms_links`, `end_call` |
+| Flow | Pitch → SMS link | Search / post | Outline → capture items → read back → `create_change_request` with `confirmation_spoken=true` |
+
+**Live stores (#52 intake):** tools dispatch **in-process** to
+`mcp-server/changerequests.py` and `lookup.py` via `mcp_bridge.run_owner_updates_tool`.
+`items` may be a list or a JSON array string; `caller_phone` defaults from the
+call state. `apply_change_request` is optional — warn that it updates local
+demo HTML only; shipping a PR is a separate step.
+
+| Env | Default / notes |
+|---|---|
+| `CHANGE_REQUESTS_PATH` | repo `data/change-requests.jsonl` (or `/data/…`) |
+| `GENERATED_SITES_DIR` | repo `generated-sites/` |
+
+Implementation: `owner_updates.py` (prompt + tool schemas), `mcp_bridge.py`
+(owner dispatch), selected via `config.AGENT_MODE` / `config.is_owner_updates()`.
+
 ## Server deployment (hwcopeland's cluster)
 
 Push to `main` → GitHub Actions builds
