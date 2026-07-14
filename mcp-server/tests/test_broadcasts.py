@@ -269,3 +269,162 @@ def test_env_path_override(tmp_path, monkeypatch):
     assert r["submitted"] is True
     assert env_store.exists()
     assert env_store.read_text(encoding="utf-8").count("\n") == 1
+
+
+# --- #48/#50 integration: approved event broadcasts → events.search_events ---
+
+
+@pytest.fixture
+def dual_stores(tmp_path, monkeypatch):
+    """Isolated broadcasts.jsonl + events.json for cross-module tests."""
+    import events as ev
+
+    bc_path = tmp_path / "broadcasts.jsonl"
+    ev_path = tmp_path / "events.json"
+    monkeypatch.setattr(bc, "BROADCASTS_PATH", bc_path)
+    monkeypatch.delenv("BROADCASTS_PATH", raising=False)
+    monkeypatch.setenv("EVENTS_PATH", str(ev_path))
+    monkeypatch.setattr(ev, "EVENTS_PATH", ev_path)
+    # Fixed clock so search_events does not drop our future-dated posts.
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    et = ZoneInfo("America/New_York")
+    fixed = datetime(2026, 7, 15, 14, 0, 0, tzinfo=et)
+    monkeypatch.setattr(ev, "_now_et", lambda: fixed)
+    # Empty events store (no seed) so community hits are easy to assert.
+    ev.reset_store([])
+    return {"broadcasts": bc_path, "events": ev_path, "now": fixed}
+
+
+def test_approved_event_broadcast_appears_in_search_events(dual_stores):
+    import events as ev
+
+    result = bc.submit_event_broadcast(
+        title="Unique Acoustic Jam Session XYZ",
+        when_start="2026-07-20T20:00:00-04:00",
+        when_end="2026-07-20T23:00:00-04:00",
+        venue="The Atlantic",
+        phone="3525550100",
+        free=True,
+        tags=["music", "free"],
+        text="Bring your own guitar",
+        url="https://example.com/jam",
+    )
+    assert result["submitted"] is True
+    assert result["status"] == "approved"
+    assert result.get("event_id") == f"community-{result['id']}"
+    assert "warning" not in result
+
+    found = ev.search_events(query="Acoustic Jam XYZ")
+    assert found["ok"] is True
+    assert found["count"] >= 1
+    hit = next(e for e in found["events"] if "XYZ" in e["title"])
+    assert hit["source"] == "community"
+    assert hit["id"] == result["event_id"]
+    assert hit["venue"] == "The Atlantic"
+    assert hit["free"] is True
+    assert "music" in hit["tags"]
+    assert hit["description"] == "Bring your own guitar"
+    assert hit["url"] == "https://example.com/jam"
+
+    by_id = ev.get_event(result["event_id"])
+    assert by_id["found"] is True
+    assert by_id["event"]["title"] == "Unique Acoustic Jam Session XYZ"
+
+
+def test_event_broadcast_respects_free_only_and_when_filters(dual_stores):
+    import events as ev
+    from datetime import datetime, time, timedelta
+    from zoneinfo import ZoneInfo
+
+    et = ZoneInfo("America/New_York")
+    # Fixed now is Wed 2026-07-15 14:00 ET
+    tonight_start = datetime(2026, 7, 15, 20, 0, 0, tzinfo=et).isoformat()
+    paid_start = datetime(2026, 7, 22, 19, 0, 0, tzinfo=et).isoformat()
+
+    free_r = bc.submit_event_broadcast(
+        title="Free Park Concert Tonight",
+        when_start=tonight_start,
+        venue="Depot Park",
+        phone="3525550101",
+        free=True,
+        tags=["music"],
+    )
+    paid_r = bc.submit_event_broadcast(
+        title="Ticketed Club Show Later",
+        when_start=paid_start,
+        venue="The Wooly",
+        phone="3525550102",
+        free=False,
+        tags=["music"],
+    )
+    assert free_r["submitted"] and paid_r["submitted"]
+
+    free_only = ev.search_events(free_only=True)
+    free_ids = {e["id"] for e in free_only["events"]}
+    assert free_r["event_id"] in free_ids
+    assert paid_r["event_id"] not in free_ids
+
+    # Paid event still searchable without free_only
+    paid_hit = ev.search_events(query="Ticketed Club")
+    assert paid_r["event_id"] in {e["id"] for e in paid_hit["events"]}
+
+    tonight = ev.search_events(when="tonight")
+    tonight_ids = {e["id"] for e in tonight["events"]}
+    assert free_r["event_id"] in tonight_ids
+    assert paid_r["event_id"] not in tonight_ids
+
+
+def test_notice_broadcast_does_not_enter_events_store(dual_stores):
+    import events as ev
+
+    notice = bc.submit_notice_broadcast(
+        text="Secret notice keyword ZZXNOTICETOKEN should not be an event",
+        category="general",
+        phone="3525550100",
+    )
+    assert notice["submitted"] is True
+    assert "event_id" not in notice
+
+    search = ev.search_events(query="ZZXNOTICETOKEN")
+    assert search["ok"] is True
+    assert search["count"] == 0
+    assert search["events"] == []
+
+
+def test_ingest_community_event_upserts_stable_id(tmp_path, monkeypatch):
+    import events as ev
+
+    path = tmp_path / "events.json"
+    monkeypatch.setenv("EVENTS_PATH", str(path))
+    monkeypatch.setattr(ev, "EVENTS_PATH", path)
+    ev.reset_store([])
+
+    first = ev.ingest_community_event(
+        broadcast_id="bc-abc123",
+        title="First Title",
+        when_start="2026-08-01T18:00:00-04:00",
+        venue="Park",
+        free=True,
+        tags=["outdoor"],
+        description="hello",
+    )
+    assert first["ok"] is True
+    assert first["event_id"] == "community-bc-abc123"
+    assert first["replaced"] is False
+
+    second = ev.ingest_community_event(
+        broadcast_id="bc-abc123",
+        title="Updated Title",
+        when_start="2026-08-01T19:00:00-04:00",
+        venue="Park 2",
+        free=False,
+    )
+    assert second["ok"] is True
+    assert second["replaced"] is True
+    got = ev.get_event("community-bc-abc123")
+    assert got["found"] is True
+    assert got["event"]["title"] == "Updated Title"
+    assert got["event"]["source"] == "community"
+    assert got["event"]["free"] is False

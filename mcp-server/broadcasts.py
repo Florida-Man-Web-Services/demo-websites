@@ -372,7 +372,9 @@ def submit_event_broadcast(
             }
             _append_record(path, rec)
 
-        return {
+        # Feed approved event posts into the events index (source=community)
+        # AFTER releasing _write_lock — events.upsert uses its own lock.
+        result: dict[str, Any] = {
             "submitted": True,
             "id": rec["id"],
             "status": status,
@@ -383,6 +385,39 @@ def submit_event_broadcast(
             ),
             "broadcast": _public_broadcast(rec),
         }
+        if status == "approved":
+            try:
+                import events as _events
+
+                ingest = _events.ingest_community_event(
+                    broadcast_id=rec["id"],
+                    title=title_s,
+                    when_start=when_s,
+                    venue=venue_s,
+                    when_end=(when_end or "").strip(),
+                    free=bool(free),
+                    tags=tag_list,
+                    description=(text or "").strip(),
+                    url=(url or "").strip(),
+                )
+                if ingest.get("ok"):
+                    result["event_id"] = ingest.get("event_id")
+                else:
+                    result["warning"] = (
+                        "Event was posted to the community feed, but "
+                        "could not be added to the events search index"
+                        + (
+                            f" ({ingest.get('error')})."
+                            if ingest.get("error")
+                            else "."
+                        )
+                    )
+            except Exception as e:  # never fail the broadcast submit
+                result["warning"] = (
+                    "Event was posted to the community feed, but "
+                    f"events index update failed ({e.__class__.__name__})."
+                )
+        return result
     except Exception as e:  # never raise
         return {
             "submitted": False,

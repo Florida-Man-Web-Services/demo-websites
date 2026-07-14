@@ -323,6 +323,53 @@ def upsert_event(event: dict[str, Any]) -> dict[str, Any]:
         return {"ok": True, "event": norm, "replaced": replaced}
 
 
+def ingest_community_event(
+    broadcast_id: str,
+    title: str,
+    when_start: str,
+    venue: str = "",
+    when_end: str = "",
+    free: bool = True,
+    tags: list[str] | None = None,
+    description: str = "",
+    url: str = "",
+) -> dict[str, Any]:
+    """Upsert an approved community broadcast into the events index.
+
+    Stable id: community-<broadcast_id>. source is always 'community'.
+    Uses upsert_event (own lock) — call outside the broadcasts write lock
+    to avoid nested lock ordering issues.
+
+    v1: deleted/reported broadcasts are left in the events store; they
+    expire via normal end/start time filtering in search_events.
+    """
+    bid = str(broadcast_id or "").strip()
+    if not bid:
+        return {
+            "ok": False,
+            "error": "broadcast_id is required to ingest a community event",
+        }
+    eid = bid if bid.startswith("community-") else f"community-{bid}"
+    payload: dict[str, Any] = {
+        "id": eid,
+        "title": title,
+        "start": when_start,
+        "end": (when_end or "").strip() or None,
+        "venue": venue or "",
+        "address": "",
+        "free": free,
+        "tags": tags or [],
+        "description": description or "",
+        "url": url or "",
+        "source": "community",
+    }
+    result = upsert_event(payload)
+    if result.get("ok"):
+        result["event_id"] = eid
+        result["broadcast_id"] = bid
+    return result
+
+
 def reset_store(events: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     """Replace entire store (tests). None → empty list."""
     with _lock:
