@@ -1,0 +1,4 @@
+# Regularly-updated Gainesville website vector store — daily incremental refresh.
+# Install:  crontab deploy/crontab.example   (adjust paths + venv)
+17 4 * * *  cd /opt/website-vector-store && WVS_EMBED_PROVIDER=openai WVS_EMBED_API_KEY=sk-... \
+            /opt/website-vector-store/.venv/bin/python -m wvs.cli update >> /var/log/wvs.log 2>&1
