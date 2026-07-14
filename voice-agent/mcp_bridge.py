@@ -1,8 +1,12 @@
-"""In-process dispatch from AI 411 voice tools to mcp-server stores (#51).
+"""Dispatch AI 411 voice tools to mcp-server stores (#51).
 
-Imports knowledge / events / callers / broadcasts / lookup from REPO_ROOT/mcp-server
-(plus voice-agent businesses for lookup). On import or execution failure, returns a
-speakable stub so live calls never crash.
+Backends (config.MCP_MODE):
+  inproc (default) — import knowledge/events/callers/broadcasts/lookup from
+                     REPO_ROOT/mcp-server (current behavior).
+  http             — Streamable HTTP tools/call against MCP_URL (+ bearer).
+  auto             — try inproc import; if it fails and MCP_URL is set, use http.
+
+On any failure, returns a speakable stub so live calls never crash.
 """
 
 from __future__ import annotations
@@ -10,10 +14,14 @@ from __future__ import annotations
 import json
 import logging
 import sys
+import uuid
 from pathlib import Path
 from typing import Any
 
+import httpx
+
 import ai411
+import config
 
 log = logging.getLogger("voice-agent.mcp_bridge")
 
@@ -24,6 +32,14 @@ _MCP_DIR = _REPO_ROOT / "mcp-server"
 _paths_ready = False
 _import_error: str | None = None
 _mods: dict[str, Any] = {}
+
+# Resolved backend for this process: "inproc" | "http" | None (not yet chosen).
+_backend: str | None = None
+_backend_note: str | None = None
+
+# MCP protocol version accepted by current FastMCP servers.
+_MCP_PROTOCOL = "2024-11-05"
+_HTTP_TIMEOUT = 20.0
 
 
 def _ensure_import_paths() -> None:
@@ -104,10 +120,168 @@ def _kind_to_category(args: dict) -> str:
     return kind
 
 
-def _dispatch(name: str, args: dict, *, caller_number: str) -> Any:
+def _resolve_backend() -> str:
+    """Pick inproc vs http once (or again after reset_for_tests)."""
+    global _backend, _backend_note
+    if _backend is not None:
+        return _backend
+
+    mode = (getattr(config, "MCP_MODE", None) or "inproc").strip().lower()
+    url = (getattr(config, "MCP_URL", None) or "").strip()
+
+    if mode == "http":
+        _backend = "http"
+        _backend_note = "MCP_MODE=http"
+        return _backend
+
+    if mode == "auto":
+        err = _load_modules()
+        if err is None:
+            _backend = "inproc"
+            _backend_note = "MCP_MODE=auto (inproc ok)"
+            return _backend
+        if url:
+            _backend = "http"
+            _backend_note = f"MCP_MODE=auto fell back to http ({err})"
+            log.info("mcp_bridge auto → http: %s", err)
+            return _backend
+        _backend = "inproc"
+        _backend_note = f"MCP_MODE=auto inproc failed, no MCP_URL ({err})"
+        return _backend
+
+    # default / inproc / unknown
+    if mode not in ("inproc", ""):
+        log.warning("Unknown MCP_MODE %r; using inproc", mode)
+    _backend = "inproc"
+    _backend_note = "MCP_MODE=inproc"
+    return _backend
+
+
+def _map_tool_call(name: str, args: dict, *, caller_number: str) -> tuple[str, dict]:
+    """Map voice tool name+args to MCP tool name + keyword arguments.
+
+    Shared by inproc (after import) and http so signatures stay aligned with
+    mcp-server/server.py tool defs.
+    """
+    args = dict(args or {})
+
+    if name == "search_business_knowledge":
+        return name, {
+            "query": str(args.get("query") or ""),
+            "limit": int(args.get("limit") or 5),
+        }
+
+    if name == "get_business_snapshot":
+        return name, {"slug": str(args.get("slug") or "")}
+
+    if name == "lookup_business":
+        return name, {"query": str(args.get("query") or "")}
+
+    if name == "search_events":
+        tags = args.get("tags")
+        free_only = args.get("free_only", False)
+        if isinstance(free_only, str):
+            free_only = free_only.strip().lower() in ("1", "true", "yes", "on")
+        out: dict[str, Any] = {
+            "query": str(args.get("query") or ""),
+            "when": str(args.get("when") or ""),
+            "free_only": bool(free_only),
+            "limit": int(args.get("limit") or 5),
+        }
+        if tags is not None:
+            out["tags"] = tags
+        return name, out
+
+    if name == "get_event":
+        eid = args.get("event_id") or args.get("id") or ""
+        return name, {"event_id": str(eid)}
+
+    if name == "get_caller_profile":
+        return name, {"phone": _phone(args, caller_number)}
+
+    if name == "update_caller_profile":
+        patch = args.get("patch")
+        if patch is None:
+            patch = {k: v for k, v in args.items() if k not in ("phone", "patch")}
+        return name, {"phone": _phone(args, caller_number), "patch": patch}
+
+    if name == "forget_caller":
+        return name, {"phone": _phone(args, caller_number)}
+
+    if name == "add_caller_note":
+        note = args.get("note") or args.get("text") or ""
+        return name, {"phone": _phone(args, caller_number), "note": str(note)}
+
+    if name == "submit_event_broadcast":
+        when_start = args.get("when_start") or args.get("when") or ""
+        venue = args.get("venue") or args.get("where") or ""
+        text = args.get("text") or args.get("summary") or ""
+        phone = _phone(args, caller_number)
+        if args.get("contact") and not phone:
+            phone = str(args.get("contact") or "")
+        out = {
+            "title": str(args.get("title") or ""),
+            "when_start": str(when_start),
+            "venue": str(venue),
+            "phone": phone,
+            "when_end": str(args.get("when_end") or ""),
+            "free": bool(args["free"]) if "free" in args else True,
+            "url": str(args.get("url") or ""),
+            "text": str(text),
+        }
+        if args.get("tags") is not None:
+            out["tags"] = args.get("tags")
+        return name, out
+
+    if name == "submit_notice_broadcast":
+        text = args.get("text") or args.get("summary") or ""
+        category = args.get("category") or args.get("area") or "general"
+        category = str(category).strip().lower() or "general"
+        # Notice categories are tips|music|food|traffic|general — freeform area
+        # becomes general with area folded into text (same as inproc).
+        known = frozenset({"tips", "music", "food", "traffic", "general"})
+        if _mods.get("broadcasts"):
+            known = getattr(_mods["broadcasts"], "NOTICE_CATEGORIES", known) or known
+        if category not in known:
+            area = category
+            category = "general"
+            if area and area not in str(text).lower():
+                text = f"{text} ({area})".strip()
+        return name, {
+            "text": str(text),
+            "category": category,
+            "phone": _phone(args, caller_number),
+            "expires_at": str(args.get("expires_at") or ""),
+        }
+
+    if name == "list_recent_broadcasts":
+        return name, {
+            "category": _kind_to_category(args),
+            "limit": int(args.get("limit") or 5),
+        }
+
+    if name == "report_broadcast":
+        return name, {
+            "broadcast_id": str(args.get("broadcast_id") or args.get("id") or ""),
+            "reason": str(args.get("reason") or ""),
+            "reporter_phone": _phone(args, caller_number),
+        }
+
+    if name == "delete_own_broadcast":
+        return name, {
+            "broadcast_id": str(args.get("broadcast_id") or args.get("id") or ""),
+            "phone": _phone(args, caller_number),
+        }
+
+    return name, dict(args)
+
+
+def _dispatch_inproc(name: str, args: dict, *, caller_number: str) -> Any:
     err = _load_modules()
     if err:
         return ai411.stub_tool_result(name, args)
+
+    mcp_name, mapped = _map_tool_call(name, args, caller_number=caller_number)
 
     knowledge = _mods["knowledge"]
     events = _mods["events"]
@@ -115,123 +289,346 @@ def _dispatch(name: str, args: dict, *, caller_number: str) -> Any:
     broadcasts = _mods["broadcasts"]
     find_business = _mods["find_business"]
 
-    if name == "search_business_knowledge":
-        return knowledge.search_business_knowledge(
-            query=str(args.get("query") or ""),
-            limit=int(args.get("limit") or 5),
-        )
+    if mcp_name == "search_business_knowledge":
+        return knowledge.search_business_knowledge(**mapped)
 
-    if name == "get_business_snapshot":
-        return knowledge.get_business_snapshot(str(args.get("slug") or ""))
+    if mcp_name == "get_business_snapshot":
+        return knowledge.get_business_snapshot(mapped["slug"])
 
-    if name == "lookup_business":
-        return find_business(str(args.get("query") or ""))
+    if mcp_name == "lookup_business":
+        return find_business(mapped["query"])
 
-    if name == "search_events":
-        tags = args.get("tags")
-        free_only = args.get("free_only", False)
-        if isinstance(free_only, str):
-            free_only = free_only.strip().lower() in ("1", "true", "yes", "on")
-        return events.search_events(
-            query=str(args.get("query") or ""),
-            when=str(args.get("when") or ""),
-            tags=tags,
-            free_only=bool(free_only),
-            limit=int(args.get("limit") or 5),
-        )
+    if mcp_name == "search_events":
+        return events.search_events(**mapped)
 
-    if name == "get_event":
-        eid = args.get("event_id") or args.get("id") or ""
-        return events.get_event(str(eid))
+    if mcp_name == "get_event":
+        return events.get_event(mapped["event_id"])
 
-    if name == "get_caller_profile":
-        return callers.get_profile(_phone(args, caller_number))
+    if mcp_name == "get_caller_profile":
+        return callers.get_profile(mapped["phone"])
 
-    if name == "update_caller_profile":
-        patch = args.get("patch")
-        if patch is None:
-            # Allow top-level field args as a shorthand patch.
-            patch = {
-                k: v
-                for k, v in args.items()
-                if k not in ("phone", "patch")
-            }
-        return callers.update_profile(_phone(args, caller_number), patch)
+    if mcp_name == "update_caller_profile":
+        return callers.update_profile(mapped["phone"], mapped.get("patch"))
 
-    if name == "forget_caller":
-        return callers.forget_profile(_phone(args, caller_number))
+    if mcp_name == "forget_caller":
+        return callers.forget_profile(mapped["phone"])
 
-    if name == "add_caller_note":
-        note = args.get("note") or args.get("text") or ""
-        return callers.add_note(_phone(args, caller_number), str(note))
+    if mcp_name == "add_caller_note":
+        return callers.add_note(mapped["phone"], mapped["note"])
 
-    if name == "submit_event_broadcast":
-        # TOOLS may use when/where/summary; MCP uses when_start/venue/text/phone.
-        when_start = (
-            args.get("when_start")
-            or args.get("when")
-            or ""
-        )
-        venue = args.get("venue") or args.get("where") or ""
-        text = args.get("text") or args.get("summary") or ""
-        phone = _phone(args, caller_number)
-        if args.get("contact") and not phone:
-            phone = str(args.get("contact") or "")
-        return broadcasts.submit_event_broadcast(
-            title=str(args.get("title") or ""),
-            when_start=str(when_start),
-            venue=str(venue),
-            phone=phone,
-            when_end=str(args.get("when_end") or ""),
-            free=bool(args["free"]) if "free" in args else True,
-            tags=args.get("tags"),
-            url=str(args.get("url") or ""),
-            text=str(text),
-        )
+    if mcp_name == "submit_event_broadcast":
+        return broadcasts.submit_event_broadcast(**mapped)
 
-    if name == "submit_notice_broadcast":
-        text = args.get("text") or args.get("summary") or ""
-        category = (
-            args.get("category")
-            or args.get("area")
-            or "general"
-        )
-        category = str(category).strip().lower() or "general"
-        # Notice categories are tips|music|food|traffic|general — freeform area
-        # becomes general with area folded into text.
-        known = getattr(broadcasts, "NOTICE_CATEGORIES", frozenset())
-        if known and category not in known:
-            area = category
-            category = "general"
-            if area and area not in str(text).lower():
-                text = f"{text} ({area})".strip()
-        return broadcasts.submit_notice_broadcast(
-            text=str(text),
-            category=category,
-            phone=_phone(args, caller_number),
-            expires_at=str(args.get("expires_at") or ""),
-        )
+    if mcp_name == "submit_notice_broadcast":
+        return broadcasts.submit_notice_broadcast(**mapped)
 
-    if name == "list_recent_broadcasts":
-        return broadcasts.list_recent_broadcasts(
-            category=_kind_to_category(args),
-            limit=int(args.get("limit") or 5),
-        )
+    if mcp_name == "list_recent_broadcasts":
+        return broadcasts.list_recent_broadcasts(**mapped)
 
-    if name == "report_broadcast":
-        return broadcasts.report_broadcast(
-            broadcast_id=str(args.get("broadcast_id") or args.get("id") or ""),
-            reason=str(args.get("reason") or ""),
-            reporter_phone=_phone(args, caller_number),
-        )
+    if mcp_name == "report_broadcast":
+        return broadcasts.report_broadcast(**mapped)
 
-    if name == "delete_own_broadcast":
-        return broadcasts.delete_own_broadcast(
-            broadcast_id=str(args.get("broadcast_id") or args.get("id") or ""),
-            phone=_phone(args, caller_number),
-        )
+    if mcp_name == "delete_own_broadcast":
+        return broadcasts.delete_own_broadcast(**mapped)
 
     return ai411.stub_tool_result(name, args)
+
+
+def _unauthorized_message(name: str) -> dict:
+    return {
+        "ok": False,
+        "error": (
+            f"MCP HTTP backend is not authorized for tool {name}. "
+            "Set MCP_AUTH_TOKEN (Bearer) for the remote server. "
+            "Apologize briefly; do not invent data."
+        ),
+        "unauthorized": True,
+    }
+
+
+def _http_config_error(name: str, detail: str) -> dict:
+    return {
+        "ok": False,
+        "error": (
+            f"MCP HTTP backend cannot run tool {name}: {detail}. "
+            "Apologize briefly; do not invent data."
+        ),
+    }
+
+
+def _parse_mcp_http_body(body: str, content_type: str) -> dict:
+    """Parse JSON or single-event SSE body from Streamable HTTP."""
+    text = (body or "").strip()
+    if not text:
+        return {}
+    ct = (content_type or "").lower()
+    if "text/event-stream" in ct or text.startswith("event:") or "data:" in text[:80]:
+        # Collect last JSON data: line from SSE.
+        data_lines: list[str] = []
+        for line in text.splitlines():
+            if line.startswith("data:"):
+                data_lines.append(line[5:].lstrip())
+            elif line.strip() == "" and data_lines:
+                # end of one event — keep going; prefer last event
+                pass
+        if data_lines:
+            # Prefer the last non-empty data payload (often tools/call result).
+            for chunk in reversed(data_lines):
+                if not chunk or chunk == "[DONE]":
+                    continue
+                try:
+                    return json.loads(chunk)
+                except json.JSONDecodeError:
+                    continue
+        return {"raw": text}
+    return json.loads(text)
+
+
+def _extract_tool_result(rpc: dict) -> Any:
+    """Pull tool result content from a tools/call JSON-RPC response."""
+    if not isinstance(rpc, dict):
+        return rpc
+    if rpc.get("error"):
+        err = rpc["error"]
+        if isinstance(err, dict):
+            msg = err.get("message") or err.get("data") or err
+            code = err.get("code")
+            return {
+                "ok": False,
+                "error": f"MCP error{f' {code}' if code is not None else ''}: {msg}",
+            }
+        return {"ok": False, "error": f"MCP error: {err}"}
+
+    result = rpc.get("result")
+    if result is None:
+        return rpc
+
+    # MCP CallToolResult: { content: [{type:text, text:...}], isError?, structuredContent? }
+    if isinstance(result, dict):
+        if "structuredContent" in result and result["structuredContent"] is not None:
+            return result["structuredContent"]
+        content = result.get("content")
+        if isinstance(content, list) and content:
+            texts = []
+            for block in content:
+                if not isinstance(block, dict):
+                    continue
+                if block.get("type") == "text" and "text" in block:
+                    texts.append(block["text"])
+            if len(texts) == 1:
+                t = texts[0]
+                try:
+                    return json.loads(t)
+                except (json.JSONDecodeError, TypeError):
+                    return t
+            if texts:
+                return "\n".join(texts)
+        # Maybe the server returned the dict directly (some proxies).
+        if "content" not in result and "isError" not in result:
+            return result
+        if result.get("isError"):
+            return {
+                "ok": False,
+                "error": _json(result.get("content") or result),
+            }
+    return result
+
+
+def _http_post_rpc(
+    client: httpx.Client,
+    url: str,
+    headers: dict[str, str],
+    method: str,
+    params: dict | None,
+    *,
+    req_id: Any,
+    session_id: str | None,
+) -> tuple[dict, str | None]:
+    """POST one JSON-RPC message; return (parsed body, session id header)."""
+    hdrs = dict(headers)
+    if session_id:
+        hdrs["Mcp-Session-Id"] = session_id
+    payload: dict[str, Any] = {
+        "jsonrpc": "2.0",
+        "id": req_id,
+        "method": method,
+    }
+    if params is not None:
+        payload["params"] = params
+
+    resp = client.post(url, headers=hdrs, json=payload)
+    new_sid = resp.headers.get("mcp-session-id") or session_id
+
+    if resp.status_code == 401:
+        return {
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "error": {"code": 401, "message": "unauthorized"},
+        }, new_sid
+
+    if resp.status_code >= 400:
+        snippet = (resp.text or "")[:300]
+        return {
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "error": {
+                "code": resp.status_code,
+                "message": f"HTTP {resp.status_code}: {snippet}",
+            },
+        }, new_sid
+
+    try:
+        body = _parse_mcp_http_body(resp.text, resp.headers.get("content-type", ""))
+    except Exception as e:  # noqa: BLE001
+        return {
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "error": {"code": -32700, "message": f"parse error: {e}"},
+        }, new_sid
+    return body, new_sid
+
+
+def _http_notify(
+    client: httpx.Client,
+    url: str,
+    headers: dict[str, str],
+    method: str,
+    params: dict | None,
+    session_id: str | None,
+) -> None:
+    hdrs = dict(headers)
+    if session_id:
+        hdrs["Mcp-Session-Id"] = session_id
+    payload: dict[str, Any] = {"jsonrpc": "2.0", "method": method}
+    if params is not None:
+        payload["params"] = params
+    # Notifications may return 202/204/200; ignore body.
+    client.post(url, headers=hdrs, json=payload)
+
+
+def call_mcp_tool_http(
+    name: str,
+    arguments: dict,
+    *,
+    url: str | None = None,
+    token: str | None = None,
+    client: httpx.Client | None = None,
+) -> Any:
+    """Call a remote MCP tool via Streamable HTTP (initialize + tools/call).
+
+    Prefer real MCP JSON-RPC against FastMCP (json_response / streamable HTTP).
+    ``client`` is injectable for tests.
+    """
+    url = (url if url is not None else getattr(config, "MCP_URL", "") or "").strip()
+    token = (
+        token if token is not None else getattr(config, "MCP_AUTH_TOKEN", "") or ""
+    ).strip()
+
+    if not url:
+        return _http_config_error(name, "MCP_URL is not set")
+    if not token:
+        return _unauthorized_message(name)
+
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+        "Authorization": f"Bearer {token}",
+    }
+
+    owns_client = client is None
+    http = client if client is not None else httpx.Client(timeout=_HTTP_TIMEOUT)
+
+    try:
+        session_id: str | None = None
+        init_body, session_id = _http_post_rpc(
+            http,
+            url,
+            headers,
+            "initialize",
+            {
+                "protocolVersion": _MCP_PROTOCOL,
+                "capabilities": {},
+                "clientInfo": {"name": "voice-agent-mcp-bridge", "version": "0.1"},
+            },
+            req_id=1,
+            session_id=None,
+        )
+        if init_body.get("error"):
+            err = init_body["error"]
+            if isinstance(err, dict) and err.get("code") == 401:
+                return _unauthorized_message(name)
+            return _extract_tool_result(init_body)
+
+        try:
+            _http_notify(
+                http,
+                url,
+                headers,
+                "notifications/initialized",
+                {},
+                session_id,
+            )
+        except Exception as e:  # noqa: BLE001
+            log.debug("notifications/initialized failed (continuing): %s", e)
+
+        call_body, _ = _http_post_rpc(
+            http,
+            url,
+            headers,
+            "tools/call",
+            {"name": name, "arguments": arguments or {}},
+            req_id=str(uuid.uuid4()),
+            session_id=session_id,
+        )
+        if call_body.get("error"):
+            err = call_body["error"]
+            if isinstance(err, dict) and err.get("code") == 401:
+                return _unauthorized_message(name)
+        return _extract_tool_result(call_body)
+    except httpx.HTTPError as e:
+        log.warning("MCP HTTP transport error for %s: %s", name, e)
+        return {
+            "ok": False,
+            "error": (
+                f"MCP HTTP transport error for {name} ({e.__class__.__name__}). "
+                "Apologize briefly; do not invent data."
+            ),
+        }
+    finally:
+        if owns_client:
+            http.close()
+
+
+def _dispatch_http(name: str, args: dict, *, caller_number: str) -> Any:
+    mcp_name, mapped = _map_tool_call(name, args, caller_number=caller_number)
+    # Unknown tools still get a remote call attempt only if they map; stubs for
+    # names we deliberately do not bridge stay local.
+    known = {
+        "search_business_knowledge",
+        "get_business_snapshot",
+        "lookup_business",
+        "search_events",
+        "get_event",
+        "get_caller_profile",
+        "update_caller_profile",
+        "forget_caller",
+        "add_caller_note",
+        "submit_event_broadcast",
+        "submit_notice_broadcast",
+        "list_recent_broadcasts",
+        "report_broadcast",
+        "delete_own_broadcast",
+    }
+    if mcp_name not in known:
+        return ai411.stub_tool_result(name, args)
+    return call_mcp_tool_http(mcp_name, mapped)
+
+
+def _dispatch(name: str, args: dict, *, caller_number: str) -> Any:
+    backend = _resolve_backend()
+    if backend == "http":
+        return _dispatch_http(name, args, caller_number=caller_number)
+    return _dispatch_inproc(name, args, caller_number=caller_number)
 
 
 def run_ai411_tool(name: str, args: dict | None, *, caller_number: str = "") -> str:
@@ -246,8 +643,10 @@ def run_ai411_tool(name: str, args: dict | None, *, caller_number: str = "") -> 
 
 
 def reset_for_tests() -> None:
-    """Drop cached imports (tests that change env / sys.path)."""
-    global _import_error, _paths_ready
+    """Drop cached imports and backend choice (tests that change env / sys.path)."""
+    global _import_error, _backend, _backend_note
     _mods.clear()
     _import_error = None
+    _backend = None
+    _backend_note = None
     # Keep paths; re-import is enough.

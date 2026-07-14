@@ -186,27 +186,36 @@ AGENT_MODE=ai411
 | Tools | `send_demo_link_sms`, `log_call_outcome`, `end_call` | `search_business_knowledge`, `lookup_business`, `search_events`, `get_event`, `get_caller_profile`, `update_caller_profile`, `forget_caller`, `submit_event_broadcast`, `submit_notice_broadcast`, `list_recent_broadcasts`, `send_sms_links`, `end_call` |
 | Safety | AI disclosure; TCPA / do-not-call | AI disclosure; emergencies → 911; no medical/legal advice |
 
-**Live stores (#51):** when `AGENT_MODE=ai411`, tool calls dispatch **in-process**
-to the same modules as `mcp-server/` (`knowledge`, `events`, `callers`,
-`broadcasts`, `lookup`) via `mcp_bridge.py`. No separate MCP HTTP hop on the
-voice path. Results are JSON strings for the LLM. If those modules fail to
-import, tools fall back to a speakable stub so calls do not crash.
+**Live stores (#51):** when `AGENT_MODE=ai411`, tool calls dispatch via
+`mcp_bridge.py` to the same tools as `mcp-server/` (`knowledge`, `events`,
+`callers`, `broadcasts`, `lookup`). Results are JSON strings for the LLM. On
+failure, tools return a speakable stub so calls do not crash.
 `send_sms_links` / `end_call` stay local in `agent.py` (Twilio when configured).
 
-Store paths (env, same as mcp-server):
+| `MCP_MODE` | Behavior |
+|---|---|
+| `inproc` (default) | Import store modules from the monorepo `mcp-server/` tree (no HTTP hop). |
+| `http` | Streamable HTTP `tools/call` against `MCP_URL` with `Authorization: Bearer MCP_AUTH_TOKEN`. |
+| `auto` | Try inproc import; if it fails and `MCP_URL` is set, fall back to HTTP. |
+
+Use `http` or `auto` when the voice container does **not** share the mcp-server
+data filesystem (e.g. production: `MCP_URL=https://mcp.flmanbiosci.net/mcp`).
 
 | Env | Default / notes |
 |---|---|
-| `KNOWLEDGE_DIR` | `generated-sites/` (HTML knowledge index) |
-| `EVENTS_PATH` | `/data/events.json` or repo `data/events.json` (auto-seeded) |
-| `CALLERS_PATH` | `/data/callers.json` |
-| `BROADCASTS_PATH` | `/data/broadcasts.jsonl` |
+| `MCP_MODE` | `inproc` \| `http` \| `auto` |
+| `MCP_URL` | e.g. `https://mcp.flmanbiosci.net/mcp` (required for http) |
+| `MCP_AUTH_TOKEN` | Bearer token for remote MCP (required for http) |
+| `KNOWLEDGE_DIR` | `generated-sites/` (HTML knowledge index; inproc) |
+| `EVENTS_PATH` | `/data/events.json` or repo `data/events.json` (auto-seeded; inproc) |
+| `CALLERS_PATH` | `/data/callers.json` (inproc) |
+| `BROADCASTS_PATH` | `/data/broadcasts.jsonl` (inproc) |
 
 Sales mode is unchanged when `AGENT_MODE` is unset or `sales`.
 
-Implementation: `ai411.py` (prompt + tool schemas), `mcp_bridge.py` (dispatch),
-selected from `agent.system_prompt` / `agent.get_tools()` / `_run_tool` via
-`config.AGENT_MODE`.
+Implementation: `ai411.py` (prompt + tool schemas), `mcp_bridge.py` (inproc +
+HTTP dispatch), selected from `agent.system_prompt` / `agent.get_tools()` /
+`_run_tool` via `config.AGENT_MODE`.
 
 ## Server deployment (hwcopeland's cluster)
 

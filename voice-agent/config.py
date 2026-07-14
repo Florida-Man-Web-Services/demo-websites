@@ -94,6 +94,25 @@ AGENT_MODE = _raw_agent_mode
 def is_ai411() -> bool:
     return AGENT_MODE == "ai411"
 
+
+# --- AI 411 MCP bridge ------------------------------------------------------
+# How voice-agent reaches knowledge/events/callers/broadcasts/lookup:
+#   inproc (default) — import mcp-server modules from the monorepo checkout
+#   http             — Streamable HTTP tools/call to MCP_URL (bearer token)
+#   auto             — try inproc; if import fails and MCP_URL is set, use http
+#
+# Production voice containers often lack the mcp-server store filesystem; set
+# MCP_MODE=http (or auto) with MCP_URL=https://mcp.flmanbiosci.net/mcp and
+# MCP_AUTH_TOKEN matching the demo-mcp Deployment.
+_raw_mcp_mode = (os.getenv("MCP_MODE") or "inproc").strip().lower()
+if _raw_mcp_mode not in ("inproc", "http", "auto"):
+    # Soft-fallback so a typo does not kill the process at import time.
+    _raw_mcp_mode = "inproc"
+MCP_MODE = _raw_mcp_mode
+MCP_URL = os.getenv("MCP_URL", "").strip()
+MCP_AUTH_TOKEN = os.getenv("MCP_AUTH_TOKEN", "").strip()
+
+
 # --- Data files -------------------------------------------------------------
 OUTREACH_CSV = Path(
     os.getenv("OUTREACH_CSV", REPO_ROOT / "correspondences" / "outreach-data.csv")
