@@ -21,6 +21,7 @@ from typing import Any
 import httpx
 
 import ai411
+import owner_updates
 import config
 
 log = logging.getLogger("voice-agent.mcp_bridge")
@@ -32,6 +33,9 @@ _MCP_DIR = _REPO_ROOT / "mcp-server"
 _paths_ready = False
 _import_error: str | None = None
 _mods: dict[str, Any] = {}
+
+_owner_mods: dict[str, Any] = {}
+_owner_import_error: str | None = None
 
 # Resolved backend for this process: "inproc" | "http" | None (not yet chosen).
 _backend: str | None = None
@@ -644,9 +648,130 @@ def run_ai411_tool(name: str, args: dict | None, *, caller_number: str = "") -> 
 
 def reset_for_tests() -> None:
     """Drop cached imports and backend choice (tests that change env / sys.path)."""
-    global _import_error, _backend, _backend_note
+    global _import_error, _backend, _backend_note, _owner_import_error
     _mods.clear()
+    _owner_mods.clear()
     _import_error = None
+    _owner_import_error = None
     _backend = None
     _backend_note = None
     # Keep paths; re-import is enough.
+
+
+
+def _dispatch_owner(
+    name: str,
+    args: dict,
+    *,
+    caller_number: str,
+    call_sid: str = "",
+) -> Any:
+    err = _load_owner_modules()
+    if err:
+        return owner_updates.stub_tool_result(name, args)
+
+    cr = _owner_mods["changerequests"]
+    find_business = _owner_mods["find_business"]
+
+    if name == "lookup_business":
+        query = args.get("query") or args.get("phone") or caller_number or ""
+        return find_business(str(query))
+
+    if name == "get_site_outline":
+        slug = args.get("slug") or args.get("business_slug") or ""
+        return cr.get_site_outline(str(slug))
+
+    if name == "create_change_request":
+        conf = args.get("confirmation_spoken", True)
+        if isinstance(conf, str):
+            conf = conf.strip().lower() in ("1", "true", "yes", "on")
+        return cr.create_change_request(
+            business_slug=str(args.get("business_slug") or args.get("slug") or ""),
+            summary=str(args.get("summary") or ""),
+            items=_parse_items(args.get("items")),
+            caller_phone=_phone(args, caller_number),
+            source=str(args.get("source") or "voice"),
+            confirmation_spoken=bool(conf),
+            priority=str(args.get("priority") or "normal"),
+            call_sid=str(args.get("call_sid") or call_sid or ""),
+            transcript_ref=str(args.get("transcript_ref") or ""),
+        )
+
+    if name == "list_open_change_requests":
+        slug = args.get("slug") or args.get("business_slug")
+        if slug is not None:
+            slug = str(slug).strip() or None
+        return cr.list_open_change_requests(slug=slug)
+
+    if name == "cancel_change_request":
+        rid = args.get("request_id") or args.get("id") or ""
+        return cr.cancel_change_request(str(rid))
+
+    if name == "apply_change_request":
+        rid = args.get("request_id") or args.get("id") or ""
+        return cr.apply_change_request(str(rid))
+
+    if name == "get_change_request":
+        rid = args.get("request_id") or args.get("id") or ""
+        return cr.get_change_request(str(rid))
+
+    return owner_updates.stub_tool_result(name, args)
+
+
+def _load_owner_modules() -> str | None:
+    """Lazy-import changerequests + lookup for owner_updates mode."""
+    global _owner_import_error
+    if _owner_mods:
+        return None
+    if _owner_import_error is not None and not _owner_mods:
+        _owner_import_error = None
+    _ensure_import_paths()
+    try:
+        import changerequests as changerequests_mod
+        from lookup import find_business
+
+        _owner_mods["changerequests"] = changerequests_mod
+        _owner_mods["find_business"] = find_business
+        return None
+    except Exception as e:  # noqa: BLE001
+        _owner_import_error = f"{e.__class__.__name__}: {e}"
+        log.warning("mcp-server owner_updates imports failed: %s", _owner_import_error)
+        return _owner_import_error
+
+
+def _parse_items(items: Any) -> Any:
+    """Accept list or JSON string for create_change_request items."""
+    if items is None:
+        return None
+    if isinstance(items, str):
+        s = items.strip()
+        if not s:
+            return []
+        try:
+            return json.loads(s)
+        except json.JSONDecodeError:
+            # Let changerequests._normalize_items report the error.
+            return items
+    return items
+
+
+def run_owner_updates_tool(
+    name: str,
+    args: dict | None,
+    *,
+    caller_number: str = "",
+    call_sid: str = "",
+) -> str:
+    """Run an owner_updates tool; always returns a string safe for the LLM."""
+    args = dict(args or {})
+    try:
+        result = _dispatch_owner(
+            name,
+            args,
+            caller_number=caller_number or "",
+            call_sid=call_sid or "",
+        )
+        return _json(result)
+    except Exception as e:  # noqa: BLE001
+        log.warning("owner_updates tool %s raised: %s", name, e, exc_info=True)
+        return owner_updates.stub_tool_result(name, args)

@@ -17,6 +17,7 @@ from twilio.rest import Client as TwilioClient
 
 import config
 import ai411
+import owner_updates
 from businesses import Business
 from tts import split_sentences
 
@@ -117,13 +118,21 @@ SALES_OPENERS = [
 
 
 def get_tools() -> list:
-    """Tool schemas for the active AGENT_MODE (sales default, or ai411)."""
-    return ai411.TOOLS if config.is_ai411() else SALES_TOOLS
+    """Tool schemas for the active AGENT_MODE (sales default, ai411, owner_updates)."""
+    if config.is_ai411():
+        return ai411.TOOLS
+    if config.is_owner_updates():
+        return owner_updates.TOOLS
+    return SALES_TOOLS
 
 
 def get_openers() -> list:
     """Stock opener phrases for the active AGENT_MODE."""
-    return ai411.OPENERS if config.is_ai411() else SALES_OPENERS
+    if config.is_ai411():
+        return ai411.OPENERS
+    if config.is_owner_updates():
+        return owner_updates.OPENERS
+    return SALES_OPENERS
 
 
 # Back-compat names: resolve to sales lists when AGENT_MODE is default.
@@ -156,6 +165,12 @@ def system_prompt(
     """
     if config.is_ai411():
         return ai411.system_prompt(
+            direction=direction,
+            caller_number=caller_number,
+            openers=openers,
+        )
+    if config.is_owner_updates():
+        return owner_updates.system_prompt(
             direction=direction,
             caller_number=caller_number,
             openers=openers,
@@ -539,6 +554,19 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
 
         return mcp_bridge.run_ai411_tool(
             name, args, caller_number=state.caller_number or ""
+        )
+
+    if config.is_owner_updates():
+        if name == "send_sms_links":
+            return _send_sms_links(state, args)
+        # In-process mcp-server changerequests + lookup.
+        import mcp_bridge
+
+        return mcp_bridge.run_owner_updates_tool(
+            name,
+            args,
+            caller_number=state.caller_number or "",
+            call_sid=getattr(state, "call_sid", "") or "",
         )
 
     if name == "send_demo_link_sms":

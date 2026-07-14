@@ -84,15 +84,19 @@ OWNER_CALLBACK_NUMBER = os.getenv("OWNER_CALLBACK_NUMBER", TWILIO_PHONE_NUMBER)
 _raw_agent_mode = (
     os.getenv("AGENT_MODE") or os.getenv("VOICE_AGENT_MODE") or "sales"
 ).strip().lower()
-if _raw_agent_mode not in ("sales", "ai411"):
+if _raw_agent_mode not in ("sales", "ai411", "owner_updates"):
     raise SystemExit(
-        f"Unknown AGENT_MODE {_raw_agent_mode!r}; use 'sales' or 'ai411'."
+        f"Unknown AGENT_MODE {_raw_agent_mode!r}; use 'sales', 'ai411', or 'owner_updates'."
     )
 AGENT_MODE = _raw_agent_mode
 
 
 def is_ai411() -> bool:
     return AGENT_MODE == "ai411"
+
+
+def is_owner_updates() -> bool:
+    return AGENT_MODE == "owner_updates"
 
 
 # --- AI 411 MCP bridge ------------------------------------------------------
