@@ -330,7 +330,7 @@ async def hangup_cmd(ctx):
 
 async def tts_keepalive():
     """Keep the Sesame model loaded and the stock openers cached."""
-    await asyncio.to_thread(tts.prewarm_phrases, agent_mod.OPENERS)
+    await asyncio.to_thread(tts.prewarm_phrases, agent_mod.get_openers())
     log.info("opener phrases cached")
     while True:
         try:

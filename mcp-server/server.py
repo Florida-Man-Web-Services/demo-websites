@@ -1,6 +1,6 @@
 """MCP server for Florida Man Web Services sales/support agents.
 
-Streamable HTTP transport, bearer-token auth (except /health), four tools.
+Streamable HTTP transport, bearer-token auth (except /health), business tools.
 Run: MCP_AUTH_TOKEN=... python server.py   → http://0.0.0.0:8036/mcp
 """
 
@@ -25,8 +25,29 @@ from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Mount, Route
 
 import businesses
+import callers as callers_mod
 import config
 from calllog import append_outcome, history_for
+from knowledge import (
+    get_business_snapshot as knowledge_snapshot,
+    search_business_knowledge as knowledge_search,
+)
+from changerequests import (
+    apply_change_request as apply_change_request_sync,
+    cancel_change_request as cancel_change_request_sync,
+    create_change_request as create_change_request_sync,
+    get_change_request as get_change_request_sync,
+    get_site_outline as get_site_outline_sync,
+    list_open_change_requests as list_open_change_requests_sync,
+    mark_request_shipped as mark_request_shipped_sync,
+)
+from sitepr import open_site_update_pr as open_site_update_pr_sync
+from events import (
+    get_event as get_event_sync,
+    list_event_sources as list_event_sources_sync,
+    search_events as search_events_sync,
+)
+import broadcasts as broadcasts_mod
 from lookup import find_business
 from pitch import get_pitch
 
@@ -189,6 +210,627 @@ async def log_call_outcome(
             caller_phone,
             direction,
         )
+    )
+
+
+def _search_business_knowledge_sync(query: str, limit: int = 5) -> dict:
+    try:
+        return knowledge_search(query, limit=limit)
+    except Exception as e:
+        logger.exception("tool %s failed", "search_business_knowledge")
+        return {"ok": False, "results": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def search_business_knowledge(query: str, limit: int = 5) -> dict:
+    """Search local demo-site knowledge for facts about Gainesville businesses.
+
+    Indexes generated-sites HTML (no live crawl). Returns ranked text snippets
+    with slug/title and fetched_at (file mtime). Use when the caller asks
+    about services, hours language on the page, address details, or anything
+    beyond the short lookup_business profile. Scoring is keyword/TF-IDF v1
+    and may be swapped for embeddings later.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_search_business_knowledge_sync, query, limit)
+    )
+
+
+def _get_business_snapshot_sync(slug: str) -> dict:
+    try:
+        return knowledge_snapshot(slug)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_business_snapshot")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_business_snapshot(slug: str) -> dict:
+    """Load a compact text snapshot of one business demo page by slug.
+
+    Prefer after lookup_business when you need the fuller page content
+    (about, services, contact copy). Slug is the generated-sites filename
+    stem (e.g. aaa-refrigeration). fetched_at is the HTML file mtime.
+    """
+    return await anyio.to_thread.run_sync(_get_business_snapshot_sync, slug)
+
+
+def _get_caller_profile_sync(phone: str) -> dict:
+    try:
+        return callers_mod.get_profile(phone)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_caller_profile")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_caller_profile(phone: str) -> dict:
+    """Load a caller's remembered profile by phone (E.164 or US 10-digit).
+
+    When consent.memory_ok is false, only phone + consent (and timestamps)
+    are returned — names, preferences, notes, and last_topics are redacted.
+    Use after greeting to personalize if memory is allowed.
+    """
+    return await anyio.to_thread.run_sync(_get_caller_profile_sync, phone)
+
+
+def _update_caller_profile_sync(phone: str, patch: dict | None = None) -> dict:
+    try:
+        return callers_mod.update_profile(phone, patch)
+    except Exception as e:
+        logger.exception("tool %s failed", "update_caller_profile")
+        return {"updated": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def update_caller_profile(phone: str, patch: dict | None = None) -> dict:
+    """Create or merge-patch a caller profile by phone.
+
+    patch may include display_name, preferred_name, preferences (interests,
+    avoid, preferred_areas, sms_ok, mobility, accessibility), last_topics,
+    last_call_at, consent (memory_ok, marketing_ok). Creates the profile if
+    missing. Nested preference/consent keys are shallow-merged.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_update_caller_profile_sync, phone, patch)
+    )
+
+
+def _forget_caller_sync(phone: str) -> dict:
+    try:
+        return callers_mod.forget_profile(phone)
+    except Exception as e:
+        logger.exception("tool %s failed", "forget_caller")
+        return {"forgotten": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def forget_caller(phone: str) -> dict:
+    """Permanently delete a caller profile (hard delete — \"forget me\").
+
+    Idempotent: returns forgotten=true even if no profile existed.
+    """
+    return await anyio.to_thread.run_sync(_forget_caller_sync, phone)
+
+
+def _add_caller_note_sync(phone: str, note: str) -> dict:
+    try:
+        return callers_mod.add_note(phone, note)
+    except Exception as e:
+        logger.exception("tool %s failed", "add_caller_note")
+        return {"added": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def add_caller_note(phone: str, note: str) -> dict:
+    """Append a short freeform note to the caller's profile (creates if needed).
+
+    Notes are only returned by get_caller_profile when consent.memory_ok is
+    true. Use for durable call takeaways the caller wants remembered.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_add_caller_note_sync, phone, note)
+    )
+
+
+def _create_change_request_sync(
+    business_slug: str,
+    summary: str,
+    items: str = "[]",
+    caller_phone: str = "",
+    source: str = "voice",
+    confirmation_spoken: bool = True,
+    priority: str = "normal",
+    call_sid: str = "",
+    transcript_ref: str = "",
+) -> dict:
+    try:
+        # MCP clients often pass structured args as JSON strings.
+        parsed_items: object = items
+        if isinstance(items, str):
+            parsed_items = items
+        return create_change_request_sync(
+            business_slug=business_slug,
+            summary=summary,
+            items=parsed_items,
+            caller_phone=caller_phone,
+            source=source,
+            confirmation_spoken=confirmation_spoken,
+            priority=priority,
+            call_sid=call_sid,
+            transcript_ref=transcript_ref,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "create_change_request")
+        return {"created": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def create_change_request(
+    business_slug: str,
+    summary: str,
+    items: str = "[]",
+    caller_phone: str = "",
+    source: str = "voice",
+    confirmation_spoken: bool = True,
+    priority: str = "normal",
+    call_sid: str = "",
+    transcript_ref: str = "",
+) -> dict:
+    """Create a pending owner site ChangeRequest for a business slug.
+
+    items: JSON array string of objects like
+    {"type":"hours|copy|phone|...","target":"...","after":"...","before?":"...","notes?":"..."}.
+    Call after the owner confirms the change list on the phone.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _create_change_request_sync,
+            business_slug,
+            summary,
+            items,
+            caller_phone,
+            source,
+            confirmation_spoken,
+            priority,
+            call_sid,
+            transcript_ref,
+        )
+    )
+
+
+def _list_open_change_requests_sync(slug: str = "") -> dict:
+    try:
+        return list_open_change_requests_sync(slug or None)
+    except Exception as e:
+        logger.exception("tool %s failed", "list_open_change_requests")
+        return {"count": 0, "requests": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def list_open_change_requests(slug: str = "") -> dict:
+    """List open (non-terminal) ChangeRequests. Optional slug filters to one business."""
+    return await anyio.to_thread.run_sync(_list_open_change_requests_sync, slug)
+
+
+def _cancel_change_request_sync(request_id: str) -> dict:
+    try:
+        return cancel_change_request_sync(request_id)
+    except Exception as e:
+        logger.exception("tool %s failed", "cancel_change_request")
+        return {"cancelled": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def cancel_change_request(request_id: str) -> dict:
+    """Cancel a pending/open ChangeRequest by id (status → cancelled)."""
+    return await anyio.to_thread.run_sync(_cancel_change_request_sync, request_id)
+
+
+def _get_site_outline_tool_sync(slug: str) -> dict:
+    try:
+        return get_site_outline_sync(slug)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_site_outline")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_site_outline(slug: str) -> dict:
+    """Read-only outline of generated-sites/<slug>.html: page title and headings.
+
+    Use before capturing change requests so you know current sections/hours/CTAs.
+    """
+    return await anyio.to_thread.run_sync(_get_site_outline_tool_sync, slug)
+
+
+def _get_change_request_sync(request_id: str) -> dict:
+    try:
+        return get_change_request_sync(request_id)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_change_request")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_change_request(request_id: str) -> dict:
+    """Load one ChangeRequest by id (any status)."""
+    return await anyio.to_thread.run_sync(_get_change_request_sync, request_id)
+
+
+def _apply_change_request_tool_sync(request_id: str) -> dict:
+    try:
+        result = apply_change_request_sync(request_id)
+    except Exception as e:
+        logger.exception("tool %s failed", "apply_change_request")
+        return {"applied": False, "error": _unavailable(e)}
+    # Optional auto-PR: only when SITE_PR_AUTO=1 and apply just shipped.
+    # Default off — never open PRs from apply without explicit env opt-in.
+    try:
+        from sitepr import site_pr_auto, open_site_update_pr as _pr
+
+        if (
+            result.get("applied")
+            and result.get("status") == "shipped"
+            and not result.get("already_shipped")
+            and site_pr_auto()
+        ):
+            pr = _pr(request_id, dry_run=False)
+            result = dict(result)
+            result["site_pr"] = pr
+            if pr.get("pr_url"):
+                result["pr_url"] = pr.get("pr_url")
+                result["pr_branch"] = pr.get("branch")
+            elif pr.get("dry_run"):
+                result["note"] = (
+                    (result.get("note") or "")
+                    + " SITE_PR_AUTO set but SITE_PR_ENABLED off or dry plan only."
+                ).strip()
+    except Exception as e:
+        logger.exception("optional SITE_PR_AUTO after apply failed")
+        result = dict(result)
+        result["site_pr_error"] = _unavailable(e)
+    return result
+
+
+@mcp.tool()
+async def apply_change_request(request_id: str) -> dict:
+    """Apply a pending/approved ChangeRequest to generated-sites/<slug>.html.
+
+    MVP supports structured items: hours, phone, address, copy (before→after
+    or section heuristics). Updates status pending|approved → in_progress →
+    shipped|failed. Writes HTML locally; does not open a GitHub PR unless
+    SITE_PR_AUTO=1 (then best-effort open_site_update_pr). Prefer calling
+    open_site_update_pr explicitly after apply. Returns before/after summary.
+    """
+    return await anyio.to_thread.run_sync(
+        _apply_change_request_tool_sync, request_id
+    )
+
+
+def _mark_request_shipped_sync(request_id: str, note: str = "") -> dict:
+    try:
+        return mark_request_shipped_sync(request_id, note=note)
+    except Exception as e:
+        logger.exception("tool %s failed", "mark_request_shipped")
+        return {"shipped": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def mark_request_shipped(request_id: str, note: str = "") -> dict:
+    """Manually mark a ChangeRequest shipped (e.g. after an external PR merge).
+
+    Prefer apply_change_request for structured HTML edits; use this when the
+    site was updated outside this tool.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_mark_request_shipped_sync, request_id, note)
+    )
+
+
+def _open_site_update_pr_sync(
+    request_id: str,
+    dry_run: bool = False,
+    base_branch: str = "main",
+) -> dict:
+    try:
+        return open_site_update_pr_sync(
+            request_id, dry_run=dry_run, base_branch=base_branch
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "open_site_update_pr")
+        return {"ok": False, "opened": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def open_site_update_pr(
+    request_id: str,
+    dry_run: bool = False,
+    base_branch: str = "main",
+) -> dict:
+    """Open a GitHub PR for a shipped ChangeRequest's generated-sites HTML.
+
+    Requires status=shipped (run apply_change_request first). Creates branch
+    site-update/<slug>-<shortid>, commits only that HTML file, pushes, and
+    opens a PR via `gh` or GitHub REST (GITHUB_TOKEN/GH_TOKEN).
+
+    Safe by default: SITE_PR_ENABLED must be 1 to push; otherwise returns a
+    dry-run plan (branch name, commit message, diff stats). Pass dry_run=true
+    to force plan-only. Saves pr_url + branch on the ChangeRequest record.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _open_site_update_pr_sync, request_id, dry_run, base_branch
+        )
+    )
+
+
+def _search_events_sync(
+    query: str = "",
+    when: str = "",
+    tags: str = "",
+    free_only: bool = False,
+    limit: int = 10,
+) -> dict:
+    try:
+        tag_list = None
+        if tags:
+            # Accept comma-separated or JSON array string from MCP clients.
+            s = tags.strip()
+            if s.startswith("["):
+                import json as _json
+
+                try:
+                    parsed = _json.loads(s)
+                    tag_list = parsed if isinstance(parsed, list) else [str(parsed)]
+                except _json.JSONDecodeError:
+                    tag_list = [t.strip() for t in s.split(",") if t.strip()]
+            else:
+                tag_list = [t.strip() for t in s.split(",") if t.strip()]
+        return search_events_sync(
+            query=query,
+            when=when,
+            tags=tag_list,
+            free_only=free_only,
+            limit=limit,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "search_events")
+        return {"ok": False, "count": 0, "events": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def search_events(
+    query: str = "",
+    when: str = "",
+    tags: str = "",
+    free_only: bool = False,
+    limit: int = 10,
+) -> dict:
+    """Search local Gainesville events (seed store; no live crawl yet).
+
+    when: empty (all upcoming), tonight, tomorrow, or this_weekend
+    (America/New_York). query matches title/description/venue/tags.
+    tags: comma-separated required tags (subset match). free_only filters
+    free events. Expired events (past end/start) are dropped.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _search_events_sync, query, when, tags, free_only, limit
+        )
+    )
+
+
+def _get_event_tool_sync(event_id: str) -> dict:
+    try:
+        return get_event_sync(event_id)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_event")
+        return {"found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_event(event_id: str) -> dict:
+    """Load one event by id from the local events store."""
+    return await anyio.to_thread.run_sync(_get_event_tool_sync, event_id)
+
+
+def _list_event_sources_tool_sync() -> dict:
+    try:
+        return list_event_sources_sync()
+    except Exception as e:
+        logger.exception("tool %s failed", "list_event_sources")
+        return {"ok": False, "sources": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def list_event_sources() -> dict:
+    """List event sources in the local store with counts (e.g. seed, community)."""
+    return await anyio.to_thread.run_sync(_list_event_sources_tool_sync)
+
+
+def _submit_event_broadcast_sync(
+    title: str,
+    when_start: str,
+    venue: str,
+    phone: str,
+    when_end: str = "",
+    free: bool = True,
+    tags: str = "",
+    url: str = "",
+    text: str = "",
+) -> dict:
+    try:
+        return submit_event_broadcast_sync(
+            title=title,
+            when_start=when_start,
+            venue=venue,
+            phone=phone,
+            when_end=when_end,
+            free=free,
+            tags=tags,
+            url=url,
+            text=text,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "submit_event_broadcast")
+        return {"submitted": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def submit_event_broadcast(
+    title: str,
+    when_start: str,
+    venue: str,
+    phone: str,
+    when_end: str = "",
+    free: bool = True,
+    tags: str = "",
+    url: str = "",
+    text: str = "",
+) -> dict:
+    """Post a community event broadcast (title, when, venue, free?, tags, url?).
+
+    Auto-approved in v1 if it passes the keyword safety filter. Rate-limited
+    per phone per day. when_start/when_end are ISO datetimes. phone attributes
+    the post (E.164 or US 10-digit).
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _submit_event_broadcast_sync,
+            title,
+            when_start,
+            venue,
+            phone,
+            when_end,
+            free,
+            tags,
+            url,
+            text,
+        )
+    )
+
+
+def _submit_notice_broadcast_sync(
+    text: str,
+    category: str,
+    phone: str,
+    expires_at: str = "",
+) -> dict:
+    try:
+        return submit_notice_broadcast_sync(
+            text=text,
+            category=category,
+            phone=phone,
+            expires_at=expires_at,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "submit_notice_broadcast")
+        return {"submitted": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def submit_notice_broadcast(
+    text: str,
+    category: str,
+    phone: str,
+    expires_at: str = "",
+) -> dict:
+    """Post a short community notice (≤280 chars). Categories: tips, music,
+    food, traffic, general. Optional expires_at (ISO); default 14 days.
+    Auto-approved if safety filter passes; rate-limited per phone per day.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _submit_notice_broadcast_sync,
+            text,
+            category,
+            phone,
+            expires_at,
+        )
+    )
+
+
+def _list_recent_broadcasts_sync(category: str = "", limit: int = 20) -> dict:
+    try:
+        return list_recent_broadcasts_sync(category=category, limit=limit)
+    except Exception as e:
+        logger.exception("tool %s failed", "list_recent_broadcasts")
+        return {
+            "ok": False,
+            "count": 0,
+            "broadcasts": [],
+            "error": _unavailable(e),
+        }
+
+
+@mcp.tool()
+async def list_recent_broadcasts(category: str = "", limit: int = 20) -> dict:
+    """List approved, non-expired community broadcasts (newest first).
+
+    category empty = all; use tips|music|food|traffic|general for notices,
+    or 'event' for event posts only.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_list_recent_broadcasts_sync, category, limit)
+    )
+
+
+def _report_broadcast_sync(
+    broadcast_id: str,
+    reason: str,
+    reporter_phone: str = "",
+) -> dict:
+    try:
+        return report_broadcast_sync(
+            broadcast_id=broadcast_id,
+            reason=reason,
+            reporter_phone=reporter_phone,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "report_broadcast")
+        return {"reported": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def report_broadcast(
+    broadcast_id: str,
+    reason: str,
+    reporter_phone: str = "",
+) -> dict:
+    """Flag a community broadcast for review (removes from public list).
+
+    reason is required. Optional reporter_phone for attribution.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _report_broadcast_sync,
+            broadcast_id,
+            reason,
+            reporter_phone,
+        )
+    )
+
+
+def _delete_own_broadcast_sync(broadcast_id: str, phone: str) -> dict:
+    try:
+        return delete_own_broadcast_sync(
+            broadcast_id=broadcast_id,
+            phone=phone,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "delete_own_broadcast")
+        return {"deleted": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def delete_own_broadcast(broadcast_id: str, phone: str) -> dict:
+    """Soft-delete a broadcast the caller authored (status → deleted).
+
+    phone must match the author. Idempotent if already deleted.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_delete_own_broadcast_sync, broadcast_id, phone)
     )
 
 

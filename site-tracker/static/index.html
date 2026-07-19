@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FMB Site Tracker</title>
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--line:#262b36;--fg:#e6e9ef;--mut:#8b93a7;--acc:#4f8cff}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+  header{position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;z-index:5}
+  header h1{font-size:16px;margin:0;font-weight:650}
+  header .sp{flex:1}
+  header .me{color:var(--mut);font-size:12px}
+  input,select{background:#0c0e12;color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:7px 9px;font:inherit}
+  input#q{width:240px}
+  .counts{color:var(--mut);font-size:12px}
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{position:sticky;top:57px;background:var(--bg);color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
+  tr.site:hover{background:#141821}
+  td.biz{font-weight:600}
+  td.biz small{display:block;color:var(--mut);font-weight:400}
+  a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+  .chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:600}
+  .st-New{background:#2a2f3a;color:#c3cad9}.st-Contacted{background:#243b57;color:#8fc0ff}
+  .st-Interested{background:#3a3320;color:#ffd479}.st-Sent{background:#213b32;color:#7fdbb0}
+  .st-Won{background:#1e3a24;color:#7ee08a}.st-Dead{background:#3a2323;color:#ff9a9a}
+  .notecell{cursor:pointer;color:var(--mut)}
+  tr.detail td{background:#0c0e12}
+  .notes{margin:0 0 8px;padding:0;list-style:none;max-width:820px}
+  .notes li{padding:6px 0;border-bottom:1px solid var(--line)}
+  .notes .meta{color:var(--mut);font-size:12px;margin-right:8px}
+  .addnote{display:flex;gap:8px;max-width:820px;margin-top:6px}
+  .addnote input{flex:1}
+  button{background:var(--acc);color:#fff;border:0;border-radius:7px;padding:7px 12px;font:inherit;font-weight:600;cursor:pointer}
+  button.ghost{background:#222834;color:var(--fg)}
+</style>
+</head>
+<body>
+<header>
+  <h1>FMB Site Tracker</h1>
+  <input id="q" placeholder="Search business…" autocomplete="off">
+  <select id="fstatus"><option value="">All statuses</option></select>
+  <span class="counts" id="counts"></span>
+  <span class="sp"></span>
+  <span class="me" id="me"></span>
+</header>
+<table>
+  <thead><tr>
+    <th data-k="business">Business</th><th>Live site</th>
+    <th data-k="status">Status</th><th data-k="notes">Notes</th><th data-k="updated_at">Updated</th>
+  </tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<script>
+let SITES=[], META={statuses:[]}, sortK="business", sortAsc=true, open=new Set();
+const $=s=>document.querySelector(s), rows=$("#rows");
+async function j(u,o){const r=await fetch(u,o);if(!r.ok)throw new Error(await r.text());return r.status==204?null:r.json();}
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function fmt(t){return t?t.replace("T"," ").replace("Z"," UTC").slice(0,16):"—";}
+
+async function load(){
+  META=await j("/api/meta"); $("#me").textContent="signed in: "+META.user;
+  const fs=$("#fstatus"); META.statuses.forEach(s=>fs.insertAdjacentHTML("beforeend",`<option>${s}</option>`));
+  SITES=await j("/api/sites"); render();
+}
+function render(){
+  const q=$("#q").value.toLowerCase(), fs=$("#fstatus").value;
+  let list=SITES.filter(s=>(!q||s.business.toLowerCase().includes(q))&&(!fs||s.status===fs));
+  list.sort((a,b)=>{let x=a[sortK],y=b[sortK];x=(x??"").toString().toLowerCase();y=(y??"").toString().toLowerCase();return (x<y?-1:x>y?1:0)*(sortAsc?1:-1);});
+  const byS={}; SITES.forEach(s=>byS[s.status]=(byS[s.status]||0)+1);
+  $("#counts").textContent=`${list.length}/${SITES.length} · `+META.statuses.map(s=>`${s} ${byS[s]||0}`).join(" · ");
+  rows.innerHTML="";
+  for(const s of list){
+    const tr=document.createElement("tr"); tr.className="site";
+    tr.innerHTML=`<td class="biz">${esc(s.business)}<small>${esc(s.title)}</small></td>
+      <td><a href="${s.url}" target="_blank" rel="noopener">${s.hash} ↗</a></td>
+      <td>${statusSel(s)}</td>
+      <td class="notecell" data-h="${s.hash}">💬 ${s.notes}${s.notes?"":" add"}</td>
+      <td class="upd">${fmt(s.updated_at)}${s.updated_by?`<br><small style="color:var(--mut)">${esc(s.updated_by)}</small>`:""}</td>`;
+    rows.appendChild(tr);
+    if(open.has(s.hash)) rows.appendChild(detailRow(s.hash));
+  }
+}
+function statusSel(s){
+  return `<select class="chip st-${s.status}" data-h="${s.hash}" onchange="setStatus(this)">`+
+    META.statuses.map(o=>`<option ${o===s.status?"selected":""}>${o}</option>`).join("")+`</select>`;
+}
+window.setStatus=async el=>{
+  const h=el.dataset.h, v=el.value;
+  await j(`/api/sites/${h}/status`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({status:v})});
+  const s=SITES.find(x=>x.hash===h); s.status=v; s.updated_at=new Date().toISOString(); s.updated_by=META.user;
+  render();
+};
+rows.addEventListener("click",e=>{const c=e.target.closest(".notecell");if(!c)return;const h=c.dataset.h;open.has(h)?open.delete(h):open.add(h);render();if(open.has(h))loadNotes(h);});
+function detailRow(h){const tr=document.createElement("tr");tr.className="detail";tr.id="d-"+h;
+  tr.innerHTML=`<td colspan="5"><ul class="notes" id="n-${h}"><li style="color:var(--mut)">loading…</li></ul>
+    <div class="addnote"><input id="i-${h}" placeholder="Add a note… (e.g. left voicemail)" onkeydown="if(event.key==='Enter')addNote('${h}')">
+    <button onclick="addNote('${h}')">Add note</button></div></td>`;return tr;}
+async function loadNotes(h){const d=await j(`/api/sites/${h}`);const ul=$("#n-"+h);if(!ul)return;
+  ul.innerHTML=d.notes.length?d.notes.map(n=>`<li><span class="meta">${fmt(n.created_at)} · ${esc(n.author)}</span>${esc(n.body)}</li>`).join(""):`<li style="color:var(--mut)">No notes yet.</li>`;}
+window.addNote=async h=>{const inp=$("#i-"+h);const b=inp.value.trim();if(!b)return;
+  await j(`/api/sites/${h}/note`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({body:b})});
+  inp.value="";const s=SITES.find(x=>x.hash===h);s.notes++;await loadNotes(h);
+  document.querySelector(`.notecell[data-h="${h}"]`).innerHTML=`💬 ${s.notes}`;};
+$("#q").addEventListener("input",render); $("#fstatus").addEventListener("change",render);
+document.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;sortAsc=sortK===k?!sortAsc:true;sortK=k;render();});
+load().catch(e=>rows.innerHTML=`<tr><td colspan=5 style="color:#ff9a9a">Failed to load: ${esc(e.message)}</td></tr>`);
+</script>
+</body>
+</html>

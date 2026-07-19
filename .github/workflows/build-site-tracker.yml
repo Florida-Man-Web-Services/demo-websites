@@ -1,0 +1,33 @@
+name: Build site-tracker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site-tracker/**'
+      - 'generated-sites/**'
+      - '.github/workflows/build-site-tracker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Log in to zot registry
+        uses: docker/login-action@v3
+        with:
+          registry: zot.hwcopeland.net
+          username: ${{ secrets.ZOT_USERNAME }}
+          password: ${{ secrets.ZOT_API_KEY }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: site-tracker/Dockerfile
+          push: true
+          tags: zot.hwcopeland.net/florida-man-bioscience/site-tracker:main

@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: wvs-refresh
+  namespace: florida-man-web-services
+  labels: { app: website-vector-store }
+spec:
+  schedule: "17 4 * * *"           # 04:17 daily — the "regularly updated" trigger
+  concurrencyPolicy: Forbid        # never overlap crawls
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: wvs
+              image: zot.hwcopeland.net/fmws/website-vector-store:latest
+              args: ["python", "-m", "wvs.cli", "update"]
+              env:
+                - name: WVS_STORE
+                  value: /data/wvs.sqlite
+                - name: WVS_EMBED_PROVIDER
+                  value: openai            # set to production embeddings in-cluster
+                - name: WVS_EMBED_BASE_URL
+                  value: https://api.openai.com/v1
+                - name: WVS_EMBED_API_KEY
+                  valueFrom: { secretKeyRef: { name: wvs-secrets, key: embed-api-key } }
+                - name: WVS_FRESHNESS_DAYS
+                  value: "7"
+              volumeMounts:
+                - { name: wvs-data, mountPath: /data }
+          volumes:
+            - name: wvs-data
+              persistentVolumeClaim: { claimName: wvs-data }

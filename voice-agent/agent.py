@@ -16,6 +16,8 @@ import anthropic
 from twilio.rest import Client as TwilioClient
 
 import config
+import ai411
+import owner_updates
 import site_content
 from businesses import Business
 from tts import split_sentences
@@ -24,7 +26,8 @@ log = logging.getLogger("voice-agent.agent")
 
 MAX_TURNS = 40  # hard stop so a stuck call can't loop forever
 
-TOOLS = [
+# Sales-mode tools (default). AI 411 tools live in ai411.TOOLS — use get_tools().
+SALES_TOOLS = [
     {
         "name": "send_demo_link_sms",
         "description": (
@@ -99,7 +102,7 @@ TOOLS = [
 # Fixed openers the agent leads every reply with. They're pre-synthesized to
 # the disk cache (tts.prewarm_phrases), so the first thing the caller hears
 # plays instantly while the rest of the reply is still being generated.
-OPENERS = [
+SALES_OPENERS = [
     "Hi there!",
     "Sure thing.",
     "Absolutely.",
@@ -115,13 +118,38 @@ OPENERS = [
 ]
 
 
+def get_tools() -> list:
+    """Tool schemas for the active AGENT_MODE (sales default, ai411, owner_updates)."""
+    if config.is_ai411():
+        return ai411.TOOLS
+    if config.is_owner_updates():
+        return owner_updates.TOOLS
+    return SALES_TOOLS
+
+
+def get_openers() -> list:
+    """Stock opener phrases for the active AGENT_MODE."""
+    if config.is_ai411():
+        return ai411.OPENERS
+    if config.is_owner_updates():
+        return owner_updates.OPENERS
+    return SALES_OPENERS
+
+
+# Back-compat names: resolve to sales lists when AGENT_MODE is default.
+# Prefer get_tools() / get_openers() so mode switches are live after import.
+TOOLS = SALES_TOOLS
+OPENERS = SALES_OPENERS
+
+
 def _spoken_url(demo_url: str) -> str:
     return demo_url.removeprefix("https://")
 
 
-def _opener_rule() -> str:
+def _opener_rule(openers_list: list | None = None) -> str:
+    phrases = openers_list if openers_list is not None else get_openers()
     return f"""- Open every reply with one of these exact opener sentences (pick whichever
-  fits, vary them, punctuation included): {" | ".join(OPENERS)}
+  fits, vary them, punctuation included): {" | ".join(phrases)}
   These are pre-recorded so they play instantly and cover the synthesis
   pause — like natural phone rhythm. Only improvise a different opener if
   none of them fits at all.
@@ -131,11 +159,30 @@ def _opener_rule() -> str:
 def system_prompt(
     business: Business, direction: str, caller_number: str, openers: bool = True
 ) -> str:
-    """Build the per-call system prompt from the campaign's phone script.
+    """Build the per-call system prompt for the active AGENT_MODE.
 
     openers=False drops the pre-recorded-opener instructions — the realtime
     speech backend speaks natively and has no synthesis pause to cover.
     """
+    if config.is_ai411():
+        return ai411.system_prompt(
+            direction=direction,
+            caller_number=caller_number,
+            openers=openers,
+        )
+    if config.is_owner_updates():
+        return owner_updates.system_prompt(
+            direction=direction,
+            caller_number=caller_number,
+            openers=openers,
+        )
+    return _sales_system_prompt(business, direction, caller_number, openers=openers)
+
+
+def _sales_system_prompt(
+    business: Business, direction: str, caller_number: str, openers: bool = True
+) -> str:
+    """Florida Man Web Services pitch agent (AGENT_MODE=sales, default)."""
     site_text = site_content.site_text(business.slug)
     site_section = (
         f"""
@@ -173,7 +220,7 @@ THE BUSINESS ON THIS CALL
 
 HOW TO SPEAK
 - 1-3 short sentences per turn. Never monologue. Ask one question at a time.
-{_opener_rule() if openers else ""}- Plain conversational English: no bullet points, no markdown, no emoji.
+{_opener_rule(SALES_OPENERS) if openers else ""}- Plain conversational English: no bullet points, no markdown, no emoji.
 - Spell things for the ear: say the demo address as "{_spoken_url(business.demo_url)}"
   and offer to text it instead of making them write it down.
 - You are talking to a busy small-business owner or their staff. Be warm,
@@ -307,7 +354,7 @@ class _ClaudeBackend:
             max_tokens=MAX_REPLY_TOKENS,
             output_config={"effort": "low"},  # latency matters on a live call
             system=sys_prompt,
-            tools=TOOLS,
+            tools=get_tools(),
             messages=self.messages,
         ) as stream:
             for text in stream.text_stream:
@@ -329,7 +376,7 @@ class _ClaudeBackend:
 
 
 def _openai_tools() -> list:
-    """TOOLS stays in Anthropic schema; convert for the OpenAI-format API."""
+    """Tools stay in Anthropic schema; convert for the OpenAI-format API."""
     return [
         {
             "type": "function",
@@ -339,7 +386,7 @@ def _openai_tools() -> list:
                 "parameters": t["input_schema"],
             },
         }
-        for t in TOOLS
+        for t in get_tools()
     ]
 
 
@@ -465,6 +512,31 @@ def _send_sms(state: CallState, to_number: str | None) -> str:
         return f"Error sending SMS: {e}. Offer to read the address out or send email."
 
 
+def _send_sms_links(state: CallState, args: dict) -> str:
+    """AI 411: text result links (not the sales demo pitch)."""
+    to = args.get("phone") or state.caller_number
+    if not to:
+        return "Error: no destination number known; ask the caller for their number."
+    links = args.get("links") or []
+    if isinstance(links, str):
+        links = [links]
+    if not links:
+        return "Error: no links provided to text."
+    note = (args.get("note") or "Gainesville AI 411 — links you asked for:").strip()
+    body = note + "\n" + "\n".join(str(u) for u in links)
+    if len(body) > 1500:
+        body = body[:1490] + "…"
+    try:
+        msg = _twilio().messages.create(
+            to=to, from_=config.TWILIO_PHONE_NUMBER, body=body
+        )
+        log.info("AI 411 SMS links sent to %s (%s)", to, msg.sid)
+        return f"SMS with {len(links)} link(s) sent to {to}."
+    except Exception as e:
+        log.warning("AI 411 SMS to %s failed: %s", to, e)
+        return f"Error sending SMS: {e}. Offer to read the links slowly instead."
+
+
 def _log_outcome(state: CallState, args: dict) -> str:
     is_new = not config.CALL_LOG.exists()
     with open(config.CALL_LOG, "a", newline="", encoding="utf-8") as f:
@@ -490,13 +562,37 @@ def _log_outcome(state: CallState, args: dict) -> str:
 
 
 def _run_tool(state: CallState, name: str, args: dict) -> str:
+    if name == "end_call":
+        state.ended = True
+        return "The call will end after your current reply is spoken."
+
+    if config.is_ai411():
+        if name == "send_sms_links":
+            return _send_sms_links(state, args)
+        # In-process mcp-server stores (knowledge/events/callers/broadcasts/lookup).
+        import mcp_bridge
+
+        return mcp_bridge.run_ai411_tool(
+            name, args, caller_number=state.caller_number or ""
+        )
+
+    if config.is_owner_updates():
+        if name == "send_sms_links":
+            return _send_sms_links(state, args)
+        # In-process mcp-server changerequests + lookup.
+        import mcp_bridge
+
+        return mcp_bridge.run_owner_updates_tool(
+            name,
+            args,
+            caller_number=state.caller_number or "",
+            call_sid=getattr(state, "call_sid", "") or "",
+        )
+
     if name == "send_demo_link_sms":
         return _send_sms(state, args.get("phone"))
     if name == "log_call_outcome":
         return _log_outcome(state, args)
-    if name == "end_call":
-        state.ended = True
-        return "The call will end after your current reply is spoken."
     return f"Unknown tool {name}"
 
 

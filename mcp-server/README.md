@@ -19,6 +19,28 @@ Gainesville demo-websites campaign.
 | `get_pitch_info()` | Offer ($999/month), objections, compliance rules |
 | `get_call_history(business)` | Prior call-log rows for the business (this server's log only) |
 | `log_call_outcome(business, outcome, notes, email?, callback_time?)` | Append to call-log.csv |
+| `search_business_knowledge(query, limit?)` | Keyword/TF-IDF search over local `generated-sites` HTML chunks |
+| `get_business_snapshot(slug)` | Compact text snapshot of one demo page (slug = filename stem) |
+| `get_caller_profile(phone)` | Caller memory by phone; redacts when `consent.memory_ok` is false |
+| `update_caller_profile(phone, patch)` | Create/merge name, prefs, consent, topics |
+| `forget_caller(phone)` | Hard-delete caller profile ("forget me") |
+| `add_caller_note(phone, note)` | Append freeform note (created if needed) |
+| `create_change_request(business_slug, summary, items?, …)` | Persist a pending owner site ChangeRequest (JSONL) |
+| `list_open_change_requests(slug?)` | List open ChangeRequests (optional slug filter) |
+| `cancel_change_request(request_id)` | Mark a ChangeRequest cancelled |
+| `get_site_outline(slug)` | Title + headings from `generated-sites/<slug>.html` |
+| `get_change_request(request_id)` | Load one ChangeRequest by id (any status) |
+| `apply_change_request(request_id)` | Apply structured hours/phone/address/copy items to local HTML; mark shipped. Optional SITE_PR_AUTO=1 to chain open_site_update_pr |
+| `mark_request_shipped(request_id, note?)` | Manually mark a request shipped after external edits |
+| `open_site_update_pr(request_id, dry_run?, base_branch?)` | After shipped: branch+commit `generated-sites/<slug>.html` and open GitHub PR (`gh` or REST). Default dry-run unless `SITE_PR_ENABLED=1` |
+| `search_events(query?, when?, tags?, free_only?, limit?)` | Local Gainesville events (seed JSON); when=tonight/tomorrow/this_weekend |
+| `get_event(event_id)` | Full event record by id |
+| `list_event_sources()` | Event source names with counts (seed, community, …) |
+| `submit_event_broadcast(title, when_start, venue, phone, …)` | Community event post (JSONL; auto-approve → also upserts into `search_events` as source=community) |
+| `submit_notice_broadcast(text, category, phone, expires_at?)` | Short notice/gossip (≤280 chars; categories) |
+| `list_recent_broadcasts(category?, limit?)` | Approved non-expired broadcasts, newest first |
+| `report_broadcast(id, reason, reporter_phone?)` | Flag a post for review (pulls from public list) |
+| `delete_own_broadcast(id, phone)` | Soft-delete own post by author phone |
 
 ## Local development
 

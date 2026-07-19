@@ -77,6 +77,46 @@ SESAME_TTS_URL = os.getenv(
 OWNER_NAME = os.getenv("OWNER_NAME", "Noah")
 OWNER_CALLBACK_NUMBER = os.getenv("OWNER_CALLBACK_NUMBER", TWILIO_PHONE_NUMBER)
 
+# --- Agent mode ---------------------------------------------------------------
+# "sales" (default): Florida Man Web Services demo-website pitch agent.
+# "ai411": Gainesville AI 411 directory/events/broadcast operator (issue #51).
+# VOICE_AGENT_MODE is accepted as an alias for AGENT_MODE.
+_raw_agent_mode = (
+    os.getenv("AGENT_MODE") or os.getenv("VOICE_AGENT_MODE") or "sales"
+).strip().lower()
+if _raw_agent_mode not in ("sales", "ai411", "owner_updates"):
+    raise SystemExit(
+        f"Unknown AGENT_MODE {_raw_agent_mode!r}; use 'sales', 'ai411', or 'owner_updates'."
+    )
+AGENT_MODE = _raw_agent_mode
+
+
+def is_ai411() -> bool:
+    return AGENT_MODE == "ai411"
+
+
+def is_owner_updates() -> bool:
+    return AGENT_MODE == "owner_updates"
+
+
+# --- AI 411 MCP bridge ------------------------------------------------------
+# How voice-agent reaches knowledge/events/callers/broadcasts/lookup:
+#   inproc (default) — import mcp-server modules from the monorepo checkout
+#   http             — Streamable HTTP tools/call to MCP_URL (bearer token)
+#   auto             — try inproc; if import fails and MCP_URL is set, use http
+#
+# Production voice containers often lack the mcp-server store filesystem; set
+# MCP_MODE=http (or auto) with MCP_URL=https://mcp.flmanbiosci.net/mcp and
+# MCP_AUTH_TOKEN matching the demo-mcp Deployment.
+_raw_mcp_mode = (os.getenv("MCP_MODE") or "inproc").strip().lower()
+if _raw_mcp_mode not in ("inproc", "http", "auto"):
+    # Soft-fallback so a typo does not kill the process at import time.
+    _raw_mcp_mode = "inproc"
+MCP_MODE = _raw_mcp_mode
+MCP_URL = os.getenv("MCP_URL", "").strip()
+MCP_AUTH_TOKEN = os.getenv("MCP_AUTH_TOKEN", "").strip()
+
+
 # --- Data files -------------------------------------------------------------
 OUTREACH_CSV = Path(
     os.getenv("OUTREACH_CSV", REPO_ROOT / "correspondences" / "outreach-data.csv")

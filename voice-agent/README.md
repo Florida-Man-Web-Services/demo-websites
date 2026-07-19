@@ -166,6 +166,89 @@ with an actual TCPA attorney first.
 - Sesame TTS via DeepInfra (~1,200 chars): ~$0.008
 - **Total ≈ $0.15–0.25 per call** — one converted site pays for hundreds.
 
+## AI 411 mode (`AGENT_MODE=ai411`)
+
+The default agent is the **sales** pitch for Florida Man Web Services demo
+sites. Set `AGENT_MODE=ai411` (or `VOICE_AGENT_MODE=ai411`) to run as
+**Gainesville AI 411** — a local directory / events / community-broadcast
+operator with **no** $999 sales pitch.
+
+```bash
+# voice-agent/.env
+AGENT_MODE=ai411
+# same Twilio / LLM / VOICE_BACKEND keys as sales mode
+```
+
+| | Sales (default) | AI 411 |
+|---|---|---|
+| Identity | Owner's AI assistant pitching free demos | Gainesville AI 411 community operator |
+| Greeting flavor | Sales disclosure + demo offer | "Gainesville AI 411 — events, businesses, or post something?" |
+| Tools | `send_demo_link_sms`, `log_call_outcome`, `end_call` | `search_business_knowledge`, `lookup_business`, `search_events`, `get_event`, `get_caller_profile`, `update_caller_profile`, `forget_caller`, `submit_event_broadcast`, `submit_notice_broadcast`, `list_recent_broadcasts`, `send_sms_links`, `end_call` |
+| Safety | AI disclosure; TCPA / do-not-call | AI disclosure; emergencies → 911; no medical/legal advice |
+
+**Live stores (#51):** when `AGENT_MODE=ai411`, tool calls dispatch via
+`mcp_bridge.py` to the same tools as `mcp-server/` (`knowledge`, `events`,
+`callers`, `broadcasts`, `lookup`). Results are JSON strings for the LLM. On
+failure, tools return a speakable stub so calls do not crash.
+`send_sms_links` / `end_call` stay local in `agent.py` (Twilio when configured).
+
+| `MCP_MODE` | Behavior |
+|---|---|
+| `inproc` (default) | Import store modules from the monorepo `mcp-server/` tree (no HTTP hop). |
+| `http` | Streamable HTTP `tools/call` against `MCP_URL` with `Authorization: Bearer MCP_AUTH_TOKEN`. |
+| `auto` | Try inproc import; if it fails and `MCP_URL` is set, fall back to HTTP. |
+
+Use `http` or `auto` when the voice container does **not** share the mcp-server
+data filesystem (e.g. production: `MCP_URL=https://mcp.flmanbiosci.net/mcp`).
+
+| Env | Default / notes |
+|---|---|
+| `MCP_MODE` | `inproc` \| `http` \| `auto` |
+| `MCP_URL` | e.g. `https://mcp.flmanbiosci.net/mcp` (required for http) |
+| `MCP_AUTH_TOKEN` | Bearer token for remote MCP (required for http) |
+| `KNOWLEDGE_DIR` | `generated-sites/` (HTML knowledge index; inproc) |
+| `EVENTS_PATH` | `/data/events.json` or repo `data/events.json` (auto-seeded; inproc) |
+| `CALLERS_PATH` | `/data/callers.json` (inproc) |
+| `BROADCASTS_PATH` | `/data/broadcasts.jsonl` (inproc) |
+
+Sales mode is unchanged when `AGENT_MODE` is unset or `sales`.
+
+Implementation: `ai411.py` (prompt + tool schemas), `mcp_bridge.py` (inproc +
+HTTP dispatch), selected from `agent.system_prompt` / `agent.get_tools()` /
+`_run_tool` via `config.AGENT_MODE`.
+
+## Owner updates mode (`AGENT_MODE=owner_updates`)
+
+Phone intake desk for **business owners** filing structured site
+`ChangeRequest`s against demo pages — not the sales pitch and not AI 411.
+
+```bash
+# voice-agent/.env
+AGENT_MODE=owner_updates
+# same Twilio / LLM / VOICE_BACKEND keys as other modes
+```
+
+| | Sales (default) | AI 411 | Owner updates |
+|---|---|---|---|
+| Identity | Pitch free demos | Gainesville AI 411 | Owner site-updates desk |
+| Auth | Outbound target business | Optional caller memory | Weak: match caller phone → business (`lookup_business`); ambiguous → ask which; spoken warning |
+| Tools | SMS demo, log outcome, end | Directory / events / broadcasts | `lookup_business`, `get_site_outline`, `create_change_request`, `list_open_change_requests`, `cancel_change_request`, `apply_change_request` (optional), `send_sms_links`, `end_call` |
+| Flow | Pitch → SMS link | Search / post | Outline → capture items → read back → `create_change_request` with `confirmation_spoken=true` |
+
+**Live stores (#52 intake):** tools dispatch **in-process** to
+`mcp-server/changerequests.py` and `lookup.py` via `mcp_bridge.run_owner_updates_tool`.
+`items` may be a list or a JSON array string; `caller_phone` defaults from the
+call state. `apply_change_request` is optional — warn that it updates local
+demo HTML only; shipping a PR is a separate step.
+
+| Env | Default / notes |
+|---|---|
+| `CHANGE_REQUESTS_PATH` | repo `data/change-requests.jsonl` (or `/data/…`) |
+| `GENERATED_SITES_DIR` | repo `generated-sites/` |
+
+Implementation: `owner_updates.py` (prompt + tool schemas), `mcp_bridge.py`
+(owner dispatch), selected via `config.AGENT_MODE` / `config.is_owner_updates()`.
+
 ## Server deployment (hwcopeland's cluster)
 
 Push to `main` → GitHub Actions builds
