@@ -80,13 +80,16 @@ OWNER_CALLBACK_NUMBER = os.getenv("OWNER_CALLBACK_NUMBER", TWILIO_PHONE_NUMBER)
 # --- Agent mode ---------------------------------------------------------------
 # "sales" (default): Florida Man Web Services demo-website pitch agent.
 # "ai411": Gainesville AI 411 directory/events/broadcast operator (issue #51).
+# "unified": one public number — AI 411 for everyone, plus owner site-update
+#   powers when the caller ID matches a business's line.
 # VOICE_AGENT_MODE is accepted as an alias for AGENT_MODE.
 _raw_agent_mode = (
     os.getenv("AGENT_MODE") or os.getenv("VOICE_AGENT_MODE") or "sales"
 ).strip().lower()
-if _raw_agent_mode not in ("sales", "ai411", "owner_updates"):
+if _raw_agent_mode not in ("sales", "ai411", "owner_updates", "unified"):
     raise SystemExit(
-        f"Unknown AGENT_MODE {_raw_agent_mode!r}; use 'sales', 'ai411', or 'owner_updates'."
+        f"Unknown AGENT_MODE {_raw_agent_mode!r}; "
+        "use 'sales', 'ai411', 'owner_updates', or 'unified'."
     )
 AGENT_MODE = _raw_agent_mode
 
@@ -97,6 +100,10 @@ def is_ai411() -> bool:
 
 def is_owner_updates() -> bool:
     return AGENT_MODE == "owner_updates"
+
+
+def is_unified() -> bool:
+    return AGENT_MODE == "unified"
 
 
 # --- AI 411 MCP bridge ------------------------------------------------------

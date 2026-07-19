@@ -249,6 +249,32 @@ demo HTML only; shipping a PR is a separate step.
 Implementation: `owner_updates.py` (prompt + tool schemas), `mcp_bridge.py`
 (owner dispatch), selected via `config.AGENT_MODE` / `config.is_owner_updates()`.
 
+## Unified mode (`AGENT_MODE=unified`) — one public number
+
+Everyone calls the same number. Every caller gets the full **Gainesville
+AI 411** surface (directory / events / broadcasts); a caller whose caller ID
+matches a business's phone line additionally gets the **owner updates**
+surface — change requests scoped to *their* site only, with that site's text
+injected into the prompt so edits are grounded in what the page says.
+
+```bash
+# voice-agent/.env
+AGENT_MODE=unified
+# same Twilio / LLM / VOICE_BACKEND keys as other modes
+```
+
+Ownership is verified by caller ID (`unified.caller_owns`) and enforced in
+`agent._run_tool` — owner tool calls from a non-matching number are refused
+in code, not just discouraged in the prompt. Businesses with no phone on
+file can never unlock owner tools. The safety net is unchanged from owner
+updates mode: requests are structured intake, `apply_change_request` touches
+the local demo HTML only, and shipping anything live is a separate reviewed
+step.
+
+Implementation: `unified.py` (tool-name union + prompt layering over
+`ai411.system_prompt`), routing by tool name in `agent._run_tool` via
+`unified.OWNER_TOOL_NAMES`.
+
 ## Server deployment (hwcopeland's cluster)
 
 Push to `main` → GitHub Actions builds

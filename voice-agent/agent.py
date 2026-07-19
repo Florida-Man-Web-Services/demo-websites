@@ -19,6 +19,7 @@ import config
 import ai411
 import owner_updates
 import site_content
+import unified
 from businesses import Business
 from tts import split_sentences
 
@@ -124,6 +125,8 @@ def get_tools() -> list:
         return ai411.TOOLS
     if config.is_owner_updates():
         return owner_updates.TOOLS
+    if config.is_unified():
+        return unified.TOOLS
     return SALES_TOOLS
 
 
@@ -133,6 +136,8 @@ def get_openers() -> list:
         return ai411.OPENERS
     if config.is_owner_updates():
         return owner_updates.OPENERS
+    if config.is_unified():
+        return unified.OPENERS
     return SALES_OPENERS
 
 
@@ -172,6 +177,13 @@ def system_prompt(
         )
     if config.is_owner_updates():
         return owner_updates.system_prompt(
+            direction=direction,
+            caller_number=caller_number,
+            openers=openers,
+        )
+    if config.is_unified():
+        return unified.system_prompt(
+            business,
             direction=direction,
             caller_number=caller_number,
             openers=openers,
@@ -587,6 +599,30 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
             args,
             caller_number=state.caller_number or "",
             call_sid=getattr(state, "call_sid", "") or "",
+        )
+
+    if config.is_unified():
+        if name == "send_sms_links":
+            return _send_sms_links(state, args)
+        import mcp_bridge
+
+        # Owner tools require caller-ID-verified ownership; everything else
+        # is the public AI 411 surface. Enforced here, not just in the prompt.
+        if name in unified.OWNER_TOOL_NAMES:
+            if not unified.caller_owns(state.business, state.caller_number or ""):
+                return (
+                    "Owner tools are only available when calling from the "
+                    "business's own phone line. Offer to note the request "
+                    "for a human follow-up instead."
+                )
+            return mcp_bridge.run_owner_updates_tool(
+                name,
+                args,
+                caller_number=state.caller_number or "",
+                call_sid=getattr(state, "call_sid", "") or "",
+            )
+        return mcp_bridge.run_ai411_tool(
+            name, args, caller_number=state.caller_number or ""
         )
 
     if name == "send_demo_link_sms":
