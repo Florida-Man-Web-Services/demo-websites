@@ -1,839 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ole Barn | Neighborhood Bar in Gainesville, FL</title>
-  <meta name="description" content="Ole Barn — Bar in Gainesville, FL. 1791 NE 23rd Ave, Gainesville, FL 32609." />
-  <meta property="og:title" content="Ole Barn | Neighborhood Bar in Gainesville, FL" />
-  <meta property="og:description" content="Ole Barn — Bar in Gainesville, FL. 1791 NE 23rd Ave, Gainesville, FL 32609." />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en_US" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --neon-cyan:   #00f5ff;
-      --neon-purple: #bf00ff;
-      --neon-pink:   #ff007f;
-      --neon-gold:   #ffd700;
-      --dark0: #050510;
-      --dark1: #0a0a1a;
-      --dark2: #0f0f28;
-      --dark3: #13132e;
-      --glass: rgba(255,255,255,0.04);
-      --glass-border: rgba(255,255,255,0.10);
-      --text: #e8e8ff;
-      --text-dim: #9999bb;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-      background: var(--dark0);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    /* ── ANIMATED GRADIENT BG ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(191,0,255,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(0,245,255,0.10) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,0,127,0.06) 0%, transparent 70%);
-      animation: bgPulse 8s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-
-    @keyframes bgPulse {
-      0%   { opacity: 0.6; transform: scale(1); }
-      100% { opacity: 1;   transform: scale(1.05); }
-    }
-
-    /* ── DECK WRAPPER ── */
-    .deck-wrapper {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Each card: sticky + stacks */
-    .card {
-      position: sticky;
-      top: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1.5rem;
-      transform-origin: top center;
-      transition: transform 0.1s linear, filter 0.1s linear;
-      will-change: transform;
-      overflow: hidden;
-    }
-
-    /* Card backgrounds */
-    .card-hero   { background: linear-gradient(160deg, #05051a 0%, #0a0520 50%, #130a30 100%); z-index: 1; }
-    .card-offer  { background: linear-gradient(160deg, #070718 0%, #0c0a22 50%, #150c35 100%); z-index: 2; }
-    .card-story  { background: linear-gradient(160deg, #080820 0%, #0e0b25 50%, #17103a 100%); z-index: 3; }
-    .card-visit  { background: linear-gradient(160deg, #090922 0%, #0f0c28 50%, #18123f 100%); z-index: 4; }
-
-    /* Card top-edge glow accent */
-    .card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      border-radius: 3px 3px 0 0;
-    }
-    .card-hero::after   { background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink), var(--neon-cyan)); }
-    .card-offer::after  { background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); }
-    .card-story::after  { background: linear-gradient(90deg, var(--neon-pink), var(--neon-gold)); }
-    .card-visit::after  { background: linear-gradient(90deg, var(--neon-gold), var(--neon-cyan)); }
-
-    /* Card inner */
-    .card-inner {
-      max-width: 900px;
-      width: 100%;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── NEON TEXT ── */
-    .neon-title {
-      font-size: clamp(3rem, 10vw, 7rem);
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      line-height: 0.95;
-      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 45%, var(--neon-pink) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 20px rgba(191,0,255,0.5)) drop-shadow(0 0 40px rgba(0,245,255,0.3));
-      animation: neonFlicker 6s ease-in-out infinite;
-    }
-
-    @keyframes neonFlicker {
-      0%, 100% { filter: drop-shadow(0 0 20px rgba(191,0,255,0.5)) drop-shadow(0 0 40px rgba(0,245,255,0.3)); }
-      45%       { filter: drop-shadow(0 0 30px rgba(191,0,255,0.8)) drop-shadow(0 0 60px rgba(0,245,255,0.5)); }
-      50%       { filter: drop-shadow(0 0 18px rgba(191,0,255,0.4)) drop-shadow(0 0 35px rgba(0,245,255,0.25)); }
-      55%       { filter: drop-shadow(0 0 32px rgba(191,0,255,0.9)) drop-shadow(0 0 65px rgba(0,245,255,0.6)); }
-    }
-
-    .neon-sub {
-      font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px rgba(0,245,255,0.4);
-      margin-bottom: 1.2rem;
-    }
-
-    /* ── EYEBROW PILL ── */
-    .pill {
-      display: inline-block;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.3rem 1rem;
-      border-radius: 999px;
-      border: 1px solid rgba(0,245,255,0.4);
-      color: var(--neon-cyan);
-      background: rgba(0,245,255,0.06);
-      margin-bottom: 1.5rem;
-    }
-
-    /* ── HERO CARD ── */
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--text-dim);
-      margin: 1.5rem 0 2.5rem;
-      max-width: 560px;
-      line-height: 1.7;
-    }
-
-    /* Neon scan-line overlay on hero */
-    .card-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 3px,
-        rgba(0,245,255,0.015) 3px,
-        rgba(0,245,255,0.015) 4px
-      );
-      pointer-events: none;
-    }
-
-    /* ── BUTTONS ── */
-    .btn-neon {
-      display: inline-block;
-      padding: 0.85rem 2.4rem;
-      border-radius: 3px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      border: 2px solid var(--neon-cyan);
-      color: var(--neon-cyan);
-      background: rgba(0,245,255,0.08);
-      box-shadow: 0 0 12px rgba(0,245,255,0.3), inset 0 0 12px rgba(0,245,255,0.05);
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-neon::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,245,255,0.15);
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-    }
-
-    .btn-neon:hover::before { transform: translateX(0); }
-
-    .btn-neon:hover {
-      box-shadow: 0 0 24px rgba(0,245,255,0.6), inset 0 0 24px rgba(0,245,255,0.1);
-      color: #fff;
-    }
-
-    .btn-neon-pink {
-      border-color: var(--neon-pink);
-      color: var(--neon-pink);
-      background: rgba(255,0,127,0.08);
-      box-shadow: 0 0 12px rgba(255,0,127,0.3), inset 0 0 12px rgba(255,0,127,0.05);
-    }
-
-    .btn-neon-pink::before { background: rgba(255,0,127,0.15); }
-
-    .btn-neon-pink:hover {
-      box-shadow: 0 0 24px rgba(255,0,127,0.6), inset 0 0 24px rgba(255,0,127,0.1);
-      color: #fff;
-    }
-
-    /* ── SECTION HEADINGS ── */
-    .card-heading {
-      font-size: clamp(1.8rem, 5vw, 3.2rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    .gradient-cyan-purple {
-      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .gradient-pink-gold {
-      background: linear-gradient(135deg, var(--neon-pink) 0%, var(--neon-gold) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .gradient-gold-cyan {
-      background: linear-gradient(135deg, var(--neon-gold) 0%, var(--neon-cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* ── GLASS PANELS ── */
-    .glass {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    /* ── OFFER GRID ── */
-    .offer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.2rem;
-      margin-top: 2rem;
-    }
-
-    .offer-item {
-      padding: 1.6rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.07);
-      background: rgba(255,255,255,0.03);
-      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .offer-item::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .offer-item:hover {
-      border-color: rgba(0,245,255,0.3);
-      box-shadow: 0 0 20px rgba(0,245,255,0.1);
-      transform: translateY(-4px);
-    }
-
-    .offer-item:hover::before { opacity: 1; }
-
-    .offer-icon {
-      font-size: 1.8rem;
-      display: block;
-      margin-bottom: 0.8rem;
-    }
-
-    .offer-item h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--neon-cyan);
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 8px rgba(0,245,255,0.4);
-    }
-
-    .offer-item p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-    }
-
-    /* ── STORY / ABOUT ── */
-    .story-grid {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: 2.5rem;
-      align-items: center;
-      margin-top: 2rem;
-    }
-
-    .story-text p {
-      color: var(--text-dim);
-      line-height: 1.8;
-      margin-bottom: 1.2rem;
-      font-size: 1rem;
-    }
-
-    .story-text p:last-child { margin-bottom: 0; }
-
-    .story-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .stat-card {
-      padding: 1.4rem;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(191,0,255,0.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .stat-num {
-      font-size: 2.4rem;
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--neon-gold) 0%, var(--neon-cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 8px rgba(255,215,0,0.4));
-    }
-
-    .stat-lbl {
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-top: 0.3rem;
-    }
-
-    /* ── VISIT CARD ── */
-    .visit-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      align-items: start;
-      margin-top: 2rem;
-    }
-
-    .visit-info-block {
-      margin-bottom: 1.5rem;
-    }
-
-    .visit-info-block h3 {
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--neon-gold);
-      text-shadow: 0 0 8px rgba(255,215,0,0.4);
-      margin-bottom: 0.4rem;
-    }
-
-    .visit-info-block p {
-      color: var(--text-dim);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    /* Rating block */
-    .rating-panel {
-      padding: 1.5rem;
-      border-radius: 12px;
-      background: rgba(255,215,0,0.04);
-      border: 1px solid rgba(255,215,0,0.2);
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      margin-bottom: 1.8rem;
-      box-shadow: 0 0 20px rgba(255,215,0,0.08);
-    }
-
-    .stars-row { font-size: 1.3rem; letter-spacing: 2px; color: var(--neon-gold); }
-
-    .rating-num {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: var(--neon-gold);
-      line-height: 1;
-      text-shadow: 0 0 15px rgba(255,215,0,0.5);
-    }
-
-    .rating-meta {
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      letter-spacing: 0.05em;
-    }
-
-    /* Map placeholder */
-    .map-box {
-      border-radius: 12px;
-      border: 1px solid rgba(0,245,255,0.2);
-      background: rgba(0,245,255,0.03);
-      height: 260px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      box-shadow: 0 0 20px rgba(0,245,255,0.06);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* CSS grid map pin SVG drawn via background */
-    .map-box::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,245,255,0.05) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,245,255,0.05) 40px);
-    }
-
-    .map-pin-svg {
-      position: relative;
-      z-index: 1;
-    }
-
-    .map-addr {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      color: var(--text-dim);
-      font-size: 0.85rem;
-      line-height: 1.6;
-    }
-
-    .map-addr strong { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0,245,255,0.4); }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 5;
-      background: var(--dark0);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 3rem 1.5rem 2rem;
-      text-align: center;
-    }
-
-    .footer-logo {
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.4rem;
-    }
-
-    .footer-sub {
-      color: var(--text-dim);
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-
-    .footer-addr {
-      color: rgba(255,255,255,0.3);
-      font-size: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-copy {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.2);
-      border-top: 1px solid rgba(255,255,255,0.05);
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
-
-    /* ── SECTION DIVIDER LINE ── */
-    .neon-hr {
-      height: 1px;
-      border: none;
-      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-      margin: 1.2rem 0 0;
-      opacity: 0.4;
-    }
-
-    /* ── REVEAL ANIMATION ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── REDUCED MOTION: cards become normal stacked flow ── */
-    @media (prefers-reduced-motion: reduce) {
-      body::before { animation: none; }
-
-      .neon-title { animation: none; }
-
-      @keyframes bgPulse { 0%, 100% { opacity: 1; transform: none; } }
-      @keyframes neonFlicker { 0%, 100% { filter: none; } }
-
-      .card {
-        position: relative;
-        top: auto;
-        min-height: auto;
-        padding: 4rem 1.5rem;
-      }
-
-      .reveal {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-
-      .offer-item:hover, .btn-neon:hover, .btn-neon-pink:hover {
-        transform: none;
-      }
-    }
-
-    /* ── MOBILE ── */
-    @media (max-width: 700px) {
-      .story-grid { grid-template-columns: 1fr; }
-      .visit-grid  { grid-template-columns: 1fr; }
-      .offer-grid  { grid-template-columns: 1fr; }
-      .story-stats { flex-direction: row; flex-wrap: wrap; }
-      .story-stats .stat-card { flex: 1 1 40%; }
-      .card { padding: 2rem 1.2rem; }
-    }
-
-    @media (max-width: 480px) {
-      .neon-title { font-size: 2.8rem; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ole Barn – Gainesville, FL</title>
+<meta name="description" content="Ole Barn — bars in Gainesville, FL. 1791 NE 23rd Ave, Gainesville, FL 32609." />
+<meta property="og:title" content="Ole Barn – Gainesville, FL" />
+<meta property="og:description" content="Ole Barn — bars in Gainesville, FL. 1791 NE 23rd Ave, Gainesville, FL 32609." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<style>
+:root{
+  --bg:hsl(27 25% 97%); --ink:hsl(27 30% 12%); --accent:hsl(9 55% 38%); --accent2:hsl(261 45% 48%);
+  --card:hsl(27 20% 100%); --muted:hsl(27 10% 40%); --line:hsl(27 15% 85%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{width:min(1080px,92%);margin:0 auto}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;gap:1rem;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:-.02em}
+.nav a{color:var(--muted);font-size:.92rem;margin-left:.9rem}
+.hero{padding:4.5rem 0 3.5rem;border-bottom:1px solid var(--line);background:linear-gradient(135deg,color-mix(in oklab,var(--accent) 12%,var(--bg)),var(--bg) 55%)}
+.k{text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--accent);font-weight:700}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.03em;margin:.55rem 0 1rem;max-width:16ch}
+.lead{font-size:1.08rem;color:var(--muted);max-width:48ch}
+.ctas{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.4rem}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:.75rem 1.15rem;border-radius:999px;font-weight:700;text-decoration:none}
+.btn:hover{filter:brightness(1.05);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.rating{margin-top:1rem;font-size:.92rem;color:var(--muted)}
+section{padding:3.4rem 0;border-bottom:1px solid var(--line)}
+section h2{font-size:clamp(1.5rem,3.5vw,2.2rem);letter-spacing:-.02em;margin:.35rem 0 1rem}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:1.2rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:1rem;padding:1.15rem 1.2rem}
+.card h3{font-size:1.05rem;margin-bottom:.35rem}
+.card p{color:var(--muted);font-size:.95rem}
+.visit{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.det{background:var(--card);border:1px solid var(--line);border-radius:1rem;padding:1.1rem 1.2rem}
+.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.val{margin-top:.35rem}
+.cta{background:color-mix(in oklab,var(--accent) 10%,var(--bg));text-align:center}
+footer{padding:2rem 0 2.6rem;color:var(--muted);font-size:.88rem}
+footer .demo{margin-top:.55rem;font-size:.8rem;opacity:.85}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
+<header class="wrap nav">
+  <div class="brand">Ole Barn</div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#offer">Offer</a>
+    <a href="#visit">Visit</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-<div class="deck-wrapper">
+<section class="hero" id="top">
+  <div class="wrap">
+    <p class="k">bars · Gainesville</p>
+    <h1>Night in Gainesville</h1>
+    <p class="lead">Ole Barn serves Gainesville with a local-first approach—clear info, easy contact, and a page built for real neighbors (and AI 411 lookups).</p>
+    <div class="ctas"><a class="btn" href="https://www.google.com/maps/place/Ole+Barn/data=!4m7!3m6!1s0x88e8a6a761d140d5:0xf60e3150776d4aa7!8m2!3d29.6735819!4d-82.3017476!16s%2Fg%2F11bzy7ftzw!19sChIJ1UDRYaem6IgRp0ptd1AxDvY?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a><a class="btn ghost" href="https://www.google.com/maps/place/Ole+Barn/data=!4m7!3m6!1s0x88e8a6a761d140d5:0xf60e3150776d4aa7!8m2!3d29.6735819!4d-82.3017476!16s%2Fg%2F11bzy7ftzw!19sChIJ1UDRYaem6IgRp0ptd1AxDvY?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a></div>
+    <p class="rating">Google: 4.7 (84)</p>
+  </div>
+</section>
 
-  <!-- CARD 1: HERO -->
-  <div class="card card-hero" id="hero">
-    <div class="card-inner">
-      <div class="reveal">
-        <span class="pill">Gainesville, FL &nbsp;&#8226;&nbsp; NE Side</span>
-      </div>
-      <div class="reveal neon-title">Ole<br>Barn</div>
-      <p class="neon-sub reveal">Neighborhood Bar</p>
-      <hr class="neon-hr">
-      <p class="hero-tagline reveal">Cold drinks, good company, and the worn-in comfort you keep coming back for. A real Gainesville spot.</p>
-      <div class="reveal" style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.5rem;">
-        <a href="#offer" class="btn-neon">What We Offer</a>
-        <a href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609" target="_blank" rel="noopener noreferrer" class="btn-neon btn-neon-pink">Get Directions</a>
-      </div>
+<section id="about">
+  <div class="wrap">
+    <p class="k">01 — Story</p>
+    <h2>Night in Gainesville</h2>
+    <p class="lead">We keep the facts straight: real location details from public listings, no invented reviews, and copy you can actually use when you need this business fast.</p>
+  </div>
+</section>
+
+<section id="offer">
+  <div class="wrap">
+    <p class="k">02 — What to expect</p>
+    <h2>Pour & atmosphere</h2>
+    <div class="grid">
+      <article class="card"><h3>Local focus</h3><p>Gainesville-oriented service and neighborhood context without tourist filler.</p></article>
+      <article class="card"><h3>Clear next step</h3><p>Call or directions first—so owners and customers are not hunting for basics.</p></article>
+      <article class="card"><h3>Straight facts</h3><p>Name, address, and phone only when verified. Hours stay honest when schedules change.</p></article>
+      <article class="card"><h3>AI 411 ready</h3><p>Key details live as readable text for voice directory answers, not only images.</p></article>
     </div>
   </div>
+</section>
 
-  <!-- CARD 2: WHAT WE OFFER -->
-  <div class="card card-offer" id="offer">
-    <div class="card-inner">
-      <div class="reveal">
-        <span class="pill">What We Offer</span>
-      </div>
-      <h2 class="card-heading gradient-cyan-purple reveal">Drinks &amp; Good Times</h2>
-      <p class="reveal" style="color:var(--text-dim);max-width:560px;line-height:1.7;font-size:0.95rem;">Everything you need for a great night out — without the attitude.</p>
+<section id="trust">
+  <div class="wrap">
+    <p class="k">03 — Proof</p>
+    <h2>Listed for a reason</h2>
+    <p class="lead">Public Google rating: 4.7 (84). This demo page is for outreach and directory quality—not a substitute for the business’s own channels.</p>
+  </div>
+</section>
 
-      <div class="offer-grid">
-        <div class="offer-item reveal">
-          <span class="offer-icon">&#127866;</span>
-          <h3>Draft &amp; Bottled Beer</h3>
-          <p>Domestic and craft beers on draft and in the bottle — always cold.</p>
-        </div>
-        <div class="offer-item reveal">
-          <span class="offer-icon">&#127864;</span>
-          <h3>Cocktails &amp; Mixed Drinks</h3>
-          <p>Classic mixed drinks made to order. Contact us for details on the current lineup.</p>
-        </div>
-        <div class="offer-item reveal">
-          <span class="offer-icon">&#127870;</span>
-          <h3>Spirits &amp; Shots</h3>
-          <p>Whiskeys, bourbons, vodkas, rums and more — for sipping or sharing.</p>
-        </div>
-        <div class="offer-item reveal">
-          <span class="offer-icon">&#127953;</span>
-          <h3>Game Day Viewing</h3>
-          <p>Catch the big game in a casual, energetic bar environment. Pull up a stool.</p>
-        </div>
-        <div class="offer-item reveal">
-          <span class="offer-icon">&#127932;</span>
-          <h3>Live Entertainment</h3>
-          <p>Periodic live music, themed nights, and special events. Contact us for upcoming details.</p>
-        </div>
-        <div class="offer-item reveal">
-          <span class="offer-icon">&#127944;</span>
-          <h3>Bar Games</h3>
-          <p>Pool, darts, and bar-room staples to keep the evening going.</p>
-        </div>
-      </div>
+<section id="visit">
+  <div class="wrap">
+    <p class="k">04 — Pull up</p>
+    <h2>Find us</h2>
+    <div class="visit">
+      <div class="det"><div class="label">Address</div><div class="val"><address style="font-style:normal">1791 NE 23rd Ave<br>Gainesville<br>FL 32609</address></div></div>
+      <div class="det"><div class="label">Phone</div><div class="val">See Google listing</div></div>
+      <div class="det"><div class="label">Hours</div><div class="val">Hours vary — check Google Maps for the latest</div></div>
     </div>
   </div>
+</section>
 
-  <!-- CARD 3: STORY / ABOUT -->
-  <div class="card card-story" id="story">
-    <div class="card-inner">
-      <div class="reveal">
-        <span class="pill">Our Story</span>
-      </div>
-      <h2 class="card-heading gradient-pink-gold reveal">A Gainesville<br>Neighborhood Bar</h2>
-
-      <div class="story-grid">
-        <div class="story-text">
-          <p class="reveal">Ole Barn is a laid-back neighborhood bar on the northeast side of Gainesville where locals come to unwind, catch the game, and share a round with familiar faces.</p>
-          <p class="reveal">The atmosphere is easygoing and unpretentious — exactly what a good bar should be. Whether you're stopping in for a cold beer after work or settling in for an evening with friends, Ole Barn delivers the kind of relaxed, welcoming vibe that keeps regulars coming back week after week.</p>
-          <p class="reveal">Situated at 1791 NE 23rd Ave, the bar is a convenient gathering spot for Gainesville residents looking for somewhere comfortable to kick back without the fuss.</p>
-        </div>
-        <div class="story-stats">
-          <div class="stat-card reveal">
-            <div class="stat-num" id="stat-rating">4.7</div>
-            <div class="stat-lbl">Google Rating</div>
-          </div>
-          <div class="stat-card reveal">
-            <div class="stat-num" id="stat-reviews">84</div>
-            <div class="stat-lbl">Customer Reviews</div>
-          </div>
-          <div class="stat-card reveal">
-            <div class="stat-num" style="font-size:1.1rem;padding:0.3rem 0;">NE Gainesville</div>
-            <div class="stat-lbl">Neighborhood Favorite</div>
-          </div>
-        </div>
-      </div>
-    </div>
+<section class="cta" id="contact">
+  <div class="wrap">
+    <p class="k">05 — Contact</p>
+    <h2>Ready when you are</h2>
+    <div class="ctas" style="justify-content:center"><a class="btn" href="https://www.google.com/maps/place/Ole+Barn/data=!4m7!3m6!1s0x88e8a6a761d140d5:0xf60e3150776d4aa7!8m2!3d29.6735819!4d-82.3017476!16s%2Fg%2F11bzy7ftzw!19sChIJ1UDRYaem6IgRp0ptd1AxDvY?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a><a class="btn ghost" href="https://www.google.com/maps/place/Ole+Barn/data=!4m7!3m6!1s0x88e8a6a761d140d5:0xf60e3150776d4aa7!8m2!3d29.6735819!4d-82.3017476!16s%2Fg%2F11bzy7ftzw!19sChIJ1UDRYaem6IgRp0ptd1AxDvY?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a></div>
   </div>
+</section>
 
-  <!-- CARD 4: VISIT -->
-  <div class="card card-visit" id="visit">
-    <div class="card-inner">
-      <div class="reveal">
-        <span class="pill">Visit Us</span>
-      </div>
-      <h2 class="card-heading gradient-gold-cyan reveal">Come Find<br>Ole Barn</h2>
-
-      <div class="visit-grid">
-        <div>
-          <div class="rating-panel reveal">
-            <div>
-              <div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            </div>
-            <div>
-              <div class="rating-num">4.7</div>
-              <div class="rating-meta">Rated on Google &bull; 84 reviews</div>
-            </div>
-          </div>
-
-          <div class="visit-info-block reveal">
-            <h3>Address</h3>
-            <p>1791 NE 23rd Ave<br>Gainesville, FL 32609</p>
-          </div>
-
-          <div class="visit-info-block reveal">
-            <h3>Hours</h3>
-            <p>Contact us for details on current operating hours.</p>
-          </div>
-
-          <div class="reveal" style="display:flex;gap:1rem;flex-wrap:wrap;">
-            <a href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609" target="_blank" rel="noopener noreferrer" class="btn-neon">Get Directions</a>
-          </div>
-        </div>
-
-        <div class="reveal">
-          <div class="map-box">
-            <!-- CSS-drawn map pin SVG -->
-            <svg class="map-pin-svg" width="40" height="52" viewBox="0 0 40 52" fill="none" aria-hidden="true">
-              <ellipse cx="20" cy="49" rx="8" ry="3" fill="rgba(0,245,255,0.2)"/>
-              <path d="M20 2C11.163 2 4 9.163 4 18c0 12 16 32 16 32s16-20 16-32C36 9.163 28.837 2 20 2Z" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1.5"/>
-              <circle cx="20" cy="18" r="6" fill="#00f5ff" opacity="0.8"/>
-            </svg>
-            <div class="map-addr">
-              <strong>Ole Barn</strong><br>
-              1791 NE 23rd Ave<br>
-              Gainesville, FL 32609
-            </div>
-            <a href="https://www.google.com/maps/search/Ole%20Barn%201791%20NE%2023rd%20Ave%2C%20Gainesville%2C%20FL%2032609" target="_blank" rel="noopener noreferrer" class="btn-neon" style="font-size:0.75rem;padding:0.6rem 1.4rem;position:relative;z-index:1;">View on Google Maps</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /deck-wrapper -->
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Ole Barn</div>
-  <div class="footer-sub">Your neighborhood bar in Gainesville, FL</div>
-  <div class="footer-addr">1791 NE 23rd Ave &bull; Gainesville, FL 32609</div>
-  <div class="footer-copy">&copy; 2026 Ole Barn. All rights reserved.</div>
+<footer class="wrap">
+  <p>© 2026 Ole Barn · 1791 NE 23rd Ave, Gainesville, FL 32609</p>
+  <p class="demo">Demo site by Florida Man Web Services</p>
 </footer>
-
-<script>
-(function () {
-  'use strict';
-
-  /* ── STICKY DECK SCALE/ROTATE ON SCROLL ── */
-  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
-  var totalCards = cards.length;
-
-  function onScroll() {
-    var scrollY = window.scrollY || window.pageYOffset;
-    var winH = window.innerHeight;
-
-    cards.forEach(function (card, i) {
-      if (i >= totalCards - 1) return; // last card doesn't shrink
-      var rect = card.getBoundingClientRect();
-      var topOffset = rect.top;
-      var ratio = Math.min(Math.max(-topOffset / winH, 0), 1);
-      // As user scrolls past, shrink and rotate slightly
-      var scale = 1 - ratio * 0.06 * (i + 1);
-      var rotate = ratio * 1.5 * (i % 2 === 0 ? -1 : 1);
-      scale = Math.max(scale, 0.85);
-      card.style.transform = 'scale(' + scale + ') rotate(' + rotate + 'deg)';
-      card.style.filter = 'brightness(' + (1 - ratio * 0.25) + ')';
-    });
-  }
-
-  // Reduced motion: skip JS transforms
-  var mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!mediaQuery.matches) {
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
-
-  /* ── INTERSECTIONOBSERVER REVEALS ── */
-  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
-
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-
-    revealEls.forEach(function (el) { io.observe(el); });
-  } else {
-    // Fallback: show all
-    revealEls.forEach(function (el) { el.classList.add('visible'); });
-  }
-
-  /* ── ANIMATED COUNTER FOR RATING + REVIEWS ── */
-  function animateCounter(el, target, decimals, duration) {
-    var start = 0;
-    var startTime = null;
-
-    function step(timestamp) {
-      if (!startTime) startTime = timestamp;
-      var progress = Math.min((timestamp - startTime) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-      var current = start + (target - start) * eased;
-      el.textContent = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toString();
-      if (progress < 1) requestAnimationFrame(step);
-    }
-
-    requestAnimationFrame(step);
-  }
-
-  var ratingEl  = document.getElementById('stat-rating');
-  var reviewsEl = document.getElementById('stat-reviews');
-  var countersStarted = false;
-
-  function maybeStartCounters() {
-    if (countersStarted) return;
-    var storyCard = document.getElementById('story');
-    if (!storyCard) return;
-    var rect = storyCard.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.8) {
-      countersStarted = true;
-      if (ratingEl)  animateCounter(ratingEl,  4.7, 1, 1200);
-      if (reviewsEl) animateCounter(reviewsEl, 84,  0, 1400);
-    }
-  }
-
-  window.addEventListener('scroll', maybeStartCounters, { passive: true });
-  maybeStartCounters();
-
-}());
-</script>
-
 </body>
 </html>

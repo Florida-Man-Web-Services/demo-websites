@@ -1,227 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vet | Animal Hospital &ndash; Gainesville, FL</title>
-  <meta name="description" content="Vet — Animal hospital in Gainesville, FL. NW 34th Blvd." />
-  <meta property="og:title" content="Vet | Animal Hospital – Gainesville, FL" />
-  <meta property="og:description" content="Vet — Animal hospital in Gainesville, FL. NW 34th Blvd." />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en_US" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vet – Gainesville, FL</title>
+<meta name="description" content="Vet — veterinarians in Gainesville, FL. NW 34th Blvd." />
+<meta property="og:title" content="Vet – Gainesville, FL" />
+<meta property="og:description" content="Vet — veterinarians in Gainesville, FL. NW 34th Blvd." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
 <style>
-  :root{
-    --ink:#2a3330; --ink-soft:#5f6d68; --bg:#f3faf6;
-    --green:#3fb98a; --green-deep:#218f68; --teal:#2fb2c4; --peach:#ffb27a; --sun:#ffd66b;
-    --forest:#183a2f; --card:#ffffff;
-    --font:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
-    --sh:0 24px 54px -28px rgba(20,60,45,.5);
-    --op:1.0; /* full opacity token */
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.62;overflow-x:hidden;opacity:1.0}
-  a{color:inherit;text-decoration:none}
-
-  /* fixed side rail */
-  .rail{position:fixed;top:0;left:0;height:100vh;width:230px;z-index:50;
-    background:linear-gradient(180deg,var(--forest),#0f2a22);color:#fff;
-    display:flex;flex-direction:column;padding:26px 22px}
-  .rail .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:1.15rem}
-  .rail .brand .m{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--green),var(--teal));display:grid;place-items:center;font-size:1.4rem}
-  .rail .tag{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sun);font-weight:800;margin-top:8px}
-  .rail nav{margin-top:38px;display:flex;flex-direction:column;gap:4px}
-  .rail nav a{display:flex;align-items:center;gap:14px;padding:11px 12px;border-radius:14px;color:rgba(255,255,255,.72);font-weight:700;font-size:.92rem;transition:.22s}
-  .rail nav a .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.3);transition:.22s;flex:none}
-  .rail nav a:hover{background:rgba(255,255,255,.08);color:#fff}
-  .rail nav a.active{background:rgba(63,185,138,.22);color:#fff}
-  .rail nav a.active .dot{background:var(--green);box-shadow:0 0 0 5px rgba(63,185,138,.25);transform:scale(1.2)}
-  .rail .foot{margin-top:auto;font-size:.78rem;color:rgba(255,255,255,.6)}
-  .rail .foot .rate{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border-radius:16px;padding:12px 14px;margin-bottom:14px}
-  .rail .foot .rate .num{font-size:1.9rem;font-weight:800;color:var(--sun);line-height:1}
-
-  .content{margin-left:230px}
-  @media(max-width:860px){
-    .rail{position:sticky;top:0;height:auto;width:100%;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px}
-    .rail nav{flex-direction:row;flex-wrap:wrap;margin:0;gap:4px}
-    .rail nav a{padding:8px 12px;font-size:.82rem}
-    .rail nav a .dot{display:none}
-    .rail .tag,.rail .foot{display:none}
-    .content{margin-left:0}
-  }
-
-  .sec{min-height:auto;padding:clamp(56px,10vh,120px) clamp(24px,5vw,80px);scroll-margin-top:70px;position:relative}
-  .kick{font-size:.76rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--green-deep);margin-bottom:14px}
-  h1{font-size:clamp(2.6rem,7vw,5rem);line-height:.98;font-weight:800;letter-spacing:-.02em}
-  h1 .g{background:linear-gradient(90deg,var(--green-deep),var(--teal),var(--green-deep));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
-  @keyframes flow{to{background-position:200% center}}
-  h2{font-size:clamp(1.9rem,5vw,3rem);font-weight:800;line-height:1.06;letter-spacing:-.01em}
-  .lead{max-width:620px;font-size:clamp(1.05rem,2.4vw,1.3rem);color:var(--ink-soft);margin-top:20px}
-
-  #home{background:
-    radial-gradient(60% 60% at 85% 15%,rgba(47,178,196,.2),transparent 60%),
-    radial-gradient(55% 55% at 10% 90%,rgba(63,185,138,.18),transparent 60%),
-    var(--bg)}
-  .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
-  .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:999px;font-weight:800;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
-  .btn.primary{background:var(--green-deep);color:#fff;box-shadow:0 16px 34px -14px var(--green-deep)}
-  .btn.ghost{background:var(--card);color:var(--green-deep);border:2px solid var(--green)}
-  .btn:hover{transform:translateY(-3px) scale(1.03)}
-  .heart{display:inline-block;color:var(--peach);animation:beat 1.6s ease-in-out infinite}
-  @keyframes beat{0%,100%{transform:scale(1)}20%{transform:scale(1.25)}40%{transform:scale(1)}}
-
-  .svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:36px}
-  .scard{background:var(--card);border-radius:24px;padding:28px;box-shadow:var(--sh);transition:transform .3s cubic-bezier(.2,.8,.2,1);border-bottom:5px solid transparent}
-  .scard:hover{transform:translateY(-8px);border-bottom-color:var(--green)}
-  .scard .ic{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--green),var(--green-deep));display:grid;place-items:center;font-size:1.6rem;color:#fff}
-  .scard h3{margin:16px 0 8px;font-size:1.2rem}
-  .scard p{color:var(--ink-soft);font-size:.95rem}
-
-  #trust{background:linear-gradient(140deg,var(--forest),#0f2a22);color:#fff;border-radius:36px;margin:clamp(24px,4vw,50px);padding:clamp(34px,5vw,64px)}
-  #trust h2{color:#fff}
-  .ratewrap{display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:26px}
-  .bignum{font-size:5rem;font-weight:800;line-height:1;color:var(--sun)}
-  .starrow svg{width:26px;height:26px;fill:var(--sun)}
-  .starrow svg.empty{fill:rgba(255,255,255,.3)}
-  .rmeta{color:rgba(255,255,255,.85)}
-  .rmeta .big{font-size:1.15rem;font-weight:800;color:#fff}
-
-  .contact{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
-  @media(max-width:700px){.contact{grid-template-columns:1fr}}
-  .info{background:var(--card);border-radius:22px;padding:22px;box-shadow:var(--sh);display:flex;gap:14px;align-items:flex-start}
-  .info .ic{width:48px;height:48px;flex:none;border-radius:15px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem}
-  .info .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);font-weight:800}
-  .info .v{font-weight:700}
-  .maparea{grid-column:1/-1;border-radius:24px;min-height:190px;display:grid;place-items:center;text-align:center;padding:24px;box-shadow:var(--sh);
-    background:linear-gradient(rgba(63,185,138,.06),rgba(63,185,138,.06)),repeating-linear-gradient(45deg,#e9f7ef,#e9f7ef 16px,#ddf0e6 16px,#ddf0e6 32px)}
-  .maparea .pin{font-size:2.4rem}
-
-  .reveal{opacity:0;transform:translateY(34px);transition:.75s cubic-bezier(.2,.8,.2,1)}
-  .reveal.in{opacity:1;transform:none}
-
-  footer{text-align:center;padding:40px;color:var(--ink-soft);font-size:.9rem}
-  footer strong{color:var(--ink)}
-  .disc{font-size:.78rem;margin-top:8px;opacity:.85}
-
-  @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;scroll-behavior:auto!important}
-    .reveal{opacity:1;transform:none;transition:none}
-  }
+:root{
+  --bg:hsl(2 25% 97%); --ink:hsl(2 30% 12%); --accent:hsl(120 55% 38%); --accent2:hsl(154 45% 48%);
+  --card:hsl(2 20% 100%); --muted:hsl(2 10% 40%); --line:hsl(2 15% 85%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{width:min(1080px,92%);margin:0 auto}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;gap:1rem;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:-.02em}
+.nav a{color:var(--muted);font-size:.92rem;margin-left:.9rem}
+.hero{padding:4.5rem 0 3.5rem;border-bottom:1px solid var(--line);background:linear-gradient(135deg,color-mix(in oklab,var(--accent) 12%,var(--bg)),var(--bg) 55%)}
+.k{text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--accent);font-weight:700}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.03em;margin:.55rem 0 1rem;max-width:16ch}
+.lead{font-size:1.08rem;color:var(--muted);max-width:48ch}
+.ctas{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.4rem}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:.75rem 1.15rem;border-radius:999px;font-weight:700;text-decoration:none}
+.btn:hover{filter:brightness(1.05);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.rating{margin-top:1rem;font-size:.92rem;color:var(--muted)}
+section{padding:3.4rem 0;border-bottom:1px solid var(--line)}
+section h2{font-size:clamp(1.5rem,3.5vw,2.2rem);letter-spacing:-.02em;margin:.35rem 0 1rem}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:1.2rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:1rem;padding:1.15rem 1.2rem}
+.card h3{font-size:1.05rem;margin-bottom:.35rem}
+.card p{color:var(--muted);font-size:.95rem}
+.visit{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.det{background:var(--card);border:1px solid var(--line);border-radius:1rem;padding:1.1rem 1.2rem}
+.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.val{margin-top:.35rem}
+.cta{background:color-mix(in oklab,var(--accent) 10%,var(--bg));text-align:center}
+footer{padding:2rem 0 2.6rem;color:var(--muted);font-size:.88rem}
+footer .demo{margin-top:.55rem;font-size:.8rem;opacity:.85}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<aside class="rail">
-  <div>
-    <div class="brand"><span class="m">&#128062;</span> Vet</div>
-    <div class="tag">Animal Hospital &bull; Gainesville</div>
-  </div>
-  <nav id="railnav">
-    <a href="#home" data-t="home"><span class="dot"></span> Home</a>
-    <a href="#services" data-t="services"><span class="dot"></span> Services</a>
-    <a href="#trust" data-t="trust"><span class="dot"></span> Trusted Care</a>
-    <a href="#contact" data-t="contact"><span class="dot"></span> Contact</a>
+<header class="wrap nav">
+  <div class="brand">Vet</div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#offer">Offer</a>
+    <a href="#visit">Visit</a>
+    <a href="#contact">Contact</a>
   </nav>
-  <div class="foot">
-    <div class="rate"><span class="num" data-count="4.3">4.3</span><div>&#11088;&#11088;&#11088;&#11088;<br>Google Maps</div></div>
-    NW 34th Blvd, Gainesville, FL
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <p class="k">veterinarians · Gainesville</p>
+    <h1>Care for your crew</h1>
+    <p class="lead">Vet serves Gainesville with a local-first approach—clear info, easy contact, and a page built for real neighbors (and AI 411 lookups).</p>
+    <div class="ctas"><a class="btn" href="https://www.google.com/maps/place/Vet/data=!4m7!3m6!1s0x88e8a4e17bbf0089:0xba220ad339bf6087!8m2!3d29.7008659!4d-82.3684386!16s%2Fg%2F11cn7tbrbq!19sChIJiQC_e-Gk6IgRh2C_OdMKIro?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a><a class="btn ghost" href="https://www.google.com/maps/place/Vet/data=!4m7!3m6!1s0x88e8a4e17bbf0089:0xba220ad339bf6087!8m2!3d29.7008659!4d-82.3684386!16s%2Fg%2F11cn7tbrbq!19sChIJiQC_e-Gk6IgRh2C_OdMKIro?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a></div>
+    <p class="rating">Google: 4.3 (9)</p>
   </div>
-</aside>
+</section>
 
-<main class="content">
-  <section class="sec" id="home">
-    <div class="kick">Compassionate Veterinary Care</div>
-    <h1>A Trusted <span class="g">Animal Hospital</span><br>in Gainesville</h1>
-    <p class="lead">Warm, attentive care for the pets who are part of your family <span class="heart">&#10084;</span> &mdash; right here on NW 34th Blvd.</p>
-    <div class="hero-cta">
-      <a class="btn primary magnet" href="https://www.google.com/maps/search/Vet%20NW%2034th%20Blvd" target="_blank" rel="noopener">&#128506; Get Directions</a>
-      <a class="btn ghost" href="#services">Our Services</a>
+<section id="about">
+  <div class="wrap">
+    <p class="k">01 — Story</p>
+    <h2>Care for your crew</h2>
+    <p class="lead">We keep the facts straight: real location details from public listings, no invented reviews, and copy you can actually use when you need this business fast.</p>
+  </div>
+</section>
+
+<section id="offer">
+  <div class="wrap">
+    <p class="k">02 — How we help</p>
+    <h2>Pets first</h2>
+    <div class="grid">
+      <article class="card"><h3>Local focus</h3><p>Gainesville-oriented service and neighborhood context without tourist filler.</p></article>
+      <article class="card"><h3>Clear next step</h3><p>Call or directions first—so owners and customers are not hunting for basics.</p></article>
+      <article class="card"><h3>Straight facts</h3><p>Name, address, and phone only when verified. Hours stay honest when schedules change.</p></article>
+      <article class="card"><h3>AI 411 ready</h3><p>Key details live as readable text for voice directory answers, not only images.</p></article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="sec" id="services">
-    <div class="reveal"><div class="kick">Our Veterinary Services</div><h2>Caring for every wag, purr &amp; whisker</h2>
-    <p class="lead">A full range of veterinary care for your companions. Contact us for details on appointment availability.</p></div>
-    <div class="svc">
-      <div class="scard reveal"><div class="ic">&#129658;</div><h3>Wellness Exams</h3><p>Routine checkups to keep your pet happy and healthy.</p></div>
-      <div class="scard reveal"><div class="ic">&#128137;</div><h3>Vaccinations</h3><p>Protection tailored to your pet&rsquo;s needs.</p></div>
-      <div class="scard reveal"><div class="ic">&#128149;</div><h3>Spay &amp; Neuter</h3><p>Safe, compassionate surgical care.</p></div>
-      <div class="scard reveal"><div class="ic">&#127973;</div><h3>Urgent &amp; Sick Visits</h3><p>Attentive help when your pet isn&rsquo;t feeling well.</p></div>
-      <div class="scard reveal"><div class="ic">&#129701;</div><h3>Dental Care</h3><p>Healthy teeth for a happier, more comfortable pet.</p></div>
-      <div class="scard reveal"><div class="ic">&#128300;</div><h3>Diagnostics &amp; Lab Work</h3><p>Careful testing to understand your pet&rsquo;s health.</p></div>
+<section id="trust">
+  <div class="wrap">
+    <p class="k">03 — Proof</p>
+    <h2>Listed for a reason</h2>
+    <p class="lead">Public Google rating: 4.3 (9). This demo page is for outreach and directory quality—not a substitute for the business’s own channels.</p>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap">
+    <p class="k">04 — Reach the clinic</p>
+    <h2>Find us</h2>
+    <div class="visit">
+      <div class="det"><div class="label">Address</div><div class="val"><address style="font-style:normal">NW 34th Blvd</address></div></div>
+      <div class="det"><div class="label">Phone</div><div class="val">See Google listing</div></div>
+      <div class="det"><div class="label">Hours</div><div class="val">Hours vary — check Google Maps for the latest</div></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="sec" id="trust">
-    <div class="reveal"><div class="kick" style="color:var(--sun)">Trusted by Pet Owners</div><h2>Care that families rely on</h2>
-    <div class="ratewrap">
-      <div class="bignum" data-count="4.3">4.3</div>
-      <div>
-        <div class="starrow" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-          <svg class="empty" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z"/></svg>
-        </div>
-        <div class="rmeta"><div class="big">Google Maps Rating</div>Based on 9 reviews &bull; Verified on Google Maps</div>
-      </div>
-    </div></div>
-  </section>
+<section class="cta" id="contact">
+  <div class="wrap">
+    <p class="k">05 — Contact</p>
+    <h2>Ready when you are</h2>
+    <div class="ctas" style="justify-content:center"><a class="btn" href="https://www.google.com/maps/place/Vet/data=!4m7!3m6!1s0x88e8a4e17bbf0089:0xba220ad339bf6087!8m2!3d29.7008659!4d-82.3684386!16s%2Fg%2F11cn7tbrbq!19sChIJiQC_e-Gk6IgRh2C_OdMKIro?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a><a class="btn ghost" href="https://www.google.com/maps/place/Vet/data=!4m7!3m6!1s0x88e8a4e17bbf0089:0xba220ad339bf6087!8m2!3d29.7008659!4d-82.3684386!16s%2Fg%2F11cn7tbrbq!19sChIJiQC_e-Gk6IgRh2C_OdMKIro?authuser=0&hl=en&rclk=1" target="_blank" rel="noopener">Directions</a></div>
+  </div>
+</section>
 
-  <section class="sec" id="contact">
-    <div class="reveal"><div class="kick">Contact &amp; Location</div><h2>Come see us on NW 34th Blvd</h2></div>
-    <div class="contact">
-      <div class="info reveal"><span class="ic">&#128205;</span><div><div class="lbl">Address</div><div class="v">NW 34th Blvd, Gainesville, FL</div></div></div>
-      <div class="info reveal"><span class="ic">&#128336;</span><div><div class="lbl">Hours</div><div class="v">Contact us for details</div></div></div>
-      <div class="info reveal"><span class="ic">&#128231;</span><div><div class="lbl">Appointments</div><div class="v">Contact us for availability</div></div></div>
-      <div class="info reveal"><span class="ic">&#11088;</span><div><div class="lbl">Reviews</div><div class="v">Rated on Google Maps</div></div></div>
-      <div class="maparea reveal"><div><div class="pin">&#128205;</div><strong>Vet &mdash; Animal Hospital</strong><br>NW 34th Blvd, Gainesville, FL<br>
-        <a class="btn primary magnet" style="margin-top:14px" href="https://www.google.com/maps/search/Vet%20NW%2034th%20Blvd" target="_blank" rel="noopener">&#128506; Get Directions</a>
-      </div></div>
-    </div>
-  </section>
-
-  <footer>
-    <strong>Vet</strong> &bull; Animal Hospital &bull; NW 34th Blvd, Gainesville, FL
-    <div class="disc">This is a demonstration website created for this Gainesville animal hospital. Please contact directly for current details.</div>
-  </footer>
-</main>
-
-<script>
-(function(){
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
-  document.querySelectorAll('.reveal').forEach(function(el){reduce?el.classList.add('in'):io.observe(el);});
-
-  function up(el){var t=parseFloat(el.getAttribute('data-count'));
-    if(reduce||isNaN(t)){el.textContent=el.getAttribute('data-count');return;}
-    var s=null;function step(n){if(!s)s=n;var p=Math.min((n-s)/1100,1);
-      el.textContent=(t*(1-Math.pow(1-p,3))).toFixed(1);
-      if(p<1)requestAnimationFrame(step);else el.textContent=t.toFixed(1);}requestAnimationFrame(step);}
-  var cio=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){up(e.target);cio.unobserve(e.target);}});},{threshold:.5});
-  document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el);});
-
-  // active section in side rail
-  var links=Array.prototype.slice.call(document.querySelectorAll('#railnav a'));
-  var secs={};
-  links.forEach(function(a){var t=a.getAttribute('data-t');var s=document.getElementById(t);if(s)secs[t]=a;});
-  var sio=new IntersectionObserver(function(en){
-    en.forEach(function(e){ if(e.isIntersecting){
-      var id=e.target.id;
-      links.forEach(function(a){a.classList.toggle('active',a.getAttribute('data-t')===id);});
-    }});
-  },{rootMargin:"-45% 0px -45% 0px"});
-  Object.keys(secs).forEach(function(t){var s=document.getElementById(t);if(s)sio.observe(s);});
-
-  if(!reduce){
-    document.querySelectorAll('.magnet').forEach(function(btn){
-      btn.addEventListener('pointermove',function(e){var r=btn.getBoundingClientRect();
-        btn.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.2-3)+'px) scale(1.03)';});
-      btn.addEventListener('pointerleave',function(){btn.style.transform='';});
-    });
-  }
-})();
-</script>
+<footer class="wrap">
+  <p>© 2026 Vet · NW 34th Blvd</p>
+  <p class="demo">Demo site by Florida Man Web Services</p>
+</footer>
 </body>
 </html>
