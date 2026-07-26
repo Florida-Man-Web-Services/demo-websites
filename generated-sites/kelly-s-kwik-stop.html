@@ -3,188 +3,85 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kelly's Kwik Stop | Gainesville, FL</title>
-  <meta name="description" content="Kelly&#x27;s Kwik Stop — Convenience store in Gainesville, FL. SW 34th St." />
-  <meta property="og:title" content="Kelly&#x27;s Kwik Stop | Gainesville, FL" />
-  <meta property="og:description" content="Kelly&#x27;s Kwik Stop — Convenience store in Gainesville, FL. SW 34th St." />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en_US" />
+<title>Kelly's Kwik Stop – Convenience Store, Gainesville FL</title>
+<meta name="description" content="Kelly's Kwik Stop — convenience store on SW 34th St, Gainesville, FL. Rated 4.0 on Google." />
+<meta property="og:title" content="Kelly's Kwik Stop – Gainesville FL" />
+<meta property="og:description" content="Neighborhood convenience stop on SW 34th St, Gainesville." />
+<meta property="og:type" content="website" /><meta property="og:locale" content="en_US" />
 <style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --pink:#ff2e88;
-    --pink-deep:#c9105f;
-    --teal:#00c2b2;
-    --teal-deep:#00857a;
-    --cream:#fff4ef;
-    --ink:#20111c;
-    --sun:#ffd23f;
-  }
-  html{scroll-behavior:smooth}
-  body{font-family:"Verdana","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;overflow-x:hidden}
-
-  .shell{display:grid;grid-template-columns:42% 58%;min-height:100vh}
-
-  /* sticky left panel */
-  .side{position:sticky;top:0;height:100vh;overflow:hidden;
-    background:linear-gradient(160deg,var(--pink),var(--pink-deep));
-    color:#fff;display:flex;flex-direction:column;justify-content:center;gap:1.4rem;padding:3rem 2.6rem}
-  .side::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(circle at 80% 20%,rgba(255,210,63,.4),transparent 45%),
-      repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 12px,transparent 12px 24px)}
-  .side>*{position:relative}
-  .side .eyebrow{font-size:.78rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--sun)}
-  .side h1{font-size:clamp(2.4rem,4.4vw,3.8rem);font-weight:900;line-height:1;letter-spacing:-1px}
-  .side h1 span{color:var(--sun)}
-  .side .tag{font-size:1.05rem;max-width:26ch;color:#ffe6f1}
-  .badge{background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.4);border-radius:20px;
-    padding:1.2rem 1.4rem;backdrop-filter:blur(6px);display:flex;align-items:center;gap:1rem;width:fit-content}
-  .badge .big{font-size:2.6rem;font-weight:900;line-height:1}
-  .badge .rstars{color:var(--sun);letter-spacing:2px}
-  .badge small{display:block;color:#ffe6f1;font-size:.8rem}
-  .addr{display:flex;align-items:center;gap:.6rem;font-weight:800}
-  .side-cta{display:inline-flex;align-items:center;gap:.5rem;width:fit-content;text-decoration:none;
-    background:var(--sun);color:var(--ink);font-weight:900;padding:.9rem 1.6rem;border-radius:14px;
-    box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .18s}
-  .side-cta:hover{transform:translateY(-3px)}
-
-  /* right scroll column */
-  .content{padding:0}
-  .panel{padding:5rem 3rem;border-bottom:2px dashed rgba(32,17,28,.15)}
-  .kick{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
-    color:#fff;background:var(--teal);padding:.28rem .8rem;border-radius:999px;margin-bottom:.7rem}
-  .panel h2{font-size:clamp(1.6rem,3.6vw,2.4rem);font-weight:900;line-height:1.1;margin-bottom:1rem}
-  .panel h2 em{font-style:normal;color:var(--pink)}
-  .panel p{color:#4d3742;margin-bottom:.9rem}
-  .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.6rem}
-  .chip{background:#fff;border:2px solid var(--ink);border-radius:999px;padding:.35rem .9rem;font-weight:800;font-size:.82rem}
-
-  .reveal{transition:opacity .6s,transform .6s}
-  .reveal.hide{opacity:0;transform:translateY(26px)}
-
-  /* offerings as alternating list */
-  .offer{display:flex;gap:1.1rem;align-items:flex-start;padding:1.1rem 0;border-top:2px solid rgba(32,17,28,.1)}
-  .offer .em{flex-shrink:0;width:58px;height:58px;display:grid;place-items:center;font-size:1.7rem;
-    background:var(--teal);color:#fff;border-radius:16px;transform:rotate(-3deg);
-    box-shadow:4px 4px 0 var(--ink)}
-  .offer:nth-child(even) .em{background:var(--pink)}
-  .offer h3{font-size:1.15rem;font-weight:900}
-  .offer p{color:#4d3742;font-size:.94rem;margin:.2rem 0 0}
-
-  .contact-block{display:flex;flex-direction:column;gap:1rem}
-  .cline{display:flex;gap:.9rem;align-items:flex-start}
-  .cline .ci{width:42px;height:42px;flex-shrink:0;border-radius:12px;display:grid;place-items:center;
-    background:var(--sun);border:2px solid var(--ink);font-size:1.1rem}
-  .cline b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--pink-deep)}
-  .rate-inline{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:1.2rem;
-    box-shadow:6px 6px 0 var(--teal);margin-top:.6rem;max-width:340px}
-  .rate-inline .score{font-size:2.4rem;font-weight:900;color:var(--pink)}
-  .rate-inline .rstars{color:var(--sun);letter-spacing:2px}
-  .rate-inline small{color:#6b5560;display:block}
-  .dir-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;text-decoration:none;
-    background:var(--pink);color:#fff;font-weight:900;padding:.9rem 1.6rem;border-radius:14px;
-    border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);transition:transform .15s}
-  .dir-btn:active{transform:translate(2px,2px)}
-
-  footer{background:var(--ink);color:#e8cddb;text-align:center;padding:2rem 1.5rem;font-size:.85rem}
-  footer b{color:var(--sun)}
-
-  @media(max-width:900px){
-    .shell{grid-template-columns:1fr}
-    .side{position:static;height:auto;min-height:70vh;padding:4rem 2rem}
-    .panel{padding:3.5rem 1.6rem}
-  }
-  @media(prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}
-    .reveal{transition:none}
-    .reveal.hide{opacity:1;transform:none}
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fff8e8;--ink:#1f1a12;--amber:#e0a010;--mut:#6d6250;--card:#fff;--line:#ecd9a8}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.1}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 1.2rem}
+.k{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#b07a00;font-weight:800}
+nav{background:rgba(255,248,232,.94);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+nav .wrap{min-height:58px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:900}
+.nav a{margin-left:1rem;color:var(--mut);font-size:.8rem;font-weight:700}
+.hero{padding:4.4rem 0 3rem}
+.hero h1{font-size:clamp(2.3rem,5.5vw,3.5rem);margin:.5rem 0 .9rem;max-width:14ch}
+.hero p{color:var(--mut);max-width:46ch}
+.stars{margin-top:.85rem;font-weight:700;color:#b07a00}
+.btns{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1.3rem}
+.btn{padding:.8rem 1.2rem;border-radius:10px;background:var(--ink);color:var(--bg);font-weight:800}
+.btn.alt{background:#fff;border:1px solid var(--line);color:var(--ink)}
+section{padding:3.2rem 0;border-top:1px solid var(--line)}
+section h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:.35rem 0 .85rem}
+.muted{color:var(--mut);max-width:56ch}
+.grid{display:grid;gap:.9rem;margin-top:1.2rem}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem}
+.card h3{margin-bottom:.3rem;font-size:1.02rem}
+.card p{color:var(--mut);font-size:.94rem}
+.visit{display:grid;gap:1.1rem}
+@media(min-width:760px){.visit{grid-template-columns:1fr 1fr}}
+.cta{text-align:center;padding:3.5rem 0}
+footer{padding:1.5rem 0;border-top:1px solid var(--line);color:var(--mut);font-size:.85rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 </style>
 </head>
 <body>
-
-<div class="shell">
-  <aside class="side">
-    <div class="eyebrow">Gainesville, FL · SW 34th St</div>
-    <h1>Kelly's<br><span>Kwik Stop</span></h1>
-    <p class="tag">Your neighborhood convenience stop — stocked, quick, and always there when you need it most.</p>
-    <div class="badge">
-      <div class="big" data-count="4.0" data-dec="1">4.0</div>
-      <div>
-        <div class="rstars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <small>Based on 13 reviews · Google Maps</small>
-      </div>
-    </div>
-    <div class="addr">📍 SW 34th St, Gainesville, FL</div>
-    <a href="#find" class="side-cta">See What We Carry ↓</a>
-  </aside>
-
-  <div class="content">
-    <section class="panel reveal" id="about">
-      <span class="kick">About Us</span>
-      <h2>A Gainesville <em>Neighborhood</em> Staple</h2>
-      <p>Kelly's Kwik Stop is a convenient, no-fuss stop on SW 34th Street in Gainesville, serving the everyday needs of students, commuters, and residents in the surrounding community. Whether you need a quick snack, a cold drink, or a few household staples, we keep the shelves stocked so you're never left empty-handed.</p>
-      <p>We pride ourselves on a fast, friendly experience — no long lines, no hassle. When you're in a hurry or just need to grab something on the go, Kelly's Kwik Stop is the spot to count on.</p>
-      <div class="chips">
-        <span class="chip">Fast Service</span>
-        <span class="chip">Cold Beverages</span>
-        <span class="chip">Daily Essentials</span>
-      </div>
-    </section>
-
-    <section class="panel reveal" id="offerings">
-      <span class="kick">What We Offer</span>
-      <h2>Everything You Need, <em>Right Now</em></h2>
-      <p>From cold drinks to daily essentials, we keep the things you reach for most always within reach.</p>
-      <div class="offer"><div class="em">🥤</div><div><h3>Cold Beverages</h3><p>Sodas, waters, sports drinks, energy drinks, juices, and more — always chilled and ready to go.</p></div></div>
-      <div class="offer"><div class="em">🍫</div><div><h3>Snacks &amp; Candy</h3><p>Chips, candy bars, nuts, crackers, and grab-and-go snacks to satisfy any craving, any time of day.</p></div></div>
-      <div class="offer"><div class="em">🧴</div><div><h3>Household Essentials</h3><p>Paper products, personal care basics, and everyday household items when you need them right away.</p></div></div>
-      <div class="offer"><div class="em">☕</div><div><h3>Hot Beverages</h3><p>Fresh-brewed coffee and hot drink options to kick off your morning or power through the afternoon.</p></div></div>
-      <div class="offer"><div class="em">🧊</div><div><h3>Ice &amp; Frozen Items</h3><p>Bagged ice, frozen novelties, and select frozen convenience foods available in-store.</p></div></div>
-      <div class="offer"><div class="em">📦</div><div><h3>Tobacco &amp; Accessories</h3><p>A selection of tobacco products and related accessories. Valid ID required for all age-restricted items.</p></div></div>
-    </section>
-
-    <section class="panel reveal" id="find">
-      <span class="kick">Find Us</span>
-      <h2>Come <em>See Us</em> Today</h2>
-      <p>We're conveniently located on SW 34th Street in Gainesville. Swing by whenever you need a quick run — we make it easy.</p>
-      <div class="contact-block">
-        <div class="cline"><div class="ci">📍</div><div><b>Address</b><span>SW 34th St, Gainesville, FL</span></div></div>
-        <div class="cline"><div class="ci">🕐</div><div><b>Hours</b><span>Contact us for details</span></div></div>
-        <div class="rate-inline">
-          <div class="score">4.0</div>
-          <div class="rstars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-          <small>Based on 13 reviews · Google Maps · Kelly's Kwik Stop</small>
-        </div>
-        <a href="https://www.google.com/maps/search/Kelly's%20Kwik%20Stop%20SW%2034th%20St" target="_blank" rel="noopener noreferrer" class="dir-btn">📍 Get Directions</a>
-      </div>
-    </section>
-  </div>
+<nav><div class="wrap"><a class="brand" href="#top">Kelly's Kwik Stop</a><div class="nav"><a href="#about">About</a><a href="#services">Stock</a><a href="#visit">Visit</a></div></div></nav>
+<header class="hero" id="top"><div class="wrap">
+<p class="k">Convenience store · Gainesville</p>
+<h1>Quick stop. Real neighborhood.</h1>
+<p>Kelly's Kwik Stop is a Gainesville convenience store on SW 34th Street—snacks, drinks, and the small essentials between bigger grocery runs.</p>
+<p class="stars">★ 4.0 · 13 Google reviews</p>
+<div class="btns"><a class="btn" href="#visit">Get directions</a><a class="btn alt" href="#services">What you'll find</a></div>
+</div></header>
+<main>
+<section id="about"><div class="wrap"><p class="k">01 — About</p><h2>The mid-route stop</h2>
+<p class="muted">When you need something fast without a full store trip, this is the map pin. Demo page keeps the address readable for locals and AI 411.</p></div></section>
+<section id="services"><div class="wrap"><p class="k">02 — On the shelves</p><h2>Everyday grab-and-go</h2>
+<div class="grid">
+<article class="card"><h3>Drinks</h3><p>Cold cases for the road and the walk home.</p></article>
+<article class="card"><h3>Snacks</h3><p>Quick fuel between classes and shifts.</p></article>
+<article class="card"><h3>Household basics</h3><p>Small essentials when the big store is too far.</p></article>
+<article class="card"><h3>Tobacco / age-restricted items</h3><p>Where carried—ID rules apply.</p></article>
+<article class="card"><h3>Last-minute needs</h3><p>The reason “kwik” is in the name.</p></article>
+<article class="card"><h3>Local access</h3><p>SW 34th Street corridor convenience.</p></article>
+</div></div></section>
+<section id="trust"><div class="wrap"><p class="k">03 — Proof</p><h2>4.0 from 13 reviews</h2>
+<p class="muted">Public Google figure only—no invented praise.</p></div></section>
+<section id="visit"><div class="wrap visit">
+<div>
+<p class="k">04 — Visit us</p><h2>SW 34th Street</h2>
+<p style="margin:1rem 0 .3rem" class="k">Address</p>
+<p><address style="font-style:normal">SW 34th St<br>Gainesville, FL</address></p>
+<p style="margin:1rem 0 .3rem" class="k">Hours</p>
+<p class="muted">Check the door or listing for current hours</p>
+<p style="margin-top:1.1rem"><a class="btn" href="https://www.google.com/maps/place/Kelly%27s+Kwik+Stop/data=!4m7!3m6!1s0x88e8a33b7ba38213:0x64f0c733128cdd94!8m2!3d29.6300563!4d-82.3728943!16s%2Fg%2F11h5vz1rxj!19sChIJE4Kjezuj6IgRlN2MEjPH8GQ" target="_blank" rel="noopener">Open in Google Maps</a></p>
 </div>
-
-<footer>
-  &copy; 2026 <b>Kelly's Kwik Stop</b> &mdash; SW 34th St, Gainesville, FL
-</footer>
-
-<script>
-(function(){
-  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if(!reduce){
-    var rev=document.querySelectorAll('.reveal');
-    var vh=window.innerHeight;
-    rev.forEach(function(r){if(r.getBoundingClientRect().top>vh*0.82)r.classList.add('hide');});
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('hide');io.unobserve(e.target);}});},{threshold:.15});
-    rev.forEach(function(r){if(r.classList.contains('hide'))io.observe(r);});
-  }
-
-  function run(el){var t=parseFloat(el.dataset.count),dec=parseInt(el.dataset.dec||0),s=null,d=1100;
-    function step(ts){if(!s)s=ts;var p=Math.min((ts-s)/d,1);el.textContent=(t*p).toFixed(dec);
-      if(p<1)requestAnimationFrame(step);else el.textContent=t.toFixed(dec);}requestAnimationFrame(step);}
-  var counters=document.querySelectorAll('[data-count]');
-  if(reduce){counters.forEach(function(el){el.textContent=parseFloat(el.dataset.count).toFixed(parseInt(el.dataset.dec||0));});}
-  else{var co=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run(e.target);co.unobserve(e.target);}});},{threshold:.5});
-    counters.forEach(function(el){co.observe(el);});}
-})();
-</script>
+<div class="card"><p class="k">Note</p><h3 style="margin:.4rem 0">Street-level stop</h3><p class="muted">Use the map pin for the precise storefront location on SW 34th.</p></div>
+</div></section>
+<section class="cta" id="contact"><div class="wrap"><p class="k">05 — Next</p><h2>Map Kelly's and swing by</h2>
+<a class="btn" href="#visit" style="display:inline-block;margin-top:1rem">Directions</a></div></section>
+</main>
+<footer><div class="wrap"><p>© 2026 Kelly's Kwik Stop · SW 34th St, Gainesville, FL</p><p>Demo site by Florida Man Web Services</p></div></footer>
 </body>
 </html>

@@ -3,218 +3,85 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gville Sweets | Bakery &mdash; Gainesville, FL</title>
-  <meta name="description" content="gville sweets — Bakery in Gainesville, FL. 211 SW 4th Ave Ste 6, Gainesville, FL 32601." />
-  <meta property="og:title" content="Gville Sweets | Bakery — Gainesville, FL" />
-  <meta property="og:description" content="gville sweets — Bakery in Gainesville, FL. 211 SW 4th Ave Ste 6, Gainesville, FL 32601." />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en_US" />
+<title>gville sweets – Bakery, Gainesville FL</title>
+<meta name="description" content="gville sweets — bakery at 211 SW 4th Ave Ste 6, Gainesville, FL." />
+<meta property="og:title" content="gville sweets – Bakery, Gainesville FL" />
+<meta property="og:description" content="Neighborhood bakery on SW 4th Ave, Suite 6, Gainesville." />
+<meta property="og:type" content="website" /><meta property="og:locale" content="en_US" />
 <style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --bg:#fff2f6; --ink:#3a1f2b; --pink:#ec5f92; --pink-dk:#c53d75;
-    --grape:#7b4b8f; --sun:#f6b93b; --mint:#5ec6a8; --cream:#fffdfb; --muted:#8a6b78;
-    --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
-    --sans:"Helvetica Neue",Arial,system-ui,sans-serif;
-  }
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
-  ::selection{background:var(--pink);color:#fff}
-  a{color:inherit}
-
-  .wrap{max-width:1180px;margin:0 auto;padding:clamp(18px,4vw,44px)}
-
-  header.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
-  header.top .logo{font-family:var(--serif);font-size:1.5rem;font-weight:400}
-  header.top .logo b{color:var(--pink-dk)}
-  header.top nav{display:flex;gap:18px;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase}
-  header.top nav a{text-decoration:none;color:var(--muted);transition:color .25s}
-  header.top nav a:hover{color:var(--pink-dk)}
-  @media(max-width:560px){header.top nav{display:none}}
-
-  /* ---------- BENTO GRID ---------- */
-  .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(150px,auto);gap:16px}
-  .tile{border-radius:22px;padding:26px;position:relative;overflow:hidden;
-    transform:translateY(30px);opacity:0;transition:opacity .8s ease,transform .8s ease,box-shadow .3s ease;
-    will-change:transform}
-  .tile.in{opacity:1;transform:none}
-  .tile:hover{box-shadow:0 20px 44px rgba(197,61,117,.22)}
-  .tile h2,.tile h3{font-family:var(--serif);font-weight:400;line-height:1.02}
-
-  /* sizes */
-  .t-hero{grid-column:span 2;grid-row:span 2;background:linear-gradient(150deg,var(--pink),var(--grape));color:#fff;display:flex;flex-direction:column;justify-content:space-between}
-  .t-hero .badge{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;opacity:.9}
-  .t-hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,6vw,4.6rem);line-height:.9;margin:14px 0}
-  .t-hero p{font-size:1.02rem;opacity:.94;max-width:36ch}
-  .t-hero::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;
-    background:rgba(255,255,255,.14);right:-70px;bottom:-70px}
-
-  .t-rate{grid-column:span 2;background:var(--ink);color:#fff;display:flex;flex-direction:column;justify-content:center}
-  .t-rate .big{font-family:var(--serif);font-size:clamp(3.2rem,7vw,5rem);line-height:.9;color:var(--sun)}
-  .t-rate .stars{font-size:1.3rem;letter-spacing:.2em;color:var(--sun)}
-  .t-rate .lab{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#e8c9d6;margin-top:6px}
-
-  .t-tag{grid-column:span 2;background:var(--sun);color:var(--ink);display:flex;align-items:center}
-  .t-tag h2{font-size:clamp(1.5rem,3.4vw,2.4rem)}
-
-  .t-about{grid-column:span 2;grid-row:span 2;background:var(--cream);display:flex;flex-direction:column;justify-content:center}
-  .t-about .k{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--pink-dk);margin-bottom:10px}
-  .t-about h2{font-size:clamp(1.6rem,3.4vw,2.4rem);margin-bottom:14px}
-  .t-about p{color:var(--muted);margin-bottom:12px;font-size:.98rem}
-
-  .t-svc{grid-column:span 1;background:var(--cream);transition:background .3s}
-  .t-svc:hover{background:#fff}
-  .t-svc .emoji{font-size:1.7rem}
-  .t-svc h3{font-size:1.2rem;margin:10px 0 6px}
-  .t-svc p{font-size:.85rem;color:var(--muted);line-height:1.55}
-  .t-svc.wide{grid-column:span 2}
-
-  .t-cta{grid-column:span 2;background:linear-gradient(150deg,var(--grape),var(--pink-dk));color:#fff;display:flex;flex-direction:column;justify-content:center}
-  .t-cta h2{font-size:clamp(1.5rem,3.4vw,2.2rem);margin-bottom:8px}
-  .t-cta p{opacity:.92;font-size:.95rem;margin-bottom:16px}
-
-  .t-visit{grid-column:span 2;background:var(--mint);color:var(--ink);display:flex;flex-direction:column;justify-content:center}
-  .t-visit .k{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px}
-  .t-visit .addr{font-family:var(--serif);font-size:1.25rem;line-height:1.4}
-  .t-visit .hrs{font-size:.85rem;margin-top:8px}
-
-  .pill{display:inline-block;align-self:flex-start;background:#fff;color:var(--pink-dk);text-decoration:none;
-    font-weight:700;letter-spacing:.05em;padding:13px 28px;border-radius:100px;font-size:.86rem;
-    transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;will-change:transform}
-  .pill:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 26px rgba(0,0,0,.2)}
-
-  footer{text-align:center;color:var(--muted);font-size:.8rem;padding:34px 20px 10px;letter-spacing:.03em}
-  footer b{color:var(--pink-dk)}
-
-  @media(max-width:820px){
-    .bento{grid-template-columns:repeat(2,1fr)}
-    .t-hero,.t-about{grid-column:span 2}
-    .t-svc{grid-column:span 1}
-    .t-svc.wide{grid-column:span 2}
-  }
-  @media(max-width:520px){
-    .bento{grid-template-columns:1fr}
-    .tile,.t-hero,.t-about,.t-rate,.t-tag,.t-svc,.t-svc.wide,.t-cta,.t-visit{grid-column:span 1}
-  }
-  @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-    .tile{opacity:1;transform:none}
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fff8f1;--ink:#3a2418;--cocoa:#7a4a2e;--sugar:#f0c9a0;--mut:#7a6356;--card:#fff;--line:#edd9c6}
+html{scroll-behavior:smooth}
+body{font-family:Georgia,"Iowan Old Style",serif;background:var(--bg);color:var(--ink);line-height:1.65}
+h1,h2,h3{font-weight:500;line-height:1.12}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 1.2rem}
+.k{font-family:system-ui,sans-serif;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--cocoa);font-weight:700}
+nav{background:rgba(255,248,241,.92);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(8px)}
+nav .wrap{min-height:60px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:1.15rem}
+.nav a{margin-left:1rem;font-family:system-ui,sans-serif;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.hero{padding:4.8rem 0 3.2rem;background:radial-gradient(ellipse 70% 50% at 10% 0%,rgba(240,201,160,.45),transparent 55%),var(--bg)}
+.hero h1{font-size:clamp(2.6rem,6.5vw,4.2rem);margin:.6rem 0 1rem;max-width:12ch}
+.hero p{font-family:system-ui,sans-serif;color:var(--mut);max-width:42ch;font-size:1.05rem}
+.stars{font-family:system-ui,sans-serif;margin-top:.9rem;color:var(--cocoa)}
+.btns{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1.4rem}
+.btn{font-family:system-ui,sans-serif;padding:.85rem 1.25rem;border-radius:999px;background:var(--cocoa);color:#fff8f1;font-weight:700;font-size:.8rem}
+.btn.alt{background:transparent;border:1px solid var(--line);color:var(--ink)}
+section{padding:3.4rem 0;border-top:1px solid var(--line)}
+section h2{font-size:clamp(1.7rem,3.5vw,2.4rem);margin:.4rem 0 .9rem}
+.muted{font-family:system-ui,sans-serif;color:var(--mut);max-width:56ch}
+.grid{display:grid;gap:1rem;margin-top:1.3rem}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.2rem;box-shadow:0 10px 24px rgba(58,36,24,.04)}
+.card h3{margin-bottom:.35rem}
+.card p{font-family:system-ui,sans-serif;color:var(--mut);font-size:.95rem}
+.visit{display:grid;gap:1.2rem}
+@media(min-width:760px){.visit{grid-template-columns:1fr 1fr}}
+.cta{text-align:center;padding:3.8rem 0}
+footer{padding:1.6rem 0;border-top:1px solid var(--line);color:var(--mut);font-size:.85rem;font-family:system-ui,sans-serif}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--cocoa);outline-offset:3px}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
-      <div class="logo">Gville <b>Sweets</b></div>
-      <nav>
-        <a href="#story">Story</a>
-        <a href="#goods">Goods</a>
-        <a href="#visit">Visit</a>
-      </nav>
-    </header>
-
-    <!-- ===== BENTO ===== -->
-    <div class="bento">
-
-      <div class="tile t-hero" data-tilt>
-        <span class="badge">Gainesville's Favorite Bakery</span>
-        <div>
-          <h1>Sweet<br>Moments,<br>Every Day</h1>
-          <p>Fresh from the oven every day &mdash; indulge in custom cakes, pastries, and treats made from quality ingredients right in the heart of Gainesville, FL.</p>
-        </div>
-      </div>
-
-      <div class="tile t-rate">
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="big" id="gvnum">0.0</div>
-        <div class="lab">Google Maps Rating &mdash; Based on customer reviews</div>
-      </div>
-
-      <div class="tile t-tag">
-        <h2>Come find your sweet spot.</h2>
-      </div>
-
-      <div class="tile t-about" id="story">
-        <span class="k">Sweet Moments, Every Day</span>
-        <h2>Handcrafted confections for every occasion.</h2>
-        <p>Gville Sweets is a beloved Gainesville bakery dedicated to crafting fresh, beautifully made confections for every occasion &mdash; from morning pastries to showstopping celebration cakes.</p>
-        <p>We take pride in using quality ingredients and time-honored baking techniques to create treats that bring people together and make every bite memorable.</p>
-      </div>
-
-      <div class="tile t-svc" data-tilt id="goods"><div class="emoji">&#127874;</div><h3>Custom Cakes</h3><p>Personalized cakes designed for birthdays, weddings, anniversaries, and any special celebration &mdash; made to your vision.</p></div>
-      <div class="tile t-svc" data-tilt><div class="emoji">&#129473;</div><h3>Cupcakes &amp; Minis</h3><p>Beautifully decorated cupcakes and bite-sized treats, perfect for parties, events, or an everyday pick-me-up.</p></div>
-
-      <div class="tile t-svc wide" data-tilt><div class="emoji">&#127850;</div><h3>Cookies &amp; Bars</h3><p>A rotating selection of handcrafted cookies, brownies, and dessert bars made with house recipes and quality ingredients.</p></div>
-      <div class="tile t-svc" data-tilt><div class="emoji">&#129360;</div><h3>Daily Pastries</h3><p>Daily baked pastries including croissants, danishes, scones, and more &mdash; best enjoyed fresh with your morning coffee.</p></div>
-      <div class="tile t-svc" data-tilt><div class="emoji">&#127873;</div><h3>Gift Boxes</h3><p>Thoughtfully assembled gift boxes of assorted sweets &mdash; ideal for holidays, thank-you gifts, and special occasions.</p></div>
-
-      <div class="tile t-cta">
-        <h2>Catering &amp; Bulk Orders</h2>
-        <p>Sweeten your next corporate event, party, or gathering with bulk bakery orders tailored to your group's needs. Contact us for details on pricing and availability.</p>
-      </div>
-
-      <div class="tile t-visit" id="visit">
-        <span class="k">Come Find Your Sweet Spot</span>
-        <div class="addr">211 SW 4th Ave, Ste 6<br>Gainesville, FL 32601</div>
-        <div class="hrs">Contact us for current hours and availability.</div>
-        <a class="pill" style="margin-top:16px;color:var(--pink-dk)"
-           href="https://www.google.com/maps/search/gville%20sweets%20211%20SW%204th%20Ave%20Ste%206%2C%20Gainesville%2C%20FL%2032601"
-           target="_blank" rel="noopener noreferrer">Get Directions</a>
-      </div>
-
-    </div>
-
-    <footer>
-      <p><b>Gville Sweets</b> &mdash; 211 SW 4th Ave, Ste 6, Gainesville, FL 32601</p>
-      <p style="margin-top:6px">&copy; 2026 Gville Sweets. All rights reserved.</p>
-    </footer>
-  </div>
-
-<script>
-(function(){
-  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var tiles = document.querySelectorAll('.tile');
-  if (rm || !('IntersectionObserver' in window)) {
-    tiles.forEach(function(el){ el.classList.add('in'); });
-  } else {
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, {threshold:.15});
-    tiles.forEach(function(el){ io.observe(el); });
-  }
-
-  // 3D tilt on hover (fine pointers only)
-  if (!rm && window.matchMedia('(pointer:fine)').matches) {
-    document.querySelectorAll('[data-tilt]').forEach(function(el){
-      el.addEventListener('mousemove', function(e){
-        var r = el.getBoundingClientRect();
-        var px = (e.clientX - r.left)/r.width - .5, py = (e.clientY - r.top)/r.height - .5;
-        el.style.transform = 'perspective(700px) rotateX(' + (-py*6) + 'deg) rotateY(' + (px*6) + 'deg) translateY(-4px)';
-      });
-      el.addEventListener('mouseleave', function(){ el.style.transform=''; });
-    });
-  }
-
-  // rating count-up (5.0)
-  var num = document.getElementById('gvnum');
-  if (num) {
-    var target = 5.0;
-    if (rm) { num.textContent = target.toFixed(1); }
-    else {
-      var run = function(){
-        var t0=null, dur=1200;
-        function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
-          num.textContent=(target*e).toFixed(1); if(p<1) requestAnimationFrame(step); }
-        requestAnimationFrame(step);
-      };
-      if('IntersectionObserver' in window){
-        var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run();io2.unobserve(e.target);}});},{threshold:.6});
-        io2.observe(num);
-      } else run();
-    }
-  }
-})();
-</script>
+<nav><div class="wrap"><a class="brand" href="#top">gville sweets</a><div class="nav"><a href="#about">About</a><a href="#bakes">Bakes</a><a href="#visit">Visit</a></div></div></nav>
+<header class="hero" id="top"><div class="wrap">
+<p class="k">Bakery · SW 4th · Gainesville</p>
+<h1>Small-batch joy on 4th.</h1>
+<p>gville sweets is a Gainesville bakery for treats worth a detour—warm, local, and easy to find in Suite 6.</p>
+<p class="stars">★ 5.0 on Google</p>
+<div class="btns"><a class="btn" href="#visit">Find Suite 6</a><a class="btn alt" href="#bakes">What's baking</a></div>
+</div></header>
+<main>
+<section id="about"><div class="wrap"><p class="k">01 — Story</p><h2>Sweet stops, neighborhood pace</h2>
+<p class="muted">Come for cookies, cakes, and whatever is fresh that day. This demo page is the map pin and the friendly intro—confirm the case when you walk in.</p></div></section>
+<section id="bakes"><div class="wrap"><p class="k">02 — Offerings</p><h2>From the case</h2>
+<div class="grid">
+<article class="card"><h3>Cookies</h3><p>Everyday favorites and rotating flavors.</p></article>
+<article class="card"><h3>Cakes &amp; slices</h3><p>Celebration energy and casual sweet tooth fixes.</p></article>
+<article class="card"><h3>Pastries</h3><p>Morning-friendly bakes when available.</p></article>
+<article class="card"><h3>Custom orders</h3><p>Ask in shop about lead times for specials.</p></article>
+<article class="card"><h3>Gift-ready boxes</h3><p>Easy to share when the case cooperates.</p></article>
+<article class="card"><h3>Local pickup</h3><p>Suite 6 on SW 4th Ave.</p></article>
+</div></div></section>
+<section id="trust"><div class="wrap"><p class="k">03 — Proof</p><h2>Five-star listing signal</h2>
+<p class="muted">Google shows a 5.0 rating. We keep quotes off the page until the owner supplies them.</p></div></section>
+<section id="visit"><div class="wrap visit">
+<div>
+<p class="k">04 — Visit us</p><h2>SW 4th Avenue</h2>
+<p style="margin:1rem 0 .3rem" class="k">Address</p>
+<p><address style="font-style:normal">211 SW 4th Ave Ste 6<br>Gainesville, FL 32601</address></p>
+<p style="margin:1rem 0 .3rem" class="k">Hours</p>
+<p class="muted">Call or stop by for current hours</p>
+<p style="margin-top:1.15rem"><a class="btn" href="https://www.google.com/maps/place/gville+sweets/data=!4m7!3m6!1s0x88e8a3cbbd039ad9:0xaa5ee0269b8d0d3d!8m2!3d29.6480089!4d-82.3270458!16s%2Fg%2F11ypc40ctf!19sChIJ2ZoDvcuj6IgRPQ2NmybgXqo" target="_blank" rel="noopener">Open in Google Maps</a></p>
+</div>
+<div class="card"><p class="k">Note</p><h3 style="margin:.45rem 0">Suite 6</h3><p class="muted">Look for the suite number at 211 SW 4th Ave before you walk in.</p></div>
+</div></section>
+<section class="cta" id="contact"><div class="wrap"><p class="k">05 — Next</p><h2>Come hungry for sugar</h2>
+<a class="btn" href="#visit" style="display:inline-block;margin-top:1rem">Directions</a></div></section>
+</main>
+<footer><div class="wrap"><p>© 2026 gville sweets · 211 SW 4th Ave Ste 6, Gainesville, FL 32601</p><p>Demo site by Florida Man Web Services</p></div></footer>
 </body>
 </html>

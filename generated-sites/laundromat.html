@@ -3,193 +3,85 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Laundromat | Gainesville, FL</title>
-  <meta name="description" content="Laundromat — Laundromat in Gainesville, FL. 1888 SW 42nd Dr, Gainesville, FL." />
-  <meta property="og:title" content="Laundromat | Gainesville, FL" />
-  <meta property="og:description" content="Laundromat — Laundromat in Gainesville, FL. 1888 SW 42nd Dr, Gainesville, FL." />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en_US" />
+<title>Laundromat – Gainesville FL</title>
+<meta name="description" content="Neighborhood laundromat at 1888 SW 42nd Dr, Gainesville, FL." />
+<meta property="og:title" content="Laundromat – Gainesville FL" />
+<meta property="og:description" content="Self-serve laundry at 1888 SW 42nd Dr, Gainesville." />
+<meta property="og:type" content="website" /><meta property="og:locale" content="en_US" />
 <style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --ink:#1d2a2b;
-    --teal:#0f9c9c;
-    --teal-dk:#0a6e70;
-    --coral:#ff7a66;
-    --sun:#ffce54;
-    --sky:#8ad7e6;
-    --cream:#f3f8f6;
-    --radius:30px;
-  }
-  html{scroll-behavior:smooth}
-  body{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;overflow-x:hidden}
-  a{color:inherit}
-  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
-
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:80;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:13px 22px;background:rgba(243,248,246,.8);backdrop-filter:blur(8px);
-    border-bottom:2px solid rgba(15,156,156,.2);
-  }
-  .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.5px}
-  .brand .o{width:38px;height:38px;border-radius:50%;background:var(--teal);position:relative}
-  .brand .o::after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:var(--sun);top:7px;left:7px}
-  nav .links{display:flex;gap:6px;flex-wrap:wrap}
-  nav .links a{text-decoration:none;font-weight:700;font-size:.85rem;padding:7px 14px;border-radius:16px;transition:background .2s}
-  nav .links a:hover{background:var(--sky)}
-
-  .hero{min-height:88vh;display:grid;place-items:center;text-align:center;position:relative;padding:100px 20px 40px}
-  .hero .bub{position:absolute;border-radius:50%;opacity:.5;filter:blur(1px)}
-  .hero h1{font-size:clamp(2.6rem,9vw,6rem);line-height:.95;letter-spacing:-2px;position:relative;z-index:2}
-  .hero h1 .stroke{
-    color:transparent;-webkit-text-stroke:2.5px var(--teal-dk);
-  }
-  .hero .sub{max-width:520px;margin:16px auto 24px;color:#4d5f5f;position:relative;z-index:2}
-  .hero .badge{position:relative;z-index:2;display:inline-block;background:var(--coral);color:#fff;font-weight:800;padding:7px 18px;border-radius:20px;letter-spacing:1px;font-size:.78rem;text-transform:uppercase}
-  .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:800;padding:13px 24px;border-radius:26px;transition:transform .16s,box-shadow .16s}
-  .btn.solid{background:var(--teal);color:#fff;box-shadow:0 10px 24px rgba(15,156,156,.35)}
-  .btn.solid:hover{transform:translateY(-3px)}
-
-  /* STACKED CARD DECK */
-  .deck{margin:20px auto 0;max-width:960px;padding:0 22px}
-  .card{
-    position:sticky;top:90px;
-    border-radius:var(--radius);padding:44px;margin-bottom:40px;
-    box-shadow:0 -10px 40px rgba(29,42,43,.14);
-    min-height:340px;display:flex;flex-direction:column;justify-content:center;
-    border:3px solid rgba(0,0,0,.06);
-  }
-  .card .num{font-size:.8rem;font-weight:800;letter-spacing:2px;opacity:.6;text-transform:uppercase}
-  .card h2{font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.5px;margin:6px 0 12px}
-  .card p{max-width:60ch}
-  .c1{background:var(--sky);color:var(--ink)}
-  .c2{background:var(--sun);color:var(--ink)}
-  .c3{background:var(--teal);color:#fff}
-  .c4{background:var(--coral);color:#fff}
-  .c5{background:#fff;color:var(--ink)}
-
-  .facts{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
-  .fact{background:rgba(255,255,255,.35);border:1.5px solid rgba(0,0,0,.12);border-radius:16px;padding:8px 15px;font-weight:700;font-size:.85rem}
-  .c3 .fact,.c4 .fact{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.35)}
-
-  .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:20px}
-  .svc{background:rgba(255,255,255,.5);border-radius:18px;padding:16px}
-  .c3 .svc,.c4 .svc{background:rgba(255,255,255,.14)}
-  .svc h3{font-size:1rem;display:flex;gap:8px;align-items:center;margin-bottom:4px}
-  .svc p{font-size:.86rem;opacity:.92}
-
-  .find-row{display:flex;gap:30px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-  .find-row .info strong{display:block;font-size:1.1rem}
-  .find-row .info div{opacity:.85;margin-bottom:8px}
-
-  footer{padding:30px 22px;text-align:center;color:#4d5f5f;font-size:.85rem}
-
-  @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important}
-    .card{position:relative;top:auto}
-    html{scroll-behavior:auto}
-  }
-  @media(max-width:640px){.card{padding:30px;min-height:auto}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#eef5f8;--ink:#16303a;--teal:#1f8a9a;--mut:#5a7380;--card:#fff;--line:#d3e2e8}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+h1,h2,h3{font-weight:750;letter-spacing:-.02em;line-height:1.15}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 1.2rem}
+.k{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);font-weight:700}
+nav{background:rgba(238,245,248,.92);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(8px)}
+nav .wrap{min-height:58px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:800}
+.nav a{margin-left:1rem;color:var(--mut);font-size:.82rem;font-weight:600}
+.hero{padding:4.2rem 0 3rem}
+.hero h1{font-size:clamp(2.2rem,5vw,3.4rem);margin:.55rem 0 1rem;max-width:14ch}
+.hero p{color:var(--mut);max-width:46ch}
+.btns{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1.4rem}
+.btn{padding:.8rem 1.2rem;border-radius:10px;background:var(--teal);color:#fff;font-weight:700}
+.btn.alt{background:#fff;border:1px solid var(--line);color:var(--ink)}
+section{padding:3.2rem 0}
+section h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:.35rem 0 .85rem}
+.muted{color:var(--mut);max-width:56ch}
+.grid{display:grid;gap:.9rem;margin-top:1.3rem}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem}
+.card h3{margin-bottom:.3rem;font-size:1.02rem}
+.card p{color:var(--mut);font-size:.94rem}
+.visit{display:grid;gap:1.1rem}
+@media(min-width:760px){.visit{grid-template-columns:1fr 1fr}}
+.panel{background:var(--ink);color:#eef6f8;border-radius:14px;padding:1.4rem}
+.panel .k{color:#7fd0dc}
+.cta{text-align:center;padding:3.5rem 0}
+footer{padding:1.5rem 0;border-top:1px solid var(--line);color:var(--mut);font-size:.85rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 </style>
 </head>
 <body>
-<nav>
-  <div class="brand"><span class="o"></span> Laundromat</div>
-  <div class="links">
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#find">Contact</a>
-  </div>
-</nav>
-
-<header class="hero">
-  <span class="bub" style="width:120px;height:120px;background:var(--sky);top:16%;left:10%;animation:fl1 9s ease-in-out infinite"></span>
-  <span class="bub" style="width:70px;height:70px;background:var(--sun);top:60%;left:16%;animation:fl1 11s ease-in-out infinite"></span>
-  <span class="bub" style="width:150px;height:150px;background:var(--coral);top:22%;right:8%;animation:fl1 13s ease-in-out infinite"></span>
-  <span class="bub" style="width:60px;height:60px;background:var(--teal);top:66%;right:18%;animation:fl1 10s ease-in-out infinite"></span>
-  <div>
-    <span class="badge">Southwest Gainesville, FL</span>
-    <h1>Clean clothes,<br><span class="stroke">every time.</span></h1>
-    <p class="sub">Your neighborhood laundromat on SW 42nd Drive &mdash; convenient, reliable, and ready when you are.</p>
-    <a class="btn solid" href="#services">See Our Services &darr;</a>
-  </div>
-</header>
-
-<section class="deck" id="about">
-  <article class="card c1">
-    <div class="num">01 &bull; About</div>
-    <h2>Serving Southwest Gainesville</h2>
-    <p>Located conveniently on SW 42nd Drive, our laundromat provides the Gainesville community with a clean, comfortable, and efficient space to take care of all your laundry needs. Whether you're a student, a busy family, or anyone in between, we make laundry day easier.</p>
-    <div class="facts">
-      <span class="fact">Multiple Washers</span>
-      <span class="fact">Multiple Dryers</span>
-      <span class="fact">SW Gainesville</span>
-      <span class="fact">Self-Service</span>
-    </div>
-  </article>
-
-  <article class="card c2">
-    <div class="num">02 &bull; Why Us</div>
-    <h2>A smooth, hassle-free visit</h2>
-    <p>We maintain our machines and facility to a high standard so you can enjoy a smooth, hassle-free experience every visit. Ample machines mean shorter wait times even on busy days. Have questions about services or machine availability? Contact us for details &mdash; we're happy to help.</p>
-  </article>
-
-  <article class="card c3" id="services">
-    <div class="num">03 &bull; What We Offer</div>
-    <h2>Our Services</h2>
-    <div class="svc-grid">
-      <div class="svc"><h3>&#129530; Self-Service Washing</h3><p>Front-load and top-load washers in multiple sizes for any load &mdash; from everyday clothes to bulky items.</p></div>
-      <div class="svc"><h3>&#128167; Self-Service Drying</h3><p>High-capacity dryers get your laundry done fast, with multiple heat settings to protect all fabric types.</p></div>
-      <div class="svc"><h3>&#128719; Large-Capacity Machines</h3><p>Oversized machines for comforters, blankets, sleeping bags, and other bulky items.</p></div>
-      <div class="svc"><h3>&#129689; Coin &amp; Card Payment</h3><p>Convenient payment options available &mdash; contact us for details on accepted payment methods.</p></div>
-      <div class="svc"><h3>&#129532; Detergent Vending</h3><p>Forgot detergent or fabric softener? On-site vending keeps you covered for a great wash.</p></div>
-      <div class="svc"><h3>&#128106; Comfortable Waiting Area</h3><p>Relax while your laundry runs in a clean, comfortable space with seating available on-site.</p></div>
-    </div>
-  </article>
-
-  <article class="card c4" id="find">
-    <div class="num">04 &bull; Find Us</div>
-    <h2>Contact &amp; Location</h2>
-    <div class="find-row">
-      <div class="info">
-        <div><strong>Address</strong>1888 SW 42nd Dr, Gainesville, FL</div>
-        <div><strong>Hours</strong>Contact us for details</div>
-      </div>
-      <a class="btn solid" style="background:#fff;color:var(--coral)" href="https://www.google.com/maps/search/Laundromat%201888%20SW%2042nd%20Dr%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener">Get Directions &rarr;</a>
-    </div>
-  </article>
-
-  <article class="card c5">
-    <div class="num">05 &bull; Reviews</div>
-    <h2>No reviews yet</h2>
-    <p>Be the first to leave a review on Google Maps and let fellow Gainesville neighbors know about your visit.</p>
-    <div style="margin-top:16px"><a class="btn solid" href="https://www.google.com/maps/search/Laundromat%201888%20SW%2042nd%20Dr%2C%20Gainesville%2C%20FL" target="_blank" rel="noopener">Open in Google Maps &rarr;</a></div>
-  </article>
-</section>
-
-<footer>Laundromat &bull; 1888 SW 42nd Dr, Gainesville, FL &bull; &copy; 2026 Laundromat. All rights reserved.</footer>
-
-<style>
-@keyframes fl1{50%{transform:translateY(-26px) scale(1.06)}}
-</style>
-
-<script>
-(function(){
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce) return;
-  var cards = document.querySelectorAll('.card');
-  if(!('IntersectionObserver' in window)) return;
-  /* subtle scale as each card settles into the sticky stack */
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      var s = 0.94 + Math.min(e.intersectionRatio,1)*0.06;
-      e.target.style.transition = 'transform .3s ease';
-      e.target.style.transform = 'scale('+s.toFixed(3)+')';
-    });
-  },{threshold:[0,.25,.5,.75,1]});
-  cards.forEach(function(c){ io.observe(c); });
-})();
-</script>
+<nav><div class="wrap"><a class="brand" href="#top">Laundromat</a><div class="nav"><a href="#about">About</a><a href="#services">Services</a><a href="#visit">Visit</a></div></div></nav>
+<header class="hero" id="top"><div class="wrap">
+<p class="k">Self-serve laundry · Gainesville</p>
+<h1>Wash day, mapped.</h1>
+<p>A straightforward Gainesville laundromat on SW 42nd Drive—machines, soap if you need it, and a clear pin on the map.</p>
+<div class="btns"><a class="btn" href="#visit">Get directions</a><a class="btn alt" href="#services">What to expect</a></div>
+</div></header>
+<main>
+<section id="about"><div class="wrap"><p class="k">01 — About</p><h2>No fluff. Just laundry.</h2>
+<p class="muted">When you need a reliable self-serve stop southwest of campus, this page is the address and the basics—nothing invented, nothing flashy.</p></div></section>
+<section id="services"><div class="wrap"><p class="k">02 — Services</p><h2>On the floor</h2>
+<div class="grid">
+<article class="card"><h3>Washers</h3><p>Everyday loads and bulkier items depending on machine size.</p></article>
+<article class="card"><h3>Dryers</h3><p>Finish the cycle before you head home.</p></article>
+<article class="card"><h3>Self-serve convenience</h3><p>Come when it fits your schedule.</p></article>
+<article class="card"><h3>Supplies</h3><p>Check on-site for detergent and softener options.</p></article>
+<article class="card"><h3>Fold tables</h3><p>Space to finish and pack up clean clothes.</p></article>
+<article class="card"><h3>Local stop</h3><p>SW 42nd Dr access for nearby neighborhoods.</p></article>
+</div></div></section>
+<section id="trust"><div class="wrap"><p class="k">03 — Notes</p><h2>Listing shows no public reviews yet</h2>
+<p class="muted">We do not invent star ratings. Come see the machines yourself.</p></div></section>
+<section id="visit"><div class="wrap visit">
+<div>
+<p class="k">04 — Visit us</p><h2>SW 42nd Drive</h2>
+<p style="margin:1rem 0 .3rem" class="k">Address</p>
+<p><address style="font-style:normal">1888 SW 42nd Dr<br>Gainesville, FL</address></p>
+<p style="margin:1rem 0 .3rem" class="k">Hours</p>
+<p class="muted">Stop by or check the door for current hours</p>
+<p style="margin-top:1.1rem"><a class="btn" href="https://www.google.com/maps/place/Laundromat/data=!4m7!3m6!1s0x88e8a3006c8ce1f1:0x1d12f8d65dd41656!8m2!3d29.6359575!4d-82.3876606!16s%2Fg%2F11x1s_g6wm!19sChIJ8eGMbACj6IgRVhbUXdb4Eh0" target="_blank" rel="noopener">Open in Google Maps</a></p>
+</div>
+<div class="panel"><p class="k">Tip</p><h3 style="margin:.45rem 0">Bring payment options</h3><p style="color:rgba(238,246,248,.8);margin-top:.4rem">Machine payment methods can vary—plan a minute when you arrive.</p></div>
+</div></section>
+<section class="cta" id="contact"><div class="wrap"><p class="k">05 — Next</p><h2>Map it and load up</h2>
+<a class="btn" href="#visit" style="display:inline-block;margin-top:1rem">Directions</a></div></section>
+</main>
+<footer><div class="wrap"><p>© 2026 Laundromat · 1888 SW 42nd Dr, Gainesville, FL</p><p>Demo site by Florida Man Web Services</p></div></footer>
 </body>
 </html>
