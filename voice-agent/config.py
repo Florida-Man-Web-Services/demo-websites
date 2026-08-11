@@ -201,6 +201,9 @@ SMS_SESSION_TTL_S = int(os.getenv("SMS_SESSION_TTL_S", "3600") or "3600")
 # Default Stripe Payment Link shown on sales calls when the customer row
 # has no per-customer link yet (create in Stripe Dashboard → Payment links).
 STRIPE_PAYMENT_LINK_DEFAULT = os.getenv("STRIPE_PAYMENT_LINK_DEFAULT", "").strip()
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY", "").strip()
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "").strip()
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "").strip()
 PUBLIC_VOICE_NUMBER = os.getenv("PUBLIC_VOICE_NUMBER", TWILIO_PHONE_NUMBER).strip()
 SITES_DESK_URL = os.getenv(
     "SITES_DESK_URL", "https://sites.floridamanweb.online"
