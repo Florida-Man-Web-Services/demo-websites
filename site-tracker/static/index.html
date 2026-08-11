@@ -34,6 +34,9 @@
   .addnote input{flex:1}
   button{background:var(--acc);color:#fff;border:0;border-radius:7px;padding:7px 12px;font:inherit;font-weight:600;cursor:pointer}
   button.ghost{background:#222834;color:var(--fg)}
+  button:disabled{background:#2a2f3a;color:#555;cursor:not-allowed;opacity:.6}
+  button.notify-btn{background:#2a6b3d;white-space:nowrap}
+  button.notify-btn:disabled{background:#1e2a22}
 </style>
 </head>
 <body>
@@ -48,7 +51,7 @@
 <table>
   <thead><tr>
     <th data-k="business">Business</th><th>Live site</th>
-    <th data-k="status">Status</th><th data-k="notes">Notes</th><th data-k="updated_at">Updated</th>
+    <th data-k="status">Status</th><th data-k="notes">Notes</th><th data-k="updated_at">Updated</th><th>Notify</th>
   </tr></thead>
   <tbody id="rows"></tbody>
 </table>
@@ -56,7 +59,7 @@
 let SITES=[], META={statuses:[]}, sortK="business", sortAsc=true, open=new Set();
 const $=s=>document.querySelector(s), rows=$("#rows");
 async function j(u,o){const r=await fetch(u,o);if(!r.ok)throw new Error(await r.text());return r.status==204?null:r.json();}
-function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function esc(s){return (s||"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function fmt(t){return t?t.replace("T"," ").replace("Z"," UTC").slice(0,16):"—";}
 
 async function load(){
@@ -77,7 +80,8 @@ function render(){
       <td><a href="${s.url}" target="_blank" rel="noopener">${s.hash} ↗</a></td>
       <td>${statusSel(s)}</td>
       <td class="notecell" data-h="${s.hash}">💬 ${s.notes}${s.notes?"":" add"}</td>
-      <td class="upd">${fmt(s.updated_at)}${s.updated_by?`<br><small style="color:var(--mut)">${esc(s.updated_by)}</small>`:""}</td>`;
+      <td class="upd">${fmt(s.updated_at)}${s.updated_by?`<br><small style="color:var(--mut)">${esc(s.updated_by)}</small>`:""}</td>
+      <td>${notifyBtn(s)}</td>`;
     rows.appendChild(tr);
     if(open.has(s.hash)) rows.appendChild(detailRow(s.hash));
   }
@@ -85,6 +89,12 @@ function render(){
 function statusSel(s){
   return `<select class="chip st-${s.status}" data-h="${s.hash}" onchange="setStatus(this)">`+
     META.statuses.map(o=>`<option ${o===s.status?"selected":""}>${o}</option>`).join("")+`</select>`;
+}
+function notifyBtn(s){
+  if(s.phone){
+    return `<button class="notify-btn" data-h="${s.hash}" onclick="notifySiteUpdated('${s.hash}','${esc(s.phone)}','${esc(s.business)}')" title="Text ${esc(s.phone)} that their site is ready">📱 Notify</button>`;
+  }
+  return `<button class="notify-btn" disabled title="no customer phone on file">📱 Notify</button>`;
 }
 window.setStatus=async el=>{
   const h=el.dataset.h, v=el.value;
@@ -94,7 +104,7 @@ window.setStatus=async el=>{
 };
 rows.addEventListener("click",e=>{const c=e.target.closest(".notecell");if(!c)return;const h=c.dataset.h;open.has(h)?open.delete(h):open.add(h);render();if(open.has(h))loadNotes(h);});
 function detailRow(h){const tr=document.createElement("tr");tr.className="detail";tr.id="d-"+h;
-  tr.innerHTML=`<td colspan="5"><ul class="notes" id="n-${h}"><li style="color:var(--mut)">loading…</li></ul>
+  tr.innerHTML=`<td colspan="6"><ul class="notes" id="n-${h}"><li style="color:var(--mut)">loading…</li></ul>
     <div class="addnote"><input id="i-${h}" placeholder="Add a note… (e.g. left voicemail)" onkeydown="if(event.key==='Enter')addNote('${h}')">
     <button onclick="addNote('${h}')">Add note</button></div></td>`;return tr;}
 async function loadNotes(h){const d=await j(`/api/sites/${h}`);const ul=$("#n-"+h);if(!ul)return;
@@ -103,9 +113,27 @@ window.addNote=async h=>{const inp=$("#i-"+h);const b=inp.value.trim();if(!b)ret
   await j(`/api/sites/${h}/note`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({body:b})});
   inp.value="";const s=SITES.find(x=>x.hash===h);s.notes++;await loadNotes(h);
   document.querySelector(`.notecell[data-h="${h}"]`).innerHTML=`💬 ${s.notes}`;};
+
+window.notifySiteUpdated=async(hash,phone,businessName)=>{
+  const confirmed=confirm(`Text ${businessName} at ${phone} that their site is updated and ready to view?`);
+  if(!confirmed) return;
+  const btn=document.querySelector(`button.notify-btn[data-h="${hash}"]`);
+  if(btn){btn.disabled=true;btn.textContent="📤 Sending…";}
+  try{
+    const res=await fetch(`/api/sites/${hash}/notify`,{method:"POST"});
+    if(!res.ok) throw new Error(await res.text());
+    const data=await res.json();
+    if(btn){btn.textContent="✓ Sent";btn.style.background="#2a8c4e";
+      setTimeout(()=>{btn.textContent="📱 Notify";btn.style.background="";btn.disabled=false;},3000);}
+  }catch(e){
+    alert(`Failed to send notification: ${e.message}`);
+    if(btn){btn.disabled=false;btn.textContent="📱 Notify";}
+  }
+};
+
 $("#q").addEventListener("input",render); $("#fstatus").addEventListener("change",render);
 document.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;sortAsc=sortK===k?!sortAsc:true;sortK=k;render();});
-load().catch(e=>rows.innerHTML=`<tr><td colspan=5 style="color:#ff9a9a">Failed to load: ${esc(e.message)}</td></tr>`);
+load().catch(e=>rows.innerHTML=`<tr><td colspan=6 style="color:#ff9a9a">Failed to load: ${esc(e.message)}</td></tr>`);
 </script>
 </body>
 </html>

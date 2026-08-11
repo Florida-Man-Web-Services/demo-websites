@@ -142,13 +142,32 @@ Base: `https://sites.floridamanweb.online` (Authentik session).
 | Method | Path | Role |
 |--------|------|------|
 | GET | `/api/meta` | Statuses, base_url, user |
-| GET | `/api/sites` | Demo catalog + CRM state |
-| GET | `/api/sites/{hash}` | Detail + notes |
+| GET | `/api/sites` | Demo catalog + CRM state (includes `phone` from customer registry) |
+| GET | `/api/sites/{hash}` | Detail + notes + `phone` |
 | POST | `/api/sites/{hash}/status` | `{ "status": "Contacted" }` |
 | POST | `/api/sites/{hash}/note` | `{ "body": "…" }` |
+| POST | `/api/sites/{hash}/notify` | Send "site updated" SMS to customer (auto-resolves phone from registry, proxies to voice `/api/sms/notify-updated`) |
 | GET | `/api/customers` | Funnel via voice `CUSTOMERS_API` |
 | GET | `/api/customers/{phone}` | One customer + builder_brief path |
 | GET | `/healthz` | Liveness |
+
+### `POST /api/sites/{hash}/notify`
+
+Looks up the customer's phone from the registry by matching the site's demo URL
+or slug. Returns `400` if no phone on file. Proxies to voice
+`POST /api/sms/notify-updated` with `{phone, demo_url}`.
+
+### `POST /api/sms/notify-updated` (voice agent)
+
+Sends a Twilio SMS to the customer. Request:
+
+```json
+{ "phone": "+1…", "demo_url": "https://…", "message": "" }
+```
+
+If `message` is empty, uses: `"Hi from Florida Man Web Services! Your free demo
+website has been updated and is ready to view: {url}. Reply or call {callback} to
+take it live."`
 
 ---
 

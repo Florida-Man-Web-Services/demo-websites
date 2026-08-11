@@ -12,33 +12,93 @@ Flow per call (VOICE_BACKEND=grok-realtime):
   xAI's speech-to-speech API (same tools, same per-call prompt).
 
 Run:  uvicorn server:app --port 8035
-Then point your Twilio number's Voice webhook at {PUBLIC_BASE_URL}/voice/inbound.
+Then point your Twilio number's Voice webhook at {PUBLIC_BASE_URL}/voice/inbound
+and Messaging webhook at {PUBLIC_BASE_URL}/sms/inbound.
 """
 
 import asyncio
+import os
+import time
 import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, Response, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, PlainTextResponse
 from twilio.request_validator import RequestValidator
+from twilio.twiml.messaging_response import MessagingResponse
 from twilio.twiml.voice_response import Connect, Gather, VoiceResponse
 
 import config
 import realtime
 import tts
-from agent import CallState, run_turn
+from agent import CallState, flush_call_transcript, run_turn
 from businesses import Business, by_phone, by_slug
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 log = logging.getLogger("voice-agent.server")
 
 app = FastAPI(title="demo-websites voice agent")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.getenv("CORS_ALLOW_ORIGINS", "*").split(","),
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 # Active call state, keyed by Twilio CallSid. In-memory is fine for a
 # single-process, one-call-at-a-time operation; swap for redis if scaling.
 CALLS: dict[str, CallState] = {}
+
+# Inbound SMS multi-turn threads, keyed by From E.164. Values: (CallState, last_ts).
+SMS_SESSIONS: dict[str, tuple[CallState, float]] = {}
+
+
+def _make_state(
+    call_sid: str,
+    business: Business,
+    direction: str,
+    number: str,
+    *,
+    outbound_slug: str | None = None,
+) -> CallState:
+    """Build CallState with per-phone mode routing (AGENT_MODE=auto)."""
+    from agent import resolve_call_mode
+
+    mode, customer = resolve_call_mode(
+        number, direction=direction, outbound_slug=outbound_slug
+    )
+    # Paid owners always get owner_updates tools even if business match is weak.
+    if customer.get("demo_url") and (
+        not business.demo_url or business.name == "your business"
+    ):
+        from businesses import Business as Biz
+
+        business = Biz(
+            name=customer.get("business_name") or business.name,
+            category=customer.get("category") or business.category,
+            phone=customer.get("phone") or number,
+            demo_url=customer.get("demo_url") or business.demo_url,
+            slug=customer.get("slug") or business.slug,
+        )
+    state = CallState(
+        call_sid=call_sid,
+        business=business,
+        direction=direction,
+        caller_number=number,
+        mode=mode,
+        customer=customer or {},
+    )
+    log.info(
+        "call %s mode=%s customer=%s business=%s",
+        call_sid,
+        mode,
+        (customer or {}).get("id") or "-",
+        business.name,
+    )
+    return state
+
 
 UNKNOWN_BUSINESS = Business(
     name="your business", category="", demo_url=config.DEMO_BASE_URL + "/../index.html"
@@ -137,15 +197,15 @@ async def _capture_loop():
         _restock_spare()
 
 
-def _prime_xai(call_sid: str, business: Business, direction: str, number: str) -> None:
+def _prime_xai(call_sid: str, business: Business, direction: str, number: str, slug: str = "") -> None:
     """Kick off the xAI session from the (sync, threadpool) webhook handler."""
     if _LOOP is None or not call_sid:
         return
 
     async def connect():
-        state = CallState(
-            call_sid=call_sid, business=business,
-            direction=direction, caller_number=number,
+        state = _make_state(
+            call_sid, business, direction, number,
+            outbound_slug=slug or None,
         )
         ws = await _take_xai()
         for retry in (False, True):
@@ -240,6 +300,10 @@ def _twiml_turn(state: CallState, text: str) -> Response:
     if state.ended:
         _speak(vr, text)
         vr.hangup()
+        try:
+            flush_call_transcript(state, backend="pipeline")
+        except Exception:
+            log.exception("call %s: transcript flush failed", state.call_sid)
         CALLS.pop(state.call_sid, None)
     else:
         gather = Gather(
@@ -279,9 +343,7 @@ def voice_inbound(CallSid: str = Form(...), From: str = Form("")):
     if config.VOICE_BACKEND == "grok-realtime":
         _prime_xai(CallSid, business, "inbound", From)
         return _twiml_stream("inbound", From)
-    state = CallState(
-        call_sid=CallSid, business=business, direction="inbound", caller_number=From
-    )
+    state = _make_state(CallSid, business, "inbound", From)
     CALLS[CallSid] = state
     return _twiml_turn(state, run_turn(state, None))
 
@@ -296,11 +358,9 @@ def voice_outbound(slug: str, CallSid: str = Form(...), To: str = Form("")):
         return Response(content=str(vr), media_type="application/xml")
     log.info("outbound call %s to %s (%s)", CallSid, To, business.name)
     if config.VOICE_BACKEND == "grok-realtime":
-        _prime_xai(CallSid, business, "outbound", To)
+        _prime_xai(CallSid, business, "outbound", To, slug=slug)
         return _twiml_stream("outbound", To, slug=slug)
-    state = CallState(
-        call_sid=CallSid, business=business, direction="outbound", caller_number=To
-    )
+    state = _make_state(CallSid, business, "outbound", To, outbound_slug=slug)
     CALLS[CallSid] = state
     return _twiml_turn(state, run_turn(state, None))
 
@@ -365,11 +425,12 @@ async def voice_stream(ws: WebSocket):
     business = (
         by_slug(params["slug"]) if params.get("slug") else by_phone(number)
     ) or UNKNOWN_BUSINESS
-    state = CallState(
-        call_sid=start.get("callSid", ""),
-        business=business,
-        direction=direction,
-        caller_number=number,
+    state = _make_state(
+        start.get("callSid", ""),
+        business,
+        direction,
+        number,
+        outbound_slug=params.get("slug"),
     )
     CALLS[state.call_sid] = state
     log.info(
@@ -401,6 +462,11 @@ async def voice_stream(ws: WebSocket):
     except Exception:
         log.exception("realtime bridge for call %s failed", state.call_sid)
     finally:
+        if not state.transcript_flushed:
+            try:
+                await asyncio.to_thread(flush_call_transcript, state, backend="grok-realtime")
+            except Exception:
+                log.exception("call %s: transcript flush failed", state.call_sid)
         CALLS.pop(state.call_sid, None)
         if xai_ws is not None:
             try:
@@ -428,7 +494,12 @@ def voice_turn(CallSid: str = Form(...), SpeechResult: str = Form("")):
 @app.post("/voice/status", dependencies=_SIGNED)
 def voice_status(CallSid: str = Form(...), CallStatus: str = Form("")):
     if CallStatus in ("completed", "failed", "busy", "no-answer", "canceled"):
-        CALLS.pop(CallSid, None)
+        state = CALLS.pop(CallSid, None)
+        if state is not None and not state.transcript_flushed:
+            try:
+                flush_call_transcript(state)
+            except Exception:
+                log.exception("call %s: transcript flush on status failed", CallSid)
         log.info("call %s finished: %s", CallSid, CallStatus)
     return PlainTextResponse("ok")
 
@@ -441,9 +512,221 @@ def audio(key: str):
     return FileResponse(path, media_type="audio/wav")
 
 
+
+def _sms_trim(body: str, limit: int = 1500) -> str:
+    body = (body or "").strip()
+    if len(body) <= limit:
+        return body
+    return body[: limit - 1].rstrip() + "…"
+
+
+def _get_sms_session(from_number: str, message_sid: str) -> CallState:
+    """Resume or start an SMS conversation for this phone number."""
+    now = time.time()
+    ttl = float(getattr(config, "SMS_SESSION_TTL_S", 3600) or 3600)
+    # Drop expired sessions
+    expired = [k for k, (_, ts) in SMS_SESSIONS.items() if now - ts > ttl]
+    for k in expired:
+        st, _ = SMS_SESSIONS.pop(k)
+        if not st.transcript_flushed:
+            try:
+                flush_call_transcript(st, backend="sms")
+            except Exception:
+                log.exception("sms %s: transcript flush on expire failed", k)
+
+    hit = SMS_SESSIONS.get(from_number)
+    if hit is not None:
+        state, _ = hit
+        SMS_SESSIONS[from_number] = (state, now)
+        return state
+
+    business = by_phone(from_number) or UNKNOWN_BUSINESS
+    state = _make_state(
+        message_sid or f"SMS-{from_number}-{int(now)}",
+        business,
+        "sms",
+        from_number,
+    )
+    SMS_SESSIONS[from_number] = (state, now)
+    log.info(
+        "sms session start %s from %s -> %s",
+        state.call_sid,
+        from_number,
+        business.name,
+    )
+    return state
+
+
+@app.post("/sms/inbound", dependencies=_SIGNED)
+def sms_inbound(
+    From: str = Form(""),
+    Body: str = Form(""),
+    MessageSid: str = Form(""),
+):
+    """Twilio Messaging webhook — agent replies over SMS (same brain as voice).
+
+    Console: number → Messaging → "A message comes in" →
+    {PUBLIC_BASE_URL}/sms/inbound (HTTP POST).
+    """
+    from_number = (From or "").strip()
+    body = (Body or "").strip()
+    if not from_number:
+        vr = MessagingResponse()
+        vr.message("Sorry — I could not read your number. Please try calling instead.")
+        return Response(content=str(vr), media_type="application/xml")
+
+    state = _get_sms_session(from_number, MessageSid or "")
+    log.info("sms %s from %s: %r", state.call_sid, from_number, body[:200])
+
+    user_text = body if body else "<empty text message>"
+    try:
+        reply = run_turn(state, user_text)
+    except Exception:
+        log.exception("sms %s: run_turn failed", state.call_sid)
+        reply = (
+            "Sorry, something went wrong on my end. "
+            f"You can call {config.OWNER_CALLBACK_NUMBER} and ask for {config.OWNER_NAME}."
+        )
+
+    reply = _sms_trim(reply)
+    if not reply:
+        reply = "Got it — thanks!"
+
+    # Persist transcript + clear session when the agent ends the thread.
+    if state.ended:
+        try:
+            flush_call_transcript(state, backend="sms")
+        except Exception:
+            log.exception("sms %s: transcript flush failed", state.call_sid)
+        SMS_SESSIONS.pop(from_number, None)
+    else:
+        SMS_SESSIONS[from_number] = (state, time.time())
+
+    vr = MessagingResponse()
+    vr.message(reply)
+    return Response(content=str(vr), media_type="application/xml")
+
+
+
+from pydantic import BaseModel, Field
+
+
+class OnboardRegisterIn(BaseModel):
+    phone: str
+    business_name: str = ""
+    contact_name: str = ""
+    email: str = ""
+    source: str = "ai411_web"
+
+
+@app.post("/api/onboarding/register")
+def api_onboard_register(body: OnboardRegisterIn):
+    """Public: queue a phone for onboarding callback (AI 411 landing form)."""
+    import sys
+    from pathlib import Path
+
+    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    result = customers.register_callback(
+        body.phone,
+        business_name=body.business_name,
+        contact_name=body.contact_name,
+        email=body.email,
+        source=body.source or "ai411_web",
+    )
+    if not result.get("ok"):
+        raise HTTPException(status_code=400, detail=result.get("error") or "bad request")
+    return {
+        "ok": True,
+        "message": "You are on the list — we will call shortly to design your free demo site.",
+        "customer": result.get("customer"),
+        "voice_number": getattr(config, "PUBLIC_VOICE_NUMBER", "") or config.TWILIO_PHONE_NUMBER,
+    }
+
+
+@app.get("/api/onboarding/customers")
+def api_onboard_list(status: str = "", limit: int = 100):
+    """Internal desk: list customers (protect at the edge in prod)."""
+    import sys
+    from pathlib import Path
+
+    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    return customers.list_customers(status=status or None, limit=limit)
+
+
+class StripeMarkPaidIn(BaseModel):
+    phone: str
+    stripe_customer_id: str = ""
+
+
+
+class NotifyUpdateIn(BaseModel):
+    phone: str
+    demo_url: str = ""
+    message: str = ""
+
+
+@app.post("/api/sms/notify-updated")
+def api_notify_updated(body: NotifyUpdateIn):
+    """Send an SMS notification that the website has been updated."""
+    from agent import _twilio
+
+    to = (body.phone or "").strip()
+    if not to:
+        raise HTTPException(status_code=400, detail="phone required")
+    url = body.demo_url.strip()
+    text = (body.message or "").strip()
+    if not text:
+        text = (
+            f"Hi from Florida Man Web Services! Your free demo website has been "
+            f"updated and is ready to view: {url or config.DEMO_BASE_URL}. "
+            f"Reply or call {config.OWNER_CALLBACK_NUMBER} to take it live."
+        )
+    try:
+        twilio = _twilio()
+        msg = twilio.messages.create(
+            to=to, from_=config.TWILIO_PHONE_NUMBER, body=text
+        )
+        log.info("notify-updated SMS sent to %s (%s)", to, msg.sid)
+        return {"ok": True, "sid": msg.sid, "to": to}
+    except Exception as e:
+        log.warning("notify-updated SMS to %s failed: %s", to, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.post("/api/billing/mark-paid")
+def api_mark_paid(body: StripeMarkPaidIn):
+    """Mark customer paid → future calls use owner_updates. Wire Stripe webhook here."""
+    import sys
+    from pathlib import Path
+
+    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    result = customers.mark_paid(body.phone, stripe_customer_id=body.stripe_customer_id)
+    if not result.get("ok"):
+        raise HTTPException(status_code=400, detail=result.get("error") or "bad request")
+    return result
+
+
+
 @app.get("/health")
 def health():
-    return {"ok": True, "active_calls": len(CALLS)}
+    return {
+        "ok": True,
+        "active_calls": len(CALLS),
+        "active_sms_sessions": len(SMS_SESSIONS),
+    }
 
 
 _KEYS = ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_PHONE_NUMBER", "PUBLIC_BASE_URL"]
