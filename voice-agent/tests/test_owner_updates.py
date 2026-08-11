@@ -77,7 +77,7 @@ def test_default_mode_is_sales():
     assert "Gainesville AI 411" not in prompt
     assert "owner site-updates" not in prompt.lower()
     names = {t["name"] for t in agent.get_tools()}
-    assert names == {"send_demo_link_sms", "log_call_outcome", "end_call"}
+    assert names == {"send_demo_link_sms", "send_demo_link_email", "log_call_outcome", "end_call"}
 
 
 def test_owner_updates_mode_prompt_and_tools():
@@ -107,10 +107,12 @@ def test_owner_updates_mode_prompt_and_tools():
         "list_open_change_requests",
         "cancel_change_request",
         "apply_change_request",
+        "log_call_outcome",
         "send_sms_links",
         "end_call",
     }
     assert names == expected
+    assert "log_call_outcome" in agent.system_prompt(_Biz(), "inbound", "+13555550100")
     assert agent.get_openers() == owner.OPENERS
 
 
@@ -239,3 +241,70 @@ def test_sales_mode_unknown_owner_tool():
     state = _state(agent)
     out = agent._run_tool(state, "create_change_request", {"business_slug": "x"})
     assert "Unknown tool" in out
+
+
+def test_create_change_request_auto_logs_call_outcome(tmp_path, monkeypatch):
+    """Filing a CR also appends owner_update_filed to call-log / calldb."""
+    import csv
+
+    cr_path = tmp_path / "change-requests.jsonl"
+    sites = tmp_path / "sites"
+    sites.mkdir()
+    (sites / "cool-cafe.html").write_text(
+        "<html><head><title>Cool Cafe</title></head><body><h1>Cool Cafe</h1></body></html>",
+        encoding="utf-8",
+    )
+    call_log = tmp_path / "call-log.csv"
+    call_db = tmp_path / "calls.sqlite"
+    monkeypatch.setenv("CHANGE_REQUESTS_PATH", str(cr_path))
+    monkeypatch.setenv("GENERATED_SITES_DIR", str(sites))
+    monkeypatch.setenv("CALL_LOG", str(call_log))
+    monkeypatch.setenv("CALL_DB", str(call_db))
+    monkeypatch.setenv("CALL_LOG_DUAL_WRITE_CSV", "1")
+
+    for key in list(sys.modules):
+        if key in (
+            "changerequests",
+            "lookup",
+            "siteedit",
+            "mcp_bridge",
+            "calldb",
+        ) or key.startswith("changerequests."):
+            del sys.modules[key]
+
+    config, agent, _, bridge = _reload_mode("owner_updates")
+    bridge.reset_for_tests()
+    import calldb
+
+    monkeypatch.setattr(config, "CALL_LOG", call_log)
+    monkeypatch.setattr(config, "CALL_DB", call_db)
+    monkeypatch.setattr(config, "CALL_LOG_DUAL_WRITE_CSV", True)
+    calldb.init_db(call_db)
+
+    state = _state(agent, phone="+13555550100")
+    created = json.loads(
+        agent._run_tool(
+            state,
+            "create_change_request",
+            {
+                "business_slug": "cool-cafe",
+                "summary": "Update hours",
+                "items": [{"type": "hours", "after": "9-5"}],
+                "confirmation_spoken": True,
+            },
+        )
+    )
+    assert created.get("created") is True, created
+    assert state.outcome_logged is True
+
+    assert call_log.is_file(), "expected dual-write CSV"
+    rows = list(csv.DictReader(call_log.open(encoding="utf-8")))
+    assert any(r.get("outcome") == "owner_update_filed" for r in rows), rows
+    assert any("cr-" in (r.get("notes") or "") for r in rows), rows
+
+    msg = agent._run_tool(
+        state,
+        "log_call_outcome",
+        {"outcome": "owner_update_filed", "notes": "Filed hours update; done."},
+    )
+    assert "logged" in msg.lower()

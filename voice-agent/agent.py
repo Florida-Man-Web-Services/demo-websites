@@ -6,11 +6,9 @@ with LLM_PROVIDER=grok), executes any tool calls (text the demo link, log the
 outcome, hang up), and returns the sentence(s) the agent should speak next.
 """
 
-import csv
 import json
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime
 
 import anthropic
 from twilio.rest import Client as TwilioClient
@@ -18,6 +16,7 @@ from twilio.rest import Client as TwilioClient
 import config
 import ai411
 import owner_updates
+import onboarding
 import site_content
 import unified
 from businesses import Business
@@ -28,6 +27,62 @@ log = logging.getLogger("voice-agent.agent")
 MAX_TURNS = 40  # hard stop so a stuck call can't loop forever
 
 # Sales-mode tools (default). AI 411 tools live in ai411.TOOLS — use get_tools().
+# Shared with mcp-server/calllog.VALID_OUTCOMES — keep in sync.
+SALES_OUTCOMES = [
+    "interested",
+    "wants_email",
+    "callback_requested",
+    "sent_sms",
+    "not_interested",
+    "do_not_call",
+    "wrong_number",
+    "voicemail",
+    "other",
+]
+# Owner-updates / unified owner filings also land in call-log.csv.
+OWNER_OUTCOMES = [
+    "owner_update_filed",
+    "owner_update_cancelled",
+    "owner_update_applied",
+    "no_change",
+]
+ALL_CALL_OUTCOMES = SALES_OUTCOMES + OWNER_OUTCOMES
+
+
+def _log_call_outcome_tool(
+    *,
+    description: str,
+    outcomes: list[str],
+) -> dict:
+    return {
+        "name": "log_call_outcome",
+        "description": description,
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "outcome": {
+                    "type": "string",
+                    "enum": list(outcomes),
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email address if they gave one.",
+                },
+                "callback_time": {
+                    "type": "string",
+                    "description": "When to call back, if they asked for that.",
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "One or two sentences: what they said, next step.",
+                },
+            },
+            "required": ["outcome", "notes"],
+            "additionalProperties": False,
+        },
+    }
+
+
 SALES_TOOLS = [
     {
         "name": "send_demo_link_sms",
@@ -48,46 +103,33 @@ SALES_TOOLS = [
         },
     },
     {
-        "name": "log_call_outcome",
+        "name": "send_demo_link_email",
         "description": (
-            "Record how the call went. Call this once, near the end of every call, "
-            "before ending it. Use do_not_call whenever the person asks not to be "
-            "contacted again."
+            "Email the business's live demo website link. Use when they prefer "
+            "email over text, or when SMS fails. Confirm the spelling of the "
+            "address before calling. Also log the email via log_call_outcome "
+            "(outcome wants_email or sent_sms if they also got a text)."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
-                "outcome": {
-                    "type": "string",
-                    "enum": [
-                        "interested",
-                        "wants_email",
-                        "callback_requested",
-                        "sent_sms",
-                        "not_interested",
-                        "do_not_call",
-                        "wrong_number",
-                        "voicemail",
-                        "other",
-                    ],
-                },
                 "email": {
                     "type": "string",
-                    "description": "Email address if they gave one.",
-                },
-                "callback_time": {
-                    "type": "string",
-                    "description": "When to call back, if they asked for that.",
-                },
-                "notes": {
-                    "type": "string",
-                    "description": "One or two sentences: what they said, next step.",
+                    "description": "Destination email address (required).",
                 },
             },
-            "required": ["outcome", "notes"],
+            "required": ["email"],
             "additionalProperties": False,
         },
     },
+    _log_call_outcome_tool(
+        description=(
+            "Record how the call went. Call this once, near the end of every call, "
+            "before ending it. Use do_not_call whenever the person asks not to be "
+            "contacted again."
+        ),
+        outcomes=SALES_OUTCOMES,
+    ),
     {
         "name": "end_call",
         "description": (
@@ -119,25 +161,31 @@ SALES_OPENERS = [
 ]
 
 
-def get_tools() -> list:
-    """Tool schemas for the active AGENT_MODE (sales default, ai411, owner_updates)."""
-    if config.is_ai411():
+def get_tools(mode: str | None = None) -> list:
+    """Tool schemas for the active mode (per-call override when AGENT_MODE=auto)."""
+    m = (mode or config.AGENT_MODE or "sales").strip().lower()
+    if m == "ai411":
         return ai411.TOOLS
-    if config.is_owner_updates():
+    if m == "owner_updates":
         return owner_updates.TOOLS
-    if config.is_unified():
+    if m == "unified":
         return unified.TOOLS
+    if m == "onboarding":
+        return onboarding.TOOLS
     return SALES_TOOLS
 
 
-def get_openers() -> list:
-    """Stock opener phrases for the active AGENT_MODE."""
-    if config.is_ai411():
+def get_openers(mode: str | None = None) -> list:
+    """Stock opener phrases for the active mode."""
+    m = (mode or config.AGENT_MODE or "sales").strip().lower()
+    if m == "ai411":
         return ai411.OPENERS
-    if config.is_owner_updates():
+    if m == "owner_updates":
         return owner_updates.OPENERS
-    if config.is_unified():
+    if m == "unified":
         return unified.OPENERS
+    if m == "onboarding":
+        return onboarding.OPENERS
     return SALES_OPENERS
 
 
@@ -162,39 +210,87 @@ def _opener_rule(openers_list: list | None = None) -> str:
 
 
 def system_prompt(
-    business: Business, direction: str, caller_number: str, openers: bool = True
+    business: Business,
+    direction: str,
+    caller_number: str,
+    openers: bool = True,
+    *,
+    mode: str | None = None,
+    customer: dict | None = None,
 ) -> str:
-    """Build the per-call system prompt for the active AGENT_MODE.
+    """Build the per-call system prompt for the active / resolved mode.
 
     openers=False drops the pre-recorded-opener instructions — the realtime
     speech backend speaks natively and has no synthesis pause to cover.
+    Inbound SMS (direction="sms") never uses spoken openers.
     """
-    if config.is_ai411():
+    if direction == "sms":
+        openers = False
+    m = (mode or config.AGENT_MODE or "sales").strip().lower()
+    if m == "auto":
+        m = "ai411"
+    cust = customer or {}
+    if m == "ai411":
         return ai411.system_prompt(
             direction=direction,
             caller_number=caller_number,
             openers=openers,
         )
-    if config.is_owner_updates():
+    if m == "owner_updates":
         return owner_updates.system_prompt(
             direction=direction,
             caller_number=caller_number,
             openers=openers,
         )
-    if config.is_unified():
+    if m == "unified":
         return unified.system_prompt(
             business,
             direction=direction,
             caller_number=caller_number,
             openers=openers,
         )
-    return _sales_system_prompt(business, direction, caller_number, openers=openers)
+    if m == "onboarding":
+        return onboarding.system_prompt(
+            direction=direction,
+            caller_number=caller_number,
+            openers=openers,
+            customer=cust,
+        )
+    return _sales_system_prompt(
+        business, direction, caller_number, openers=openers, customer=cust
+    )
 
 
 def _sales_system_prompt(
-    business: Business, direction: str, caller_number: str, openers: bool = True
+    business: Business,
+    direction: str,
+    caller_number: str,
+    openers: bool = True,
+    customer: dict | None = None,
 ) -> str:
     """Florida Man Web Services pitch agent (AGENT_MODE=sales, default)."""
+    cust = customer or {}
+    # Prefer customer demo URL / payment link when this is a post-onboarding sale.
+    demo_url = cust.get("demo_url") or business.demo_url
+    pay_link = (
+        cust.get("stripe_payment_link")
+        or getattr(config, "STRIPE_PAYMENT_LINK_DEFAULT", "")
+        or ""
+    )
+    if cust.get("business_name") and (
+        not business.name or business.name == "your business"
+    ):
+        business = Business(
+            name=cust.get("business_name") or business.name,
+            category=cust.get("category") or business.category,
+            phone=cust.get("phone") or getattr(business, "phone", ""),
+            address=getattr(business, "address", "") or "",
+            rating=getattr(business, "rating", "") or "",
+            demo_url=demo_url,
+            slug=cust.get("slug") or business.slug,
+        )
+    elif demo_url:
+        business.demo_url = demo_url
     site_text = site_content.site_text(business.slug)
     site_section = (
         f"""
@@ -259,10 +355,12 @@ THE PITCH (adapted from the campaign script)
 - The demo is theirs to keep either way. Zero pressure.
 - If interested: offer to text the link right now (send_demo_link_sms), and
   say {config.OWNER_NAME} can follow up to take it live whenever they're ready.
-- If they want email instead: collect their email address carefully (confirm
-  the spelling), log it with log_call_outcome, and say it'll be sent shortly.
+- If they want email instead: carefully confirm the spelling of their address,
+  call send_demo_link_email with that address, then log_call_outcome with
+  wants_email (include the email field) once the send succeeds — or if email
+  send fails, apologize and offer SMS or have {config.OWNER_NAME} follow up.
 - If staff answers (not the owner): ask if the owner is available; if not,
-  offer to text the link or note a better time to call back.
+  offer to text or email the link or note a better time to call back.
 - Objection "how much?": looking at the demo is free; going live is $999 a
   month (domain, hosting, ongoing updates). If they balk at the price, don't
   negotiate — offer a follow-up from {config.OWNER_NAME}.
@@ -272,9 +370,30 @@ THE PITCH (adapted from the campaign script)
 
 TOOLS
 - Use send_demo_link_sms the moment they agree to a text.
+- Use send_demo_link_email when they give an email address for the demo link.
 - Always call log_call_outcome exactly once before the call ends.
-- Call end_call together with your final goodbye sentence."""
-    if direction == "inbound":
+- Call end_call together with your final goodbye sentence (on SMS, end_call
+  closes this text thread).
+
+POST-ONBOARDING / DEMO-READY CALLS
+- If this caller completed onboarding, their demo may already be built. Lead with
+  the demo link (SMS or email) and invite them to look.
+- If a payment link is configured for them, after they like the demo offer the
+  Stripe checkout link so they can start the monthly service. Prefer SMS for
+  the Stripe URL (send_sms_links or send_demo_link_sms style brevity).
+- Payment link (may be empty): {pay_link or "none configured — collect interest and log"}
+- Never claim payment succeeded until ops marks them paid; after payment they
+  reach the owner updates desk on future calls.
+"""
+    if direction == "sms":
+        ctx += """
+
+This is an INBOUND SMS text conversation (not a phone call). Reply in short
+plain-text messages suitable for SMS — 1-3 short sentences, no markdown.
+Identify as an AI on the first reply. Prefer send_demo_link_sms back to their
+number, or send_demo_link_email if they give an email. Use end_call when the
+thread is done (no more replies needed)."""
+    elif direction == "inbound":
         ctx += """
 
 This is an INBOUND call — they are calling the number from a voicemail,
@@ -482,15 +601,64 @@ def make_backend():
     )
 
 
+
+def resolve_call_mode(
+    phone: str,
+    *,
+    direction: str = "inbound",
+    outbound_slug: str | None = None,
+) -> tuple[str, dict]:
+    """Return (mode, customer_row) for this phone under AGENT_MODE=auto|pinned."""
+    import sys
+    from pathlib import Path
+
+    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    in_outreach = False
+    try:
+        from businesses import by_phone
+
+        in_outreach = by_phone(phone) is not None
+    except Exception:
+        pass
+    mode = customers.resolve_mode(
+        phone,
+        direction=direction,
+        outbound_sales_slug=outbound_slug,
+        env_mode=config.AGENT_MODE,
+        in_sales_outreach=in_outreach,
+    )
+    cust = customers.get(phone) or {}
+    return mode, cust
+
+
+def effective_mode(state: "CallState") -> str:
+    if state.mode:
+        return state.mode
+    if config.AGENT_MODE == "auto":
+        return "ai411"
+    return config.AGENT_MODE
+
+
 @dataclass
 class CallState:
     call_sid: str
     business: Business
-    direction: str  # "inbound" | "outbound"
+    direction: str  # "inbound" | "outbound" | "sms"
     caller_number: str = ""
     llm: object = field(default_factory=make_backend)
     ended: bool = False
     turns: int = 0
+    # Live transcript buffer (realtime fills this; pipeline rebuilds from llm.messages).
+    transcript_turns: list = field(default_factory=list)
+    transcript_flushed: bool = False
+    outcome_logged: bool = False
+    # Per-call product mode when AGENT_MODE=auto (ai411|onboarding|sales|owner_updates).
+    mode: str = ""
+    customer: dict = field(default_factory=dict)
 
 
 _twilio_client = None
@@ -524,6 +692,55 @@ def _send_sms(state: CallState, to_number: str | None) -> str:
         return f"Error sending SMS: {e}. Offer to read the address out or send email."
 
 
+
+def _send_demo_link_email(state: CallState, email: str | None) -> str:
+    """Email the demo URL via mailer (Resend or SMTP)."""
+    import mailer
+
+    addr = (email or "").strip()
+    if not addr:
+        return "Error: no email address given; ask them to spell it."
+    if not mailer.is_valid_email(addr):
+        return (
+            f"Error: {addr!r} does not look like a valid email. "
+            "Confirm the spelling with them."
+        )
+    subject = f"Your free demo website — {state.business.name}"
+    text_body = (
+        f"Hi from {config.OWNER_NAME} (Gainesville web developer),\n\n"
+        f"Here's the free demo website for {state.business.name}:\n"
+        f"{state.business.demo_url}\n\n"
+        f"Looking at the demo is free. Taking it live is $999/month "
+        f"(domain, hosting, ongoing updates).\n\n"
+        f"Reply to this email or call {config.OWNER_CALLBACK_NUMBER} "
+        f"to take it live.\n\n"
+        f"— {config.OWNER_NAME}"
+    )
+    html_body = (
+        f"<p>Hi from {config.OWNER_NAME} (Gainesville web developer),</p>"
+        f"<p>Here's the free demo website for "
+        f"<strong>{state.business.name}</strong>:</p>"
+        f'<p><a href="{state.business.demo_url}">{state.business.demo_url}</a></p>'
+        f"<p>Looking at the demo is free. Taking it live is $999/month "
+        f"(domain, hosting, ongoing updates).</p>"
+        f"<p>Reply to this email or call {config.OWNER_CALLBACK_NUMBER} "
+        f"to take it live.</p>"
+        f"<p>— {config.OWNER_NAME}</p>"
+    )
+    result = mailer.send_email(
+        to=addr, subject=subject, text_body=text_body, html_body=html_body
+    )
+    if result.get("sent"):
+        log.info("demo email sent to %s (%s)", addr, result.get("provider"))
+        return f"Email with the demo link sent to {addr}."
+    err = result.get("error") or "unknown error"
+    log.warning("demo email to %s failed: %s", addr, err)
+    return (
+        f"Error sending email: {err}. Offer to text the link instead "
+        f"(send_demo_link_sms), or say {config.OWNER_NAME} will follow up."
+    )
+
+
 def _send_sms_links(state: CallState, args: dict) -> str:
     """AI 411: text result links (not the sales demo pitch)."""
     to = args.get("phone") or state.caller_number
@@ -549,28 +766,326 @@ def _send_sms_links(state: CallState, args: dict) -> str:
         return f"Error sending SMS: {e}. Offer to read the links slowly instead."
 
 
-def _log_outcome(state: CallState, args: dict) -> str:
-    is_new = not config.CALL_LOG.exists()
-    with open(config.CALL_LOG, "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        if is_new:
-            writer.writerow(
-                ["timestamp", "call_sid", "direction", "business", "slug",
-                 "phone", "outcome", "email", "callback_time", "notes"]
-            )
-        writer.writerow([
-            datetime.now().isoformat(timespec="seconds"),
-            state.call_sid,
-            state.direction,
-            state.business.name,
-            state.business.slug,
-            state.caller_number,
-            args.get("outcome", ""),
-            args.get("email", ""),
-            args.get("callback_time", ""),
-            args.get("notes", ""),
-        ])
+def _log_outcome(
+    state: CallState,
+    args: dict,
+    *,
+    business: Business | None = None,
+) -> str:
+    import calldb
+
+    biz = business or state.business
+    result = calldb.log_outcome(
+        call_sid=state.call_sid,
+        direction=state.direction,
+        business=biz.name,
+        slug=biz.slug,
+        phone=state.caller_number,
+        outcome=str(args.get("outcome", "") or ""),
+        email=str(args.get("email", "") or ""),
+        callback_time=str(args.get("callback_time", "") or ""),
+        notes=str(args.get("notes", "") or ""),
+        source="voice-agent",
+        dual_write_csv=config.CALL_LOG_DUAL_WRITE_CSV,
+    )
+    state.outcome_logged = True
+    ref = result.get("transcript_ref") or ""
+    if ref:
+        return f"Outcome logged. transcript_ref={ref}"
     return "Outcome logged."
+
+
+def record_transcript_turn(
+    state: CallState,
+    role: str,
+    text: str,
+    *,
+    replace_last_same_role: bool = False,
+) -> None:
+    """Append one spoken/transcribed turn to the in-memory buffer.
+
+    When replace_last_same_role is True (realtime ASR partials), overwrite the
+    trailing turn if it has the same role instead of stacking partials.
+    """
+    text = (text or "").strip()
+    if not text:
+        return
+    from datetime import datetime as _dt
+
+    ts = _dt.now().isoformat(timespec="seconds")
+    if (
+        replace_last_same_role
+        and state.transcript_turns
+        and state.transcript_turns[-1].get("role") == role
+    ):
+        state.transcript_turns[-1] = {"role": role, "content": text, "ts": ts}
+        return
+    state.transcript_turns.append({"role": role, "content": text, "ts": ts})
+
+
+def flush_call_transcript(state: CallState, *, backend: str = "") -> dict:
+    """Write buffered / pipeline turns into the relational transcript tables.
+
+    Safe to call more than once; subsequent calls replace the transcript row
+    for the same call_sid when new turns arrived.
+    """
+    import calldb
+
+    if state.transcript_flushed and not state.transcript_turns:
+        # Still try pipeline extract if we never buffered realtime turns.
+        pass
+
+    turns = list(state.transcript_turns)
+    if not turns:
+        messages = getattr(state.llm, "messages", None)
+        if messages:
+            turns = calldb.extract_pipeline_turns(messages)
+
+    backend = backend or (
+        "grok-realtime" if config.VOICE_BACKEND == "grok-realtime" else "pipeline"
+    )
+    result = calldb.finalize_call(
+        state.call_sid,
+        turns,
+        backend=backend,
+        direction=state.direction,
+        business=state.business.name,
+        slug=state.business.slug,
+        phone=state.caller_number,
+    )
+    state.transcript_flushed = True
+    if result.get("transcript_ref"):
+        log.info(
+            "call %s transcript saved (%s turns) ref=%s",
+            state.call_sid,
+            result.get("turn_count"),
+            result.get("transcript_ref"),
+        )
+    return result
+
+
+def _owner_log_business(state: CallState, slug: str) -> Business | None:
+    """Resolve the site the owner tool touched (may differ from CallState)."""
+    slug = (slug or "").strip()
+    if not slug:
+        return None
+    try:
+        from businesses import by_slug
+
+        found = by_slug(slug)
+        if found is not None:
+            return found
+    except Exception:  # noqa: BLE001
+        pass
+    if state.business and state.business.slug == slug:
+        return state.business
+    return Business(name=slug, slug=slug)
+
+
+def _maybe_log_owner_update(state: CallState, name: str, args: dict, raw: str) -> None:
+    """Append call-db/call-log when a ChangeRequest is filed/cancelled/applied.
+
+    Owner mode previously only wrote change-requests.jsonl — outcomes never
+    hit the call store. Best-effort: never raise into the tool path.
+    """
+    if name not in (
+        "create_change_request",
+        "cancel_change_request",
+        "apply_change_request",
+    ):
+        return
+    try:
+        data = json.loads(raw)
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return
+    if not isinstance(data, dict):
+        return
+
+    outcome = ""
+    notes = ""
+    slug = ""
+    if name == "create_change_request" and data.get("created"):
+        outcome = "owner_update_filed"
+        cr_id = data.get("id") or ""
+        summary = data.get("summary") or args.get("summary") or ""
+        n = data.get("item_count")
+        notes = f"CR {cr_id}: {summary}".strip()
+        if n is not None:
+            notes = f"{notes} ({n} item(s))"
+        req = data.get("request") if isinstance(data.get("request"), dict) else {}
+        slug = str(
+            data.get("business_slug")
+            or req.get("business_slug")
+            or args.get("business_slug")
+            or args.get("slug")
+            or ""
+        )
+    elif name == "cancel_change_request" and (
+        data.get("cancelled") or data.get("already_cancelled")
+    ):
+        outcome = "owner_update_cancelled"
+        rid = data.get("id") or args.get("request_id") or args.get("id") or ""
+        notes = f"Cancelled change request {rid}".strip()
+        if data.get("summary"):
+            notes = f"{notes}: {data['summary']}"
+        slug = str(data.get("business_slug") or "")
+    elif name == "apply_change_request" and data.get("applied"):
+        outcome = "owner_update_applied"
+        rid = data.get("id") or args.get("request_id") or args.get("id") or ""
+        notes = f"Applied change request {rid} to local demo HTML".strip()
+        if data.get("summary"):
+            notes = f"{notes}: {data['summary']}"
+        slug = str(data.get("business_slug") or "")
+    else:
+        return
+
+    biz = _owner_log_business(state, slug)
+    try:
+        _log_outcome(state, {"outcome": outcome, "notes": notes}, business=biz)
+    except Exception as e:  # noqa: BLE001
+        log.warning("owner call-log append failed after %s: %s", name, e)
+
+
+def _inject_transcript_ref(state: CallState, args: dict) -> dict:
+    """Attach calldb transcript_ref onto create_change_request when missing."""
+    if args.get("transcript_ref"):
+        return args
+    try:
+        import calldb
+
+        if not calldb.enabled():
+            return args
+        row = calldb.get_call(state.call_sid)
+        ref = (row or {}).get("transcript_ref") or ""
+        if not ref and state.transcript_turns:
+            flush_call_transcript(state)
+            row = calldb.get_call(state.call_sid)
+            ref = (row or {}).get("transcript_ref") or ""
+        if ref:
+            out = dict(args)
+            out["transcript_ref"] = ref
+            return out
+    except Exception as e:  # noqa: BLE001
+        log.debug("transcript_ref inject skipped: %s", e)
+    return args
+
+
+def _run_owner_tool(state: CallState, name: str, args: dict) -> str:
+    """Owner-updates tools + local SMS / call-log outcome logging."""
+    if name == "send_sms_links":
+        return _send_sms_links(state, args)
+    if name == "log_call_outcome":
+        return _log_outcome(state, args)
+    import mcp_bridge
+
+    tool_args = dict(args or {})
+    if name == "create_change_request":
+        tool_args = _inject_transcript_ref(state, tool_args)
+
+    raw = mcp_bridge.run_owner_updates_tool(
+        name,
+        tool_args,
+        caller_number=state.caller_number or "",
+        call_sid=getattr(state, "call_sid", "") or "",
+    )
+    _maybe_log_owner_update(state, name, tool_args, raw)
+    return raw
+
+
+
+def _run_onboarding_tool(state: CallState, name: str, args: dict) -> str:
+    """Onboarding interview tools backed by customers registry + memory."""
+    import json
+    import sys
+    from pathlib import Path
+
+    import customer_memory
+
+    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    phone = (args.get("phone") or state.caller_number or "").strip()
+    try:
+        if name == "get_customer_profile":
+            cust = customers.get(phone) or {}
+            mem = customer_memory.recall(phone, limit=5)
+            return json.dumps({"ok": True, "customer": cust, "memory": mem}, ensure_ascii=False)
+
+        if name == "save_onboarding_answer":
+            field = str(args.get("field") or "").strip()
+            value = args.get("value")
+            if not field:
+                return json.dumps({"ok": False, "error": "field required"})
+            cust = customers.get(phone) or {}
+            req = cust.get("requirements") if isinstance(cust.get("requirements"), dict) else {}
+            if not isinstance(req, dict):
+                req = {"_raw": req}
+            req[field] = value
+            extra = {}
+            if field == "business_name" and isinstance(value, str):
+                extra["business_name"] = value
+            if field == "email" and isinstance(value, str):
+                extra["email"] = value
+            if field == "category" and isinstance(value, str):
+                extra["category"] = value
+            out = customers.upsert(
+                phone,
+                status=cust.get("status") or "onboarding",
+                requirements=req,
+                **extra,
+            )
+            customer_memory.append_note(phone, f"{field}={value!r}", kind="onboarding")
+            if out.get("customer"):
+                state.customer = out["customer"]
+            return json.dumps(out, ensure_ascii=False)
+
+        if name == "finalize_requirements":
+            conf = args.get("confirmation_spoken", True)
+            if isinstance(conf, str):
+                conf = conf.strip().lower() in ("1", "true", "yes", "on")
+            if not conf:
+                return json.dumps({
+                    "ok": False,
+                    "error": "confirmation_spoken must be true after read-back",
+                })
+            req = args.get("requirements")
+            if isinstance(req, str):
+                try:
+                    req = json.loads(req)
+                except json.JSONDecodeError:
+                    req = {"text": req}
+            out = customers.save_requirements(
+                phone,
+                requirements=req or {},
+                summary=str(args.get("summary") or ""),
+                business_name=str(args.get("business_name") or ""),
+                category=str(args.get("category") or ""),
+                email=str(args.get("email") or ""),
+                mark_ready=True,
+            )
+            customer_memory.append_note(
+                phone,
+                f"requirements finalized: {args.get('summary')}",
+                kind="onboarding",
+            )
+            if out.get("customer"):
+                state.customer = out["customer"]
+            return json.dumps(out, ensure_ascii=False)
+
+        if name == "queue_website_build":
+            out = customers.write_builder_brief(phone)
+            if out.get("ok"):
+                customer_memory.append_note(
+                    phone, f"builder brief: {out.get('path')}", kind="build"
+                )
+            return json.dumps(out, ensure_ascii=False)
+
+        return onboarding.stub_tool_result(name, args)
+    except Exception as e:
+        log.warning("onboarding tool %s failed: %s", name, e, exc_info=True)
+        return onboarding.stub_tool_result(name, args)
 
 
 def _run_tool(state: CallState, name: str, args: dict) -> str:
@@ -578,7 +1093,16 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
         state.ended = True
         return "The call will end after your current reply is spoken."
 
-    if config.is_ai411():
+    mode = effective_mode(state)
+
+    if mode == "onboarding":
+        if name == "send_sms_links":
+            return _send_sms_links(state, args)
+        if name == "log_call_outcome":
+            return _log_outcome(state, args)
+        return _run_onboarding_tool(state, name, args)
+
+    if mode == "ai411":
         if name == "send_sms_links":
             return _send_sms_links(state, args)
         # In-process mcp-server stores (knowledge/events/callers/broadcasts/lookup).
@@ -588,22 +1112,14 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
             name, args, caller_number=state.caller_number or ""
         )
 
-    if config.is_owner_updates():
+    if mode == "owner_updates":
+        return _run_owner_tool(state, name, args)
+
+    if mode == "unified" or config.is_unified():
         if name == "send_sms_links":
             return _send_sms_links(state, args)
-        # In-process mcp-server changerequests + lookup.
-        import mcp_bridge
-
-        return mcp_bridge.run_owner_updates_tool(
-            name,
-            args,
-            caller_number=state.caller_number or "",
-            call_sid=getattr(state, "call_sid", "") or "",
-        )
-
-    if config.is_unified():
-        if name == "send_sms_links":
-            return _send_sms_links(state, args)
+        if name == "log_call_outcome":
+            return _log_outcome(state, args)
         import mcp_bridge
 
         # Owner tools require caller-ID-verified ownership; everything else
@@ -615,18 +1131,15 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
                     "business's own phone line. Offer to note the request "
                     "for a human follow-up instead."
                 )
-            return mcp_bridge.run_owner_updates_tool(
-                name,
-                args,
-                caller_number=state.caller_number or "",
-                call_sid=getattr(state, "call_sid", "") or "",
-            )
+            return _run_owner_tool(state, name, args)
         return mcp_bridge.run_ai411_tool(
             name, args, caller_number=state.caller_number or ""
         )
 
     if name == "send_demo_link_sms":
         return _send_sms(state, args.get("phone"))
+    if name == "send_demo_link_email":
+        return _send_demo_link_email(state, args.get("email"))
     if name == "log_call_outcome":
         return _log_outcome(state, args)
     return f"Unknown tool {name}"
@@ -666,7 +1179,10 @@ def run_turn(
 
     # System prompt is constant for the whole call — build it once, not on
     # every stream round (a tool turn would otherwise rebuild it 2-3x).
-    sys_prompt = system_prompt(state.business, state.direction, state.caller_number)
+    sys_prompt = system_prompt(
+        state.business, state.direction, state.caller_number,
+        mode=effective_mode(state), customer=state.customer or None,
+    )
 
     def emit(final: bool = False):
         """Hand completed sentences to on_sentence as they finish streaming.

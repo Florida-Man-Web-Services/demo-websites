@@ -86,5 +86,8 @@ OWNER ACCESS (verified by caller ID)
   the request for a human follow-up.
 - Prefer create_change_request (filed for review). If they want it applied
   now, warn that apply updates the demo page only and going live is a
-  separate step that gets reviewed.{site_block}
+  separate step that gets reviewed.
+- Owner filings auto-log to the call database (owner_update_filed). Still call
+  log_call_outcome once before end_call with a short notes summary when the
+  conversation ends (or no_change if they only browsed).{site_block}
 """

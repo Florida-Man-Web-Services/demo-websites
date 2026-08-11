@@ -17,4 +17,6 @@ RUN mkdir /out && for f in /src/*.html; do \
 FROM nginx:alpine
 COPY --from=build /out /usr/share/nginx/html
 COPY hosting/root-index.html /usr/share/nginx/html/index.html
+# AI 411 landing (also serve under /ai411/ on the apex until ai411.* DNS is live)
+COPY hosting/ai411/index.html /usr/share/nginx/html/ai411/index.html
 EXPOSE 80

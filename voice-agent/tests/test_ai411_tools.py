@@ -134,7 +134,7 @@ def test_sales_mode_still_only_sales_tools():
     config, agent, _, _ = _reload_mode("sales")
     assert config.is_ai411() is False
     names = {t["name"] for t in agent.get_tools()}
-    assert names == {"send_demo_link_sms", "log_call_outcome", "end_call"}
+    assert names == {"send_demo_link_sms", "send_demo_link_email", "log_call_outcome", "end_call"}
     state = _state(agent)
     out = agent._run_tool(state, "search_events", {"query": "x"})
     assert "Unknown tool" in out

@@ -37,14 +37,21 @@ def slug_from_row(row: dict) -> str:
 
 
 def already_called() -> set[str]:
+    import calldb
+
+    slugs: set[str] = set()
+    if calldb.enabled():
+        calldb.init_db()
+        slugs |= calldb.called_slugs(include_test=False)
     if not config.CALL_LOG.exists():
-        return set()
+        return slugs
     with open(config.CALL_LOG, newline="", encoding="utf-8") as f:
-        return {
-            row["slug"]
-            for row in csv.DictReader(f)
-            if not row.get("call_sid", "").startswith("TEST-")  # sims don't count
-        }
+        for row in csv.DictReader(f):
+            if row.get("call_sid", "").startswith("TEST-"):
+                continue
+            if row.get("slug"):
+                slugs.add(row["slug"])
+    return slugs
 
 
 def pick_next():

@@ -685,6 +685,20 @@ def _dispatch_owner(
         conf = args.get("confirmation_spoken", True)
         if isinstance(conf, str):
             conf = conf.strip().lower() in ("1", "true", "yes", "on")
+        sid = str(args.get("call_sid") or call_sid or "")
+        tref = str(args.get("transcript_ref") or "").strip()
+        if not tref and sid:
+            try:
+                import calldb
+
+                row = calldb.get_call(sid)
+                if row and row.get("transcript_ref"):
+                    tref = row["transcript_ref"]
+                else:
+                    # Pointer reserved even before turns are flushed.
+                    tref = f"calldb:call:{sid}"
+            except Exception:
+                tref = f"calldb:call:{sid}" if sid else ""
         return cr.create_change_request(
             business_slug=str(args.get("business_slug") or args.get("slug") or ""),
             summary=str(args.get("summary") or ""),
@@ -693,8 +707,8 @@ def _dispatch_owner(
             source=str(args.get("source") or "voice"),
             confirmation_spoken=bool(conf),
             priority=str(args.get("priority") or "normal"),
-            call_sid=str(args.get("call_sid") or call_sid or ""),
-            transcript_ref=str(args.get("transcript_ref") or ""),
+            call_sid=sid,
+            transcript_ref=tref,
         )
 
     if name == "list_open_change_requests":

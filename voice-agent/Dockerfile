@@ -18,6 +18,7 @@ COPY voice-agent/*.py voice-agent/
 # Call log and synthesized-audio cache live on a mounted volume so outcomes
 # (including the permanent do-not-call list) survive restarts.
 ENV CALL_LOG=/data/call-log.csv \
+    CALL_DB=/data/call-log.db \
     AUDIO_CACHE_DIR=/data/audio_cache
 RUN mkdir -p /data
 

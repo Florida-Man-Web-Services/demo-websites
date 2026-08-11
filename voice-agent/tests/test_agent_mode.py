@@ -54,7 +54,7 @@ def test_default_mode_is_sales():
     assert "AI phone assistant" in prompt or "selling websites" in prompt
     assert "Gainesville AI 411" not in prompt
     names = {t["name"] for t in agent.get_tools()}
-    assert names == {"send_demo_link_sms", "log_call_outcome", "end_call"}
+    assert names == {"send_demo_link_sms", "send_demo_link_email", "log_call_outcome", "end_call"}
 
 
 def test_ai411_mode_prompt_and_tools():

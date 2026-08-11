@@ -90,14 +90,19 @@ def test_tools_registered(monkeypatch):
 
 
 def test_log_tool_resolves_business(monkeypatch, tmp_path):
+    import calldb
     import config
     monkeypatch.setattr(config, "CALL_LOG", tmp_path / "log.csv")
+    monkeypatch.setattr(config, "CALL_DB", tmp_path / "log.db")
+    monkeypatch.setattr(config, "CALL_LOG_DUAL_WRITE_CSV", True)
+    calldb._initialized_paths.clear()
     monkeypatch.setenv("MCP_AUTH_TOKEN", "t")
     import server
     importlib.reload(server)
     import anyio
     result = anyio.run(server.log_call_outcome, "Ole Barn", "interested", "great call")
-    assert result == {"logged": True}
+    assert result["logged"] is True
+    assert result.get("call_sid")
     unknown = anyio.run(server.log_call_outcome, "zzzzqqqq", "interested", "n")
     assert unknown["logged"] is False
     assert "suggestions" in unknown

@@ -64,7 +64,16 @@ def main() -> None:
     )
     if url:
         print(f"        Twilio voice webhook:   {config.PUBLIC_BASE_URL}/voice/inbound (POST)")
+        print(f"        Twilio SMS webhook:     {config.PUBLIC_BASE_URL}/sms/inbound (POST)")
         print(f"        Twilio status callback: {config.PUBLIC_BASE_URL}/voice/status")
+
+    # 3b. Email (optional — demo link by email).
+    import mailer
+    step(
+        mailer.email_configured(),
+        "email backend (EMAIL_FROM + RESEND_API_KEY or SMTP_HOST)",
+        "set EMAIL_FROM and RESEND_API_KEY (or SMTP_*) so send_demo_link_email works",
+    )
 
     # 4. What to run next.
     print()

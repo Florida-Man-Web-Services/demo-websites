@@ -7,7 +7,7 @@ COPY mcp-server/requirements.txt mcp-server/requirements.txt
 RUN pip install --no-cache-dir -r mcp-server/requirements.txt
 
 # Shared data layer + baked-in business data (refreshed on image rebuild).
-COPY voice-agent/businesses.py voice-agent/config.py voice-agent/
+COPY voice-agent/businesses.py voice-agent/config.py voice-agent/calldb.py voice-agent/
 # NOTE: correspondences/*.csv (outreach + call-order) are intentionally NOT baked
 # into the image (they're uncommitted business data). load_businesses() falls back
 # to gainesville-no-website/gainesville_no_website.json and call_queue() returns []
@@ -19,8 +19,10 @@ COPY gainesville-no-website/gainesville_no_website.json gainesville-no-website/
 COPY generated-sites generated-sites/
 COPY mcp-server/*.py mcp-server/
 
-# Call log lives on a mounted volume so outcomes survive restarts.
-ENV CALL_LOG=/data/call-log.csv
+# Call log + relational call DB live on a mounted volume so outcomes/transcripts
+# survive restarts.
+ENV CALL_LOG=/data/call-log.csv \
+    CALL_DB=/data/call-log.db
 RUN mkdir /data
 
 EXPOSE 8036

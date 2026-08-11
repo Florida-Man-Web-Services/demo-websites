@@ -206,6 +206,52 @@ TOOLS = [
         },
     },
     {
+        "name": "log_call_outcome",
+        "description": (
+            "Record how the call went in the call database / call-log. Call "
+            "once near the end of every call (in addition to filing change "
+            "requests). Use owner_update_filed when a CR was already filed "
+            "this call; no_change if they only asked questions; "
+            "do_not_call / voicemail / wrong_number as appropriate."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "outcome": {
+                    "type": "string",
+                    "enum": [
+                        "owner_update_filed",
+                        "owner_update_cancelled",
+                        "owner_update_applied",
+                        "no_change",
+                        "callback_requested",
+                        "do_not_call",
+                        "wrong_number",
+                        "voicemail",
+                        "other",
+                    ],
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email address if they gave one.",
+                },
+                "callback_time": {
+                    "type": "string",
+                    "description": "When to call back, if they asked for that.",
+                },
+                "notes": {
+                    "type": "string",
+                    "description": (
+                        "One or two sentences: what they wanted, CR id if any, "
+                        "next step."
+                    ),
+                },
+            },
+            "required": ["outcome", "notes"],
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "end_call",
         "description": (
             "Hang up after your current reply is spoken. Use once the "
@@ -287,11 +333,16 @@ CONVERSATION FLOW
 5. Read the items back clearly and get explicit confirmation.
 6. create_change_request with confirmation_spoken=true, summary, items, and
    caller_phone (omit phone arg to use the caller's number automatically).
+   Filing auto-logs outcome owner_update_filed to the call database.
 7. list_open_change_requests / cancel_change_request when they ask about pending
-   work or want to cancel.
+   work or want to cancel (cancel also auto-logs).
 8. apply_change_request is optional. If they want apply now, warn that it only
-   updates the local demo HTML and that a live PR/ship is a separate step.
-9. Offer send_sms_links for the demo URL if useful; then end_call when done.
+   updates the local demo HTML and that a live PR/ship is a separate step
+   (apply auto-logs owner_update_applied).
+9. Offer send_sms_links for the demo URL if useful.
+10. Always call log_call_outcome once before end_call — overall disposition
+   (owner_update_filed if you filed, no_change if nothing filed, voicemail,
+   wrong_number, do_not_call, etc.) plus a short notes summary. Then end_call.
 
 If they clearly want a new website built or a sales conversation, say this line
 is for site updates only and they can reach the sales number separately — do not
@@ -301,9 +352,11 @@ TOOLS
 - lookup_business, get_site_outline
 - create_change_request, list_open_change_requests, cancel_change_request
 - apply_change_request (optional; demo file only, PR ship separate)
+- log_call_outcome (required once before hangup — call database / CSV)
 - send_sms_links, end_call
 If a tool returns an error, apologize briefly and offer what you can without
-inventing data. Call end_call with your final goodbye.
+inventing data. Always log_call_outcome once, then end_call with your final
+goodbye.
 """
     if direction == "inbound":
         ctx += """

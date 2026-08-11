@@ -86,12 +86,21 @@ OWNER_CALLBACK_NUMBER = os.getenv("OWNER_CALLBACK_NUMBER", TWILIO_PHONE_NUMBER)
 _raw_agent_mode = (
     os.getenv("AGENT_MODE") or os.getenv("VOICE_AGENT_MODE") or "sales"
 ).strip().lower()
-if _raw_agent_mode not in ("sales", "ai411", "owner_updates", "unified"):
+if _raw_agent_mode not in (
+    "sales",
+    "ai411",
+    "owner_updates",
+    "unified",
+    "onboarding",
+    "auto",
+):
     raise SystemExit(
         f"Unknown AGENT_MODE {_raw_agent_mode!r}; "
-        "use 'sales', 'ai411', 'owner_updates', or 'unified'."
+        "use 'sales', 'ai411', 'owner_updates', 'unified', 'onboarding', or 'auto'."
     )
 AGENT_MODE = _raw_agent_mode
+# Production public line: AGENT_MODE=auto routes per phone via customers registry.
+# Default remains sales for local/dev unless set. Deploy voice with AGENT_MODE=auto.
 
 
 def is_ai411() -> bool:
@@ -104,6 +113,14 @@ def is_owner_updates() -> bool:
 
 def is_unified() -> bool:
     return AGENT_MODE == "unified"
+
+
+def is_onboarding() -> bool:
+    return AGENT_MODE == "onboarding"
+
+
+def is_auto() -> bool:
+    return AGENT_MODE == "auto"
 
 
 # --- AI 411 MCP bridge ------------------------------------------------------
@@ -139,6 +156,18 @@ BUSINESS_JSON = Path(
 )
 
 CALL_LOG = Path(os.getenv("CALL_LOG", AGENT_DIR / "call-log.csv"))
+# Relational call store (outcomes + referenced transcript tables). Set CALL_DB=
+# empty / 0 / false / none / off to disable SQLite (CSV-only).
+_raw_call_db = os.getenv("CALL_DB", str(AGENT_DIR / "call-log.db")).strip()
+CALL_DB: Path | None
+if _raw_call_db.lower() in ("", "0", "false", "no", "none", "off"):
+    CALL_DB = None
+else:
+    CALL_DB = Path(_raw_call_db)
+# Keep writing call-log.csv alongside SQLite so call.py / ops greps keep working.
+CALL_LOG_DUAL_WRITE_CSV = os.getenv(
+    "CALL_LOG_DUAL_WRITE_CSV", "1"
+).strip().lower() not in ("0", "false", "no")
 AUDIO_CACHE_DIR = Path(os.getenv("AUDIO_CACHE_DIR", AGENT_DIR / "audio_cache"))
 
 # --- Demo site URLs ---------------------------------------------------------
@@ -156,6 +185,29 @@ DEMO_BASE_URL = os.getenv(
 GENERATED_SITES_DIR = Path(
     os.getenv("GENERATED_SITES_DIR", REPO_ROOT / "generated-sites")
 )
+
+# --- Outbound email (demo link delivery) ------------------------------------
+# Prefer Resend (RESEND_API_KEY + EMAIL_FROM). Otherwise SMTP_HOST + EMAIL_FROM.
+EMAIL_FROM = os.getenv("EMAIL_FROM", "").strip()
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "").strip()
+SMTP_HOST = os.getenv("SMTP_HOST", "").strip()
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587") or "587")
+SMTP_USER = os.getenv("SMTP_USER", "").strip()
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_TLS = os.getenv("SMTP_TLS", "1").strip().lower() not in ("0", "false", "no")
+# How long an inbound SMS conversation stays open for multi-turn replies.
+SMS_SESSION_TTL_S = int(os.getenv("SMS_SESSION_TTL_S", "3600") or "3600")
+
+# Default Stripe Payment Link shown on sales calls when the customer row
+# has no per-customer link yet (create in Stripe Dashboard → Payment links).
+STRIPE_PAYMENT_LINK_DEFAULT = os.getenv("STRIPE_PAYMENT_LINK_DEFAULT", "").strip()
+PUBLIC_VOICE_NUMBER = os.getenv("PUBLIC_VOICE_NUMBER", TWILIO_PHONE_NUMBER).strip()
+SITES_DESK_URL = os.getenv(
+    "SITES_DESK_URL", "https://sites.floridamanweb.online"
+).rstrip("/")
+AI411_PUBLIC_URL = os.getenv(
+    "AI411_PUBLIC_URL", "https://ai411.floridamanweb.online"
+).rstrip("/")
 
 
 def require(*names: str) -> None:

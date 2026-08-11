@@ -6,9 +6,10 @@ both ways between Twilio and wss://api.x.ai/v1/realtime. Both sides speak
 G.711 mu-law at 8 kHz as base64, so payloads pass through untouched — no
 transcoding, no per-turn webhooks, sub-second turn latency.
 
-The same three call tools (send_demo_link_sms / log_call_outcome / end_call)
-and the same per-call system prompt are wired into the realtime session, so
-call behavior and logging match the pipeline backend.
+The same sales call tools (send_demo_link_sms / send_demo_link_email /
+log_call_outcome / end_call) and the same per-call system prompt are wired
+into the realtime session, so call behavior and logging match the pipeline
+backend.
 
 run_call() only sees two duck-typed adapters (async send / async iterate /
 close), which keeps the bridge testable without sockets.
@@ -19,7 +20,7 @@ import json
 import logging
 
 import config
-from agent import CallState, _run_tool, get_tools, system_prompt
+from agent import CallState, _run_tool, flush_call_transcript, get_tools, record_transcript_turn, system_prompt
 
 log = logging.getLogger("voice-agent.realtime")
 
@@ -36,7 +37,7 @@ REALTIME VOICE NOTES
 """
 
 
-def realtime_tools() -> list:
+def realtime_tools(mode: str | None = None) -> list:
     """Active-mode tools (Anthropic schema) in the realtime API's flat format."""
     return [
         {
@@ -45,17 +46,23 @@ def realtime_tools() -> list:
             "description": t["description"],
             "parameters": t["input_schema"],
         }
-        for t in get_tools()
+        for t in get_tools(mode)
     ]
 
 
 def session_update(state: CallState) -> dict:
+    mode = getattr(state, "mode", None) or None
     session = {
         "instructions": system_prompt(
-            state.business, state.direction, state.caller_number, openers=False
+            state.business,
+            state.direction,
+            state.caller_number,
+            openers=False,
+            mode=mode,
+            customer=getattr(state, "customer", None) or None,
         )
         + REALTIME_EXTRA_RULES,
-        "tools": realtime_tools(),
+        "tools": realtime_tools(mode),
         "turn_detection": {
             "type": "server_vad",
             "silence_duration_ms": config.GROK_VAD_SILENCE_MS,
@@ -148,11 +155,26 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
                     )
                     asyncio.get_running_loop().call_later(HANGUP_GRACE_S, done.set)
                 elif t == "response.output_audio_transcript.done":
-                    log.info("call %s agent: %r", state.call_sid, ev.get("transcript"))
-                elif t == "conversation.item.input_audio_transcription.updated":
-                    log.debug(
-                        "call %s caller: %r", state.call_sid, ev.get("transcript")
-                    )
+                    text = (ev.get("transcript") or "").strip()
+                    log.info("call %s agent: %r", state.call_sid, text)
+                    if text:
+                        record_transcript_turn(state, "agent", text)
+                elif t in (
+                    "conversation.item.input_audio_transcription.completed",
+                    "conversation.item.input_audio_transcription.done",
+                    "conversation.item.input_audio_transcription.updated",
+                ):
+                    # xAI may stream partials via "updated" only — coalesce into
+                    # one caller turn per utterance.
+                    text = (ev.get("transcript") or "").strip()
+                    if text:
+                        record_transcript_turn(
+                            state, "caller", text, replace_last_same_role=True
+                        )
+                        if t != "conversation.item.input_audio_transcription.updated":
+                            log.info("call %s caller: %r", state.call_sid, text)
+                        else:
+                            log.debug("call %s caller (asr): %r", state.call_sid, text)
                 elif t == "error":
                     log.warning("call %s xai error: %s", state.call_sid, ev)
         finally:
@@ -164,6 +186,11 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
     finally:
         for task in tasks:
             task.cancel()
+        # Hangup path: persist turns into transcripts + transcript_turns.
+        try:
+            await asyncio.to_thread(flush_call_transcript, state, backend="grok-realtime")
+        except Exception:
+            log.exception("call %s: transcript flush failed", state.call_sid)
 
 
 async def _handle_tool(xai, state: CallState, ev: dict) -> None:
