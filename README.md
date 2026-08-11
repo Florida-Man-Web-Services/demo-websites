@@ -11,7 +11,9 @@ Monorepo for **Gainesville demo landing pages**, the **AI 411 / owner-updates vo
 | Public hashed hosting | `hosting/` → floridamanweb.online | **Live** — content-hash paths (see Deploy) |
 | Root nginx Dockerfile | `Dockerfile` + `arcade-bar-south.html` | **Legacy sample** — one-off Arcade Bar image; prefer `hosting/Dockerfile` |
 | MCP server | `mcp-server/` | **Live** — lookup, knowledge, ChangeRequests, events, broadcasts |
-| Voice agent | `voice-agent/` | **Live** — sales + `AGENT_MODE=ai411` / `owner_updates` |
+| Voice agent | `voice-agent/` | **Live** — `AGENT_MODE=auto` routes AI411 / onboarding / sales / owner |
+| Product loop | [`docs/PRODUCT_LOOP.md`](docs/PRODUCT_LOOP.md) | AI411 web → interview → build → Stripe → owner |
+| AI 411 landing | `hosting/ai411/` | Phone callback form → `/api/onboarding/register` |
 | Site tracker | `site-tracker/` | Supporting UI/gen helper |
 | Website vector store | `website-vector-store/` | Crawl/index of *existing* GNV sites + prospects |
 | NAP source list | `gainesville-no-website/` | Source JSON for demos |
@@ -91,8 +93,11 @@ python doctor.py       # checklist
 # Nix: nix develop   # from repo root (default shell = voice-agent)
 ```
 
-Modes via `AGENT_MODE` (see `voice-agent/README.md`): default sales, `ai411`, `owner_updates`.  
-CI: `.github/workflows/build-voice-agent.yml`.
+Modes via `AGENT_MODE` (see `voice-agent/README.md` and
+[`docs/PRODUCT_LOOP.md`](docs/PRODUCT_LOOP.md)): `sales`, `ai411`,
+`owner_updates`, `unified`, `onboarding`, **`auto`** (per-phone routing).
+Production public line currently runs **`ai411`** until the image includes
+`auto`. CI: `.github/workflows/build-voice-agent.yml`.
 
 ## Generate / improve a demo page
 
@@ -110,6 +115,11 @@ After adding/renaming pages, keep **`index.html`** in sync (catalog links).
 
 | Doc | Topic |
 |-----|--------|
+| [`docs/README.md`](docs/README.md) | **Doc index** |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | System architecture, components, domains |
+| [`docs/PRODUCT_LOOP.md`](docs/PRODUCT_LOOP.md) | AI411 → onboarding → build → Stripe → owner |
+| [`docs/OPS_CLUSTER.md`](docs/OPS_CLUSTER.md) | DNS, Authentik, Flux, secrets, runbooks |
+| [`docs/API.md`](docs/API.md) | Voice + desk HTTP APIs |
 | [`mcp-server/README.md`](mcp-server/README.md) | MCP tools, local run, k8s deploy |
 | [`voice-agent/README.md`](voice-agent/README.md) | Twilio, TTS, AGENT_MODE, doctor |
 | [`docs/site-generation/README.md`](docs/site-generation/README.md) | Prompt fill + improve wave |

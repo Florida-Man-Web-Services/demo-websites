@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gainesville AI 411 — Free demo website callback</title>
+  <meta name="description" content="Gainesville AI 411. Enter your phone number to get a free demo website interview callback from Florida Man Web Services." />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --ink: #e8eefc;
+      --muted: #9aabc8;
+      --accent: #3dd6c6;
+      --accent2: #f5b942;
+      --danger: #ff7b7b;
+      --line: rgba(255,255,255,.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #1a3a4a 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #3a2a10 0%, transparent 50%),
+        var(--bg);
+    }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    .badge {
+      display: inline-block; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid rgba(61,214,198,.35); padding: .35rem .65rem; border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.15; margin: 0 0 .75rem; }
+    .lead { color: var(--muted); font-size: 1.05rem; line-height: 1.55; margin: 0 0 1.75rem; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.03), transparent 40%), var(--card);
+      border: 1px solid var(--line); border-radius: 18px; padding: 1.35rem 1.25rem 1.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    .card h2 { margin: 0 0 .35rem; font-size: 1.2rem; }
+    .card p { margin: 0 0 1.1rem; color: var(--muted); font-size: .95rem; }
+    label { display: block; font-size: .85rem; color: var(--muted); margin: .75rem 0 .35rem; }
+    input {
+      width: 100%; padding: .85rem 1rem; border-radius: 12px; border: 1px solid var(--line);
+      background: #0a101c; color: var(--ink); font-size: 1.05rem;
+    }
+    input:focus { outline: 2px solid rgba(61,214,198,.45); border-color: transparent; }
+    .phone-wrap { position: relative; }
+    .phone-wrap input { font-size: 1.35rem; letter-spacing: .02em; padding: 1rem 1.1rem; }
+    button {
+      width: 100%; margin-top: 1.15rem; border: 0; border-radius: 12px; cursor: pointer;
+      padding: 1rem 1.1rem; font-size: 1.05rem; font-weight: 650;
+      background: linear-gradient(90deg, var(--accent), #2bb8e6); color: #042018;
+    }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    .msg { margin-top: 1rem; padding: .85rem 1rem; border-radius: 12px; display: none; font-size: .95rem; line-height: 1.45; }
+    .msg.ok { display: block; background: rgba(61,214,198,.12); border: 1px solid rgba(61,214,198,.35); color: #b7fff6; }
+    .msg.err { display: block; background: rgba(255,123,123,.1); border: 1px solid rgba(255,123,123,.35); color: #ffd0d0; }
+    .steps { margin: 2rem 0 0; padding: 0; list-style: none; }
+    .steps li {
+      display: grid; grid-template-columns: 2rem 1fr; gap: .75rem; align-items: start;
+      padding: .85rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .95rem;
+    }
+    .steps strong { color: var(--ink); display: block; margin-bottom: .15rem; }
+    .n {
+      width: 2rem; height: 2rem; border-radius: 999px; display: grid; place-items: center;
+      background: rgba(245,185,66,.15); color: var(--accent2); font-weight: 700; font-size: .9rem;
+    }
+    footer { margin-top: 2.5rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="badge">Gainesville · AI 411</div>
+    <h1>Get a free demo website for your business</h1>
+    <p class="lead">
+      Enter your phone number. Our AI onboarding agent will call you, interview you about your
+      business, and build a free demo site. When it’s ready, you’ll get the link — and a simple
+      way to go live if you like it.
+    </p>
+
+    <section class="card" aria-labelledby="form-title">
+      <h2 id="form-title">Request a callback</h2>
+      <p>We’ll call from Florida Man Web Services. Standard rates may apply. You can hang up anytime.</p>
+      <form id="cb-form">
+        <label for="phone">Mobile phone number</label>
+        <div class="phone-wrap">
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                 placeholder="(352) 555-0100" required />
+        </div>
+        <label for="business_name">Business name (optional)</label>
+        <input id="business_name" name="business_name" type="text" placeholder="Cool Cafe" />
+        <label for="email">Email for the demo link (optional)</label>
+        <input id="email" name="email" type="email" placeholder="you@business.com" />
+        <button type="submit" id="submit">Call me to design my free demo</button>
+        <div id="msg" class="msg" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <ol class="steps">
+      <li><span class="n">1</span><div><strong>Onboarding call</strong>Open-ended interview about your business and website needs.</div></li>
+      <li><span class="n">2</span><div><strong>We build a free demo</strong>A coding agent turns your requirements into a real page.</div></li>
+      <li><span class="n">3</span><div><strong>Sales call with your link</strong>See the demo; pay via Stripe only if you want it live.</div></li>
+      <li><span class="n">4</span><div><strong>Owner updates line</strong>After you subscribe, call anytime to request site changes.</div></li>
+    </ol>
+
+    <footer>
+      Powered by Florida Man Web Services.
+      Directory / events: ask for Gainesville AI 411 when you call.
+      Ops desk: <a href="https://sites.floridamanweb.online">sites.floridamanweb.online</a>
+      (internal). API default: set <code>data-api</code> on the form or <code>window.AI411_API</code>.
+    </footer>
+  </main>
+  <script>
+    (function () {
+      const form = document.getElementById("cb-form");
+      const msg = document.getElementById("msg");
+      const btn = document.getElementById("submit");
+      // Prefer same-origin proxy, then voice API, then relative path for local dev.
+      const API = window.AI411_API
+        || form.getAttribute("data-api")
+        || "https://voice.flmanbiosci.net/api/onboarding/register";
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        msg.className = "msg";
+        msg.textContent = "";
+        btn.disabled = true;
+        const payload = {
+          phone: document.getElementById("phone").value.trim(),
+          business_name: document.getElementById("business_name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          source: "ai411_web",
+        };
+        try {
+          const r = await fetch(API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await r.json().catch(() => ({}));
+          if (!r.ok || data.ok === false) {
+            throw new Error(data.detail || data.error || data.message || ("HTTP " + r.status));
+          }
+          const n = data.voice_number || "";
+          msg.className = "msg ok";
+          msg.textContent = (data.message || "You're on the list.")
+            + (n ? (" Our number: " + n + ".") : "");
+          form.reset();
+        } catch (err) {
+          msg.className = "msg err";
+          msg.textContent = "Could not register: " + (err && err.message ? err.message : err);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

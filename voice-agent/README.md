@@ -109,13 +109,35 @@ uvicorn server:app --port 8035
 ```
 
 In the Twilio console, set the phone number's **Voice webhook** to
-`{PUBLIC_BASE_URL}/voice/inbound` (POST) and the **status callback** to
+`{PUBLIC_BASE_URL}/voice/inbound` (POST), the **Messaging webhook** to
+`{PUBLIC_BASE_URL}/sms/inbound` (POST), and the **status callback** to
 `{PUBLIC_BASE_URL}/voice/status`.
+
+### Inbound SMS
+
+Texts to the Twilio number hit `/sms/inbound`. The same sales / AI 411 /
+owner brain answers over SMS (multi-turn session per phone number, default
+TTL 1h via `SMS_SESSION_TTL_S`). Tools work the same way — including
+`send_demo_link_sms` and `send_demo_link_email`.
+
+### Email the demo link
+
+On a call or SMS, if the owner prefers email, the agent collects the address
+and calls **`send_demo_link_email`**. Configure one backend in `.env`:
+
+```bash
+EMAIL_FROM="Florida Man Web Services <hello@yourdomain.com>"
+RESEND_API_KEY=re_...          # preferred
+# or SMTP_HOST=... SMTP_PORT=587 SMTP_USER=... SMTP_PASSWORD=...
+```
+
+Without email configured, the tool returns an error the model can speak;
+it can fall back to SMS or `log_call_outcome` with `wants_email`.
 
 ### Test it on yourself first
 
-Call your Twilio number — the agent answers as an inbound call. Then try an
-outbound call to your own cell:
+Call your Twilio number — the agent answers as an inbound call. Text the
+number too. Then try an outbound call to your own cell:
 
 ```bash
 python call.py --to +1YOURCELL hayes-jewelry-ltd
@@ -129,9 +151,14 @@ python call.py --next          # call the top uncalled business (asks first)
 python call.py ole-barn        # call a specific business by slug
 ```
 
-Every call appends a row to `call-log.csv` (outcome, email captured, callback
-time, notes). `--next` skips anything already logged. Businesses that call
-back are recognized by caller ID and greeted by name.
+Every call writes:
+- a summary row to SQLite `calls` (and still dual-writes `call-log.csv`)
+- full turn text into separate `transcripts` + `transcript_turns` tables,
+  referenced from `calls.transcript_id` / `transcript_ref=calldb:transcript:<id>`
+
+`--next` skips anything already logged. Businesses that call back are recognized
+by caller ID and greeted by name. Set `CALL_DB` / `CALL_LOG` via env (see
+`.env.example`); prod defaults to `/data/call-log.db` on the voice PVC.
 
 ## Compliance — read before dialing strangers
 
@@ -232,14 +259,17 @@ AGENT_MODE=owner_updates
 |---|---|---|---|
 | Identity | Pitch free demos | Gainesville AI 411 | Owner site-updates desk |
 | Auth | Outbound target business | Optional caller memory | Weak: match caller phone → business (`lookup_business`); ambiguous → ask which; spoken warning |
-| Tools | SMS demo, log outcome, end | Directory / events / broadcasts | `lookup_business`, `get_site_outline`, `create_change_request`, `list_open_change_requests`, `cancel_change_request`, `apply_change_request` (optional), `send_sms_links`, `end_call` |
-| Flow | Pitch → SMS link | Search / post | Outline → capture items → read back → `create_change_request` with `confirmation_spoken=true` |
+| Tools | SMS demo, log outcome, end | Directory / events / broadcasts | `lookup_business`, `get_site_outline`, `create_change_request`, `list_open_change_requests`, `cancel_change_request`, `apply_change_request` (optional), **`log_call_outcome`**, `send_sms_links`, `end_call` |
+| Flow | Pitch → SMS link | Search / post | Outline → capture → confirm → `create_change_request` (auto-logs `owner_update_filed`) → `log_call_outcome` once → `end_call` |
 
 **Live stores (#52 intake):** tools dispatch **in-process** to
 `mcp-server/changerequests.py` and `lookup.py` via `mcp_bridge.run_owner_updates_tool`.
 `items` may be a list or a JSON array string; `caller_phone` defaults from the
-call state. `apply_change_request` is optional — warn that it updates local
-demo HTML only; shipping a PR is a separate step.
+call state. Successful `create_change_request` / cancel / apply also append
+`owner_update_*` rows to the call database (+ CSV dual-write). Prefer
+`log_call_outcome` once before hangup for the overall disposition.
+`apply_change_request` is optional — warn that it updates local demo HTML only;
+shipping a PR is a separate step.
 
 | Env | Default / notes |
 |---|---|
@@ -285,17 +315,42 @@ automation rolls out the `voice-agent` Deployment in `theswamp`
 
 - `PUBLIC_BASE_URL=https://voice.flmanbiosci.net` is set in the Deployment;
   point the Twilio number's Voice webhook at
-  `https://voice.flmanbiosci.net/voice/inbound` and the status callback at
-  `/voice/status` (one-time Twilio console change, replacing the ngrok URL).
+  `https://voice.flmanbiosci.net/voice/inbound`, Messaging at
+  `/sms/inbound`, and the status callback at `/voice/status`.
 - API keys come from the Bitwarden item `voice-agent-keys` via
-  External Secrets (custom fields, one per env var).
-- `call-log.csv` and the audio cache persist on a Longhorn PVC at `/data`.
-  To migrate laptop history (do-not-call permanence lives there):
-  `kubectl -n theswamp cp voice-agent/call-log.csv <pod>:/data/call-log.csv`
-  before pointing Twilio at the cluster.
+  External Secrets. Optional Honcho/Stripe/email: Secret `voice-agent-extra`
+  (or Bitwarden fields + `external-secret-voice-extra.yaml`).
+- PVC `voice-agent-data` at `/data`: `customers.json`, builder briefs,
+  call-log / calldb, audio cache, local memory fallback.
+- **Product loop** (AI411 → onboarding → build → sales → owner): see
+  monorepo [`docs/PRODUCT_LOOP.md`](../docs/PRODUCT_LOOP.md),
+  [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md),
+  [`docs/OPS_CLUSTER.md`](../docs/OPS_CLUSTER.md),
+  [`docs/API.md`](../docs/API.md).
 - `call.py` keeps working from anywhere — it talks to Twilio's REST API, and
   Twilio then webhooks whichever server `PUBLIC_BASE_URL` names. Run it
   locally with `PUBLIC_BASE_URL=https://voice.flmanbiosci.net`.
+
+### AGENT_MODE values
+
+| Value | Behavior |
+|-------|----------|
+| `sales` | Cold outreach pitch (default for local if unset) |
+| `ai411` | Gainesville directory/events (current **prod** pin) |
+| `onboarding` | Requirements interview |
+| `owner_updates` | Paid owner ChangeRequests |
+| `unified` | AI411 + owner tools when caller ID matches business |
+| `auto` | Per-phone routing via `customers` registry (**needs image with auto**) |
+
+### Onboarding / billing APIs (summary)
+
+| Method | Path |
+|--------|------|
+| POST | `/api/onboarding/register` |
+| GET | `/api/onboarding/customers` |
+| POST | `/api/billing/mark-paid` |
+
+Full schemas: [`docs/API.md`](../docs/API.md).
 
 ## Notes & limits
 
