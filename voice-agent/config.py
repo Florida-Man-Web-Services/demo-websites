@@ -212,6 +212,18 @@ AI411_PUBLIC_URL = os.getenv(
     "AI411_PUBLIC_URL", "https://ai411.floridamanweb.online"
 ).rstrip("/")
 
+# --- Owner voice auth (F1 levels now; F2 speaker-verify later) ---------------
+# VOICE_AUTH_VENDOR=none|mock|<future>
+# none (default): write tools need cid_only / cid_legacy (Phase 1).
+# mock: tests promote via voice_auth.on_speech_window fake scores.
+VOICE_AUTH_VENDOR = (os.getenv("VOICE_AUTH_VENDOR") or "none").strip().lower()
+VOICE_ENROLL_REQUIRED_FOR_WRITE = os.getenv(
+    "VOICE_ENROLL_REQUIRED_FOR_WRITE", "false"
+).strip().lower() in ("1", "true", "yes", "on")
+VOICE_AUTH_SOFT = float(os.getenv("VOICE_AUTH_SOFT", "0.75") or "0.75")
+VOICE_AUTH_HARD = float(os.getenv("VOICE_AUTH_HARD", "0.85") or "0.85")
+VOICE_AUTH_MIN_WINDOWS = int(os.getenv("VOICE_AUTH_MIN_WINDOWS", "3") or "3")
+
 
 def require(*names: str) -> None:
     """Fail fast with a readable message when required env vars are missing."""

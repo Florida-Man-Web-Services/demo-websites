@@ -706,6 +706,12 @@ class CallState:
     # Per-call product mode when AGENT_MODE=auto (ai411|onboarding|sales|owner_updates).
     mode: str = ""
     customer: dict = field(default_factory=dict)
+    # Owner F1/F2 auth (see voice_auth.py). Defaults safe for non-owner modes.
+    auth_level: str = "anonymous"
+    voice_enrolled: bool = False
+    voice_score_ema: float | None = None
+    voice_windows: int = 0
+    step_up_ok: bool = False
 
 
 _twilio_client = None
@@ -1019,6 +1025,17 @@ def _inject_transcript_ref(state: CallState, args: dict) -> dict:
 
 def _run_owner_tool(state: CallState, name: str, args: dict) -> str:
     """Owner-updates tools + local SMS / call-log outcome logging."""
+    import voice_auth
+
+    # Ensure F1 snapshot exists (tests may construct CallState without server._make_state).
+    if not getattr(state, "auth_level", None) or state.auth_level == "anonymous":
+        if state.caller_number or state.customer:
+            voice_auth.refresh_auth(state)
+
+    deny = voice_auth.check_tool_allowed(state, name)
+    if deny is not None:
+        return voice_auth.deny_json(deny)
+
     if name == "send_sms_links":
         return _send_sms_links(state, args)
     if name == "log_call_outcome":
@@ -1034,6 +1051,7 @@ def _run_owner_tool(state: CallState, name: str, args: dict) -> str:
         tool_args,
         caller_number=state.caller_number or "",
         call_sid=getattr(state, "call_sid", "") or "",
+        auth_level=getattr(state, "auth_level", "") or "",
     )
     _maybe_log_owner_update(state, name, tool_args, raw)
     return raw

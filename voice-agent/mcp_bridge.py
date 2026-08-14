@@ -874,9 +874,27 @@ def run_owner_updates_tool(
     *,
     caller_number: str = "",
     call_sid: str = "",
+    auth_level: str = "",
 ) -> str:
     """Run an owner_updates tool; always returns a string safe for the LLM."""
     args = dict(args or {})
+    # Optional second gate when callers pass auth_level without CallState (HTTP/tests).
+    if auth_level:
+        try:
+            import voice_auth
+
+            class _S:
+                pass
+
+            s = _S()
+            s.auth_level = auth_level
+            s.voice_enrolled = False
+            s.step_up_ok = False
+            deny = voice_auth.check_tool_allowed(s, name)
+            if deny is not None:
+                return _json(deny)
+        except Exception as e:  # noqa: BLE001
+            log.debug("auth_level gate skipped: %s", e)
     try:
         result = _dispatch_owner(
             name,

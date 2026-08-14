@@ -90,10 +90,17 @@ def _make_state(
         mode=mode,
         customer=customer or {},
     )
+    try:
+        import voice_auth
+
+        voice_auth.apply_auth_to_state(state)
+    except Exception as e:  # noqa: BLE001
+        log.warning("voice_auth init failed: %s", e)
     log.info(
-        "call %s mode=%s customer=%s business=%s",
+        "call %s mode=%s auth=%s customer=%s business=%s",
         call_sid,
         mode,
+        getattr(state, "auth_level", "?"),
         (customer or {}).get("id") or "-",
         business.name,
     )
