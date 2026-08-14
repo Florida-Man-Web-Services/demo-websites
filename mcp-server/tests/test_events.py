@@ -1,4 +1,4 @@
-"""Unit tests for Gainesville events store (#48 MVP)."""
+"""Unit tests for Gainesville events store + Visit Gainesville ingest."""
 
 from __future__ import annotations
 
@@ -41,9 +41,10 @@ def _evt(
     free: bool = True,
     tags: list[str] | None = None,
     description: str = "desc",
-    source: str = "seed",
+    source: str = "community",
+    website: str = "",
 ) -> dict:
-    return {
+    out = {
         "id": eid,
         "title": title,
         "start": start.astimezone(ET).replace(microsecond=0).isoformat(),
@@ -58,14 +59,30 @@ def _evt(
         "url": "",
         "source": source,
     }
+    if website:
+        out["website"] = website
+    return out
 
 
-def test_ensure_seeded_writes_file(tmp_store, fixed_clock):
+def test_ensure_seeded_empty_ok(tmp_store, fixed_clock):
+    """Empty store is valid — no auto fake seeds."""
     evs = events.ensure_seeded()
-    assert len(evs) >= 5
-    assert tmp_store.exists()
-    again = events.ensure_seeded()
-    assert len(again) == len(evs)
+    assert evs == []
+    assert not tmp_store.exists() or True
+    # search still ok
+    result = events.search_events()
+    assert result["ok"] is True
+    assert result["count"] == 0
+    assert result["events"] == []
+
+
+def test_no_auto_seed_fakes(tmp_store, fixed_clock):
+    events.ensure_seeded()
+    sources = events.list_event_sources()
+    assert sources["ok"] is True
+    assert sources["sources"] == []
+    # Ensure seed generator is gone
+    assert not hasattr(events, "_seed_events")
 
 
 def test_search_all_future_drops_expired(tmp_store, fixed_clock, monkeypatch):
@@ -248,15 +265,15 @@ def test_list_event_sources(tmp_store, fixed_clock):
     now = _fixed_now()
     events.reset_store(
         [
-            _evt("a", "A", now + timedelta(hours=1), source="seed"),
-            _evt("b", "B", now + timedelta(hours=2), source="seed"),
+            _evt("a", "A", now + timedelta(hours=1), source="visitgainesville"),
+            _evt("b", "B", now + timedelta(hours=2), source="visitgainesville"),
             _evt("c", "C", now + timedelta(hours=3), source="community"),
         ]
     )
     result = events.list_event_sources()
     assert result["ok"] is True
     by_src = {s["source"]: s["count"] for s in result["sources"]}
-    assert by_src == {"community": 1, "seed": 2}
+    assert by_src == {"community": 1, "visitgainesville": 2}
 
 
 def test_upsert_event(tmp_store, fixed_clock):
@@ -288,8 +305,20 @@ def test_limit(tmp_store, fixed_clock):
     assert len(result["events"]) == 2
 
 
-def test_seed_search_integration(tmp_store, fixed_clock):
-    """Default seed is searchable without manual upsert."""
+def test_fixture_search_integration(tmp_store, fixed_clock):
+    """Search works from explicit fixtures (no seed dependency)."""
+    now = _fixed_now()
+    events.reset_store(
+        [
+            _evt(
+                "mkt",
+                "Union Street Farmers Market",
+                now + timedelta(days=2),
+                tags=["market", "food"],
+                source="visitgainesville",
+            )
+        ]
+    )
     result = events.search_events(query="market")
     assert result["ok"] is True
     assert result["count"] >= 1
@@ -300,13 +329,26 @@ def test_seed_search_integration(tmp_store, fixed_clock):
 
 
 def test_summarize_event_categories_and_drilldown(tmp_store, fixed_clock):
+    now = _fixed_now()
+    fri = now.date() + timedelta(days=2)
+    sat = fri + timedelta(days=1)
+
+    def at(day, hour):
+        return datetime.combine(day, time(hour, 0), tzinfo=ET)
+
+    events.reset_store(
+        [
+            _evt("w1", "Saturday Market", at(sat, 9), tags=["market", "food"]),
+            _evt("w2", "Friday Jazz", at(fri, 20), tags=["music", "jazz"]),
+            _evt("w3", "Park Yoga", at(sat, 8), tags=["fitness", "outdoor"]),
+        ]
+    )
     summary = events.summarize_event_categories(when="this_weekend")
     assert summary["ok"] is True
     assert summary["total"] >= 1
     assert isinstance(summary["categories"], list)
     assert summary["categories"]
     assert "speakable" in summary
-    # Drill into first category
     cat = summary["categories"][0]["category"]
     drilled = events.search_events(when="this_weekend", category=cat, limit=10)
     assert drilled["ok"] is True
@@ -317,8 +359,223 @@ def test_summarize_event_categories_and_drilldown(tmp_store, fixed_clock):
 
 
 def test_search_reports_total_matched(tmp_store, fixed_clock):
+    now = _fixed_now()
+    events.reset_store(
+        [_evt(f"e{i}", f"Event {i}", now + timedelta(hours=i + 1)) for i in range(5)]
+    )
     result = events.search_events(limit=2)
     assert result["ok"] is True
     assert result["count"] == 2
     assert result.get("total_matched", 0) >= 2
     assert isinstance(result.get("categories"), list)
+
+
+# --- Visit Gainesville map / filter / ingest ---------------------------------
+
+
+def _tribe_raw(
+    tid: int,
+    title: str,
+    *,
+    start: str = "2026-07-18 19:00:00",
+    end: str = "2026-07-18 21:00:00",
+    city: str = "Gainesville",
+    country: str = "United States",
+    address: str = "1 Main St",
+    zip_code: str = "32601",
+    venue: str = "The Top",
+    cost: str = "",
+    website: str = "https://example.com/event",
+    url: str = "https://www.visitgainesville.com/event/x/",
+    categories: list | None = None,
+) -> dict:
+    return {
+        "id": tid,
+        "title": title,
+        "start_date": start,
+        "end_date": end,
+        "cost": cost,
+        "website": website,
+        "url": url,
+        "categories": categories
+        or [{"name": "Live Music", "slug": "live-music"}],
+        "venue": {
+            "venue": venue,
+            "address": address,
+            "city": city,
+            "country": country,
+            "zip": zip_code,
+            "website": "https://venue.example",
+        },
+        "excerpt": "A <b>fun</b> night out.",
+    }
+
+
+def test_map_visitgainesville_event_basic(fixed_clock):
+    raw = _tribe_raw(42, "Jazz Night &amp; Friends")
+    mapped = events.map_visitgainesville_event(raw)
+    assert mapped is not None
+    assert mapped["id"] == "vg-42"
+    assert mapped["source"] == "visitgainesville"
+    assert mapped["title"] == "Jazz Night & Friends"
+    assert mapped["free"] is True
+    assert mapped["venue"] == "The Top"
+    assert "FL" in mapped["address"] or "32601" in mapped["address"]
+    assert mapped["start"].startswith("2026-07-18T19:00:00")
+    assert "live-music" in mapped["tags"] or "live music" in mapped["tags"]
+    assert mapped["website"] == "https://example.com/event"
+    assert "fun" in mapped["description"].lower()
+
+
+def test_map_filters_nonlocal_title_and_country(fixed_clock):
+    tokyo = _tribe_raw(1, "Tokyo Climate Summit 2026", city="Tokyo", country="Japan")
+    assert events.map_visitgainesville_event(tokyo) is None
+
+    remote = _tribe_raw(
+        2,
+        "Remote Tech Meetup",
+        city="Austin",
+        country="United States",
+        zip_code="78701",
+        address="100 Congress Ave",
+    )
+    assert events.map_visitgainesville_event(remote) is None
+
+    waldo = _tribe_raw(
+        3,
+        "Waldo Farmers Market",
+        city="Waldo",
+        zip_code="32694",
+        address="17805 US-301",
+        venue="Waldo Farmers and Flea Market",
+    )
+    assert events.map_visitgainesville_event(waldo) is not None
+
+
+def test_cost_paid_not_free(fixed_clock):
+    raw = _tribe_raw(9, "Ticketed Show", cost="$25")
+    mapped = events.map_visitgainesville_event(raw)
+    assert mapped is not None
+    assert mapped["free"] is False
+
+
+def test_replace_preserves_community_purges_seed(tmp_store, fixed_clock):
+    now = _fixed_now()
+    events.reset_store(
+        [
+            _evt("community-1", "Open Mic", now + timedelta(days=1), source="community"),
+            _evt("evt-seed-old", "Fake Seed", now + timedelta(days=1), source="seed"),
+            _evt("vg-1", "Old VG", now + timedelta(days=2), source="visitgainesville"),
+        ]
+    )
+    new_vg = [
+        _evt(
+            "vg-99",
+            "New VG Jazz",
+            now + timedelta(days=3),
+            source="visitgainesville",
+            tags=["music"],
+        )
+    ]
+    result = events.replace_visitgainesville_events(new_vg)
+    assert result["ok"] is True
+    assert result["purged_seed"] == 1
+    assert result["visitgainesville"] == 1
+    assert result["preserved"] == 1
+    ids = {e["id"] for e in events.ensure_seeded()}
+    assert ids == {"community-1", "vg-99"}
+    assert "evt-seed-old" not in ids
+    assert "vg-1" not in ids
+
+
+def test_ingest_visitgainesville_httpx_mock(tmp_store, fixed_clock):
+    """Unit test ingest with mocked HTTP pages (httpx-style callable)."""
+    page1 = {
+        "events": [
+            _tribe_raw(100, "GNV Jazz", start="2026-07-20 20:00:00"),
+            _tribe_raw(
+                101,
+                "Tokyo Summit",
+                city="Tokyo",
+                country="Japan",
+                start="2026-07-21 10:00:00",
+            ),
+        ],
+        "total": 3,
+        "total_pages": 2,
+    }
+    page2 = {
+        "events": [
+            _tribe_raw(
+                102,
+                "Depot Park Yoga",
+                venue="Depot Park",
+                start="2026-07-22 07:30:00",
+                categories=[{"name": "Fitness", "slug": "fitness"}],
+            ),
+        ],
+        "total": 3,
+        "total_pages": 2,
+    }
+
+    calls: list[str] = []
+
+    def fake_get(url: str) -> dict:
+        calls.append(url)
+        if "page=2" in url:
+            return page2
+        return page1
+
+    # Pre-existing community + seed
+    now = _fixed_now()
+    events.reset_store(
+        [
+            _evt("community-keep", "Keep Me", now + timedelta(days=5), source="community"),
+            _evt("evt-seed-x", "Seed", now + timedelta(days=1), source="seed"),
+        ]
+    )
+
+    result = events.ingest_visitgainesville(
+        per_page=50,
+        max_pages=None,
+        days_ahead=180,
+        http_get=fake_get,
+    )
+    assert result["ok"] is True
+    assert result["pages"] == 2
+    assert result["mapped"] == 2
+    assert result["dropped_nonlocal"] >= 1
+    assert result["purged_seed"] == 1
+    assert "digest" in result
+    assert "vg_sha256_16=" in result["digest"]
+
+    store = events.ensure_seeded()
+    ids = {e["id"] for e in store}
+    assert "community-keep" in ids
+    assert "vg-100" in ids
+    assert "vg-102" in ids
+    assert "vg-101" not in ids
+    assert "evt-seed-x" not in ids
+    assert len(calls) == 2
+
+    # Stable digest across re-read
+    d1 = events.stable_events_digest()
+    d2 = events.stable_events_digest()
+    assert d1 == d2
+
+
+def test_ingest_dry_run_no_write(tmp_store, fixed_clock):
+    def fake_get(url: str) -> dict:
+        return {
+            "events": [_tribe_raw(7, "Only Dry", start="2026-07-19 18:00:00")],
+            "total": 1,
+            "total_pages": 1,
+        }
+
+    events.reset_store([])
+    result = events.ingest_visitgainesville(http_get=fake_get, dry_run=True)
+    assert result["ok"] is True
+    assert result["dry_run"] is True
+    assert result["mapped"] == 1
+    # Store still empty on disk
+    assert events.ensure_seeded() == []

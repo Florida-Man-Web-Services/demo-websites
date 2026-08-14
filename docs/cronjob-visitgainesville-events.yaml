@@ -1,0 +1,50 @@
+# Optional k8s CronJob: refresh AI 411 events from Visit Gainesville.
+# Apply only after the ingest script is baked into the voice-agent (or a
+# sidecar) image and EVENTS_PATH points at the shared PVC.
+#
+# Not applied by default — copy into iac/theswamp when ready.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ai411-visitgainesville-events
+  namespace: theswamp
+  labels:
+    app: ai411-events-ingest
+spec:
+  # Every 6 hours
+  schedule: "17 */6 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 900
+      template:
+        metadata:
+          labels:
+            app: ai411-events-ingest
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: ingest
+              # Prefer the voice image once it bakes scripts/ + mcp-server/events.py
+              image: zot.hwcopeland.net/florida-man-bioscience/voice-agent:main
+              imagePullPolicy: IfNotPresent
+              command:
+                - python3
+                - /app/scripts/ingest_visitgainesville_events.py
+                - --days-ahead
+                - "180"
+              env:
+                - name: EVENTS_PATH
+                  value: /data/events.json
+                - name: PYTHONPATH
+                  value: /app/mcp-server
+              volumeMounts:
+                - name: voice-data
+                  mountPath: /data
+          volumes:
+            - name: voice-data
+              persistentVolumeClaim:
+                claimName: voice-agent-data

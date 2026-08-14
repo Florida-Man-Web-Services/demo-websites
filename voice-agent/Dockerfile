@@ -27,6 +27,8 @@ COPY mcp-server/customers.py \
      mcp-server/changerequests.py \
      mcp-server/calllog.py \
      mcp-server/
+# Cron/CLI Visit Gainesville ingest (AI 411 events store)
+COPY scripts/ingest_visitgainesville_events.py scripts/
 
 # Call log and synthesized-audio cache live on a mounted volume so outcomes
 # (including the permanent do-not-call list) survive restarts.
@@ -35,7 +37,8 @@ ENV CALL_LOG=/data/call-log.csv \
     AUDIO_CACHE_DIR=/data/audio_cache \
     CUSTOMERS_PATH=/data/customers.json \
     BUILDER_BRIEFS_DIR=/data/builder-briefs \
-    MEMORY_DIR=/data/customer-memory
+    MEMORY_DIR=/data/customer-memory \
+    EVENTS_PATH=/data/events.json
 RUN mkdir -p /data /data/builder-briefs /data/customer-memory /data/audio_cache
 
 EXPOSE 8035

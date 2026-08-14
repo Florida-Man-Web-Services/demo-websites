@@ -33,9 +33,9 @@ Gainesville demo-websites campaign.
 | `apply_change_request(request_id)` | Apply structured hours/phone/address/copy items to local HTML; mark shipped. Optional SITE_PR_AUTO=1 to chain open_site_update_pr |
 | `mark_request_shipped(request_id, note?)` | Manually mark a request shipped after external edits |
 | `open_site_update_pr(request_id, dry_run?, base_branch?)` | After shipped: branch+commit `generated-sites/<slug>.html` and open GitHub PR (`gh` or REST). Default dry-run unless `SITE_PR_ENABLED=1` |
-| `search_events(query?, when?, tags?, free_only?, limit?)` | Local Gainesville events (seed JSON); when=tonight/tomorrow/this_weekend |
+| `search_events(query?, when?, tags?, free_only?, limit?)` | Local Gainesville events (community + Visit Gainesville JSON); when=tonight/tomorrow/this_weekend |
 | `get_event(event_id)` | Full event record by id |
-| `list_event_sources()` | Event source names with counts (seed, community, …) |
+| `list_event_sources()` | Event source names with counts (community, visitgainesville, …) |
 | `submit_event_broadcast(title, when_start, venue, phone, …)` | Community event post (JSONL; auto-approve → also upserts into `search_events` as source=community) |
 | `submit_notice_broadcast(text, category, phone, expires_at?)` | Short notice/gossip (≤280 chars; categories) |
 | `list_recent_broadcasts(category?, limit?)` | Approved non-expired broadcasts, newest first |
