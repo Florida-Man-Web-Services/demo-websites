@@ -87,11 +87,10 @@ def test_get_respects_memory_ok_false(tmp_store):
             "preferred_name": "Sec",
             "preferences": {"interests": ["private hobby"]},
             "last_topics": ["something personal"],
+            "notes": [{"text": "should not surface on get", "at": "2026-01-01T00:00:00+00:00"}],
             "consent": {"memory_ok": False},
         },
     )
-    # add note while memory off
-    callers.add_note("+13525550999", "should not surface on get")
 
     got = callers.get_profile("+13525550999")
     assert got["found"] is True
@@ -151,17 +150,55 @@ def test_add_note_creates_profile(tmp_store):
     assert result["phone_e164"] == "+13525550333"
     assert result["note"]["text"] == "first note"
     assert result["note_count"] == 1
+    assert result.get("memory_ok") is True
 
-    # memory_ok default false → get redacts notes
+    # add_note is an explicit remember-me → notes surface on get
     got = callers.get_profile("+13525550333")
     assert got["found"] is True
-    assert got["memory_ok"] is False
-    assert got["notes"] == []
+    assert got["memory_ok"] is True
+    assert len(got["notes"]) == 1
+    assert got["notes"][0]["text"] == "first note"
 
-    # Enable memory and notes appear
-    callers.update_profile("+13525550333", {"consent": {"memory_ok": True}})
-    got2 = callers.get_profile("+13525550333")
-    assert len(got2["notes"]) == 1
+
+def test_consent_bool_true_enables_memory(tmp_store):
+    """LLM often sends consent:true instead of consent:{memory_ok:true}."""
+    r = callers.update_profile(
+        "+13525550444",
+        {
+            "consent": True,
+            "preferences": {"interests": ["farmers markets"]},
+        },
+    )
+    assert r["updated"] is True
+    assert r["profile"]["memory_ok"] is True
+    assert r["profile"]["preferences"]["interests"] == ["farmers markets"]
+    got = callers.get_profile("+13525550444")
+    assert got["memory_ok"] is True
+    assert got["preferences"]["interests"] == ["farmers markets"]
+
+
+def test_prefs_without_consent_auto_enable(tmp_store):
+    """'Remember I like X' with only preferences still enables memory."""
+    r = callers.update_profile(
+        "+13525550555",
+        {"preferences": {"interests": ["live music"]}, "last_topics": ["events"]},
+    )
+    assert r["profile"]["memory_ok"] is True
+    got = callers.get_profile("+13525550555")
+    assert got["preferences"]["interests"] == ["live music"]
+
+
+def test_explicit_memory_false_still_redacts(tmp_store):
+    callers.update_profile(
+        "+13525550666",
+        {
+            "preferences": {"interests": ["secret"]},
+            "consent": {"memory_ok": False},
+        },
+    )
+    got = callers.get_profile("+13525550666")
+    assert got["memory_ok"] is False
+    assert got["preferences"]["interests"] == []
 
 
 def test_add_note_empty_rejected(tmp_store):

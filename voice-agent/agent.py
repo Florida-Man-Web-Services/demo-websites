@@ -209,6 +209,27 @@ def _opener_rule(openers_list: list | None = None) -> str:
 """
 
 
+def _load_ai411_caller_profile(caller_number: str) -> dict | None:
+    """Load phone-keyed AI 411 profile for system-prompt memory injection."""
+    phone = (caller_number or "").strip()
+    if not phone:
+        return None
+    try:
+        import sys
+        from pathlib import Path
+
+        mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+        if str(mcp) not in sys.path:
+            sys.path.insert(0, str(mcp))
+        import callers
+
+        return callers.get_profile(phone)
+    except Exception as e:  # noqa: BLE001 — never block a call on memory
+        log = __import__("logging").getLogger("voice-agent.agent")
+        log.warning("AI 411 caller profile load failed for %s: %s", phone, e)
+        return None
+
+
 def system_prompt(
     business: Business,
     direction: str,
@@ -231,10 +252,12 @@ def system_prompt(
         m = "ai411"
     cust = customer or {}
     if m == "ai411":
+        profile = _load_ai411_caller_profile(caller_number)
         return ai411.system_prompt(
             direction=direction,
             caller_number=caller_number,
             openers=openers,
+            caller_profile=profile,
         )
     if m == "owner_updates":
         return owner_updates.system_prompt(

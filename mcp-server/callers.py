@@ -154,6 +154,71 @@ def _merge_dict(base: dict, patch: dict, allowed: frozenset) -> dict:
     return out
 
 
+def _coerce_consent_update(patch: dict) -> dict[str, bool] | None:
+    """Normalize consent from model/tool patches.
+
+    Models often send ``consent: true`` instead of ``consent: {memory_ok: true}``.
+    Also accept top-level ``memory_ok`` / ``marketing_ok``.
+    Returns a partial consent dict, or None if the patch did not mention consent.
+    """
+    if not isinstance(patch, dict):
+        return None
+    updates: dict[str, bool] = {}
+    if "memory_ok" in patch:
+        updates["memory_ok"] = bool(patch["memory_ok"])
+    if "marketing_ok" in patch:
+        updates["marketing_ok"] = bool(patch["marketing_ok"])
+    if "consent" in patch:
+        c = patch["consent"]
+        if isinstance(c, bool):
+            # Bare true/false ⇒ memory consent (common LLM mistake).
+            updates["memory_ok"] = c
+        elif isinstance(c, dict):
+            for ck, cv in c.items():
+                if ck in _CONSENT_KEYS:
+                    updates[ck] = bool(cv)
+        elif c is None:
+            pass
+        else:
+            # "yes" / "true" strings
+            s = str(c).strip().lower()
+            if s in ("1", "true", "yes", "y", "on"):
+                updates["memory_ok"] = True
+            elif s in ("0", "false", "no", "n", "off"):
+                updates["memory_ok"] = False
+    return updates or None
+
+
+def _patch_requests_personalization(patch: dict) -> bool:
+    """True if the patch stores remember-me content (prefs, name, notes, topics)."""
+    if not isinstance(patch, dict):
+        return False
+    for key in ("display_name", "preferred_name"):
+        if key in patch and str(patch.get(key) or "").strip():
+            return True
+    prefs = patch.get("preferences")
+    if isinstance(prefs, dict):
+        for pk, pv in prefs.items():
+            if pk not in _PREFERENCE_KEYS:
+                continue
+            if isinstance(pv, list) and any(str(x).strip() for x in pv):
+                return True
+            if isinstance(pv, str) and pv.strip():
+                return True
+            if isinstance(pv, bool) and pv:
+                return True
+    if isinstance(patch.get("notes"), list) and any(
+        str((n.get("text") if isinstance(n, dict) else n) or "").strip()
+        for n in patch["notes"]
+    ):
+        return True
+    if isinstance(patch.get("last_topics"), list) and any(
+        str(t).strip() for t in patch["last_topics"]
+    ):
+        return True
+    return False
+
+
 def _apply_patch(profile: dict, patch: dict) -> dict:
     """Deep-merge a caller-supplied patch into profile (mutates a copy)."""
     if not isinstance(patch, dict):
@@ -176,12 +241,18 @@ def _apply_patch(profile: dict, patch: dict) -> dict:
                 prefs[pk] = pv
         out["preferences"] = prefs
 
-    if "consent" in patch and isinstance(patch["consent"], dict):
-        consent = copy.deepcopy(out.get("consent") or _default_consent())
-        for ck, cv in patch["consent"].items():
-            if ck in _CONSENT_KEYS:
-                consent[ck] = bool(cv)
-        out["consent"] = consent
+    consent = copy.deepcopy(out.get("consent") or _default_consent())
+    consent_updates = _coerce_consent_update(patch)
+    explicit_memory_false = (
+        consent_updates is not None and consent_updates.get("memory_ok") is False
+    )
+    if consent_updates:
+        consent.update(consent_updates)
+    # "Remember that I like X" without a proper consent object still means
+    # store-and-use — unless they explicitly set memory_ok false.
+    if _patch_requests_personalization(patch) and not explicit_memory_false:
+        consent["memory_ok"] = True
+    out["consent"] = consent
 
     if "notes" in patch and isinstance(patch["notes"], list):
         out["notes"] = list(patch["notes"])
@@ -320,7 +391,10 @@ def forget_profile(phone: str) -> dict:
 
 
 def add_note(phone: str, note: str) -> dict:
-    """Append a freeform note to the caller profile (creates if needed)."""
+    """Append a freeform note to the caller profile (creates if needed).
+
+    Adding a note is an explicit remember-me act → enables memory_ok.
+    """
     key = _normalize_phone(phone)
     if not key:
         return {
@@ -342,6 +416,9 @@ def add_note(phone: str, note: str) -> dict:
             notes = list(profile.get("notes") or [])
             notes.append(entry)
             profile["notes"] = notes
+            consent = copy.deepcopy(profile.get("consent") or _default_consent())
+            consent["memory_ok"] = True
+            profile["consent"] = consent
             profile["updated_at"] = _now_iso()
             profiles[key] = profile
             _save_store(profiles)
@@ -350,6 +427,7 @@ def add_note(phone: str, note: str) -> dict:
             "phone_e164": key,
             "note": entry,
             "note_count": len(profile["notes"]),
+            "memory_ok": True,
         }
     except Exception as e:  # noqa: BLE001
         return {

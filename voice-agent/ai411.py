@@ -143,7 +143,10 @@ TOOLS = [
         "name": "update_caller_profile",
         "description": (
             "Create or merge-patch caller profile fields: preferred name, "
-            "interests, areas, consent flags, last topics. Only with consent."
+            "interests, areas, consent flags, last topics. When the caller asks "
+            "you to remember something, include consent.memory_ok=true (or "
+            "consent=true) in the same patch as the preference — otherwise "
+            "memory stays off and the next call will not see it."
         ),
         "input_schema": {
             "type": "object",
@@ -155,8 +158,10 @@ TOOLS = [
                 "patch": {
                     "type": "object",
                     "description": (
-                        "Fields to merge (display_name, preferred_name, "
-                        "preferences, consent, last_topics, etc.)."
+                        "Fields to merge. Prefer "
+                        '{"consent": {"memory_ok": true}, '
+                        '"preferences": {"interests": ["…"]}, '
+                        '"last_topics": ["…"]}. Also accepts consent: true.'
                     ),
                 },
             },
@@ -345,8 +350,10 @@ def system_prompt(
     direction: str,
     caller_number: str,
     openers: bool = True,
+    caller_profile: dict | None = None,
 ) -> str:
     """AI 411 operator prompt — no Florida Man $999 sales pitch."""
+    memory_block = _memory_context(caller_profile)
     ctx = f"""You are Gainesville AI 411 — a helpful local phone operator for the
 Gainesville, Florida community. Callers dial you for events, local businesses,
 community notices, and light personalization by phone. You are an AI on a live
@@ -376,11 +383,23 @@ HOW TO SPEAK
 CALL CONTEXT
 - Caller/called number: {caller_number or "unknown"}
 - Call direction: {direction}
+{memory_block}
+MEMORY (phone-keyed caller profile)
+- If MEMORY SNAPSHOT above shows interests or a name, use them naturally on this
+  call (e.g. prioritize farmers markets if that is stored). Do not claim you
+  "cannot remember" when the snapshot has data.
+- When the caller asks you to remember something ("remember that I like X",
+  "next time…", "my name is…"): call update_caller_profile with BOTH
+  consent.memory_ok=true AND the preference/name in the same patch. Example:
+  patch={{"consent": {{"memory_ok": true}}, "preferences": {{"interests": ["farmers markets"]}}, "last_topics": ["events"]}}
+  Bare consent:true is also accepted. Do not only ask for consent without saving.
+- If they say yes to enabling memory, set consent.memory_ok=true immediately.
+- forget_caller when they ask to be forgotten / wipe memory.
+- Still call get_caller_profile if you need a fresh read mid-call.
 
 CONVERSATION FLOW
 1. Fast greeting flavor: "{AI411_GREETING}" (adapt if they already stated a need).
-2. If you have a phone number, optionally get_caller_profile for return callers
-   when memory may apply; respect consent / forget-me requests.
+2. Prefer the MEMORY SNAPSHOT; optionally get_caller_profile if snapshot missing.
 3. Route intent: businesses → lookup_business / search_business_knowledge;
    events → search_events / get_event; post something → submit_event_broadcast
    or submit_notice_broadcast after confirming details; recent posts →
@@ -414,6 +433,51 @@ are calling in one short sentence if known, and keep it brief. If it is clearly
 a voicemail greeting, leave one concise message and end_call.
 """
     return ctx
+
+
+def _memory_context(profile: dict | None) -> str:
+    """Compact speakable memory block injected at call start."""
+    if not profile or not profile.get("found"):
+        return (
+            "\nMEMORY SNAPSHOT\n"
+            "- No stored profile for this number yet (or memory not enabled).\n"
+        )
+    if not profile.get("memory_ok"):
+        return (
+            "\nMEMORY SNAPSHOT\n"
+            "- Profile exists but memory_ok is false — do not personalize from "
+            "storage; you may ask to enable memory.\n"
+        )
+    prefs = profile.get("preferences") or {}
+    interests = prefs.get("interests") or []
+    avoid = prefs.get("avoid") or []
+    areas = prefs.get("preferred_areas") or []
+    name = (profile.get("preferred_name") or profile.get("display_name") or "").strip()
+    topics = profile.get("last_topics") or []
+    notes = profile.get("notes") or []
+    note_bits = []
+    for n in notes[-3:]:
+        if isinstance(n, dict) and n.get("text"):
+            note_bits.append(str(n["text"])[:120])
+        elif isinstance(n, str) and n.strip():
+            note_bits.append(n.strip()[:120])
+    lines = ["\nMEMORY SNAPSHOT (use on this call — already consented)"]
+    if name:
+        lines.append(f"- Name: {name}")
+    if interests:
+        lines.append(f"- Interests: {', '.join(str(x) for x in interests)}")
+    if avoid:
+        lines.append(f"- Avoid: {', '.join(str(x) for x in avoid)}")
+    if areas:
+        lines.append(f"- Preferred areas: {', '.join(str(x) for x in areas)}")
+    if topics:
+        lines.append(f"- Last topics: {', '.join(str(x) for x in topics)}")
+    if note_bits:
+        lines.append(f"- Notes: {'; '.join(note_bits)}")
+    if len(lines) == 1:
+        lines.append("- Memory on, but no interests/name stored yet.")
+    lines.append("")
+    return "\n".join(lines) + "\n"
 
 
 def stub_tool_result(name: str, args: dict) -> str:
