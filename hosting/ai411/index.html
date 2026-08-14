@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gainesville AI 411 — Free demo website callback</title>
-  <meta name="description" content="Gainesville AI 411. Enter your phone number to get a free demo website interview callback from Florida Man Web Services." />
+  <title>Gainesville AI 411 — Free demos &amp; personal pages</title>
+  <meta name="description" content="Gainesville AI 411. Free business demo website callback, or opt in to a free personal page rebuilt daily from what AI 411 knows about you." />
   <style>
     :root {
       --bg: #0b1220;
@@ -38,15 +38,17 @@
       background: linear-gradient(180deg, rgba(255,255,255,.03), transparent 40%), var(--card);
       border: 1px solid var(--line); border-radius: 18px; padding: 1.35rem 1.25rem 1.5rem;
       box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      margin-bottom: 1.25rem;
     }
     .card h2 { margin: 0 0 .35rem; font-size: 1.2rem; }
     .card p { margin: 0 0 1.1rem; color: var(--muted); font-size: .95rem; }
     label { display: block; font-size: .85rem; color: var(--muted); margin: .75rem 0 .35rem; }
-    input {
+    input, textarea {
       width: 100%; padding: .85rem 1rem; border-radius: 12px; border: 1px solid var(--line);
       background: #0a101c; color: var(--ink); font-size: 1.05rem;
+      font-family: inherit;
     }
-    input:focus { outline: 2px solid rgba(61,214,198,.45); border-color: transparent; }
+    input:focus, textarea:focus { outline: 2px solid rgba(61,214,198,.45); border-color: transparent; }
     .phone-wrap { position: relative; }
     .phone-wrap input { font-size: 1.35rem; letter-spacing: .02em; padding: 1rem 1.1rem; }
     button {
@@ -54,7 +56,15 @@
       padding: 1rem 1.1rem; font-size: 1.05rem; font-weight: 650;
       background: linear-gradient(90deg, var(--accent), #2bb8e6); color: #042018;
     }
+    button.secondary {
+      background: linear-gradient(90deg, var(--accent2), #e08a2e); color: #1a1200;
+    }
     button:disabled { opacity: .55; cursor: not-allowed; }
+    .check {
+      display: flex; gap: .65rem; align-items: flex-start; margin: 1rem 0 .25rem;
+      color: var(--muted); font-size: .9rem; line-height: 1.4;
+    }
+    .check input { width: auto; margin-top: .2rem; }
     .msg { margin-top: 1rem; padding: .85rem 1rem; border-radius: 12px; display: none; font-size: .95rem; line-height: 1.45; }
     .msg.ok { display: block; background: rgba(61,214,198,.12); border: 1px solid rgba(61,214,198,.35); color: #b7fff6; }
     .msg.err { display: block; background: rgba(255,123,123,.1); border: 1px solid rgba(255,123,123,.35); color: #ffd0d0; }
@@ -70,20 +80,21 @@
     }
     footer { margin-top: 2.5rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
     a { color: var(--accent); }
+    .fine { font-size: .8rem; color: var(--muted); margin-top: .75rem; line-height: 1.45; }
   </style>
 </head>
 <body>
   <main class="wrap">
     <div class="badge">Gainesville · AI 411</div>
-    <h1>Get a free demo website for your business</h1>
+    <h1>Free demos for businesses — and a free personal page if you want one</h1>
     <p class="lead">
-      Enter your phone number. Our AI onboarding agent will call you, interview you about your
-      business, and build a free demo site. When it’s ready, you’ll get the link — and a simple
-      way to go live if you like it.
+      Call AI 411 for local events and businesses. Use the forms below for a free business demo
+      callback, or opt in to a free personal page built from what AI 411 already knows about you
+      (rebuilt about every 24 hours). Personal pages are optional and off by default.
     </p>
 
     <section class="card" aria-labelledby="form-title">
-      <h2 id="form-title">Request a callback</h2>
+      <h2 id="form-title">Request a business demo callback</h2>
       <p>We’ll call from Florida Man Web Services. Standard rates may apply. You can hang up anytime.</p>
       <form id="cb-form">
         <label for="phone">Mobile phone number</label>
@@ -100,11 +111,46 @@
       </form>
     </section>
 
+    <section class="card" aria-labelledby="pp-title">
+      <h2 id="pp-title">Free personal page (opt-in)</h2>
+      <p>
+        AI 411 can publish a simple public page from interests and prefs you’ve shared —
+        not your phone number. It refreshes about once a day. Take it down anytime by calling
+        AI 411 and saying “take my page down.”
+      </p>
+      <form id="pp-form">
+        <label for="pp_phone">Mobile phone number</label>
+        <div class="phone-wrap">
+          <input id="pp_phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                 placeholder="(352) 555-0100" required />
+        </div>
+        <label for="pp_name">Name on the page (optional)</label>
+        <input id="pp_name" name="preferred_name" type="text" placeholder="Alex" maxlength="80" />
+        <label for="pp_headline">Short headline (optional)</label>
+        <input id="pp_headline" name="headline" type="text" placeholder="Into live music &amp; farmers markets" maxlength="160" />
+        <label class="check">
+          <input id="pp_consent" type="checkbox" required />
+          <span>
+            I opt in to a free public personal page based on what AI 411 remembers about me.
+            I understand it rebuilds about every 24 hours and will not show my phone number.
+            I can opt out later by calling AI 411.
+          </span>
+        </label>
+        <button type="submit" id="pp_submit" class="secondary">Create my free personal page</button>
+        <p class="fine">
+          Requires memory consent (enabled when you opt in here). Not a business website —
+          for a business demo use the form above.
+        </p>
+        <div id="pp_msg" class="msg" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
     <ol class="steps">
       <li><span class="n">1</span><div><strong>Onboarding call</strong>Open-ended interview about your business and website needs.</div></li>
       <li><span class="n">2</span><div><strong>We build a free demo</strong>A coding agent turns your requirements into a real page.</div></li>
       <li><span class="n">3</span><div><strong>Sales call with your link</strong>See the demo; pay via Stripe only if you want it live.</div></li>
       <li><span class="n">4</span><div><strong>Owner updates line</strong>After you subscribe, call anytime to request site changes.</div></li>
+      <li><span class="n">★</span><div><strong>Optional personal page</strong>Opt in above or say “make me a page” on AI 411 — free, 24h refresh, removable anytime.</div></li>
     </ol>
 
     <footer>
@@ -116,13 +162,13 @@
   </main>
   <script>
     (function () {
+      const voiceBase = (window.AI411_VOICE_BASE || "https://voice.flmanbiosci.net").replace(/\/$/, "");
       const form = document.getElementById("cb-form");
       const msg = document.getElementById("msg");
       const btn = document.getElementById("submit");
-      // Prefer same-origin proxy, then voice API, then relative path for local dev.
       const API = window.AI411_API
         || form.getAttribute("data-api")
-        || "https://voice.flmanbiosci.net/api/onboarding/register";
+        || (voiceBase + "/api/onboarding/register");
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -155,6 +201,51 @@
           msg.textContent = "Could not register: " + (err && err.message ? err.message : err);
         } finally {
           btn.disabled = false;
+        }
+      });
+
+      const ppForm = document.getElementById("pp-form");
+      const ppMsg = document.getElementById("pp_msg");
+      const ppBtn = document.getElementById("pp_submit");
+      const PP_API = window.AI411_PERSONAL_PAGE_API
+        || (voiceBase + "/api/personal-pages/opt-in");
+
+      ppForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        ppMsg.className = "msg";
+        ppMsg.textContent = "";
+        if (!document.getElementById("pp_consent").checked) {
+          ppMsg.className = "msg err";
+          ppMsg.textContent = "Check the opt-in box to continue.";
+          return;
+        }
+        ppBtn.disabled = true;
+        const payload = {
+          phone: document.getElementById("pp_phone").value.trim(),
+          preferred_name: document.getElementById("pp_name").value.trim(),
+          headline: document.getElementById("pp_headline").value.trim(),
+          source: "ai411_web_personal_page",
+        };
+        try {
+          const r = await fetch(PP_API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await r.json().catch(() => ({}));
+          if (!r.ok || data.ok === false) {
+            throw new Error(data.detail || data.error || data.message || ("HTTP " + r.status));
+          }
+          ppMsg.className = "msg ok";
+          const url = data.url || "";
+          ppMsg.innerHTML = (data.message || "You're opted in.")
+            + (url ? (' <a href="' + url + '" target="_blank" rel="noopener">Open your page</a>.') : "");
+          ppForm.reset();
+        } catch (err) {
+          ppMsg.className = "msg err";
+          ppMsg.textContent = "Could not create page: " + (err && err.message ? err.message : err);
+        } finally {
+          ppBtn.disabled = false;
         }
       });
     })();

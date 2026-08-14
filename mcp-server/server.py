@@ -556,6 +556,85 @@ async def list_event_interest_matches(
     )
 
 
+def _opt_in_personal_page_sync(
+    phone: str,
+    preferred_name: str = "",
+    display_name: str = "",
+    headline: str = "",
+    source: str = "mcp",
+) -> dict:
+    try:
+        import personal_pages as pp
+
+        return pp.opt_in_personal_page(
+            phone,
+            preferred_name=preferred_name,
+            display_name=display_name,
+            headline=headline,
+            source=source,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "opt_in_personal_page")
+        return {"ok": False, "enabled": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def opt_in_personal_page(
+    phone: str,
+    preferred_name: str = "",
+    display_name: str = "",
+    headline: str = "",
+    source: str = "mcp",
+) -> dict:
+    """Opt the caller into a free personal page built from AI 411 memory.
+
+    Default OFF. Enables memory_ok + personal_page_ok, generates HTML, returns
+    public URL. Page rebuilds about every 24 hours. Never puts phone on the page.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _opt_in_personal_page_sync,
+            phone,
+            preferred_name,
+            display_name,
+            headline,
+            source,
+        )
+    )
+
+
+def _opt_out_personal_page_sync(phone: str) -> dict:
+    try:
+        import personal_pages as pp
+
+        return pp.opt_out_personal_page(phone)
+    except Exception as e:
+        logger.exception("tool %s failed", "opt_out_personal_page")
+        return {"ok": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def opt_out_personal_page(phone: str) -> dict:
+    """Remove the caller's free personal page and clear personal_page_ok."""
+    return await anyio.to_thread.run_sync(_opt_out_personal_page_sync, phone)
+
+
+def _get_personal_page_status_sync(phone: str) -> dict:
+    try:
+        import personal_pages as pp
+
+        return pp.get_personal_page_status(phone)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_personal_page_status")
+        return {"ok": False, "enabled": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_personal_page_status(phone: str) -> dict:
+    """Status + public URL for the caller's free personal page (if opted in)."""
+    return await anyio.to_thread.run_sync(_get_personal_page_status_sync, phone)
+
+
 def _create_change_request_sync(
     business_slug: str,
     summary: str,

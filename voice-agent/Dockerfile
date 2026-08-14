@@ -29,6 +29,7 @@ COPY mcp-server/customers.py \
      mcp-server/calllog.py \
      mcp-server/qotd.py \
      mcp-server/fomo.py \
+     mcp-server/personal_pages.py \
      mcp-server/
 # Cron/CLI Visit Gainesville ingest (AI 411 events store)
 COPY scripts/ingest_visitgainesville_events.py scripts/
@@ -41,11 +42,14 @@ ENV CALL_LOG=/data/call-log.csv \
     CUSTOMERS_PATH=/data/customers.json \
     BUILDER_BRIEFS_DIR=/data/builder-briefs \
     MEMORY_DIR=/data/customer-memory \
-    EVENTS_PATH=/data/events.json
-RUN mkdir -p /data /data/builder-briefs /data/customer-memory /data/audio_cache
+    EVENTS_PATH=/data/events.json \
+    PERSONAL_PAGES_REGISTRY=/data/personal-pages.json \
+    PERSONAL_PAGES_DIR=/data/personal-pages \
+    PERSONAL_PAGE_BASE_URL=https://voice.flmanbiosci.net/me
+RUN mkdir -p /data /data/builder-briefs /data/customer-memory /data/audio_cache /data/personal-pages
 
 EXPOSE 8035
 WORKDIR /app/voice-agent
 # Fail closed at build time if packaging drifts again.
-RUN python -c "import sys; sys.path[:0]=['/app/mcp-server','/app/voice-agent']; import customers, knowledge, events, callers, broadcasts, lookup, changerequests, qotd, fomo; print('mcp-server ok', customers.MODE_AI411, 'qotd+fomo')"
+RUN python -c "import sys; sys.path[:0]=['/app/mcp-server','/app/voice-agent']; import customers, knowledge, events, callers, broadcasts, lookup, changerequests, qotd, fomo, personal_pages; print('mcp-server ok', customers.MODE_AI411, 'qotd+fomo+personal_pages')"
 CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8035"]

@@ -25,7 +25,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, Response, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
 from twilio.request_validator import RequestValidator
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.twiml.voice_response import Connect, Gather, VoiceResponse
@@ -760,9 +760,89 @@ def api_voice_forget(body: VoiceEnrollIn):
     return result
 
 
+def _personal_pages_mod():
+    import sys
+    from pathlib import Path
+
+    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    try:
+        import personal_pages
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(
+            status_code=503,
+            detail=f"personal pages unavailable: {e}",
+        ) from e
+    return personal_pages
+
+
+class PersonalPageOptIn(BaseModel):
+    phone: str
+    preferred_name: str = ""
+    display_name: str = ""
+    headline: str = ""
+    source: str = "ai411_web"
+
+
+class PersonalPagePhoneIn(BaseModel):
+    phone: str
+
+
+@app.post("/api/personal-pages/opt-in")
+def api_personal_page_opt_in(body: PersonalPageOptIn):
+    """Public opt-in: free personal page from AI 411 memory (24h regen)."""
+    pp = _personal_pages_mod()
+    result = pp.opt_in_personal_page(
+        body.phone,
+        preferred_name=body.preferred_name,
+        display_name=body.display_name,
+        headline=body.headline,
+        source=body.source or "ai411_web",
+    )
+    if not result.get("ok"):
+        raise HTTPException(
+            status_code=400,
+            detail=result.get("error") or result.get("message") or "opt-in failed",
+        )
+    return result
+
+
+@app.post("/api/personal-pages/opt-out")
+def api_personal_page_opt_out(body: PersonalPagePhoneIn):
+    """Remove personal page for this phone."""
+    pp = _personal_pages_mod()
+    result = pp.opt_out_personal_page(body.phone)
+    if not result.get("ok"):
+        raise HTTPException(
+            status_code=400,
+            detail=result.get("error") or "opt-out failed",
+        )
+    return result
+
+
+@app.get("/api/personal-pages/status")
+def api_personal_page_status(phone: str):
+    """Status for a phone (desk / caller with link)."""
+    pp = _personal_pages_mod()
+    return pp.get_personal_page_status(phone)
+
+
+@app.get("/me/{slug}")
+@app.get("/me/{slug}/")
+def public_personal_page(slug: str):
+    """Public HTML personal page (lazy 24h regen)."""
+    pp = _personal_pages_mod()
+    doc = pp.render_public(slug)
+    if not doc:
+        raise HTTPException(status_code=404, detail="page not found or not public")
+    return HTMLResponse(content=doc, headers={"Cache-Control": "public, max-age=300"})
+
+
 @app.get("/health")
 def health():
     customers_ok = False
+    personal_pages_ok = False
     try:
         import sys
         from pathlib import Path
@@ -775,11 +855,24 @@ def health():
         customers_ok = True
     except Exception:
         customers_ok = False
+    try:
+        import sys
+        from pathlib import Path
+
+        mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+        if str(mcp) not in sys.path:
+            sys.path.insert(0, str(mcp))
+        import personal_pages  # noqa: F401
+
+        personal_pages_ok = True
+    except Exception:
+        personal_pages_ok = False
     return {
         "ok": True,
         "active_calls": len(CALLS),
         "active_sms_sessions": len(SMS_SESSIONS),
         "customers_registry": customers_ok,
+        "personal_pages": personal_pages_ok,
         "agent_mode": getattr(config, "AGENT_MODE", ""),
         "voice_auth_vendor": getattr(config, "VOICE_AUTH_VENDOR", "none"),
     }

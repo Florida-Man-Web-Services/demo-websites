@@ -413,7 +413,25 @@ cd voice-agent
 | HTTPRoutes + Authentik host | **IAC PR #96** |
 | Stripe webhook → mark-paid | **Pending** wiring |
 | Bitwarden fields for Honcho | **Pending** (manual Secret OK) |
-| | Owner voice auth (F1 harden + F2) | **Phases 0–4 complete** (dormancy/ANI/replay + vendor adapters + OTP) |
+| Owner voice auth (F1 harden + F2) | **Phases 0–4 complete** (dormancy/ANI/replay + vendor adapters + OTP) |
+| Free personal pages (opt-in, 24h regen) | **Code landed** — ship voice image with `personal_pages.py` |
+
+---
+
+## 12b. Free personal pages (opt-in)
+
+**Goal:** Opt-in **free** public mini-page from AI 411 memory (interests/areas/vibe).
+Rebuilds about every **24 hours**. Default **OFF**. Not the business demo product.
+
+| Piece | Detail |
+|-------|--------|
+| Consent | `consent.personal_page_ok` (+ alias `preferences.personal_page`) |
+| Store | `mcp-server/personal_pages.py` → `/data/personal-pages.json` + HTML dir |
+| Public URL | `https://voice.flmanbiosci.net/me/p-<16hex>/` |
+| Voice tools | `opt_in_personal_page`, `opt_out_personal_page`, `get_personal_page_status` |
+| Web | Landing → `POST /api/personal-pages/opt-in` (explicit checkbox) |
+| Cron | `scripts/regen_personal_pages.py` (lazy regen also on GET) |
+| Privacy | No phone on page; unguessable slug; `forget_caller` wipes page |
 
 ---
 

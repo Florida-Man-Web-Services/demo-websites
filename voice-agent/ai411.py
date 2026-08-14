@@ -532,6 +532,68 @@ TOOLS = [
         },
     },
     {
+        "name": "opt_in_personal_page",
+        "description": (
+            "Opt the caller into a FREE personal web page built from what AI 411 "
+            "already remembers about them (interests, areas, vibe). Default OFF — "
+            "only after an explicit yes. Page rebuilds about every 24 hours. "
+            "Never puts their phone number on the page. Returns a public URL; "
+            "offer to text it with send_sms_links."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                },
+                "preferred_name": {
+                    "type": "string",
+                    "description": "Optional name to show on the page.",
+                },
+                "headline": {
+                    "type": "string",
+                    "description": "Optional short tagline for the page.",
+                },
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "opt_out_personal_page",
+        "description": (
+            "Take down the caller's free personal page and clear personal_page_ok. "
+            "Use when they say remove my page / take it down / stop publishing me."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                }
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "get_personal_page_status",
+        "description": (
+            "Check whether this caller has an opted-in free personal page and "
+            "return the public URL if live."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                }
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "end_call",
         "description": (
             "Hang up after your current reply is spoken. Use once the "
@@ -613,6 +675,13 @@ MEMORY (phone-keyed caller profile)
   (or preferences.fomo_calls=true) after an explicit yes to FOMO / "run with your
   tribe" alerts. Prefer also preferences.sms_ok=true so we text instead of call.
   Bare memory consent does NOT enable FOMO.
+- FREE PERSONAL PAGE is separate and DEFAULT OFF. Only after an explicit yes
+  ("make me a page", "personal site from what you know"): call
+  opt_in_personal_page (not a bare consent patch alone). Explain briefly: free,
+  built from remembered interests, rebuilds about every 24 hours, no phone on
+  the page, they can take it down anytime. Offer SMS of the URL. Use
+  get_personal_page_status if they ask for the link again; opt_out_personal_page
+  to remove it. Bare memory consent does NOT publish a page.
 - forget_caller when they ask to be forgotten / wipe memory.
 - Still call get_caller_profile if you need a fresh read mid-call.
 
@@ -627,11 +696,22 @@ CONVERSATION FLOW
    - events → follow EVENT DISCOVERY below (not a raw dump)
    - post something → submit_event_broadcast / submit_notice_broadcast after confirm
    - recent posts → list_recent_broadcasts
+   - free personal page / website about me / publish what you know → PERSONAL PAGE flow
 4. Offer SMS of links after useful results (send_sms_links).
 5. If they ask about Florida Man Web Services or free demo websites specifically,
    you may briefly explain that a separate local web-dev service builds free demos
    for businesses — do not run a sales pitch unless they clearly ask how to get
    a site built, and even then keep it one sentence and offer an owner callback.
+   Personal pages (opt-in free neighbor pages) are NOT the paid business product.
+
+PERSONAL PAGE (opt-in free mini-site from memory)
+1. Default OFF. If they ask, explain in one short turn: free page from what you've
+   shared with AI 411; rebuilds about every day; no phone number on it; removable
+   anytime. Wait for a clear yes.
+2. On yes: opt_in_personal_page (optional preferred_name / headline). Then offer
+   send_sms_links with the URL from the tool result.
+3. Link again → get_personal_page_status. Take down → opt_out_personal_page.
+4. Do not invent a URL. Do not publish without explicit opt-in.
 
 QUESTION OF THE DAY (people profile over time)
 Purpose: learn how this caller likes to be around *people*, build a durable
@@ -690,6 +770,7 @@ TOOLS (in-process MCP store names)
 - get_question_of_the_day, answer_question_of_the_day, suggest_question_of_the_day
 - get_caller_people_profile, match_events_for_profile
 - express_event_interest, list_event_interest_matches
+- opt_in_personal_page, opt_out_personal_page, get_personal_page_status
 - submit_event_broadcast (prefer ISO when_start + venue), submit_notice_broadcast,
   list_recent_broadcasts
 - send_sms_links, end_call

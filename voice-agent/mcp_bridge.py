@@ -84,6 +84,7 @@ def _load_modules() -> str | None:
         import events as events_mod
         import fomo as fomo_mod
         import knowledge as knowledge_mod
+        import personal_pages as personal_pages_mod
         import qotd as qotd_mod
         from lookup import find_business
 
@@ -92,6 +93,7 @@ def _load_modules() -> str | None:
         _mods["events"] = events_mod
         _mods["fomo"] = fomo_mod
         _mods["knowledge"] = knowledge_mod
+        _mods["personal_pages"] = personal_pages_mod
         _mods["qotd"] = qotd_mod
         _mods["find_business"] = find_business
         return None
@@ -288,6 +290,21 @@ def _map_tool_call(name: str, args: dict, *, caller_number: str) -> tuple[str, d
             "limit": int(args.get("limit") or 10),
         }
 
+    if name == "opt_in_personal_page":
+        return name, {
+            "phone": _phone(args, caller_number),
+            "preferred_name": str(args.get("preferred_name") or args.get("name") or ""),
+            "display_name": str(args.get("display_name") or ""),
+            "headline": str(args.get("headline") or args.get("tagline") or ""),
+            "source": str(args.get("source") or "voice"),
+        }
+
+    if name == "opt_out_personal_page":
+        return name, {"phone": _phone(args, caller_number)}
+
+    if name == "get_personal_page_status":
+        return name, {"phone": _phone(args, caller_number)}
+
     if name == "submit_event_broadcast":
         when_start = args.get("when_start") or args.get("when") or ""
         venue = args.get("venue") or args.get("where") or ""
@@ -449,6 +466,21 @@ def _dispatch_inproc(name: str, args: dict, *, caller_number: str) -> Any:
                 event_id=mapped.get("event_id") or "",
                 limit=int(mapped.get("limit") or 10),
             )
+
+    pp = _mods.get("personal_pages")
+    if pp is not None:
+        if mcp_name == "opt_in_personal_page":
+            return pp.opt_in_personal_page(
+                mapped["phone"],
+                preferred_name=mapped.get("preferred_name") or "",
+                display_name=mapped.get("display_name") or "",
+                headline=mapped.get("headline") or "",
+                source=mapped.get("source") or "voice",
+            )
+        if mcp_name == "opt_out_personal_page":
+            return pp.opt_out_personal_page(mapped["phone"])
+        if mcp_name == "get_personal_page_status":
+            return pp.get_personal_page_status(mapped["phone"])
 
     if mcp_name == "submit_event_broadcast":
         return broadcasts.submit_event_broadcast(**mapped)
@@ -755,6 +787,9 @@ def _dispatch_http(name: str, args: dict, *, caller_number: str) -> Any:
         "match_events_for_profile",
         "express_event_interest",
         "list_event_interest_matches",
+        "opt_in_personal_page",
+        "opt_out_personal_page",
+        "get_personal_page_status",
         "submit_event_broadcast",
         "submit_notice_broadcast",
         "list_recent_broadcasts",

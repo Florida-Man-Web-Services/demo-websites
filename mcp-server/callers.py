@@ -46,11 +46,14 @@ _PREFERENCE_KEYS = frozenset({
     "preferred_areas",
     "sms_ok",
     "fomo_calls",  # alias → consent.fomo_ok (FOMO tribe alerts)
+    "personal_page",  # alias → consent.personal_page_ok (free personal site)
     "mobility",
     "accessibility",
 })
 
-_CONSENT_KEYS = frozenset({"memory_ok", "marketing_ok", "fomo_ok"})
+_CONSENT_KEYS = frozenset(
+    {"memory_ok", "marketing_ok", "fomo_ok", "personal_page_ok"}
+)
 
 
 def _now_iso() -> str:
@@ -88,14 +91,20 @@ def _default_preferences() -> dict[str, Any]:
         "preferred_areas": [],
         "sms_ok": False,
         "fomo_calls": False,  # default OFF; mirrors consent.fomo_ok when set
+        "personal_page": False,  # default OFF; mirrors consent.personal_page_ok
         "mobility": "",
         "accessibility": "",
     }
 
 
 def _default_consent() -> dict[str, Any]:
-    # fomo_ok default OFF — TCPA: never outbound FOMO without explicit opt-in.
-    return {"memory_ok": False, "marketing_ok": False, "fomo_ok": False}
+    # fomo_ok / personal_page_ok default OFF — explicit opt-in only.
+    return {
+        "memory_ok": False,
+        "marketing_ok": False,
+        "fomo_ok": False,
+        "personal_page_ok": False,
+    }
 
 
 def _empty_profile(phone_e164: str) -> dict[str, Any]:
@@ -174,14 +183,18 @@ def _coerce_consent_update(patch: dict) -> dict[str, bool] | None:
         updates["marketing_ok"] = bool(patch["marketing_ok"])
     if "fomo_ok" in patch:
         updates["fomo_ok"] = bool(patch["fomo_ok"])
+    if "personal_page_ok" in patch:
+        updates["personal_page_ok"] = bool(patch["personal_page_ok"])
     prefs = patch.get("preferences")
     if isinstance(prefs, dict) and "fomo_calls" in prefs:
         updates["fomo_ok"] = bool(prefs.get("fomo_calls"))
+    if isinstance(prefs, dict) and "personal_page" in prefs:
+        updates["personal_page_ok"] = bool(prefs.get("personal_page"))
     if "consent" in patch:
         c = patch["consent"]
         if isinstance(c, bool):
             # Bare true/false ⇒ memory consent (common LLM mistake).
-            # Does NOT imply fomo_ok (separate TCPA opt-in).
+            # Does NOT imply fomo_ok or personal_page_ok (separate opt-ins).
             updates["memory_ok"] = c
         elif isinstance(c, dict):
             for ck, cv in c.items():
@@ -264,7 +277,7 @@ def _apply_patch(profile: dict, patch: dict) -> dict:
     if _patch_requests_personalization(patch) and not explicit_memory_false:
         consent["memory_ok"] = True
     out["consent"] = consent
-    # Keep preferences.fomo_calls in sync with consent.fomo_ok when either moves.
+    # Keep preference aliases in sync with consent flags when either moves.
     prefs_out = copy.deepcopy(out.get("preferences") or _default_preferences())
     for dk, dv in _default_preferences().items():
         prefs_out.setdefault(dk, dv)
@@ -273,6 +286,15 @@ def _apply_patch(profile: dict, patch: dict) -> dict:
     elif isinstance(patch.get("preferences"), dict) and "fomo_calls" in patch["preferences"]:
         prefs_out["fomo_calls"] = bool(patch["preferences"].get("fomo_calls"))
         consent["fomo_ok"] = bool(prefs_out["fomo_calls"])
+        out["consent"] = consent
+    if consent_updates and "personal_page_ok" in consent_updates:
+        prefs_out["personal_page"] = bool(consent.get("personal_page_ok"))
+    elif (
+        isinstance(patch.get("preferences"), dict)
+        and "personal_page" in patch["preferences"]
+    ):
+        prefs_out["personal_page"] = bool(patch["preferences"].get("personal_page"))
+        consent["personal_page_ok"] = bool(prefs_out["personal_page"])
         out["consent"] = consent
     out["preferences"] = prefs_out
 
@@ -399,11 +421,17 @@ def forget_profile(phone: str) -> dict:
                 }
             del profiles[key]
             _save_store(profiles)
-        # Best-effort: clear FOMO event interests for this phone.
+        # Best-effort: clear FOMO interests + personal page for this phone.
         try:
             import fomo as fomo_mod  # type: ignore
 
             fomo_mod.clear_interests_for_phone(key)
+        except Exception:  # noqa: BLE001
+            pass
+        try:
+            import personal_pages as pp_mod  # type: ignore
+
+            pp_mod.clear_for_phone(key)
         except Exception:  # noqa: BLE001
             pass
         return {
