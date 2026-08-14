@@ -110,7 +110,14 @@ def events_path(tmp_path, monkeypatch):
 
 
 @pytest.fixture
-def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path):
+def qotd_path(tmp_path, monkeypatch):
+    path = tmp_path / "qotd.json"
+    monkeypatch.setenv("QOTD_PATH", str(path))
+    return path
+
+
+@pytest.fixture
+def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path, qotd_path):
     """Reload agent/bridge under AI 411 with store paths pointed at fixtures."""
     # Clear any previously imported mcp modules so env is re-read.
     for key in list(sys.modules):
@@ -120,6 +127,7 @@ def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path):
             "callers",
             "broadcasts",
             "lookup",
+            "qotd",
             "mcp_bridge",
         ) or key.startswith("knowledge.") or key.startswith("events."):
             del sys.modules[key]
@@ -227,3 +235,54 @@ def test_end_call_still_works(ai411_agent):
     msg = agent._run_tool(state, "end_call", {})
     assert state.ended is True
     assert "end" in msg.lower()
+
+
+def test_qotd_tools_roundtrip(ai411_agent):
+    _, agent, ai411, _ = ai411_agent
+    names = {t["name"] for t in agent.get_tools()}
+    for n in (
+        "get_question_of_the_day",
+        "answer_question_of_the_day",
+        "suggest_question_of_the_day",
+        "get_caller_people_profile",
+        "match_events_for_profile",
+    ):
+        assert n in names
+    assert "question of the day" in ai411.system_prompt(
+        direction="inbound", caller_number="+13555550100"
+    ).lower()
+    phone = "+13555550188"
+    state = _state(agent, phone=phone)
+    q = json.loads(agent._run_tool(state, "get_question_of_the_day", {}))
+    assert q.get("ok") is True
+    assert q.get("text")
+    ans = json.loads(
+        agent._run_tool(
+            state,
+            "answer_question_of_the_day",
+            {
+                "answer": "I like outdoor music with friendly people",
+                "question_id": q.get("question_id") or "",
+            },
+        )
+    )
+    assert ans.get("ok") is True and ans.get("recorded") is True
+    sug = json.loads(
+        agent._run_tool(
+            state,
+            "suggest_question_of_the_day",
+            {
+                "suggestion": (
+                    "Who would you most want to meet at a community art night?"
+                )
+            },
+        )
+    )
+    assert sug.get("ok") is True and sug.get("accepted") is True
+    people = json.loads(agent._run_tool(state, "get_caller_people_profile", {}))
+    assert people.get("found") is True
+    matched = json.loads(
+        agent._run_tool(state, "match_events_for_profile", {"when": "", "limit": 5})
+    )
+    assert matched.get("ok") is True
+    assert isinstance(matched.get("events"), list)

@@ -84,13 +84,19 @@ def test_ai411_mode_prompt_and_tools():
         "submit_notice_broadcast",
         "list_recent_broadcasts",
         "send_sms_links",
+        "get_question_of_the_day",
+        "answer_question_of_the_day",
+        "suggest_question_of_the_day",
+        "get_caller_people_profile",
+        "match_events_for_profile",
         "end_call",
     }
     assert names == expected
     assert agent.get_openers() == ai411.OPENERS
     assert "EVENT DISCOVERY" in prompt
     assert "summarize_event_categories" in prompt
-
+    assert "QUESTION OF THE DAY" in prompt
+    assert "match_events_for_profile" in prompt
 
 def test_voice_agent_mode_alias():
     os.environ.pop("AGENT_MODE", None)

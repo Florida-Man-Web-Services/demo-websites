@@ -83,12 +83,14 @@ def _load_modules() -> str | None:
         import callers as callers_mod
         import events as events_mod
         import knowledge as knowledge_mod
+        import qotd as qotd_mod
         from lookup import find_business
 
         _mods["broadcasts"] = broadcasts_mod
         _mods["callers"] = callers_mod
         _mods["events"] = events_mod
         _mods["knowledge"] = knowledge_mod
+        _mods["qotd"] = qotd_mod
         _mods["find_business"] = find_business
         return None
     except Exception as e:  # noqa: BLE001 — never crash the call path
@@ -227,6 +229,43 @@ def _map_tool_call(name: str, args: dict, *, caller_number: str) -> tuple[str, d
         note = args.get("note") or args.get("text") or ""
         return name, {"phone": _phone(args, caller_number), "note": str(note)}
 
+    if name == "get_question_of_the_day":
+        return name, {"day": str(args.get("day") or "")}
+
+    if name == "answer_question_of_the_day":
+        tags = args.get("tags")
+        out = {
+            "phone": _phone(args, caller_number),
+            "answer": str(args.get("answer") or args.get("text") or ""),
+            "question_id": str(args.get("question_id") or ""),
+            "day": str(args.get("day") or ""),
+        }
+        if tags is not None:
+            out["tags"] = tags
+        return name, out
+
+    if name == "suggest_question_of_the_day":
+        return name, {
+            "phone": _phone(args, caller_number),
+            "suggestion": str(
+                args.get("suggestion") or args.get("text") or args.get("question") or ""
+            ),
+        }
+
+    if name == "get_caller_people_profile":
+        return name, {"phone": _phone(args, caller_number)}
+
+    if name == "match_events_for_profile":
+        free_only = args.get("free_only", False)
+        if isinstance(free_only, str):
+            free_only = free_only.strip().lower() in ("1", "true", "yes", "on")
+        return name, {
+            "phone": _phone(args, caller_number),
+            "when": str(args.get("when") or ""),
+            "limit": int(args.get("limit") or 5),
+            "free_only": bool(free_only),
+        }
+
     if name == "submit_event_broadcast":
         when_start = args.get("when_start") or args.get("when") or ""
         venue = args.get("venue") or args.get("where") or ""
@@ -333,6 +372,40 @@ def _dispatch_inproc(name: str, args: dict, *, caller_number: str) -> Any:
 
     if mcp_name == "add_caller_note":
         return callers.add_note(mapped["phone"], mapped["note"])
+
+    qotd = _mods.get("qotd")
+    if qotd is not None:
+        if mcp_name == "get_question_of_the_day":
+            return qotd.get_question_of_the_day(day=mapped.get("day") or "")
+        if mcp_name == "answer_question_of_the_day":
+            tags = mapped.get("tags")
+            if isinstance(tags, str):
+                try:
+                    import json as _json
+
+                    tags = _json.loads(tags)
+                except Exception:
+                    tags = [t.strip() for t in tags.split(",") if t.strip()]
+            return qotd.answer_question_of_the_day(
+                mapped["phone"],
+                mapped.get("answer") or "",
+                question_id=mapped.get("question_id") or "",
+                tags=tags if isinstance(tags, list) else None,
+                day=mapped.get("day") or "",
+            )
+        if mcp_name == "suggest_question_of_the_day":
+            return qotd.suggest_question_of_the_day(
+                mapped["phone"], mapped.get("suggestion") or ""
+            )
+        if mcp_name == "get_caller_people_profile":
+            return qotd.get_caller_people_profile(mapped["phone"])
+        if mcp_name == "match_events_for_profile":
+            return qotd.match_events_for_profile(
+                mapped["phone"],
+                when=mapped.get("when") or "",
+                limit=int(mapped.get("limit") or 5),
+                free_only=bool(mapped.get("free_only")),
+            )
 
     if mcp_name == "submit_event_broadcast":
         return broadcasts.submit_event_broadcast(**mapped)
@@ -632,6 +705,11 @@ def _dispatch_http(name: str, args: dict, *, caller_number: str) -> Any:
         "update_caller_profile",
         "forget_caller",
         "add_caller_note",
+        "get_question_of_the_day",
+        "answer_question_of_the_day",
+        "suggest_question_of_the_day",
+        "get_caller_people_profile",
+        "match_events_for_profile",
         "submit_event_broadcast",
         "submit_notice_broadcast",
         "list_recent_broadcasts",

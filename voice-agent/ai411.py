@@ -355,6 +355,126 @@ TOOLS = [
         },
     },
     {
+        "name": "get_question_of_the_day",
+        "description": (
+            "Load today's people-oriented Question of the Day. Ask it "
+            "conversationally (about who they like to be around / how they hang). "
+            "After they answer, call answer_question_of_the_day, then invite "
+            "suggest_question_of_the_day."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "description": "Optional YYYY-MM-DD (default today ET).",
+                }
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "answer_question_of_the_day",
+        "description": (
+            "Save the caller's QOTD answer. Builds their long-horizon people "
+            "profile (tags/interests) used to match events with like-minded vibes."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                },
+                "answer": {
+                    "type": "string",
+                    "description": "What the caller said in response to the QOTD.",
+                },
+                "question_id": {
+                    "type": "string",
+                    "description": "Id from get_question_of_the_day when known.",
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional interest tags you inferred (music, food…).",
+                },
+            },
+            "required": ["answer"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "suggest_question_of_the_day",
+        "description": (
+            "Save a caller-suggested future Question of the Day. Prefer "
+            "people-oriented questions. Call after they answer today's QOTD "
+            "or when they volunteer an idea."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                },
+                "suggestion": {
+                    "type": "string",
+                    "description": "The question idea they proposed.",
+                },
+            },
+            "required": ["suggestion"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "get_caller_people_profile",
+        "description": (
+            "Summarize this caller's QOTD answers and people-interest tags "
+            "accumulated over time."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                }
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "match_events_for_profile",
+        "description": (
+            "Find local events that fit the caller's people profile (QOTD answers "
+            "+ interests) — use when they want hangouts with like-minded people "
+            "or after building profile via QOTD."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                },
+                "when": {
+                    "type": "string",
+                    "description": "tonight, tomorrow, this_weekend, or empty.",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max events (default 5).",
+                },
+                "free_only": {
+                    "type": "boolean",
+                    "description": "If true, only free events.",
+                },
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "end_call",
         "description": (
             "Hang up after your current reply is spoken. Use once the "
@@ -439,6 +559,9 @@ CONVERSATION FLOW
 1. Answer with exactly: "{AI411_GREETING}" Then wait. Do not expand the greeting.
 2. Prefer the MEMORY SNAPSHOT; optionally get_caller_profile if snapshot missing.
 3. Route intent:
+   - question of the day / get to know me / bored → QUESTION OF THE DAY flow
+   - events with people like me / like-minded / who should I hang with →
+     match_events_for_profile (after profile has signal) or QOTD first
    - businesses → lookup_business / search_business_knowledge
    - events → follow EVENT DISCOVERY below (not a raw dump)
    - post something → submit_event_broadcast / submit_notice_broadcast after confirm
@@ -449,13 +572,31 @@ CONVERSATION FLOW
    for businesses — do not run a sales pitch unless they clearly ask how to get
    a site built, and even then keep it one sentence and offer an owner callback.
 
+QUESTION OF THE DAY (people profile over time)
+Purpose: learn how this caller likes to be around *people*, build a durable
+profile, then match events where they might find like-minded folks.
+1. Call get_question_of_the_day. Ask the question in one short spoken turn.
+   These questions are about people (crowds, hangouts, who they click with) —
+   not trivia.
+2. Listen. Call answer_question_of_the_day with their answer (and tags if clear).
+   That enables memory and stores interests.
+3. Invite a suggestion: ask if they have a good people-question for other
+   callers tomorrow. If they offer one, call suggest_question_of_the_day.
+4. Optionally offer match_events_for_profile (with when= if they gave a window)
+   so they can find hangouts that fit their vibe. Speak 2–3 events max.
+5. On return callers, get_caller_people_profile or MEMORY SNAPSHOT first; you
+   may skip QOTD if they already answered today or want events immediately —
+   but still offer QOTD once if the conversation is open-ended.
+
 EVENT DISCOVERY (required whenever they ask what's going on / events / tonight /
 this weekend / etc.)
-1. Interests first (mandatory): If MEMORY SNAPSHOT already has interests, briefly
-   acknowledge them and use them as the topic. If not, ask ONE short question
-   about what they like (music, food, outdoors, family, free stuff, arts…) and
-   WAIT for the answer. Do NOT call search_events or summarize_event_categories
-   and do NOT list event titles until you have an interest or they refuse and
+1. Interests first (mandatory): If MEMORY SNAPSHOT or people profile already has
+   interests, briefly acknowledge them and use them as the topic. Prefer
+   match_events_for_profile when they want people/like-minded matches. If no
+   interests yet, ask ONE short question about what they like (music, food,
+   outdoors, family, free stuff, arts…) OR offer today's QOTD — and WAIT.
+   Do NOT call search_events or summarize_event_categories and do NOT list
+   event titles until you have an interest, a QOTD answer, or they refuse and
    say "anything" / "everything".
 2. Time window: map their words to when= tonight | tomorrow | this_weekend | empty.
 3. Long list → categories: Call summarize_event_categories with that when= (and
@@ -474,6 +615,8 @@ TOOLS (in-process MCP store names)
 - search_business_knowledge, lookup_business
 - summarize_event_categories, search_events (when; category; tags; free_only), get_event
 - get_caller_profile, update_caller_profile, forget_caller
+- get_question_of_the_day, answer_question_of_the_day, suggest_question_of_the_day
+- get_caller_people_profile, match_events_for_profile
 - submit_event_broadcast (prefer ISO when_start + venue), submit_notice_broadcast,
   list_recent_broadcasts
 - send_sms_links, end_call

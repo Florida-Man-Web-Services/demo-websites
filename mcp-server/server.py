@@ -27,6 +27,7 @@ from starlette.routing import Mount, Route
 import businesses
 import callers as callers_mod
 import config
+import qotd as qotd_mod
 from calllog import append_outcome, history_for
 from knowledge import (
     get_business_snapshot as knowledge_snapshot,
@@ -331,6 +332,153 @@ async def add_caller_note(phone: str, note: str) -> dict:
     """
     return await anyio.to_thread.run_sync(
         functools.partial(_add_caller_note_sync, phone, note)
+    )
+
+
+def _get_question_of_the_day_sync(day: str = "") -> dict:
+    try:
+        return qotd_mod.get_question_of_the_day(day=day or "")
+    except Exception as e:
+        logger.exception("tool %s failed", "get_question_of_the_day")
+        return {"ok": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_question_of_the_day(day: str = "") -> dict:
+    """Get today's people-oriented Question of the Day for Gainesville AI 411.
+
+    Ask it conversationally. After the caller answers, call
+    answer_question_of_the_day, then invite suggest_question_of_the_day.
+    Optional day=YYYY-MM-DD for tests/backfill.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_get_question_of_the_day_sync, day)
+    )
+
+
+def _answer_question_of_the_day_sync(
+    phone: str,
+    answer: str,
+    question_id: str = "",
+    tags: str = "[]",
+    day: str = "",
+) -> dict:
+    try:
+        import json as _json
+
+        tag_list = None
+        if tags:
+            try:
+                parsed = _json.loads(tags) if isinstance(tags, str) else tags
+                if isinstance(parsed, list):
+                    tag_list = [str(t) for t in parsed]
+            except Exception:
+                if isinstance(tags, str) and tags.strip():
+                    tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+        return qotd_mod.answer_question_of_the_day(
+            phone,
+            answer,
+            question_id=question_id or "",
+            tags=tag_list,
+            day=day or "",
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "answer_question_of_the_day")
+        return {"ok": False, "recorded": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def answer_question_of_the_day(
+    phone: str,
+    answer: str,
+    question_id: str = "",
+    tags: str = "[]",
+    day: str = "",
+) -> dict:
+    """Record the caller's QOTD answer and fold people-interest tags into memory.
+
+    phone: E.164 or US 10-digit. tags: JSON list or comma-separated optional
+    interest tags. Builds a long-horizon people profile used for event matching.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _answer_question_of_the_day_sync,
+            phone,
+            answer,
+            question_id,
+            tags,
+            day,
+        )
+    )
+
+
+def _suggest_question_of_the_day_sync(phone: str, suggestion: str) -> dict:
+    try:
+        return qotd_mod.suggest_question_of_the_day(phone, suggestion)
+    except Exception as e:
+        logger.exception("tool %s failed", "suggest_question_of_the_day")
+        return {"ok": False, "accepted": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def suggest_question_of_the_day(phone: str, suggestion: str) -> dict:
+    """Save a caller's suggestion for a future Question of the Day.
+
+    Prefer people-oriented questions (who they like to be around, how they hang).
+    Strong suggestions may enter the active rotation.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_suggest_question_of_the_day_sync, phone, suggestion)
+    )
+
+
+def _get_caller_people_profile_sync(phone: str) -> dict:
+    try:
+        return qotd_mod.get_caller_people_profile(phone)
+    except Exception as e:
+        logger.exception("tool %s failed", "get_caller_people_profile")
+        return {"ok": False, "found": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def get_caller_people_profile(phone: str) -> dict:
+    """Summarize QOTD answers and people-interest tags accumulated for a caller."""
+    return await anyio.to_thread.run_sync(
+        functools.partial(_get_caller_people_profile_sync, phone)
+    )
+
+
+def _match_events_for_profile_sync(
+    phone: str,
+    when: str = "",
+    limit: int = 5,
+    free_only: bool = False,
+) -> dict:
+    try:
+        return qotd_mod.match_events_for_profile(
+            phone, when=when or "", limit=limit, free_only=bool(free_only)
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "match_events_for_profile")
+        return {"ok": False, "events": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def match_events_for_profile(
+    phone: str,
+    when: str = "",
+    limit: int = 5,
+    free_only: bool = False,
+) -> dict:
+    """Find local events that fit the caller's people profile (QOTD + interests).
+
+    Use after they answered QOTDs or when they ask for events with like-minded
+    people. when=: tonight | tomorrow | this_weekend | empty.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _match_events_for_profile_sync, phone, when, limit, free_only
+        )
     )
 
 
