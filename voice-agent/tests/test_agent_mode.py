@@ -61,14 +61,16 @@ def test_ai411_mode_prompt_and_tools():
     config, agent, ai411 = _reload_mode("ai411")
     assert config.AGENT_MODE == "ai411"
     assert config.is_ai411() is True
-    prompt = agent.system_prompt(_Biz(), "inbound", "+13555550100")
-    assert "Gainesville AI 411" in prompt
-    assert "events, businesses, or post something" in prompt
-    assert "911" in prompt
-    assert "medical" in prompt.lower() or "No medical" in prompt
-    assert "$999" not in prompt
-    assert "selling websites" not in prompt
-    names = {t["name"] for t in agent.get_tools()}
+    prompt = agent.system_prompt(_Biz(), "inbound", "+13525550100")
+        assert "Gainesville AI 411" in prompt
+        assert "A411 here" in prompt
+        assert "events, businesses, or post something" not in prompt
+        assert "911" in prompt
+        assert "medical" in prompt.lower() or "No medical" in prompt
+        assert "$999" not in prompt
+        assert "selling websites" not in prompt
+        assert ai411.AI411_GREETING == "A411 here."
+        names = {t["name"] for t in agent.get_tools()}
     expected = {
         "search_business_knowledge",
         "lookup_business",

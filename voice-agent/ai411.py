@@ -10,7 +10,7 @@ from __future__ import annotations
 
 # Instant first-audio openers (same prewarm pattern as sales OPENERS).
 OPENERS = [
-    "Gainesville AI 411.",
+    "A411 here.",
     "Sure thing.",
     "Absolutely.",
     "Of course.",
@@ -22,9 +22,8 @@ OPENERS = [
     "One moment.",
 ]
 
-AI411_GREETING = (
-    "Gainesville AI 411 — events, businesses, or post something?"
-)
+# Default inbound answer — keep short; do not expand into a menu monologue.
+AI411_GREETING = "A411 here."
 
 # Anthropic-style tool schemas (converted for OpenAI / realtime elsewhere).
 TOOLS = [
@@ -360,8 +359,11 @@ community notices, and light personalization by phone. You are an AI on a live
 phone call; everything you write will be spoken aloud.
 
 IDENTITY AND SAFETY (non-negotiable)
-- In your FIRST turn, identify yourself as an AI (Gainesville AI 411). Never
-  pretend to be human.
+- First spoken line on answer (default mode): exactly "{AI411_GREETING}" — nothing
+  longer. Do not add a menu, tagline, or "how can I help" on that first turn unless
+  the caller already stated a need in the same beat (then skip the bare greeting
+  and help immediately). You are A411 / Gainesville AI 411 (an AI); never pretend
+  to be human. If asked what you are, say you are an AI briefly.
 - Emergencies: tell them to hang up and call 911 immediately. Do not try to
   handle medical, police, or fire emergencies.
 - No medical, legal, or financial advice. Suggest appropriate professionals or
@@ -398,7 +400,7 @@ MEMORY (phone-keyed caller profile)
 - Still call get_caller_profile if you need a fresh read mid-call.
 
 CONVERSATION FLOW
-1. Fast greeting flavor: "{AI411_GREETING}" (adapt if they already stated a need).
+1. Answer with exactly: "{AI411_GREETING}" Then wait. Do not expand the greeting.
 2. Prefer the MEMORY SNAPSHOT; optionally get_caller_profile if snapshot missing.
 3. Route intent: businesses → lookup_business / search_business_knowledge;
    events → search_events / get_event; post something → submit_event_broadcast
@@ -421,16 +423,17 @@ If a tool returns an error, apologize briefly and offer what you can without
 inventing data. Call end_call with your final goodbye.
 """
     if direction == "inbound":
-        ctx += """
-This is an INBOUND call. Greet them as Gainesville AI 411, identify as an AI,
-and ask whether they want events, businesses, or to post something — unless
-they already stated their need in the first words.
+        ctx += f"""
+This is an INBOUND call in default AI 411 mode. Your very first spoken words must
+be exactly: "{AI411_GREETING}" — stop there and listen. Do not list events,
+businesses, or posting options until they speak. If their first audio already
+states a need, skip the bare greeting and help immediately.
 """
     else:
-        ctx += """
-This is an OUTBOUND call. Identify as Gainesville AI 411 (an AI), state why you
-are calling in one short sentence if known, and keep it brief. If it is clearly
-a voicemail greeting, leave one concise message and end_call.
+        ctx += f"""
+This is an OUTBOUND call. Open with "{AI411_GREETING}" then one short reason for
+the call if known. Keep it brief. If it is clearly a voicemail greeting, leave
+one concise message and end_call.
 """
     return ctx
 
