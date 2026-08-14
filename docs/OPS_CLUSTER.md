@@ -307,6 +307,25 @@ curl -X POST https://voice.flmanbiosci.net/api/billing/mark-paid \
   -d '{"phone":"+1...","stripe_customer_id":"cus_..."}'
 ```
 
+### 8.7 AI 411 Visit Gainesville events ingest
+
+Refresh the events store used by AI 411 (preserves `source=community`, replaces `visitgainesville`, deletes legacy seed fakes):
+
+```bash
+# Local / laptop
+unset PYTHONPATH
+python3 scripts/ingest_visitgainesville_events.py --out /tmp/events.json
+# stdout: DIGEST total=… visitgainesville=… vg_sha256_16=…  (stable; exit 0)
+
+# Prod PVC (after image has events.py + script)
+kubectl -n theswamp exec deploy/voice-agent -- \
+  python3 /app/scripts/ingest_visitgainesville_events.py
+kubectl -n theswamp exec deploy/voice-agent -- \
+  python3 -c "import json;print(json.load(open('/data/events.json')).get('events',[]) and 'ok')"
+```
+
+Optional CronJob (not Flux-applied by default): monorepo `docs/cronjob-visitgainesville-events.yaml` — every 6h, Forbid concurrency, PVC `voice-agent-data`.
+
 ---
 
 ## 9. Cutover checklist (DNS + Authentik)

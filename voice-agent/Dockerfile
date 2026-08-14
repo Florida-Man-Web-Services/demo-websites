@@ -18,6 +18,8 @@ COPY voice-agent/*.py voice-agent/
 # /api/onboarding/* import customers from sibling mcp-server/; mcp_bridge
 # imports knowledge/events/callers/broadcasts/lookup/changerequests the same way.
 # Without these, AGENT_MODE=auto accepts Twilio then crashes the WS (~1s hangup).
+# Note: mcp_bridge AI411 path imports qotd with events/callers — missing qotd
+# fails the WHOLE inproc import set and stubs search_events as "not available".
 COPY mcp-server/customers.py \
      mcp-server/knowledge.py \
      mcp-server/events.py \
@@ -28,8 +30,8 @@ COPY mcp-server/customers.py \
      mcp-server/calllog.py \
      mcp-server/qotd.py \
      mcp-server/
-# Note: mcp_bridge AI411 path imports qotd with events/callers — missing qotd
-# fails the WHOLE inproc import set and stubs search_events as "not available".
+# Cron/CLI Visit Gainesville ingest (AI 411 events store)
+COPY scripts/ingest_visitgainesville_events.py scripts/
 
 # Call log and synthesized-audio cache live on a mounted volume so outcomes
 # (including the permanent do-not-call list) survive restarts.
@@ -38,7 +40,8 @@ ENV CALL_LOG=/data/call-log.csv \
     AUDIO_CACHE_DIR=/data/audio_cache \
     CUSTOMERS_PATH=/data/customers.json \
     BUILDER_BRIEFS_DIR=/data/builder-briefs \
-    MEMORY_DIR=/data/customer-memory
+    MEMORY_DIR=/data/customer-memory \
+    EVENTS_PATH=/data/events.json
 RUN mkdir -p /data /data/builder-briefs /data/customer-memory /data/audio_cache
 
 EXPOSE 8035

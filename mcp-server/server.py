@@ -759,13 +759,13 @@ async def search_events(
     limit: int = 10,
     category: str = "",
 ) -> dict:
-    """Search local Gainesville events (seed store; no live crawl yet).
+    """Search local Gainesville events (community + Visit Gainesville store).
 
     when: empty (all upcoming), tonight, tomorrow, or this_weekend
     (America/New_York). query matches title/description/venue/tags.
     tags: comma-separated required tags (subset match). category: primary
     bucket from summarize_event_categories. free_only filters free events.
-    Expired events (past end/start) are dropped.
+    Expired events (past end/start) are dropped. Empty store is OK.
     """
     return await anyio.to_thread.run_sync(
         functools.partial(
@@ -835,7 +835,7 @@ def _list_event_sources_tool_sync() -> dict:
 
 @mcp.tool()
 async def list_event_sources() -> dict:
-    """List event sources in the local store with counts (e.g. seed, community)."""
+    """List event sources in the local store with counts (e.g. community, visitgainesville)."""
     return await anyio.to_thread.run_sync(_list_event_sources_tool_sync)
 
 

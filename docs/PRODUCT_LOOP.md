@@ -321,6 +321,19 @@ export CUSTOMERS_PATH=$PWD/data/customers.json
 
 ---
 
+## 10b. AI 411 events feed (Visit Gainesville)
+
+AI 411 `search_events` reads `EVENTS_PATH` (default `/data/events.json`). **No fake seed events** are auto-written — an empty file is valid. Real rows come from:
+
+1. **community** — approved event broadcasts (`community-<id>`)
+2. **visitgainesville** — public tribe REST ingest  
+   `https://www.visitgainesville.com/wp-json/tribe/events/v1/events`  
+   via `scripts/ingest_visitgainesville_events.py` (ids `vg-<tribe_id>`, local FL filter, replaces only that source, purges legacy `source=seed`).
+
+Cron monitor: exit 0 + one stable `DIGEST …` stdout line. Optional manifest: [cronjob-visitgainesville-events.yaml](./cronjob-visitgainesville-events.yaml). After merge, one-shot PVC: purge seed rows then run ingest against the voice volume.
+
+---
+
 ## 11. Tests
 
 ```bash
