@@ -26,7 +26,10 @@ COPY mcp-server/customers.py \
      mcp-server/lookup.py \
      mcp-server/changerequests.py \
      mcp-server/calllog.py \
+     mcp-server/qotd.py \
      mcp-server/
+# Note: mcp_bridge AI411 path imports qotd with events/callers — missing qotd
+# fails the WHOLE inproc import set and stubs search_events as "not available".
 
 # Call log and synthesized-audio cache live on a mounted volume so outcomes
 # (including the permanent do-not-call list) survive restarts.
@@ -41,5 +44,5 @@ RUN mkdir -p /data /data/builder-briefs /data/customer-memory /data/audio_cache
 EXPOSE 8035
 WORKDIR /app/voice-agent
 # Fail closed at build time if packaging drifts again.
-RUN python -c "import sys; sys.path[:0]=['/app/mcp-server','/app/voice-agent']; import customers, knowledge, events, callers, broadcasts, lookup, changerequests; print('mcp-server ok', customers.MODE_AI411)"
+RUN python -c "import sys; sys.path[:0]=['/app/mcp-server','/app/voice-agent']; import customers, knowledge, events, callers, broadcasts, lookup, changerequests, qotd; print('mcp-server ok', customers.MODE_AI411, 'qotd', getattr(qotd, '__name__', 'ok'))"
 CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8035"]
