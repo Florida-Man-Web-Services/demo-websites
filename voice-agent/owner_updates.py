@@ -179,6 +179,28 @@ TOOLS = [
         },
     },
     {
+        "name": "enroll_voice_auth",
+        "description": (
+            "After the owner clearly consents to voice recognition for future "
+            "update calls, enroll this caller phone. Speak the disclosure first. "
+            "Set consent_spoken=true only after they agree."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "consent_spoken": {
+                    "type": "boolean",
+                    "description": "True only after owner agreed to voice enrollment.",
+                },
+                "consent_version": {
+                    "type": "string",
+                    "description": "Policy version string (default 2026-08-14).",
+                },
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "send_sms_links",
         "description": (
             "Text helpful links (demo page, confirmation) to the caller. "

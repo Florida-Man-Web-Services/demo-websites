@@ -107,6 +107,7 @@ def test_owner_updates_mode_prompt_and_tools():
         "list_open_change_requests",
         "cancel_change_request",
         "apply_change_request",
+        "enroll_voice_auth",
         "log_call_outcome",
         "send_sms_links",
         "end_call",

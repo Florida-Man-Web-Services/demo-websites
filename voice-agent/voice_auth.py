@@ -39,6 +39,7 @@ TOOL_MIN_LEVEL: dict[str, str] = {
     "create_change_request": "voice_soft",
     "cancel_change_request": "voice_soft",
     "apply_change_request": "voice_hard",
+    "enroll_voice_auth": "cid_legacy",  # need a phone; handled specially
     "send_sms_links": "cid_only",
     "log_call_outcome": "cid_only",
     # end_call is local and never gated here
@@ -65,6 +66,21 @@ def enroll_required_for_write() -> bool:
     )
 
 
+def effective_min_level(tool_name: str) -> str:
+    """Resolve tool minimum, degrading F2 requirements when vendor is stubbed."""
+    nominal = TOOL_MIN_LEVEL.get(tool_name, "voice_soft")
+    if nominal == "cid_legacy":
+        return "cid_legacy"
+    vendor = voice_auth_vendor()
+    if vendor in ("", "none", "off", "stub") and not enroll_required_for_write():
+        if nominal in ("voice_soft", "voice_hard"):
+            # Phase 1 default: F1 is enough until speaker-verify ships.
+            return "cid_only"
+    if enroll_required_for_write() and nominal in ("voice_soft", "voice_hard"):
+        return nominal
+    return nominal
+
+
 def level_at_least(have: str | None, need: str | None) -> bool:
     h_name = (have or "anonymous").strip().lower()
     n_name = (need or "anonymous").strip().lower()
@@ -75,21 +91,10 @@ def level_at_least(have: str | None, need: str | None) -> bool:
     # Soft/legacy F1 (Twilio From present, no registry claim) satisfies cid_only tools.
     if n_name == "cid_only" and h_name == "cid_legacy":
         return True
+    # cid_only/cid_legacy both OK for enroll (cid_legacy floor)
+    if n_name == "cid_legacy" and h_name in ("cid_legacy", "cid_only", "voice_soft", "voice_hard"):
+        return True
     return h >= n
-
-
-def effective_min_level(tool_name: str) -> str:
-    """Resolve tool minimum, degrading F2 requirements when vendor is stubbed."""
-    nominal = TOOL_MIN_LEVEL.get(tool_name, "voice_soft")
-    vendor = voice_auth_vendor()
-    if vendor in ("", "none", "off", "stub") and not enroll_required_for_write():
-        if nominal in ("voice_soft", "voice_hard"):
-            # Phase 1: F1 is enough until speaker-verify ships.
-            return "cid_only"
-    if enroll_required_for_write() and nominal in ("voice_soft", "voice_hard"):
-        # Force enrolled+soft path even if vendor still stubbed (deny until enrolled).
-        return nominal
-    return nominal
 
 
 def _customers_mod():
@@ -212,15 +217,73 @@ def refresh_auth(state: Any) -> str:
     return state.auth_level
 
 
+def enroll_owner_on_state(
+    state: Any,
+    *,
+    consent_version: str = "2026-08-14",
+    vendor: str | None = None,
+) -> dict[str, Any]:
+    """Consent + enroll current caller; update CallState.voice_enrolled."""
+    phone = (getattr(state, "caller_number", None) or "").strip()
+    cust_mod = _customers_mod()
+    if cust_mod is None:
+        return {"ok": False, "error": "customers registry unavailable"}
+    if not phone:
+        return {"ok": False, "error": "caller phone required"}
+    v = (vendor if vendor is not None else voice_auth_vendor()) or "none"
+    # Consent then enroll (mark_voice_enrolled also stamps consent if missing).
+    out = cust_mod.mark_voice_enrolled(
+        phone,
+        vendor=v,
+        consent_version=consent_version,
+        quality=1.0 if v in ("mock", "local_stub", "none") else None,
+    )
+    if out.get("ok"):
+        state.voice_enrolled = True
+        if out.get("customer"):
+            state.customer = out["customer"]
+        # Recompute F1; keep enrolled flag.
+        refresh_auth(state)
+        state.voice_enrolled = True
+    return out
+
+
+def verify_enrolled_template(state: Any) -> dict[str, Any]:
+    """Return template_id if this caller is enrolled for F2."""
+    cust = getattr(state, "customer", None) or {}
+    va = cust.get("voice_auth") if isinstance(cust, dict) else None
+    if not isinstance(va, dict) or not (va.get("enrolled_at") or va.get("template_id")):
+        # Refresh from registry
+        cust_mod = _customers_mod()
+        phone = getattr(state, "caller_number", "") or ""
+        if cust_mod and phone:
+            row = cust_mod.get(phone)
+            if row:
+                state.customer = row
+                va = row.get("voice_auth") or {}
+    if not isinstance(va, dict):
+        return {"ok": False, "enrolled": False}
+    tid = (va.get("template_id") or "").strip()
+    enrolled = bool(va.get("enrolled_at") or tid)
+    return {
+        "ok": True,
+        "enrolled": enrolled,
+        "template_id": tid,
+        "vendor": va.get("vendor") or "none",
+    }
+
+
 def on_speech_window(
     state: Any,
     *,
     pcm: bytes | None = None,
     sample_rate: int = 8000,
 ) -> dict[str, Any]:
-    """Phase 2+ hook: score a speech window and maybe promote auth_level.
+    """Score a speech window and maybe promote auth_level (Phase 2+).
 
-    Phase 1 stub: no-op unless VOICE_AUTH_VENDOR is not none (still stub score).
+    Vendors:
+      none/off/stub — no-op (F1 only)
+      mock|local_stub — promote enrolled callers after min windows (no real biometrics)
     """
     vendor = voice_auth_vendor()
     if vendor in ("", "none", "off", "stub"):
@@ -230,20 +293,33 @@ def on_speech_window(
             "reason": "vendor_none",
             "auth_level": getattr(state, "auth_level", "anonymous"),
         }
-    # Placeholder adapter — real SV backends plug in here.
+
+    info = verify_enrolled_template(state)
+    if not info.get("enrolled"):
+        return {
+            "ok": True,
+            "skipped": True,
+            "reason": "not_enrolled",
+            "auth_level": getattr(state, "auth_level", "anonymous"),
+        }
+
     windows = int(getattr(state, "voice_windows", 0) or 0) + 1
     state.voice_windows = windows
-    # Fake score path for future tests with vendor=mock
-    if vendor == "mock":
-        score = 0.9
+    state.voice_enrolled = True
+
+    if vendor in ("mock", "local_stub"):
+        # Deterministic stub score — not a real biometric.
+        score = 0.92
         ema = getattr(state, "voice_score_ema", None)
-        state.voice_score_ema = score if ema is None else (0.6 * float(ema) + 0.4 * score)
+        state.voice_score_ema = (
+            score if ema is None else (0.6 * float(ema) + 0.4 * score)
+        )
         soft = float(os.getenv("VOICE_AUTH_SOFT", "0.75"))
         hard = float(os.getenv("VOICE_AUTH_HARD", "0.85"))
         min_w = int(os.getenv("VOICE_AUTH_MIN_WINDOWS", "3"))
-        if windows >= min_w and state.voice_score_ema >= hard:
+        if windows >= min_w and float(state.voice_score_ema) >= hard:
             state.auth_level = "voice_hard"
-        elif windows >= min_w and state.voice_score_ema >= soft:
+        elif windows >= min_w and float(state.voice_score_ema) >= soft:
             if LEVEL_RANK.get(getattr(state, "auth_level", ""), 0) < LEVEL_RANK["voice_soft"]:
                 state.auth_level = "voice_soft"
         return {
@@ -251,7 +327,10 @@ def on_speech_window(
             "score": score,
             "auth_level": state.auth_level,
             "windows": windows,
+            "template_id": info.get("template_id"),
+            "vendor": vendor,
         }
+
     return {
         "ok": False,
         "error": f"voice auth vendor {vendor!r} not implemented",

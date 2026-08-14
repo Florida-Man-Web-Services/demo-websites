@@ -725,6 +725,37 @@ def api_mark_paid(body: StripeMarkPaidIn):
     return result
 
 
+class VoiceEnrollIn(BaseModel):
+    phone: str
+    consent_version: str = "2026-08-14"
+    vendor: str = ""
+
+
+@app.post("/api/owner/voice/enroll")
+def api_voice_enroll(body: VoiceEnrollIn):
+    """Record consent + enroll voice template metadata (Phase 2). Desk/ops use."""
+    customers = _customers_mod()
+    vendor = (body.vendor or getattr(config, "VOICE_AUTH_VENDOR", "none") or "none").strip()
+    customers.record_voice_consent(body.phone, consent_version=body.consent_version)
+    result = customers.mark_voice_enrolled(
+        body.phone,
+        vendor=vendor,
+        consent_version=body.consent_version,
+    )
+    if not result.get("ok"):
+        raise HTTPException(status_code=400, detail=result.get("error") or "bad request")
+    return result
+
+
+@app.post("/api/owner/voice/forget")
+def api_voice_forget(body: VoiceEnrollIn):
+    """Clear voice_auth fields for a phone (forget-me)."""
+    customers = _customers_mod()
+    result = customers.clear_voice_auth(body.phone)
+    if not result.get("ok"):
+        raise HTTPException(status_code=400, detail=result.get("error") or "bad request")
+    return result
+
 
 @app.get("/health")
 def health():
@@ -747,6 +778,7 @@ def health():
         "active_sms_sessions": len(SMS_SESSIONS),
         "customers_registry": customers_ok,
         "agent_mode": getattr(config, "AGENT_MODE", ""),
+        "voice_auth_vendor": getattr(config, "VOICE_AUTH_VENDOR", "none"),
     }
 
 

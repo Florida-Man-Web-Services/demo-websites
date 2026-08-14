@@ -1032,6 +1032,24 @@ def _run_owner_tool(state: CallState, name: str, args: dict) -> str:
         if state.caller_number or state.customer:
             voice_auth.refresh_auth(state)
 
+    if name == "enroll_voice_auth":
+        conf = args.get("consent_spoken", False)
+        if isinstance(conf, str):
+            conf = conf.strip().lower() in ("1", "true", "yes", "on")
+        if not conf:
+            return voice_auth.deny_json(
+                {
+                    "ok": False,
+                    "error": "consent_spoken must be true after the owner agrees.",
+                    "code": "consent_required",
+                }
+            )
+        out = voice_auth.enroll_owner_on_state(
+            state,
+            consent_version=str(args.get("consent_version") or "2026-08-14"),
+        )
+        return voice_auth.deny_json(out) if not out.get("ok") else __import__("json").dumps(out, ensure_ascii=False)
+
     deny = voice_auth.check_tool_allowed(state, name)
     if deny is not None:
         return voice_auth.deny_json(deny)

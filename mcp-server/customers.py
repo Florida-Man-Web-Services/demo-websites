@@ -344,6 +344,72 @@ def set_trusted_phones(phone: str, phones: list[str]) -> dict[str, Any]:
     return upsert(phone, patch={"trusted_phones": cleaned})
 
 
+def record_voice_consent(
+    phone: str,
+    *,
+    consent_version: str = "2026-08-14",
+) -> dict[str, Any]:
+    """Stamp biometric consent before enrollment (Phase 2)."""
+    key = normalize_phone(phone)
+    if not key:
+        return {"ok": False, "error": "invalid phone number"}
+    row = get(key)
+    if not row:
+        return {"ok": False, "error": "customer not found"}
+    if not is_owner_write_status(row.get("status")):
+        return {
+            "ok": False,
+            "error": "voice enrollment requires paid/active_owner status",
+            "code": "not_active_owner",
+        }
+    va = dict(row.get("voice_auth") or {})
+    va["consent_version"] = (consent_version or "2026-08-14").strip()
+    va["consented_at"] = _now()
+    return upsert(key, patch={"voice_auth": va})
+
+
+def mark_voice_enrolled(
+    phone: str,
+    *,
+    vendor: str = "none",
+    template_id: str = "",
+    quality: float | None = None,
+    consent_version: str = "2026-08-14",
+) -> dict[str, Any]:
+    """Mark owner voice template enrolled (Phase 2+)."""
+    key = normalize_phone(phone)
+    if not key:
+        return {"ok": False, "error": "invalid phone number"}
+    row = get(key)
+    if not row:
+        return {"ok": False, "error": "customer not found"}
+    if not is_owner_write_status(row.get("status")):
+        return {
+            "ok": False,
+            "error": "voice enrollment requires paid/active_owner status",
+            "code": "not_active_owner",
+        }
+    va = dict(row.get("voice_auth") or {})
+    if not va.get("consented_at"):
+        va["consent_version"] = (consent_version or "2026-08-14").strip()
+        va["consented_at"] = _now()
+    va["vendor"] = (vendor or "none").strip() or "none"
+    va["template_id"] = (template_id or f"tmpl-{uuid.uuid4().hex[:12]}").strip()
+    va["enrolled_at"] = _now()
+    if quality is not None:
+        va["quality"] = quality
+    va["fail_streak"] = 0
+    return upsert(key, patch={"voice_auth": va})
+
+
+def clear_voice_auth(phone: str) -> dict[str, Any]:
+    """Forget-me: drop voice template metadata."""
+    key = normalize_phone(phone)
+    if not key:
+        return {"ok": False, "error": "invalid phone number"}
+    return upsert(key, patch={"voice_auth": {}})
+
+
 def list_customers(
     *,
     status: str | None = None,

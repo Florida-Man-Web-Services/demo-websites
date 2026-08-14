@@ -148,13 +148,23 @@ def test_legacy_cid_can_create_unclaimed(tmp_path, monkeypatch):
     assert created.get("created") is True, created
 
 
-def test_check_tool_allowed_voice_soft_pending(monkeypatch):
+def test_check_tool_allowed_voice_soft_pending(tmp_path, monkeypatch):
     monkeypatch.setenv("VOICE_AUTH_VENDOR", "mock")
     monkeypatch.setenv("VOICE_ENROLL_REQUIRED_FOR_WRITE", "false")
+    monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "c.json"))
+    (tmp_path / "c.json").write_text("{}\n", encoding="utf-8")
+    mcp = REPO_ROOT / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    importlib.reload(customers)
+    customers.upsert("+13555550100", status="active_owner", slug="cool-cafe")
+
     _, agent, va, _ = _reload_owner()
-    # Force nominal voice_soft requirement
     monkeypatch.setenv("VOICE_AUTH_VENDOR", "mock")
     importlib.reload(va)
+
     state = agent.CallState(
         call_sid="CA-V",
         business=_Biz(),
@@ -162,16 +172,49 @@ def test_check_tool_allowed_voice_soft_pending(monkeypatch):
         caller_number="+13555550100",
         auth_level="cid_only",
     )
-    # With mock vendor, create needs voice_soft
+    # Not enrolled → speech windows skipped
+    skip = va.on_speech_window(state)
+    assert skip.get("reason") == "not_enrolled"
+
+    # Enroll then promote
+    en = va.enroll_owner_on_state(state, vendor="mock")
+    assert en.get("ok") is True, en
+    assert state.voice_enrolled is True
+
     deny = va.check_tool_allowed(state, "create_change_request")
     assert deny is not None
     assert deny.get("code") == "auth_voice_pending"
 
-    # Promote via mock windows
     for _ in range(3):
         va.on_speech_window(state)
     assert state.auth_level in ("voice_soft", "voice_hard")
     assert va.check_tool_allowed(state, "create_change_request") is None
+
+
+def test_enroll_voice_tool_requires_consent_and_paid(tmp_path, monkeypatch):
+    monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "c.json"))
+    (tmp_path / "c.json").write_text("{}\n", encoding="utf-8")
+    mcp = REPO_ROOT / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    importlib.reload(customers)
+    customers.upsert("+13555550100", status="active_owner", slug="cool-cafe")
+    _, agent, va, _ = _reload_owner()
+    state = agent.CallState(
+        call_sid="CA-E",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13555550100",
+    )
+    state.llm = mock.Mock()
+    va.apply_auth_to_state(state)
+    denied = json.loads(agent._run_tool(state, "enroll_voice_auth", {"consent_spoken": False}))
+    assert denied.get("ok") is False
+    ok = json.loads(agent._run_tool(state, "enroll_voice_auth", {"consent_spoken": True}))
+    assert ok.get("ok") is True
+    assert state.voice_enrolled is True
 
 
 def test_read_tools_allowed_at_cid_only():

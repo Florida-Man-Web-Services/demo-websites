@@ -165,3 +165,20 @@ def test_cancel_denied_for_stranger(customer_store, cr_store, monkeypatch):
     denied = cr.cancel_change_request(created["id"], caller_phone="+13555550999")
     assert denied.get("cancelled") is False
     assert denied.get("code") == "not_owner"
+
+
+def test_mark_voice_enrolled_requires_paid(customer_store):
+    cust.upsert("+13555550100", status="callback_queued", slug="cool-cafe")
+    bad = cust.mark_voice_enrolled("+13555550100")
+    assert bad.get("ok") is False
+    cust.upsert("+13555550100", status="active_owner", slug="cool-cafe")
+    good = cust.mark_voice_enrolled("+13555550100", vendor="mock")
+    assert good.get("ok") is True
+    va = good["customer"]["voice_auth"]
+    assert va.get("enrolled_at")
+    assert va.get("template_id")
+    assert va.get("consented_at")
+    cleared = cust.clear_voice_auth("+13555550100")
+    assert cleared.get("ok") is True
+    assert not (cleared["customer"].get("voice_auth") or {}).get("template_id")
+
