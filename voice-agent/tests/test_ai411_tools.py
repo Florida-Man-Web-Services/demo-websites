@@ -116,6 +116,53 @@ def qotd_path(tmp_path, monkeypatch):
     return path
 
 
+def _seed_fixture_events() -> None:
+    """Insert real-shaped fixture events (store no longer auto-seeds fakes)."""
+    mcp = str(REPO_ROOT / "mcp-server")
+    if mcp not in sys.path:
+        sys.path.insert(0, mcp)
+    import events as events_mod
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+
+    et = ZoneInfo("America/New_York")
+    start = datetime.now(et).replace(hour=19, minute=0, second=0, microsecond=0)
+    end = start + timedelta(hours=3)
+    events_mod.upsert_event(
+        {
+            "id": "evt-fixture-jazz",
+            "title": "Live Jazz at The Top",
+            "start": start.isoformat(),
+            "end": end.isoformat(),
+            "venue": "The Top",
+            "address": "30 N Main St, Gainesville, FL",
+            "free": False,
+            "tags": ["music", "jazz", "nightlife"],
+            "description": "Local jazz trio fixture event for tests.",
+            "url": "https://example.com/jazz",
+            "source": "fixture",
+        }
+    )
+    market_start = (start + timedelta(days=(5 - start.weekday()) % 7)).replace(
+        hour=8, minute=30
+    )
+    events_mod.upsert_event(
+        {
+            "id": "evt-fixture-market",
+            "title": "Union Street Farmers Market",
+            "start": market_start.isoformat(),
+            "end": (market_start + timedelta(hours=4)).isoformat(),
+            "venue": "Bo Diddley Plaza",
+            "address": "111 E University Ave, Gainesville, FL",
+            "free": True,
+            "tags": ["market", "food", "family"],
+            "description": "Farmers market fixture for tests.",
+            "url": "https://example.com/market",
+            "source": "fixture",
+        }
+    )
+
+
 @pytest.fixture
 def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path, qotd_path, tmp_path, monkeypatch):
     """Reload agent/bridge under AI 411 with store paths pointed at fixtures."""
@@ -139,6 +186,7 @@ def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path, qotd_
     config, agent, ai411, bridge = _reload_mode("ai411")
     # Force re-import of store modules with new env.
     bridge.reset_for_tests()
+    _seed_fixture_events()
     yield config, agent, ai411, bridge
     _reload_mode("sales")
 
