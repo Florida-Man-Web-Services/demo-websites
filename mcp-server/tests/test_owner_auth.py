@@ -182,3 +182,19 @@ def test_mark_voice_enrolled_requires_paid(customer_store):
     assert cleared.get("ok") is True
     assert not (cleared["customer"].get("voice_auth") or {}).get("template_id")
 
+
+def test_touch_and_verify_streak(customer_store):
+    cust.upsert("+13555550100", status="active_owner", slug="cool-cafe")
+    cust.mark_voice_enrolled("+13555550100", vendor="mock")
+    t = cust.touch_owner_call("+13555550100", ani="+13555550100")
+    assert t["ok"]
+    assert t["customer"]["voice_auth"].get("last_call_at")
+    assert t["customer"]["voice_auth"].get("last_ani") == "+13555550100"
+    f1 = cust.record_voice_verify_result("+13555550100", ok=False)
+    assert f1["customer"]["voice_auth"]["fail_streak"] == 1
+    f2 = cust.record_voice_verify_result("+13555550100", ok=False)
+    assert f2["customer"]["voice_auth"]["fail_streak"] == 2
+    ok = cust.record_voice_verify_result("+13555550100", ok=True, score=0.9)
+    assert ok["customer"]["voice_auth"]["fail_streak"] == 0
+    assert ok["customer"]["voice_auth"].get("last_verify_at")
+

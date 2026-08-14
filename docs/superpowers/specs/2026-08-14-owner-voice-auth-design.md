@@ -1,7 +1,7 @@
 # Owner voice authentication — Design Spec
 
 **Date:** 2026-08-14  
-**Status:** approved (operator)  
+**Status:** implemented phases 0–4 (2026-08-14)  
 **Product:** FMWS owner site-updates desk (`owner_updates` / paid customers)  
 **Plan task:** `t-fmws-product-loop` (parent) · implement via phased slices below  
 **Companions:** [PRODUCT_LOOP.md](../../PRODUCT_LOOP.md) · [ARCHITECTURE.md](../../ARCHITECTURE.md) · voice modes skill ref
@@ -332,3 +332,20 @@ Cases:
 - Modes pattern: skill `demo-websites` → `references/voice-agent-modes.md`
 - Product loop: `docs/PRODUCT_LOOP.md` step E → owner_updates
 - Arete plan: `t-fmws-product-loop` (`fmws-cash`)
+
+
+---
+
+## Implementation status (2026-08-14)
+
+Phases **0–4 delivered** in `demo-websites` main:
+
+| Phase | Deliverable |
+|-------|-------------|
+| 0 | F1 trusted phones + CR ownership (`OWNER_CR_AUTH`) |
+| 1 | `CallState.auth_level` + tool gates (`voice_auth.py`) |
+| 2 | Enroll + mock/local_stub promote |
+| 3 | Realtime speech windows + SMS OTP step-up |
+| 4 | Dormancy/new ANI/template age/fail streak; PCM replay guard; pluggable vendors (`none`/`mock`/`local_stub`/`http`) |
+
+Prod default remains `VOICE_AUTH_VENDOR=none` (F1 + OTP on apply/anomalies). Wire a real SV backend via `VOICE_AUTH_VENDOR=http` + `VOICE_AUTH_HTTP_URL`.

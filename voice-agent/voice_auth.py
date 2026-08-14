@@ -45,9 +45,18 @@ TOOL_MIN_LEVEL: dict[str, str] = {
     # end_call is local and never gated here
 }
 
-# High-risk: need step_up_ok even if voice_hard (Phase 3).
+# High-risk: need step_up_ok even if voice_hard (Phase 3+).
 STEP_UP_TOOLS: frozenset[str] = frozenset(
     {
+        "apply_change_request",
+    }
+)
+
+# When anomaly flags fire, these also need step-up (Phase 4).
+ANOMALY_STEP_UP_TOOLS: frozenset[str] = frozenset(
+    {
+        "create_change_request",
+        "cancel_change_request",
         "apply_change_request",
     }
 )
@@ -113,6 +122,110 @@ def _customers_mod():
         return None
 
 
+def dormancy_days() -> int:
+    try:
+        return max(1, int(os.getenv("VOICE_AUTH_DORMANCY_DAYS", "90") or "90"))
+    except ValueError:
+        return 90
+
+
+def template_max_age_days() -> int:
+    try:
+        return max(1, int(os.getenv("VOICE_AUTH_TEMPLATE_MAX_AGE_DAYS", "365") or "365"))
+    except ValueError:
+        return 365
+
+
+def fail_streak_step_up_threshold() -> int:
+    try:
+        return max(1, int(os.getenv("VOICE_AUTH_FAIL_STREAK_STEP_UP", "3") or "3"))
+    except ValueError:
+        return 3
+
+
+def fail_streak_lock_threshold() -> int:
+    try:
+        return max(1, int(os.getenv("VOICE_AUTH_FAIL_STREAK_LOCK", "8") or "8"))
+    except ValueError:
+        return 8
+
+
+def _parse_iso(ts: str | None):
+    from datetime import datetime, timezone
+
+    if not ts:
+        return None
+    s = str(ts).strip()
+    if not s:
+        return None
+    try:
+        if s.endswith("Z"):
+            s = s[:-1] + "+00:00"
+        dt = datetime.fromisoformat(s)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+    except ValueError:
+        return None
+
+
+def analyze_anomaly_flags(
+    customer: dict | None,
+    caller_number: str,
+) -> dict[str, Any]:
+    """Phase 4: dormancy, template age, fail streak, new ANI vs last_ani."""
+    from datetime import datetime, timezone
+
+    flags: list[str] = []
+    reasons: dict[str, Any] = {}
+    va = (customer or {}).get("voice_auth") if isinstance(customer, dict) else None
+    if not isinstance(va, dict):
+        va = {}
+
+    now = datetime.now(timezone.utc)
+    last_call = _parse_iso(va.get("last_call_at"))
+    if last_call is not None:
+        days = (now - last_call).total_seconds() / 86400.0
+        reasons["days_since_call"] = round(days, 2)
+        if days >= dormancy_days():
+            flags.append("dormant")
+
+    enrolled_at = _parse_iso(va.get("enrolled_at"))
+    if enrolled_at is not None:
+        age = (now - enrolled_at).total_seconds() / 86400.0
+        reasons["template_age_days"] = round(age, 2)
+        if age >= template_max_age_days():
+            flags.append("template_aged")
+
+    streak = int(va.get("fail_streak") or 0)
+    reasons["fail_streak"] = streak
+    if streak >= fail_streak_lock_threshold():
+        flags.append("fail_locked")
+    elif streak >= fail_streak_step_up_threshold():
+        flags.append("fail_streak")
+
+    # New ANI: caller differs from last_ani on file (e.g. switched trusted phone).
+    cust_mod = _customers_mod()
+    last_ani = va.get("last_ani") or ""
+    cur = caller_number
+    if cust_mod:
+        cur = cust_mod.normalize_phone(caller_number) or caller_number
+        last_ani = cust_mod.normalize_phone(last_ani) or last_ani
+    if last_ani and cur and last_ani != cur:
+        flags.append("new_ani")
+        reasons["last_ani"] = last_ani
+        reasons["caller"] = cur
+
+    return {
+        "flags": flags,
+        "reasons": reasons,
+        "require_step_up": bool(
+            set(flags) & {"dormant", "template_aged", "fail_streak", "new_ani"}
+        ),
+        "locked": "fail_locked" in flags,
+    }
+
+
 def compute_initial_auth(
     caller_number: str,
     customer: dict | None = None,
@@ -123,6 +236,13 @@ def compute_initial_auth(
     enrolled = False
     level = "anonymous"
     matched: list[dict] = []
+    primary_customer: dict | None = None
+    anomaly: dict[str, Any] = {
+        "flags": [],
+        "reasons": {},
+        "require_step_up": False,
+        "locked": False,
+    }
 
     if not phone:
         return {
@@ -132,6 +252,8 @@ def compute_initial_auth(
             "voice_windows": 0,
             "step_up_ok": False,
             "matched_customers": [],
+            "anomaly": anomaly,
+            "require_step_up": False,
         }
 
     if cust_mod is not None:
@@ -148,18 +270,19 @@ def compute_initial_auth(
             ]
             if paid:
                 level = "cid_only"
+                primary_customer = paid[0]
                 for c in paid:
                     va = c.get("voice_auth") or {}
                     if isinstance(va, dict) and (
                         va.get("enrolled_at") or va.get("template_id")
                     ):
                         enrolled = True
+                        primary_customer = c
                         break
             elif matched:
-                # Registered but not paid — no owner write level.
                 level = "anonymous"
+                primary_customer = matched[0]
             else:
-                # Unknown number: soft F1 presence for legacy unclaimed CR path.
                 level = "cid_legacy"
         except Exception as e:  # noqa: BLE001
             log.warning("compute_initial_auth customers path failed: %s", e)
@@ -167,8 +290,13 @@ def compute_initial_auth(
     else:
         level = "cid_legacy"
 
-    # If enrolled and vendor is live, we still start at cid_only and promote
-    # via on_speech_window (Phase 2+). Phase 1 never auto-promotes to voice_*.
+    if primary_customer is None and customer:
+        primary_customer = customer
+    if primary_customer is not None:
+        anomaly = analyze_anomaly_flags(primary_customer, phone)
+        if anomaly.get("locked"):
+            level = "locked"
+
     return {
         "auth_level": level,
         "voice_enrolled": enrolled,
@@ -176,6 +304,9 @@ def compute_initial_auth(
         "voice_windows": 0,
         "step_up_ok": False,
         "matched_customers": matched,
+        "anomaly": anomaly,
+        "require_step_up": bool(anomaly.get("require_step_up")),
+        "primary_customer": primary_customer,
     }
 
 
@@ -189,7 +320,16 @@ def apply_auth_to_state(state: Any, snapshot: dict[str, Any] | None = None) -> N
     state.voice_enrolled = bool(snap.get("voice_enrolled"))
     state.voice_score_ema = snap.get("voice_score_ema")
     state.voice_windows = int(snap.get("voice_windows") or 0)
+    # Anomaly step-up must be earned this call (do not inherit step_up_ok).
     state.step_up_ok = bool(snap.get("step_up_ok"))
+    state.auth_anomaly_flags = list((snap.get("anomaly") or {}).get("flags") or [])
+    state.auth_require_step_up = bool(snap.get("require_step_up"))
+    state.auth_anomaly_reasons = dict((snap.get("anomaly") or {}).get("reasons") or {})
+    if snap.get("primary_customer") and not getattr(state, "customer", None):
+        state.customer = snap["primary_customer"]
+    # Touch last_call only after a real owner session starts (server may call touch).
+    if not hasattr(state, "voice_pcm_hashes") or state.voice_pcm_hashes is None:
+        state.voice_pcm_hashes = []
 
 
 def refresh_auth(state: Any) -> str:
@@ -198,22 +338,25 @@ def refresh_auth(state: Any) -> str:
         getattr(state, "caller_number", "") or "",
         getattr(state, "customer", None) or None,
     )
-    # Preserve any F2 progress if we already promoted this call.
     prev = (getattr(state, "auth_level", None) or "anonymous").strip().lower()
     new = snap["auth_level"]
-    if LEVEL_RANK.get(prev, 0) > LEVEL_RANK.get(new, 0) and prev not in (
-        "locked",
-        "anonymous",
-    ):
-        # Keep higher F2 level if already promoted.
+    # Preserve F2 progress unless anomaly locked.
+    if snap.get("auth_level") != "locked" and LEVEL_RANK.get(prev, 0) > LEVEL_RANK.get(
+        new, 0
+    ) and prev not in ("locked", "anonymous"):
         snap["auth_level"] = prev
         snap["voice_score_ema"] = getattr(state, "voice_score_ema", None)
         snap["voice_windows"] = getattr(state, "voice_windows", 0)
-        snap["step_up_ok"] = getattr(state, "step_up_ok", False)
         snap["voice_enrolled"] = getattr(state, "voice_enrolled", False) or snap[
             "voice_enrolled"
         ]
+    # Keep step_up_ok if already verified this call
+    if getattr(state, "step_up_ok", False):
+        snap["step_up_ok"] = True
     apply_auth_to_state(state, snap)
+    # Re-apply step_up after apply wiped it when we set True above
+    if snap.get("step_up_ok"):
+        state.step_up_ok = True
     return state.auth_level
 
 
@@ -222,6 +365,8 @@ def enroll_owner_on_state(
     *,
     consent_version: str = "2026-08-14",
     vendor: str | None = None,
+    pcm: bytes | None = None,
+    sample_rate: int = 8000,
 ) -> dict[str, Any]:
     """Consent + enroll current caller; update CallState.voice_enrolled."""
     phone = (getattr(state, "caller_number", None) or "").strip()
@@ -231,20 +376,55 @@ def enroll_owner_on_state(
     if not phone:
         return {"ok": False, "error": "caller phone required"}
     v = (vendor if vendor is not None else voice_auth_vendor()) or "none"
-    # Consent then enroll (mark_voice_enrolled also stamps consent if missing).
+
+    template_id = ""
+    quality = 1.0 if v in ("mock", "local_stub", "none") else None
+    try:
+        from voice_auth_vendors import get_vendor, reset_vendor_cache
+
+        reset_vendor_cache()
+        adapter = get_vendor(v)
+        if v not in ("", "none", "off", "stub"):
+            er = adapter.enroll(
+                phone=phone,
+                pcm=pcm,
+                sample_rate=sample_rate,
+                meta={"consent_version": consent_version},
+            )
+            if er.ok and er.template_id:
+                template_id = er.template_id
+                quality = er.quality
+            elif v == "http" and not er.ok:
+                return {
+                    "ok": False,
+                    "error": er.error or "vendor enroll failed",
+                    "code": "enroll_vendor_failed",
+                    "vendor": v,
+                }
+    except Exception as e:  # noqa: BLE001
+        log.warning("vendor enroll path failed: %s", e)
+
     out = cust_mod.mark_voice_enrolled(
         phone,
         vendor=v,
+        template_id=template_id,
         consent_version=consent_version,
-        quality=1.0 if v in ("mock", "local_stub", "none") else None,
+        quality=quality,
     )
     if out.get("ok"):
         state.voice_enrolled = True
         if out.get("customer"):
             state.customer = out["customer"]
-        # Recompute F1; keep enrolled flag.
+        # Fresh enroll clears template_aged / fail streak anomalies for step-up
         refresh_auth(state)
         state.voice_enrolled = True
+        # New enrollment: clear anomaly step-up for template_aged
+        flags = list(getattr(state, "auth_anomaly_flags", []) or [])
+        flags = [f for f in flags if f != "template_aged"]
+        state.auth_anomaly_flags = flags
+        state.auth_require_step_up = bool(
+            set(flags) & {"dormant", "fail_streak", "new_ani"}
+        )
     return out
 
 
@@ -253,7 +433,6 @@ def verify_enrolled_template(state: Any) -> dict[str, Any]:
     cust = getattr(state, "customer", None) or {}
     va = cust.get("voice_auth") if isinstance(cust, dict) else None
     if not isinstance(va, dict) or not (va.get("enrolled_at") or va.get("template_id")):
-        # Refresh from registry
         cust_mod = _customers_mod()
         phone = getattr(state, "caller_number", "") or ""
         if cust_mod and phone:
@@ -270,6 +449,8 @@ def verify_enrolled_template(state: Any) -> dict[str, Any]:
         "enrolled": enrolled,
         "template_id": tid,
         "vendor": va.get("vendor") or "none",
+        "fail_streak": int(va.get("fail_streak") or 0),
+        "enrolled_at": va.get("enrolled_at"),
     }
 
 
@@ -279,12 +460,7 @@ def on_speech_window(
     pcm: bytes | None = None,
     sample_rate: int = 8000,
 ) -> dict[str, Any]:
-    """Score a speech window and maybe promote auth_level (Phase 2+).
-
-    Vendors:
-      none/off/stub — no-op (F1 only)
-      mock|local_stub — promote enrolled callers after min windows (no real biometrics)
-    """
+    """Score a speech window and maybe promote auth_level (Phase 2–4)."""
     vendor = voice_auth_vendor()
     if vendor in ("", "none", "off", "stub"):
         return {
@@ -292,6 +468,13 @@ def on_speech_window(
             "skipped": True,
             "reason": "vendor_none",
             "auth_level": getattr(state, "auth_level", "anonymous"),
+        }
+
+    if getattr(state, "auth_level", "") == "locked":
+        return {
+            "ok": False,
+            "error": "auth_locked",
+            "auth_level": "locked",
         }
 
     info = verify_enrolled_template(state)
@@ -303,39 +486,166 @@ def on_speech_window(
             "auth_level": getattr(state, "auth_level", "anonymous"),
         }
 
+    # Anti-replay: reject duplicate PCM fingerprints within the call.
+    try:
+        from voice_auth_vendors import get_vendor, pcm_fingerprint, reset_vendor_cache
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": f"vendor import failed: {e}"}
+
+    fp = pcm_fingerprint(pcm)
+    hashes = list(getattr(state, "voice_pcm_hashes", None) or [])
+    if fp and fp in hashes:
+        _record_fail(state, score=None, reason="replay")
+        return {
+            "ok": False,
+            "error": "replay_detected",
+            "code": "replay",
+            "auth_level": getattr(state, "auth_level", "anonymous"),
+        }
+    if fp:
+        hashes.append(fp)
+        # keep last 32
+        state.voice_pcm_hashes = hashes[-32:]
+
+    reset_vendor_cache()
+    adapter = get_vendor(vendor)
+    result = adapter.verify(
+        template_id=str(info.get("template_id") or ""),
+        pcm=pcm,
+        sample_rate=sample_rate,
+        meta={
+            "call_sid": getattr(state, "call_sid", ""),
+            "phone": getattr(state, "caller_number", ""),
+            "window": int(getattr(state, "voice_windows", 0) or 0) + 1,
+        },
+    )
+
     windows = int(getattr(state, "voice_windows", 0) or 0) + 1
     state.voice_windows = windows
     state.voice_enrolled = True
 
-    if vendor in ("mock", "local_stub"):
-        # Deterministic stub score — not a real biometric.
-        score = 0.92
-        ema = getattr(state, "voice_score_ema", None)
-        state.voice_score_ema = (
-            score if ema is None else (0.6 * float(ema) + 0.4 * score)
-        )
-        soft = float(os.getenv("VOICE_AUTH_SOFT", "0.75"))
-        hard = float(os.getenv("VOICE_AUTH_HARD", "0.85"))
-        min_w = int(os.getenv("VOICE_AUTH_MIN_WINDOWS", "3"))
-        if windows >= min_w and float(state.voice_score_ema) >= hard:
-            state.auth_level = "voice_hard"
-        elif windows >= min_w and float(state.voice_score_ema) >= soft:
-            if LEVEL_RANK.get(getattr(state, "auth_level", ""), 0) < LEVEL_RANK["voice_soft"]:
-                state.auth_level = "voice_soft"
+    if not result.ok or result.score is None:
+        _record_fail(state, score=None, reason=result.error or "verify_failed")
         return {
-            "ok": True,
-            "score": score,
-            "auth_level": state.auth_level,
+            "ok": False,
+            "error": result.error or "verify_failed",
+            "auth_level": getattr(state, "auth_level", "anonymous"),
             "windows": windows,
-            "template_id": info.get("template_id"),
             "vendor": vendor,
         }
 
+    if not result.liveness_ok:
+        _record_fail(state, score=float(result.score), reason="liveness_failed")
+        return {
+            "ok": False,
+            "error": "liveness_failed",
+            "code": "liveness",
+            "score": float(result.score),
+            "auth_level": getattr(state, "auth_level", "anonymous"),
+            "windows": windows,
+            "vendor": vendor,
+        }
+
+    score = float(result.score)
+    soft = float(os.getenv("VOICE_AUTH_SOFT", "0.75"))
+    hard = float(os.getenv("VOICE_AUTH_HARD", "0.85"))
+    min_w = int(os.getenv("VOICE_AUTH_MIN_WINDOWS", "3"))
+
+    if score < soft:
+        _record_fail(state, score=score, reason="low_score")
+        # demote soft progress on bad windows
+        if getattr(state, "auth_level", "") in ("voice_soft", "voice_hard"):
+            # keep level but streak rises
+            pass
+        return {
+            "ok": True,
+            "score": score,
+            "auth_level": getattr(state, "auth_level", "anonymous"),
+            "windows": windows,
+            "promoted": False,
+            "vendor": vendor,
+            "low_score": True,
+        }
+
+    ema = getattr(state, "voice_score_ema", None)
+    state.voice_score_ema = score if ema is None else (0.6 * float(ema) + 0.4 * score)
+    _record_success(state, score=score)
+
+    promoted = False
+    if windows >= min_w and float(state.voice_score_ema) >= hard:
+        if getattr(state, "auth_level", "") != "voice_hard":
+            promoted = True
+        state.auth_level = "voice_hard"
+    elif windows >= min_w and float(state.voice_score_ema) >= soft:
+        if LEVEL_RANK.get(getattr(state, "auth_level", ""), 0) < LEVEL_RANK["voice_soft"]:
+            state.auth_level = "voice_soft"
+            promoted = True
+
     return {
-        "ok": False,
-        "error": f"voice auth vendor {vendor!r} not implemented",
-        "auth_level": getattr(state, "auth_level", "anonymous"),
+        "ok": True,
+        "score": score,
+        "auth_level": state.auth_level,
+        "windows": windows,
+        "template_id": info.get("template_id"),
+        "vendor": vendor,
+        "promoted": promoted,
+        "liveness_ok": True,
     }
+
+
+def _record_fail(state: Any, *, score: float | None, reason: str) -> None:
+    phone = getattr(state, "caller_number", "") or ""
+    cust_mod = _customers_mod()
+    if cust_mod and phone:
+        try:
+            out = cust_mod.record_voice_verify_result(phone, ok=False, score=score)
+            if out.get("customer"):
+                state.customer = out["customer"]
+                va = out["customer"].get("voice_auth") or {}
+                streak = int(va.get("fail_streak") or 0)
+                if streak >= fail_streak_lock_threshold():
+                    state.auth_level = "locked"
+                elif streak >= fail_streak_step_up_threshold():
+                    state.auth_require_step_up = True
+                    flags = list(getattr(state, "auth_anomaly_flags", []) or [])
+                    if "fail_streak" not in flags:
+                        flags.append("fail_streak")
+                    state.auth_anomaly_flags = flags
+        except Exception as e:  # noqa: BLE001
+            log.debug("record fail streak failed: %s", e)
+    log.info(
+        "voice_auth fail reason=%s score=%s phone=%s",
+        reason,
+        score,
+        phone[-4:] if phone else "",
+    )
+
+
+def _record_success(state: Any, *, score: float) -> None:
+    phone = getattr(state, "caller_number", "") or ""
+    cust_mod = _customers_mod()
+    if cust_mod and phone:
+        try:
+            out = cust_mod.record_voice_verify_result(phone, ok=True, score=score)
+            if out.get("customer"):
+                state.customer = out["customer"]
+        except Exception as e:  # noqa: BLE001
+            log.debug("record success failed: %s", e)
+
+
+def touch_call_start(state: Any) -> None:
+    """Record last_call_at / last_ani after anomaly snapshot is computed."""
+    mode = (getattr(state, "mode", None) or "").strip().lower()
+    if mode not in ("owner_updates", "unified"):
+        return
+    phone = getattr(state, "caller_number", "") or ""
+    cust_mod = _customers_mod()
+    if not cust_mod or not phone:
+        return
+    try:
+        cust_mod.touch_owner_call(phone, ani=phone)
+    except Exception as e:  # noqa: BLE001
+        log.debug("touch_owner_call failed: %s", e)
 
 
 def check_tool_allowed(state: Any, tool_name: str) -> dict[str, Any] | None:
@@ -414,11 +724,24 @@ def check_tool_allowed(state: Any, tool_name: str) -> dict[str, Any] | None:
             "required_level": need,
         }
 
-    # High-risk step-up (after F1/F2 satisfied)
-    if name in STEP_UP_TOOLS and step_up_enabled() and not getattr(state, "step_up_ok", False):
+    # High-risk + anomaly step-up (after F1/F2 satisfied)
+    need_step = False
+    step_reason = ""
+    if step_up_enabled() and not getattr(state, "step_up_ok", False):
+        if name in STEP_UP_TOOLS:
+            need_step = True
+            step_reason = "high_risk"
+        elif getattr(state, "auth_require_step_up", False) and name in ANOMALY_STEP_UP_TOOLS:
+            need_step = True
+            flags = list(getattr(state, "auth_anomaly_flags", []) or [])
+            step_reason = ",".join(flags) or "anomaly"
+
+    if need_step:
         return {
             "ok": False,
             "denied": True,
+            "created": False,
+            "cancelled": False,
             "applied": False,
             "error": (
                 "That change needs a quick extra check — "
@@ -428,6 +751,8 @@ def check_tool_allowed(state: Any, tool_name: str) -> dict[str, Any] | None:
             "code": "step_up_required",
             "auth_level": have,
             "required_level": need,
+            "step_up_reason": step_reason,
+            "anomaly_flags": list(getattr(state, "auth_anomaly_flags", []) or []),
         }
 
     return None

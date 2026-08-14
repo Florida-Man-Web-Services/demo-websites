@@ -722,6 +722,11 @@ class CallState:
     # Throttle F2 speech-window scoring in realtime media path.
     voice_auth_last_window_at: float = 0.0
     voice_auth_media_bytes: int = 0
+    # Phase 4 anomaly / anti-replay
+    auth_anomaly_flags: list = field(default_factory=list)
+    auth_anomaly_reasons: dict = field(default_factory=dict)
+    auth_require_step_up: bool = False
+    voice_pcm_hashes: list = field(default_factory=list)
 
 
 _twilio_client = None

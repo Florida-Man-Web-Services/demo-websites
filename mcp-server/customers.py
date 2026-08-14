@@ -399,6 +399,8 @@ def mark_voice_enrolled(
     if quality is not None:
         va["quality"] = quality
     va["fail_streak"] = 0
+    # Phase 4: template age baseline
+    va["last_verify_at"] = None
     return upsert(key, patch={"voice_auth": va})
 
 
@@ -408,6 +410,55 @@ def clear_voice_auth(phone: str) -> dict[str, Any]:
     if not key:
         return {"ok": False, "error": "invalid phone number"}
     return upsert(key, patch={"voice_auth": {}})
+
+
+def touch_owner_call(
+    phone: str,
+    *,
+    ani: str | None = None,
+    at: str | None = None,
+) -> dict[str, Any]:
+    """Record last successful owner-desk call metadata (Phase 4 dormancy/ANI)."""
+    key = normalize_phone(phone)
+    if not key:
+        return {"ok": False, "error": "invalid phone number"}
+    row = get(key)
+    if not row:
+        return {"ok": False, "error": "customer not found"}
+    va = dict(row.get("voice_auth") or {})
+    ts = at or _now()
+    va["last_call_at"] = ts
+    nani = normalize_phone(ani) if ani else key
+    if nani:
+        va["last_ani"] = nani
+    return upsert(key, patch={"voice_auth": va})
+
+
+def record_voice_verify_result(
+    phone: str,
+    *,
+    ok: bool,
+    score: float | None = None,
+    at: str | None = None,
+) -> dict[str, Any]:
+    """Update fail_streak / last_verify_at after an F2 window (Phase 4)."""
+    key = normalize_phone(phone)
+    if not key:
+        return {"ok": False, "error": "invalid phone number"}
+    row = get(key)
+    if not row:
+        return {"ok": False, "error": "customer not found"}
+    va = dict(row.get("voice_auth") or {})
+    ts = at or _now()
+    if ok:
+        va["fail_streak"] = 0
+        va["last_verify_at"] = ts
+        if score is not None:
+            va["last_score"] = float(score)
+    else:
+        va["fail_streak"] = int(va.get("fail_streak") or 0) + 1
+        va["last_fail_at"] = ts
+    return upsert(key, patch={"voice_auth": va})
 
 
 def list_customers(

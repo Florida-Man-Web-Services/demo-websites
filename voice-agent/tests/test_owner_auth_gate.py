@@ -290,6 +290,12 @@ def test_note_speech_activity_throttles(monkeypatch):
     _, agent, va, _ = _reload_owner()
     monkeypatch.setenv("VOICE_AUTH_VENDOR", "mock")
     importlib.reload(va)
+    try:
+        from voice_auth_vendors import reset_vendor_cache
+
+        reset_vendor_cache()
+    except Exception:
+        pass
     state = agent.CallState(
         call_sid="CA-SP",
         business=_Biz(),
@@ -308,4 +314,142 @@ def test_note_speech_activity_throttles(monkeypatch):
     assert a.get("reason") != "vendor_none", a
     b = va.note_speech_activity(state, force=False)
     assert b.get("reason") == "throttled"
+
+
+def test_dormancy_requires_step_up_for_create(tmp_path, monkeypatch):
+    monkeypatch.setenv("VOICE_AUTH_DORMANCY_DAYS", "30")
+    monkeypatch.setenv("VOICE_STEP_UP_ENABLED", "true")
+    path = tmp_path / "c.json"
+    monkeypatch.setenv("CUSTOMERS_PATH", str(path))
+    mcp = REPO_ROOT / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    importlib.reload(customers)
+    customers.upsert("+13555550100", status="active_owner", slug="cool-cafe")
+    customers.mark_voice_enrolled("+13555550100", vendor="mock")
+    # last call 100 days ago
+    customers.upsert(
+        "+13555550100",
+        patch={
+            "voice_auth": {
+                **(customers.get("+13555550100") or {}).get("voice_auth", {}),
+                "last_call_at": "2025-01-01T00:00:00+00:00",
+            }
+        },
+    )
+    _, agent, va, _ = _reload_owner()
+    importlib.reload(va)
+    snap = va.compute_initial_auth("+13555550100")
+    assert "dormant" in snap["anomaly"]["flags"]
+    assert snap["require_step_up"] is True
+    state = agent.CallState(
+        call_sid="CA-DORM",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13555550100",
+        mode="owner_updates",
+    )
+    va.apply_auth_to_state(state)
+    deny = va.check_tool_allowed(state, "create_change_request")
+    assert deny and deny.get("code") == "step_up_required"
+    assert "dormant" in (deny.get("anomaly_flags") or [])
+
+
+def test_template_aged_flag(tmp_path, monkeypatch):
+    monkeypatch.setenv("VOICE_AUTH_TEMPLATE_MAX_AGE_DAYS", "10")
+    path = tmp_path / "c.json"
+    monkeypatch.setenv("CUSTOMERS_PATH", str(path))
+    mcp = REPO_ROOT / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    importlib.reload(customers)
+    customers.upsert("+13555550100", status="active_owner", slug="cool-cafe")
+    customers.upsert(
+        "+13555550100",
+        patch={
+            "voice_auth": {
+                "enrolled_at": "2020-01-01T00:00:00+00:00",
+                "template_id": "old",
+                "fail_streak": 0,
+            }
+        },
+    )
+    _, _, va, _ = _reload_owner()
+    importlib.reload(va)
+    flags = va.analyze_anomaly_flags(customers.get("+13555550100"), "+13555550100")
+    assert "template_aged" in flags["flags"]
+
+
+def test_replay_pcm_rejected(tmp_path, monkeypatch):
+    monkeypatch.setenv("VOICE_AUTH_VENDOR", "mock")
+    path = tmp_path / "c.json"
+    monkeypatch.setenv("CUSTOMERS_PATH", str(path))
+    mcp = REPO_ROOT / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    importlib.reload(customers)
+    customers.upsert("+13555550100", status="active_owner", slug="cool-cafe")
+    customers.mark_voice_enrolled("+13555550100", vendor="mock", template_id="t-replay")
+    _, agent, va, _ = _reload_owner()
+    monkeypatch.setenv("VOICE_AUTH_VENDOR", "mock")
+    importlib.reload(va)
+    try:
+        from voice_auth_vendors import reset_vendor_cache
+
+        reset_vendor_cache()
+    except Exception:
+        pass
+    state = agent.CallState(
+        call_sid="CA-RP",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13555550100",
+        mode="owner_updates",
+        auth_level="cid_only",
+    )
+    va.apply_auth_to_state(state)
+    pcm = b"\x00\x01\x02\x03" * 20
+    r1 = va.on_speech_window(state, pcm=pcm)
+    assert r1.get("ok") is True
+    r2 = va.on_speech_window(state, pcm=pcm)
+    assert r2.get("code") == "replay" or r2.get("error") == "replay_detected"
+
+
+def test_new_ani_flag(tmp_path, monkeypatch):
+    path = tmp_path / "c.json"
+    monkeypatch.setenv("CUSTOMERS_PATH", str(path))
+    mcp = REPO_ROOT / "mcp-server"
+    if str(mcp) not in sys.path:
+        sys.path.insert(0, str(mcp))
+    import customers
+
+    importlib.reload(customers)
+    customers.upsert(
+        "+13555550100",
+        status="active_owner",
+        slug="cool-cafe",
+        patch={"trusted_phones": ["+13555550100", "+13555550999"]},
+    )
+    customers.upsert(
+        "+13555550100",
+        patch={
+            "voice_auth": {
+                "last_ani": "+13555550100",
+                "last_call_at": "2026-08-01T00:00:00+00:00",
+            }
+        },
+    )
+    # call from trusted delegate line
+    _, _, va, _ = _reload_owner()
+    importlib.reload(va)
+    # find_customers_for_phone on 999 must find the row
+    flags = va.analyze_anomaly_flags(customers.get("+13555550100"), "+13555550999")
+    assert "new_ani" in flags["flags"]
+
 

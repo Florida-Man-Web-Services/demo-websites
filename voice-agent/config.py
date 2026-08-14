@@ -231,6 +231,17 @@ VOICE_STEP_UP_ENABLED = os.getenv("VOICE_STEP_UP_ENABLED", "true").strip().lower
 )
 VOICE_STEP_UP_TTL_S = int(os.getenv("VOICE_STEP_UP_TTL_S", "600") or "600")
 VOICE_STEP_UP_MAX_ATTEMPTS = int(os.getenv("VOICE_STEP_UP_MAX_ATTEMPTS", "5") or "5")
+# Phase 4 hardening
+VOICE_AUTH_DORMANCY_DAYS = int(os.getenv("VOICE_AUTH_DORMANCY_DAYS", "90") or "90")
+VOICE_AUTH_TEMPLATE_MAX_AGE_DAYS = int(
+    os.getenv("VOICE_AUTH_TEMPLATE_MAX_AGE_DAYS", "365") or "365"
+)
+VOICE_AUTH_FAIL_STREAK_STEP_UP = int(
+    os.getenv("VOICE_AUTH_FAIL_STREAK_STEP_UP", "3") or "3"
+)
+VOICE_AUTH_FAIL_STREAK_LOCK = int(os.getenv("VOICE_AUTH_FAIL_STREAK_LOCK", "8") or "8")
+VOICE_AUTH_HTTP_URL = os.getenv("VOICE_AUTH_HTTP_URL", "").strip()
+VOICE_AUTH_HTTP_TOKEN = os.getenv("VOICE_AUTH_HTTP_TOKEN", "").strip()
 
 
 def require(*names: str) -> None:

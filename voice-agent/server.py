@@ -94,13 +94,16 @@ def _make_state(
         import voice_auth
 
         voice_auth.apply_auth_to_state(state)
+        # After anomaly snapshot (uses prior last_call_at), stamp this call.
+        voice_auth.touch_call_start(state)
     except Exception as e:  # noqa: BLE001
         log.warning("voice_auth init failed: %s", e)
     log.info(
-        "call %s mode=%s auth=%s customer=%s business=%s",
+        "call %s mode=%s auth=%s flags=%s customer=%s business=%s",
         call_sid,
         mode,
         getattr(state, "auth_level", "?"),
+        getattr(state, "auth_anomaly_flags", []),
         (customer or {}).get("id") or "-",
         business.name,
     )
