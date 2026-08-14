@@ -211,7 +211,7 @@ def _prime_xai(call_sid: str, business: Business, direction: str, number: str, s
         for retry in (False, True):
             try:
                 await ws.send(json.dumps(realtime.session_update(state)))
-                await ws.send(json.dumps({"type": "response.create"}))
+                await ws.send(json.dumps(realtime.opening_response_create(state)))
                 # A silently-dead socket accepts sends; only a live server can
                 # reply (session.updated / response.created — the bridge needs
                 # neither). No reply in time = spare died undetected: redial.

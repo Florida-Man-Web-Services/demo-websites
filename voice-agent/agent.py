@@ -1214,6 +1214,23 @@ def run_turn(
             on_sentence(closing)
         return closing
 
+    # Default AI 411 answer: fixed short greeting (no LLM menu monologue).
+    if (
+        not user_speech
+        and not state.llm.has_history()
+        and effective_mode(state) == "ai411"
+        and state.direction != "sms"
+    ):
+        import ai411 as _ai411
+
+        greeting = _ai411.AI411_GREETING
+        # Seed transcript so the next turn is not another "greet them now".
+        if hasattr(state.llm, "messages"):
+            state.llm.messages.append({"role": "assistant", "content": greeting})
+        if on_sentence:
+            on_sentence(greeting)
+        return greeting
+
     if user_speech:
         state.llm.add_user(user_speech)
     elif not state.llm.has_history():

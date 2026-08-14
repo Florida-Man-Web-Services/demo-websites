@@ -80,6 +80,30 @@ def session_update(state: CallState) -> dict:
     return {"type": "session.update", "session": session}
 
 
+def opening_response_create(state: CallState) -> dict:
+    """First model turn after answer.
+
+    For default AI 411 mode, pin the spoken line to AI411_GREETING so the
+    model cannot expand into a menu monologue (prompt-only is unreliable).
+    """
+    mode = (getattr(state, "mode", None) or config.AGENT_MODE or "sales").strip().lower()
+    if mode == "ai411":
+        import ai411
+
+        line = ai411.AI411_GREETING
+        return {
+            "type": "response.create",
+            "response": {
+                # Per-response instructions override session instructions for this turn.
+                "instructions": (
+                    f'Say exactly these words and nothing else, then stop and wait '
+                    f'for the caller to speak: "{line}"'
+                ),
+            },
+        }
+    return {"type": "response.create"}
+
+
 def xai_url() -> str:
     # A console-configured voice agent wins; otherwise pick the model directly.
     if config.XAI_VOICE_AGENT_ID:
@@ -100,7 +124,7 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
     """
     if not primed:
         await xai.send(session_update(state))
-        await xai.send({"type": "response.create"})  # model speaks first, both directions
+        await xai.send(opening_response_create(state))  # AI411: fixed "A411 here."
 
     done = asyncio.Event()
 

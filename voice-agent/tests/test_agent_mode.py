@@ -131,6 +131,44 @@ def test_ai411_search_events_not_stub():
     assert "events" in out or "ok" in out
 
 
+def test_ai411_opening_response_is_fixed_greeting():
+    """Realtime first turn must pin spoken line to AI411_GREETING."""
+    import realtime
+    from agent import CallState
+
+    _, agent, ai411 = _reload_mode("ai411")
+    state = CallState(
+        call_sid="CA-test",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13525550100",
+        mode="ai411",
+    )
+    msg = realtime.opening_response_create(state)
+    assert msg["type"] == "response.create"
+    instr = msg["response"]["instructions"]
+    assert ai411.AI411_GREETING in instr
+    assert "exactly" in instr.lower()
+
+
+def test_ai411_pipeline_first_turn_is_fixed_greeting():
+    _, agent, ai411 = _reload_mode("ai411")
+    state = agent.CallState(
+        call_sid="CA-test",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13525550100",
+        mode="ai411",
+    )
+    # Minimal LLM stub with messages list
+    state.llm = mock.Mock()
+    state.llm.has_history.return_value = False
+    state.llm.messages = []
+    out = agent.run_turn(state, None)
+    assert out == ai411.AI411_GREETING
+    assert state.llm.messages[-1]["content"] == ai411.AI411_GREETING
+
+
 @pytest.fixture(autouse=True)
 def _restore_sales_mode():
     yield
