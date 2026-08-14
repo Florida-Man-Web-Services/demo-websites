@@ -56,6 +56,14 @@ MODE_ONBOARDING = "onboarding"
 MODE_SALES = "sales"
 MODE_OWNER = "owner_updates"
 
+# Statuses allowed to mutate sites (owner_updates write path).
+OWNER_WRITE_STATUSES = frozenset({"paid", "active_owner"})
+
+# OWNER_CR_AUTH: soft (default) | strict | off
+# soft  — paid slug owners are protected; unknown/unclaimed slugs stay legacy-open
+# strict — every write needs a paid/active_owner trusted phone for that slug
+# off   — no registry checks (tests / emergency)
+
 
 def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -115,6 +123,225 @@ def get(phone: str) -> dict[str, Any] | None:
     with _lock:
         row = _read().get(key)
         return dict(row) if row else None
+
+
+def trusted_phones_for(customer: dict[str, Any] | None) -> list[str]:
+    """Primary phone + trusted_phones + delegate phones (normalized, unique)."""
+    if not customer:
+        return []
+    out: list[str] = []
+    seen: set[str] = set()
+
+    def _add(raw: Any) -> None:
+        key = normalize_phone(str(raw) if raw is not None else None)
+        if key and key not in seen:
+            seen.add(key)
+            out.append(key)
+
+    _add(customer.get("phone"))
+    trusted = customer.get("trusted_phones") or []
+    if isinstance(trusted, str):
+        trusted = [trusted]
+    if isinstance(trusted, list):
+        for p in trusted:
+            _add(p)
+    delegates = customer.get("delegates") or []
+    if isinstance(delegates, list):
+        for d in delegates:
+            if isinstance(d, dict):
+                _add(d.get("phone"))
+            else:
+                _add(d)
+    return out
+
+
+def phone_is_trusted(customer: dict[str, Any] | None, phone: str | None) -> bool:
+    key = normalize_phone(phone)
+    if not key:
+        return False
+    return key in set(trusted_phones_for(customer))
+
+
+def is_owner_write_status(status: str | None) -> bool:
+    return (status or "").strip() in OWNER_WRITE_STATUSES
+
+
+def find_customers_for_phone(phone: str | None) -> list[dict[str, Any]]:
+    """All registry rows where phone is primary, trusted, or a delegate line."""
+    key = normalize_phone(phone)
+    if not key:
+        return []
+    with _lock:
+        rows = list(_read().values())
+    return [dict(r) for r in rows if phone_is_trusted(r, key)]
+
+
+def owners_of_slug(slug: str | None) -> list[dict[str, Any]]:
+    """Paid/active_owner customers whose slug matches (case-sensitive store)."""
+    s = (slug or "").strip()
+    if not s:
+        return []
+    with _lock:
+        rows = list(_read().values())
+    out: list[dict[str, Any]] = []
+    for r in rows:
+        if not is_owner_write_status(r.get("status")):
+            continue
+        if (r.get("slug") or "").strip() == s:
+            out.append(dict(r))
+    return out
+
+
+def cr_auth_mode() -> str:
+    raw = (os.getenv("OWNER_CR_AUTH") or "soft").strip().lower()
+    if raw in ("off", "0", "false", "no"):
+        return "off"
+    if raw in ("strict", "require", "on", "1", "true"):
+        return "strict"
+    return "soft"
+
+
+def authorize_owner_write(
+    caller_phone: str | None,
+    business_slug: str | None,
+    *,
+    action: str = "write",
+) -> dict[str, Any]:
+    """Server-side F1 gate for owner ChangeRequest mutates (Phase 0).
+
+    Returns {ok: True, auth_level, customer?} or {ok: False, error, code}.
+    Never raises.
+    """
+    mode = cr_auth_mode()
+    if mode == "off":
+        return {
+            "ok": True,
+            "auth_level": "cid_legacy",
+            "auth_mode": mode,
+            "action": action,
+        }
+
+    phone = normalize_phone(caller_phone)
+    slug = (business_slug or "").strip()
+    if not slug:
+        return {
+            "ok": False,
+            "error": "business_slug is required",
+            "code": "slug_required",
+            "auth_mode": mode,
+        }
+    if not phone:
+        # Voice always has Twilio From; empty phone is admin/MCP/legacy tests.
+        if mode == "strict":
+            return {
+                "ok": False,
+                "error": "A verified caller phone is required to change a site.",
+                "code": "phone_required",
+                "auth_mode": mode,
+            }
+        return {
+            "ok": True,
+            "auth_level": "cid_legacy",
+            "auth_mode": mode,
+            "action": action,
+            "note": "no_caller_phone",
+        }
+
+    matched = find_customers_for_phone(phone)
+    claim = owners_of_slug(slug)
+
+    if claim:
+        for cust in claim:
+            if phone_is_trusted(cust, phone):
+                return {
+                    "ok": True,
+                    "auth_level": "cid_only",
+                    "auth_mode": mode,
+                    "customer": cust,
+                    "action": action,
+                }
+        return {
+            "ok": False,
+            "error": (
+                "This phone number is not authorized to update that business site. "
+                "Call from the owner's registered line."
+            ),
+            "code": "not_owner",
+            "auth_mode": mode,
+            "slug": slug,
+        }
+
+    # No paid owner claims this slug yet.
+    paid_here = [c for c in matched if is_owner_write_status(c.get("status"))]
+    if paid_here:
+        for cust in paid_here:
+            own_slug = (cust.get("slug") or "").strip()
+            if own_slug in ("", slug):
+                return {
+                    "ok": True,
+                    "auth_level": "cid_only",
+                    "auth_mode": mode,
+                    "customer": cust,
+                    "action": action,
+                }
+        return {
+            "ok": False,
+            "error": (
+                "This line is registered to a different site. "
+                "I can only take updates for your own business."
+            ),
+            "code": "slug_mismatch",
+            "auth_mode": mode,
+            "slug": slug,
+        }
+
+    non_paid = [c for c in matched if not is_owner_write_status(c.get("status"))]
+    if non_paid:
+        st = (non_paid[0].get("status") or "unknown").strip()
+        return {
+            "ok": False,
+            "error": (
+                "Site updates are available after the website is paid and activated. "
+                f"Current account status is {st}."
+            ),
+            "code": "not_active_owner",
+            "auth_mode": mode,
+            "status": st,
+        }
+
+    # No registry hit for this phone and slug unclaimed.
+    if mode == "strict":
+        return {
+            "ok": False,
+            "error": (
+                "I don't have an active owner account on this phone for that site yet."
+            ),
+            "code": "not_registered",
+            "auth_mode": mode,
+        }
+
+    # soft + legacy catalog demos: allow unclaimed slug with no customer row
+    return {
+        "ok": True,
+        "auth_level": "cid_legacy",
+        "auth_mode": mode,
+        "action": action,
+    }
+
+
+def set_trusted_phones(phone: str, phones: list[str]) -> dict[str, Any]:
+    """Replace trusted_phones list (primary phone always remains trusted via helper)."""
+    key = normalize_phone(phone)
+    if not key:
+        return {"ok": False, "error": "invalid phone number"}
+    cleaned: list[str] = []
+    seen: set[str] = set()
+    for p in phones or []:
+        n = normalize_phone(p)
+        if n and n not in seen:
+            seen.add(n)
+            cleaned.append(n)
+    return upsert(phone, patch={"trusted_phones": cleaned})
 
 
 def list_customers(

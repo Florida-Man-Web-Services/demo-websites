@@ -48,6 +48,41 @@ OPEN_STATUSES = frozenset(
         "in_progress",
     }
 )
+
+
+def _authorize_owner_write(caller_phone: str, business_slug: str, *, action: str) -> dict[str, Any] | None:
+    """Return a speakable deny dict, or None if allowed. Fail-open only if customers missing."""
+    try:
+        import customers as customers_mod
+    except Exception:
+        return None
+    try:
+        auth = customers_mod.authorize_owner_write(
+            caller_phone, business_slug, action=action
+        )
+    except Exception as e:  # noqa: BLE001
+        return {
+            "ok": False,
+            "created": False,
+            "cancelled": False,
+            "applied": False,
+            "error": f"owner auth check failed: {e}",
+            "code": "auth_error",
+        }
+    if auth.get("ok"):
+        return None
+    # Shape for create/cancel/apply callers
+    return {
+        "ok": False,
+        "created": False,
+        "cancelled": False,
+        "applied": False,
+        "error": auth.get("error") or "not authorized",
+        "code": auth.get("code") or "not_owner",
+        "auth_mode": auth.get("auth_mode"),
+    }
+
+
 TERMINAL_STATUSES = frozenset(
     {
         "cancelled",
@@ -185,6 +220,15 @@ def create_change_request(
             "error": "summary is required — give a one-line description of the change",
         }
 
+    denied = _authorize_owner_write(caller_phone, slug, action="create")
+    if denied is not None:
+        return {
+            "created": False,
+            "error": denied.get("error") or "not authorized",
+            "code": denied.get("code"),
+            "auth_mode": denied.get("auth_mode"),
+        }
+
     normalized, err = _normalize_items(items)
     if err:
         return {"created": False, "error": err}
@@ -257,7 +301,10 @@ def list_open_change_requests(slug: str | None = None) -> dict[str, Any]:
     }
 
 
-def cancel_change_request(request_id: str) -> dict[str, Any]:
+def cancel_change_request(
+    request_id: str,
+    caller_phone: str = "",
+) -> dict[str, Any]:
     """Set status=cancelled for an open request. Idempotent if already cancelled."""
     rid = (request_id or "").strip()
     if not rid:
@@ -290,6 +337,21 @@ def cancel_change_request(request_id: str) -> dict[str, Any]:
                 "error": f"request {rid} is {status} and cannot be cancelled",
                 "status": status,
             }
+
+        slug = str(found.get("business_slug") or "")
+        # Prefer explicit caller_phone; fall back to the phone that filed the CR
+        # only when auth is off or soft-unclaimed — still run gate when phone given.
+        phone = (caller_phone or "").strip() or str(found.get("caller_phone") or "")
+        denied = _authorize_owner_write(phone, slug, action="cancel")
+        if denied is not None:
+            return {
+                "cancelled": False,
+                "error": denied.get("error") or "not authorized",
+                "code": denied.get("code"),
+                "auth_mode": denied.get("auth_mode"),
+                "id": rid,
+            }
+
         found["status"] = "cancelled"
         found["cancelled_at"] = _now_iso()
         _write_all(path, records)
@@ -485,7 +547,10 @@ def _site_path_for_slug(slug: str) -> tuple[Path | None, str | None]:
     return path, None
 
 
-def apply_change_request(request_id: str) -> dict[str, Any]:
+def apply_change_request(
+    request_id: str,
+    caller_phone: str = "",
+) -> dict[str, Any]:
     """Apply structured items (hours/phone/address/copy) to the site HTML.
 
     Status flow: pending|approved → in_progress → shipped|failed.
@@ -504,6 +569,19 @@ def apply_change_request(request_id: str) -> dict[str, Any]:
         return {
             "applied": False,
             "error": loaded.get("error") or f"no change request with id {rid!r}",
+        }
+    req0 = loaded.get("request") or {}
+    phone = (caller_phone or "").strip() or str(req0.get("caller_phone") or "")
+    denied = _authorize_owner_write(
+        phone, str(req0.get("business_slug") or ""), action="apply"
+    )
+    if denied is not None:
+        return {
+            "applied": False,
+            "error": denied.get("error") or "not authorized",
+            "code": denied.get("code"),
+            "auth_mode": denied.get("auth_mode"),
+            "id": rid,
         }
     req = loaded["request"]
     status = str(req.get("status") or "").lower()

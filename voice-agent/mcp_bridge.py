@@ -812,11 +812,17 @@ def _dispatch_owner(
 
     if name == "cancel_change_request":
         rid = args.get("request_id") or args.get("id") or ""
-        return cr.cancel_change_request(str(rid))
+        return cr.cancel_change_request(
+            str(rid),
+            caller_phone=_phone(args, caller_number),
+        )
 
     if name == "apply_change_request":
         rid = args.get("request_id") or args.get("id") or ""
-        return cr.apply_change_request(str(rid))
+        return cr.apply_change_request(
+            str(rid),
+            caller_phone=_phone(args, caller_number),
+        )
 
     if name == "get_change_request":
         rid = args.get("request_id") or args.get("id") or ""
