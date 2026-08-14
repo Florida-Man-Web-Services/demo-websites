@@ -158,6 +158,11 @@ curl -X POST https://voice.flmanbiosci.net/api/billing/mark-paid \
 
 3. `status=active_owner`.
 4. Later calls → **owner_updates** (ChangeRequests on their demo).
+5. **Owner auth (phased):** Factor 1 = Twilio caller ID ∈ `trusted_phones`; Factor 2 =
+   passive speaker verification after consented enrollment. Writes gated by
+   `CallState.auth_level` in code (not prompt-only). High-risk actions (phone/billing/publish)
+   use SMS OTP / liveness step-up. Full design:
+   [superpowers/specs/2026-08-14-owner-voice-auth-design.md](./superpowers/specs/2026-08-14-owner-voice-auth-design.md).
 
 ---
 
@@ -184,12 +189,25 @@ File: `CUSTOMERS_PATH` (JSON object).
     "stripe_customer_id": "",
     "builder_brief_path": "",
     "honcho_session_id": "",
+    "trusted_phones": ["+135****0100"],
+    "voice_auth": {
+      "consent_version": "",
+      "consented_at": null,
+      "enrolled_at": null,
+      "vendor": "none",
+      "template_id": "",
+      "quality": null
+    },
+    "delegates": [],
     "notes": "",
     "created_at": "2026-08-11T00:00:00+00:00",
     "updated_at": "2026-08-11T00:00:00+00:00"
   }
 }
 ```
+
+`trusted_phones` / `voice_auth` / `delegates` are **additive** (owner voice-auth design).
+Empty `trusted_phones` ⇒ treat primary `phone` as sole trusted line.
 
 API helpers: `register_callback`, `save_requirements`, `write_builder_brief`,
 `mark_demo_ready`, `mark_paid`, `list_customers`, `get`, `resolve_mode`.
@@ -330,6 +348,7 @@ cd voice-agent
 | HTTPRoutes + Authentik host | **IAC PR #96** |
 | Stripe webhook → mark-paid | **Pending** wiring |
 | Bitwarden fields for Honcho | **Pending** (manual Secret OK) |
+| Owner voice auth (F1 harden + F2) | **Spec approved** 2026-08-14; implement phases 0–4 |
 
 ---
 

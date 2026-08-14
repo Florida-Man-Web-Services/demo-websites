@@ -137,9 +137,14 @@ JSON map `phone_e164 → Customer` on voice PVC (source of truth).
 | **ai411** | Default public / unknown phone | Directory, events, broadcasts, SMS links |
 | **onboarding** | Signup / interview queue | Profile, save answers, finalize requirements, builder brief |
 | **sales** | Demo ready or outbound slug dial | Demo SMS/email, outcome log, Stripe link in prompt |
-| **owner_updates** | Paid / active_owner | ChangeRequests, outline, apply local HTML |
+| **owner_updates** | Paid / active_owner | ChangeRequests, outline, apply local HTML; **auth_level** gates writes |
 | **unified** | Pinned env | AI411 + owner if caller ID matches business phone |
 | **auto** | Desired prod | Per-call `customers.resolve_mode` (needs new image) |
+
+**Owner identity (phased):** F1 Twilio CID ∈ `trusted_phones`; F2 passive speaker
+verify after enrollment; step-up OTP for high-risk. Spec:
+[superpowers/specs/2026-08-14-owner-voice-auth-design.md](./superpowers/specs/2026-08-14-owner-voice-auth-design.md).
+Server-side gates in `mcp_bridge` / stores — not LLM-only.
 
 Resolution (when `AGENT_MODE=auto`):
 
@@ -229,9 +234,14 @@ PR track: `hwcopeland/iac` **#96** branch `feat/theswamp-authentik-flmanbiosci`.
 - Voice APIs for register are **public** (CORS-limited origins in prod).
 - Desk is Authentik FMB | Infrastructure only.
 - Demo pages are public by unguessable hash (not auth).
+- **Owner updates auth (phased):** F1 caller ID ∈ `trusted_phones`; F2 passive
+  speaker verification post-consent enrollment; step-up OTP for high-risk; gates in
+  code not prompt — [2026-08-14-owner-voice-auth-design.md](./superpowers/specs/2026-08-14-owner-voice-auth-design.md).
 - TCPA: outbound sales remains human-confirmed dialer; AI disclosure in prompts.
 - A2P/10DLC still required for bulk SMS under FMWS entity (formation gate).
 - Never commit API keys; Honcho/Stripe live only in Secrets/Bitwarden.
+- Biometric retention: templates preferred over raw audio; delete path on offboarding;
+  counsel before multi-state scale of voiceprints.
 
 ---
 
@@ -242,6 +252,7 @@ PR track: `hwcopeland/iac` **#96** branch `feat/theswamp-authentik-flmanbiosci`.
 | [PRODUCT_LOOP.md](./PRODUCT_LOOP.md) | Funnel steps, APIs, builder |
 | [OPS_CLUSTER.md](./OPS_CLUSTER.md) | DNS, Authentik, Flux, secrets, runbooks |
 | [API.md](./API.md) | HTTP API reference |
+| [superpowers/specs/2026-08-14-owner-voice-auth-design.md](./superpowers/specs/2026-08-14-owner-voice-auth-design.md) | Owner phone + voice 2FA |
 | [../voice-agent/README.md](../voice-agent/README.md) | Local voice dev |
 | [../mcp-server/README.md](../mcp-server/README.md) | MCP tools |
 | [../README.md](../README.md) | Monorepo map |
