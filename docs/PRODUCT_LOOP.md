@@ -348,7 +348,7 @@ cd voice-agent
 | HTTPRoutes + Authentik host | **IAC PR #96** |
 | Stripe webhook → mark-paid | **Pending** wiring |
 | Bitwarden fields for Honcho | **Pending** (manual Secret OK) |
-| Owner voice auth (F1 harden + F2) | **Spec approved** 2026-08-14; implement phases 0–4 |
+| Owner voice auth (F1 harden + F2) | **Phase 0 shipped** (F1 CR gates); phases 1–4 open — see voice-auth spec |
 
 ---
 
