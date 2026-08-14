@@ -201,6 +201,37 @@ TOOLS = [
         },
     },
     {
+        "name": "request_step_up_code",
+        "description": (
+            "Text a one-time code to the caller's phone before high-risk actions "
+            "(especially apply_change_request). Call this when a tool returns "
+            "step_up_required."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "verify_step_up_code",
+        "description": (
+            "Verify the 6-digit SMS code the owner read back. On success, "
+            "high-risk tools like apply_change_request are unlocked for this call."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "Digits the owner spoke (e.g. 123456).",
+                }
+            },
+            "required": ["code"],
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "send_sms_links",
         "description": (
             "Text helpful links (demo page, confirmation) to the caller. "

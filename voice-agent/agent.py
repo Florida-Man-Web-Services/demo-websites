@@ -8,6 +8,7 @@ outcome, hang up), and returns the sentence(s) the agent should speak next.
 
 import json
 import logging
+import os
 from dataclasses import dataclass, field
 
 import anthropic
@@ -712,6 +713,15 @@ class CallState:
     voice_score_ema: float | None = None
     voice_windows: int = 0
     step_up_ok: bool = False
+    # Phase 3 SMS OTP step-up (hashes only; never log the code).
+    step_up_code_hash: str = ""
+    step_up_salt: str = ""
+    step_up_expires_at: float = 0.0
+    step_up_attempts: int = 0
+    step_up_sent_at: float = 0.0
+    # Throttle F2 speech-window scoring in realtime media path.
+    voice_auth_last_window_at: float = 0.0
+    voice_auth_media_bytes: int = 0
 
 
 _twilio_client = None
@@ -1048,7 +1058,28 @@ def _run_owner_tool(state: CallState, name: str, args: dict) -> str:
             state,
             consent_version=str(args.get("consent_version") or "2026-08-14"),
         )
-        return voice_auth.deny_json(out) if not out.get("ok") else __import__("json").dumps(out, ensure_ascii=False)
+        return json.dumps(out, ensure_ascii=False)
+
+    if name == "request_step_up_code":
+        def _sms(to: str, body: str) -> None:
+            _twilio().messages.create(
+                to=to, from_=config.TWILIO_PHONE_NUMBER, body=body
+            )
+
+        # Prefer real SMS; tests can set VOICE_STEP_UP_DEBUG_CODE=1 without Twilio.
+        send_fn = _sms
+        if (os.getenv("VOICE_STEP_UP_DEBUG_CODE") or "").strip().lower() in (
+            "1",
+            "true",
+            "yes",
+        ):
+            send_fn = None
+        out = voice_auth.request_step_up_code(state, send_sms_fn=send_fn)
+        return json.dumps(out, ensure_ascii=False)
+
+    if name == "verify_step_up_code":
+        out = voice_auth.verify_step_up_code(state, str(args.get("code") or ""))
+        return json.dumps(out, ensure_ascii=False)
 
     deny = voice_auth.check_tool_allowed(state, name)
     if deny is not None:

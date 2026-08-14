@@ -166,6 +166,23 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
                     await twilio.send(
                         {"event": "clear", "streamSid": twilio.stream_sid}
                     )
+                elif t in (
+                    "input_audio_buffer.speech_stopped",
+                    "input_audio_buffer.committed",
+                ):
+                    # Phase 3: F2 speech window on end-of-utterance (owner modes).
+                    try:
+                        import voice_auth
+
+                        await asyncio.to_thread(
+                            voice_auth.note_speech_activity, state, force=True
+                        )
+                    except Exception:
+                        log.debug(
+                            "call %s: voice_auth speech window skipped",
+                            state.call_sid,
+                            exc_info=True,
+                        )
                 elif t == "response.function_call_arguments.done":
                     await _handle_tool(xai, state, ev)
                 elif t == "response.done" and state.ended:
@@ -197,6 +214,19 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
                         )
                         if t != "conversation.item.input_audio_transcription.updated":
                             log.info("call %s caller: %r", state.call_sid, text)
+                            # Completed caller utterance → another F2 window signal
+                            try:
+                                import voice_auth
+
+                                await asyncio.to_thread(
+                                    voice_auth.note_speech_activity, state
+                                )
+                            except Exception:
+                                log.debug(
+                                    "call %s: voice_auth on transcript skipped",
+                                    state.call_sid,
+                                    exc_info=True,
+                                )
                         else:
                             log.debug("call %s caller (asr): %r", state.call_sid, text)
                 elif t == "error":

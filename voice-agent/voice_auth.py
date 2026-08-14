@@ -45,10 +45,10 @@ TOOL_MIN_LEVEL: dict[str, str] = {
     # end_call is local and never gated here
 }
 
-# High-risk: need step_up_ok even if voice_hard (Phase 3+; listed for structure).
+# High-risk: need step_up_ok even if voice_hard (Phase 3).
 STEP_UP_TOOLS: frozenset[str] = frozenset(
     {
-        # reserved: change_owner_phone, publish_site, ...
+        "apply_change_request",
     }
 )
 
@@ -341,7 +341,11 @@ def on_speech_window(
 def check_tool_allowed(state: Any, tool_name: str) -> dict[str, Any] | None:
     """Return speakable deny dict if tool blocked; None if allowed."""
     name = (tool_name or "").strip()
-    if not name or name == "end_call":
+    if not name or name in (
+        "end_call",
+        "request_step_up_code",
+        "verify_step_up_code",
+    ):
         return None
 
     need = effective_min_level(name)
@@ -360,71 +364,267 @@ def check_tool_allowed(state: Any, tool_name: str) -> dict[str, Any] | None:
             "required_level": need,
         }
 
-    if name in STEP_UP_TOOLS and not getattr(state, "step_up_ok", False):
+    if not level_at_least(have, need):
+        if have == "anonymous":
+            msg = (
+                "I can only update a site from the owner's registered phone line "
+                "after the account is active. I can take a note for the team instead."
+            )
+            code = "auth_anonymous"
+        elif need in ("voice_soft", "voice_hard"):
+            msg = (
+                "I need a bit more of your natural speech to confirm it's you — "
+                "keep talking about the change you want."
+            )
+            code = "auth_voice_pending"
+        else:
+            msg = (
+                "I couldn't verify this phone for site updates yet. "
+                "Call from the number on the owner account."
+            )
+            code = "auth_insufficient"
+        return {
+            "ok": False,
+            "denied": True,
+            "created": False,
+            "cancelled": False,
+            "applied": False,
+            "error": msg,
+            "code": code,
+            "auth_level": have,
+            "required_level": need,
+        }
+
+    # Extra: enroll required + write tool + not enrolled
+    if (
+        enroll_required_for_write()
+        and TOOL_MIN_LEVEL.get(name) in ("voice_soft", "voice_hard")
+        and not getattr(state, "voice_enrolled", False)
+        and voice_auth_vendor() not in ("", "none", "off", "stub")
+    ):
         return {
             "ok": False,
             "denied": True,
             "error": (
+                "I still need a short voice enrollment before I can change the site. "
+                "We can do that on this call."
+            ),
+            "code": "enroll_required",
+            "auth_level": have,
+            "required_level": need,
+        }
+
+    # High-risk step-up (after F1/F2 satisfied)
+    if name in STEP_UP_TOOLS and step_up_enabled() and not getattr(state, "step_up_ok", False):
+        return {
+            "ok": False,
+            "denied": True,
+            "applied": False,
+            "error": (
                 "That change needs a quick extra check — "
-                "I can text a code to this phone."
+                "I can text a code to this phone. "
+                "Use request_step_up_code, then verify_step_up_code with the digits."
             ),
             "code": "step_up_required",
             "auth_level": have,
             "required_level": need,
         }
 
-    if level_at_least(have, need):
-        # Extra: enroll required + write tool + not enrolled
-        if (
-            enroll_required_for_write()
-            and TOOL_MIN_LEVEL.get(name) in ("voice_soft", "voice_hard")
-            and not getattr(state, "voice_enrolled", False)
-            and voice_auth_vendor() not in ("", "none", "off", "stub")
+    return None
+
+
+def step_up_enabled() -> bool:
+    return (os.getenv("VOICE_STEP_UP_ENABLED") or "true").strip().lower() not in (
+        "0",
+        "false",
+        "no",
+        "off",
+    )
+
+
+def step_up_ttl_s() -> int:
+    try:
+        return max(60, int(os.getenv("VOICE_STEP_UP_TTL_S", "600") or "600"))
+    except ValueError:
+        return 600
+
+
+def step_up_max_attempts() -> int:
+    try:
+        return max(1, int(os.getenv("VOICE_STEP_UP_MAX_ATTEMPTS", "5") or "5"))
+    except ValueError:
+        return 5
+
+
+def _hash_code(code: str, salt: str) -> str:
+    import hashlib
+
+    return hashlib.sha256(f"{salt}:{code}".encode("utf-8")).hexdigest()
+
+
+def request_step_up_code(
+    state: Any,
+    *,
+    send_sms_fn: Any | None = None,
+) -> dict[str, Any]:
+    """Generate OTP, store hash on state, optionally SMS via send_sms_fn(to, body)."""
+    import secrets
+    import time
+
+    if not step_up_enabled():
+        state.step_up_ok = True
+        return {"ok": True, "skipped": True, "reason": "step_up_disabled", "step_up_ok": True}
+
+    phone = (getattr(state, "caller_number", None) or "").strip()
+    if not phone:
+        return {"ok": False, "error": "no caller phone for step-up SMS", "code": "phone_required"}
+
+    # Rate-limit resend: 30s
+    now = time.time()
+    last = float(getattr(state, "step_up_sent_at", 0) or 0)
+    if last and now - last < 30 and getattr(state, "step_up_code_hash", ""):
+        return {
+            "ok": True,
+            "resent": False,
+            "message": "A code was already sent recently — check your texts.",
+            "retry_after_s": int(30 - (now - last)),
+        }
+
+    code = f"{secrets.randbelow(1_000_000):06d}"
+    salt = (getattr(state, "call_sid", None) or phone) + str(int(now))
+    state.step_up_code_hash = _hash_code(code, salt)
+    state.step_up_salt = salt  # type: ignore[attr-defined]
+    state.step_up_expires_at = now + step_up_ttl_s()
+    state.step_up_attempts = 0
+    state.step_up_sent_at = now
+    state.step_up_ok = False
+
+    body = (
+        f"Florida Man site updates code: {code}. "
+        f"Valid {step_up_ttl_s() // 60} min. If you didn't ask, ignore."
+    )
+    sms_ok = True
+    sms_error = ""
+    if send_sms_fn is not None:
+        try:
+            send_sms_fn(phone, body)
+        except Exception as e:  # noqa: BLE001
+            sms_ok = False
+            sms_error = str(e)
+            log.warning("step-up SMS failed: %s", e)
+    else:
+        # Dev/test: attach code only when explicitly allowed
+        if (os.getenv("VOICE_STEP_UP_DEBUG_CODE") or "").strip().lower() in (
+            "1",
+            "true",
+            "yes",
         ):
             return {
-                "ok": False,
-                "denied": True,
-                "error": (
-                    "I still need a short voice enrollment before I can change the site. "
-                    "We can do that on this call."
-                ),
-                "code": "enroll_required",
-                "auth_level": have,
-                "required_level": need,
+                "ok": True,
+                "sent": False,
+                "debug_code": code,
+                "message": "Step-up code generated (debug mode, not SMSed).",
             }
-        return None
 
-    # Speakable, non-scary denies
-    if have == "anonymous":
-        msg = (
-            "I can only update a site from the owner's registered phone line "
-            "after the account is active. I can take a note for the team instead."
-        )
-        code = "auth_anonymous"
-    elif need in ("voice_soft", "voice_hard"):
-        msg = (
-            "I need a bit more of your natural speech to confirm it's you — "
-            "keep talking about the change you want."
-        )
-        code = "auth_voice_pending"
-    else:
-        msg = (
-            "I couldn't verify this phone for site updates yet. "
-            "Call from the number on the owner account."
-        )
-        code = "auth_insufficient"
-
+    if not sms_ok:
+        return {
+            "ok": False,
+            "error": f"Could not text the code: {sms_error}",
+            "code": "sms_failed",
+        }
     return {
-        "ok": False,
-        "denied": True,
-        "created": False,
-        "cancelled": False,
-        "applied": False,
-        "error": msg,
-        "code": code,
-        "auth_level": have,
-        "required_level": need,
+        "ok": True,
+        "sent": True,
+        "message": "I texted a 6-digit code to this phone. What are the digits?",
+        "to_last4": phone[-4:] if len(phone) >= 4 else "",
     }
+
+
+def verify_step_up_code(state: Any, code: str) -> dict[str, Any]:
+    """Validate OTP; set step_up_ok on success."""
+    import time
+
+    if not step_up_enabled():
+        state.step_up_ok = True
+        return {"ok": True, "step_up_ok": True, "skipped": True}
+
+    raw = "".join(ch for ch in str(code or "") if ch.isdigit())
+    if len(raw) < 4:
+        return {"ok": False, "error": "That doesn't look like the code — try the 6 digits.", "code": "bad_format"}
+
+    if getattr(state, "auth_level", "") == "locked":
+        return {"ok": False, "error": "This line is locked.", "code": "auth_locked"}
+
+    now = time.time()
+    exp = float(getattr(state, "step_up_expires_at", 0) or 0)
+    if not getattr(state, "step_up_code_hash", "") or not exp:
+        return {
+            "ok": False,
+            "error": "No code is pending — ask me to text a new one.",
+            "code": "no_pending",
+        }
+    if now > exp:
+        return {
+            "ok": False,
+            "error": "That code expired — I can text a new one.",
+            "code": "expired",
+        }
+
+    attempts = int(getattr(state, "step_up_attempts", 0) or 0) + 1
+    state.step_up_attempts = attempts
+    if attempts > step_up_max_attempts():
+        state.auth_level = "locked"
+        state.step_up_code_hash = ""
+        return {
+            "ok": False,
+            "error": "Too many tries — this line is locked for updates on this call.",
+            "code": "locked",
+        }
+
+    salt = getattr(state, "step_up_salt", "") or ""
+    if _hash_code(raw, salt) != state.step_up_code_hash:
+        left = step_up_max_attempts() - attempts
+        return {
+            "ok": False,
+            "error": f"That code didn't match. {left} tries left." if left > 0 else "That code didn't match.",
+            "code": "mismatch",
+            "attempts": attempts,
+        }
+
+    state.step_up_ok = True
+    state.step_up_code_hash = ""
+    state.step_up_salt = ""  # type: ignore[attr-defined]
+    return {
+        "ok": True,
+        "step_up_ok": True,
+        "message": "Code confirmed — I can apply the change now.",
+    }
+
+
+def note_speech_activity(state: Any, *, force: bool = False, pcm: bytes | None = None) -> dict[str, Any]:
+    """Throttle-friendly entry from realtime: one F2 window per utterance/cadence."""
+    import time
+
+    vendor = voice_auth_vendor()
+    if vendor in ("", "none", "off", "stub"):
+        return {"ok": True, "skipped": True, "reason": "vendor_none"}
+
+    mode = (getattr(state, "mode", None) or "").strip().lower()
+    # Only score on owner-capable calls
+    if mode and mode not in ("owner_updates", "unified", "auto"):
+        # auto still has mode set per call by resolve_call_mode
+        pass
+    if mode in ("sales", "ai411", "onboarding"):
+        return {"ok": True, "skipped": True, "reason": "mode"}
+
+    now = time.time()
+    last = float(getattr(state, "voice_auth_last_window_at", 0) or 0)
+    min_gap = float(os.getenv("VOICE_AUTH_WINDOW_GAP_S", "2.0") or "2.0")
+    if not force and last and now - last < min_gap:
+        return {"ok": True, "skipped": True, "reason": "throttled"}
+
+    state.voice_auth_last_window_at = now
+    return on_speech_window(state, pcm=pcm)
 
 
 def deny_json(deny: dict[str, Any]) -> str:

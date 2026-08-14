@@ -108,6 +108,8 @@ def test_owner_updates_mode_prompt_and_tools():
         "cancel_change_request",
         "apply_change_request",
         "enroll_voice_auth",
+        "request_step_up_code",
+        "verify_step_up_code",
         "log_call_outcome",
         "send_sms_links",
         "end_call",

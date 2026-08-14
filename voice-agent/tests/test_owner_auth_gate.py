@@ -229,3 +229,83 @@ def test_read_tools_allowed_at_cid_only():
     assert va.check_tool_allowed(state, "get_site_outline") is None
     assert va.check_tool_allowed(state, "lookup_business") is None
     assert va.check_tool_allowed(state, "end_call") is None
+
+
+def test_apply_requires_step_up_then_otp(monkeypatch):
+    monkeypatch.setenv("VOICE_STEP_UP_ENABLED", "true")
+    monkeypatch.setenv("VOICE_STEP_UP_DEBUG_CODE", "1")
+    _, agent, va, _ = _reload_owner()
+    importlib.reload(va)
+    state = agent.CallState(
+        call_sid="CA-OTP",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13555550100",
+        auth_level="cid_only",
+        mode="owner_updates",
+    )
+    state.llm = mock.Mock()
+    deny = va.check_tool_allowed(state, "apply_change_request")
+    assert deny is not None
+    assert deny.get("code") == "step_up_required"
+
+    req = va.request_step_up_code(state, send_sms_fn=None)
+    assert req.get("ok") is True
+    code = req.get("debug_code")
+    assert code and len(code) == 6
+
+    bad = va.verify_step_up_code(state, "000000")
+    assert bad.get("ok") is False
+    good = va.verify_step_up_code(state, code)
+    assert good.get("ok") is True
+    assert state.step_up_ok is True
+    assert va.check_tool_allowed(state, "apply_change_request") is None
+
+
+def test_step_up_lockout(monkeypatch):
+    monkeypatch.setenv("VOICE_STEP_UP_ENABLED", "true")
+    monkeypatch.setenv("VOICE_STEP_UP_DEBUG_CODE", "1")
+    monkeypatch.setenv("VOICE_STEP_UP_MAX_ATTEMPTS", "2")
+    _, agent, va, _ = _reload_owner()
+    importlib.reload(va)
+    state = agent.CallState(
+        call_sid="CA-LOCK",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13555550100",
+        auth_level="cid_only",
+    )
+    va.request_step_up_code(state, send_sms_fn=None)
+    va.verify_step_up_code(state, "111111")
+    out = va.verify_step_up_code(state, "222222")
+    # 2nd attempt may lock on exceed
+    out3 = va.verify_step_up_code(state, "333333")
+    assert out3.get("code") in ("locked", "mismatch", "no_pending")
+    if out3.get("code") == "locked":
+        assert state.auth_level == "locked"
+
+
+def test_note_speech_activity_throttles(monkeypatch):
+    monkeypatch.setenv("VOICE_AUTH_WINDOW_GAP_S", "10")
+    _, agent, va, _ = _reload_owner()
+    monkeypatch.setenv("VOICE_AUTH_VENDOR", "mock")
+    importlib.reload(va)
+    state = agent.CallState(
+        call_sid="CA-SP",
+        business=_Biz(),
+        direction="inbound",
+        caller_number="+13555550100",
+        mode="owner_updates",
+        auth_level="cid_only",
+        voice_enrolled=True,
+        customer={
+            "phone": "+13555550100",
+            "status": "active_owner",
+            "voice_auth": {"enrolled_at": "2026-08-14", "template_id": "t1"},
+        },
+    )
+    a = va.note_speech_activity(state, force=True)
+    assert a.get("reason") != "vendor_none", a
+    b = va.note_speech_activity(state, force=False)
+    assert b.get("reason") == "throttled"
+

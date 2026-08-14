@@ -223,6 +223,14 @@ VOICE_ENROLL_REQUIRED_FOR_WRITE = os.getenv(
 VOICE_AUTH_SOFT = float(os.getenv("VOICE_AUTH_SOFT", "0.75") or "0.75")
 VOICE_AUTH_HARD = float(os.getenv("VOICE_AUTH_HARD", "0.85") or "0.85")
 VOICE_AUTH_MIN_WINDOWS = int(os.getenv("VOICE_AUTH_MIN_WINDOWS", "3") or "3")
+VOICE_STEP_UP_ENABLED = os.getenv("VOICE_STEP_UP_ENABLED", "true").strip().lower() not in (
+    "0",
+    "false",
+    "no",
+    "off",
+)
+VOICE_STEP_UP_TTL_S = int(os.getenv("VOICE_STEP_UP_TTL_S", "600") or "600")
+VOICE_STEP_UP_MAX_ATTEMPTS = int(os.getenv("VOICE_STEP_UP_MAX_ATTEMPTS", "5") or "5")
 
 
 def require(*names: str) -> None:
