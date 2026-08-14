@@ -338,7 +338,9 @@ cd voice-agent
 | Symptom | Check |
 |---------|--------|
 | Voice CrashLoop `Unknown AGENT_MODE 'auto'` | Image too old → set `ai411`/`sales` |
+| Call connects then hangs up in ~1s | `customers` missing from image — rebuild voice with `mcp-server/*.py` baked in; check logs for `ModuleNotFoundError: customers` |
 | Form CORS error | `CORS_ALLOW_ORIGINS` + voice up |
+| Register API 500/503 | Same customers packaging; `GET /health` → `customers_registry: true` |
 | Tracker empty customers | Voice up; `CUSTOMERS_API` DNS inside cluster |
 | Multi-Attach PVC error | Only one voice replica; wait for detach |
 | Flux wiped deploy env | PR not merged; re-apply deploy YAML or merge Flux |

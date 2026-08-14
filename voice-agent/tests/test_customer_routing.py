@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import importlib
-import json
-import os
 import sys
 from pathlib import Path
 
@@ -117,3 +115,40 @@ def test_agent_auto_tools_onboarding(tmp_path, monkeypatch):
     )
     assert "onboarding" in prompt.lower() or "interview" in prompt.lower()
     assert "$999" not in prompt
+
+
+def test_resolve_call_mode_survives_missing_customers(tmp_path, monkeypatch):
+    """Old images without mcp-server must not raise (instant hangup)."""
+    monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "c.json"))
+    monkeypatch.setenv("AGENT_MODE", "auto")
+    monkeypatch.setenv("CALL_DB", "0")
+    monkeypatch.setenv("TWILIO_ACCOUNT_SID", "ACtest")
+    monkeypatch.setenv("TWILIO_AUTH_TOKEN", "t")
+    monkeypatch.setenv("TWILIO_PHONE_NUMBER", "+13555550000")
+    monkeypatch.setenv("PUBLIC_BASE_URL", "https://example.test")
+    monkeypatch.setenv("VALIDATE_TWILIO_WEBHOOKS", "0")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk")
+    monkeypatch.setenv("DEEPINFRA_API_KEY", "di")
+    monkeypatch.setenv("VOICE_BACKEND", "pipeline")
+
+    import config
+    import agent
+
+    importlib.reload(config)
+    importlib.reload(agent)
+
+    real_import = __import__
+
+    def _block_customers(name, globals=None, locals=None, fromlist=(), level=0):
+        if name == "customers":
+            raise ModuleNotFoundError("customers")
+        return real_import(name, globals, locals, fromlist, level)
+
+    monkeypatch.setattr("builtins.__import__", _block_customers)
+    mode, cust = agent.resolve_call_mode("+13555550199", direction="inbound")
+    assert mode == "ai411"
+    assert cust == {}
+    mode2, _ = agent.resolve_call_mode(
+        "+13555550199", direction="outbound", outbound_slug="ole-barn"
+    )
+    assert mode2 == "sales"

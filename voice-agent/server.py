@@ -619,16 +619,28 @@ class OnboardRegisterIn(BaseModel):
     source: str = "ai411_web"
 
 
-@app.post("/api/onboarding/register")
-def api_onboard_register(body: OnboardRegisterIn):
-    """Public: queue a phone for onboarding callback (AI 411 landing form)."""
+def _customers_mod():
+    """Import mcp-server/customers with monorepo path layout (image + checkout)."""
     import sys
     from pathlib import Path
 
     mcp = Path(__file__).resolve().parent.parent / "mcp-server"
     if str(mcp) not in sys.path:
         sys.path.insert(0, str(mcp))
-    import customers
+    try:
+        import customers
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(
+            status_code=503,
+            detail=f"customers registry unavailable: {e}",
+        ) from e
+    return customers
+
+
+@app.post("/api/onboarding/register")
+def api_onboard_register(body: OnboardRegisterIn):
+    """Public: queue a phone for onboarding callback (AI 411 landing form)."""
+    customers = _customers_mod()
 
     result = customers.register_callback(
         body.phone,
@@ -650,14 +662,7 @@ def api_onboard_register(body: OnboardRegisterIn):
 @app.get("/api/onboarding/customers")
 def api_onboard_list(status: str = "", limit: int = 100):
     """Internal desk: list customers (protect at the edge in prod)."""
-    import sys
-    from pathlib import Path
-
-    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
-    if str(mcp) not in sys.path:
-        sys.path.insert(0, str(mcp))
-    import customers
-
+    customers = _customers_mod()
     return customers.list_customers(status=status or None, limit=limit)
 
 
@@ -705,13 +710,7 @@ def api_notify_updated(body: NotifyUpdateIn):
 @app.post("/api/billing/mark-paid")
 def api_mark_paid(body: StripeMarkPaidIn):
     """Mark customer paid → future calls use owner_updates. Wire Stripe webhook here."""
-    import sys
-    from pathlib import Path
-
-    mcp = Path(__file__).resolve().parent.parent / "mcp-server"
-    if str(mcp) not in sys.path:
-        sys.path.insert(0, str(mcp))
-    import customers
+    customers = _customers_mod()
 
     result = customers.mark_paid(body.phone, stripe_customer_id=body.stripe_customer_id)
     if not result.get("ok"):
@@ -722,10 +721,25 @@ def api_mark_paid(body: StripeMarkPaidIn):
 
 @app.get("/health")
 def health():
+    customers_ok = False
+    try:
+        import sys
+        from pathlib import Path
+
+        mcp = Path(__file__).resolve().parent.parent / "mcp-server"
+        if str(mcp) not in sys.path:
+            sys.path.insert(0, str(mcp))
+        import customers  # noqa: F401
+
+        customers_ok = True
+    except Exception:
+        customers_ok = False
     return {
         "ok": True,
         "active_calls": len(CALLS),
         "active_sms_sessions": len(SMS_SESSIONS),
+        "customers_registry": customers_ok,
+        "agent_mode": getattr(config, "AGENT_MODE", ""),
     }
 
 

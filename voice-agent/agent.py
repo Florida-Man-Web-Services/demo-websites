@@ -608,14 +608,31 @@ def resolve_call_mode(
     direction: str = "inbound",
     outbound_slug: str | None = None,
 ) -> tuple[str, dict]:
-    """Return (mode, customer_row) for this phone under AGENT_MODE=auto|pinned."""
+    """Return (mode, customer_row) for this phone under AGENT_MODE=auto|pinned.
+
+    Never raises: missing mcp-server/customers (old images) falls back to a safe
+    pin so Twilio realtime streams do not die on import.
+    """
+    import logging
     import sys
     from pathlib import Path
 
+    log = logging.getLogger("voice-agent.agent")
     mcp = Path(__file__).resolve().parent.parent / "mcp-server"
     if str(mcp) not in sys.path:
         sys.path.insert(0, str(mcp))
-    import customers
+    try:
+        import customers
+    except Exception as e:  # noqa: BLE001 — call path must stay alive
+        log.error(
+            "customers import failed (%s); falling back to pinned mode (env=%s)",
+            e,
+            config.AGENT_MODE,
+        )
+        fallback = config.AGENT_MODE if config.AGENT_MODE != "auto" else "ai411"
+        if outbound_slug:
+            fallback = "sales"
+        return fallback, {}
 
     in_outreach = False
     try:
@@ -624,15 +641,22 @@ def resolve_call_mode(
         in_outreach = by_phone(phone) is not None
     except Exception:
         pass
-    mode = customers.resolve_mode(
-        phone,
-        direction=direction,
-        outbound_sales_slug=outbound_slug,
-        env_mode=config.AGENT_MODE,
-        in_sales_outreach=in_outreach,
-    )
-    cust = customers.get(phone) or {}
-    return mode, cust
+    try:
+        mode = customers.resolve_mode(
+            phone,
+            direction=direction,
+            outbound_sales_slug=outbound_slug,
+            env_mode=config.AGENT_MODE,
+            in_sales_outreach=in_outreach,
+        )
+        cust = customers.get(phone) or {}
+        return mode, cust
+    except Exception as e:  # noqa: BLE001
+        log.exception("resolve_mode failed for %s: %s", phone, e)
+        fallback = config.AGENT_MODE if config.AGENT_MODE != "auto" else "ai411"
+        if outbound_slug:
+            fallback = "sales"
+        return fallback, {}
 
 
 def effective_mode(state: "CallState") -> str:

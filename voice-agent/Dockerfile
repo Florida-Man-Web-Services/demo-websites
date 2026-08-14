@@ -14,14 +14,32 @@ COPY gainesville-no-website/gainesville_no_website.json gainesville-no-website/
 # URL is sha256(page)[:12], so the pages themselves must be readable.
 COPY generated-sites generated-sites/
 COPY voice-agent/*.py voice-agent/
+# Product-loop + AI 411 inproc stores. agent.resolve_call_mode and
+# /api/onboarding/* import customers from sibling mcp-server/; mcp_bridge
+# imports knowledge/events/callers/broadcasts/lookup/changerequests the same way.
+# Without these, AGENT_MODE=auto accepts Twilio then crashes the WS (~1s hangup).
+COPY mcp-server/customers.py \
+     mcp-server/knowledge.py \
+     mcp-server/events.py \
+     mcp-server/callers.py \
+     mcp-server/broadcasts.py \
+     mcp-server/lookup.py \
+     mcp-server/changerequests.py \
+     mcp-server/calllog.py \
+     mcp-server/
 
 # Call log and synthesized-audio cache live on a mounted volume so outcomes
 # (including the permanent do-not-call list) survive restarts.
 ENV CALL_LOG=/data/call-log.csv \
     CALL_DB=/data/call-log.db \
-    AUDIO_CACHE_DIR=/data/audio_cache
-RUN mkdir -p /data
+    AUDIO_CACHE_DIR=/data/audio_cache \
+    CUSTOMERS_PATH=/data/customers.json \
+    BUILDER_BRIEFS_DIR=/data/builder-briefs \
+    MEMORY_DIR=/data/customer-memory
+RUN mkdir -p /data /data/builder-briefs /data/customer-memory /data/audio_cache
 
 EXPOSE 8035
 WORKDIR /app/voice-agent
+# Fail closed at build time if packaging drifts again.
+RUN python -c "import sys; sys.path[:0]=['/app/mcp-server','/app/voice-agent']; import customers, knowledge, events, callers, broadcasts, lookup, changerequests; print('mcp-server ok', customers.MODE_AI411)"
 CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8035"]
