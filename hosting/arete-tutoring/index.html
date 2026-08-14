@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arete Tutoring — MAC 2311</title>
+  <meta name="description" content="UF freshman Calculus 1 AI tutor — account portal, LaTeX skills coach, voice concepts." />
+  <link rel="canonical" href="https://floridamanweb.online/arete-tutoring/" />
+  <style>
+    :root { color-scheme: dark; --bg:#0b1020; --ink:#e8eefc; --muted:#9aa8c7; --accent:#6ea8fe; --panel:#121a33; --line:#243056; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, sans-serif; background: radial-gradient(900px 500px at 10% -10%, #1a2750, var(--bg)); color: var(--ink); min-height:100vh; }
+    main { max-width: 40rem; margin: 0 auto; padding: 3.5rem 1.25rem 4rem; }
+    .eyebrow { font-size:.75rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color: var(--accent); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); letter-spacing:-.03em; margin:.4rem 0 0.75rem; }
+    p { color: var(--muted); line-height:1.65; }
+    .card { margin-top:1.5rem; padding:1.25rem 1.4rem; border:1px solid var(--line); border-radius:14px; background: color-mix(in srgb, var(--panel) 92%, black); }
+    .row { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.25rem; }
+    a.btn { display:inline-block; padding:.7rem 1.1rem; border-radius:999px; background: linear-gradient(180deg,#7eb0ff,#4d82e8); color:#061018; font-weight:700; text-decoration:none; }
+    a.btn.secondary { background: transparent; color: var(--ink); border:1px solid var(--line); font-weight:600; }
+    ul { color: var(--muted); line-height:1.6; }
+    code { font-size:.9em; color:#cfe0ff; }
+  </style>
+  <script>
+    // If the app is live behind this path, bounce straight into the portal.
+    (async () => {
+      try {
+        const r = await fetch('/arete-tutoring/api/health', { cache: 'no-store' });
+        if (r.ok) {
+          const j = await r.json();
+          if (j && j.ok) {
+            // stay on splash unless ?stay=1
+            if (!new URLSearchParams(location.search).has('stay')) {
+              // health is enough — show CTA; auto-login optional
+            }
+          }
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Florida Man Web · Arete</p>
+  <h1>Arete Tutoring</h1>
+  <p>AI coach for UF freshmen — flagship course <strong>MAC 2311</strong>. Web skills mode with LaTeX, voice concepts on a whitelisted number, syllabus-aligned study calendar, crypto interim checkout until entity Stripe is ready.</p>
+  <div class="card">
+    <p><strong>Account portal</strong> (login, paywall, practice chat, calendar, call slots):</p>
+    <div class="row">
+      <a class="btn" href="/arete-tutoring/login">Open portal / log in</a>
+      <a class="btn secondary" href="/arete-tutoring/register">Create account</a>
+      <a class="btn secondary" href="/arete-tutoring/paywall">Subscribe</a>
+    </div>
+    <ul>
+      <li>Demo: <code>student@example.com</code> / <code>student123</code> (dev seed)</li>
+      <li>Canonical host: <code>https://floridamanweb.online/arete-tutoring/</code></li>
+      <li><code>www</code> redirects to apex (path preserved)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <p><strong>Not</strong> an official UF service. Course pack grounded in public Academic Resources + faculty syllabi and open pedagogy (OpenStax, etc.).</p>
+    <p>Ops: FMWS demo-sites nginx proxies <code>/arete-tutoring/</code> → <code>arete-tutoring</code> service in <code>theswamp</code>.</p>
+  </div>
+</main>
+</body>
+</html>
