@@ -27,6 +27,7 @@ from starlette.routing import Mount, Route
 import businesses
 import callers as callers_mod
 import config
+import fomo as fomo_mod
 import qotd as qotd_mod
 from calllog import append_outcome, history_for
 from knowledge import (
@@ -478,6 +479,79 @@ async def match_events_for_profile(
     return await anyio.to_thread.run_sync(
         functools.partial(
             _match_events_for_profile_sync, phone, when, limit, free_only
+        )
+    )
+
+
+def _express_event_interest_sync(
+    phone: str,
+    event_id: str,
+    tags: str = "[]",
+) -> dict:
+    try:
+        import json as _json
+
+        tag_list = None
+        if tags:
+            try:
+                parsed = _json.loads(tags) if isinstance(tags, str) else tags
+                if isinstance(parsed, list):
+                    tag_list = [str(t) for t in parsed]
+            except Exception:
+                if isinstance(tags, str) and tags.strip():
+                    tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+        return fomo_mod.express_event_interest(
+            phone, event_id, tags=tag_list
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "express_event_interest")
+        return {"ok": False, "recorded": False, "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def express_event_interest(
+    phone: str,
+    event_id: str,
+    tags: str = "[]",
+) -> dict:
+    """Record caller interest in an event for FOMO tribe matching.
+
+    Requires consent.memory_ok. Matching/notify also require consent.fomo_ok
+    (default OFF). Never speaks peer names or phones. tags: JSON list optional.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(_express_event_interest_sync, phone, event_id, tags)
+    )
+
+
+def _list_event_interest_matches_sync(
+    phone: str,
+    event_id: str = "",
+    limit: int = 10,
+) -> dict:
+    try:
+        return fomo_mod.list_event_interest_matches(
+            phone, event_id=event_id or "", limit=limit
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "list_event_interest_matches")
+        return {"ok": False, "matches": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def list_event_interest_matches(
+    phone: str,
+    event_id: str = "",
+    limit: int = 10,
+) -> dict:
+    """List privacy-safe FOMO matches for this caller's event interests.
+
+    Requires memory_ok + fomo_ok. Speak only generic tribe phrasing — never
+    peer names or phone numbers. Optional event_id filters to one event.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _list_event_interest_matches_sync, phone, event_id, limit
         )
     )
 

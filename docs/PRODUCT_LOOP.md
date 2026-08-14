@@ -243,6 +243,58 @@ Onboarding tools call `customer_memory.append_note` / `recall` automatically.
 
 ---
 
+## 7b. AI 411 FOMO (tribe interest — opt-in)
+
+**Goal:** When like-minded community members express interest in the **same event**,
+opted-in callers can get a tip (“run with your tribe”) — SMS preferred, outbound
+call only as a queued stub until a dialer exists.
+
+### Rules (TCPA + privacy)
+
+| Rule | Detail |
+|------|--------|
+| Default | **OFF** |
+| Gates | `consent.memory_ok` **and** `consent.fomo_ok` (alias: `preferences.fomo_calls`) |
+| Memory alone | Does **not** enable FOMO |
+| Outbound call | Never auto-dial; `call_stub` jobs only when SMS not allowed |
+| Prefer SMS | When `preferences.sms_ok=true`, queue SMS template (`Reply STOP…`) |
+| Rate limit | `FOMO_MAX_NOTIFIES_PER_PHONE_PER_DAY` (default 3); cooldown per phone+event (`FOMO_NOTIFY_COOLDOWN_HOURS`, default 24) |
+| Privacy | Speakable text never includes peer **names** or **phones** — only “someone else into X is interested in Y” |
+| Opt-in UX | After they pick an event, offer FOMO **once** per call; no nag |
+
+### Storage
+
+| Path env | Default | Content |
+|----------|---------|---------|
+| `EVENT_INTERESTS_PATH` | `/data/event_interests.jsonl` | Active interest rows (`phone_e164`, `event_id`, tags) |
+| `FOMO_NOTIFY_PATH` | `/data/fomo_notify.jsonl` | Queued SMS / call_stub jobs |
+| `CALLERS_PATH` | `/data/callers.json` | `consent.fomo_ok`, `preferences.sms_ok` / `fomo_calls` |
+
+### Tools
+
+| Tool | Effect |
+|------|--------|
+| `express_event_interest(phone, event_id, tags?)` | Record interest; if 2+ `fomo_ok` peers on same `event_id`, queue notifies |
+| `list_event_interest_matches(phone, event_id?)` | Privacy-safe match list for the caller |
+| `update_caller_profile` | Set `consent.fomo_ok` / `preferences.fomo_calls` + `sms_ok` |
+
+Module: `mcp-server/fomo.py`. Voice: `ai411.TOOLS` + `mcp_bridge`.  
+`forget_caller` deactivates that phone’s interest rows.
+
+### Voice prompt
+
+After event pick → `express_event_interest` → if `needs_fomo_ok`, explain once →
+on yes, `update_caller_profile` with `fomo_ok` (+ `sms_ok` if they want texts).
+
+### Tests
+
+```bash
+cd mcp-server && .venv/bin/python -m pytest tests/test_fomo.py tests/test_callers.py -q
+cd voice-agent && .venv/bin/python -m pytest tests/test_ai411_tools.py -k fomo -q
+```
+
+---
+
 ## 8. Environment reference
 
 ### Voice (production)

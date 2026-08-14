@@ -475,6 +475,63 @@ TOOLS = [
         },
     },
     {
+        "name": "express_event_interest",
+        "description": (
+            "Record that this caller is interested in attending a specific event "
+            "(by event_id from search_events / get_event / match_events_for_profile). "
+            "Requires memory_ok. FOMO tribe alerts also need consent.fomo_ok "
+            "(default OFF) — offer opt-in once after they pick an event. Never "
+            "share peer names or phone numbers."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                },
+                "event_id": {
+                    "type": "string",
+                    "description": "Event id from search_events / get_event.",
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional interest tags (music, food, …).",
+                },
+            },
+            "required": ["event_id"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "list_event_interest_matches",
+        "description": (
+            "List privacy-safe FOMO matches: when other fomo_ok callers are "
+            "interested in the same events as this caller. Speak only generic "
+            "tribe lines (\"someone else into music is interested in …\") — never "
+            "names or numbers. Requires memory_ok + fomo_ok."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string",
+                    "description": "Caller phone; omit to use caller's number.",
+                },
+                "event_id": {
+                    "type": "string",
+                    "description": "Optional: filter to one event id.",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max matches (default 10).",
+                },
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "end_call",
         "description": (
             "Hang up after your current reply is spoken. Use once the "
@@ -552,6 +609,10 @@ MEMORY (phone-keyed caller profile)
   patch={{"consent": {{"memory_ok": true}}, "preferences": {{"interests": ["farmers markets"]}}, "last_topics": ["events"]}}
   Bare consent:true is also accepted. Do not only ask for consent without saving.
 - If they say yes to enabling memory, set consent.memory_ok=true immediately.
+- FOMO tribe alerts are separate and DEFAULT OFF. Only set consent.fomo_ok=true
+  (or preferences.fomo_calls=true) after an explicit yes to FOMO / "run with your
+  tribe" alerts. Prefer also preferences.sms_ok=true so we text instead of call.
+  Bare memory consent does NOT enable FOMO.
 - forget_caller when they ask to be forgotten / wipe memory.
 - Still call get_caller_profile if you need a fresh read mid-call.
 
@@ -610,6 +671,17 @@ this weekend / etc.)
 5. Short list (≤3 total): After interests are known, you may name the events
    directly without the category round.
 6. Save new interests they state via update_caller_profile (with memory_ok).
+7. FOMO / tribe interest (after they pick or clearly like a specific event):
+   a. Call express_event_interest with that event_id (needs memory_ok first).
+   b. Offer FOMO opt-in ONCE if needs_fomo_ok: brief explanation — if others into
+      the same things are interested in the same event, you can tip them off;
+      never share names or phone numbers; default off; prefer text if they allow SMS.
+   c. On yes: update_caller_profile with consent.fomo_ok=true (keep memory_ok)
+      and preferences.sms_ok=true if they agree to texts; then express_event_interest
+      again or list_event_interest_matches.
+   d. On no: leave fomo_ok false; do not nag again this call.
+   e. Speak only privacy-safe lines from the tool (someone else into X is
+      interested in Y). Never invent peer names or numbers.
 
 TOOLS (in-process MCP store names)
 - search_business_knowledge, lookup_business
@@ -617,6 +689,7 @@ TOOLS (in-process MCP store names)
 - get_caller_profile, update_caller_profile, forget_caller
 - get_question_of_the_day, answer_question_of_the_day, suggest_question_of_the_day
 - get_caller_people_profile, match_events_for_profile
+- express_event_interest, list_event_interest_matches
 - submit_event_broadcast (prefer ISO when_start + venue), submit_notice_broadcast,
   list_recent_broadcasts
 - send_sms_links, end_call
@@ -670,6 +743,14 @@ def _memory_context(profile: dict | None) -> str:
         lines.append(f"- Name: {name}")
     if interests:
         lines.append(f"- Interests: {', '.join(str(x) for x in interests)}")
+    consent = profile.get("consent") or {}
+    if consent.get("fomo_ok") or prefs.get("fomo_calls"):
+        lines.append(
+            "- FOMO tribe alerts: ON (may tip about shared event interest; "
+            "never peer names/numbers)"
+        )
+    else:
+        lines.append("- FOMO tribe alerts: OFF (default; offer opt-in once after event pick)")
     if avoid:
         lines.append(f"- Avoid: {', '.join(str(x) for x in avoid)}")
     if areas:

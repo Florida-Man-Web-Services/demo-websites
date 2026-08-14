@@ -22,9 +22,11 @@ Gainesville demo-websites campaign.
 | `search_business_knowledge(query, limit?)` | Keyword/TF-IDF search over local `generated-sites` HTML chunks |
 | `get_business_snapshot(slug)` | Compact text snapshot of one demo page (slug = filename stem) |
 | `get_caller_profile(phone)` | Caller memory by phone; redacts when `consent.memory_ok` is false |
-| `update_caller_profile(phone, patch)` | Create/merge name, prefs, consent, topics |
-| `forget_caller(phone)` | Hard-delete caller profile ("forget me") |
+| `update_caller_profile(phone, patch)` | Create/merge name, prefs, consent (`memory_ok`, `marketing_ok`, `fomo_ok`), topics |
+| `forget_caller(phone)` | Hard-delete caller profile ("forget me"); clears FOMO interests |
 | `add_caller_note(phone, note)` | Append freeform note (created if needed) |
+| `express_event_interest(phone, event_id, tags?)` | FOMO: record event interest; queue tribe notify when 2+ fomo_ok peers |
+| `list_event_interest_matches(phone, event_id?)` | FOMO: privacy-safe shared-interest matches (no peer phones/names) |
 | `create_change_request(business_slug, summary, items?, …)` | Persist a pending owner site ChangeRequest (JSONL) |
 | `list_open_change_requests(slug?)` | List open ChangeRequests (optional slug filter) |
 | `cancel_change_request(request_id)` | Mark a ChangeRequest cancelled |

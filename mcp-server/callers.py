@@ -45,11 +45,12 @@ _PREFERENCE_KEYS = frozenset({
     "avoid",
     "preferred_areas",
     "sms_ok",
+    "fomo_calls",  # alias → consent.fomo_ok (FOMO tribe alerts)
     "mobility",
     "accessibility",
 })
 
-_CONSENT_KEYS = frozenset({"memory_ok", "marketing_ok"})
+_CONSENT_KEYS = frozenset({"memory_ok", "marketing_ok", "fomo_ok"})
 
 
 def _now_iso() -> str:
@@ -86,13 +87,15 @@ def _default_preferences() -> dict[str, Any]:
         "avoid": [],
         "preferred_areas": [],
         "sms_ok": False,
+        "fomo_calls": False,  # default OFF; mirrors consent.fomo_ok when set
         "mobility": "",
         "accessibility": "",
     }
 
 
 def _default_consent() -> dict[str, Any]:
-    return {"memory_ok": False, "marketing_ok": False}
+    # fomo_ok default OFF — TCPA: never outbound FOMO without explicit opt-in.
+    return {"memory_ok": False, "marketing_ok": False, "fomo_ok": False}
 
 
 def _empty_profile(phone_e164: str) -> dict[str, Any]:
@@ -158,7 +161,8 @@ def _coerce_consent_update(patch: dict) -> dict[str, bool] | None:
     """Normalize consent from model/tool patches.
 
     Models often send ``consent: true`` instead of ``consent: {memory_ok: true}``.
-    Also accept top-level ``memory_ok`` / ``marketing_ok``.
+    Also accept top-level ``memory_ok`` / ``marketing_ok`` / ``fomo_ok``.
+    ``preferences.fomo_calls`` is an alias for ``consent.fomo_ok``.
     Returns a partial consent dict, or None if the patch did not mention consent.
     """
     if not isinstance(patch, dict):
@@ -168,10 +172,16 @@ def _coerce_consent_update(patch: dict) -> dict[str, bool] | None:
         updates["memory_ok"] = bool(patch["memory_ok"])
     if "marketing_ok" in patch:
         updates["marketing_ok"] = bool(patch["marketing_ok"])
+    if "fomo_ok" in patch:
+        updates["fomo_ok"] = bool(patch["fomo_ok"])
+    prefs = patch.get("preferences")
+    if isinstance(prefs, dict) and "fomo_calls" in prefs:
+        updates["fomo_ok"] = bool(prefs.get("fomo_calls"))
     if "consent" in patch:
         c = patch["consent"]
         if isinstance(c, bool):
             # Bare true/false ⇒ memory consent (common LLM mistake).
+            # Does NOT imply fomo_ok (separate TCPA opt-in).
             updates["memory_ok"] = c
         elif isinstance(c, dict):
             for ck, cv in c.items():
@@ -250,9 +260,21 @@ def _apply_patch(profile: dict, patch: dict) -> dict:
         consent.update(consent_updates)
     # "Remember that I like X" without a proper consent object still means
     # store-and-use — unless they explicitly set memory_ok false.
+    # Does NOT auto-enable fomo_ok (separate opt-in).
     if _patch_requests_personalization(patch) and not explicit_memory_false:
         consent["memory_ok"] = True
     out["consent"] = consent
+    # Keep preferences.fomo_calls in sync with consent.fomo_ok when either moves.
+    prefs_out = copy.deepcopy(out.get("preferences") or _default_preferences())
+    for dk, dv in _default_preferences().items():
+        prefs_out.setdefault(dk, dv)
+    if consent_updates and "fomo_ok" in consent_updates:
+        prefs_out["fomo_calls"] = bool(consent.get("fomo_ok"))
+    elif isinstance(patch.get("preferences"), dict) and "fomo_calls" in patch["preferences"]:
+        prefs_out["fomo_calls"] = bool(patch["preferences"].get("fomo_calls"))
+        consent["fomo_ok"] = bool(prefs_out["fomo_calls"])
+        out["consent"] = consent
+    out["preferences"] = prefs_out
 
     if "notes" in patch and isinstance(patch["notes"], list):
         out["notes"] = list(patch["notes"])
@@ -377,6 +399,13 @@ def forget_profile(phone: str) -> dict:
                 }
             del profiles[key]
             _save_store(profiles)
+        # Best-effort: clear FOMO event interests for this phone.
+        try:
+            import fomo as fomo_mod  # type: ignore
+
+            fomo_mod.clear_interests_for_phone(key)
+        except Exception:  # noqa: BLE001
+            pass
         return {
             "forgotten": True,
             "phone_e164": key,

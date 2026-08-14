@@ -117,8 +117,12 @@ def qotd_path(tmp_path, monkeypatch):
 
 
 @pytest.fixture
-def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path, qotd_path):
+def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path, qotd_path, tmp_path, monkeypatch):
     """Reload agent/bridge under AI 411 with store paths pointed at fixtures."""
+    interests = tmp_path / "event_interests.jsonl"
+    notify = tmp_path / "fomo_notify.jsonl"
+    monkeypatch.setenv("EVENT_INTERESTS_PATH", str(interests))
+    monkeypatch.setenv("FOMO_NOTIFY_PATH", str(notify))
     # Clear any previously imported mcp modules so env is re-read.
     for key in list(sys.modules):
         if key in (
@@ -128,6 +132,7 @@ def ai411_agent(knowledge_dir, callers_path, broadcasts_path, events_path, qotd_
             "broadcasts",
             "lookup",
             "qotd",
+            "fomo",
             "mcp_bridge",
         ) or key.startswith("knowledge.") or key.startswith("events."):
             del sys.modules[key]
@@ -286,3 +291,60 @@ def test_qotd_tools_roundtrip(ai411_agent):
     )
     assert matched.get("ok") is True
     assert isinstance(matched.get("events"), list)
+
+
+def test_fomo_tools_roundtrip(ai411_agent):
+    _, agent, ai411, _ = ai411_agent
+    names = {t["name"] for t in agent.get_tools()}
+    assert "express_event_interest" in names
+    assert "list_event_interest_matches" in names
+    prompt = ai411.system_prompt(direction="inbound", caller_number="+13525550100").lower()
+    assert "fomo" in prompt
+
+    phone_a = "+13525550188"
+    phone_b = "+13525550189"
+    state_a = _state(agent, phone=phone_a)
+    state_b = _state(agent, phone=phone_b)
+
+    # memory + fomo + sms for both
+    for state in (state_a, state_b):
+        upd = json.loads(
+            agent._run_tool(
+                state,
+                "update_caller_profile",
+                {
+                    "patch": {
+                        "consent": {"memory_ok": True, "fomo_ok": True},
+                        "preferences": {
+                            "interests": ["music"],
+                            "sms_ok": True,
+                        },
+                    }
+                },
+            )
+        )
+        assert upd.get("updated") is True
+
+    events = json.loads(agent._run_tool(state_a, "search_events", {"query": "jazz", "limit": 5}))
+    assert events.get("ok") is True
+    eid = (events.get("events") or [{}])[0].get("id")
+    assert eid
+
+    r1 = json.loads(
+        agent._run_tool(state_a, "express_event_interest", {"event_id": eid})
+    )
+    assert r1.get("ok") is True and r1.get("recorded") is True
+
+    r2 = json.loads(
+        agent._run_tool(state_b, "express_event_interest", {"event_id": eid})
+    )
+    assert r2.get("ok") is True and r2.get("recorded") is True
+    assert r2.get("peer_matches", 0) >= 2
+
+    matches = json.loads(agent._run_tool(state_a, "list_event_interest_matches", {}))
+    assert matches.get("ok") is True
+    assert matches.get("count", 0) >= 1
+    blob = json.dumps(matches)
+    assert phone_b not in blob
+    assert "not available" not in blob.lower()
+    assert "not wired" not in blob.lower()
