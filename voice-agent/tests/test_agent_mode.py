@@ -89,6 +89,8 @@ def test_ai411_mode_prompt_and_tools():
         "suggest_question_of_the_day",
         "get_caller_people_profile",
         "match_events_for_profile",
+        "express_event_interest",
+        "list_event_interest_matches",
         "end_call",
     }
     assert names == expected
@@ -97,6 +99,8 @@ def test_ai411_mode_prompt_and_tools():
     assert "summarize_event_categories" in prompt
     assert "QUESTION OF THE DAY" in prompt
     assert "match_events_for_profile" in prompt
+    assert "FOMO" in prompt or "fomo" in prompt.lower()
+    assert "express_event_interest" in prompt
 
 def test_voice_agent_mode_alias():
     os.environ.pop("AGENT_MODE", None)

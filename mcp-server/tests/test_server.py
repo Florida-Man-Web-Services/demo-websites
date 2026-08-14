@@ -82,6 +82,8 @@ def test_tools_registered(monkeypatch):
         "get_question_of_the_day", "answer_question_of_the_day",
         "suggest_question_of_the_day", "get_caller_people_profile",
         "match_events_for_profile",
+        "express_event_interest",
+        "list_event_interest_matches",
         "create_change_request", "list_open_change_requests",
         "cancel_change_request", "get_site_outline",
         "get_change_request", "apply_change_request", "mark_request_shipped",

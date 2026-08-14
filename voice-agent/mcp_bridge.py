@@ -82,6 +82,7 @@ def _load_modules() -> str | None:
         import broadcasts as broadcasts_mod
         import callers as callers_mod
         import events as events_mod
+        import fomo as fomo_mod
         import knowledge as knowledge_mod
         import qotd as qotd_mod
         from lookup import find_business
@@ -89,6 +90,7 @@ def _load_modules() -> str | None:
         _mods["broadcasts"] = broadcasts_mod
         _mods["callers"] = callers_mod
         _mods["events"] = events_mod
+        _mods["fomo"] = fomo_mod
         _mods["knowledge"] = knowledge_mod
         _mods["qotd"] = qotd_mod
         _mods["find_business"] = find_business
@@ -266,6 +268,26 @@ def _map_tool_call(name: str, args: dict, *, caller_number: str) -> tuple[str, d
             "free_only": bool(free_only),
         }
 
+    if name == "express_event_interest":
+        tags = args.get("tags")
+        out = {
+            "phone": _phone(args, caller_number),
+            "event_id": str(args.get("event_id") or args.get("id") or ""),
+        }
+        if tags is not None:
+            if isinstance(tags, list):
+                out["tags"] = json.dumps(tags)
+            else:
+                out["tags"] = tags
+        return name, out
+
+    if name == "list_event_interest_matches":
+        return name, {
+            "phone": _phone(args, caller_number),
+            "event_id": str(args.get("event_id") or args.get("id") or ""),
+            "limit": int(args.get("limit") or 10),
+        }
+
     if name == "submit_event_broadcast":
         when_start = args.get("when_start") or args.get("when") or ""
         venue = args.get("venue") or args.get("where") or ""
@@ -405,6 +427,27 @@ def _dispatch_inproc(name: str, args: dict, *, caller_number: str) -> Any:
                 when=mapped.get("when") or "",
                 limit=int(mapped.get("limit") or 5),
                 free_only=bool(mapped.get("free_only")),
+            )
+
+    fomo = _mods.get("fomo")
+    if fomo is not None:
+        if mcp_name == "express_event_interest":
+            tags = mapped.get("tags")
+            if isinstance(tags, str):
+                try:
+                    tags = json.loads(tags)
+                except Exception:
+                    tags = [t.strip() for t in tags.split(",") if t.strip()]
+            return fomo.express_event_interest(
+                mapped["phone"],
+                mapped.get("event_id") or "",
+                tags=tags if isinstance(tags, list) else None,
+            )
+        if mcp_name == "list_event_interest_matches":
+            return fomo.list_event_interest_matches(
+                mapped["phone"],
+                event_id=mapped.get("event_id") or "",
+                limit=int(mapped.get("limit") or 10),
             )
 
     if mcp_name == "submit_event_broadcast":
@@ -710,6 +753,8 @@ def _dispatch_http(name: str, args: dict, *, caller_number: str) -> Any:
         "suggest_question_of_the_day",
         "get_caller_people_profile",
         "match_events_for_profile",
+        "express_event_interest",
+        "list_event_interest_matches",
         "submit_event_broadcast",
         "submit_notice_broadcast",
         "list_recent_broadcasts",
