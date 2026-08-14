@@ -191,10 +191,21 @@ def _map_tool_call(name: str, args: dict, *, caller_number: str) -> tuple[str, d
             "when": str(args.get("when") or ""),
             "free_only": bool(free_only),
             "limit": int(args.get("limit") or 5),
+            "category": str(args.get("category") or ""),
         }
         if tags is not None:
             out["tags"] = tags
         return name, out
+
+    if name == "summarize_event_categories":
+        free_only = args.get("free_only", False)
+        if isinstance(free_only, str):
+            free_only = free_only.strip().lower() in ("1", "true", "yes", "on")
+        return name, {
+            "query": str(args.get("query") or ""),
+            "when": str(args.get("when") or ""),
+            "free_only": bool(free_only),
+        }
 
     if name == "get_event":
         eid = args.get("event_id") or args.get("id") or ""
@@ -304,6 +315,9 @@ def _dispatch_inproc(name: str, args: dict, *, caller_number: str) -> Any:
 
     if mcp_name == "search_events":
         return events.search_events(**mapped)
+
+    if mcp_name == "summarize_event_categories":
+        return events.summarize_event_categories(**mapped)
 
     if mcp_name == "get_event":
         return events.get_event(mapped["event_id"])
@@ -612,6 +626,7 @@ def _dispatch_http(name: str, args: dict, *, caller_number: str) -> Any:
         "get_business_snapshot",
         "lookup_business",
         "search_events",
+        "summarize_event_categories",
         "get_event",
         "get_caller_profile",
         "update_caller_profile",

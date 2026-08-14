@@ -75,6 +75,7 @@ def test_ai411_mode_prompt_and_tools():
         "search_business_knowledge",
         "lookup_business",
         "search_events",
+        "summarize_event_categories",
         "get_event",
         "get_caller_profile",
         "update_caller_profile",
@@ -87,6 +88,8 @@ def test_ai411_mode_prompt_and_tools():
     }
     assert names == expected
     assert agent.get_openers() == ai411.OPENERS
+    assert "EVENT DISCOVERY" in prompt
+    assert "summarize_event_categories" in prompt
 
 
 def test_voice_agent_mode_alias():

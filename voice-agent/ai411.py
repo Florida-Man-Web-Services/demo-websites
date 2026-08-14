@@ -71,8 +71,9 @@ TOOLS = [
     {
         "name": "search_events",
         "description": (
-            "Search cached local events/calendars (what's on this weekend, "
-            "free outdoor events, etc.). Seed data is always available."
+            "Search cached local events after you know the caller's interest or "
+            "category. Prefer summarize_event_categories first when the list may "
+            "be long. Pass category= from that summary to drill into one bucket."
         ),
         "input_schema": {
             "type": "object",
@@ -93,6 +94,13 @@ TOOLS = [
                     "items": {"type": "string"},
                     "description": "Optional tags filter (e.g. music, free, outdoor).",
                 },
+                "category": {
+                    "type": "string",
+                    "description": (
+                        "Primary category from summarize_event_categories "
+                        "(music, food, arts, sports, outdoors, nightlife, family, …)."
+                    ),
+                },
                 "free_only": {
                     "type": "boolean",
                     "description": "If true, only free events (default false).",
@@ -100,6 +108,34 @@ TOOLS = [
                 "limit": {
                     "type": "integer",
                     "description": "Max events to return (default 5).",
+                },
+            },
+            "required": [],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "summarize_event_categories",
+        "description": (
+            "Get event category counts for a time window (tonight / tomorrow / "
+            "this_weekend). Use this for long lists: speak total + how many in "
+            "each category, then let the caller pick a category before listing "
+            "individual events."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "when": {
+                    "type": "string",
+                    "description": "tonight, tomorrow, this_weekend, or empty.",
+                },
+                "query": {
+                    "type": "string",
+                    "description": "Optional topic filter before categorizing.",
+                },
+                "free_only": {
+                    "type": "boolean",
+                    "description": "If true, only free events.",
                 },
             },
             "required": [],
@@ -402,19 +438,41 @@ MEMORY (phone-keyed caller profile)
 CONVERSATION FLOW
 1. Answer with exactly: "{AI411_GREETING}" Then wait. Do not expand the greeting.
 2. Prefer the MEMORY SNAPSHOT; optionally get_caller_profile if snapshot missing.
-3. Route intent: businesses → lookup_business / search_business_knowledge;
-   events → search_events / get_event; post something → submit_event_broadcast
-   or submit_notice_broadcast after confirming details; recent posts →
-   list_recent_broadcasts.
+3. Route intent:
+   - businesses → lookup_business / search_business_knowledge
+   - events → follow EVENT DISCOVERY below (not a raw dump)
+   - post something → submit_event_broadcast / submit_notice_broadcast after confirm
+   - recent posts → list_recent_broadcasts
 4. Offer SMS of links after useful results (send_sms_links).
 5. If they ask about Florida Man Web Services or free demo websites specifically,
    you may briefly explain that a separate local web-dev service builds free demos
    for businesses — do not run a sales pitch unless they clearly ask how to get
    a site built, and even then keep it one sentence and offer an owner callback.
 
+EVENT DISCOVERY (required whenever they ask what's going on / events / tonight /
+this weekend / etc.)
+1. Interests first (mandatory): If MEMORY SNAPSHOT already has interests, briefly
+   acknowledge them and use them as the topic. If not, ask ONE short question
+   about what they like (music, food, outdoors, family, free stuff, arts…) and
+   WAIT for the answer. Do NOT call search_events or summarize_event_categories
+   and do NOT list event titles until you have an interest or they refuse and
+   say "anything" / "everything".
+2. Time window: map their words to when= tonight | tomorrow | this_weekend | empty.
+3. Long list → categories: Call summarize_event_categories with that when= (and
+   optional query= their interest). If long_list is true or total > 3, speak only
+   the total and how many events in each category — e.g. "Twelve things this
+   weekend: four music, three food, two arts." Then ask which category they want.
+   Do not read every title yet.
+4. Drill-down: When they pick a category (or a specific interest that maps to one),
+   call search_events with category= that name and the same when=. Speak at most
+   2–3 event titles with one detail each; offer more or SMS links.
+5. Short list (≤3 total): After interests are known, you may name the events
+   directly without the category round.
+6. Save new interests they state via update_caller_profile (with memory_ok).
+
 TOOLS (in-process MCP store names)
 - search_business_knowledge, lookup_business
-- search_events (when: tonight|tomorrow|this_weekend|empty; free_only; tags), get_event
+- summarize_event_categories, search_events (when; category; tags; free_only), get_event
 - get_caller_profile, update_caller_profile, forget_caller
 - submit_event_broadcast (prefer ISO when_start + venue), submit_notice_broadcast,
   list_recent_broadcasts

@@ -46,6 +46,7 @@ from events import (
     get_event as get_event_sync,
     list_event_sources as list_event_sources_sync,
     search_events as search_events_sync,
+    summarize_event_categories as summarize_event_categories_sync,
 )
 import broadcasts as broadcasts_mod
 from lookup import find_business
@@ -571,6 +572,7 @@ def _search_events_sync(
     tags: str = "",
     free_only: bool = False,
     limit: int = 10,
+    category: str = "",
 ) -> dict:
     try:
         tag_list = None
@@ -593,6 +595,7 @@ def _search_events_sync(
             tags=tag_list,
             free_only=free_only,
             limit=limit,
+            category=category,
         )
     except Exception as e:
         logger.exception("tool %s failed", "search_events")
@@ -606,17 +609,56 @@ async def search_events(
     tags: str = "",
     free_only: bool = False,
     limit: int = 10,
+    category: str = "",
 ) -> dict:
     """Search local Gainesville events (seed store; no live crawl yet).
 
     when: empty (all upcoming), tonight, tomorrow, or this_weekend
     (America/New_York). query matches title/description/venue/tags.
-    tags: comma-separated required tags (subset match). free_only filters
-    free events. Expired events (past end/start) are dropped.
+    tags: comma-separated required tags (subset match). category: primary
+    bucket from summarize_event_categories. free_only filters free events.
+    Expired events (past end/start) are dropped.
     """
     return await anyio.to_thread.run_sync(
         functools.partial(
-            _search_events_sync, query, when, tags, free_only, limit
+            _search_events_sync, query, when, tags, free_only, limit, category
+        )
+    )
+
+
+def _summarize_event_categories_sync(
+    query: str = "",
+    when: str = "",
+    free_only: bool = False,
+) -> dict:
+    try:
+        return summarize_event_categories_sync(
+            query=query, when=when, free_only=free_only
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "summarize_event_categories")
+        return {
+            "ok": False,
+            "total": 0,
+            "categories": [],
+            "error": _unavailable(e),
+        }
+
+
+@mcp.tool()
+async def summarize_event_categories(
+    query: str = "",
+    when: str = "",
+    free_only: bool = False,
+) -> dict:
+    """Category counts for events in a time window (voice browse step).
+
+    Prefer this before listing titles when many events match. Then call
+    search_events with category= after the caller picks a bucket.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _summarize_event_categories_sync, query, when, free_only
         )
     )
 

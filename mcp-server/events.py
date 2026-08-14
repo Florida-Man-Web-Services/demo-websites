@@ -501,6 +501,7 @@ def search_events(
     tags: list[str] | None = None,
     free_only: bool = False,
     limit: int = 10,
+    category: str = "",
 ) -> dict[str, Any]:
     """Search local events. Returns {ok, count, events} or speakable error."""
     try:
@@ -509,7 +510,9 @@ def search_events(
             return {
                 "ok": False,
                 "count": 0,
+                "total_matched": 0,
                 "events": [],
+                "categories": [],
                 "error": (
                     f"unknown when {when!r} — try tonight, tomorrow, "
                     "this_weekend, or leave empty for all upcoming"
@@ -532,13 +535,17 @@ def search_events(
         else:
             tag_list = None
 
+        cat_key = (category or "").strip().lower()
+
         now = _now_et()
         window = _when_window(when_key, now)
         if window is None:
             return {
                 "ok": False,
                 "count": 0,
+                "total_matched": 0,
                 "events": [],
+                "categories": [],
                 "error": f"unknown when {when!r}",
             }
         window_start, window_end = window
@@ -554,19 +561,133 @@ def search_events(
                 continue
             if not _tags_match(ev, tag_list):
                 continue
+            if cat_key and _primary_category(ev) != cat_key:
+                continue
             if not _keyword_match(ev, query or ""):
                 continue
             matched.append(ev)
 
         matched.sort(key=lambda e: e.get("start") or "")
         limited = matched[:lim]
-        return {"ok": True, "count": len(limited), "events": limited}
+        cats = _category_breakdown(matched)
+        return {
+            "ok": True,
+            "count": len(limited),
+            "total_matched": len(matched),
+            "events": limited,
+            "categories": cats,
+            "long_list": len(matched) > 3,
+            "category_filter": cat_key or None,
+        }
     except Exception as e:  # noqa: BLE001 — speakable, never raise
         return {
             "ok": False,
             "count": 0,
+            "total_matched": 0,
             "events": [],
+            "categories": [],
             "error": f"events search unavailable ({e.__class__.__name__})",
+        }
+
+
+# Friendly buckets for voice. First matching tag wins; else "other".
+_CATEGORY_RULES: list[tuple[str, frozenset[str]]] = [
+    ("music", frozenset({"music", "jazz", "live music", "concert"})),
+    ("food", frozenset({"food", "market", "farmers market", "dining"})),
+    ("arts", frozenset({"art", "film", "gallery", "theater", "theatre"})),
+    ("sports", frozenset({"sports", "gators", "fitness"})),
+    ("outdoors", frozenset({"outdoor", "outdoors", "nature", "astronomy"})),
+    ("nightlife", frozenset({"nightlife", "comedy", "trivia", "bar"})),
+    ("family", frozenset({"family", "kids", "children"})),
+    ("free", frozenset({"free"})),
+]
+
+
+def _primary_category(ev: dict[str, Any]) -> str:
+    tags = [str(t).strip().lower() for t in (ev.get("tags") or []) if str(t).strip()]
+    for name, keys in _CATEGORY_RULES:
+        if name == "free":
+            continue  # free is a filter, not a primary bucket when other tags exist
+        if any(t in keys for t in tags):
+            return name
+    if ev.get("free") and not tags:
+        return "free"
+    if tags:
+        return tags[0]
+    return "other"
+
+
+def _category_breakdown(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    buckets: dict[str, list[dict[str, Any]]] = {}
+    for ev in events:
+        cat = _primary_category(ev)
+        buckets.setdefault(cat, []).append(ev)
+    out: list[dict[str, Any]] = []
+    for name, items in sorted(buckets.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+        samples = [str(e.get("title") or "").strip() for e in items[:2]]
+        samples = [s for s in samples if s]
+        out.append(
+            {
+                "category": name,
+                "count": len(items),
+                "sample_titles": samples,
+            }
+        )
+    return out
+
+
+def summarize_event_categories(
+    query: str = "",
+    when: str = "",
+    free_only: bool = False,
+) -> dict[str, Any]:
+    """Category counts for a time window — voice browse before listing events.
+
+    Returns total + per-category counts (and sample titles). Does not return
+    the full event list; use search_events with tags= after the caller picks.
+    """
+    try:
+        # Reuse search with high limit to get full match + categories.
+        result = search_events(
+            query=query,
+            when=when,
+            tags=None,
+            free_only=free_only,
+            limit=50,
+        )
+        if not result.get("ok"):
+            return result
+        total = int(result.get("total_matched") or result.get("count") or 0)
+        cats = list(result.get("categories") or [])
+        # Speakable one-liner for the model.
+        if total == 0:
+            speak = "No events matched that window."
+        elif total <= 3:
+            speak = (
+                f"{total} event{'s' if total != 1 else ''} matched — short enough "
+                "to name them directly after confirming interest."
+            )
+        else:
+            bits = [f"{c['count']} {c['category']}" for c in cats]
+            speak = (
+                f"{total} events total: " + ", ".join(bits) + ". "
+                "Ask which category they want details on."
+            )
+        return {
+            "ok": True,
+            "total": total,
+            "when": (when or "").strip() or "upcoming",
+            "query": query or "",
+            "categories": cats,
+            "long_list": total > 3,
+            "speakable": speak,
+        }
+    except Exception as e:  # noqa: BLE001
+        return {
+            "ok": False,
+            "total": 0,
+            "categories": [],
+            "error": f"event categories unavailable ({e.__class__.__name__})",
         }
 
 

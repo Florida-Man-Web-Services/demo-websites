@@ -293,6 +293,32 @@ def test_seed_search_integration(tmp_store, fixed_clock):
     result = events.search_events(query="market")
     assert result["ok"] is True
     assert result["count"] >= 1
+    assert "categories" in result
     sources = events.list_event_sources()
     assert sources["ok"] is True
     assert any(s["count"] > 0 for s in sources["sources"])
+
+
+def test_summarize_event_categories_and_drilldown(tmp_store, fixed_clock):
+    summary = events.summarize_event_categories(when="this_weekend")
+    assert summary["ok"] is True
+    assert summary["total"] >= 1
+    assert isinstance(summary["categories"], list)
+    assert summary["categories"]
+    assert "speakable" in summary
+    # Drill into first category
+    cat = summary["categories"][0]["category"]
+    drilled = events.search_events(when="this_weekend", category=cat, limit=10)
+    assert drilled["ok"] is True
+    assert drilled["total_matched"] == summary["categories"][0]["count"]
+    assert drilled.get("category_filter") == cat
+    for ev in drilled["events"]:
+        assert events._primary_category(ev) == cat
+
+
+def test_search_reports_total_matched(tmp_store, fixed_clock):
+    result = events.search_events(limit=2)
+    assert result["ok"] is True
+    assert result["count"] == 2
+    assert result.get("total_matched", 0) >= 2
+    assert isinstance(result.get("categories"), list)
