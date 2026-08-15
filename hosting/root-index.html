@@ -1,22 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Florida Man Web</title>
-<meta name="description" content="Custom websites for Gainesville, FL businesses." />
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5rem;line-height:1.6}
-h1{font-size:clamp(1.8rem,5vw,2.6rem);background:linear-gradient(90deg,#58a6ff,#7ee787);-webkit-background-clip:text;background-clip:text;color:transparent}
-p{color:#8b949e;margin-top:.8rem;max-width:480px}
-a{color:#58a6ff;text-decoration:none}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Florida Man Web — Gainesville websites &amp; AI 411</title>
+  <meta name="description" content="Florida Man Web Services: custom websites for Gainesville businesses, live demo catalog, and Gainesville AI 411." />
+  <meta name="theme-color" content="#07110e" />
+  <link rel="canonical" href="https://floridamanweb.online/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Florida Man Web — Gainesville websites &amp; AI 411" />
+  <meta property="og:description" content="Custom websites for Gainesville businesses. Call AI 411 or browse live demos." />
+  <meta property="og:url" content="https://floridamanweb.online/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07110e;
+      --surface: #12241d;
+      --ink: #f1f6f2;
+      --muted: #9aaca3;
+      --lagoon: #2ec4a6;
+      --citrus: #f0b429;
+      --clay: #e07a3d;
+      --line: rgba(241, 246, 242, 0.1);
+      --font-display: "Fraunces", "Times New Roman", serif;
+      --font-body: "Figtree", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 800px 480px at 12% -10%, rgba(46, 196, 166, 0.16), transparent 55%),
+        radial-gradient(ellipse 640px 400px at 100% 0%, rgba(240, 180, 41, 0.12), transparent 50%),
+        var(--bg);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    .skip-link {
+      position: absolute; left: -9999px; top: 0.75rem; z-index: 10;
+      background: var(--citrus); color: #1a1200; padding: 0.6rem 1rem;
+      border-radius: 8px; font-weight: 700; text-decoration: none;
+    }
+    .skip-link:focus { left: 0.75rem; outline: 3px solid var(--lagoon); }
+
+    .wrap {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) 1.25rem 3.5rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lagoon);
+      border: 1px solid rgba(46, 196, 166, 0.35);
+      background: rgba(46, 196, 166, 0.08);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 1.15rem;
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 6vw, 3rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.85rem;
+    }
+    h1 span { color: var(--citrus); font-style: italic; font-weight: 600; }
+    .lead {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 36ch;
+      margin: 0 0 2rem;
+    }
+    .phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid rgba(46, 196, 166, 0.45);
+      padding-bottom: 0.15rem;
+    }
+    .phone:hover { color: var(--lagoon); }
+    .phone:focus-visible { outline: 3px solid rgba(46, 196, 166, 0.55); outline-offset: 4px; }
+
+    .cards {
+      display: grid;
+      gap: 0.9rem;
+    }
+    @media (min-width: 560px) {
+      .cards { grid-template-columns: 1fr 1fr; }
+    }
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: linear-gradient(165deg, rgba(255,255,255,0.04), transparent 40%), var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.15rem 1.1rem 1.2rem;
+      transition: border-color 0.15s ease, transform 0.12s ease;
+      min-height: 100%;
+    }
+    a.card:hover {
+      border-color: rgba(46, 196, 166, 0.35);
+      transform: translateY(-2px);
+    }
+    a.card:focus-visible {
+      outline: 3px solid rgba(46, 196, 166, 0.55);
+      outline-offset: 3px;
+    }
+    a.card.biz { border-top: 3px solid var(--lagoon); }
+    a.card.ai { border-top: 3px solid var(--citrus); }
+    .kicker {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+    .biz .kicker { color: var(--lagoon); }
+    .ai .kicker { color: var(--citrus); }
+    a.card h2 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin: 0 0 0.4rem;
+      letter-spacing: -0.015em;
+    }
+    a.card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .arrow {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--lagoon);
+    }
+    .ai .arrow { color: var(--citrus); }
+
+    footer {
+      margin-top: 2.75rem;
+      padding-top: 1.15rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+  </style>
 </head>
 <body>
-<main>
-<h1>Florida Man Web</h1>
-<p>Custom websites for Gainesville, FL businesses.<br>
-Questions? Call <a href="tel:+18449030365">(844)&nbsp;903&#8209;0365</a>.</p>
-</main>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <main id="main" class="wrap">
+    <div class="badge">Gainesville · Florida Man Web</div>
+    <h1>Websites that work. <span>AI that answers.</span></h1>
+    <p class="lead">
+      Custom sites for local businesses — plus Gainesville AI 411 for events,
+      people, and free demo callbacks.
+    </p>
+    <a class="phone" href="tel:+18449030365">(844)&nbsp;903&#8209;0365</a>
+
+    <div class="cards">
+      <a class="card ai" href="/ai411/">
+        <div class="kicker">Product</div>
+        <h2>Gainesville AI 411</h2>
+        <p>Voice directory for events and businesses, free demo callback, optional personal page.</p>
+        <span class="arrow">Open AI 411 →</span>
+      </a>
+      <a class="card biz" href="/ai411/#form-title">
+        <div class="kicker">Businesses</div>
+        <h2>Free demo website</h2>
+        <p>Request a callback. We interview you, build a free demo page, and show you the link.</p>
+        <span class="arrow">Request callback →</span>
+      </a>
+    </div>
+
+    <footer>
+      Florida Man Web Services. Questions? Call the number above.
+    </footer>
+  </main>
 </body>
 </html>
