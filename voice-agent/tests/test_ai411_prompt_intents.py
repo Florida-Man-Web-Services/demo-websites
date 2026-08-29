@@ -52,6 +52,21 @@ def test_explicit_date_night_skips_interest_gate():
     assert "i can't book" in pl or "cannot book" in pl or "not a booking" in pl
     # Empty browse may still wait; explicit date/movies/Hipp must not.
     assert "IMMEDIATELY" in p or "immediately" in pl
+    # QOTD stays in the product: after the answer, not as a gate.
+    assert "question of the day" in pl
+    assert "get_question_of_the_day" in p
+    assert "do not drop qotd" in pl or "offer today's qotd" in pl or "offer qotd" in pl
+
+
+def test_qotd_is_default_on_empty_or_bored():
+    ai411 = _reload()
+    p = ai411.system_prompt(
+        direction="inbound", caller_number="+135****0100", openers=False
+    )
+    pl = p.lower()
+    assert "bored" in pl
+    assert "silence after greeting" in pl or "default people-profile" in pl
+    assert "get_question_of_the_day" in p
 
 
 def test_connect_is_spoken_number_not_dial():
