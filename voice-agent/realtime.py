@@ -18,6 +18,7 @@ close), which keeps the bridge testable without sockets.
 import asyncio
 import json
 import logging
+import time
 
 import config
 from agent import CallState, _run_tool, flush_call_transcript, get_tools, record_transcript_turn, system_prompt
@@ -152,16 +153,8 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
         try:
             async for ev in xai:
                 t = ev.get("type")
-                if t == "response.output_audio.delta":
-                    # mu-law 8k base64 on both sides: pass straight through.
-                    await twilio.send(
-                        {
-                            "event": "media",
-                            "streamSid": twilio.stream_sid,
-                            "media": {"payload": ev["delta"]},
-                        }
-                    )
-                elif t == "input_audio_buffer.speech_started":
+                if t == "input_audio_buffer.speech_started":
+                    state.ttfa["speech_started_at"] = time.perf_counter()
                     # Barge-in: drop any queued agent audio so it shuts up.
                     await twilio.send(
                         {"event": "clear", "streamSid": twilio.stream_sid}
@@ -170,6 +163,13 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
                     "input_audio_buffer.speech_stopped",
                     "input_audio_buffer.committed",
                 ):
+                    now = time.perf_counter()
+                    if t == "input_audio_buffer.speech_stopped":
+                        state.ttfa["speech_stopped_at"] = now
+                        state.ttfa.pop("first_delta_at", None)
+                        state.ttfa.pop("first_twilio_media_at", None)
+                    else:
+                        state.ttfa["committed_at"] = now
                     # Phase 3: F2 speech window on end-of-utterance (owner modes).
                     try:
                         import voice_auth
@@ -182,6 +182,36 @@ async def run_call(twilio, xai, state: CallState, primed: bool = False) -> None:
                             "call %s: voice_auth speech window skipped",
                             state.call_sid,
                             exc_info=True,
+                        )
+                elif t == "response.output_audio.delta":
+                    # mu-law 8k base64 on both sides: pass straight through.
+                    t0 = time.perf_counter()
+                    stopped = state.ttfa.get("speech_stopped_at")
+                    if stopped and "first_delta_at" not in state.ttfa:
+                        state.ttfa["first_delta_at"] = t0
+                    await twilio.send(
+                        {
+                            "event": "media",
+                            "streamSid": twilio.stream_sid,
+                            "media": {"payload": ev["delta"]},
+                        }
+                    )
+                    if (
+                        stopped
+                        and "first_delta_at" in state.ttfa
+                        and "first_twilio_media_at" not in state.ttfa
+                    ):
+                        t1 = time.perf_counter()
+                        state.ttfa["first_twilio_media_at"] = t1
+                        d_ms = int((state.ttfa["first_delta_at"] - stopped) * 1000)
+                        tw_ms = int((t1 - state.ttfa["first_delta_at"]) * 1000)
+                        state.ttfa["speech_stopped_to_first_delta_ms"] = max(0, d_ms)
+                        state.ttfa["first_delta_to_twilio_ms"] = max(0, tw_ms)
+                        log.info(
+                            "ttfa call=%s speech_stopped_to_first_delta_ms=%s first_delta_to_twilio_ms=%s",
+                            state.call_sid,
+                            state.ttfa["speech_stopped_to_first_delta_ms"],
+                            state.ttfa["first_delta_to_twilio_ms"],
                         )
                 elif t == "response.function_call_arguments.done":
                     await _handle_tool(xai, state, ev)

@@ -91,6 +91,10 @@ def test_ai411_mode_prompt_and_tools():
         "match_events_for_profile",
         "express_event_interest",
         "list_event_interest_matches",
+        "opt_in_personal_page",
+        "opt_out_personal_page",
+        "get_personal_page_status",
+        "log_connect",
         "end_call",
     }
     assert names == expected

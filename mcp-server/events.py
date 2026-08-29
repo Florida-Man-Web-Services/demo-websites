@@ -864,6 +864,37 @@ def _when_window(
     return (window_start, end)
 
 
+def resolve_event_window(
+    when: str = "",
+    start_at: str = "",
+    end_at: str = "",
+    now: datetime | None = None,
+) -> tuple[datetime | None, datetime | None] | dict[str, Any]:
+    """Resolve (start, end) from when= aliases and/or ISO start_at/end_at.
+
+    Returns a dict with error= on failure (never raises). ISO window wins
+    when start_at or end_at is provided — when= is then ignored.
+    """
+    now = now or _now_et()
+    sa_raw = (start_at or "").strip()
+    ea_raw = (end_at or "").strip()
+    sa = _parse_iso(sa_raw) if sa_raw else None
+    ea = _parse_iso(ea_raw) if ea_raw else None
+    if sa_raw and sa is None:
+        return {"error": "ambiguous_date"}
+    if ea_raw and ea is None:
+        return {"error": "ambiguous_date"}
+    if sa is not None or ea is not None:
+        return (sa or now, ea)
+    when_key = (when or "").strip().lower()
+    if when_key not in _WHEN_VALUES:
+        return {"error": "unknown_when"}
+    window = _when_window(when_key, now)
+    if window is None:
+        return {"error": "unknown_when"}
+    return window
+
+
 def _event_in_window(
     ev: dict[str, Any],
     window_start: datetime | None,
@@ -918,22 +949,47 @@ def search_events(
     free_only: bool = False,
     limit: int = 10,
     category: str = "",
+    start_at: str = "",
+    end_at: str = "",
 ) -> dict[str, Any]:
     """Search local events. Returns {ok, count, events} or speakable error."""
     try:
-        when_key = (when or "").strip().lower()
-        if when_key not in _WHEN_VALUES:
+        now = _now_et()
+        window = resolve_event_window(
+            when=when, start_at=start_at, end_at=end_at, now=now
+        )
+        if isinstance(window, dict):
+            err = window.get("error") or "bad window"
+            if err == "unknown_when":
+                msg = (
+                    f"unknown when {when!r} — try tonight, tomorrow, "
+                    "this_weekend, start_at/end_at ISO, or leave empty "
+                    "for all upcoming"
+                )
+            else:
+                msg = "ambiguous_date — use ISO start_at/end_at or when= tonight|tomorrow|this_weekend"
             return {
                 "ok": False,
                 "count": 0,
                 "total_matched": 0,
                 "events": [],
                 "categories": [],
-                "error": (
-                    f"unknown when {when!r} — try tonight, tomorrow, "
-                    "this_weekend, or leave empty for all upcoming"
-                ),
+                "error": msg,
             }
+        when_key = (when or "").strip().lower()
+        if not (start_at or "").strip() and not (end_at or "").strip():
+            if when_key not in _WHEN_VALUES:
+                return {
+                    "ok": False,
+                    "count": 0,
+                    "total_matched": 0,
+                    "events": [],
+                    "categories": [],
+                    "error": (
+                        f"unknown when {when!r} — try tonight, tomorrow, "
+                        "this_weekend, or leave empty for all upcoming"
+                    ),
+                }
         try:
             lim = int(limit)
         except (TypeError, ValueError):
@@ -953,17 +1009,6 @@ def search_events(
 
         cat_key = (category or "").strip().lower()
 
-        now = _now_et()
-        window = _when_window(when_key, now)
-        if window is None:
-            return {
-                "ok": False,
-                "count": 0,
-                "total_matched": 0,
-                "events": [],
-                "categories": [],
-                "error": f"unknown when {when!r}",
-            }
         window_start, window_end = window
 
         events = ensure_seeded()
