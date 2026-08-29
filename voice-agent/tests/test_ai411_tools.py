@@ -396,3 +396,21 @@ def test_fomo_tools_roundtrip(ai411_agent):
     assert phone_b not in blob
     assert "not available" not in blob.lower()
     assert "not wired" not in blob.lower()
+
+
+def test_log_connect_spoken_number_does_not_end_call(tmp_path, monkeypatch):
+    monkeypatch.setenv("CALL_DB", str(tmp_path / "call-log.db"))
+    monkeypatch.setenv("CALL_LOG_PATH", str(tmp_path / "call-log.csv"))
+    config, agent, ai411, _bridge = _reload_mode("ai411")
+    state = _state(agent)
+    out = json.loads(
+        agent._run_tool(
+            state,
+            "log_connect",
+            {"kind": "spoken_number", "phone": "+13523735968", "business_query": "Hipp"},
+        )
+    )
+    assert out.get("ok") is True
+    assert out.get("outcome") == "connect_spoken"
+    assert state.ended is False
+    assert "<Dial>" not in json.dumps(ai411.TOOLS)

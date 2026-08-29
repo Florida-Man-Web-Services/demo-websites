@@ -579,3 +579,88 @@ def test_ingest_dry_run_no_write(tmp_store, fixed_clock):
     assert result["mapped"] == 1
     # Store still empty on disk
     assert events.ensure_seeded() == []
+
+
+def test_when_tonight_is_evening_window(tmp_store, monkeypatch):
+    now = datetime(2026, 8, 29, 21, 0, tzinfo=ET)
+    monkeypatch.setattr(events, "_now_et", lambda: now)
+    w = events.resolve_event_window(when="tonight", now=now)
+    assert not isinstance(w, dict)
+    start, end = w
+    assert start.hour >= 17 or start == now
+    assert end.hour == 4
+
+
+def test_iso_start_end_filters_overlap(tmp_store, monkeypatch):
+    now = datetime(2026, 8, 29, 12, 0, tzinfo=ET)
+    monkeypatch.setattr(events, "_now_et", lambda: now)
+    inside = _evt(
+        "in",
+        "Inside",
+        datetime(2026, 8, 29, 19, 0, tzinfo=ET),
+        end=datetime(2026, 8, 29, 21, 0, tzinfo=ET),
+    )
+    outside = _evt(
+        "out",
+        "Outside",
+        datetime(2026, 8, 30, 19, 0, tzinfo=ET),
+        end=datetime(2026, 8, 30, 21, 0, tzinfo=ET),
+    )
+    events.reset_store([inside, outside])
+    start_at = datetime(2026, 8, 29, 18, 0, tzinfo=ET).isoformat()
+    end_at = datetime(2026, 8, 29, 23, 0, tzinfo=ET).isoformat()
+    hit = events.search_events(start_at=start_at, end_at=end_at)
+    assert hit["ok"] is True
+    ids = {e["id"] for e in hit["events"]}
+    assert "in" in ids
+    assert "out" not in ids
+
+
+def test_unknown_when_still_errors(tmp_store, fixed_clock):
+    events.reset_store([_evt("x", "X", _fixed_now() + timedelta(hours=2))])
+    bad = events.search_events(when="next_month")
+    assert bad["ok"] is False
+    assert "error" in bad
+
+
+def test_start_at_friday_iso_does_not_require_when_enum(tmp_store, monkeypatch):
+    now = datetime(2026, 8, 26, 10, 0, tzinfo=ET)  # Wednesday
+    monkeypatch.setattr(events, "_now_et", lambda: now)
+    fri = _evt(
+        "fri-show",
+        "Friday Show",
+        datetime(2026, 8, 28, 20, 0, tzinfo=ET),
+        end=datetime(2026, 8, 28, 22, 0, tzinfo=ET),
+    )
+    events.reset_store([fri])
+    start_at = datetime(2026, 8, 28, 0, 0, tzinfo=ET).isoformat()
+    end_at = datetime(2026, 8, 28, 23, 59, tzinfo=ET).isoformat()
+    hit = events.search_events(start_at=start_at, end_at=end_at)
+    assert hit["ok"] is True
+    assert any(e["id"] == "fri-show" for e in hit["events"])
+
+
+def test_hipp_query_matches_visitgainesville_venue(tmp_store, monkeypatch):
+    now = datetime(2026, 8, 29, 12, 0, tzinfo=ET)
+    monkeypatch.setattr(events, "_now_et", lambda: now)
+    hipp = _evt(
+        "vg-248174",
+        "Hippodrome Theatre play",
+        datetime(2026, 8, 29, 19, 30, tzinfo=ET),
+        venue="The Hippodrome Theatre",
+        source="visitgainesville",
+        tags=["arts"],
+    )
+    other = _evt(
+        "vg-1",
+        "Park Jam",
+        datetime(2026, 8, 29, 18, 0, tzinfo=ET),
+        venue="Depot Park",
+        source="visitgainesville",
+    )
+    events.reset_store([hipp, other])
+    hit = events.search_events(query="hipp")
+    assert hit["ok"] is True
+    ids = {e["id"] for e in hit["events"]}
+    assert "vg-248174" in ids
+    assert "vg-1" not in ids

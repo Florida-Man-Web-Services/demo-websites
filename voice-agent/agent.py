@@ -727,6 +727,8 @@ class CallState:
     auth_anomaly_reasons: dict = field(default_factory=dict)
     auth_require_step_up: bool = False
     voice_pcm_hashes: list = field(default_factory=list)
+    # grok-realtime TTFA stamps (monotonic seconds / derived ms). No audio.
+    ttfa: dict = field(default_factory=dict)
 
 
 _twilio_client = None
@@ -861,6 +863,31 @@ def _log_outcome(
     if ref:
         return f"Outcome logged. transcript_ref={ref}"
     return "Outcome logged."
+
+
+def _log_connect(state: CallState, args: dict) -> str:
+    """Spoken-number connect. Never dials. Does not end the call."""
+    phone = str(args.get("phone") or "").strip()
+    kind = str(args.get("kind") or "spoken_number").strip() or "spoken_number"
+    query = str(args.get("business_query") or args.get("query") or "").strip()
+    event_id = str(args.get("event_id") or "").strip()
+    notes = (
+        f"connect_spoken kind={kind} phone={phone} "
+        f"query={query} event_id={event_id}"
+    )
+    try:
+        _log_outcome(state, {"outcome": "other", "notes": notes})
+    except Exception:
+        log.debug("log_connect calldb skipped", exc_info=True)
+    return json.dumps(
+        {
+            "ok": True,
+            "outcome": "connect_spoken",
+            "kind": kind,
+            "phone": phone,
+        },
+        ensure_ascii=False,
+    )
 
 
 def record_transcript_turn(
@@ -1224,6 +1251,8 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
     if mode == "ai411":
         if name == "send_sms_links":
             return _send_sms_links(state, args)
+        if name == "log_connect":
+            return _log_connect(state, args)
         # In-process mcp-server stores (knowledge/events/callers/broadcasts/lookup).
         import mcp_bridge
 

@@ -874,6 +874,8 @@ def _search_events_sync(
     free_only: bool = False,
     limit: int = 10,
     category: str = "",
+    start_at: str = "",
+    end_at: str = "",
 ) -> dict:
     try:
         tag_list = None
@@ -897,6 +899,8 @@ def _search_events_sync(
             free_only=free_only,
             limit=limit,
             category=category,
+            start_at=start_at,
+            end_at=end_at,
         )
     except Exception as e:
         logger.exception("tool %s failed", "search_events")
@@ -911,18 +915,29 @@ async def search_events(
     free_only: bool = False,
     limit: int = 10,
     category: str = "",
+    start_at: str = "",
+    end_at: str = "",
 ) -> dict:
     """Search local Gainesville events (community + Visit Gainesville store).
 
     when: empty (all upcoming), tonight, tomorrow, or this_weekend
-    (America/New_York). query matches title/description/venue/tags.
+    (America/New_York). start_at/end_at: optional ISO window (wins over when).
+    query matches title/description/venue/tags.
     tags: comma-separated required tags (subset match). category: primary
     bucket from summarize_event_categories. free_only filters free events.
     Expired events (past end/start) are dropped. Empty store is OK.
     """
     return await anyio.to_thread.run_sync(
         functools.partial(
-            _search_events_sync, query, when, tags, free_only, limit, category
+            _search_events_sync,
+            query,
+            when,
+            tags,
+            free_only,
+            limit,
+            category,
+            start_at,
+            end_at,
         )
     )
 
