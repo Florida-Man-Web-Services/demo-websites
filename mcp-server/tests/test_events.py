@@ -43,6 +43,7 @@ def _evt(
     description: str = "desc",
     source: str = "community",
     website: str = "",
+    kind: str = "",
 ) -> dict:
     out = {
         "id": eid,
@@ -61,6 +62,8 @@ def _evt(
     }
     if website:
         out["website"] = website
+    if kind:
+        out["kind"] = kind
     return out
 
 
@@ -664,3 +667,135 @@ def test_hipp_query_matches_visitgainesville_venue(tmp_store, monkeypatch):
     ids = {e["id"] for e in hit["events"]}
     assert "vg-248174" in ids
     assert "vg-1" not in ids
+
+
+def test_search_events_source_filter(tmp_store, monkeypatch):
+    now = datetime(2026, 8, 29, 12, 0, tzinfo=ET)
+    monkeypatch.setattr(events, "_now_et", lambda: now)
+    events.reset_store(
+        [
+            _evt(
+                "vg-1",
+                "Hipp Play",
+                now + timedelta(hours=6),
+                venue="The Hippodrome Theatre",
+                source="visitgainesville",
+            ),
+            _evt(
+                "community-1",
+                "Hipp Open Mic",
+                now + timedelta(hours=7),
+                venue="The Hippodrome Theatre",
+                source="community",
+            ),
+        ]
+    )
+    vg = events.search_events(query="hipp", source="visitgainesville")
+    assert vg["ok"] is True
+    assert {e["id"] for e in vg["events"]} == {"vg-1"}
+    comm = events.search_events(query="hipp", source="community")
+    assert {e["id"] for e in comm["events"]} == {"community-1"}
+
+
+def test_film_showtime_kind_empty_is_cinema_miss(tmp_store, monkeypatch):
+    now = datetime(2026, 8, 29, 12, 0, tzinfo=ET)
+    monkeypatch.setattr(events, "_now_et", lambda: now)
+    events.reset_store(
+        [
+            _evt(
+                "vg-1",
+                "Park Jam",
+                now + timedelta(hours=6),
+                source="visitgainesville",
+            )
+        ]
+    )
+    hit = events.search_events(kind="film_showtime")
+    assert hit["ok"] is True
+    assert hit["count"] == 0
+    assert hit["events"] == []
+    assert hit.get("cinema_miss") is True
+
+
+def test_film_showtime_kind_returns_only_showtimes(tmp_store, monkeypatch):
+    now = datetime(2026, 8, 29, 12, 0, tzinfo=ET)
+    monkeypatch.setattr(events, "_now_et", lambda: now)
+    show = _evt(
+        "film-1",
+        "Dune Part Three",
+        now + timedelta(hours=6),
+        venue="Regal Royal Park",
+        source="licensed_feed",
+        kind="film_showtime",
+    )
+    other = _evt(
+        "vg-1",
+        "Park Jam",
+        now + timedelta(hours=6),
+        source="visitgainesville",
+    )
+    events.reset_store([show, other])
+    hit = events.search_events(kind="film_showtime")
+    assert hit["ok"] is True
+    assert hit.get("cinema_miss") is not True
+    ids = {e["id"] for e in hit["events"]}
+    assert ids == {"film-1"}
+    assert hit["events"][0].get("kind") == "film_showtime"
+
+
+def test_fetch_passes_search_query(tmp_store, fixed_clock):
+    calls: list[str] = []
+
+    def fake_get(url: str) -> dict:
+        calls.append(url)
+        return {"events": [], "total": 0, "total_pages": 1}
+
+    result = events.fetch_visitgainesville_events(
+        search="hippodrome", http_get=fake_get
+    )
+    assert result["ok"] is True
+    assert calls
+    assert "search=hippodrome" in calls[0]
+
+
+def test_ingest_search_without_dry_run_refuses_write(tmp_store, fixed_clock):
+    def fake_get(url: str) -> dict:
+        return {
+            "events": [_tribe_raw(9, "Hipp Play", start="2026-07-20 20:00:00")],
+            "total": 1,
+            "total_pages": 1,
+        }
+
+    events.reset_store([])
+    result = events.ingest_visitgainesville(
+        search="hippodrome", http_get=fake_get, dry_run=False
+    )
+    assert result["ok"] is False
+    assert "dry_run" in (result.get("error") or "").lower()
+    assert events.ensure_seeded() == []
+
+
+def test_ingest_search_dry_run_maps_hipp(tmp_store, fixed_clock):
+    def fake_get(url: str) -> dict:
+        assert "search=hippodrome" in url
+        return {
+            "events": [
+                _tribe_raw(
+                    248174,
+                    "Hippodrome Theatre play",
+                    venue="The Hippodrome Theatre",
+                    start="2026-07-20 19:30:00",
+                )
+            ],
+            "total": 1,
+            "total_pages": 1,
+        }
+
+    events.reset_store([])
+    result = events.ingest_visitgainesville(
+        search="hippodrome", http_get=fake_get, dry_run=True
+    )
+    assert result["ok"] is True
+    assert result["dry_run"] is True
+    assert result["mapped"] == 1
+    assert events.ensure_seeded() == []

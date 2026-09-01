@@ -59,6 +59,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Fetch+map only; do not write the store",
     )
     ap.add_argument(
+        "--search",
+        default="",
+        help="Tribe search= probe (e.g. hippodrome). Requires --dry-run.",
+    )
+    ap.add_argument(
         "--json",
         action="store_true",
         help="Also print full result JSON on stdout after the digest line",
@@ -79,6 +84,7 @@ def main(argv: list[str] | None = None) -> int:
         max_pages=max_pages,
         start_date=start_date,
         days_ahead=days_ahead,
+        search=(args.search or "").strip() or None,
         dry_run=args.dry_run,
     )
 

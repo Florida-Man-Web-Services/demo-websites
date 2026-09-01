@@ -116,6 +116,20 @@ TOOLS = [
                     "type": "integer",
                     "description": "Max events to return (default 5).",
                 },
+                "source": {
+                    "type": "string",
+                    "description": (
+                        "Optional store source: visitgainesville or community. "
+                        "Hipp: prefer visitgainesville after a venue query."
+                    ),
+                },
+                "kind": {
+                    "type": "string",
+                    "description": (
+                        "Optional row kind. film_showtime = licensed cinema "
+                        "board only — empty means honest miss, never scrape."
+                    ),
+                },
             },
             "required": [],
             "additionalProperties": False,
@@ -611,7 +625,10 @@ TOOLS = [
             "properties": {
                 "kind": {
                     "type": "string",
-                    "description": "Must be spoken_number.",
+                    "description": (
+                        "spoken_number after you say a phone; cinema_miss when "
+                        "no film_showtime rows; hipp_miss when Hipp search is empty."
+                    ),
                 },
                 "phone": {
                     "type": "string",
@@ -762,11 +779,13 @@ DATE NIGHT / CINEMA / HIPP / CONNECT
   Say "I can't book" once. Never invent a show. Empty/stale store: one honest
   sentence, then Hipp 352-373-5968 AND lookup_business for a restaurant — never
   QOTD, never "what category", never repeat "I can't book".
-- cinema / movies / Regal: if store has film_showtime rows, two titles + times;
-  else honest miss ("I don't have tonight's board") + theater number from
-  lookup_business. Never scrape-guess showtimes. Then log_connect.
-- Hipp / Hippodrome: search_events query Hipp (title/venue). On miss speak
-  352-373-5968 and log_connect. Do not claim sold-out or hold tickets.
+- cinema / movies / Regal: search_events kind=film_showtime. If cinema_miss or
+  empty, say "I don't have tonight's board" and lookup_business for the theater
+  (Royal Park on Newberry, Butler, Celebration Pointe). Never scrape-guess
+  showtimes. Then log_connect(kind=cinema_miss).
+- Hipp / Hippodrome: search_events query Hipp (title/venue), optional
+  source=visitgainesville. On miss speak 352-373-5968 (lookup_business Hipp)
+  and log_connect(kind=hipp_miss). Do not claim sold-out or hold tickets.
 - CONNECT: speak the number, then log_connect(kind=spoken_number, phone=...).
   Never Dial. Do not outbound-dial from this line.
 
@@ -856,7 +875,7 @@ for these; never add them to generated-sites)
 
 TOOLS (in-process MCP store names)
 - search_business_knowledge, lookup_business
-- summarize_event_categories, search_events (when; start_at; end_at; category; tags; free_only), get_event
+- summarize_event_categories, search_events (when; start_at; end_at; category; tags; free_only; source; kind), get_event
 - get_caller_profile, update_caller_profile, forget_caller
 - get_question_of_the_day, answer_question_of_the_day, suggest_question_of_the_day
 - get_caller_people_profile, match_events_for_profile

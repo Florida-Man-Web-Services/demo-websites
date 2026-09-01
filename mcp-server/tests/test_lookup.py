@@ -62,3 +62,30 @@ def test_lookup_by_phone_ambiguous_returns_all_candidates():
     assert slugs == {
         "oasis-car-wash", "car-wash-nw-13th-st", "marathon-car-wash",
     }
+
+
+def test_lookup_hipp_alias_returns_connect_venue():
+    result = lookup.find_business("Hipp")
+    assert result["found"] is True
+    assert "hippodrome" in result["name"].lower()
+    assert "352" in result["phone"] and "373" in result["phone"] and "5968" in result["phone"]
+    assert "demo_url" not in result or not result.get("demo_url")
+    assert result.get("connect_venue") is True
+
+
+def test_lookup_regal_royal_park_returns_showtimes_line():
+    result = lookup.find_business("Regal Royal Park")
+    assert result["found"] is True
+    assert "royal park" in result["name"].lower()
+    assert "Newberry" in result["address"]
+    assert "844" in result["phone"] and "462" in result["phone"] and "7342" in result["phone"]
+    assert result.get("connect_venue") is True
+
+
+def test_lookup_regal_bare_is_ambiguous_theaters():
+    result = lookup.find_business("Regal")
+    assert result["found"] is False
+    names = " ".join(s["name"].lower() for s in result.get("suggestions") or [])
+    assert "royal park" in names
+    assert "butler" in names
+    assert "celebration" in names
