@@ -6,7 +6,7 @@ Monorepo for **Gainesville demo landing pages**, the **AI 411 / owner-updates vo
 
 | Surface | Path | Status |
 |--------|------|--------|
-| Demo catalog (browse all) | `index.html` | **Live** — 246 sites linked by category |
+| Demo catalog (browse all) | `index.html` | **Live** — 247 sites linked by category |
 | Demo landing pages | `generated-sites/<slug>.html` | **Live** — single-file HTML (inline CSS/JS) |
 | Public hashed hosting | `hosting/` → floridamanweb.online | **Live** — content-hash paths (see Deploy) |
 | Root nginx Dockerfile | `Dockerfile` + `arcade-bar-south.html` | **Legacy sample** — one-off Arcade Bar image; prefer `hosting/Dockerfile` |

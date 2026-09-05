@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IMPACTO — Free English classes for Hispanic families · UF · Gainesville</title>
+<meta name="description" content="IMPACTO is a University of Florida student organization offering free English classes for the Hispanic community in Gainesville and Alachua County. Tuesdays and Thursdays, 6:30–8:00 pm, UF campus." />
+<meta property="og:title" content="IMPACTO — Cerrando brechas. Rompiendo barreras. Gainesville" />
+<meta property="og:description" content="Free English classes taught by bilingual UF students for Hispanic immigrants in Gainesville and Alachua County." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="es_US" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --night:#04151c;
+  --deep:#0a2430;
+  --foam:#e6f4ee;
+  --foam-2:#cfe6db;
+  --cochineal:#e23b32;
+  --gold:#efc14a;
+  --ink:#071016;
+  --mute:#8aa39a;
+  --line:rgba(230,244,238,.14);
+  --paper:#f3f7f4;
+  --display:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;
+  --body:Figtree,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--night);color:var(--foam);line-height:1.6;text-wrap:pretty}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{width:min(1120px,calc(100% - 2.4rem));margin-inline:auto}
+.k{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.92;letter-spacing:-.02em;text-wrap:balance}
+a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.skip{position:absolute;left:-999px;top:0;background:var(--gold);color:var(--ink);padding:.6rem 1rem;z-index:80}
+.skip:focus{left:1rem;top:1rem}
+
+nav{position:sticky;top:0;z-index:40;background:rgba(4,21,28,.88);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+nav .bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--display);font-weight:800;letter-spacing:.08em;font-size:1.15rem}
+.brand .o{width:18px;height:18px;border-radius:50%;border:2px solid var(--cochineal);box-shadow:0 0 0 4px rgba(226,59,50,.18),0 0 0 8px rgba(239,193,74,.12)}
+.nav-links{display:flex;align-items:center;gap:1.1rem;list-style:none;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.nav-links a:hover{color:var(--foam)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em}
+.lang button{padding:.45rem .7rem;min-width:44px;min-height:36px}
+.lang button[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.menu-btn{display:none;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:8px}
+
+.hero{position:relative;overflow:hidden;padding:4.8rem 0 4.2rem;border-bottom:1px solid var(--line)}
+.hero-bg{position:absolute;inset:-20% -10% auto auto;width:min(720px,90vw);height:min(720px,90vw);pointer-events:none;opacity:.9}
+.ripple{fill:none;stroke:var(--cochineal);stroke-width:1.2;transform-origin:center;animation:pulse 7s ease-in-out infinite}
+.ripple:nth-child(2){stroke:var(--gold);animation-delay:-1.4s;opacity:.7}
+.ripple:nth-child(3){stroke:var(--foam);opacity:.25;animation-delay:-2.8s}
+.ripple:nth-child(4){stroke:var(--cochineal);opacity:.35;animation-delay:-4.2s}
+@keyframes pulse{0%,100%{transform:scale(.86);opacity:.35}50%{transform:scale(1.06);opacity:.9}}
+.hero .k{margin-bottom:1.1rem}
+.hero h1{font-size:clamp(2.55rem,11.2vw,9.2rem);max-width:11ch;overflow:visible}
+.hero h1 .o{display:inline-block;width:.62em;height:.62em;border-radius:50%;border:.08em solid var(--cochineal);box-shadow:0 0 0 .1em rgba(239,193,74,.35),0 0 0 .2em rgba(226,59,50,.18);vertical-align:-.04em;margin:0 .02em}
+.lede{margin-top:1.4rem;max-width:38ch;font-size:1.15rem;color:var(--foam-2)}
+.tag{margin-top:.85rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.btns{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.8rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.9rem 1.3rem;background:var(--cochineal);color:#fff;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;border-radius:2px}
+.btn.alt{background:transparent;border:1px solid var(--line);color:var(--foam)}
+.btn:hover{filter:brightness(1.08)}
+.hero-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:3.2rem;padding-top:1.6rem;border-top:1px solid var(--line)}
+.hero-meta b{display:block;font-family:var(--display);font-size:1.55rem;font-weight:800;color:var(--gold)}
+.hero-meta span{font-size:.85rem;color:var(--mute)}
+
+section{padding:4.4rem 0;border-bottom:1px solid var(--line)}
+section h2{font-size:clamp(2.2rem,6vw,4.2rem);margin:.45rem 0 1.1rem}
+.muted{color:var(--mute);max-width:62ch}
+.split{display:grid;gap:2rem}
+@media(min-width:860px){.split{grid-template-columns:1.1fr .9fr;align-items:start}}
+.panel{background:var(--deep);border:1px solid var(--line);padding:1.4rem 1.35rem}
+.panel h3{font-size:1.7rem;margin-bottom:.5rem}
+.panel p{color:var(--foam-2)}
+.paper{background:var(--paper);color:var(--ink)}
+.paper p,.paper li{color:#2a3d38}
+.paper .k{color:var(--cochineal)}
+
+.courses{display:grid;gap:1rem}
+@media(min-width:760px){.courses{grid-template-columns:1fr 1fr}}
+.course{position:relative;overflow:hidden;padding:1.7rem 1.5rem 1.5rem;border:1px solid var(--line);min-height:220px}
+.course::before{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(239,193,74,.35)}
+.course h3{font-size:2.1rem;margin:.4rem 0 .7rem}
+.course ul{margin-top:1rem;padding-left:1.1rem;color:var(--foam-2)}
+.doors{display:grid;gap:1rem}
+@media(min-width:760px){.doors{grid-template-columns:1fr 1fr}}
+.door{padding:1.8rem 1.5rem;min-height:260px;display:flex;flex-direction:column}
+.door.learn{background:var(--paper);color:var(--ink)}
+.door.learn .k{color:var(--cochineal)}
+.door.learn p{color:#2a3d38}
+.door.teach{background:var(--cochineal);color:#fff}
+.door.teach .k,.door.teach p{color:rgba(255,255,255,.86)}
+.door h3{font-size:2.4rem;margin:.5rem 0 1rem}
+.door .btn{margin-top:auto;align-self:flex-start}
+.door.learn .btn{background:var(--ink);color:var(--foam)}
+.door.teach .btn{background:#fff;color:var(--ink)}
+
+.roster{display:grid;gap:0;border:1px solid var(--line)}
+@media(min-width:700px){.roster{grid-template-columns:1fr 1fr}}
+.off{display:grid;grid-template-columns:auto 1fr;gap:.9rem 1rem;padding:1.1rem 1.15rem;border-bottom:1px solid var(--line)}
+@media(min-width:700px){.off:nth-child(odd){border-right:1px solid var(--line)}}
+.off:nth-last-child(-n+2){border-bottom:0}
+.mono{width:52px;height:52px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font-family:var(--display);font-size:1.05rem;color:var(--gold)}
+.off h3{font-size:1.15rem;margin-bottom:.15rem}
+.off p{font-size:.88rem;color:var(--mute)}
+.off a{color:var(--gold);font-family:var(--mono);font-size:.75rem}
+
+.quotes{display:grid;gap:1rem}
+@media(min-width:800px){.quotes{grid-template-columns:1.3fr .7fr .9fr}}
+blockquote{background:var(--deep);border:1px solid var(--line);padding:1.3rem 1.2rem;font-size:1.02rem}
+blockquote:first-child{background:var(--paper);color:var(--ink);font-size:1.25rem}
+cite{display:block;margin-top:.8rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-style:normal;color:var(--gold)}
+blockquote:first-child cite{color:var(--cochineal)}
+
+.visit{display:grid;gap:1.2rem}
+@media(min-width:760px){.visit{grid-template-columns:1fr 1fr 1fr}}
+.det .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+.det .val{font-size:1.08rem}
+.note{margin-top:1.4rem;font-size:.88rem;color:var(--mute);max-width:70ch}
+
+.cta{text-align:center;padding:5rem 0;background:
+  radial-gradient(ellipse 60% 80% at 50% 120%,rgba(226,59,50,.22),transparent 60%),
+  var(--night)}
+.cta h2{max-width:16ch;margin-inline:auto}
+.cta .btns{justify-content:center}
+
+footer{padding:1.8rem 0 2.4rem;color:var(--mute);font-size:.85rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:.7rem 1.4rem;justify-content:space-between}
+footer a{color:var(--gold)}
+
+@media(max-width:820px){
+  .nav-links{display:none}
+  .nav-links.open{display:flex;position:absolute;left:0;right:0;top:68px;flex-direction:column;background:var(--night);padding:1rem 1.2rem 1.3rem;border-bottom:1px solid var(--line);gap:.8rem}
+  .menu-btn{display:inline-flex;align-items:center;justify-content:center}
+  .hero-meta{grid-template-columns:1fr}
+  .hero-bg{opacity:.32;inset:-8% -38% auto auto}
+  .hero h1{font-size:clamp(2.4rem,15vw,3.1rem)}
+  .hero h1 .o{width:.52em;height:.52em}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ripple{animation:none}
+  .btn,.lang button,.nav-links a{transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav>
+  <div class="wrap bar">
+    <a class="brand" href="#top"><span class="o" aria-hidden="true"></span> IMPACTO</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#mission" data-es="Misión">Mission</a></li>
+      <li><a href="#classes" data-es="Clases">Classes</a></li>
+      <li><a href="#join" data-es="Participar">Join</a></li>
+      <li><a href="#officers" data-es="Directiva">Officers</a></li>
+      <li><a href="#visit" data-es="Visítanos">Visit</a></li>
+    </ul>
+    <div style="display:flex;gap:.6rem;align-items:center">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" id="lang-en" aria-pressed="true">EN</button>
+        <button type="button" id="lang-es" aria-pressed="false">ES</button>
+      </div>
+      <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="nav-links" data-es="Menú">Menu</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <svg class="hero-bg" viewBox="0 0 400 400" aria-hidden="true">
+    <circle class="ripple" cx="200" cy="200" r="70" />
+    <circle class="ripple" cx="200" cy="200" r="110" />
+    <circle class="ripple" cx="200" cy="200" r="150" />
+    <circle class="ripple" cx="200" cy="200" r="190" />
+  </svg>
+  <div class="wrap">
+    <p class="k" data-es="Organización estudiantil de la UF · Gainesville / Alachua">UF student organization · Gainesville / Alachua</p>
+    <h1>IMPACT<span class="o" aria-hidden="true"></span></h1>
+    <p class="lede" data-es="Clases de inglés gratuitas, dictadas por estudiantes bilingües de la University of Florida, para la comunidad hispana de Gainesville y el condado de Alachua.">Free English classes, taught by bilingual University of Florida students, for the Hispanic community in Gainesville and Alachua County.</p>
+    <p class="tag">Cerrando brechas y rompiendo barreras</p>
+    <div class="btns">
+      <a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Inscribirse a clase">Register for class</a>
+      <a class="btn alt" href="#join" data-es="Enseñar con nosotros">Teach with us</a>
+    </div>
+    <div class="hero-meta">
+      <p><b>2024</b><span data-es="Fundada en primavera en la UF">Founded spring at UF</span></p>
+      <p><b>2</b><span data-es="Niveles de inglés · martes y jueves">English levels · Tue &amp; Thu</span></p>
+      <p><b>75%</b><span data-es="Asistencia para certificado de participación">Attendance for a certificate</span></p>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section id="mission">
+    <div class="wrap split">
+      <div>
+        <p class="k" data-es="Misión">Mission</p>
+        <h2 data-es="El idioma es una de las barreras más grandes.">Language is one of the largest barriers.</h2>
+        <p class="muted" data-es="Un número significativo de inmigrantes hispanos en Gainesville no habla inglés con fluidez, lo que limita su libertad, agencia y movilidad en Estados Unidos. IMPACTO recluta y capacita a estudiantes hispanohablantes de la UF para enseñar inglés básico a esa comunidad.">A significant number of Hispanic immigrants in Gainesville are not proficient in English, which limits their freedom, agency, and mobility in the United States. IMPACTO recruits and trains Spanish-speaking UF students to teach basic English to that community.</p>
+        <p class="muted" style="margin-top:1rem" data-es="Muchas tareas cotidianas —conseguir trabajo, pedir un servicio, viajar, comprar, alquilar vivienda, investigar recursos— requieren inglés. Saber lo básico abre un mundo de acceso. Eso es el impacto.">Getting a job, asking for services, traveling, shopping, finding housing, and researching resources all require English. Basic English opens a world of access. That is the impact.</p>
+      </div>
+      <aside class="panel paper">
+        <p class="k" data-es="Por qué existimos">Why we exist</p>
+        <h3 data-es="Estudiantes de primera y segunda generación, enseñando a la comunidad con la que están conectados.">First- and second-generation students, teaching a community they are connected to.</h3>
+        <p style="margin-top:1rem" data-es="El equipo de IMPACTO está formado por estudiantes de la UF con padres de América Latina y familia que aún vive allí. Reconocen el privilegio de la ciudadanía — y el esfuerzo que implica obtener las mismas oportunidades.">IMPACTO is made of UF students whose parents are from Latin America and whose extended family still lives there. They know the privilege of U.S. citizenship — and the work it takes to earn the same opportunities.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="classes">
+    <div class="wrap">
+      <p class="k" data-es="Cursos">Courses</p>
+      <h2 data-es="Dos aulas. Método comunicativo. Cero costo.">Two classrooms. Communicative method. No charge.</h2>
+      <p class="muted" data-es="A partir del 8 de septiembre de 2026, IMPACTO ofrece dos variantes de inglés gratuitas para cualquier persona de la comunidad hispana que viva en el condado de Alachua o el área de Gainesville. Cada aula tiene dos docentes bilingües de la UF, capacitados por un profesor profesional de idiomas (el Sr. Andrés García).">Starting September 8, 2026, IMPACTO offers two free English courses to anyone from the Hispanic community living in Alachua County or the Gainesville area. Each classroom has two bilingual UF student teachers, trained by a professional foreign-language instructor (Mr. Andrés García).</p>
+      <div class="courses" style="margin-top:1.6rem">
+        <article class="course">
+          <p class="k">01</p>
+          <h3 data-es="Inglés · Nivel principiante">English · Beginner</h3>
+          <p data-es="Para quien está empezando. Prioridad: hablar. Cupos limitados; la confirmación llega por correo.">For learners who are just starting. Speaking comes first. Seats fill; a confirmation email follows registration.</p>
+        </article>
+        <article class="course">
+          <p class="k">02</p>
+          <h3 data-es="Inglés · Principiante avanzado">English · Advanced beginner</h3>
+          <p data-es="Para quien ya tiene lo básico y quiere más fluidez. Revise el programa de estudios antes de inscribirse.">For learners who have the basics and want more fluency. Review the syllabus before you register.</p>
+        </article>
+      </div>
+      <p class="note" data-es="Inscripción de otoño: 6 de julio – 21 de agosto. Orientación: 4 de septiembre (estacionamiento, aulas, asistencia, presentación de instructores). Los estudiantes que asistan al menos al 75% de las clases reciben un Certificado de Participación. Hay sanciones por ausencias injustificadas; consulte la política en el programa de estudios.">Fall registration: July 6 – August 21. Orientation: September 4 (parking, classrooms, attendance, instructor introductions). Students who attend at least 75% of classes receive a Certificate of Participation. Unexcused absences carry penalties; see the attendance policy on the syllabus.</p>
+      <p class="note" data-es="Descargo: este evento requiere que padres, tutores o maestros sean responsables del cuidado, custodia o control de los menores participantes. La University of Florida no proporcionará supervisión.">Disclaimer: this event requires parents, guardians, or teachers to be responsible for the care, custody, or control of minor participants. The University of Florida will not provide supervision.</p>
+    </div>
+  </section>
+
+  <section id="join">
+    <div class="wrap">
+      <p class="k" data-es="Dos puertas">Two doors</p>
+      <h2 data-es="Aprender, o enseñar.">Learn, or teach.</h2>
+      <div class="doors" style="margin-top:1.5rem">
+        <article class="door learn">
+          <p class="k" data-es="Comunidad">Community</p>
+          <h3 data-es="Tomar una clase">Take a class</h3>
+          <p data-es="Clases en el campus de la UF, martes y jueves, 6:30 pm a 8:00 pm. El salón exacto se envía por correo después de confirmar el cupo. Inscríbase solo si puede asistir de forma constante durante el semestre.">Classes on the UF campus, Tuesdays and Thursdays, 6:30 pm to 8:00 pm. The exact room is emailed after your seat is confirmed. Register only if you can attend consistently through the semester.</p>
+          <a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Ir a inscripción">Go to registration</a>
+        </article>
+        <article class="door teach">
+          <p class="k" data-es="Estudiantes UF">UF students</p>
+          <h3 data-es="Ser instructor">Become an instructor</h3>
+          <p data-es="Vea ambas capacitaciones de Zoom del Sr. Andrés García en Google Classroom, luego solicite una entrevista de 10 minutos con la presidencia o la coordinación de cursos. Las entrevistas no buscan rechazar: buscan que enseñe en el formato correcto. Después, manténgase en el GroupMe.">Watch both Zoom trainings from Mr. Andrés García in Google Classroom, then request a 10-minute interview with the president or course coordinator. Interviews are not meant to reject people — they confirm you can teach the content in the proper format. Then stay current in GroupMe.</p>
+          <a class="btn" href="https://impactouf.wixsite.com/impacto/teacher-registration" data-es="Información de membresía">Membership information</a>
+        </article>
+      </div>
+      <p class="note" data-es="Además de enseñar 2–3 veces al mes, los miembros asisten a las asambleas, sociales y mesas (tabling) bimensuales. Hay un formulario de ausencia. Instagram @uf_impacto anuncia eventos. Classroom y formularios viven en Google Classroom.">Besides teaching 2–3 times a month, members attend general body meetings, socials, and bimonthly tabling. An absence form exists. Instagram @uf_impacto posts events. Forms live in Google Classroom.</p>
+    </div>
+  </section>
+
+  <section id="officers">
+    <div class="wrap">
+      <p class="k" data-es="Directiva">Officers</p>
+      <h2 data-es="El equipo que sostiene las aulas.">The team that holds the classrooms.</h2>
+      <p class="muted" data-es="Nombres, cargos y correos publicados por IMPACTO. Los años y especialidades son los que el club lista en su sitio.">Names, roles, and emails as published by IMPACTO. Years and majors are what the club lists on its site.</p>
+      <div class="roster" style="margin-top:1.6rem">
+        <article class="off"><div class="mono" aria-hidden="true">KG</div><div><p class="k" data-es="Presidenta">President</p><h3>Karina Garcia-Leal</h3><p>International Studies · Senior · Pensacola, FL</p><a href="mailto:kgarcialeal@ufl.edu">kgarcialeal@ufl.edu</a></div></article>
+        <article class="off"><div class="mono" aria-hidden="true">LH</div><div><p class="k" data-es="Vicepresidente">Vice President</p><h3>Logan Hibshman</h3><p>Nutritional Sciences · Junior · Parkland, FL</p><a href="mailto:logan.hibshman@ufl.edu">logan.hibshman@ufl.edu</a></div></article>
+        <article class="off"><div class="mono" aria-hidden="true">SA</div><div><p class="k" data-es="Coordinación de eventos">Event Coordinator</p><h3>Salomé Almeida</h3><p>International Studies, Linguistics · Junior · Quito, Ecuador</p><a href="mailto:tsalome.almeidac@ufl.edu">tsalome.almeidac@ufl.edu</a></div></article>
+        <article class="off"><div class="mono" aria-hidden="true">SP</div><div><p class="k" data-es="Tesorera">Treasurer</p><h3>Sophia Perez-Garcia</h3><p>APK · Sophomore · Lake Worth, FL</p><a href="mailto:s.perezgarcia@ufl.edu">s.perezgarcia@ufl.edu</a></div></article>
+        <article class="off"><div class="mono" aria-hidden="true">AM</div><div><p class="k" data-es="Secretaria">Secretary</p><h3>Ariana Majano Perez</h3><p>Health Science · Senior · San Salvador</p><a href="mailto:majanopereza@ufl.edu">majanopereza@ufl.edu</a></div></article>
+        <article class="off"><div class="mono" aria-hidden="true">BB</div><div><p class="k" data-es="Coordinación de cursos">Course Coordinator</p><h3>Brenda Braulio Jose</h3><p>Nursing · Junior · Homestead, FL</p><a href="mailto:brenda.brauliojo@ufl.edu">brenda.brauliojo@ufl.edu</a></div></article>
+        <article class="off"><div class="mono" aria-hidden="true">BV</div><div><p class="k" data-es="Membresía / reclutamiento">Membership / Recruitment</p><h3>Briana van Oordt</h3><p>Biology · Senior · Miami, FL</p><a href="mailto:bvanoordt@ufl.edu">bvanoordt@ufl.edu</a></div></article>
+        <article class="off"><div class="mono" aria-hidden="true">ED</div><div><p class="k" data-es="Relaciones públicas">Public Relations</p><h3>Elizabeth Delgado-Garnica</h3><p>Psychology · Senior · Coral Springs, FL</p><a href="mailto:elizabet.delgado@ufl.edu">elizabet.delgado@ufl.edu</a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <p class="k" data-es="La experiencia de aprendizaje">The learning experience</p>
+      <h2 data-es="Lo que dicen quienes ya están en el aula.">What people already in the classroom say.</h2>
+      <p class="muted" data-es="Testimonios publicados por IMPACTO en su sitio. Sin citas inventadas.">Testimonies published by IMPACTO on their site. No invented quotes.</p>
+      <div class="quotes" style="margin-top:1.5rem">
+        <blockquote>
+          <p data-es="“He tenido experiencias muy buenas; los profesores nos han ayudado mucho con todas nuestras dudas y nos han guiado hacia esta nueva mentalidad.”">“I've had very good experiences, the teachers have helped us a lot with all the doubts we have had and have guided us into this new mindset.”</p>
+          <cite data-es="Estudiante de IMPACTO">IMPACTO student</cite>
+        </blockquote>
+        <blockquote>
+          <p data-es="“Ha sido una experiencia muy buena porque no sabía nada de inglés, y me ha resultado muy útil, aunque creo que solo he aprendido lo básico. Pero todo lo que aprendo cuenta.”">“It's been a really good experience because I didn't know any English at all, and it's been very helpful, even though I think I've only learned the bare minimum. But everything I learn adds up.”</p>
+          <cite data-es="Estudiante de IMPACTO">IMPACTO student</cite>
+        </blockquote>
+        <blockquote>
+          <p data-es="“Agradezco el interés, la paciencia y la atención de los instructores cuando les pedimos que repitan una lección; muy amablemente regresan y nos la explican.”">“I appreciate the instructors' interest, patience, and care when we ask them to redo a lesson because we didn't understand; they very kindly come back and explain.”</p>
+          <cite data-es="Estudiante de IMPACTO">IMPACTO student</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap">
+      <p class="k" data-es="Visítanos">Visit us</p>
+      <h2 data-es="Campus UF. Gainesville. Alachua.">UF campus. Gainesville. Alachua.</h2>
+      <div class="visit" style="margin-top:1.5rem">
+        <div class="det">
+          <p class="label">Hours</p>
+          <p class="val" data-es="Martes y jueves, 6:30 pm – 8:00 pm. Orientación 4 de septiembre. Clases desde el 8 de septiembre de 2026.">Tuesdays and Thursdays, 6:30 pm – 8:00 pm. Orientation September 4. Classes from September 8, 2026.</p>
+        </div>
+        <div class="det">
+          <p class="label">Location</p>
+          <p class="val"><address data-es="Aulas en el campus de la University of Florida, Gainesville, FL. El salón exacto se envía por correo después de confirmar el cupo. Condado de Alachua / área de Gainesville.">Classrooms on the University of Florida campus, Gainesville, FL. Exact room emailed after a seat is confirmed. Alachua County / Gainesville area.</address></p>
+        </div>
+        <div class="det">
+          <p class="label" data-es="Contacto">Contact</p>
+          <p class="val"><a href="mailto:impactouf@gmail.com">impactouf@gmail.com</a><br />
+          <a href="https://www.instagram.com/uf_impacto/">Instagram @uf_impacto</a><br />
+          <a href="https://www.facebook.com/ufimpacto">Facebook / ufimpacto</a></p>
+        </div>
+      </div>
+      <p class="note" data-es="Asambleas recientes se han anunciado en New Physics Building 1101. El salón de clase cambia por semestre — no inventamos un número de aula. Google Classroom y GroupMe son los canales internos del club.">Recent general body meetings have been announced in New Physics Building 1101. Classroom rooms change by semester — we do not invent a room number. Google Classroom and GroupMe are the club's internal channels.</p>
+    </div>
+  </section>
+
+  <section class="cta" id="cta">
+    <div class="wrap">
+      <p class="k">IMPACTO</p>
+      <h2 data-es="Cerrar la brecha empieza en un martes a las 6:30.">Closing the gap starts on a Tuesday at 6:30.</h2>
+      <div class="btns">
+        <a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Inscribirse">Register</a>
+        <a class="btn alt" href="mailto:impactouf@gmail.com" data-es="Escribir al club">Email the club</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>IMPACTO · University of Florida · Gainesville / Alachua County · <a href="mailto:impactouf@gmail.com">impactouf@gmail.com</a></p>
+    <p>Demo site by Florida Man Web Services · cloned from the club's public Wix, redesigned. Not an official UF page.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var html=document.documentElement;
+  var stored=localStorage.getItem('impacto-lang');
+  var lang=(stored==='es'||stored==='en')?stored:'en';
+  function apply(next){
+    lang=next;
+    html.lang=next;
+    localStorage.setItem('impacto-lang',next);
+    document.getElementById('lang-en').setAttribute('aria-pressed', next==='en'?'true':'false');
+    document.getElementById('lang-es').setAttribute('aria-pressed', next==='es'?'true':'false');
+    document.querySelectorAll('[data-es]').forEach(function(el){
+      if(!el.hasAttribute('data-en')) el.setAttribute('data-en', el.innerHTML);
+      el.innerHTML = next==='es' ? el.getAttribute('data-es') : el.getAttribute('data-en');
+    });
+  }
+  document.getElementById('lang-en').addEventListener('click', function(){ apply('en'); });
+  document.getElementById('lang-es').addEventListener('click', function(){ apply('es'); });
+  if(lang==='es') apply('es');
+  var btn=document.getElementById('menu-btn');
+  var links=document.getElementById('nav-links');
+  btn.addEventListener('click', function(){
+    var open=links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open?'true':'false');
+  });
+})();
+</script>
+</body>
+</html>
