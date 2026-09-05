@@ -12,6 +12,8 @@ RUN mkdir /out && for f in /src/*.html; do \
         h="$(sha256sum "$f" | cut -c1-12)"; \
         mkdir -p "/out/$h"; \
         cp "$f" "/out/$h/index.html"; \
+        slug="$(basename "$f" .html)"; \
+        if [ -d "/src/$slug" ]; then cp -a "/src/$slug" "/out/$h/$slug"; fi; \
     done
 
 FROM nginx:alpine
