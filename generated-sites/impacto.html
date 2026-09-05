@@ -12,216 +12,246 @@
 <meta property="og:locale:alternate" content="es_US" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --night:#04151c;
-  --deep:#0a2430;
-  --foam:#e6f4ee;
-  --foam-2:#cfe6db;
-  --cochineal:#e23b32;
-  --gold:#efc14a;
-  --ink:#071016;
-  --mute:#8aa39a;
-  --line:rgba(230,244,238,.14);
-  --paper:#f3f7f4;
-  --display:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;
-  --body:Figtree,system-ui,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --berry:#c2274b;
+  --teal:#417586;
+  --cream:#fff1e0;
+  --cyan:#02bbd2;
+  --land:#59db71;
+  --ink:#1a1a1a;
+  --mute:#4a4a4a;
+  --white:#fff;
+  --star:#000;
+  --display:Montserrat,Arial,sans-serif;
+  --body:"Open Sans",Arial,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--body);background:var(--night);color:var(--foam);line-height:1.6;text-wrap:pretty}
-img,svg{display:block;max-width:100%}
+body{font-family:var(--body);background:var(--white);color:var(--ink);line-height:1.65;text-wrap:pretty}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.wrap{width:min(1120px,calc(100% - 2.4rem));margin-inline:auto}
-.k{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
-h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.92;letter-spacing:-.02em;text-wrap:balance}
-a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.skip{position:absolute;left:-999px;top:0;background:var(--gold);color:var(--ink);padding:.6rem 1rem;z-index:80}
+img,svg{display:block;max-width:100%}
+.wrap{width:min(1080px,calc(100% - 2.2rem));margin-inline:auto}
+a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2px solid var(--berry);outline-offset:3px}
+.skip{position:absolute;left:-999px;top:0;background:var(--berry);color:#fff;padding:.6rem 1rem;z-index:80}
 .skip:focus{left:1rem;top:1rem}
 
-nav{position:sticky;top:0;z-index:40;background:rgba(4,21,28,.88);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
-nav .bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--display);font-weight:800;letter-spacing:.08em;font-size:1.15rem}
-.brand .o{width:18px;height:18px;border-radius:50%;border:2px solid var(--cochineal);box-shadow:0 0 0 4px rgba(226,59,50,.18),0 0 0 8px rgba(239,193,74,.12)}
-.nav-links{display:flex;align-items:center;gap:1.1rem;list-style:none;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
-.nav-links a:hover{color:var(--foam)}
-.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em}
-.lang button{padding:.45rem .7rem;min-width:44px;min-height:36px}
-.lang button[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
-.menu-btn{display:none;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:8px}
+.topbar{background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:40}
+.brand-row{display:flex;justify-content:center;padding:1.1rem 0 .4rem}
+.logo{width:118px;height:118px}
+nav .links{display:flex;justify-content:center;flex-wrap:wrap;list-style:none;align-items:stretch}
+nav .links a,nav .links button.nav-more{display:flex;align-items:center;min-height:44px;padding:.7rem 1.15rem;font-family:var(--display);font-size:.92rem;font-weight:600;color:#222;border-left:1px solid #d9d9d9}
+nav .links li:first-child a{border-left:0}
+nav .links a.active,nav .links a[aria-current="page"]{background:var(--berry);color:#fff}
+nav .links a:hover:not(.active){color:var(--berry)}
+.tools{display:flex;justify-content:flex-end;align-items:center;gap:.5rem;padding:.35rem .8rem 0}
+.lang{display:flex;border:1px solid #ddd;border-radius:2px;overflow:hidden;font-family:var(--display);font-size:.72rem;font-weight:700;letter-spacing:.06em}
+.lang button{min-width:44px;min-height:32px;padding:.3rem .55rem}
+.lang button[aria-pressed="true"]{background:var(--berry);color:#fff}
+.menu-btn{display:none;min-width:44px;min-height:44px;border:1px solid #ddd;padding:0 .8rem;font-family:var(--display);font-weight:600}
 
-.hero{position:relative;overflow:hidden;padding:4.8rem 0 4.2rem;border-bottom:1px solid var(--line)}
-.hero-bg{position:absolute;inset:-20% -10% auto auto;width:min(720px,90vw);height:min(720px,90vw);pointer-events:none;opacity:.9}
-.ripple{fill:none;stroke:var(--cochineal);stroke-width:1.2;transform-origin:center;animation:pulse 7s ease-in-out infinite}
-.ripple:nth-child(2){stroke:var(--gold);animation-delay:-1.4s;opacity:.7}
-.ripple:nth-child(3){stroke:var(--foam);opacity:.25;animation-delay:-2.8s}
-.ripple:nth-child(4){stroke:var(--cochineal);opacity:.35;animation-delay:-4.2s}
-@keyframes pulse{0%,100%{transform:scale(.86);opacity:.35}50%{transform:scale(1.06);opacity:.9}}
-.hero .k{margin-bottom:1.1rem}
-.hero h1{font-size:clamp(2.55rem,11.2vw,9.2rem);max-width:11ch;overflow:visible}
-.hero h1 .o{display:inline-block;width:.62em;height:.62em;border-radius:50%;border:.08em solid var(--cochineal);box-shadow:0 0 0 .1em rgba(239,193,74,.35),0 0 0 .2em rgba(226,59,50,.18);vertical-align:-.04em;margin:0 .02em}
-.lede{margin-top:1.4rem;max-width:38ch;font-size:1.15rem;color:var(--foam-2)}
-.tag{margin-top:.85rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-.btns{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.8rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.9rem 1.3rem;background:var(--cochineal);color:#fff;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;border-radius:2px}
-.btn.alt{background:transparent;border:1px solid var(--line);color:var(--foam)}
+.hero{position:relative;isolation:isolate;color:#fff;text-align:center;padding:5.2rem 1.2rem 4.6rem;background:
+  radial-gradient(1.5px 1.5px at 12% 18%, #fff 80%, transparent),
+  radial-gradient(1.5px 1.5px at 28% 42%, #fff 80%, transparent),
+  radial-gradient(1.2px 1.2px at 48% 12%, #fff 80%, transparent),
+  radial-gradient(1.5px 1.5px at 72% 28%, #fff 80%, transparent),
+  radial-gradient(1.2px 1.2px at 88% 16%, #fff 80%, transparent),
+  radial-gradient(1.5px 1.5px at 18% 72%, #fff 80%, transparent),
+  radial-gradient(1.2px 1.2px at 62% 68%, #fff 80%, transparent),
+  radial-gradient(1.5px 1.5px at 82% 78%, #fff 80%, transparent),
+  radial-gradient(1px 1px at 40% 55%, rgba(255,255,255,.7) 80%, transparent),
+  radial-gradient(1px 1px at 8% 50%, rgba(255,255,255,.55) 80%, transparent),
+  linear-gradient(180deg,#000 0%,#021318 42%,#04343c 72%,#0a6b74 100%);
+overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(circle at 18% 22%, rgba(255,255,255,.55) 0 1px, transparent 1.6px),
+  radial-gradient(circle at 77% 18%, rgba(255,255,255,.7) 0 1.4px, transparent 2px);
+mix-blend-mode:screen;opacity:.7}
+.spark{position:absolute;width:10px;height:10px;background:#fff;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);opacity:.85}
+.spark.s1{top:12%;left:14%}
+.spark.s2{top:18%;right:16%;width:14px;height:14px}
+.spark.s3{bottom:28%;left:22%;width:8px;height:8px;opacity:.5}
+.hero h1{position:relative;z-index:1;font-family:var(--display);font-weight:800;font-size:clamp(3.2rem,10vw,6.4rem);letter-spacing:-.03em;line-height:.95;margin-bottom:.55rem}
+.hero .mid{position:relative;z-index:1;font-family:var(--display);font-weight:600;font-size:clamp(1.15rem,3vw,1.85rem);margin:.35rem 0}
+.hero .org{position:relative;z-index:1;font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,7vw,4.6rem);letter-spacing:.04em;margin:.45rem 0 1rem}
+.hero .sub{position:relative;z-index:1;font-family:var(--display);font-weight:600;font-size:clamp(1.05rem,2.6vw,1.7rem);max-width:22ch;margin:.2rem auto 0}
+.btns{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;margin-top:2rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:.75rem 1.25rem;background:var(--berry);color:#fff;font-family:var(--display);font-weight:700;font-size:.82rem;letter-spacing:.04em;border-radius:2px}
+.btn.alt{background:transparent;border:2px solid #fff;color:#fff}
 .btn:hover{filter:brightness(1.08)}
-.hero-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:3.2rem;padding-top:1.6rem;border-top:1px solid var(--line)}
-.hero-meta b{display:block;font-family:var(--display);font-size:1.55rem;font-weight:800;color:var(--gold)}
-.hero-meta span{font-size:.85rem;color:var(--mute)}
 
-section{padding:4.4rem 0;border-bottom:1px solid var(--line)}
-section h2{font-size:clamp(2.2rem,6vw,4.2rem);margin:.45rem 0 1.1rem}
-.muted{color:var(--mute);max-width:62ch}
-.split{display:grid;gap:2rem}
-@media(min-width:860px){.split{grid-template-columns:1.1fr .9fr;align-items:start}}
-.panel{background:var(--deep);border:1px solid var(--line);padding:1.4rem 1.35rem}
-.panel h3{font-size:1.7rem;margin-bottom:.5rem}
-.panel p{color:var(--foam-2)}
-.paper{background:var(--paper);color:var(--ink)}
-.paper p,.paper li{color:#2a3d38}
-.paper .k{color:var(--cochineal)}
+.started{color:#fff;padding:3.4rem 0 3.6rem;background:linear-gradient(180deg,#0a6b74 0%,#1c4d7a 48%,#5a4d9c 100%)}
+.started h2{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem);text-align:center}
+.started h2::after{content:"";display:block;width:7.5rem;height:2px;background:#fff;margin:.55rem auto 1.4rem}
+.started p{max-width:46rem;margin:0 auto 1rem;text-align:center}
+.started a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 
+.mission{position:relative;color:#fff;padding:4.2rem 0 4.4rem;overflow:hidden;background:
+  radial-gradient(1.4px 1.4px at 10% 20%, #fff 80%, transparent),
+  radial-gradient(1.2px 1.2px at 90% 30%, #fff 80%, transparent),
+  radial-gradient(1.4px 1.4px at 80% 80%, #fff 80%, transparent),
+  radial-gradient(1px 1px at 20% 70%, #fff 80%, transparent),
+  #05060c}
+.mission-art{position:absolute;left:50%;bottom:-8%;transform:translateX(-50%);width:min(640px,90vw);opacity:.55;pointer-events:none}
+.mission .wrap{position:relative;z-index:1}
+.mission h2{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,6vw,3.8rem);text-align:center;margin-bottom:1.4rem}
+.mission p{max-width:46rem;margin:0 auto 1.05rem;text-align:center;font-size:1.05rem;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+
+.band{padding:3.6rem 0}
+.band h2{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,4vw,2.4rem);text-align:center;margin-bottom:.4rem}
+.band .lead{text-align:center;color:var(--mute);max-width:44rem;margin:.2rem auto 1.6rem}
 .courses{display:grid;gap:1rem}
-@media(min-width:760px){.courses{grid-template-columns:1fr 1fr}}
-.course{position:relative;overflow:hidden;padding:1.7rem 1.5rem 1.5rem;border:1px solid var(--line);min-height:220px}
-.course::before{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(239,193,74,.35)}
-.course h3{font-size:2.1rem;margin:.4rem 0 .7rem}
-.course ul{margin-top:1rem;padding-left:1.1rem;color:var(--foam-2)}
-.doors{display:grid;gap:1rem}
-@media(min-width:760px){.doors{grid-template-columns:1fr 1fr}}
-.door{padding:1.8rem 1.5rem;min-height:260px;display:flex;flex-direction:column}
-.door.learn{background:var(--paper);color:var(--ink)}
-.door.learn .k{color:var(--cochineal)}
-.door.learn p{color:#2a3d38}
-.door.teach{background:var(--cochineal);color:#fff}
-.door.teach .k,.door.teach p{color:rgba(255,255,255,.86)}
-.door h3{font-size:2.4rem;margin:.5rem 0 1rem}
-.door .btn{margin-top:auto;align-self:flex-start}
-.door.learn .btn{background:var(--ink);color:var(--foam)}
-.door.teach .btn{background:#fff;color:var(--ink)}
+@media(min-width:720px){.courses{grid-template-columns:1fr 1fr}}
+.course{border:1px solid #e6e6e6;padding:1.4rem 1.3rem}
+.course .k{font-family:var(--display);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--berry);font-weight:700}
+.course h3{font-family:var(--display);font-size:1.35rem;margin:.35rem 0 .5rem}
+.note{max-width:48rem;margin:1.1rem auto 0;color:var(--mute);font-size:.92rem;text-align:center}
 
-.roster{display:grid;gap:0;border:1px solid var(--line)}
-@media(min-width:700px){.roster{grid-template-columns:1fr 1fr}}
-.off{display:grid;grid-template-columns:auto 1fr;gap:.9rem 1rem;padding:1.1rem 1.15rem;border-bottom:1px solid var(--line)}
-@media(min-width:700px){.off:nth-child(odd){border-right:1px solid var(--line)}}
-.off:nth-last-child(-n+2){border-bottom:0}
-.mono{width:52px;height:52px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font-family:var(--display);font-size:1.05rem;color:var(--gold)}
-.off h3{font-size:1.15rem;margin-bottom:.15rem}
-.off p{font-size:.88rem;color:var(--mute)}
-.off a{color:var(--gold);font-family:var(--mono);font-size:.75rem}
+.doors{display:grid;gap:1rem}
+@media(min-width:720px){.doors{grid-template-columns:1fr 1fr}}
+.door{padding:1.6rem 1.4rem;min-height:240px;display:flex;flex-direction:column}
+.door.learn{background:var(--cream);color:var(--ink)}
+.door.teach{background:var(--teal);color:#fff}
+.door h3{font-family:var(--display);font-size:1.6rem;margin:.3rem 0 .7rem}
+.door .btn{margin-top:auto;align-self:flex-start}
+.door.learn .btn{background:var(--berry)}
+.door.teach .btn{background:#fff;color:var(--teal)}
+.door .k{font-family:var(--display);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+
+.roster{display:grid;gap:2.2rem;margin-top:1.4rem}
+.off{display:grid;gap:1rem;align-items:center}
+@media(min-width:700px){.off{grid-template-columns:180px 1fr;gap:1.6rem}}
+.off:nth-child(even){direction:rtl}
+.off:nth-child(even) > *{direction:ltr}
+.avatar{width:180px;height:180px;margin-inline:auto;background:
+  radial-gradient(circle at 35% 30%, var(--cyan), var(--teal));
+display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:800;font-size:2.4rem}
+.bio{text-align:center}
+.role{display:inline-block;background:var(--teal);color:#fff;font-family:var(--display);font-weight:700;font-size:1.15rem;padding:.45rem 1.6rem;min-width:14rem}
+.name{display:inline-block;background:var(--cream);font-family:var(--display);font-weight:700;font-size:1.2rem;padding:.4rem 1.4rem;margin:.55rem 0 .4rem;color:#333}
+.bio p{color:#333}
+.bio a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 
 .quotes{display:grid;gap:1rem}
-@media(min-width:800px){.quotes{grid-template-columns:1.3fr .7fr .9fr}}
-blockquote{background:var(--deep);border:1px solid var(--line);padding:1.3rem 1.2rem;font-size:1.02rem}
-blockquote:first-child{background:var(--paper);color:var(--ink);font-size:1.25rem}
-cite{display:block;margin-top:.8rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-style:normal;color:var(--gold)}
-blockquote:first-child cite{color:var(--cochineal)}
+@media(min-width:800px){.quotes{grid-template-columns:repeat(3,1fr)}}
+blockquote{background:var(--cream);padding:1.2rem 1.15rem;font-size:.98rem}
+cite{display:block;margin-top:.7rem;font-style:normal;font-family:var(--display);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--berry)}
 
 .visit{display:grid;gap:1.2rem}
 @media(min-width:760px){.visit{grid-template-columns:1fr 1fr 1fr}}
-.det .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
-.det .val{font-size:1.08rem}
-.note{margin-top:1.4rem;font-size:.88rem;color:var(--mute);max-width:70ch}
+.det .label{font-family:var(--display);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--berry);font-weight:700;margin-bottom:.3rem}
+.det .val{font-size:1.02rem}
+.star-cta{color:#fff;text-align:center;padding:4.2rem 0;background:
+  radial-gradient(1.4px 1.4px at 20% 30%, #fff 80%, transparent),
+  radial-gradient(1.2px 1.2px at 80% 20%, #fff 80%, transparent),
+  linear-gradient(180deg,#000,#04343c 70%,#0a6b74)}
+.star-cta h2{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,5vw,2.8rem);max-width:16ch;margin:0 auto .4rem}
+.star-cta .btns .btn.alt{border-color:#fff}
 
-.cta{text-align:center;padding:5rem 0;background:
-  radial-gradient(ellipse 60% 80% at 50% 120%,rgba(226,59,50,.22),transparent 60%),
-  var(--night)}
-.cta h2{max-width:16ch;margin-inline:auto}
-.cta .btns{justify-content:center}
-
-footer{padding:1.8rem 0 2.4rem;color:var(--mute);font-size:.85rem}
-footer .wrap{display:flex;flex-wrap:wrap;gap:.7rem 1.4rem;justify-content:space-between}
-footer a{color:var(--gold)}
+footer{padding:1.5rem 0 2rem;font-size:.85rem;color:#666;border-top:1px solid #eee}
+footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;justify-content:space-between}
+footer a{color:var(--berry)}
 
 @media(max-width:820px){
-  .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;left:0;right:0;top:68px;flex-direction:column;background:var(--night);padding:1rem 1.2rem 1.3rem;border-bottom:1px solid var(--line);gap:.8rem}
-  .menu-btn{display:inline-flex;align-items:center;justify-content:center}
-  .hero-meta{grid-template-columns:1fr}
-  .hero-bg{opacity:.32;inset:-8% -38% auto auto}
-  .hero h1{font-size:clamp(2.4rem,15vw,3.1rem)}
-  .hero h1 .o{width:.52em;height:.52em}
+  nav .links{display:none}
+  nav .links.open{display:flex;flex-direction:column;border-top:1px solid #eee}
+  nav .links.open a,nav .links.open button.nav-more{border-left:0;border-top:1px solid #eee;justify-content:center}
+  .menu-btn{display:inline-flex;align-items:center}
+  .tools{justify-content:space-between}
+  .off:nth-child(even){direction:ltr}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .ripple{animation:none}
-  .btn,.lang button,.nav-links a{transition:none}
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<nav>
-  <div class="wrap bar">
-    <a class="brand" href="#top"><span class="o" aria-hidden="true"></span> IMPACTO</a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#mission" data-es="Misión">Mission</a></li>
-      <li><a href="#classes" data-es="Clases">Classes</a></li>
-      <li><a href="#join" data-es="Participar">Join</a></li>
-      <li><a href="#officers" data-es="Directiva">Officers</a></li>
+<header class="topbar" id="top">
+  <div class="tools wrap">
+    <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="nav-links" data-es="Menú">Menu</button>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+  <div class="brand-row">
+    <a href="#top" aria-label="IMPACTO">
+      <svg class="logo" viewBox="0 0 120 120" role="img">
+        <title>IMPACTO</title>
+        <circle cx="60" cy="60" r="58" fill="#02bbd2"/>
+        <ellipse cx="60" cy="60" rx="22" ry="58" fill="none" stroke="#e8fbff" stroke-width="2"/>
+        <ellipse cx="60" cy="60" rx="58" ry="22" fill="none" stroke="#e8fbff" stroke-width="2"/>
+        <path fill="#59db71" d="M28 44c10-10 22-8 30-2 6 4 8 2 16-2 6 8 8 20 4 32-8 4-16 2-24 6-10 4-18-2-28-8-4-10 0-18 2-26z"/>
+        <path fill="#59db71" d="M74 70c10 2 18 10 16 22-8 6-20 4-30-2 2-8 6-16 14-20z"/>
+        <path fill="#fff" stroke="#111" stroke-width="1.4" d="M22 58c0-14 12-26 28-26h8l-6 8c-10 0-18 8-18 18s8 18 18 18h4l6 10h-12c-16 0-28-12-28-28z"/>
+        <path fill="#fff" stroke="#111" stroke-width="1.4" d="M62 50h18c14 0 26 11 26 25s-12 25-26 25h-10l6-9h4c8 0 15-7 15-16s-7-16-15-16H70l-8-9z"/>
+        <text x="36" y="66" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="11" fill="#111">IMP</text>
+        <text x="86" y="72" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="11" fill="#111">ACTO</text>
+      </svg>
+    </a>
+  </div>
+  <nav>
+    <ul class="links" id="nav-links">
+      <li><a class="active" href="#top" data-es="Inicio">Home</a></li>
+      <li><a href="#mission" data-es="Misión">Mission Statement</a></li>
+      <li><a href="#officers" data-es="Directiva">Meet the Officers</a></li>
+      <li><a href="#classes" data-es="Inscripción">Course Registration</a></li>
+      <li><a href="#join" data-es="Membresía">Membership Information</a></li>
       <li><a href="#visit" data-es="Visítanos">Visit</a></li>
     </ul>
-    <div style="display:flex;gap:.6rem;align-items:center">
-      <div class="lang" role="group" aria-label="Language">
-        <button type="button" id="lang-en" aria-pressed="true">EN</button>
-        <button type="button" id="lang-es" aria-pressed="false">ES</button>
-      </div>
-      <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="nav-links" data-es="Menú">Menu</button>
-    </div>
-  </div>
-</nav>
-
-<header class="hero" id="top">
-  <svg class="hero-bg" viewBox="0 0 400 400" aria-hidden="true">
-    <circle class="ripple" cx="200" cy="200" r="70" />
-    <circle class="ripple" cx="200" cy="200" r="110" />
-    <circle class="ripple" cx="200" cy="200" r="150" />
-    <circle class="ripple" cx="200" cy="200" r="190" />
-  </svg>
-  <div class="wrap">
-    <p class="k" data-es="Organización estudiantil de la UF · Gainesville / Alachua">UF student organization · Gainesville / Alachua</p>
-    <h1>IMPACT<span class="o" aria-hidden="true"></span></h1>
-    <p class="lede" data-es="Clases de inglés gratuitas, dictadas por estudiantes bilingües de la University of Florida, para la comunidad hispana de Gainesville y el condado de Alachua.">Free English classes, taught by bilingual University of Florida students, for the Hispanic community in Gainesville and Alachua County.</p>
-    <p class="tag">Cerrando brechas y rompiendo barreras</p>
-    <div class="btns">
-      <a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Inscribirse a clase">Register for class</a>
-      <a class="btn alt" href="#join" data-es="Enseñar con nosotros">Teach with us</a>
-    </div>
-    <div class="hero-meta">
-      <p><b>2024</b><span data-es="Fundada en primavera en la UF">Founded spring at UF</span></p>
-      <p><b>2</b><span data-es="Niveles de inglés · martes y jueves">English levels · Tue &amp; Thu</span></p>
-      <p><b>75%</b><span data-es="Asistencia para certificado de participación">Attendance for a certificate</span></p>
-    </div>
-  </div>
+  </nav>
 </header>
 
+<section class="hero">
+  <span class="spark s1" aria-hidden="true"></span>
+  <span class="spark s2" aria-hidden="true"></span>
+  <span class="spark s3" aria-hidden="true"></span>
+  <h1 data-es="Bienvenidos">Welcome</h1>
+  <p class="mid" data-es="al sitio web oficial de">to the official website for</p>
+  <p class="org">IMPACTO</p>
+  <p class="sub" data-es="Una organización estudiantil de la University of Florida">A student run organization at the University of Florida</p>
+  <div class="btns">
+    <a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Inscribirse a clase">Register for class</a>
+    <a class="btn alt" href="#join" data-es="Enseñar con nosotros">Teach with us</a>
+  </div>
+</section>
+
+<section class="started" id="start">
+  <div class="wrap">
+    <h2 data-es="Los primeros pasos">Getting Started</h2>
+    <p data-es="¿Quiere saber más sobre Impacto y los servicios que nuestros líderes planean brindar a Gainesville y el condado de Alachua? Visite la sección Declaración de objetivos y Conozca a los oficiales.">Want to know more about Impacto and the services our leaders plan to provide to Gainesville and Alachua County? Please navigate to <a href="#mission">Mission Statement</a> and <a href="#officers">Meet the Officers</a>.</p>
+    <p data-es="Si desea capacitarse y enseñar un curso de inglés, navegue a Inscripción de profesores. Si desea asistir a una clase de inglés en el campus de la UF, navegue a Inscripción para clases.">If you wish to train for and teach an English course, please navigate to <a href="#join">Member Registration</a> for more information. If you wish to attend an English class on the University of Florida's campus, please navigate to <a href="#classes">Course Registration</a>.</p>
+    <p data-es="Si desea dejar comentarios sobre uno de nuestros cursos, visite La experiencia de aprendizaje.">If you wish to leave feedback on one of our courses, and the end of the semester is near, please visit <a href="#experience">The Learning Experience</a>.</p>
+  </div>
+</section>
+
 <main id="main">
-  <section id="mission">
-    <div class="wrap split">
-      <div>
-        <p class="k" data-es="Misión">Mission</p>
-        <h2 data-es="El idioma es una de las barreras más grandes.">Language is one of the largest barriers.</h2>
-        <p class="muted" data-es="Un número significativo de inmigrantes hispanos en Gainesville no habla inglés con fluidez, lo que limita su libertad, agencia y movilidad en Estados Unidos. IMPACTO recluta y capacita a estudiantes hispanohablantes de la UF para enseñar inglés básico a esa comunidad.">A significant number of Hispanic immigrants in Gainesville are not proficient in English, which limits their freedom, agency, and mobility in the United States. IMPACTO recruits and trains Spanish-speaking UF students to teach basic English to that community.</p>
-        <p class="muted" style="margin-top:1rem" data-es="Muchas tareas cotidianas —conseguir trabajo, pedir un servicio, viajar, comprar, alquilar vivienda, investigar recursos— requieren inglés. Saber lo básico abre un mundo de acceso. Eso es el impacto.">Getting a job, asking for services, traveling, shopping, finding housing, and researching resources all require English. Basic English opens a world of access. That is the impact.</p>
-      </div>
-      <aside class="panel paper">
-        <p class="k" data-es="Por qué existimos">Why we exist</p>
-        <h3 data-es="Estudiantes de primera y segunda generación, enseñando a la comunidad con la que están conectados.">First- and second-generation students, teaching a community they are connected to.</h3>
-        <p style="margin-top:1rem" data-es="El equipo de IMPACTO está formado por estudiantes de la UF con padres de América Latina y familia que aún vive allí. Reconocen el privilegio de la ciudadanía — y el esfuerzo que implica obtener las mismas oportunidades.">IMPACTO is made of UF students whose parents are from Latin America and whose extended family still lives there. They know the privilege of U.S. citizenship — and the work it takes to earn the same opportunities.</p>
-      </aside>
+  <section class="mission" id="mission">
+    <svg class="mission-art" viewBox="0 0 640 420" aria-hidden="true">
+      <circle cx="320" cy="250" r="110" fill="#02bbd2"/>
+      <ellipse cx="320" cy="250" rx="42" ry="110" fill="none" stroke="#e8fbff" stroke-width="3"/>
+      <path fill="#59db71" d="M250 210c30-28 70-20 90 0 20 16 40 10 70 0 10 30 8 70-10 95-40 18-80 8-120 18-40 8-70-20-90-50 0-28 20-48 60-63z"/>
+      <path d="M120 80c40 10 70 70 62 150" fill="none" stroke="#e08b6a" stroke-width="54" stroke-linecap="round"/>
+      <path d="M520 70c-40 16-72 74-58 154" fill="none" stroke="#8d5a3c" stroke-width="54" stroke-linecap="round"/>
+      <path d="M80 300c70-10 120 10 150 40" fill="none" stroke="#f0c7a0" stroke-width="50" stroke-linecap="round"/>
+      <path d="M560 300c-70-6-120 14-150 44" fill="none" stroke="#5c3a28" stroke-width="50" stroke-linecap="round"/>
+    </svg>
+    <div class="wrap">
+      <h2 data-es="Declaración de objetivos">Mission Statement</h2>
+      <p data-es="Un número significativo de inmigrantes hispanos en Gainesville no habla inglés con fluidez, lo que limita su libertad, agencia y movilidad en Estados Unidos. Para promover la integración, estudiantes de habla hispana pueden usar sus habilidades lingüísticas para llegar a su comunidad y generar un impacto.">A significant number of Hispanic immigrants in Gainesville are not proficient in English, which limits their freedom, agency, and mobility within the United States. To promote integration, Spanish-speaking students can use their language skills to reach their community and make an impact.</p>
+      <p data-es="Impacto, fundada en la primavera de 2024, busca reclutar y capacitar a estudiantes hispanohablantes de la UF para enseñar inglés básico a la comunidad hispana de Gainesville que no habla inglés. Como la University of Florida tiene una importante población estudiantil hispanoamericana, podemos ayudar a cerrar la brecha en el aprendizaje de idiomas en Gainesville y Alachua y romper las barreras que impiden la agencia de esa comunidad.">Impacto, founded in the Spring of 2024, seeks to recruit and train Spanish-speaking UF students to teach basic English to the non-English-speaking Hispanic community in Gainesville. As the University of Florida has a substantial Hispanic-American student population, we can help bridge the gap in language-learning in Gainesville and Alachua and break barriers that impede the Hispanic immigrant community's agency.</p>
+      <p data-es="El idioma es una de las mayores barreras. Conseguir un trabajo, pedir un servicio, viajar, comprar, alquilar vivienda e investigar recursos requieren inglés. Saber lo básico abre un mundo de acceso.">Language is one of the largest barriers. Getting a job, asking for services, traveling, shopping, renting housing, and researching resources require English. Simply knowing basic English opens up an entire world of accessibility.</p>
     </div>
   </section>
 
-  <section id="classes">
+  <section class="band" id="classes">
     <div class="wrap">
-      <p class="k" data-es="Cursos">Courses</p>
-      <h2 data-es="Dos aulas. Método comunicativo. Cero costo.">Two classrooms. Communicative method. No charge.</h2>
-      <p class="muted" data-es="A partir del 8 de septiembre de 2026, IMPACTO ofrece dos variantes de inglés gratuitas para cualquier persona de la comunidad hispana que viva en el condado de Alachua o el área de Gainesville. Cada aula tiene dos docentes bilingües de la UF, capacitados por un profesor profesional de idiomas (el Sr. Andrés García).">Starting September 8, 2026, IMPACTO offers two free English courses to anyone from the Hispanic community living in Alachua County or the Gainesville area. Each classroom has two bilingual UF student teachers, trained by a professional foreign-language instructor (Mr. Andrés García).</p>
-      <div class="courses" style="margin-top:1.6rem">
+      <h2 data-es="Inscripción para clases de inglés">Course Registration</h2>
+      <p class="lead" data-es="A partir del 8 de septiembre de 2026, IMPACTO ofrece dos variantes de inglés gratuitas para la comunidad hispana del condado de Alachua o el área de Gainesville. Método comunicativo. Cada aula tiene dos docentes bilingües de la UF, capacitados por el Sr. Andrés García.">Starting September 8th of 2026, IMPACTO will offer two variations of English courses, free of charge, to anyone from the Hispanic community who also resides in Alachua County or the Gainesville Area. A communicative method will be used that will prioritize speaking. Each classroom will have two Spanish-speaking bilingual UF students trained by a professional foreign language teacher (Mr. Andrés García).</p>
+      <div class="courses">
         <article class="course">
           <p class="k">01</p>
           <h3 data-es="Inglés · Nivel principiante">English · Beginner</h3>
@@ -229,61 +259,60 @@ footer a{color:var(--gold)}
         </article>
         <article class="course">
           <p class="k">02</p>
-          <h3 data-es="Inglés · Principiante avanzado">English · Advanced beginner</h3>
+          <h3 data-es="Inglés · Principiante avanzado">English · Advanced Beginner</h3>
           <p data-es="Para quien ya tiene lo básico y quiere más fluidez. Revise el programa de estudios antes de inscribirse.">For learners who have the basics and want more fluency. Review the syllabus before you register.</p>
         </article>
       </div>
-      <p class="note" data-es="Inscripción de otoño: 6 de julio – 21 de agosto. Orientación: 4 de septiembre (estacionamiento, aulas, asistencia, presentación de instructores). Los estudiantes que asistan al menos al 75% de las clases reciben un Certificado de Participación. Hay sanciones por ausencias injustificadas; consulte la política en el programa de estudios.">Fall registration: July 6 – August 21. Orientation: September 4 (parking, classrooms, attendance, instructor introductions). Students who attend at least 75% of classes receive a Certificate of Participation. Unexcused absences carry penalties; see the attendance policy on the syllabus.</p>
-      <p class="note" data-es="Descargo: este evento requiere que padres, tutores o maestros sean responsables del cuidado, custodia o control de los menores participantes. La University of Florida no proporcionará supervisión.">Disclaimer: this event requires parents, guardians, or teachers to be responsible for the care, custody, or control of minor participants. The University of Florida will not provide supervision.</p>
+      <p class="note" data-es="Inscripción de otoño: 6 de julio – 21 de agosto. Orientación: 4 de septiembre. Clases: martes y jueves, 6:30 pm a 8:00 pm, aulas en el campus de la UF. Quienes asistan al menos al 75% reciben un Certificado de Participación.">Fall registration: July 6 – August 21. Orientation: September 4. Classes: Tuesdays and Thursdays, 6:30 pm to 8:00 pm, in classrooms on the UF campus. Students that have attended at least 75% of all classes will receive a Certificate of Participation.</p>
+      <p class="note" data-es="Descargo: este evento requiere que padres, tutores o maestros sean responsables del cuidado, custodia o control de los menores participantes. La University of Florida no proporcionará supervisión.">Disclaimer: This event requires parents, guardians, or teachers to be responsible for the care, custody, or control of the minor participants. The University of Florida will not provide supervision.</p>
+      <p class="note"><a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Regístrese ahora">Register now</a></p>
     </div>
   </section>
 
-  <section id="join">
+  <section class="band" id="join" style="background:#f7f7f7">
     <div class="wrap">
-      <p class="k" data-es="Dos puertas">Two doors</p>
-      <h2 data-es="Aprender, o enseñar.">Learn, or teach.</h2>
-      <div class="doors" style="margin-top:1.5rem">
+      <h2 data-es="Información de membresía">Membership Information</h2>
+      <p class="lead" data-es="Dos caminos: tomar una clase, o enseñar una.">Two paths: take a class, or teach one.</p>
+      <div class="doors">
         <article class="door learn">
           <p class="k" data-es="Comunidad">Community</p>
           <h3 data-es="Tomar una clase">Take a class</h3>
-          <p data-es="Clases en el campus de la UF, martes y jueves, 6:30 pm a 8:00 pm. El salón exacto se envía por correo después de confirmar el cupo. Inscríbase solo si puede asistir de forma constante durante el semestre.">Classes on the UF campus, Tuesdays and Thursdays, 6:30 pm to 8:00 pm. The exact room is emailed after your seat is confirmed. Register only if you can attend consistently through the semester.</p>
+          <p data-es="Clases en el campus de la UF, martes y jueves, 6:30 pm a 8:00 pm. El salón exacto se envía por correo después de confirmar el cupo.">Classes on the UF campus, Tuesdays and Thursdays, 6:30 pm to 8:00 pm. The exact room is emailed after your seat is confirmed. Register only if you can attend consistently through the semester.</p>
           <a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Ir a inscripción">Go to registration</a>
         </article>
         <article class="door teach">
           <p class="k" data-es="Estudiantes UF">UF students</p>
           <h3 data-es="Ser instructor">Become an instructor</h3>
-          <p data-es="Vea ambas capacitaciones de Zoom del Sr. Andrés García en Google Classroom, luego solicite una entrevista de 10 minutos con la presidencia o la coordinación de cursos. Las entrevistas no buscan rechazar: buscan que enseñe en el formato correcto. Después, manténgase en el GroupMe.">Watch both Zoom trainings from Mr. Andrés García in Google Classroom, then request a 10-minute interview with the president or course coordinator. Interviews are not meant to reject people — they confirm you can teach the content in the proper format. Then stay current in GroupMe.</p>
+          <p data-es="Vea ambas capacitaciones de Zoom del Sr. Andrés García en Google Classroom, luego solicite una entrevista de 10 minutos con la presidencia o la coordinación de cursos. Después, manténgase en el GroupMe.">Watch both Zoom trainings from Mr. Andrés García in Google Classroom, then request a 10-minute interview with the president or course coordinator. Interviews are not meant to reject people — they confirm you can teach the content in the proper format.</p>
           <a class="btn" href="https://impactouf.wixsite.com/impacto/teacher-registration" data-es="Información de membresía">Membership information</a>
         </article>
       </div>
-      <p class="note" data-es="Además de enseñar 2–3 veces al mes, los miembros asisten a las asambleas, sociales y mesas (tabling) bimensuales. Hay un formulario de ausencia. Instagram @uf_impacto anuncia eventos. Classroom y formularios viven en Google Classroom.">Besides teaching 2–3 times a month, members attend general body meetings, socials, and bimonthly tabling. An absence form exists. Instagram @uf_impacto posts events. Forms live in Google Classroom.</p>
+      <p class="note" data-es="Además de enseñar 2–3 veces al mes, los miembros asisten a las asambleas, sociales y mesas (tabling) bimensuales. Instagram @uf_impacto anuncia eventos.">Besides teaching 2–3 times a month, members attend general body meetings, socials, and bimonthly tabling. An absence form exists. Instagram @uf_impacto posts events. Forms live in Google Classroom.</p>
     </div>
   </section>
 
-  <section id="officers">
+  <section class="band" id="officers">
     <div class="wrap">
-      <p class="k" data-es="Directiva">Officers</p>
-      <h2 data-es="El equipo que sostiene las aulas.">The team that holds the classrooms.</h2>
-      <p class="muted" data-es="Nombres, cargos y correos publicados por IMPACTO. Los años y especialidades son los que el club lista en su sitio.">Names, roles, and emails as published by IMPACTO. Years and majors are what the club lists on its site.</p>
-      <div class="roster" style="margin-top:1.6rem">
-        <article class="off"><div class="mono" aria-hidden="true">KG</div><div><p class="k" data-es="Presidenta">President</p><h3>Karina Garcia-Leal</h3><p>International Studies · Senior · Pensacola, FL</p><a href="mailto:kgarcialeal@ufl.edu">kgarcialeal@ufl.edu</a></div></article>
-        <article class="off"><div class="mono" aria-hidden="true">LH</div><div><p class="k" data-es="Vicepresidente">Vice President</p><h3>Logan Hibshman</h3><p>Nutritional Sciences · Junior · Parkland, FL</p><a href="mailto:logan.hibshman@ufl.edu">logan.hibshman@ufl.edu</a></div></article>
-        <article class="off"><div class="mono" aria-hidden="true">SA</div><div><p class="k" data-es="Coordinación de eventos">Event Coordinator</p><h3>Salomé Almeida</h3><p>International Studies, Linguistics · Junior · Quito, Ecuador</p><a href="mailto:tsalome.almeidac@ufl.edu">tsalome.almeidac@ufl.edu</a></div></article>
-        <article class="off"><div class="mono" aria-hidden="true">SP</div><div><p class="k" data-es="Tesorera">Treasurer</p><h3>Sophia Perez-Garcia</h3><p>APK · Sophomore · Lake Worth, FL</p><a href="mailto:s.perezgarcia@ufl.edu">s.perezgarcia@ufl.edu</a></div></article>
-        <article class="off"><div class="mono" aria-hidden="true">AM</div><div><p class="k" data-es="Secretaria">Secretary</p><h3>Ariana Majano Perez</h3><p>Health Science · Senior · San Salvador</p><a href="mailto:majanopereza@ufl.edu">majanopereza@ufl.edu</a></div></article>
-        <article class="off"><div class="mono" aria-hidden="true">BB</div><div><p class="k" data-es="Coordinación de cursos">Course Coordinator</p><h3>Brenda Braulio Jose</h3><p>Nursing · Junior · Homestead, FL</p><a href="mailto:brenda.brauliojo@ufl.edu">brenda.brauliojo@ufl.edu</a></div></article>
-        <article class="off"><div class="mono" aria-hidden="true">BV</div><div><p class="k" data-es="Membresía / reclutamiento">Membership / Recruitment</p><h3>Briana van Oordt</h3><p>Biology · Senior · Miami, FL</p><a href="mailto:bvanoordt@ufl.edu">bvanoordt@ufl.edu</a></div></article>
-        <article class="off"><div class="mono" aria-hidden="true">ED</div><div><p class="k" data-es="Relaciones públicas">Public Relations</p><h3>Elizabeth Delgado-Garnica</h3><p>Psychology · Senior · Coral Springs, FL</p><a href="mailto:elizabet.delgado@ufl.edu">elizabet.delgado@ufl.edu</a></div></article>
+      <h2 data-es="Conozca a los oficiales">Meet the Officers</h2>
+      <p class="lead" data-es="Nombres, cargos y correos publicados por IMPACTO.">Names, roles, and emails as published by IMPACTO.</p>
+      <div class="roster">
+        <article class="off"><div class="avatar" aria-hidden="true">KG</div><div class="bio"><p class="role" data-es="Presidenta">President</p><p class="name">Karina Garcia-Leal</p><p>Major: International Studies<br>Minor: Chinese, French<br>Year: Senior<br>Hometown: Pensacola, FL<br>Email: <a href="mailto:kgarcialeal@ufl.edu">kgarcialeal@ufl.edu</a></p></div></article>
+        <article class="off"><div class="avatar" aria-hidden="true">LH</div><div class="bio"><p class="role" data-es="Vicepresidente">Vice President</p><p class="name">Logan Hibshman</p><p>Major: Nutritional Sciences<br>Minor: Spanish<br>Year: Junior<br>Hometown: Parkland, FL<br>Email: <a href="mailto:logan.hibshman@ufl.edu">logan.hibshman@ufl.edu</a></p></div></article>
+        <article class="off"><div class="avatar" aria-hidden="true">SA</div><div class="bio"><p class="role" data-es="Coordinación de eventos">Event Coordinator</p><p class="name">Salomé Almeida</p><p>Major: International Studies, Linguistics<br>Minor: French, Chinese<br>Year: Junior<br>Hometown: Quito, Ecuador<br>Email: <a href="mailto:tsalome.almeidac@ufl.edu">tsalome.almeidac@ufl.edu</a></p></div></article>
+        <article class="off"><div class="avatar" aria-hidden="true">SP</div><div class="bio"><p class="role" data-es="Tesorera">Treasurer</p><p class="name">Sophia Perez-Garcia</p><p>Major: APK<br>Year: Sophomore<br>Hometown: Lake Worth, FL<br>Email: <a href="mailto:s.perezgarcia@ufl.edu">s.perezgarcia@ufl.edu</a></p></div></article>
+        <article class="off"><div class="avatar" aria-hidden="true">AM</div><div class="bio"><p class="role" data-es="Secretaria">Secretary</p><p class="name">Ariana Majano Perez</p><p>Major: Health Science<br>Year: Senior<br>Hometown: San Salvador<br>Email: <a href="mailto:majanopereza@ufl.edu">majanopereza@ufl.edu</a></p></div></article>
+        <article class="off"><div class="avatar" aria-hidden="true">BB</div><div class="bio"><p class="role" data-es="Coordinación de cursos">Course Coordinator</p><p class="name">Brenda Braulio Jose</p><p>Major: Nursing<br>Minor: Early Childhood Studies<br>Year: Junior<br>Hometown: Homestead, FL<br>Email: <a href="mailto:brenda.brauliojo@ufl.edu">brenda.brauliojo@ufl.edu</a></p></div></article>
+        <article class="off"><div class="avatar" aria-hidden="true">BV</div><div class="bio"><p class="role" data-es="Membresía / reclutamiento">Membership/Recruitment Officer</p><p class="name">Briana van Oordt</p><p>Major: Biology<br>Minor: Health disparities<br>Year: Senior<br>Hometown: Miami, FL<br>Email: <a href="mailto:bvanoordt@ufl.edu">bvanoordt@ufl.edu</a></p></div></article>
+        <article class="off"><div class="avatar" aria-hidden="true">ED</div><div class="bio"><p class="role" data-es="Relaciones públicas">Public Relations Officer</p><p class="name">Elizabeth Delgado-Garnica</p><p>Major: Psychology<br>Minor: Disabilities in Society &amp; Family, Youth and Community Sciences<br>Year: Senior<br>Hometown: Coral Springs, FL<br>Email: <a href="mailto:elizabet.delgado@ufl.edu">elizabet.delgado@ufl.edu</a></p></div></article>
       </div>
     </div>
   </section>
 
-  <section id="experience">
+  <section class="band" id="experience" style="background:#f7f7f7">
     <div class="wrap">
-      <p class="k" data-es="La experiencia de aprendizaje">The learning experience</p>
-      <h2 data-es="Lo que dicen quienes ya están en el aula.">What people already in the classroom say.</h2>
-      <p class="muted" data-es="Testimonios publicados por IMPACTO en su sitio. Sin citas inventadas.">Testimonies published by IMPACTO on their site. No invented quotes.</p>
-      <div class="quotes" style="margin-top:1.5rem">
+      <h2 data-es="La experiencia de aprendizaje">The Learning Experience</h2>
+      <p class="lead" data-es="Testimonios publicados por IMPACTO. Sin citas inventadas.">Student testimonies published by IMPACTO. No invented quotes.</p>
+      <div class="quotes">
         <blockquote>
           <p data-es="“He tenido experiencias muy buenas; los profesores nos han ayudado mucho con todas nuestras dudas y nos han guiado hacia esta nueva mentalidad.”">“I've had very good experiences, the teachers have helped us a lot with all the doubts we have had and have guided us into this new mindset.”</p>
           <cite data-es="Estudiante de IMPACTO">IMPACTO student</cite>
@@ -300,11 +329,10 @@ footer a{color:var(--gold)}
     </div>
   </section>
 
-  <section id="visit">
+  <section class="band" id="visit">
     <div class="wrap">
-      <p class="k" data-es="Visítanos">Visit us</p>
-      <h2 data-es="Campus UF. Gainesville. Alachua.">UF campus. Gainesville. Alachua.</h2>
-      <div class="visit" style="margin-top:1.5rem">
+      <h2 data-es="Visítanos">Visit us</h2>
+      <div class="visit" style="margin-top:1.4rem">
         <div class="det">
           <p class="label">Hours</p>
           <p class="val" data-es="Martes y jueves, 6:30 pm – 8:00 pm. Orientación 4 de septiembre. Clases desde el 8 de septiembre de 2026.">Tuesdays and Thursdays, 6:30 pm – 8:00 pm. Orientation September 4. Classes from September 8, 2026.</p>
@@ -320,14 +348,13 @@ footer a{color:var(--gold)}
           <a href="https://www.facebook.com/ufimpacto">Facebook / ufimpacto</a></p>
         </div>
       </div>
-      <p class="note" data-es="Asambleas recientes se han anunciado en New Physics Building 1101. El salón de clase cambia por semestre — no inventamos un número de aula. Google Classroom y GroupMe son los canales internos del club.">Recent general body meetings have been announced in New Physics Building 1101. Classroom rooms change by semester — we do not invent a room number. Google Classroom and GroupMe are the club's internal channels.</p>
+      <p class="note" data-es="Asambleas recientes se han anunciado en New Physics Building 1101. El salón de clase cambia por semestre — no inventamos un número de aula.">Recent general body meetings have been announced in New Physics Building 1101. Classroom rooms change by semester — we do not invent a room number.</p>
     </div>
   </section>
 
-  <section class="cta" id="cta">
+  <section class="star-cta" id="cta">
     <div class="wrap">
-      <p class="k">IMPACTO</p>
-      <h2 data-es="Cerrar la brecha empieza en un martes a las 6:30.">Closing the gap starts on a Tuesday at 6:30.</h2>
+      <h2 data-es="Cerrar la brecha empieza un martes a las 6:30.">Closing the gap starts on a Tuesday at 6:30.</h2>
       <div class="btns">
         <a class="btn" href="https://impactouf.wixsite.com/impacto/course-registration" data-es="Inscribirse">Register</a>
         <a class="btn alt" href="mailto:impactouf@gmail.com" data-es="Escribir al club">Email the club</a>
@@ -368,6 +395,16 @@ footer a{color:var(--gold)}
     var open=links.classList.toggle('open');
     btn.setAttribute('aria-expanded', open?'true':'false');
   });
+  var navAs=links.querySelectorAll('a');
+  function mark(){
+    var id=(location.hash||'#top').slice(1)||'top';
+    navAs.forEach(function(a){
+      var href=a.getAttribute('href').slice(1);
+      a.classList.toggle('active', href===id || (id==='top' && href==='top'));
+    });
+  }
+  navAs.forEach(function(a){ a.addEventListener('click', function(){ setTimeout(mark, 0); }); });
+  window.addEventListener('hashchange', mark);
 })();
 </script>
 </body>
