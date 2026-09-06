@@ -20,9 +20,11 @@ def _reload():
     return ai411
 
 
-def test_greeting_unchanged():
+def test_greeting_is_an_invite():
     ai411 = _reload()
-    assert ai411.AI411_GREETING == "A411 here."
+    assert "Gainesville" in ai411.AI411_GREETING
+    assert "need" in ai411.AI411_GREETING.lower()
+    assert ai411.AI411_GREETING == ai411.OPENERS[0]
 
 
 def test_openers_have_no_filler():
@@ -52,20 +54,20 @@ def test_explicit_date_night_skips_interest_gate():
     assert "i can't book" in pl or "cannot book" in pl or "not a booking" in pl
     # Empty browse may still wait; explicit date/movies/Hipp must not.
     assert "IMMEDIATELY" in p or "immediately" in pl
-    # QOTD stays in the product: after the answer, not as a gate.
+    # QOTD is optional after help — never a gate on explicit date/movies/Hipp.
     assert "question of the day" in pl
     assert "get_question_of_the_day" in p
-    assert "do not drop qotd" in pl or "offer today's qotd" in pl or "offer qotd" in pl
+    assert "never" in pl and "qotd" in pl
 
 
-def test_qotd_is_default_on_empty_or_bored():
+def test_qotd_does_not_run_on_silence():
     ai411 = _reload()
     p = ai411.system_prompt(
-        direction="inbound", caller_number="+135****0100", openers=False
+        direction="inbound", caller_number="+13555550100", openers=False
     )
     pl = p.lower()
-    assert "bored" in pl
-    assert "silence after greeting" in pl or "default people-profile" in pl
+    assert "do not launch question of the day on silence" in pl
+    assert "events, food, or a number" in pl
     assert "get_question_of_the_day" in p
 
 

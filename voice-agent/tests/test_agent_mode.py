@@ -63,13 +63,15 @@ def test_ai411_mode_prompt_and_tools():
     assert config.is_ai411() is True
     prompt = agent.system_prompt(_Biz(), "inbound", "+13525550100")
     assert "Gainesville AI 411" in prompt
-    assert "A411 here" in prompt
+    assert "A411" in prompt
+    assert "Gainesville" in prompt
     assert "events, businesses, or post something" not in prompt
     assert "911" in prompt
     assert "medical" in prompt.lower() or "No medical" in prompt
     assert "$999" not in prompt
     assert "selling websites" not in prompt
-    assert ai411.AI411_GREETING == "A411 here."
+    assert "A411" in ai411.AI411_GREETING
+    assert "Gainesville" in ai411.AI411_GREETING
     names = {t["name"] for t in agent.get_tools()}
     expected = {
         "search_business_knowledge",

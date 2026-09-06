@@ -95,3 +95,16 @@ def test_authorize_manager_write_on_claimed_slug(page_manager):
     assert ok["ok"] is True
     assert deny["ok"] is False
     assert deny["code"] == "not_owner"
+
+
+def test_entacto_asr_alias_finds_impacto(page_manager):
+    sites = page_manager["sites"]
+    (sites / "impacto.html").write_text(
+        "<html><head><title>IMPACTO — Gainesville</title></head><body>IMPACTO</body></html>",
+        encoding="utf-8",
+    )
+    lookup = page_manager["lookup"]
+    result = lookup.find_business("Entacto")
+    assert result["found"] is True
+    assert result["slug"] == "impacto"
+    assert "IMPACTO" in result["name"]

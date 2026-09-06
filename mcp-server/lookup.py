@@ -4,6 +4,16 @@ import difflib
 
 from businesses import all_businesses, by_phone_all, by_slug, slugify
 
+# ASR / nickname → catalog slug. Keep small; do not invent businesses.
+_QUERY_ALIASES = {
+    "entacto": "impacto",
+    "entacto-club": "impacto",
+    "impacto-club": "impacto",
+    "uf-impacto": "impacto",
+    "in-pacto": "impacto",
+    "impact-o": "impacto",
+}
+
 
 def _profile(b) -> dict:
     return {
@@ -92,6 +102,10 @@ def find_business(query: str) -> dict:
                 ],
             }
     b = by_slug(slugify(q))
+    if not b:
+        aliased = _QUERY_ALIASES.get(slugify(q))
+        if aliased:
+            b = by_slug(aliased)
     if b:
         return _profile(b)
     slugs = {x.slug: x for x in all_businesses()}
