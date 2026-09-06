@@ -8,8 +8,10 @@ CSV isn't present. call-order.csv supplies the prioritized outbound queue.
 import csv
 import hashlib
 import json
+import os
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import config
 
@@ -121,8 +123,40 @@ def all_businesses() -> list[Business]:
     return _BUSINESSES
 
 
+def _sites_dir() -> Path:
+    env = os.getenv("GENERATED_SITES_DIR")
+    if env:
+        return Path(env)
+    return Path(config.GENERATED_SITES_DIR)
+
+
+def from_generated_site(slug: str) -> Business | None:
+    """Build a Business from generated-sites/<slug>.html when not in the catalog.
+
+    Phone stays empty — page-manager CID lives in customers.json, not NAP.
+    """
+    s = (slug or "").strip()
+    if not s or "/" in s or ".." in s or s.startswith("."):
+        return None
+    path = _sites_dir() / f"{s}.html"
+    if not path.is_file():
+        return None
+    name = s.replace("-", " ").title()
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        m = re.search(r"<title>([^<]+)</title>", text, re.I)
+        if m:
+            name = re.split(r"[·|—\n]", m.group(1))[0].strip() or name
+    except OSError:
+        pass
+    return Business(name=name, slug=s, phone="", category="")
+
+
 def by_slug(slug: str) -> Business | None:
-    return next((b for b in all_businesses() if b.slug == slug), None)
+    found = next((b for b in all_businesses() if b.slug == slug), None)
+    if found:
+        return found
+    return from_generated_site(slug)
 
 
 def by_phone(phone: str) -> Business | None:
