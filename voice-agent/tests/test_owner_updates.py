@@ -119,6 +119,27 @@ def test_owner_updates_mode_prompt_and_tools():
     assert agent.get_openers() == owner.OPENERS
 
 
+def test_owner_updates_prompt_uses_known_cid_business():
+    _, agent, owner, _ = _reload_mode("owner_updates")
+    customer = {
+        "business_name": "IMPACTO",
+        "contact_name": "Nicolette",
+        "slug": "impacto",
+        "demo_url": "https://floridamanweb.online/cc4ecbdb90ae/",
+    }
+    prompt = agent.system_prompt(
+        _Biz(),
+        "inbound",
+        "+13214995975",
+        customer=customer,
+    )
+    assert "KNOWN OWNER" in prompt
+    assert "IMPACTO" in prompt
+    assert "Nicolette" in prompt
+    assert "already know this is Nicolette at IMPACTO" in prompt
+    assert owner.OWNER_UPDATES_GREETING not in prompt
+
+
 def test_ai411_still_isolated_from_owner():
     config, agent, _, _ = _reload_mode("ai411")
     assert config.is_ai411() is True

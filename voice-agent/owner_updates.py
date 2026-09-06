@@ -335,8 +335,34 @@ def system_prompt(
     direction: str,
     caller_number: str,
     openers: bool = True,
+    customer: dict | None = None,
+    business: object | None = None,
 ) -> str:
     """Owner change-desk prompt — not sales, not AI 411 directory."""
+    cust = customer or {}
+    biz_name = (cust.get("business_name") or getattr(business, "name", "") or "").strip()
+    biz_slug = (cust.get("slug") or getattr(business, "slug", "") or "").strip()
+    contact = (cust.get("contact_name") or "").strip()
+    demo_url = (cust.get("demo_url") or getattr(business, "demo_url", "") or "").strip()
+    known = bool(biz_slug and biz_name and biz_name.lower() != "your business")
+    known_block = ""
+    if known:
+        known_block = f"""
+KNOWN OWNER (from caller ID — do not re-ask which business)
+- Contact name: {contact or "unknown"}
+- Business: {biz_name}
+- Slug: {biz_slug}
+- Demo URL: {demo_url or "unknown"}
+Greet them as the owner of {biz_name}. If you have a contact name, use it.
+Then get_site_outline for slug {biz_slug!r}. lookup_business is optional confirmation,
+not a fishing expedition.
+"""
+    greeting_step = (
+        f"1. Fast greeting: you already know this is {contact or 'the owner'} at {biz_name}. "
+        "Identify as AI. Do not ask which business."
+        if known
+        else f'1. Fast greeting: "{OWNER_UPDATES_GREETING}" (adapt if they already named a business).'
+    )
     ctx = f"""You are the Florida Man Web Services **owner site-updates desk** —
 a phone agent that helps local business owners file structured website change
 requests for their demo pages. You are an AI on a live phone call; everything
@@ -375,9 +401,9 @@ HOW TO SPEAK
 CALL CONTEXT
 - Caller/called number: {caller_number or "unknown"}
 - Call direction: {direction}
-
+{known_block}
 CONVERSATION FLOW
-1. Fast greeting: "{OWNER_UPDATES_GREETING}" (adapt if they already named a business).
+{greeting_step}
 2. Identify as AI. Verify owner: lookup_business with caller phone and/or the
    business they name. Resolve ambiguity. Spoken weak-auth warning.
 3. get_site_outline for that slug so you know headings/sections on the page.
@@ -412,7 +438,14 @@ inventing data. Always log_call_outcome once, then end_call with your final
 goodbye.
 """
     if direction == "inbound":
-        ctx += """
+        if known:
+            ctx += """
+This is an INBOUND call. The caller ID already matched the business above.
+Greet them as that owner (use the contact name if you have it), identify as an
+AI, and do not ask which business they are calling about.
+"""
+        else:
+            ctx += """
 This is an INBOUND call. Greet them as the owner site-updates desk, identify as
 an AI, and ask which business they are calling about — unless they already
 stated it.

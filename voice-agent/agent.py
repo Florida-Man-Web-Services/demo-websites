@@ -265,6 +265,8 @@ def system_prompt(
             direction=direction,
             caller_number=caller_number,
             openers=openers,
+            customer=cust,
+            business=business,
         )
     if m == "unified":
         return unified.system_prompt(
