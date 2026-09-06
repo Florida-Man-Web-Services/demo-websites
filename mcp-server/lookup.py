@@ -20,6 +20,47 @@ def _profile(b) -> dict:
     }
 
 
+def _profile_from_customer(cust: dict) -> dict | None:
+    """Owner/page-manager row → speakable lookup. Never copy CID into NAP phone."""
+    slug = (cust.get("slug") or "").strip()
+    if not slug:
+        return None
+    b = by_slug(slug)
+    if b:
+        out = _profile(b)
+    else:
+        out = {
+            "found": True,
+            "name": (cust.get("business_name") or slug).strip(),
+            "slug": slug,
+            "category": (cust.get("category") or ""),
+            "address": "",
+            "phone": "",
+            "rating": "",
+            "demo_url": (cust.get("demo_url") or ""),
+            "google_maps_url": "",
+            "shared_demo": False,
+        }
+    # Catalog NAP stays if the site published one; manager CID is not NAP.
+    out["owner_match"] = True
+    if cust.get("contact_name"):
+        out["contact_name"] = cust["contact_name"]
+    if cust.get("demo_url") and not out.get("demo_url"):
+        out["demo_url"] = cust["demo_url"]
+    return out
+
+
+def _customers_for_phone(query: str) -> list[dict]:
+    try:
+        import customers as customers_mod
+    except Exception:
+        return []
+    try:
+        return customers_mod.find_customers_for_phone(query)
+    except Exception:
+        return []
+
+
 def find_business(query: str) -> dict:
     q = (query or "").strip()
     digits = sum(ch.isdigit() for ch in q)
@@ -32,6 +73,23 @@ def find_business(query: str) -> dict:
                 "found": False,
                 "ambiguous_phone": True,
                 "suggestions": [{"name": b.name, "slug": b.slug} for b in matches],
+            }
+        owned = [c for c in _customers_for_phone(q) if (c.get("slug") or "").strip()]
+        if len(owned) == 1:
+            profile = _profile_from_customer(owned[0])
+            if profile:
+                return profile
+        if len(owned) > 1:
+            return {
+                "found": False,
+                "ambiguous_phone": True,
+                "suggestions": [
+                    {
+                        "name": (c.get("business_name") or c.get("slug") or ""),
+                        "slug": (c.get("slug") or ""),
+                    }
+                    for c in owned
+                ],
             }
     b = by_slug(slugify(q))
     if b:
