@@ -3,6 +3,7 @@
 Statuses drive per-call AGENT_MODE routing when AGENT_MODE=auto (recommended):
 
   unknown / no row          → ai411          (default public line)
+  resume_waitlist           → ai411          (resume_web waitlist; not website onboarding)
   onboarding | callback_queued → onboarding  (requirements interview)
   requirements_ready | demo_ready | sales_ready → sales
   paid | active_owner       → owner_updates
@@ -39,6 +40,7 @@ _lock = threading.Lock()
 STATUSES = [
     "prospect",            # web signup, not yet called
     "callback_queued",     # waiting for onboarding outbound/inbound
+    "resume_waitlist",     # resume_web signup; stay on ai411, never onboard
     "onboarding",          # mid-interview
     "requirements_ready",  # interview done; ready for builder
     "building",            # coding agent working
@@ -566,16 +568,23 @@ def register_callback(
     contact_name: str = "",
     email: str = "",
     source: str = "ai411_web",
+    notes: str = "",
 ) -> dict[str, Any]:
-    """Public web signup: queue an onboarding call."""
+    """Public web signup: queue a callback. resume_web is NOT website onboarding."""
+    src = (source or "ai411_web").strip() or "ai411_web"
+    status = "resume_waitlist" if src == "resume_web" else "callback_queued"
+    note = f"Callback requested via {src} at {_now()}"
+    extra = (notes or "").strip()
+    if extra:
+        note = note + "\n" + extra
     return upsert(
         phone,
-        status="callback_queued",
+        status=status,
         business_name=business_name,
         contact_name=contact_name,
         email=email,
-        source=source,
-        notes=f"Callback requested via {source} at {_now()}",
+        source=src,
+        notes=note,
     )
 
 
@@ -659,6 +668,8 @@ def resolve_mode(
         st = (cust.get("status") or "").strip()
         if st in ("paid", "active_owner"):
             return MODE_OWNER
+        if st == "resume_waitlist":
+            return MODE_AI411
         if st in ("onboarding", "callback_queued", "prospect"):
             # prospect/callback → run onboarding interview when they connect
             return MODE_ONBOARDING
