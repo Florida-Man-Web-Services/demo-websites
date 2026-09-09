@@ -81,3 +81,32 @@ def test_connect_is_spoken_number_not_dial():
     assert "<Dial>" not in p
     names = {t["name"] for t in ai411.TOOLS}
     assert "log_connect" in names
+
+
+def test_fmws_facts_are_gated_and_honest():
+    ai411 = _reload()
+    p = ai411.system_prompt(
+        direction="inbound", caller_number="+13555550100", openers=False
+    )
+    assert ai411.AI411_GREETING == "A411 in Gainesville. What do you need?"
+    assert "FMWS FACTS" in p
+    assert "https://arete.floridamanweb.online/" in p
+    assert "not an official uf service" in p.lower()
+    assert "waitlist" in p.lower()
+    assert "ONLY if they" in p
+    assert "never concatenated" in p.lower() or "never recap a product menu" in p.lower()
+    assert "directory lookup, not FMWS" in p
+    assert "resume_waitlist) never triggers" in p or "never triggers FMWS facts" in p
+    assert "$999" not in p
+    assert "Arete Holdings" in p  # ban list only
+    names = {t["name"] for t in ai411.TOOLS}
+    assert "search_business_knowledge" in names
+    assert "get_fmws_facts" not in names
+
+
+def test_fmws_facts_do_not_add_tools():
+    ai411 = _reload()
+    names = [t["name"] for t in ai411.TOOLS]
+    assert len(names) == len(set(names))
+    assert "search_business_knowledge" in names
+    assert not any("fmws" in n.lower() for n in names)

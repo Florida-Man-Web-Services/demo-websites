@@ -70,6 +70,7 @@ def test_prompt_withholds_owner_access_from_strangers(unified_mode):
     assert "Gainesville AI 411" in prompt
     assert "OWNER ACCESS" not in prompt
     assert "caller ID doesn't match" in prompt
+    assert "FMWS FACTS" in prompt
 
 
 def test_mode_dispatch_selects_unified_surface(unified_mode):
