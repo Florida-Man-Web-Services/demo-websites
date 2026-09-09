@@ -152,3 +152,28 @@ def test_resolve_call_mode_survives_missing_customers(tmp_path, monkeypatch):
         "+13555550199", direction="outbound", outbound_slug="ole-barn"
     )
     assert mode2 == "sales"
+
+
+def test_resume_web_is_waitlist_not_onboarding(customers_mod):
+    r = customers_mod.register_callback(
+        "+13555550188",
+        contact_name="Alex",
+        email="alex@example.test",
+        source="resume_web",
+        notes="target_role: flow cytometry scientist",
+    )
+    assert r["ok"] is True
+    row = r["customer"]
+    assert row["status"] == "resume_waitlist"
+    assert row["source"] == "resume_web"
+    assert row["contact_name"] == "Alex"
+    assert "resume_web" in (row.get("notes") or "")
+    assert "target_role" in (row.get("notes") or "")
+    mode = customers_mod.resolve_mode("+13555550188", env_mode="auto")
+    assert mode == "ai411"
+
+
+def test_ai411_web_still_onboards(customers_mod):
+    r = customers_mod.register_callback("+13555550189", business_name="Cool Cafe")
+    assert r["customer"]["status"] == "callback_queued"
+    assert customers_mod.resolve_mode("+13555550189", env_mode="auto") == "onboarding"

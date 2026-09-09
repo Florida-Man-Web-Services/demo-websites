@@ -24,7 +24,8 @@ CORS: controlled by `CORS_ALLOW_ORIGINS` (comma-separated).
 
 ### `POST /api/onboarding/register`
 
-Queue a phone for onboarding callback (AI 411 web form).
+Queue a phone for onboarding callback (AI 411 web form) or Resume & Job
+Application Assistant waitlist (`source=resume_web`).
 
 **Request**
 
@@ -34,7 +35,8 @@ Queue a phone for onboarding callback (AI 411 web form).
   "business_name": "Cool Cafe",
   "contact_name": "Alex",
   "email": "alex@coolcafe.example",
-  "source": "ai411_web"
+  "source": "ai411_web",
+  "notes": ""
 }
 ```
 
@@ -44,9 +46,15 @@ Queue a phone for onboarding callback (AI 411 web form).
 | `business_name` | no | |
 | `contact_name` | no | |
 | `email` | no | |
-| `source` | no | default `ai411_web` |
+| `source` | no | `ai411_web` (default) or `resume_web` |
+| `notes` | no | Optional free-text; stored on the customer row |
 
 **Response 200**
+
+`message` depends on `source`:
+
+- `ai411_web` (default): `You are on the list — we will call shortly to design your free demo site.`
+- `resume_web`: `You are on the waitlist — we will call about Resume & Job Application Assistant.`
 
 ```json
 {
@@ -59,7 +67,8 @@ Queue a phone for onboarding callback (AI 411 web form).
 
 **Errors:** `400` invalid phone / bad status.
 
-**Side effects:** writes `CUSTOMERS_PATH`; status `callback_queued`.
+**Side effects:** writes `CUSTOMERS_PATH`. Status is `callback_queued` for
+`ai411_web` (default) and `resume_waitlist` for `resume_web`.
 
 ---
 
@@ -173,9 +182,9 @@ take it live."`
 
 ## Customer statuses (registry)
 
-`prospect` · `callback_queued` · `onboarding` · `requirements_ready` ·
-`building` · `demo_ready` · `sales_ready` · `paid` · `active_owner` ·
-`churned` · `do_not_call`
+`prospect` · `callback_queued` · `resume_waitlist` · `onboarding` ·
+`requirements_ready` · `building` · `demo_ready` · `sales_ready` · `paid` ·
+`active_owner` · `churned` · `do_not_call`
 
 ---
 

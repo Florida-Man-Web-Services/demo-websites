@@ -627,6 +627,7 @@ class OnboardRegisterIn(BaseModel):
     contact_name: str = ""
     email: str = ""
     source: str = "ai411_web"
+    notes: str = ""
 
 
 def _customers_mod():
@@ -652,18 +653,21 @@ def api_onboard_register(body: OnboardRegisterIn):
     """Public: queue a phone for onboarding callback (AI 411 landing form)."""
     customers = _customers_mod()
 
+    from onboard_messages import register_message
+
     result = customers.register_callback(
         body.phone,
         business_name=body.business_name,
         contact_name=body.contact_name,
         email=body.email,
         source=body.source or "ai411_web",
+        notes=body.notes or "",
     )
     if not result.get("ok"):
         raise HTTPException(status_code=400, detail=result.get("error") or "bad request")
     return {
         "ok": True,
-        "message": "You are on the list — we will call shortly to design your free demo site.",
+        "message": register_message(body.source),
         "customer": result.get("customer"),
         "voice_number": getattr(config, "PUBLIC_VOICE_NUMBER", "") or config.TWILIO_PHONE_NUMBER,
     }

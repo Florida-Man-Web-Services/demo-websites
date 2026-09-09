@@ -21,6 +21,7 @@ COPY --from=build /out /usr/share/nginx/html
 COPY hosting/root-index.html /usr/share/nginx/html/index.html
 # AI 411 landing (also serve under /ai411/ on the apex until ai411.* DNS is live)
 COPY hosting/ai411/index.html /usr/share/nginx/html/ai411/index.html
+COPY hosting/resume/index.html /usr/share/nginx/html/resume/index.html
 # Arete Tutoring splash (proxied app takes /arete-tutoring/ when service is up;
 # this file is a fallback if proxy is down — also useful for local static browse)
 COPY hosting/arete-tutoring/index.html /usr/share/nginx/html/arete-tutoring/index.html
