@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Florida Man Web — Gainesville websites, AI 411 &amp; Resume Assistant</title>
-  <meta name="description" content="Florida Man Web Services: custom websites for Gainesville businesses, Gainesville AI 411, and Resume &amp; Job Application Assistant." />
+  <title>Florida Man Web Services — Gainesville websites, AI 411, Tutoring &amp; Resume waitlist</title>
+  <meta name="description" content="A website for your Gainesville business. Start with a free demo. Also: Gainesville AI 411, Arete Tutoring for UF calc and chem, and a Resume waitlist." />
   <meta name="theme-color" content="#07110e" />
   <link rel="canonical" href="https://floridamanweb.online/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Florida Man Web — Gainesville websites, AI 411 &amp; Resume Assistant" />
-  <meta property="og:description" content="Custom websites for Gainesville businesses. Call AI 411 or join the Resume &amp; Job Application Assistant waitlist." />
+  <meta property="og:title" content="Florida Man Web Services — Gainesville websites, AI 411, Tutoring &amp; Resume waitlist" />
+  <meta property="og:description" content="A website for your Gainesville business. Start with a free demo. Explore AI 411, Arete Tutoring, or join the Resume waitlist." />
   <meta property="og:url" content="https://floridamanweb.online/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #07110e;
@@ -22,10 +22,13 @@
       --muted: #9aaca3;
       --lagoon: #2ec4a6;
       --citrus: #f0b429;
+      --citrus-ink: #1a1200;
       --clay: #e07a3d;
       --line: rgba(241, 246, 242, 0.1);
       --font-display: "Fraunces", "Times New Roman", serif;
       --font-body: "Figtree", system-ui, sans-serif;
+      --radius: 14px;
+      --max: 72rem;
     }
     *, *::before, *::after { box-sizing: border-box; }
     @media (prefers-reduced-motion: reduce) {
@@ -48,34 +51,56 @@
     }
     .skip-link {
       position: absolute; left: -9999px; top: 0.75rem; z-index: 10;
-      background: var(--citrus); color: #1a1200; padding: 0.6rem 1rem;
+      background: var(--citrus); color: var(--citrus-ink); padding: 0.6rem 1rem;
       border-radius: 8px; font-weight: 700; text-decoration: none;
     }
     .skip-link:focus { left: 0.75rem; outline: 3px solid var(--lagoon); }
 
-    .wrap {
-      max-width: 40rem;
-      margin: 0 auto;
-      padding: clamp(2rem, 6vw, 4rem) 1.25rem 3.5rem;
-    }
-    .badge {
-      display: inline-flex;
+    .site-header {
+      display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 0.4rem;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--lagoon);
-      border: 1px solid rgba(46, 196, 166, 0.35);
-      background: rgba(46, 196, 166, 0.08);
-      padding: 0.35rem 0.7rem;
-      border-radius: 999px;
-      margin-bottom: 1.15rem;
+      justify-content: space-between;
+      gap: 0.75rem 1.25rem;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 1.15rem 1.25rem 0;
     }
+    .wordmark {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .wordmark:hover { color: var(--lagoon); }
+    .wordmark:focus-visible { outline: 3px solid rgba(46, 196, 166, 0.55); outline-offset: 4px; }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.25rem;
+      align-items: center;
+    }
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .nav a:hover { color: var(--ink); }
+    .nav a:focus-visible { outline: 3px solid rgba(46, 196, 166, 0.55); outline-offset: 3px; }
+    .nav .tel { color: var(--ink); border-bottom: 1px solid rgba(46, 196, 166, 0.45); padding-bottom: 0.05rem; }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 2.75rem) 1.25rem 3.5rem;
+    }
+    .hero { max-width: 42rem; }
     h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.1rem, 6vw, 3rem);
+      font-size: clamp(2rem, 5vw, 3.05rem);
       line-height: 1.08;
       letter-spacing: -0.02em;
       margin: 0 0 0.85rem;
@@ -84,44 +109,65 @@
     .lead {
       color: var(--muted);
       font-size: 1.08rem;
-      max-width: 36ch;
-      margin: 0 0 2rem;
+      margin: 0 0 1.35rem;
+      max-width: 46ch;
     }
-    .phone {
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem 1.1rem;
+      margin-bottom: 0.7rem;
+    }
+    .btn-primary {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 1.15rem;
+      justify-content: center;
+      min-height: 2.75rem;
+      padding: 0.7rem 1.15rem;
+      border-radius: 999px;
+      background: var(--citrus);
+      color: var(--citrus-ink);
       font-weight: 700;
-      color: var(--ink);
       text-decoration: none;
-      margin-bottom: 2rem;
-      border-bottom: 2px solid rgba(46, 196, 166, 0.45);
-      padding-bottom: 0.15rem;
+      font-size: 0.98rem;
     }
-    .phone:hover { color: var(--lagoon); }
-    .phone:focus-visible { outline: 3px solid rgba(46, 196, 166, 0.55); outline-offset: 4px; }
+    .btn-primary:hover { filter: brightness(1.06); }
+    .btn-primary:focus-visible { outline: 3px solid rgba(46, 196, 166, 0.7); outline-offset: 3px; }
+    .expect, .paths, .ask {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0 0 0.55rem;
+      max-width: 52ch;
+    }
+    .ask a { color: var(--ink); font-weight: 600; }
+    .ask a:focus-visible { outline: 3px solid rgba(46, 196, 166, 0.55); outline-offset: 3px; }
 
+    .products { margin-top: 2.4rem; }
+    .products h2 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      letter-spacing: -0.015em;
+    }
     .cards {
       display: grid;
       gap: 0.9rem;
     }
-    @media (min-width: 560px) {
+    @media (min-width: 720px) {
       .cards { grid-template-columns: 1fr 1fr; }
     }
-    a.card.resume { border-top: 3px solid var(--clay); }
-    .resume .kicker { color: var(--clay); }
-    .resume .arrow { color: var(--clay); }
     a.card {
-      display: block;
+      display: flex;
+      flex-direction: column;
       text-decoration: none;
       color: inherit;
       background: linear-gradient(165deg, rgba(255,255,255,0.04), transparent 40%), var(--surface);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: var(--radius);
       padding: 1.15rem 1.1rem 1.2rem;
-      transition: border-color 0.15s ease, transform 0.12s ease;
       min-height: 100%;
+      transition: border-color 0.15s ease, transform 0.12s ease;
     }
     a.card:hover {
       border-color: rgba(46, 196, 166, 0.35);
@@ -131,20 +177,24 @@
       outline: 3px solid rgba(46, 196, 166, 0.55);
       outline-offset: 3px;
     }
-    a.card.biz { border-top: 3px solid var(--lagoon); }
     a.card.ai { border-top: 3px solid var(--citrus); }
+    a.card.tutor { border-top: 3px solid var(--lagoon); }
+    a.card.demo { border-top: 3px solid var(--citrus); }
+    a.card.resume { border-top: 3px solid var(--clay); }
     .kicker {
       font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       margin-bottom: 0.45rem;
+      color: var(--muted);
     }
-    .biz .kicker { color: var(--lagoon); }
-    .ai .kicker { color: var(--citrus); }
-    a.card h2 {
+    .ai .kicker, .demo .kicker { color: var(--citrus); }
+    .tutor .kicker { color: var(--lagoon); }
+    .resume .kicker { color: var(--clay); }
+    a.card h3 {
       font-family: var(--font-display);
-      font-size: 1.2rem;
+      font-size: 1.22rem;
       margin: 0 0 0.4rem;
       letter-spacing: -0.015em;
     }
@@ -154,14 +204,20 @@
       font-size: 0.92rem;
       line-height: 1.45;
     }
+    a.card .note {
+      margin-top: 0.45rem;
+      font-size: 0.82rem;
+    }
     .arrow {
       display: inline-block;
-      margin-top: 0.75rem;
+      margin-top: auto;
+      padding-top: 0.85rem;
       font-weight: 700;
       font-size: 0.88rem;
       color: var(--lagoon);
     }
-    .ai .arrow { color: var(--citrus); }
+    .ai .arrow, .demo .arrow { color: var(--citrus); }
+    .resume .arrow { color: var(--clay); }
 
     footer {
       margin-top: 2.75rem;
@@ -170,41 +226,65 @@
       color: var(--muted);
       font-size: 0.82rem;
     }
+    footer a { color: var(--ink); }
+    footer a:focus-visible { outline: 3px solid rgba(46, 196, 166, 0.55); outline-offset: 3px; }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="wordmark" href="/">Florida Man Web Services</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#products">Products</a>
+      <a class="tel" href="tel:+18449030365">(844)&nbsp;903&#8209;0365</a>
+    </nav>
+  </header>
   <main id="main" class="wrap">
-    <div class="badge">Gainesville · Florida Man Web</div>
-    <h1>Websites that work. <span>AI that answers.</span></h1>
-    <p class="lead">
-      Custom sites for local businesses — Gainesville AI 411 — and Resume &amp; Job Application Assistant.
-    </p>
-    <a class="phone" href="tel:+18449030365">(844)&nbsp;903&#8209;0365</a>
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">A website for your Gainesville business. <span>Start with a free demo.</span></h1>
+      <p class="lead">Tell us about your business. We’ll call you to talk through a real demo page for your shop. Getting started means answering the phone—not building the site yourself.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="/ai411/#form-title">Request a free demo</a>
+      </div>
+      <p class="expect">Free demo. We call you first—this is not an instant website generator.</p>
+      <p class="paths">Looking for something else? Explore AI 411 for Gainesville, practice your UF section with Tutoring, or join the Resume waitlist.</p>
+      <p class="ask">Questions? Call <a href="tel:+18449030365">(844)&nbsp;903&#8209;0365</a>.</p>
+    </section>
 
-    <div class="cards">
-      <a class="card ai" href="/ai411/">
-        <div class="kicker">Product</div>
-        <h2>Gainesville AI 411</h2>
-        <p>Voice directory for events and businesses, free demo callback, optional personal page.</p>
-        <span class="arrow">Open AI 411 →</span>
-      </a>
-      <a class="card biz" href="/ai411/#form-title">
-        <div class="kicker">Businesses</div>
-        <h2>Free demo website</h2>
-        <p>Request a callback. We interview you, build a free demo page, and show you the link.</p>
-        <span class="arrow">Request callback →</span>
-      </a>
-      <a class="card resume" href="/resume/">
-        <div class="kicker">Product</div>
-        <h2>Resume &amp; Job Application Assistant</h2>
-        <p>Tailored resume and cover letter, then a path to the person who hires. Waitlist — we call you.</p>
-        <span class="arrow">Open /resume/ →</span>
-      </a>
-    </div>
+    <section class="products" id="products" aria-labelledby="products-title">
+      <h2 id="products-title">Choose what you need.</h2>
+      <div class="cards">
+        <a class="card ai" href="/ai411/">
+          <div class="kicker">Live</div>
+          <h3>AI 411</h3>
+          <p>Find Gainesville businesses through a local voice directory.</p>
+          <span class="arrow">Explore AI 411 →</span>
+        </a>
+        <a class="card tutor" href="https://arete.floridamanweb.online/">
+          <div class="kicker">Live</div>
+          <h3>Arete Tutoring</h3>
+          <p>Practice your UF section in class order—gases before thermo when that’s how your class teaches it.</p>
+          <p class="note">Independent coach; not official UF.</p>
+          <span class="arrow">Try the coach →</span>
+        </a>
+        <a class="card demo" href="/ai411/#form-title">
+          <div class="kicker">Free demo</div>
+          <h3>Free demo website</h3>
+          <p>Start with a real demo page for your business. We’ll call to talk it through; your first step is answering the phone.</p>
+          <span class="arrow">Request a free demo →</span>
+        </a>
+        <a class="card resume" href="/resume/">
+          <div class="kicker">Waitlist</div>
+          <h3>Resume &amp; Job Application Assistant</h3>
+          <p>Get on the list for resume help. We’ll call you; the service is not live yet.</p>
+          <span class="arrow">Join the waitlist →</span>
+        </a>
+      </div>
+    </section>
 
     <footer>
-      Florida Man Web Services. Questions? Call the number above.
+      Florida Man Web Services, Gainesville.
+      Questions? Call <a href="tel:+18449030365">(844)&nbsp;903&#8209;0365</a>.
     </footer>
   </main>
 </body>
