@@ -29,6 +29,13 @@ Cloudflare (proxied A → 69.180.240.158)
 Certificate: `cf-floridamanweb-wildcard-cert-secret` covers
 `floridamanweb.online` and `*.floridamanweb.online`.
 
+**Customer vanity domains** (e.g. `impacto.community`) are **not** Gateway
+listeners. They live on the customer's Cloudflare account (different NS pair
+from floridamanweb) and a Worker reverse-proxies to
+`https://floridamanweb.online/vanity/<slug>/`. Recipe:
+`hosting/impacto-community-worker/`. Do not add a `Zone` CR — the operator
+token cannot edit that account.
+
 ---
 
 ## 2. DNS (cloudflare-operator)

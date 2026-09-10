@@ -25,5 +25,9 @@ COPY hosting/resume/index.html /usr/share/nginx/html/resume/index.html
 # Arete Tutoring splash (proxied app takes /arete-tutoring/ when service is up;
 # this file is a fallback if proxy is down — also useful for local static browse)
 COPY hosting/arete-tutoring/index.html /usr/share/nginx/html/arete-tutoring/index.html
+# Stable vanity URL for IMPACTO custom domain (impacto.community). Hash paths stay
+# the unguessable catalog URLs; this path must not change when HTML bytes change.
+COPY generated-sites/impacto.html /usr/share/nginx/html/vanity/impacto/index.html
+COPY generated-sites/impacto /usr/share/nginx/html/vanity/impacto/impacto
 COPY hosting/nginx-default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
