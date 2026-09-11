@@ -140,6 +140,31 @@ def test_owner_updates_prompt_uses_known_cid_business():
     assert owner.OWNER_UPDATES_GREETING not in prompt
 
 
+def test_owner_updates_prompt_asks_which_page_when_owned_slugs():
+    _, agent, _, _ = _reload_mode("owner_updates")
+    customer = {
+        "business_name": "Florida Man Bioscience",
+        "contact_name": "Noah",
+        "slug": "florida-man-bioscience",
+        "owned_slugs": ["fmb-peptodyssey", "fmb-cytogate"],
+        "owned_slug_labels": {
+            "fmb-peptodyssey": "PeptOdyssey",
+            "fmb-cytogate": "CytoGate",
+        },
+        "demo_url": "https://floridamanweb.online/vanity/florida-man-bioscience/",
+    }
+    prompt = agent.system_prompt(
+        _Biz(),
+        "inbound",
+        "+135****1914",
+        customer=customer,
+    )
+    assert "Ask which page" in prompt
+    assert "fmb-peptodyssey" in prompt
+    assert "PeptOdyssey" in prompt
+    assert "Do not assume slug 'florida-man-bioscience'" in prompt
+
+
 def test_ai411_still_isolated_from_owner():
     config, agent, _, _ = _reload_mode("ai411")
     assert config.is_ai411() is True

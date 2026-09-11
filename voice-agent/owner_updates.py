@@ -345,17 +345,38 @@ def system_prompt(
     contact = (cust.get("contact_name") or "").strip()
     demo_url = (cust.get("demo_url") or getattr(business, "demo_url", "") or "").strip()
     known = bool(biz_slug and biz_name and biz_name.lower() != "your business")
+    extra_slugs = cust.get("owned_slugs") or []
+    if isinstance(extra_slugs, str):
+        extra_slugs = [extra_slugs]
+    page_slugs: list[str] = []
+    for s in [biz_slug, *[str(x).strip() for x in extra_slugs]]:
+        if s and s not in page_slugs:
+            page_slugs.append(s)
+    labels = cust.get("owned_slug_labels") or {}
+    if not isinstance(labels, dict):
+        labels = {}
+    pages_lines = "\n".join(
+        f"- {s}" + (f" ({labels[s]})" if s in labels else "")
+        for s in page_slugs
+    )
+    multi_pages = len(page_slugs) > 1
     known_block = ""
     if known:
+        which_page = (
+            f"This owner has multiple pages. Ask which page they want to change "
+            f"before get_site_outline. Do not assume slug {biz_slug!r}.\n"
+            f"PAGES THEY MAY EDIT:\n{pages_lines}\n"
+            if multi_pages
+            else f"Then get_site_outline for slug {biz_slug!r}.\n"
+        )
         known_block = f"""
 KNOWN OWNER (from caller ID — do not re-ask which business)
 - Contact name: {contact or "unknown"}
 - Business: {biz_name}
-- Slug: {biz_slug}
+- Primary slug: {biz_slug}
 - Demo URL: {demo_url or "unknown"}
 Greet them as the owner of {biz_name}. If you have a contact name, use it.
-Then get_site_outline for slug {biz_slug!r}. lookup_business is optional confirmation,
-not a fishing expedition.
+{which_page}lookup_business is optional confirmation, not a fishing expedition.
 """
     greeting_step = (
         f"1. Fast greeting: you already know this is {contact or 'the owner'} at {biz_name}. "

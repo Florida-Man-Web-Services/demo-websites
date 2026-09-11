@@ -110,6 +110,7 @@ Write output only to `generated-sites/<slug>.html`. Slug rule: lowercase, non-al
 Checklist: `docs/site-generation/quality-rubric.md`.
 
 After adding/renaming pages, keep **`index.html`** in sync (catalog links).
+Company sites listed in `generated-sites/CATALOG_EXCLUDE` (currently `florida-man-bioscience` and `fmb-*`) are **not** catalog cards — card count equals `generated-sites/*.html` minus those stems. Vanity: `/vanity/florida-man-bioscience/`.
 
 ## Related docs
 

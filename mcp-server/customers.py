@@ -178,8 +178,26 @@ def find_customers_for_phone(phone: str | None) -> list[dict[str, Any]]:
     return [dict(r) for r in rows if phone_is_trusted(r, key)]
 
 
+def slugs_owned(customer: dict[str, Any] | None) -> list[str]:
+    """Primary slug plus owned_slugs (unique, stripped, order-preserving)."""
+    if not customer:
+        return []
+    out: list[str] = []
+    primary = (customer.get("slug") or "").strip()
+    if primary:
+        out.append(primary)
+    extra = customer.get("owned_slugs") or []
+    if isinstance(extra, str):
+        extra = [extra]
+    for item in extra:
+        s = (item or "").strip()
+        if s and s not in out:
+            out.append(s)
+    return out
+
+
 def owners_of_slug(slug: str | None) -> list[dict[str, Any]]:
-    """Paid/active_owner customers whose slug matches (case-sensitive store)."""
+    """Paid/active_owner customers whose primary slug or owned_slugs match."""
     s = (slug or "").strip()
     if not s:
         return []
@@ -189,7 +207,7 @@ def owners_of_slug(slug: str | None) -> list[dict[str, Any]]:
     for r in rows:
         if not is_owner_write_status(r.get("status")):
             continue
-        if (r.get("slug") or "").strip() == s:
+        if s in slugs_owned(r):
             out.append(dict(r))
     return out
 
@@ -277,8 +295,9 @@ def authorize_owner_write(
     paid_here = [c for c in matched if is_owner_write_status(c.get("status"))]
     if paid_here:
         for cust in paid_here:
+            owned = slugs_owned(cust)
             own_slug = (cust.get("slug") or "").strip()
-            if own_slug in ("", slug):
+            if own_slug in ("", slug) or slug in owned:
                 return {
                     "ok": True,
                     "auth_level": "cid_only",

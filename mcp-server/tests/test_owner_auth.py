@@ -183,6 +183,50 @@ def test_mark_voice_enrolled_requires_paid(customer_store):
     assert not (cleared["customer"].get("voice_auth") or {}).get("template_id")
 
 
+def test_owned_slugs_authorize_each_page(customer_store):
+    owner = "+1" + "352" + "555" + "0100"
+    stranger = "+1" + "352" + "555" + "0999"
+    r = cust.upsert(
+        owner,
+        status="active_owner",
+        slug="florida-man-bioscience",
+        patch={
+            "owned_slugs": [
+                "florida-man-bioscience",
+                "fmb-peptodyssey",
+                "fmb-cytogate",
+            ]
+        },
+    )
+    assert r.get("ok") is True, r
+    assert "fmb-peptodyssey" in cust.slugs_owned(r["customer"])
+    for slug in ("florida-man-bioscience", "fmb-peptodyssey", "fmb-cytogate"):
+        auth = cust.authorize_owner_write(owner, slug)
+        assert auth["ok"] is True, (slug, auth)
+        assert auth["auth_level"] == "cid_only"
+    deny = cust.authorize_owner_write(stranger, "fmb-peptodyssey")
+    assert deny["ok"] is False
+    assert deny["code"] == "not_owner"
+    mismatch = cust.authorize_owner_write(owner, "impacto")
+    assert mismatch["ok"] is False
+    assert mismatch["code"] == "slug_mismatch"
+
+
+def test_owners_of_slug_includes_owned_slugs(customer_store):
+    owner = "+1" + "352" + "555" + "0100"
+    r = cust.upsert(
+        owner,
+        status="active_owner",
+        slug="florida-man-bioscience",
+        patch={"owned_slugs": ["fmb-team"]},
+    )
+    assert r.get("ok") is True, r
+    owners = cust.owners_of_slug("fmb-team")
+    assert len(owners) == 1
+    assert owners[0]["phone"] == owner
+    assert "fmb-team" in cust.slugs_owned(owners[0])
+
+
 def test_touch_and_verify_streak(customer_store):
     cust.upsert("+13555550100", status="active_owner", slug="cool-cafe")
     cust.mark_voice_enrolled("+13555550100", vendor="mock")

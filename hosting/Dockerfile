@@ -32,5 +32,18 @@ COPY generated-sites/impacto.html /usr/share/nginx/html/vanity/impacto/index.htm
 COPY generated-sites/impacto /usr/share/nginx/html/vanity/impacto/impacto
 # Inner Wix routes (course-registration, teacher-registration, …) as first-party pages.
 COPY generated-sites/impacto-pages/ /usr/share/nginx/html/vanity/impacto/
+# Florida Man Bioscience canonical site (floridamanbioscience.com → this vanity).
+COPY generated-sites/florida-man-bioscience.html /usr/share/nginx/html/vanity/florida-man-bioscience/index.html
+COPY generated-sites/fmb-team.html /usr/share/nginx/html/vanity/florida-man-bioscience/team/index.html
+COPY generated-sites/fmb-peptodyssey.html /usr/share/nginx/html/vanity/florida-man-bioscience/peptodyssey/index.html
+COPY generated-sites/fmb-peptodyssey-privacy.html /usr/share/nginx/html/vanity/florida-man-bioscience/peptodyssey/privacy/index.html
+COPY generated-sites/fmb-u4u.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/u4u/index.html
+COPY generated-sites/fmb-u4u-privacy.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/u4u-privacy/index.html
+COPY generated-sites/fmb-cytogate.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/cytogate/index.html
+COPY generated-sites/fmb-discovery-informatics.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/discovery-informatics/index.html
+COPY generated-sites/fmb-next-gen-drug-development.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/next-gen-drug-development/index.html
+COPY generated-sites/fmb-vector-nanodisk.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/vector-nanodisk/index.html
+COPY generated-sites/fmb-neurocreatine.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/neurocreatine/index.html
+COPY generated-sites/florida-man-bioscience/ /usr/share/nginx/html/vanity/florida-man-bioscience/florida-man-bioscience/
 COPY hosting/nginx-default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
