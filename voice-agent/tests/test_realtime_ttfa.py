@@ -22,10 +22,15 @@ class _Biz:
 
 
 class FakeWS:
-    def __init__(self, events, stream_sid="MS123"):
+    def __init__(self, events, stream_sid="MS123", hold=False):
         self._events = list(events)
         self.sent = []
         self.stream_sid = stream_sid
+        self._hold = hold
+        self._closed = asyncio.Event()
+
+    def close(self):
+        self._closed.set()
 
     async def send(self, msg):
         self.sent.append(msg)
@@ -34,9 +39,11 @@ class FakeWS:
         return self
 
     async def __anext__(self):
-        if not self._events:
-            raise StopAsyncIteration
-        return self._events.pop(0)
+        if self._events:
+            return self._events.pop(0)
+        if self._hold:
+            await self._closed.wait()
+        raise StopAsyncIteration
 
 
 def _reload():
@@ -80,7 +87,8 @@ def test_ttfa_stamps_after_speech_stopped():
     )
     state.mode = "ai411"
     state.llm = Mock()
-    twilio = FakeWS([])
+    state.llm.messages = []
+    twilio = FakeWS([], hold=True)
     xai = FakeWS(
         [
             {"type": "input_audio_buffer.speech_stopped"},

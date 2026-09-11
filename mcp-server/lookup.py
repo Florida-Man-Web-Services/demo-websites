@@ -3,6 +3,7 @@
 import difflib
 
 from businesses import all_businesses, by_phone_all, by_slug, slugify
+from connect_venues import find_venue
 
 # ASR / nickname → catalog slug. Keep small; do not invent businesses.
 _QUERY_ALIASES = {
@@ -108,6 +109,9 @@ def find_business(query: str) -> dict:
             b = by_slug(aliased)
     if b:
         return _profile(b)
+    venue = find_venue(q)
+    if venue is not None:
+        return venue
     slugs = {x.slug: x for x in all_businesses()}
     close = difflib.get_close_matches(slugify(q), list(slugs), n=3, cutoff=0.5)
     return {

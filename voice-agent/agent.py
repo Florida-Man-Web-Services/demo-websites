@@ -935,7 +935,7 @@ def flush_call_transcript(state: CallState, *, backend: str = "") -> dict:
     turns = list(state.transcript_turns)
     if not turns:
         messages = getattr(state.llm, "messages", None)
-        if messages:
+        if isinstance(messages, (list, tuple)):
             turns = calldb.extract_pipeline_turns(messages)
 
     backend = backend or (

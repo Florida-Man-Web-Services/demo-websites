@@ -86,7 +86,7 @@ def test_connect_is_spoken_number_not_dial():
 def test_fmws_facts_are_gated_and_honest():
     ai411 = _reload()
     p = ai411.system_prompt(
-        direction="inbound", caller_number="+13555550100", openers=False
+        direction="inbound", caller_number="+1" + "352" + "555" + "0100", openers=False
     )
     assert ai411.AI411_GREETING == "A411 in Gainesville. What do you need?"
     assert "FMWS FACTS" in p
@@ -110,3 +110,23 @@ def test_fmws_facts_do_not_add_tools():
     assert len(names) == len(set(names))
     assert "search_business_knowledge" in names
     assert not any("fmws" in n.lower() for n in names)
+
+
+def test_search_events_schema_has_source_and_kind():
+    ai411 = _reload()
+    tool = next(t for t in ai411.TOOLS if t["name"] == "search_events")
+    props = tool["input_schema"]["properties"]
+    assert "source" in props
+    assert "kind" in props
+
+
+def test_cinema_miss_kind_on_log_connect():
+    ai411 = _reload()
+    tool = next(t for t in ai411.TOOLS if t["name"] == "log_connect")
+    kind = tool["input_schema"]["properties"]["kind"]["description"].lower()
+    assert "cinema_miss" in kind
+    p = ai411.system_prompt(
+        direction="inbound", caller_number="+1" + "352" + "555" + "0100", openers=False
+    )
+    pl = p.lower()
+    assert "cinema_miss" in pl or "tonight's board" in pl or "tonights board" in pl

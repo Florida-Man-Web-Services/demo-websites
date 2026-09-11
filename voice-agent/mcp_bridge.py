@@ -203,6 +203,10 @@ def _map_tool_call(name: str, args: dict, *, caller_number: str) -> tuple[str, d
             out["start_at"] = str(args.get("start_at") or "")
         if args.get("end_at"):
             out["end_at"] = str(args.get("end_at") or "")
+        if args.get("source"):
+            out["source"] = str(args.get("source") or "")
+        if args.get("kind"):
+            out["kind"] = str(args.get("kind") or "")
         if tags is not None:
             out["tags"] = tags
         return name, out

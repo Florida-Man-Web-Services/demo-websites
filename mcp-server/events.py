@@ -173,6 +173,9 @@ def _normalize_event(raw: dict[str, Any]) -> dict[str, Any] | None:
     website = str(raw.get("website") or "").strip()
     if website:
         out["website"] = website
+    kind = str(raw.get("kind") or "").strip().lower()
+    if kind:
+        out["kind"] = kind
     return out
 
 
@@ -460,6 +463,7 @@ def fetch_visitgainesville_events(
     per_page: int = 50,
     max_pages: int | None = None,
     start_date: str | None = None,
+    search: str | None = None,
     http_get: Callable[[str], dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Paginate tribe events API. Returns {ok, raw_events, pages, total, error?}."""
@@ -470,6 +474,7 @@ def fetch_visitgainesville_events(
     raw_events: list[dict[str, Any]] = []
     total: int | None = None
     total_pages: int | None = None
+    search_q = (search or "").strip()
     try:
         while True:
             if max_pages is not None and pages_fetched >= max_pages:
@@ -480,6 +485,8 @@ def fetch_visitgainesville_events(
             }
             if start_date:
                 qs["start_date"] = start_date
+            if search_q:
+                qs["search"] = search_q
             url = f"{VG_EVENTS_API}?{urllib.parse.urlencode(qs)}"
             data = get(url)
             batch = data.get("events") or []
@@ -617,14 +624,25 @@ def ingest_visitgainesville(
     max_pages: int | None = None,
     start_date: str | None = None,
     days_ahead: int | None = 180,
+    search: str | None = None,
     http_get: Callable[[str], dict[str, Any]] | None = None,
     dry_run: bool = False,
 ) -> dict[str, Any]:
     """Fetch → map/filter → replace visitgainesville rows. Speakable result dict."""
+    search_q = (search or "").strip()
+    if search_q and not dry_run:
+        return {
+            "ok": False,
+            "error": (
+                "search= requires dry_run so it cannot replace the full "
+                "visitgainesville store"
+            ),
+        }
     fetched = fetch_visitgainesville_events(
         per_page=per_page,
         max_pages=max_pages,
         start_date=start_date,
+        search=search_q or None,
         http_get=http_get,
     )
     if not fetched.get("ok"):
@@ -951,6 +969,8 @@ def search_events(
     category: str = "",
     start_at: str = "",
     end_at: str = "",
+    source: str = "",
+    kind: str = "",
 ) -> dict[str, Any]:
     """Search local events. Returns {ok, count, events} or speakable error."""
     try:
@@ -1008,6 +1028,8 @@ def search_events(
             tag_list = None
 
         cat_key = (category or "").strip().lower()
+        src_key = (source or "").strip().lower()
+        kind_key = (kind or "").strip().lower()
 
         window_start, window_end = window
 
@@ -1024,6 +1046,10 @@ def search_events(
                 continue
             if cat_key and _primary_category(ev) != cat_key:
                 continue
+            if src_key and str(ev.get("source") or "").strip().lower() != src_key:
+                continue
+            if kind_key and str(ev.get("kind") or "").strip().lower() != kind_key:
+                continue
             if not _keyword_match(ev, query or ""):
                 continue
             matched.append(ev)
@@ -1031,7 +1057,7 @@ def search_events(
         matched.sort(key=lambda e: e.get("start") or "")
         limited = matched[:lim]
         cats = _category_breakdown(matched)
-        return {
+        out = {
             "ok": True,
             "count": len(limited),
             "total_matched": len(matched),
@@ -1040,6 +1066,9 @@ def search_events(
             "long_list": len(matched) > 3,
             "category_filter": cat_key or None,
         }
+        if kind_key == "film_showtime" and not matched:
+            out["cinema_miss"] = True
+        return out
     except Exception as e:  # noqa: BLE001 — speakable, never raise
         return {
             "ok": False,
