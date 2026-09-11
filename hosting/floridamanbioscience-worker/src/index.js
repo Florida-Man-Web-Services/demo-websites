@@ -1,7 +1,7 @@
 /**
- * Apex Worker for floridamanbioscience.com — reverse-proxy the FMB canonical
- * set at the stable floridamanweb vanity path. Host header to origin is
- * floridamanweb.online so the existing Cilium Gateway listener matches.
+ * Apex Worker for floridamanbioscience.com — reverse-proxy the live FMB
+ * Next.js site (flmanbiosci.net). Not the Gainesville demo-sites vanity HTML.
+ * Host header to origin is flmanbiosci.net so the existing gateway matches.
  */
 const HOP = new Set([
   "host",
