@@ -46,4 +46,5 @@ COPY generated-sites/fmb-vector-nanodisk.html /usr/share/nginx/html/vanity/flori
 COPY generated-sites/fmb-neurocreatine.html /usr/share/nginx/html/vanity/florida-man-bioscience/products/neurocreatine/index.html
 COPY generated-sites/florida-man-bioscience/ /usr/share/nginx/html/vanity/florida-man-bioscience/florida-man-bioscience/
 COPY hosting/nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY generated-sites/florida-man-bioscience-site/ /usr/share/nginx/html/vanity/florida-man-bioscience/
 EXPOSE 80

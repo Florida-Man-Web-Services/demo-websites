@@ -1,7 +1,7 @@
 /**
- * Apex Worker for floridamanbioscience.com — reverse-proxy the live FMB
- * Next.js site (flmanbiosci.net). Not the Gainesville demo-sites vanity HTML.
- * Host header to origin is flmanbiosci.net so the existing gateway matches.
+ * Apex Worker for floridamanbioscience.com — reverse-proxy the FMB site
+ * cloned from the Noomo Awwwards chrome with public FMB copy and images,
+ * served at floridamanweb vanity. Host to origin is floridamanweb.online.
  */
 const HOP = new Set([
   "host",

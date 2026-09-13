@@ -1,12 +1,11 @@
 # floridamanbioscience.com Worker
 
-Proxies `https://floridamanbioscience.com/` → `https://flmanbiosci.net/`
-(the live Next.js company site: full pages, team photos, product art).
+Proxies `https://floridamanbioscience.com/` →
+`https://floridamanweb.online/vanity/florida-man-bioscience/`
 
-Do **not** point this hostname at `floridamanweb.online/vanity/florida-man-bioscience/`
-— that is the Gainesville agency demo pattern and is the wrong vehicle for FMB.
+That vanity tree is a **Noomo (Awwwards Users Choice 2023) chrome clone** with
+Florida Man Bioscience public copy and images transferred in. Not the
+Gainesville one-file agency kit. Not a pass-through of `flmanbiosci.net`.
 
-The zone lives on Noah's Cloudflare account (NS `margot`/`martin`), **not** the
-hwcopeland operator account (`cora`/`stan`). Do not add a `Zone` CR to IAC.
-
-Token from `~/.authinfo.gpg` (`machine cloudflare.com login apikey`). Never commit it.
+Zone is Noah's Cloudflare account (NS `margot`/`martin`). No IAC Zone CR.
+Token from `~/.authinfo.gpg`. Never commit it.
