@@ -25,6 +25,7 @@ COPY mcp-server/customers.py \
      mcp-server/callers.py \
      mcp-server/broadcasts.py \
      mcp-server/lookup.py \
+     mcp-server/connect_venues.py \
      mcp-server/changerequests.py \
      mcp-server/calllog.py \
      mcp-server/qotd.py \
@@ -51,5 +52,5 @@ RUN mkdir -p /data /data/builder-briefs /data/customer-memory /data/audio_cache 
 EXPOSE 8035
 WORKDIR /app/voice-agent
 # Fail closed at build time if packaging drifts again.
-RUN python -c "import sys; sys.path[:0]=['/app/mcp-server','/app/voice-agent']; import customers, knowledge, events, callers, broadcasts, lookup, changerequests, qotd, fomo, personal_pages; print('mcp-server ok', customers.MODE_AI411, 'qotd+fomo+personal_pages')"
+RUN python -c "import sys; sys.path[:0]=['/app/mcp-server','/app/voice-agent']; import customers, knowledge, events, callers, broadcasts, lookup, connect_venues, changerequests, qotd, fomo, personal_pages; print('mcp-server ok', customers.MODE_AI411, 'qotd+fomo+personal_pages')"
 CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8035"]
