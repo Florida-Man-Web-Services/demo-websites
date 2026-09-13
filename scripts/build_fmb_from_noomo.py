@@ -87,6 +87,8 @@ HIDE_CSS = """
 <style id="fmb-transfer">
 .home-awards-list,.home-news,a[href*="labs."],a[href*="insights"],a[href*="Labs"],a[target="_blank"].font-12-dark{display:none!important}
 .home-contact-form input[type="radio"]{display:none}
+.preloader,#transition{display:none!important;opacity:0!important;pointer-events:none!important;z-index:-1!important;clip-path:none!important}
+html,body,.index-page{overflow:auto!important;height:auto!important}
 </style>
 """
 
