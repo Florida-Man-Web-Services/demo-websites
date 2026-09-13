@@ -69,6 +69,22 @@ Application Assistant waitlist (`source=resume_web`).
 
 **Side effects:** writes `CUSTOMERS_PATH`. Status is `callback_queued` for
 `ai411_web` (default) and `resume_waitlist` for `resume_web`.
+`ai411_web` also places one Twilio outbound (`/voice/outbound`, no `slug`).
+`call_sid` is set when that dial succeeds; queue still lands if Twilio fails.
+
+---
+
+### `POST /api/onboarding/place-callback`
+
+Retry one already-queued website callback.
+
+**Request:** `{ "phone": "+1…" }`
+
+**Response 200:** `{ "ok": true, "sid": "CA…", "to": "+1…", "url": "https://voice…/voice/outbound" }`
+
+**Errors:** `400` unknown / resume waitlist / not `callback_queued|prospect|onboarding`.
+
+Does **not** pass `?slug=` (that would force sales).
 
 ---
 
@@ -125,7 +141,8 @@ All require valid `X-Twilio-Signature` when validation is on.
 | Method | Path | Role |
 |--------|------|------|
 | POST | `/voice/inbound` | Inbound call TwiML |
-| POST | `/voice/outbound?slug=` | Outbound TwiML for dialer |
+| POST | `/voice/outbound` | Onboarding callback TwiML (no slug) |
+| POST | `/voice/outbound?slug=` | Sales outbound TwiML (`call.py`) |
 | POST | `/voice/turn` | Pipeline STT turn |
 | POST | `/voice/status` | Call completed → flush transcript |
 | WS | `/voice/stream` | Grok-realtime media |

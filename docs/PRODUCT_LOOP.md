@@ -91,13 +91,14 @@ AGENT_MODE=unified        # AI411 + owner-by-caller-ID
 ```
 
 4. Registry: `status=callback_queued`, phone normalized to E.164.
-5. Response includes `voice_number` for display.
+5. Voice places **one** Twilio outbound to that number (`/voice/outbound` with **no** `slug` — onboarding, not sales). Response includes `voice_number` and `call_sid` when the dial succeeds.
+6. Ops retry: `POST /api/onboarding/place-callback` `{ "phone": "+1…" }` (queued website callbacks only; never `resume_web`).
 
 **CORS:** `CORS_ALLOW_ORIGINS` includes `https://ai411.floridamanweb.online`.
 
 ### Step B — Onboarding call
 
-1. Human or dialer places/receives call; with `auto`, mode = **onboarding**.
+1. The register dialer (or inbound from that CID) connects; with `auto`, mode = **onboarding**. Sales `call.py` (`?slug=`) is **not** this path.
 2. Agent tools (`voice-agent/onboarding.py`):
 
 | Tool | Effect |

@@ -347,6 +347,7 @@ automation rolls out the `voice-agent` Deployment in `theswamp`
 | Method | Path |
 |--------|------|
 | POST | `/api/onboarding/register` |
+| POST | `/api/onboarding/place-callback` |
 | GET | `/api/onboarding/customers` |
 | POST | `/api/billing/mark-paid` |
 

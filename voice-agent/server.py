@@ -359,18 +359,54 @@ def voice_inbound(CallSid: str = Form(...), From: str = Form("")):
 
 
 @app.post("/voice/outbound", dependencies=_SIGNED)
-def voice_outbound(slug: str, CallSid: str = Form(...), To: str = Form("")):
-    business = by_slug(slug)
-    if business is None:
-        vr = VoiceResponse()
-        vr.hangup()
-        log.error("outbound call %s: unknown slug %s", CallSid, slug)
-        return Response(content=str(vr), media_type="application/xml")
-    log.info("outbound call %s to %s (%s)", CallSid, To, business.name)
+def voice_outbound(
+    CallSid: str = Form(...),
+    To: str = Form(""),
+    slug: str = "",
+):
+    """Outbound TwiML.
+
+    With ?slug= — sales campaign (call.py). Without slug — consented
+    onboarding callback; AGENT_MODE=auto routes from the customer registry.
+    """
+    slug = (slug or "").strip()
+    if slug:
+        business = by_slug(slug)
+        if business is None:
+            vr = VoiceResponse()
+            vr.hangup()
+            log.error("outbound call %s: unknown slug %s", CallSid, slug)
+            return Response(content=str(vr), media_type="application/xml")
+    else:
+        business = by_phone(To) or UNKNOWN_BUSINESS
+        try:
+            cust = _customers_mod().get(To) or {}
+        except HTTPException:
+            cust = {}
+        if cust.get("business_name") and (
+            not business.name or business.name == "your business"
+        ):
+            business = Business(
+                name=cust.get("business_name") or business.name,
+                category=cust.get("category") or business.category,
+                phone=cust.get("phone") or To,
+                demo_url=cust.get("demo_url") or "",
+                slug=cust.get("slug") or "",
+            )
+    log.info(
+        "outbound call %s to %s (%s) slug=%s",
+        CallSid,
+        To,
+        business.name,
+        slug or "-",
+    )
+    outbound_slug = slug or None
     if config.VOICE_BACKEND == "grok-realtime":
-        _prime_xai(CallSid, business, "outbound", To, slug=slug)
-        return _twiml_stream("outbound", To, slug=slug)
-    state = _make_state(CallSid, business, "outbound", To, outbound_slug=slug)
+        _prime_xai(CallSid, business, "outbound", To, slug=outbound_slug or "")
+        return _twiml_stream("outbound", To, slug=outbound_slug or "")
+    state = _make_state(
+        CallSid, business, "outbound", To, outbound_slug=outbound_slug
+    )
     CALLS[CallSid] = state
     return _twiml_turn(state, run_turn(state, None))
 
@@ -665,12 +701,45 @@ def api_onboard_register(body: OnboardRegisterIn):
     )
     if not result.get("ok"):
         raise HTTPException(status_code=400, detail=result.get("error") or "bad request")
+    src = (body.source or "ai411_web").strip() or "ai411_web"
+    call_sid = ""
+    if src != "resume_web":
+        try:
+            from callback_dial import place_onboarding_callback
+
+            dial = place_onboarding_callback(body.phone)
+            if dial.get("ok"):
+                call_sid = dial.get("sid") or ""
+            else:
+                log.warning(
+                    "callback queued but dial skipped: %s", dial.get("error")
+                )
+        except Exception as e:  # noqa: BLE001 — form must still succeed
+            log.exception("callback dial failed after register: %s", e)
     return {
         "ok": True,
         "message": register_message(body.source),
         "customer": result.get("customer"),
         "voice_number": getattr(config, "PUBLIC_VOICE_NUMBER", "") or config.TWILIO_PHONE_NUMBER,
+        "call_sid": call_sid,
     }
+
+
+class PlaceCallbackIn(BaseModel):
+    phone: str
+
+
+@app.post("/api/onboarding/place-callback")
+def api_place_callback(body: PlaceCallbackIn):
+    """Ops: place one consented onboarding callback (already queued)."""
+    from callback_dial import place_onboarding_callback
+
+    result = place_onboarding_callback(body.phone)
+    if not result.get("ok"):
+        raise HTTPException(
+            status_code=400, detail=result.get("error") or "cannot place callback"
+        )
+    return result
 
 
 @app.get("/api/onboarding/customers")
