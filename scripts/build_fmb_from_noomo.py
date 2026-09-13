@@ -186,6 +186,28 @@ def main() -> None:
         if "Salesforce" in t or "Red Bull" in t or "noomoagency" in t.lower():
             leftover.append(str(html.relative_to(DEST)))
     print("leftover_brand_files", leftover[:20], "count", len(leftover))
+    fetch_missing_nuxt_css()
+
+
+def fetch_missing_nuxt_css() -> None:
+    """Wget did not capture Nuxt CSS chunks that entry.js modulepreloads."""
+    nuxt = DEST / "_nuxt"
+    on_disk = {p.name for p in nuxt.iterdir()}
+    pat = re.compile(r"(index\.[a-f0-9]{8}\.css)")
+    need = set()
+    for p in nuxt.glob("*.js"):
+        t = p.read_text(encoding="utf-8", errors="replace")
+        need.update(pat.findall(t))
+    for name in sorted(need):
+        if name in on_disk:
+            continue
+        url = f"https://noomoagency.com/_nuxt/{name}"
+        dest = nuxt / name
+        try:
+            fetch(url, dest)
+            print("nuxt-css", name, dest.stat().st_size)
+        except Exception as e:
+            print("nuxt-css-fail", name, type(e).__name__)
 
 
 if __name__ == "__main__":
