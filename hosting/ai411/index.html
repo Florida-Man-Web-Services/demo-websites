@@ -671,6 +671,13 @@
       const API = window.AI411_API
         || form.getAttribute("data-api")
         || (voiceBase + "/api/onboarding/register");
+      const CALLBACK_ERROR_MESSAGE =
+        "We couldn't register your request right now. Please try again in a moment.";
+
+      function showError(target, message) {
+        target.className = "msg err";
+        target.textContent = message;
+      }
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -691,16 +698,16 @@
           });
           const data = await r.json().catch(() => ({}));
           if (!r.ok || data.ok === false) {
-            throw new Error(data.detail || data.error || data.message || ("HTTP " + r.status));
+            showError(msg, CALLBACK_ERROR_MESSAGE);
+            return;
           }
           const n = data.voice_number || "";
           msg.className = "msg ok";
           msg.textContent = (data.message || "You're on the list.")
             + (n ? (" Our number: " + n + ".") : "");
           form.reset();
-        } catch (err) {
-          msg.className = "msg err";
-          msg.textContent = "Could not register: " + (err && err.message ? err.message : err);
+        } catch {
+          showError(msg, CALLBACK_ERROR_MESSAGE);
         } finally {
           btn.disabled = false;
         }
@@ -711,6 +718,8 @@
       const ppBtn = document.getElementById("pp_submit");
       const PP_API = window.AI411_PERSONAL_PAGE_API
         || (voiceBase + "/api/personal-pages/opt-in");
+      const PERSONAL_PAGE_ERROR_MESSAGE =
+        "We couldn't create your page right now. Please try again in a moment.";
 
       ppForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -736,16 +745,25 @@
           });
           const data = await r.json().catch(() => ({}));
           if (!r.ok || data.ok === false) {
-            throw new Error(data.detail || data.error || data.message || ("HTTP " + r.status));
+            showError(ppMsg, PERSONAL_PAGE_ERROR_MESSAGE);
+            return;
           }
           ppMsg.className = "msg ok";
-          const url = data.url || "";
-          ppMsg.innerHTML = (data.message || "You're opted in.")
-            + (url ? (' <a href="' + url + '" target="_blank" rel="noopener">Open your page</a>.') : "");
+          ppMsg.textContent = data.message || "You're opted in.";
+          const url = typeof data.url === "string" && /^https?:\/\//i.test(data.url)
+            ? data.url
+            : "";
+          if (url) {
+            const link = document.createElement("a");
+            link.href = url;
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.textContent = "Open your page";
+            ppMsg.append(" ", link, ".");
+          }
           ppForm.reset();
-        } catch (err) {
-          ppMsg.className = "msg err";
-          ppMsg.textContent = "Could not create page: " + (err && err.message ? err.message : err);
+        } catch {
+          showError(ppMsg, PERSONAL_PAGE_ERROR_MESSAGE);
         } finally {
           ppBtn.disabled = false;
         }
