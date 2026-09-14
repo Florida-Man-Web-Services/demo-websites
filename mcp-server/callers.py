@@ -412,15 +412,10 @@ def forget_profile(phone: str) -> dict:
     try:
         with _lock:
             profiles = _load_store()
-            if key not in profiles:
-                return {
-                    "forgotten": True,
-                    "phone_e164": key,
-                    "existed": False,
-                    "message": "no profile on file — nothing to delete",
-                }
-            del profiles[key]
-            _save_store(profiles)
+            existed = key in profiles
+            if existed:
+                del profiles[key]
+                _save_store(profiles)
         # Best-effort: clear FOMO interests + personal page for this phone.
         try:
             import fomo as fomo_mod  # type: ignore
@@ -434,6 +429,13 @@ def forget_profile(phone: str) -> dict:
             pp_mod.clear_for_phone(key)
         except Exception:  # noqa: BLE001
             pass
+        if not existed:
+            return {
+                "forgotten": True,
+                "phone_e164": key,
+                "existed": False,
+                "message": "no profile on file — nothing to delete",
+            }
         return {
             "forgotten": True,
             "phone_e164": key,
