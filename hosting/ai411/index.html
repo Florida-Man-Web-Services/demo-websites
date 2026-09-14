@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gainesville AI 411 — Free demos &amp; personal pages</title>
-  <meta name="description" content="Gainesville AI 411. Free business demo website callback, or opt in to a free personal page rebuilt daily from what AI 411 knows about you." />
+  <title>Gainesville AI 411 — Business demos, directory &amp; personal pages</title>
+  <meta name="description" content="Start with a free Gainesville business demo callback. Call AI 411 for local events and businesses, or opt in to a free personal page." />
   <meta name="theme-color" content="#07110e" />
   <link rel="canonical" href="https://ai411.floridamanweb.online/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Gainesville AI 411" />
-  <meta property="og:title" content="Gainesville AI 411 — Free demos &amp; personal pages" />
-  <meta property="og:description" content="Local voice AI for events and businesses. Request a free demo callback, or opt in to a free personal page." />
+  <meta property="og:title" content="Gainesville AI 411 — Business demos, directory &amp; personal pages" />
+  <meta property="og:description" content="Start with a free Gainesville business demo callback. Call AI 411 for local events and businesses, or opt in to a free personal page." />
   <meta property="og:url" content="https://ai411.floridamanweb.online/" />
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -206,6 +206,33 @@
     }
     .lead strong { color: var(--ink); font-weight: 600; }
 
+    .directory-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin: 0 0 1.15rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(240, 180, 41, 0.25);
+      border-left: 3px solid var(--citrus);
+      border-radius: var(--radius);
+      background: rgba(240, 180, 41, 0.07);
+    }
+    .directory-note .path-kicker {
+      color: var(--citrus);
+      margin-bottom: 0.4rem;
+    }
+    .directory-note h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+      line-height: 1.2;
+      margin: 0 0 0.35rem;
+    }
+    .directory-note p {
+      color: var(--muted);
+      margin: 0;
+      max-width: 65ch;
+    }
+
     .path-grid {
       display: grid;
       gap: 1.15rem;
@@ -213,9 +240,9 @@
     }
     @media (min-width: 820px) {
       .path-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1.25fr) minmax(17rem, 0.75fr);
         gap: 1.35rem;
-        align-items: stretch;
+        align-items: start;
       }
     }
 
@@ -240,6 +267,19 @@
     }
     .path-pp {
       border-top: 3px solid var(--citrus);
+      background: rgba(12, 25, 20, 0.72);
+      box-shadow: none;
+    }
+
+    .path-biz .path-kicker::after {
+      content: "Start here";
+      color: var(--ink);
+      background: rgba(46, 196, 166, 0.12);
+      border: 1px solid rgba(46, 196, 166, 0.24);
+      border-radius: 999px;
+      padding: 0.2rem 0.5rem;
+      letter-spacing: 0.04em;
+      margin-left: 0.15rem;
     }
 
     .path-kicker {
@@ -513,20 +553,27 @@
 
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
-        <h1 id="hero-title">Group chat can’t plan. <em>This number can.</em></h1>
+        <h1 id="hero-title">A better first step for your Gainesville business. <em>Start with a demo.</em></h1>
         <p class="lead">
-          <strong>A411 here.</strong> Call for Gainesville events and businesses —
-          or use the forms below for a free business demo callback, or a free personal page
-          built from what AI 411 already knows about you. Personal pages stay off until you opt in.
+          <strong>Business owners: start here.</strong> Request a free demo callback and we’ll use one short AI call
+          to learn what your business needs. Personal pages are a separate, optional path below.
         </p>
       </section>
 
+      <section class="directory-note" aria-labelledby="directory-title">
+        <div>
+          <div class="path-kicker">Path · Directory</div>
+          <h2 id="directory-title">Looking for a Gainesville business or event?</h2>
+          <p>Call AI 411 and ask for the local directory. You can also ask about events, then return here when you want a business demo.</p>
+        </div>
+      </section>
+
       <div class="path-grid">
-        <section class="path path-biz" aria-labelledby="form-title">
+        <section class="path path-biz" id="business-demo" aria-labelledby="form-title">
           <div class="path-kicker">Path · Business</div>
           <h2 id="form-title">Free demo website callback</h2>
-          <p>We’ll call from Florida Man Web Services. Standard rates may apply. Hang up anytime.</p>
-          <form id="cb-form">
+          <p id="business-expectation">We’ll call from Florida Man Web Services. The first call is a short AI conversation about your business and demo. Standard rates may apply; hang up anytime.</p>
+          <form id="cb-form" aria-describedby="business-expectation">
             <label for="phone">Mobile phone number</label>
             <div class="phone-wrap">
               <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
@@ -536,14 +583,15 @@
             <input id="business_name" name="business_name" type="text" placeholder="Cool Cafe" autocomplete="organization" />
             <label for="email">Email for the demo link (optional)</label>
             <input id="email" name="email" type="email" placeholder="you@business.com" autocomplete="email" />
-            <button type="submit" id="submit" class="primary">Call me to design my free demo</button>
+            <button type="submit" id="submit" class="primary">Start my free business demo</button>
             <div id="msg" class="msg" role="status" aria-live="polite"></div>
           </form>
+          <p class="fine">Missed the call? Call AI 411 back and say you’re returning for your business demo.</p>
         </section>
 
-        <section class="path path-pp" aria-labelledby="pp-title">
-          <div class="path-kicker">Path · Personal</div>
-          <h2 id="pp-title">Free personal page (opt-in)</h2>
+        <section class="path path-pp" id="personal-page" aria-labelledby="pp-title">
+          <div class="path-kicker">Optional path · Personal</div>
+          <h2 id="pp-title">Prefer a personal page?</h2>
           <p>
             A simple public page from interests you’ve shared — not your phone number.
             Rebuilds about once a day. Take it down anytime: call AI 411 and say “take my page down.”
@@ -578,13 +626,13 @@
 
       <section class="how" aria-labelledby="how-title">
         <div class="how-head">
-          <h2 id="how-title">How the free demo works</h2>
-          <span>Four steps · optional page</span>
+          <h2 id="how-title">What happens after you start</h2>
+          <span>One short AI call · optional page</span>
         </div>
         <ol class="steps">
           <li>
             <span class="n" aria-hidden="true">1</span>
-            <div><strong>Onboarding call</strong>Open-ended interview about your business and website needs.</div>
+            <div><strong>One short AI call</strong>Answer a few questions about your business and website needs.</div>
           </li>
           <li>
             <span class="n" aria-hidden="true">2</span>
@@ -592,7 +640,7 @@
           </li>
           <li>
             <span class="n" aria-hidden="true">3</span>
-            <div><strong>Sales call with your link</strong>See the demo; pay via Stripe only if you want it live.</div>
+            <div><strong>Review the demo</strong>See the link and decide whether you want to continue.</div>
           </li>
           <li>
             <span class="n" aria-hidden="true">4</span>
@@ -600,7 +648,7 @@
           </li>
           <li>
             <span class="n star" aria-hidden="true">★</span>
-            <div><strong>Optional personal page</strong>Opt in above or say “make me a page” on AI 411 — free, ~24h refresh, removable anytime.</div>
+            <div><strong>Optional personal page</strong>Opt in above or say “make me a page” on AI 411 — free, refreshed about once a day, removable anytime.</div>
           </li>
         </ol>
       </section>
