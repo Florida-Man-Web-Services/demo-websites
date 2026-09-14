@@ -12,7 +12,7 @@ There are three parity/security findings:
 
 1. **Documentation drift (medium):** `docs/PRODUCT_LOOP.md` and `docs/OPS_CLUSTER.md` still describe production as pinned to `AGENT_MODE=ai411` and an image that only accepts `sales|ai411`; the live `/health` response reports `agent_mode=auto`.
 2. **Public registry exposure (high):** unauthenticated `GET https://voice.flmanbiosci.net/api/onboarding/customers` returned HTTP 200 and six customer rows. The route's source comment says it must be protected at the edge, but this audit found no edge protection. The response includes registry metadata beyond a simple count/status summary (for example IDs, phone-related fields, slugs, timestamps, and voice-auth metadata). No customer values are reproduced in this report.
-3. **Landing deployment lag (medium):** after fetching `origin/main` at audit time, the repository's current `hosting/ai411/index.html` was 25,131 bytes with SHA-256 `9878e22c047746f09e5c64f93ca8e93f25447f7f90e14acac8a7a4b25d7de0a2`, while the deployed curl body remained 23,299 bytes with SHA-256 `00920bfe5741cde5541e39ada7db8b1e5593eb7d91f0e78009963df1e9e9f58e` (the previous page version). This may be normal CI/image propagation lag, but the live page was not current with `origin/main` during the audit.
+3. **Landing deployment lag (medium):** after fetching `origin/main` at audit time, the repository's current `hosting/ai411/index.html` was 25,550 bytes with SHA-256 `0b9db3a73c6f0602f97ca2c6bbeaecd9b6d4942389fb98cf1f9a32aff0e4e34a`, while the deployed application body remained 25,131 bytes with SHA-256 `9878e22c047746f09e5c64f93ca8e93f25447f7f90e14acac8a7a4b25d7de0a2` (the pre-`612ad5e` page version). This may be normal CI/image propagation lag, but the live page was not current with `origin/main` during the audit.
 
 A live valid signup-to-Twilio callback was deliberately not exercised because it would persist customer data and trigger an outbound call. Therefore, the complete production mutation/dial path remains unverified by this controlled audit.
 
@@ -24,15 +24,15 @@ All requests below were read-only except the empty JSON validation probe, which 
 
 - `GET https://ai411.floridamanweb.online/` returned HTTP 302 to `/ai411/`.
 - `GET https://ai411.floridamanweb.online/ai411/` returned HTTP 200, `text/html`.
-- A curl fetch of the deployed `/ai411/` body was 23,299 bytes with SHA-256 `00920bfe5741cde5541e39ada7db8b1e5593eb7d91f0e78009963df1e9e9f58e`.
-- The current checked-out `hosting/ai411/index.html` (after rebasing onto `origin/main` commit `db7257b`) is 25,131 bytes with SHA-256 `9878e22c047746f09e5c64f93ca8e93f25447f7f90e14acac8a7a4b25d7de0a2`. It contains the newer business-first copy and directory note from `db7257b`, which were absent from the live body. The deployed page therefore matches the previous source version, not the current repository version.
-- A browser-like request caused Cloudflare Insights to append one beacon script to the deployed body; the application HTML was otherwise the same as the 23,299-byte curl response. This explains the 23,666-byte response from that request and is not the source of the repository/live content difference.
+- A curl fetch of the deployed `/ai411/` body was 25,131 bytes with SHA-256 `9878e22c047746f09e5c64f93ca8e93f25447f7f90e14acac8a7a4b25d7de0a2`.
+- The current checked-out `hosting/ai411/index.html` (after rebasing onto `origin/main` commit `09e1b29`, which includes landing commit `612ad5e`) is 25,550 bytes with SHA-256 `0b9db3a73c6f0602f97ca2c6bbeaecd9b6d4942389fb98cf1f9a32aff0e4e34a`. It contains the newer sanitized form-error handling from `612ad5e`, which was absent from the live body. The deployed page therefore matches the pre-`612ad5e` source version, not the current repository version.
+- A later request with the current Cloudflare path returned 25,498 bytes with SHA-256 `adb8b430472fb174aa162aa67c093242f5e1bd71ccd0fd8eda622250f2f89888`; it contains the same 25,131-byte application body plus a 367-byte Cloudflare Insights beacon. The beacon is not the source of the repository/live application difference.
 - The deployed form contains `id="cb-form"`. Its script sets the default voice base to `https://voice.flmanbiosci.net` and constructs `POST /api/onboarding/register` from that base. The payload fields are `phone`, `business_name`, `email`, and `source: "ai411_web"`.
 
 Repository mapping:
 
 - `hosting/Dockerfile:23-24` copies the landing to `/ai411/index.html`.
-- `hosting/ai411/index.html:635-676` defines the callback form submission and response handling in the current repository version. The deployed previous version has the same callback logic at the corresponding script block.
+- `hosting/ai411/index.html:666-705` defines the callback form submission and response handling in the current repository version. The deployed previous version has the same endpoint/payload logic at the corresponding script block but lacks the newer sanitized error handling.
 
 ### Voice API and callback route surface
 
@@ -103,8 +103,9 @@ Results from fresh runs:
 - `voice-agent/tests/test_callback_dial.py -k 'not test_callback_twiml_url'`: **7 passed, 1 deselected**.
 - `voice-agent/tests/test_customer_routing.py`: **10 passed**.
 - `voice-agent/tests/test_agent_mode.py`: **7 passed**.
+- `voice-agent/tests/test_onboarding.py`: **8 passed**.
 
-The combined invocation of all three files produced 22 passes and 3 failures because the first callback test imports `config` before its fixture sets environment variables; later server imports then see the stale module and fail `config.require(...)`. Running the callback tests with clean/controlled module state passes. This is a local test-order/module-cache issue, not evidence of a deployed callback failure, and was not changed during this read-only audit.
+An earlier combined invocation of the three original files produced 22 passes and 3 failures because the first callback test imports `config` before its fixture sets environment variables; later server imports then see the stale module and fail `config.require(...)`. Running each test file with clean/controlled module state passes. This is a local test-order/module-cache issue, not evidence of a deployed callback failure, and was not changed during this read-only audit.
 
 ## Acceptance checklist
 
