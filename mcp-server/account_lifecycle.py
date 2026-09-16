@@ -81,6 +81,7 @@ _failure_injector = None
 _failure_points: set[str] = set()
 _blocked_accounts: set[str] = set()
 _blocked_accounts_lock = threading.Lock()
+_phone_apply_lock = threading.RLock()
 FAILURE_POINT: str | None = None
 
 
@@ -298,6 +299,8 @@ def _safe_result(state: str, **fields: Any) -> dict[str, Any]:
     for key, value in fields.items():
         if key not in _SAFE_FIELD_NAMES or value is None:
             continue
+        if key == "phone_ref" and not _validate_phone_ref(value):
+            continue
         if isinstance(value, (str, int, bool)):
             result[key] = value
     return result
@@ -400,10 +403,18 @@ def _validate_ref(value: str) -> bool:
     return isinstance(value, str) and bool(_OPAQUE_REF_RE.fullmatch(value))
 
 
-def _validate_phone_ref(value: str) -> bool:
-    """Accept opaque refs with digits, but reject a raw numeric phone value."""
+def _validate_phone_ref(value: str | None) -> bool:
+    """Accept only the exact server-issued opaque phone-ref format."""
 
-    return _validate_ref(value) and bool(re.search(r"[A-Za-z]", value))
+    return isinstance(value, str) and bool(re.fullmatch(r"phone_[0-9a-f]{32}", value))
+
+
+def _phone_payload_digest(action: str, phone_ref: str | None = None) -> str | None:
+    if action == "trusted_phone_add":
+        return hashlib.sha256(b"trusted_phone_add").hexdigest()
+    if action == "trusted_phone_remove" and _validate_phone_ref(phone_ref):
+        return hashlib.sha256(f"trusted_phone_remove\0{phone_ref}".encode()).hexdigest()
+    return None
 
 
 def _new_id(prefix: str) -> str:
@@ -695,10 +706,9 @@ def prepare_trusted_phone_add(*, ctx: AuthContext, idempotency_key: str) -> dict
         return guard
     if _is_account_blocked(_value(ctx, "account_id")):
         return _safe_result("pending_reconciliation", blocked=True)
-    if _account_has_registry_identity(_value(ctx, "account_id")):
-        auth = _authorize_registry_context(ctx, "trusted_phone_add")
-        if not auth.get("ok"):
-            return _denied(auth.get("code", "invalid_context"))
+    auth = _authorize_registry_context(ctx, "trusted_phone_add")
+    if not auth.get("ok"):
+        return _denied(auth.get("code", "invalid_context"))
     digest = hashlib.sha256(b"trusted_phone_add").hexdigest()
     return _create_operation(
         ctx=ctx,
@@ -719,15 +729,14 @@ def prepare_trusted_phone_remove(*, ctx: AuthContext, phone_ref: str, idempotenc
         return _denied("invalid_phone_ref")
     if _is_account_blocked(_value(ctx, "account_id")):
         return _safe_result("pending_reconciliation", blocked=True)
-    if _account_has_registry_identity(_value(ctx, "account_id")):
-        auth = _authorize_registry_context(ctx, "trusted_phone_remove")
-        if not auth.get("ok"):
-            return _denied(auth.get("code", "invalid_context"))
-        refs = customers.lifecycle_phone_refs(_value(ctx, "account_id"), ctx=ctx)
-        if not refs.get("ok"):
-            return _denied(refs.get("code", "account_unavailable"))
-        if not any(item.get("phone_ref") == phone_ref for item in refs.get("phones", [])):
-            return _denied("not_found")
+    auth = _authorize_registry_context(ctx, "trusted_phone_remove")
+    if not auth.get("ok"):
+        return _denied(auth.get("code", "invalid_context"))
+    refs = customers.lifecycle_phone_refs(_value(ctx, "account_id"), ctx=ctx)
+    if not refs.get("ok"):
+        return _denied(refs.get("code", "account_unavailable"))
+    if not any(item.get("phone_ref") == phone_ref for item in refs.get("phones", [])):
+        return _denied("not_found")
     digest = hashlib.sha256(f"trusted_phone_remove\0{phone_ref}".encode()).hexdigest()
     return _create_operation(
         ctx=ctx,
@@ -1061,13 +1070,16 @@ def _finalize_phone_operation(
         _fail_at("before_audit_finalization")
         conn.execute("BEGIN IMMEDIATE")
         row = conn.execute(
-            "SELECT payload_digest FROM operations WHERE operation_id = ? AND account_id = ?",
+            "SELECT * FROM operations WHERE operation_id = ? AND account_id = ?",
             (operation_id, account_id),
         ).fetchone()
         if row is None:
             _rollback_safely(conn)
             _block_account(account_id)
             return _safe_result("pending_reconciliation", operation_id=operation_id, blocked=True)
+        if row["state"] in FINAL_OPERATION_STATES:
+            conn.execute("COMMIT")
+            return _operation_result(row)
         conn.execute(
             "UPDATE operations SET state = ?, receipt_json = ?, updated_at = ? WHERE operation_id = ? AND account_id = ?",
             (state, json.dumps(receipt, sort_keys=True), _now_iso(), operation_id, account_id),
@@ -1089,6 +1101,9 @@ def _finalize_phone_operation(
         return _safe_result("pending_reconciliation", operation_id=operation_id, blocked=True)
     finally:
         conn.close()
+    if state not in FINAL_OPERATION_STATES:
+        _block_account(account_id)
+        return _safe_result("pending_reconciliation", operation_id=operation_id, blocked=True)
     _unblock_account(account_id)
     row = _phone_operation_row(operation_id)
     return _operation_result(row) if row is not None else _safe_result("pending_reconciliation", operation_id=operation_id)
@@ -1106,6 +1121,9 @@ def _registry_phone_effect(
 ) -> dict[str, Any]:
     """Validate and, for valid operations, apply a registry phone mutation."""
 
+    registry_check = customers.validate_lifecycle_registry(data)
+    if not registry_check["ok"]:
+        return {"ok": False, "code": registry_check["code"]}
     rows = customers._lifecycle_account_rows(data, account_id)  # noqa: SLF001
     if len(rows) != 1 or not customers.is_owner_write_status(rows[0][1].get("status")):
         return {"ok": False, "code": "account_unavailable"}
@@ -1143,9 +1161,7 @@ def _registry_phone_effect(
         if len(same_account) > 1:
             return {"ok": False, "code": "ambiguous_phone_membership"}
         if same_account:
-            if reconciling and current_revision != expected_revision:
-                return {"ok": False, "code": "stale_auth_revision"}
-            if current_revision < expected_revision:
+            if current_revision != expected_revision:
                 return {"ok": False, "code": "stale_auth_revision"}
             return {
                 "ok": True,
@@ -1249,7 +1265,7 @@ def _registry_phone_effect_matches(
             1 for _, member_row, member_phone, _ in memberships
             if member_row.get("account_id") == account_id and member_phone == phone
         )
-        return count == 1 and (revision == expected_revision + 1 if changed else revision >= expected_revision)
+        return count == 1 and (revision == expected_revision + 1 if changed else revision == expected_revision)
     if action == "trusted_phone_remove" and phone_ref:
         count = sum(
             1
@@ -1270,24 +1286,60 @@ def apply_trusted_phone_operation(
     expected_auth_revision: int,
     _reconciling: bool = False,
 ) -> dict[str, Any]:
+    """Serialize phone applies so one operation has one durable receipt."""
+
+    with _phone_apply_lock:
+        return _apply_trusted_phone_operation(
+            operation_id=operation_id,
+            account_id=account_id,
+            action=action,
+            phone_e164=phone_e164,
+            expected_auth_revision=expected_auth_revision,
+            _reconciling=_reconciling,
+        )
+
+
+def _apply_trusted_phone_operation(
+    *,
+    operation_id: str,
+    account_id: str,
+    action: str,
+    phone_e164: str,
+    expected_auth_revision: int,
+    _reconciling: bool = False,
+) -> dict[str, Any]:
     """Apply a prepared phone operation under the process-wide registry lock."""
 
     if not _enabled():
         return _denied("feature_disabled")
-    if action not in _PHONE_ACTIONS or not _validate_ref(operation_id):
+    if not isinstance(action, str) or action not in _PHONE_ACTIONS or not _validate_ref(operation_id):
         return _denied("invalid_context")
-    if not isinstance(account_id, str) or not account_id.strip() or isinstance(expected_auth_revision, bool):
+    if not isinstance(account_id, str) or not account_id.strip() or type(expected_auth_revision) is not int:
         return _denied("invalid_context")
     row = _phone_operation_row(operation_id)
     if row is None or row["account_id"] != account_id or row["action"] != action:
         return _denied("not_found")
-    if row["state"] in FINAL_OPERATION_STATES:
-        return _operation_result(row)
-    if not _reconciling and _is_account_blocked(account_id):
-        return _safe_result("pending_reconciliation", operation_id=operation_id, blocked=True)
+    if row["expected_auth_revision"] != expected_auth_revision:
+        return _denied("stale_auth_revision")
     try:
         intent = json.loads(row["payload_json"] or "{}")
     except (TypeError, ValueError):
+        return _denied("operation_integrity_error")
+    prepared_ref = intent.get("phone_ref") if action == "trusted_phone_remove" else None
+    expected_digest = _phone_payload_digest(action, prepared_ref)
+    if row["payload_digest"] != expected_digest:
+        return _denied("operation_integrity_error")
+    if action == "trusted_phone_add" and intent.get("action") != "trusted_phone_add":
+        return _denied("operation_integrity_error")
+    if action == "trusted_phone_add" and row["phone_ref"] is not None:
+        return _denied("operation_integrity_error")
+    if action == "trusted_phone_remove" and (
+        row["phone_ref"] != prepared_ref or not _validate_phone_ref(prepared_ref)
+    ):
+        return _denied("operation_integrity_error")
+    if row["state"] in FINAL_OPERATION_STATES:
+        return _operation_result(row)
+    if not _reconciling and _is_account_blocked(account_id):
         return _safe_result("pending_reconciliation", operation_id=operation_id, blocked=True)
     phone_ref = intent.get("phone_ref") if action == "trusted_phone_remove" else None
     target = _validate_e164(phone_e164) if action == "trusted_phone_add" else None
@@ -1312,11 +1364,7 @@ def apply_trusted_phone_operation(
                 reconciling=_reconciling,
             )
             if not effect.get("ok"):
-                if _reconciling and effect.get("code") in {
-                    "stale_auth_revision",
-                    "ambiguous_phone_membership",
-                    "not_found",
-                }:
+                if _reconciling:
                     _block_account(account_id)
                     return _safe_result("pending_reconciliation", operation_id=operation_id, blocked=True)
                 receipt = _phone_receipt(
@@ -1375,10 +1423,10 @@ def apply_trusted_phone_operation(
     )
 
 
-def _pending_operation_rows(account_id: str | None = None) -> list[sqlite3.Row]:
+def _pending_operation_rows(account_id: str | None = None) -> list[sqlite3.Row] | None:
     conn = _try_open_store()
     if conn is None:
-        return []
+        return None
     try:
         if account_id:
             return conn.execute(
@@ -1403,8 +1451,10 @@ def _reconcile_exact_pending(row: sqlite3.Row, intent: dict[str, Any]) -> dict[s
         return None
     with customers._lock:  # noqa: SLF001
         data = customers._read()  # noqa: SLF001
+        if not customers.validate_lifecycle_registry(data).get("ok"):
+            return None
         rows = customers._lifecycle_account_rows(data, account_id)  # noqa: SLF001
-        if len(rows) != 1:
+        if len(rows) != 1 or not customers.is_owner_write_status(rows[0][1].get("status")):
             return None
         revision = rows[0][1].get("auth_revision")
         memberships = customers._lifecycle_phone_memberships(data)  # noqa: SLF001
@@ -1448,10 +1498,49 @@ def _reconcile_exact_pending(row: sqlite3.Row, intent: dict[str, Any]) -> dict[s
     )
 
 
+def _pending_recovery_is_well_formed(row: sqlite3.Row, intent: Any) -> bool:
+    """Reject malformed/unavailable recovery inputs without replaying them."""
+
+    if not isinstance(intent, dict) or row["action"] not in _PHONE_ACTIONS:
+        return False
+    action = row["action"]
+    if action == "trusted_phone_add":
+        if _validate_e164(intent.get("phone_e164")) is None:
+            return False
+        if intent.get("action") != action:
+            return False
+        expected_digest = _phone_payload_digest(action)
+    else:
+        phone_ref = intent.get("phone_ref")
+        if not _validate_phone_ref(phone_ref) or row["phone_ref"] != phone_ref:
+            return False
+        expected_digest = _phone_payload_digest(action, phone_ref)
+    if row["payload_digest"] != expected_digest:
+        return False
+    with customers._lock:  # noqa: SLF001
+        data = customers._read()  # noqa: SLF001
+        if not customers.validate_lifecycle_registry(data).get("ok"):
+            return False
+        account_rows = customers._lifecycle_account_rows(data, row["account_id"])  # noqa: SLF001
+        if len(account_rows) != 1 or not customers.is_owner_write_status(account_rows[0][1].get("status")):
+            return False
+        revision = account_rows[0][1].get("auth_revision")
+        return isinstance(revision, int) and not isinstance(revision, bool)
+
+
 def reconcile_pending_operations(*, account_id: str | None = None, operation_id: str | None = None) -> dict[str, Any]:
+    """Serialize reconciliation with applies for stable operation receipts."""
+
+    with _phone_apply_lock:
+        return _reconcile_pending_operations(account_id=account_id, operation_id=operation_id)
+
+
+def _reconcile_pending_operations(*, account_id: str | None = None, operation_id: str | None = None) -> dict[str, Any]:
     """Resolve pending phone operations only after exact registry read-back."""
 
     rows = _pending_operation_rows(account_id)
+    if rows is None:
+        return {"ok": False, "state": "pending_reconciliation", "code": "reconciliation_unavailable"}
     if operation_id:
         rows = [row for row in rows if row["operation_id"] == operation_id]
         if not rows:
@@ -1460,18 +1549,24 @@ def reconcile_pending_operations(*, account_id: str | None = None, operation_id:
     for row in rows:
         try:
             intent = json.loads(row["payload_json"] or "{}")
-            result = _reconcile_exact_pending(row, intent)
-            if result is None:
-                phone = intent.get("phone_e164") or ""
-                result = apply_trusted_phone_operation(
-                    operation_id=row["operation_id"],
-                    account_id=row["account_id"],
-                    action=row["action"],
-                    phone_e164=phone,
-                    expected_auth_revision=row["expected_auth_revision"],
-                    _reconciling=True,
-                )
+            if not _pending_recovery_is_well_formed(row, intent):
+                _block_account(row["account_id"])
+                result = _safe_result("pending_reconciliation", operation_id=row["operation_id"], blocked=True)
+            else:
+                result = _reconcile_exact_pending(row, intent)
+                if result is None:
+                    result = apply_trusted_phone_operation(
+                        operation_id=row["operation_id"],
+                        account_id=row["account_id"],
+                        action=row["action"],
+                        phone_e164=intent.get("phone_e164", ""),
+                        expected_auth_revision=row["expected_auth_revision"],
+                        _reconciling=True,
+                    )
         except (TypeError, ValueError, KeyError):
+            _block_account(row["account_id"])
+            result = _safe_result("pending_reconciliation", operation_id=row["operation_id"], blocked=True)
+        if result.get("state") not in {"verified_success", "verified_noop", "pending_reconciliation"}:
             _block_account(row["account_id"])
             result = _safe_result("pending_reconciliation", operation_id=row["operation_id"], blocked=True)
         results.append(result)

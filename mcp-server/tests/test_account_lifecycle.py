@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import sqlite3
 from datetime import datetime, timedelta, timezone
@@ -10,6 +11,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 
 import account_lifecycle as lifecycle
+import customers
 
 
 @pytest.fixture
@@ -305,6 +307,15 @@ def test_corrupt_sqlite_returns_safe_failed_result(store, monkeypatch):
         raise sqlite3.DatabaseError("file is not a database")
 
     monkeypatch.setattr(lifecycle, "_open_store", raise_corrupt)
+    customers_path = store.parent / "customers.json"
+    customers_path.write_text("{}\n", encoding="utf-8")
+    monkeypatch.setenv("CUSTOMERS_PATH", str(customers_path))
+    importlib.reload(customers)
+    customers.upsert(
+        "+13525550100",
+        status="paid",
+        patch={"account_id": "acct-1", "auth_revision": 7},
+    )
     result = lifecycle.prepare_trusted_phone_add(
         ctx=context(action="trusted_phone_add"), idempotency_key="storage-1"
     )
@@ -365,11 +376,12 @@ def test_only_typed_auth_context_with_action_capability_can_mutate(store):
     assert result == {"ok": False, "state": "denied", "code": "invalid_context"}
 
 
-def test_digit_bearing_opaque_phone_ref_is_accepted(store):
+def test_unissued_phone_ref_is_rejected_without_echo(store):
     result = lifecycle.prepare_trusted_phone_remove(
         ctx=context(action="trusted_phone_remove"),
         phone_ref="phone_ref_42",
         idempotency_key="phone-remove-1",
     )
 
-    assert result["state"] == "awaiting_confirmation"
+    assert result == {"ok": False, "state": "denied", "code": "invalid_phone_ref"}
+    assert "phone_ref_42" not in str(result)

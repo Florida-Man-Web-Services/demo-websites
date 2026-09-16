@@ -94,7 +94,24 @@ def test_same_account_add_is_idempotent_without_revision_bump(registry):
     assert customers.get(primary)["auth_revision"] == 0
 
 
-def test_concurrent_same_account_add_serializes_to_success_and_noop(registry):
+def test_same_account_add_noop_rejects_a_newer_registry_revision(registry):
+    primary = "+13525550100"
+    destination = "+13525550102"
+    owner = customers.upsert(
+        primary, status="active_owner", patch={"trusted_phones": [destination], "auth_revision": 1}
+    )["customer"]
+    prepared = prepare(owner["account_id"], revision=1, key="newer-noop")
+    customers.upsert(primary, patch={"auth_revision": 2})
+    result = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=1,
+    )
+    assert result["state"] == "failed"
+    assert result["code"] == "stale_auth_revision"
+    assert customers.get(primary)["auth_revision"] == 2
+
+
+def test_concurrent_same_account_add_serializes_and_rejects_stale_second_prepare(registry):
     primary = "+13525550100"
     destination = "+13525550102"
     owner = customers.upsert(primary, status="active_owner")["customer"]
@@ -109,7 +126,8 @@ def test_concurrent_same_account_add_serializes_to_success_and_noop(registry):
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(apply, (first, second)))
-    assert {result["state"] for result in results} == {"verified_success", "verified_noop"}
+    assert {result["state"] for result in results} == {"verified_success", "failed"}
+    assert any(result.get("code") == "stale_auth_revision" for result in results)
     assert customers.get(primary)["auth_revision"] == 1
 
 
@@ -204,3 +222,80 @@ def test_successful_remove_invalidates_old_revision(registry):
     assert lifecycle.prepare_trusted_phone_add(
         ctx=ctx(owner["account_id"], revision=0), idempotency_key="old-proof"
     )["code"] == "stale_auth_revision"
+
+
+def test_apply_enforces_prepared_revision_even_when_caller_supplies_current_revision(registry):
+    primary = "+13525550100"
+    destination = "+13525550106"
+    owner = customers.upsert(primary, status="active_owner")["customer"]
+    prepared = prepare(owner["account_id"], key="prepared-revision")
+    customers.upsert(primary, patch={"auth_revision": 2})
+    result = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=2,
+    )
+    assert result == {"ok": False, "state": "denied", "code": "stale_auth_revision"}
+    assert destination not in customers.get(primary).get("trusted_phones", [])
+
+
+def test_apply_rejects_tampered_prepared_action_digest(registry):
+    primary = "+13525550100"
+    owner = customers.upsert(primary, status="active_owner")["customer"]
+    prepared = prepare(owner["account_id"], key="tampered-digest")
+    with lifecycle._connect(lifecycle._db_path()) as conn:
+        conn.execute(
+            "UPDATE operations SET payload_digest = ? WHERE operation_id = ?",
+            ("0" * 64, prepared["operation_id"]),
+        )
+    result = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164="+13525550106", expected_auth_revision=0,
+    )
+    assert result == {"ok": False, "state": "denied", "code": "operation_integrity_error"}
+    assert customers.get(primary).get("trusted_phones", []) == []
+
+
+def test_concurrent_same_operation_returns_one_stable_add_receipt(registry):
+    primary = "+13525550100"
+    destination = "+13525550106"
+    owner = customers.upsert(primary, status="active_owner")["customer"]
+    prepared = prepare(owner["account_id"], key="same-operation-add")
+
+    def apply_once(_):
+        return lifecycle.apply_trusted_phone_operation(
+            operation_id=prepared["operation_id"], account_id=owner["account_id"],
+            action="trusted_phone_add", phone_e164=destination, expected_auth_revision=0,
+        )
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        results = list(pool.map(apply_once, range(4)))
+    assert all(result == results[0] for result in results)
+    assert results[0]["state"] == "verified_success"
+    assert customers.get(primary)["auth_revision"] == 1
+
+
+def test_concurrent_remove_is_one_stable_receipt(registry):
+    primary = "+13525550100"
+    removable = "+13525550106"
+    survivor = "+13525550107"
+    owner = customers.upsert(primary, status="active_owner", patch={"trusted_phones": [removable, survivor]})["customer"]
+    refs = lifecycle.lifecycle_phone_refs(
+        owner["account_id"], ctx=ctx(owner["account_id"], action="lifecycle_phone_refs")
+    )
+    phone_ref = next(item["phone_ref"] for item in refs["phones"] if item["label"].endswith(removable[-4:]))
+    prepared = lifecycle.prepare_trusted_phone_remove(
+        ctx=ctx(owner["account_id"], action="trusted_phone_remove"),
+        phone_ref=phone_ref, idempotency_key="same-operation-remove",
+    )
+
+    def remove_once(_):
+        return lifecycle.apply_trusted_phone_operation(
+            operation_id=prepared["operation_id"], account_id=owner["account_id"],
+            action="trusted_phone_remove", phone_e164="", expected_auth_revision=0,
+        )
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        results = list(pool.map(remove_once, range(4)))
+    assert all(result == results[0] for result in results)
+    assert results[0]["state"] == "verified_success"
+    assert customers.get(primary)["trusted_phones"] == [survivor]

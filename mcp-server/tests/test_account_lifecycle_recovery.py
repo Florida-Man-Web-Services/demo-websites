@@ -90,3 +90,52 @@ def test_ambiguous_recovery_stays_blocked_and_never_reports_success(setup):
     assert blocked["state"] == "pending_reconciliation"
     assert blocked["ok"] is False
     assert "verified_success" not in str(recovered)
+
+
+def test_account_unavailable_recovery_stays_pending_and_blocks_mutations(setup):
+    registry, owner = setup
+    prepared = lifecycle.prepare_trusted_phone_add(
+        ctx=context(owner["account_id"]), idempotency_key="unavailable-1"
+    )
+    lifecycle.set_failure_point("before_registry_replacement")
+    pending = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164="+13525550102", expected_auth_revision=0,
+    )
+    assert pending["state"] == "pending_reconciliation"
+    lifecycle.set_failure_point(None)
+    customers.upsert("+13525550100", status="churned")
+    recovered = lifecycle.reconcile_pending_operations(
+        account_id=owner["account_id"], operation_id=prepared["operation_id"]
+    )
+    assert recovered["ok"] is False
+    assert recovered["state"] == "pending_reconciliation"
+    blocked = lifecycle.prepare_trusted_phone_add(
+        ctx=context(owner["account_id"]), idempotency_key="unavailable-2"
+    )
+    assert blocked["state"] == "pending_reconciliation"
+
+
+def test_malformed_recovery_stays_pending_without_raw_payload_echo(setup):
+    registry, owner = setup
+    prepared = lifecycle.prepare_trusted_phone_add(
+        ctx=context(owner["account_id"]), idempotency_key="malformed-1"
+    )
+    lifecycle.set_failure_point("before_registry_replacement")
+    pending = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164="+13525550102", expected_auth_revision=0,
+    )
+    assert pending["state"] == "pending_reconciliation"
+    lifecycle.set_failure_point(None)
+    with lifecycle._connect(lifecycle._db_path()) as conn:
+        conn.execute(
+            "UPDATE operations SET payload_json = ? WHERE operation_id = ?",
+            ("{malformed", prepared["operation_id"]),
+        )
+    recovered = lifecycle.reconcile_pending_operations(
+        account_id=owner["account_id"], operation_id=prepared["operation_id"]
+    )
+    assert recovered["ok"] is False
+    assert recovered["state"] == "pending_reconciliation"
+    assert "13525550102" not in str(recovered)

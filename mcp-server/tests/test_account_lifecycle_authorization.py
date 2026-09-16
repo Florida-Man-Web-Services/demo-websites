@@ -15,6 +15,7 @@ def registry(tmp_path, monkeypatch):
     path = tmp_path / "customers.json"
     path.write_text("{}\n", encoding="utf-8")
     monkeypatch.setenv("CUSTOMERS_PATH", str(path))
+    monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_ENABLED", "true")
     importlib.reload(customers)
     yield path
@@ -112,3 +113,40 @@ def test_phone_refs_are_opaque_and_masked(registry):
     assert result["ok"] is True
     assert all("phone_ref" in item and "••••" in item["label"] for item in result["phones"])
     assert primary not in encoded and trusted not in encoded
+
+
+def test_phone_prepare_requires_registry_identity_and_rejects_raw_refs(registry):
+    forged = make_context("acct_not_in_registry")
+    missing = lifecycle.prepare_trusted_phone_add(ctx=forged, idempotency_key="missing-account")
+    assert missing["state"] == "denied"
+    assert missing["code"] == "account_unavailable"
+
+    primary = "+13525550100"
+    owner = customers.upsert(primary, status="active_owner")["customer"]
+    raw_ref = "+13525550102"
+    rejected = lifecycle.prepare_trusted_phone_remove(
+        ctx=make_context(owner["account_id"], action="trusted_phone_remove"),
+        phone_ref=raw_ref,
+        idempotency_key="raw-ref",
+    )
+    assert rejected["state"] == "denied"
+    assert raw_ref not in str(rejected)
+
+
+def test_unrelated_duplicate_and_malformed_memberships_fail_closed(registry):
+    primary = "+13525550100"
+    other = "+13525550101"
+    duplicate = "+13525550102"
+    owner = customers.upsert(primary, status="active_owner")["customer"]
+    customers.upsert(other, status="active_owner", patch={"trusted_phones": [duplicate]})
+    customers.upsert("+13525550103", status="active_owner", patch={"trusted_phones": [duplicate]})
+    duplicate_result = lifecycle.prepare_trusted_phone_add(
+        ctx=make_context(owner["account_id"]), idempotency_key="duplicate-registry"
+    )
+    assert duplicate_result["code"] == "ambiguous_phone_membership"
+
+    customers.upsert(other, patch={"trusted_phones": ["not-a-phone"]})
+    malformed_result = lifecycle.prepare_trusted_phone_add(
+        ctx=make_context(owner["account_id"]), idempotency_key="malformed-registry"
+    )
+    assert malformed_result["code"] == "ambiguous_phone_membership"
