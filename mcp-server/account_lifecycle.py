@@ -1052,6 +1052,76 @@ def _phone_receipt(
     return receipt
 
 
+def _validate_terminal_phone_retry(
+    row: sqlite3.Row,
+    intent: Mapping[str, Any],
+    *,
+    phone_e164: str,
+    expected_auth_revision: int,
+) -> dict[str, Any]:
+    """Return a stored receipt only for a still-bound terminal retry."""
+
+    prepared_phone: str | None = None
+    if row["action"] == "trusted_phone_add":
+        prepared_phone = intent.get("phone_e164")
+        if not isinstance(prepared_phone, str) or _validate_e164(prepared_phone) != prepared_phone:
+            return _denied("operation_integrity_error")
+        if _validate_e164(phone_e164) != prepared_phone:
+            return _denied("operation_integrity_error")
+    try:
+        receipt = json.loads(row["receipt_json"] or "{}")
+    except (TypeError, ValueError):
+        return _denied("operation_integrity_error")
+    if not isinstance(receipt, dict):
+        return _denied("operation_integrity_error")
+    receipt_id = receipt.get("receipt_id")
+    new_auth_revision = receipt.get("new_auth_revision")
+    if (
+        receipt.get("operation_id") != row["operation_id"]
+        or receipt.get("action") != row["action"]
+        or not isinstance(receipt_id, str)
+        or not _validate_ref(receipt_id)
+        or type(new_auth_revision) is not int
+    ):
+        return _denied("operation_integrity_error")
+    with customers._lock:  # noqa: SLF001 - revalidate ownership at retry
+        data = customers._read()  # noqa: SLF001
+        registry_check = customers.validate_lifecycle_registry(data)
+        if not registry_check.get("ok"):
+            return _denied("account_unavailable")
+        account_rows = customers._lifecycle_account_rows(data, row["account_id"])  # noqa: SLF001
+        if len(account_rows) != 1 or not customers.is_owner_write_status(account_rows[0][1].get("status")):
+            return _denied("account_unavailable")
+        current_revision = account_rows[0][1].get("auth_revision")
+        if type(current_revision) is not int:
+            return _denied("account_unavailable")
+        if row["state"] in {"verified_success", "verified_noop"}:
+            changed = receipt.get("changed")
+            receipt_ref = receipt.get("phone_ref")
+            if type(changed) is not bool or not isinstance(receipt_ref, str) or not _validate_phone_ref(receipt_ref):
+                return _denied("operation_integrity_error")
+            expected_ref = customers._lifecycle_phone_ref(  # noqa: SLF001
+                row["account_id"], prepared_phone
+            ) if prepared_phone is not None else row["phone_ref"]
+            if receipt_ref != expected_ref:
+                return _denied("operation_integrity_error")
+            if not _registry_phone_effect_matches(
+                data,
+                account_id=row["account_id"],
+                action=row["action"],
+                phone=prepared_phone,
+                phone_ref=receipt_ref,
+                expected_revision=row["expected_auth_revision"],
+                changed=changed,
+            ):
+                return _denied("stale_auth_revision")
+    if expected_auth_revision not in {row["expected_auth_revision"], current_revision}:
+        return _denied("stale_auth_revision")
+    if new_auth_revision != current_revision:
+        return _denied("stale_auth_revision")
+    return _operation_result(row)
+
+
 def _finalize_phone_operation(
     *,
     operation_id: str,
@@ -1319,11 +1389,11 @@ def _apply_trusted_phone_operation(
     row = _phone_operation_row(operation_id)
     if row is None or row["account_id"] != account_id or row["action"] != action:
         return _denied("not_found")
-    if row["expected_auth_revision"] != expected_auth_revision:
-        return _denied("stale_auth_revision")
     try:
         intent = json.loads(row["payload_json"] or "{}")
     except (TypeError, ValueError):
+        return _denied("operation_integrity_error")
+    if not isinstance(intent, dict):
         return _denied("operation_integrity_error")
     prepared_ref = intent.get("phone_ref") if action == "trusted_phone_remove" else None
     expected_digest = _phone_payload_digest(action, prepared_ref)
@@ -1338,7 +1408,14 @@ def _apply_trusted_phone_operation(
     ):
         return _denied("operation_integrity_error")
     if row["state"] in FINAL_OPERATION_STATES:
-        return _operation_result(row)
+        return _validate_terminal_phone_retry(
+            row,
+            intent,
+            phone_e164=phone_e164,
+            expected_auth_revision=expected_auth_revision,
+        )
+    if row["expected_auth_revision"] != expected_auth_revision:
+        return _denied("stale_auth_revision")
     if not _reconciling and _is_account_blocked(account_id):
         return _safe_result("pending_reconciliation", operation_id=operation_id, blocked=True)
     phone_ref = intent.get("phone_ref") if action == "trusted_phone_remove" else None

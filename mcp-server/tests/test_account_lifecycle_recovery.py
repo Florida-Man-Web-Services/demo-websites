@@ -139,3 +139,34 @@ def test_malformed_recovery_stays_pending_without_raw_payload_echo(setup):
     assert recovered["ok"] is False
     assert recovered["state"] == "pending_reconciliation"
     assert "13525550102" not in str(recovered)
+
+
+@pytest.mark.parametrize("failure_point", ["before_audit_finalization", "after_audit_finalization"])
+def test_audit_finalization_failures_block_then_reconcile_to_stable_receipt(setup, failure_point):
+    registry, owner = setup
+    destination = "+13525550102"
+    prepared = lifecycle.prepare_trusted_phone_add(
+        ctx=context(owner["account_id"]), idempotency_key=f"audit-{failure_point}"
+    )
+    lifecycle.set_failure_point(failure_point)
+    pending = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=0,
+    )
+    assert pending["state"] == "pending_reconciliation"
+    assert pending["blocked"] is True
+    assert destination in customers.get("+13525550100")["trusted_phones"]
+
+    lifecycle.set_failure_point(None)
+    recovered = lifecycle.reconcile_pending_operations(
+        account_id=owner["account_id"], operation_id=prepared["operation_id"]
+    )
+    assert recovered["ok"] is True
+    receipt = recovered["operations"][0]
+    assert receipt["state"] == "verified_success"
+
+    retry = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=1,
+    )
+    assert retry == receipt

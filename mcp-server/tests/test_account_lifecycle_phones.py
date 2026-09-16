@@ -111,6 +111,44 @@ def test_same_account_add_noop_rejects_a_newer_registry_revision(registry):
     assert customers.get(primary)["auth_revision"] == 2
 
 
+def test_completed_add_retry_returns_receipt_at_post_mutation_revision_and_preserves_guards(registry):
+    primary = "+13525550100"
+    destination = "+13525550102"
+    owner = customers.upsert(primary, status="active_owner")["customer"]
+    prepared = prepare(owner["account_id"], key="terminal-retry")
+    first = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=0,
+    )
+    assert first["state"] == "verified_success"
+
+    retry = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=1,
+    )
+    assert retry == first
+
+    mismatched_retry = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164="+13525550108", expected_auth_revision=1,
+    )
+    assert mismatched_retry == {"ok": False, "state": "denied", "code": "operation_integrity_error"}
+
+    stale_prepared = prepare(owner["account_id"], revision=1, key="terminal-stale")
+    stale = lifecycle.apply_trusted_phone_operation(
+        operation_id=stale_prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164="+13525550109", expected_auth_revision=0,
+    )
+    assert stale == {"ok": False, "state": "denied", "code": "stale_auth_revision"}
+
+    customers.upsert(primary, status="churned")
+    revoked_retry = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=1,
+    )
+    assert revoked_retry == {"ok": False, "state": "denied", "code": "account_unavailable"}
+
+
 def test_concurrent_same_account_add_serializes_and_rejects_stale_second_prepare(registry):
     primary = "+13525550100"
     destination = "+13525550102"
