@@ -11,14 +11,22 @@ from __future__ import annotations
 # Instant first-audio openers (same prewarm pattern as sales OPENERS).
 # No filler — “sure thing / absolutely / good question / one moment” are banned.
 OPENERS = [
-    "A411 in Gainesville. What do you need?",
+    "AI 411 in Gainesville. What do you need?",
     "Got it.",
     "Thanks.",
     "No problem.",
 ]
 
-# Default inbound answer — invite the request; dead air after a cryptic hello loses callers.
-AI411_GREETING = "A411 in Gainesville. What do you need?"
+# Default inbound answer — identify the AI and invite the request; dead air after
+# a cryptic hello loses callers.
+AI411_GREETING = "AI 411 in Gainesville. What do you need?"
+
+# Keep recovery short and caller-facing. In particular, do not leak internal
+# tool names or serialized arguments into speech when a store is unavailable.
+FAILURE_RECOVERY = (
+    "I can't access that right now. I don't want to guess. "
+    "I can try another angle, or you can call back later."
+)
 
 # Anthropic-style tool schemas (converted for OpenAI / realtime elsewhere).
 TOOLS = [
@@ -702,6 +710,23 @@ IDENTITY AND SAFETY (non-negotiable)
 - Prefer tool answers. When information might be stale or missing, say so
   briefly rather than inventing details.
 
+PRIORITY ORDER (follow top to bottom)
+1. EMERGENCIES FIRST: If there may be immediate danger, tell the caller to hang
+   up and call 911. Do not continue the directory flow.
+2. SAFETY AND TRUTH: Refuse medical, legal, financial, harassment, doxxing,
+   spam, and scam requests. Never invent a local fact; use verified tools or say
+   that the information is missing or stale.
+3. DIRECT UTILITY: Handle the caller's explicit local request on this turn.
+   The request outranks QOTD, FOMO, personal-page, SMS, and other optional
+   follow-ups. Ask one clarifying question only when the request is genuinely
+   ambiguous.
+4. CONSENT-GATED ACTIONS: Only after useful help, and only with the required
+   explicit consent, offer memory, FOMO alerts, personal pages, SMS, or posting.
+   A yes for one action never opts the caller into another.
+5. QUESTION OF THE DAY LAST: Offer QOTD only after a spoken useful result (or
+   an honest miss with the appropriate fallback). Never use it to stall, and
+   never run it on silence or before an explicit request is handled.
+
 HOW TO SPEAK
 - Answer first. 1-3 short sentences per turn. Never monologue. Ask one question at a time.
 - Ban (never say): "great question", "good question", "sure thing", "absolutely",
@@ -884,8 +909,10 @@ TOOLS (in-process MCP store names)
 - submit_event_broadcast (prefer ISO when_start + venue), submit_notice_broadcast,
   list_recent_broadcasts
 - send_sms_links, log_connect, end_call
-If a tool returns an error, apologize briefly and offer what you can without
-inventing data. Call end_call with your final goodbye.
+If a tool returns an error or local data is unavailable, say exactly:
+"{FAILURE_RECOVERY}" Do not mention the tool name, error details, or raw
+arguments. Do not guess; offer one reasonable alternative or let the caller
+call back later. Call end_call with your final goodbye.
 """
     if direction == "inbound":
         ctx += f"""
@@ -959,8 +986,5 @@ def stub_tool_result(name: str, args: dict) -> str:
     """Speakable result when MCP-backed tools are not locally implemented."""
     if name == "end_call":
         return "The call will end after your current reply is spoken."
-    return (
-        f"Tool {name} is defined for AI 411 MCP wiring but is not available "
-        f"in this local process yet (args={args!r}). Apologize briefly, do not "
-        "invent data, and offer to try another angle or have them call back later."
-    )
+    # Keep this safe even if callers pass untrusted or sensitive arguments.
+    return FAILURE_RECOVERY

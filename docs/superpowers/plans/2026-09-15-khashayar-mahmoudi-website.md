@@ -125,7 +125,7 @@ s = p.read_text(encoding='utf-8')
 checks = {
     'file_exists': p.is_file(),
     'title': bool(re.search(r'<title>[^<]*Khashayar Mahmoudi', s, re.I)),
-    'description': 'name and contact page for Khashayar Mahmoudi' in s,
+    'description': 'Personal website and contact page for Khashayar Mahmoudi.' in s,
     'sections_at_least_5': len(re.findall(r'<section\b', s, re.I)) >= 5,
     'semantic_main': bool(re.search(r'<main\b', s, re.I)),
     'phone_display': '(352) 888-3741' in s,

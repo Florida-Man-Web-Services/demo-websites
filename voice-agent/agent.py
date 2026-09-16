@@ -1172,7 +1172,7 @@ def _run_onboarding_tool(state: CallState, name: str, args: dict) -> str:
                 req = {"_raw": req}
             req[field] = value
             extra = {}
-            if field == "business_name" and isinstance(value, str):
+            if field in ("business_name", "business") and isinstance(value, str):
                 extra["business_name"] = value
             if field == "email" and isinstance(value, str):
                 extra["email"] = value
@@ -1190,7 +1190,9 @@ def _run_onboarding_tool(state: CallState, name: str, args: dict) -> str:
             return json.dumps(out, ensure_ascii=False)
 
         if name == "finalize_requirements":
-            conf = args.get("confirmation_spoken", True)
+            # Confirmation is a required, explicit content gate.  Never let a
+            # missing model argument silently finalize a brief.
+            conf = args.get("confirmation_spoken", False)
             if isinstance(conf, str):
                 conf = conf.strip().lower() in ("1", "true", "yes", "on")
             if not conf:
@@ -1203,10 +1205,30 @@ def _run_onboarding_tool(state: CallState, name: str, args: dict) -> str:
                 try:
                     req = json.loads(req)
                 except json.JSONDecodeError:
-                    req = {"text": req}
+                    return json.dumps({
+                        "ok": False,
+                        "error": "requirements must be an object or valid JSON object",
+                    })
+            if not isinstance(req, dict):
+                return json.dumps({
+                    "ok": False,
+                    "error": "requirements must be an object or valid JSON object",
+                })
+            cust = customers.get(phone) or {}
+            # Include signup/incremental answers in the validation and persist
+            # them with the final package so a resumed interview is complete.
+            stored = onboarding.requirements_for_customer(cust)
+            complete_req = {**stored, **req}
+            missing = onboarding.missing_mvp_fields(complete_req)
+            if missing:
+                return json.dumps({
+                    "ok": False,
+                    "error": "MVP requirements are incomplete",
+                    "missing": list(missing),
+                })
             out = customers.save_requirements(
                 phone,
-                requirements=req or {},
+                requirements=complete_req,
                 summary=str(args.get("summary") or ""),
                 business_name=str(args.get("business_name") or ""),
                 category=str(args.get("category") or ""),
@@ -1223,6 +1245,23 @@ def _run_onboarding_tool(state: CallState, name: str, args: dict) -> str:
             return json.dumps(out, ensure_ascii=False)
 
         if name == "queue_website_build":
+            cust = customers.get(phone) or {}
+            status = str(cust.get("status") or "")
+            missing = onboarding.missing_mvp_fields(
+                onboarding.requirements_for_customer(cust)
+            )
+            if status not in {"requirements_ready", "building"}:
+                return json.dumps({
+                    "ok": False,
+                    "error": "finalize_requirements must succeed before queueing a build",
+                    "status": status or "unknown",
+                })
+            if missing:
+                return json.dumps({
+                    "ok": False,
+                    "error": "cannot queue a partial MVP brief",
+                    "missing": list(missing),
+                })
             out = customers.write_builder_brief(phone)
             if out.get("ok"):
                 customer_memory.append_note(

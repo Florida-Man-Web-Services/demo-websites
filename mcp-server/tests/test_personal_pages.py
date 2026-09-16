@@ -111,3 +111,94 @@ def test_forget_caller_clears_page(stores):
     assert pp.render_public(slug) is None
     st2 = pp.get_personal_page_status("+13525550133")
     assert st2["enabled"] is False
+
+
+def test_publication_allowlist_excludes_internal_memory(stores):
+    phone = "+13525550144"
+    callers.update_profile(
+        phone,
+        {
+            "preferred_name": "River",
+            "preferences": {
+                "interests": ["live music"],
+                "preferred_areas": ["downtown"],
+                "avoid": ["private medical detail"],
+                "mobility": "internal mobility note",
+                "accessibility": "confidential access note",
+            },
+            "last_topics": ["raw memory topic"],
+            "notes": [{"text": "secret internal note"}],
+        },
+    )
+    out = pp.opt_in_personal_page(phone)
+    assert out["ok"] is True
+    page = pp.render_public(out["slug"])
+    assert page is not None
+    assert "live music" in page
+    assert "downtown" in page
+    for private_text in (
+        "private medical detail",
+        "internal mobility note",
+        "confidential access note",
+        "raw memory topic",
+        "secret internal note",
+    ):
+        assert private_text not in page
+    assert "Rather skip" not in page
+    assert "Lately talking about" not in page
+    assert "How they roll" not in page
+
+
+def test_publication_rejects_contact_content_before_opt_in(stores):
+    phone = "+13525550155"
+    callers.update_profile(
+        phone,
+        {"preferences": {"interests": ["call 352-555-0155"]}},
+    )
+    out = pp.opt_in_personal_page(phone)
+    assert out["ok"] is False
+    assert out["enabled"] is False
+    assert out["publication_rejected"] is True
+    assert "352-555-0155" not in out["error"]
+    status = pp.get_personal_page_status(phone)
+    assert status["enabled"] is False
+    assert status["personal_page_ok"] is False
+
+
+def test_publication_rejects_contact_headline_without_writing_profile(stores):
+    phone = "+13525550166"
+    out = pp.opt_in_personal_page(phone, headline="Email me at river@example.test")
+    assert out["ok"] is False
+    assert out["publication_rejected"] is True
+    assert callers.get_profile(phone)["found"] is False
+    assert pp.get_personal_page_status(phone)["enabled"] is False
+
+
+def test_clear_for_phone_removes_stale_index_slugs(stores):
+    phone = "+13525550177"
+    out = pp.opt_in_personal_page(phone, preferred_name="Lee")
+    current_slug = out["slug"]
+    stale_slug = "p-0123456789abcdef"
+    (stores["dir"] / f"{stale_slug}.html").write_text("old", encoding="utf-8")
+    with pp._lock:  # noqa: SLF001
+        pages = pp._load_registry()  # noqa: SLF001
+        pages["_slug_index"][stale_slug] = phone
+        pp._save_registry(pages)  # noqa: SLF001
+
+    pp.clear_for_phone(phone)
+    assert not (stores["dir"] / f"{current_slug}.html").exists()
+    assert not (stores["dir"] / f"{stale_slug}.html").exists()
+    assert pp.render_public(current_slug) is None
+
+
+def test_forget_clears_page_even_when_profile_is_already_missing(stores):
+    phone = "+13525550188"
+    out = pp.opt_in_personal_page(phone, preferred_name="Taylor")
+    slug = out["slug"]
+    callers._save_store({})  # noqa: SLF001 — simulate an earlier profile purge
+
+    forgotten = callers.forget_profile(phone)
+    assert forgotten["forgotten"] is True
+    assert forgotten["existed"] is False
+    assert pp.render_public(slug) is None
+    assert not (stores["dir"] / f"{slug}.html").exists()

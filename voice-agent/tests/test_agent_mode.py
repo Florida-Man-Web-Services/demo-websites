@@ -70,7 +70,7 @@ def test_ai411_mode_prompt_and_tools():
     assert "medical" in prompt.lower() or "No medical" in prompt
     assert "$999" not in prompt
     assert "selling websites" not in prompt
-    assert "A411" in ai411.AI411_GREETING
+    assert "AI 411" in ai411.AI411_GREETING
     assert "Gainesville" in ai411.AI411_GREETING
     names = {t["name"] for t in agent.get_tools()}
     expected = {

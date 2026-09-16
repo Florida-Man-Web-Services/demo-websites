@@ -4,6 +4,11 @@ Public mini-sites built only from caller profile fields the person chose to
 remember with AI 411. Default OFF. Requires consent.memory_ok AND
 consent.personal_page_ok.
 
+Publication is deliberately narrower than the caller profile: only a chosen
+name, interests, broad preferred areas, and an optional user-supplied headline
+are allowlisted. This is a product guardrail, not a legal-compliance claim;
+privacy counsel review is still required before treating it as a policy.
+
 Privacy hard rules:
   - Never put phone, email, full address, or raw private notes on the page.
   - Slug is an unguessable public token (not derived from phone alone).
@@ -69,6 +74,89 @@ PERSONAL_PAGE_BASE_URL = (
 PERSONAL_PAGE_TTL_HOURS = int(os.getenv("PERSONAL_PAGE_TTL_HOURS", "24"))
 
 _lock = threading.Lock()
+
+# Keep this list explicit. Profile fields not named here (including notes,
+# topics, avoid lists, mobility, and accessibility) are internal memory and
+# must never become public-page content by accident.
+_PUBLIC_PROFILE_FIELDS = frozenset(
+    {
+        "preferred_name",
+        "display_name",
+        "preferences.interests",
+        "preferences.preferred_areas",
+    }
+)
+_EMAIL_RE = re.compile(r"[^\s@]+@[^\s@]+\.[^\s@]+")
+_URL_RE = re.compile(r"(?:https?://|www\.)\S+", re.IGNORECASE)
+_PHONE_RE = re.compile(
+    r"(?<!\w)(?:\+?\d[\d* x().-]{6,}\d|\d{7,})(?!\w)"
+)
+_STREET_RE = re.compile(
+    r"\b\d{1,6}\s+[^,\n]{1,80}\b(?:street|st\.?|road|rd\.?|avenue|ave\.?|"
+    r"boulevard|blvd\.?|drive|dr\.?|lane|ln\.?|court|ct\.?|way|parkway|pkwy\.?)\b",
+    re.IGNORECASE,
+)
+_PRIVATE_MARKER_RE = re.compile(
+    r"\b(?:internal|private|confidential|raw memory|do not publish|note:)\b",
+    re.IGNORECASE,
+)
+
+
+class PublicationRejected(ValueError):
+    """Raised when candidate page content fails the publication allowlist."""
+
+
+def _publication_rejection(field: str, value: Any) -> str | None:
+    """Return a stable, non-PII rejection reason for one public value."""
+    if not isinstance(value, str):
+        return "must be text"
+    text = value.strip()
+    if not text:
+        return None
+    if _EMAIL_RE.search(text) or _URL_RE.search(text):
+        return "contact details or links are not publishable"
+    if _PHONE_RE.search(text) or _STREET_RE.search(text):
+        return "phone numbers and street addresses are not publishable"
+    if _PRIVATE_MARKER_RE.search(text):
+        return "internal or private memory is not publishable"
+    return None
+
+
+def _require_public_text(field: str, value: Any) -> str:
+    """Validate an allowlisted scalar without echoing its value in errors."""
+    if value is None:
+        text = ""
+    elif not isinstance(value, str):
+        raise PublicationRejected(f"publication rejected for {field}: must be text")
+    else:
+        text = value.strip()
+    reason = _publication_rejection(field, text)
+    if reason:
+        raise PublicationRejected(f"publication rejected for {field}: {reason}")
+    return text
+
+
+def _allowlisted_list(field: str, items: Any) -> list[str]:
+    """Validate and return one allowlisted list from a caller profile."""
+    if field not in _PUBLIC_PROFILE_FIELDS:
+        raise PublicationRejected(f"publication rejected for {field}: field is not allowlisted")
+    if not isinstance(items, list):
+        return []
+    out: list[str] = []
+    for item in items:
+        if not isinstance(item, str):
+            raise PublicationRejected(f"publication rejected for {field}: must be text")
+        value = item.strip()
+        if not value:
+            continue
+        reason = _publication_rejection(field, value)
+        if reason:
+            raise PublicationRejected(f"publication rejected for {field}: {reason}")
+        if value not in out:
+            out.append(value)
+        if len(out) >= 12:
+            break
+    return out
 
 
 def _now() -> datetime:
@@ -173,53 +261,35 @@ def _safe_name(profile: dict) -> str:
     return "Neighbor"
 
 
-def _clean_list(items: Any, *, limit: int = 12) -> list[str]:
-    if not isinstance(items, list):
-        return []
-    out: list[str] = []
-    for x in items:
-        s = str(x or "").strip()
-        if not s:
-            continue
-        # Drop anything that looks like a phone/email.
-        if "@" in s or re.search(r"\d{7,}", s):
-            continue
-        if s not in out:
-            out.append(s)
-        if len(out) >= limit:
-            break
-    return out
-
-
 def _public_payload(profile: dict, meta: dict) -> dict[str, Any]:
     """Fields safe to put on a public page."""
     prefs = profile.get("preferences") or {}
-    interests = _clean_list(prefs.get("interests"))
-    areas = _clean_list(prefs.get("preferred_areas"))
-    avoid = _clean_list(prefs.get("avoid"), limit=6)
-    topics = _clean_list(profile.get("last_topics"), limit=8)
-    mobility = str(prefs.get("mobility") or "").strip()
-    accessibility = str(prefs.get("accessibility") or "").strip()
-    # Strip digits-heavy free text.
-    if re.search(r"\d{7,}", mobility):
-        mobility = ""
-    if re.search(r"\d{7,}", accessibility):
-        accessibility = ""
-    headline = str(meta.get("headline") or "").strip()
+    # Deliberately read only the explicit allowlist above. In particular, do
+    # not publish notes, last_topics, avoid, mobility, or accessibility.
+    interests = _allowlisted_list(
+        "preferences.interests", prefs.get("interests")
+    )
+    areas = _allowlisted_list(
+        "preferences.preferred_areas", prefs.get("preferred_areas")
+    )
+    name = _require_public_text("preferred_name", _safe_name(profile))
+    headline = _require_public_text("headline", meta.get("headline") or "")
     if not headline:
         if interests:
             headline = f"Into {', '.join(interests[:3])}"
         else:
             headline = "Gainesville local · AI 411 neighbor page"
     return {
-        "name": _safe_name(profile),
+        "name": name,
         "headline": headline[:160],
         "interests": interests,
         "preferred_areas": areas,
-        "avoid": avoid,
-        "topics": topics,
-        "mobility": mobility[:120],
-        "accessibility": accessibility[:160],
+        # These keys remain empty for renderer compatibility. They are not
+        # sourced from the profile and therefore cannot publish internal data.
+        "avoid": [],
+        "topics": [],
+        "mobility": "",
+        "accessibility": "",
         "generated_at": meta.get("last_generated_at") or _now_iso(),
         "ttl_hours": _ttl_hours(),
         "slug": meta.get("slug") or "",
@@ -497,8 +567,16 @@ def regenerate(phone: str, *, force: bool = False) -> dict:
             meta["phone_e164"] = key
             meta["last_generated_at"] = _now_iso()
             meta["updated_at"] = meta["last_generated_at"]
-            payload = _public_payload(prof, meta)
-            html_doc = _render_html(payload)
+            try:
+                payload = _public_payload(prof, meta)
+                html_doc = _render_html(payload)
+            except PublicationRejected as e:
+                return {
+                    "ok": False,
+                    "regenerated": False,
+                    "publication_rejected": True,
+                    "error": str(e),
+                }
             _write_html(meta["slug"], html_doc)
             pages[key] = meta
             # secondary index slug → phone for public GET
@@ -561,14 +639,29 @@ def opt_in_personal_page(
     if not key:
         return {"ok": False, "enabled": False, "error": "invalid or missing phone"}
     try:
+        # Validate caller-supplied publication content before changing either
+        # consent or the page registry. A rejected request must remain off.
+        proposed_preferred = _require_public_text(
+            "preferred_name", preferred_name
+        )
+        proposed_display = _require_public_text("display_name", display_name)
+        proposed_headline = _require_public_text("headline", headline)
+        candidate = _raw_profile(key) or {}
+        if proposed_preferred:
+            candidate["preferred_name"] = proposed_preferred[:80]
+        if proposed_display:
+            candidate["display_name"] = proposed_display[:120]
+        candidate_meta = {"headline": proposed_headline}
+        _public_payload(candidate, candidate_meta)
+
         patch: dict[str, Any] = {
             "consent": {"memory_ok": True, "personal_page_ok": True},
             "preferences": {"personal_page": True},
         }
-        if preferred_name.strip():
-            patch["preferred_name"] = preferred_name.strip()[:80]
-        if display_name.strip():
-            patch["display_name"] = display_name.strip()[:120]
+        if proposed_preferred:
+            patch["preferred_name"] = proposed_preferred[:80]
+        if proposed_display:
+            patch["display_name"] = proposed_display[:120]
         up = callers.update_profile(key, patch)
         if not up.get("updated"):
             return {
@@ -584,8 +677,8 @@ def opt_in_personal_page(
             meta["source"] = (source or "voice")[:64]
             meta["opted_in_at"] = meta.get("opted_in_at") or _now_iso()
             meta["updated_at"] = _now_iso()
-            if headline.strip():
-                meta["headline"] = headline.strip()[:160]
+            if proposed_headline:
+                meta["headline"] = proposed_headline[:160]
             if not meta.get("slug"):
                 meta["slug"] = _new_slug()
             pages[key] = meta
@@ -620,6 +713,13 @@ def opt_in_personal_page(
                 f"You're opted in. Your free personal page is live and refreshes about "
                 f"every {_ttl_hours()} hours. I can text you the link if you want."
             ),
+        }
+    except PublicationRejected as e:
+        return {
+            "ok": False,
+            "enabled": False,
+            "publication_rejected": True,
+            "error": str(e),
         }
     except Exception as e:  # noqa: BLE001
         return {
@@ -666,21 +766,24 @@ def clear_for_phone(phone: str) -> None:
     if not key:
         return
     try:
-        slug = ""
+        slugs: set[str] = set()
         with _lock:
             pages = _load_registry()
             meta = pages.pop(key, None)
             if isinstance(meta, dict):
                 slug = str(meta.get("slug") or "")
+                if slug:
+                    slugs.add(slug)
             index = pages.get("_slug_index")
             if isinstance(index, dict):
-                if slug:
-                    index.pop(slug, None)
                 for s, p in list(index.items()):
                     if p == key:
+                        slugs.add(str(s))
                         del index[s]
             _save_registry(pages)
-        if slug:
+        # Delete every valid slug still associated with this phone, including
+        # stale secondary-index entries left by an interrupted rotation.
+        for slug in slugs:
             _delete_html(slug)
     except Exception:
         pass
@@ -714,7 +817,11 @@ def render_public(slug: str) -> str | None:
         # Stale → regenerate
         status = _status_from_meta(phone, meta, flags=flags)
         if status.get("stale"):
-            regenerate(phone, force=True)
+            refreshed = regenerate(phone, force=True)
+            # Never serve an older page when current memory fails the
+            # publication allowlist. Fail closed instead.
+            if not refreshed.get("ok"):
+                return None
         path = _pages_dir() / f"{slug}.html"
         if path.exists():
             return path.read_text(encoding="utf-8")

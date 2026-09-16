@@ -7,6 +7,91 @@ saves via customers.save_requirements, and hands off to the builder + sales.
 
 from __future__ import annotations
 
+# The first pass deliberately stays small.  These names are the persisted
+# requirements keys used by the interview and by the builder brief.  Optional
+# details can improve a site, but must not hold up a useful first draft.
+MVP_REQUIRED_FIELDS = (
+    "business_name",
+    "audience",
+    "goal",
+    "must_haves",
+    "follow_up",
+)
+OPTIONAL_FIELDS = (
+    "category",
+    "pages",
+    "features",
+    "branding",
+    "tone",
+    "content_sources",
+    "timeline",
+    "email",
+    "notes",
+)
+
+_FIELD_ALIASES = {
+    "business_name": ("business_name", "business"),
+    "goal": ("goal", "goals"),
+    "follow_up": ("follow_up", "follow-up", "next_step"),
+}
+
+
+def _as_requirements(value: object) -> dict:
+    """Return a requirements mapping without raising on model-shaped input."""
+    if isinstance(value, dict):
+        return dict(value)
+    if isinstance(value, str):
+        import json
+
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            return {}
+        return dict(parsed) if isinstance(parsed, dict) else {}
+    return {}
+
+
+def requirements_for_customer(customer: dict | None) -> dict:
+    """Merge incremental requirements with signup fields for completion checks."""
+    customer = customer or {}
+    requirements = _as_requirements(customer.get("requirements"))
+    # Signup data is already a valid answer, even when the caller has not
+    # repeated it during the callback.
+    if customer.get("business_name") and not requirements.get("business_name"):
+        requirements["business_name"] = customer["business_name"]
+    if customer.get("category") and not requirements.get("category"):
+        requirements["category"] = customer["category"]
+    if customer.get("email") and not requirements.get("email"):
+        requirements["email"] = customer["email"]
+    return requirements
+
+
+def missing_mvp_fields(requirements: dict | str | None) -> tuple[str, ...]:
+    """List required first-pass fields that still need a meaningful answer."""
+    values = _as_requirements(requirements)
+    missing = []
+    for field in MVP_REQUIRED_FIELDS:
+        aliases = _FIELD_ALIASES.get(field, (field,))
+        if not any(_has_answer(values.get(alias)) for alias in aliases):
+            missing.append(field)
+    return tuple(missing)
+
+
+def _has_answer(value: object) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, (list, tuple, set, dict)):
+        return bool(value)
+    return True
+
+
+def mvp_brief_complete(requirements: dict | str | None) -> bool:
+    """Return whether the minimum useful onboarding brief is complete."""
+    return not missing_mvp_fields(requirements)
+
+
 OPENERS = [
     "Thanks for calling.",
     "Sure thing.",
@@ -46,9 +131,11 @@ TOOLS = [
     {
         "name": "save_onboarding_answer",
         "description": (
-            "Save one structured answer mid-interview (business_name, category, "
-            "goals, pages, branding, content_sources, must_haves, timeline, email, "
-            "notes). Call often so progress is not lost if they hang up."
+            "Save one structured answer immediately after a solid answer. First "
+            "collect the MVP fields business_name, audience, goal, must_haves, and "
+            "follow_up; optional fields are category, pages, features, branding, "
+            "tone, content_sources, timeline, email, and notes. Call often so "
+            "progress is not lost if they hang up."
         ),
         "input_schema": {
             "type": "object",
@@ -82,9 +169,10 @@ TOOLS = [
                 },
                 "requirements": {
                     "description": (
-                        "Object or JSON string: business_name, category, audience, "
-                        "goals, pages[], features[], branding, tone, content_notes, "
-                        "must_haves[], nice_to_haves[], timeline, email, phone."
+                        "Object or JSON string. Required MVP keys: business_name, "
+                        "audience, goal, must_haves, follow_up. Optional keys: "
+                        "category, pages[], features[], branding, tone, "
+                        "content_sources, timeline, email, notes."
                     ),
                 },
                 "business_name": {"type": "string"},
@@ -96,7 +184,7 @@ TOOLS = [
                     "description": "True only after you read back and they agreed.",
                 },
             },
-            "required": ["summary", "requirements"],
+            "required": ["summary", "requirements", "confirmation_spoken"],
             "additionalProperties": False,
         },
     },
@@ -189,6 +277,8 @@ def system_prompt(
     cust = customer or {}
     known = ""
     if cust:
+        stored_requirements = requirements_for_customer(cust)
+        missing = missing_mvp_fields(stored_requirements)
         known = f"""
 WHAT WE ALREADY KNOW (from signup / prior turns)
 - Business: {cust.get("business_name") or "unknown"}
@@ -196,6 +286,9 @@ WHAT WE ALREADY KNOW (from signup / prior turns)
 - Email: {cust.get("email") or "unknown"}
 - Status: {cust.get("status") or "unknown"}
 - Prior summary: {cust.get("requirements_summary") or "(none yet)"}
+- MVP fields still needed: {", ".join(missing) if missing else "none"}
+Do not re-ask an MVP field that is already meaningfully answered. Resume with
+the first missing MVP field, then offer optional details.
 """
     ctx = f"""You are Florida Man Web Services' **onboarding interview AI** on a live
 phone call. Your only job is to help a local business owner flesh out
@@ -218,18 +311,29 @@ CALL CONTEXT
 INTERVIEW FLOW
 1. Greet: "{ONBOARDING_GREETING}" (adapt if you already know the business name).
 2. get_customer_profile once.
-3. Explore open-ended (use save_onboarding_answer after each solid answer):
-   - What the business is and who they serve
-   - What a great website would do for them (goals)
-   - Must-have pages/sections (home, services, menu, gallery, contact, …)
-   - Branding/tone (colors, feel) if they care
-   - Content they already have (photos, logo, Google listing)
-   - Must-haves vs nice-to-haves; any hard deadline
-   - Best email for sending the demo later
-4. Read the plan back in plain language. Get explicit confirmation.
-5. finalize_requirements with confirmation_spoken=true, a summary, and the
-   full requirements object.
-6. queue_website_build so the coding agent can start.
+3. Complete the MVP FIRST, one open-ended question at a time. After each solid
+   answer call save_onboarding_answer immediately. Ask, in this order:
+   a. BUSINESS — what the business is called and does (save business_name; save
+      category too only if they volunteer it).
+   b. AUDIENCE — who they most want the website to help.
+   c. GOAL — what they want the website to help them accomplish (save goal,
+      not a list of speculative metrics).
+   d. MUST-HAVES — pages, information, or actions the first version must include
+      (save must_haves as a list or faithful short description).
+   e. FOLLOW-UP — the preferred next step after this call, such as when/how to
+      contact them about the demo (save follow_up).
+   Do not ask optional discovery questions until all five MVP fields have
+   meaningful answers. If the caller volunteers optional details, acknowledge
+   and save them without opening a new line of questioning.
+4. Only after the MVP is complete, progressively disclose optional details as
+   time and caller interest allow: category, pages/features beyond the
+   must-haves, branding/tone, content_sources, timeline, email, and notes.
+   These are helpful, never gates for a first brief; do not pressure the caller.
+5. Read the plan back in plain language, including the five MVP fields. Ask for
+   explicit confirmation and correct anything they change.
+6. Only after they agree, call finalize_requirements with confirmation_spoken=true,
+   a short summary, and the full requirements object. Wait for a successful
+   result before calling queue_website_build; never queue a partial brief.
 7. Tell them we'll call or text when the free demo is ready; log_call_outcome;
    end_call.
 

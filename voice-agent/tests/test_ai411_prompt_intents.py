@@ -22,6 +22,7 @@ def _reload():
 
 def test_greeting_is_an_invite():
     ai411 = _reload()
+    assert ai411.AI411_GREETING.startswith("AI 411")
     assert "Gainesville" in ai411.AI411_GREETING
     assert "need" in ai411.AI411_GREETING.lower()
     assert ai411.AI411_GREETING == ai411.OPENERS[0]
@@ -71,6 +72,37 @@ def test_qotd_does_not_run_on_silence():
     assert "get_question_of_the_day" in p
 
 
+def test_prompt_declares_priority_order():
+    ai411 = _reload()
+    p = ai411.system_prompt(
+        direction="inbound", caller_number="+135****0100", openers=False
+    )
+    priority = p[p.index("PRIORITY ORDER"):]
+    markers = (
+        "EMERGENCIES FIRST",
+        "SAFETY AND TRUTH",
+        "DIRECT UTILITY",
+        "CONSENT-GATED ACTIONS",
+        "QUESTION OF THE DAY LAST",
+    )
+    positions = [priority.index(marker) for marker in markers]
+    assert positions == sorted(positions)
+    assert "call 911" in priority
+    assert "explicit local request" in priority
+    assert "required" in priority and "explicit consent" in priority
+    assert "never run it on silence" in priority
+
+
+def test_tool_failure_recovery_is_concise_and_caller_facing():
+    ai411 = _reload()
+    result = ai411.stub_tool_result("search_events", {"query": "secret"})
+    assert result == ai411.FAILURE_RECOVERY
+    assert "search_events" not in result
+    assert "secret" not in result
+    assert "guess" in result.lower()
+    assert "call back later" in result.lower()
+
+
 def test_connect_is_spoken_number_not_dial():
     ai411 = _reload()
     p = ai411.system_prompt(
@@ -88,7 +120,7 @@ def test_fmws_facts_are_gated_and_honest():
     p = ai411.system_prompt(
         direction="inbound", caller_number="+1" + "352" + "555" + "0100", openers=False
     )
-    assert ai411.AI411_GREETING == "A411 in Gainesville. What do you need?"
+    assert ai411.AI411_GREETING == "AI 411 in Gainesville. What do you need?"
     assert "FMWS FACTS" in p
     assert "https://arete.floridamanweb.online/" in p
     assert "not an official uf service" in p.lower()
