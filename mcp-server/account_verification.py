@@ -35,6 +35,7 @@ class AuthContext:
     proof_fresh: bool
     auth_level: str | None = None
     legacy_auth: bool = False
+    forced_mode: bool = False
 
     def has_capability(self, action: str) -> bool:
         """Return whether this context is bound to exactly ``action``."""
