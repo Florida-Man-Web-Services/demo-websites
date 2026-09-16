@@ -34,6 +34,12 @@ def test_validation_rejects_markup_links_contact_and_phone_content():
         assert value not in result["error"]
 
 
+def test_validation_rejects_domains_with_unlisted_or_newer_tlds():
+    for value in ("example.xyz", "example.dev", "portal.example.cloud/path"):
+        result = pages.validate_public_page("Title", value)
+        assert result["ok"] is False
+
+
 def test_validation_rejects_known_account_identifier_without_echoing_it():
     result = pages.validate_public_page(
         "Title",

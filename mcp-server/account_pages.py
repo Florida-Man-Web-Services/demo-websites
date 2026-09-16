@@ -25,7 +25,12 @@ class PageValidationError(ValueError):
 
 _EMAIL_RE = re.compile(r"(?<![\w.+-])[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+")
 _URL_RE = re.compile(
-    r"(?:https?://|ftp://|www\.)|\b(?:[a-z0-9-]+\.)+(?:com|net|org|io|co|biz|info|us|me|test)\b",
+    r"(?:"
+    r"\b(?:https?|ftp)://[^\s<>()]+"
+    r"|\bwww\.[^\s<>()]+"
+    r"|\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}"
+    r"(?::\d{2,5})?(?:[/?#][^\s<>()]*)?"
+    r")",
     re.IGNORECASE,
 )
 _PHONE_RE = re.compile(r"(?<!\w)(?:\+?\d[\d().\- x]{5,}\d|\d{7,})(?!\w)")

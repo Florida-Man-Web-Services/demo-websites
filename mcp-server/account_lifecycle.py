@@ -20,12 +20,12 @@ import os
 import re
 import secrets
 import sqlite3
-from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
 import account_pages
+from account_verification import AuthContext, TrustedInputEvent, is_auth_context
 
 SAFE_STATES = frozenset(
     {
@@ -67,25 +67,7 @@ _IDEMPOTENCY_RE = re.compile(r"\A[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
 _OPAQUE_REF_RE = re.compile(r"\A[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
 
 
-@dataclass(frozen=True)
-class LifecycleContext:
-    """Server-created, action-bound proof passed into lifecycle functions.
-
-    A later verification module may use its own AuthContext type; lifecycle
-    functions also accept mappings/objects with these same field names.  The
-    two boolean proof fields must be set by the server, never by a model tool.
-    """
-
-    session_id: str
-    account_id: str
-    caller_transport_binding: str
-    auth_revision: int
-    action: str
-    expires_at: datetime | str
-    capability_id: str
-    account_status: str
-    owner_authenticated: bool
-    proof_fresh: bool
+LifecycleContext = AuthContext
 
 
 def _now() -> datetime:
@@ -258,7 +240,7 @@ def _denied(code: str) -> dict[str, Any]:
 
 
 def _invalid_context(ctx: Any, action: str) -> bool:
-    if ctx is None:
+    if not is_auth_context(ctx):
         return True
     required = (
         "session_id",
@@ -271,7 +253,7 @@ def _invalid_context(ctx: Any, action: str) -> bool:
     auth_revision = _value(ctx, "auth_revision")
     if isinstance(auth_revision, bool) or not isinstance(auth_revision, int) or auth_revision < 0:
         return True
-    if _value(ctx, "action") != action:
+    if not ctx.has_capability(action):
         return True
     if _value(ctx, "account_status") not in ELIGIBLE_ACCOUNT_STATUSES:
         return True
@@ -299,6 +281,12 @@ def _validate_ref(value: str) -> bool:
     return isinstance(value, str) and bool(_OPAQUE_REF_RE.fullmatch(value))
 
 
+def _validate_phone_ref(value: str) -> bool:
+    """Accept opaque refs with digits, but reject a raw numeric phone value."""
+
+    return _validate_ref(value) and bool(re.search(r"[A-Za-z]", value))
+
+
 def _new_id(prefix: str) -> str:
     return f"{prefix}_{secrets.token_urlsafe(16)}"
 
@@ -307,6 +295,22 @@ def _open_store() -> sqlite3.Connection:
     path = _db_path()
     _init_schema(path)
     return _connect(path)
+
+
+def _try_open_store() -> sqlite3.Connection | None:
+    """Open the store without allowing SQLite corruption to escape APIs."""
+
+    try:
+        return _open_store()
+    except (sqlite3.Error, OSError):
+        return None
+
+
+def _rollback_safely(conn: sqlite3.Connection) -> None:
+    try:
+        conn.execute("ROLLBACK")
+    except sqlite3.Error:
+        pass
 
 
 def _audit(
@@ -356,7 +360,7 @@ def _operation_result(row: sqlite3.Row) -> dict[str, Any]:
         fields["page_id"] = row["page_id"]
     try:
         receipt = json.loads(row["receipt_json"] or "{}")
-    except json.JSONDecodeError:
+    except (TypeError, ValueError):
         receipt = {}
     for key in ("page_id", "slug", "public_status", "page_version", "code"):
         if key in receipt:
@@ -382,7 +386,7 @@ def _existing_operation(
 
 def _create_operation(
     *,
-    ctx: Any,
+    ctx: AuthContext,
     action: str,
     idempotency_key: str,
     payload_digest: str,
@@ -396,7 +400,9 @@ def _create_operation(
         return guard
     if not _validate_idempotency(idempotency_key):
         return _denied("invalid_idempotency_key")
-    conn = _open_store()
+    conn = _try_open_store()
+    if conn is None:
+        return _safe_result("failed", code="storage_unavailable")
     operation_id = _new_id("op")
     now = _now_iso()
     expires = (_now() + timedelta(minutes=10)).replace(microsecond=0).isoformat()
@@ -444,14 +450,21 @@ def _create_operation(
         )
         conn.execute("COMMIT")
     except sqlite3.IntegrityError:
-        conn.execute("ROLLBACK")
-        with _open_store() as retry_conn:
+        _rollback_safely(conn)
+        retry_conn = _try_open_store()
+        if retry_conn is None:
+            return _safe_result("failed", code="storage_unavailable")
+        try:
             existing = _existing_operation(
                 retry_conn, _value(ctx, "account_id"), idempotency_key, payload_digest
             )
+        except sqlite3.Error:
+            existing = None
+        finally:
+            retry_conn.close()
         return existing or _safe_result("failed", code="operation_conflict")
     except sqlite3.Error:
-        conn.execute("ROLLBACK")
+        _rollback_safely(conn)
         return _safe_result("failed", code="storage_unavailable")
     finally:
         conn.close()
@@ -468,7 +481,7 @@ def _create_operation(
     return _safe_result("awaiting_confirmation", **fields)
 
 
-def prepare_client_page_create(*, ctx: Any, title: str, body: str, idempotency_key: str) -> dict[str, Any]:
+def prepare_client_page_create(*, ctx: AuthContext, title: str, body: str, idempotency_key: str) -> dict[str, Any]:
     """Validate and durably prepare a page without publishing it."""
 
     guard = _guard(ctx, "client_page_create")
@@ -492,25 +505,41 @@ def prepare_client_page_create(*, ctx: Any, title: str, body: str, idempotency_k
     )
 
 
-def prepare_client_page_remove(*, ctx: Any, page_id: str, idempotency_key: str) -> dict[str, Any]:
-    """Prepare a page tombstone after checking account ownership."""
+def prepare_client_page_remove(*, ctx: AuthContext, page_id: str, idempotency_key: str) -> dict[str, Any]:
+    """Prepare a page tombstone after checking idempotency and ownership."""
 
     guard = _guard(ctx, "client_page_remove")
     if guard:
         return guard
     if not _validate_ref(page_id):
         return _denied("not_found")
-    conn = _open_store()
+    if not _validate_idempotency(idempotency_key):
+        return _denied("invalid_idempotency_key")
+    digest = hashlib.sha256(f"client_page_remove\0{page_id}".encode()).hexdigest()
+    conn = _try_open_store()
+    if conn is None:
+        return _safe_result("failed", code="storage_unavailable")
     try:
+        conn.execute("BEGIN IMMEDIATE")
+        existing = _existing_operation(
+            conn, _value(ctx, "account_id"), idempotency_key, digest
+        )
+        if existing:
+            conn.execute("COMMIT")
+            return existing
         row = conn.execute(
             "SELECT page_id, account_id, state, page_version FROM client_pages WHERE page_id = ?",
             (page_id,),
         ).fetchone()
+        if row is None or row["account_id"] != _value(ctx, "account_id") or row["state"] != "published":
+            _rollback_safely(conn)
+            return _denied("not_found")
+        conn.execute("COMMIT")
+    except sqlite3.Error:
+        _rollback_safely(conn)
+        return _safe_result("failed", code="storage_unavailable")
     finally:
         conn.close()
-    if row is None or row["account_id"] != _value(ctx, "account_id") or row["state"] != "published":
-        return _denied("not_found")
-    digest = hashlib.sha256(f"client_page_remove\0{page_id}".encode()).hexdigest()
     return _create_operation(
         ctx=ctx,
         action="client_page_remove",
@@ -522,7 +551,7 @@ def prepare_client_page_remove(*, ctx: Any, page_id: str, idempotency_key: str) 
     )
 
 
-def prepare_trusted_phone_add(*, ctx: Any, idempotency_key: str) -> dict[str, Any]:
+def prepare_trusted_phone_add(*, ctx: AuthContext, idempotency_key: str) -> dict[str, Any]:
     """Prepare a future verified destination-phone addition without raw input."""
 
     digest = hashlib.sha256(b"trusted_phone_add").hexdigest()
@@ -535,13 +564,13 @@ def prepare_trusted_phone_add(*, ctx: Any, idempotency_key: str) -> dict[str, An
     )
 
 
-def prepare_trusted_phone_remove(*, ctx: Any, phone_ref: str, idempotency_key: str) -> dict[str, Any]:
+def prepare_trusted_phone_remove(*, ctx: AuthContext, phone_ref: str, idempotency_key: str) -> dict[str, Any]:
     """Prepare removal using only an opaque phone reference."""
 
     guard = _guard(ctx, "trusted_phone_remove")
     if guard:
         return guard
-    if not _validate_ref(phone_ref) or any(char.isdigit() for char in phone_ref):
+    if not _validate_phone_ref(phone_ref):
         return _denied("invalid_phone_ref")
     digest = hashlib.sha256(f"trusted_phone_remove\0{phone_ref}".encode()).hexdigest()
     return _create_operation(
@@ -554,18 +583,22 @@ def prepare_trusted_phone_remove(*, ctx: Any, phone_ref: str, idempotency_key: s
     )
 
 
-def bind_operation_confirmation(*, ctx: Any, operation_id: str, confirmation_digest: str) -> dict[str, Any]:
+def bind_operation_confirmation(*, ctx: AuthContext, operation_id: str, confirmation_digest: str) -> dict[str, Any]:
     """Bind a server-created keypad token digest before commit.
 
     This small boundary lets Task 3 create the single-use token without ever
     putting the token in a model-facing result or in the operation payload.
     """
 
-    if not _enabled() or not _validate_ref(operation_id):
-        return _denied("invalid_context" if _enabled() else "feature_disabled")
+    if not _enabled():
+        return _denied("feature_disabled")
+    if not is_auth_context(ctx) or not _validate_ref(operation_id):
+        return _denied("invalid_context")
     if not isinstance(confirmation_digest, str) or not re.fullmatch(r"[a-f0-9]{64}", confirmation_digest):
         return _denied("invalid_confirmation")
-    conn = _open_store()
+    conn = _try_open_store()
+    if conn is None:
+        return _safe_result("failed", code="storage_unavailable")
     try:
         conn.execute("BEGIN IMMEDIATE")
         row = conn.execute(
@@ -573,7 +606,7 @@ def bind_operation_confirmation(*, ctx: Any, operation_id: str, confirmation_dig
             (operation_id, _value(ctx, "account_id")),
         ).fetchone()
         if row is None or _invalid_context(ctx, row["action"]):
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _denied("not_found")
         conn.execute(
             "UPDATE operations SET confirmation_digest = ?, updated_at = ? WHERE operation_id = ?",
@@ -590,21 +623,25 @@ def bind_operation_confirmation(*, ctx: Any, operation_id: str, confirmation_dig
         )
         conn.execute("COMMIT")
     except sqlite3.Error:
-        conn.execute("ROLLBACK")
+        _rollback_safely(conn)
         return _safe_result("failed", code="storage_unavailable")
     finally:
         conn.close()
     return _safe_result("awaiting_confirmation", operation_id=operation_id, confirmation_digest=confirmation_digest)
 
 
-def commit_account_operation(*, ctx: Any, operation_id: str, confirmation_token: str) -> dict[str, Any]:
+def commit_account_operation(*, ctx: AuthContext, operation_id: str, confirmation_token: str) -> dict[str, Any]:
     """Commit a confirmed page operation with all checks in one transaction."""
 
     if not _enabled():
         return _denied("feature_disabled")
+    if not is_auth_context(ctx):
+        return _denied("invalid_context")
     if not _validate_ref(operation_id) or not isinstance(confirmation_token, str):
         return _denied("invalid_confirmation")
-    conn = _open_store()
+    conn = _try_open_store()
+    if conn is None:
+        return _safe_result("failed", operation_id=operation_id, code="storage_unavailable")
     try:
         conn.execute("BEGIN IMMEDIATE")
         row = conn.execute(
@@ -612,19 +649,25 @@ def commit_account_operation(*, ctx: Any, operation_id: str, confirmation_token:
             (operation_id, _value(ctx, "account_id")),
         ).fetchone()
         if row is None:
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _denied("not_found")
         if row["state"] in FINAL_OPERATION_STATES:
             conn.execute("COMMIT")
             return _operation_result(row)
         if _invalid_context(ctx, row["action"]):
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _denied("invalid_context")
         expires_at = _parse_time(row["expires_at"])
         if expires_at is None or expires_at <= _now():
+            expiry_receipt = {
+                "operation_id": operation_id,
+                "action": row["action"],
+                "payload_digest": row["payload_digest"],
+                "code": "expired",
+            }
             conn.execute(
-                "UPDATE operations SET state = 'failed', updated_at = ? WHERE operation_id = ?",
-                (_now_iso(), operation_id),
+                "UPDATE operations SET state = 'failed', receipt_json = ?, updated_at = ? WHERE operation_id = ?",
+                (json.dumps(expiry_receipt, sort_keys=True), _now_iso(), operation_id),
             )
             _audit(
                 conn,
@@ -636,16 +679,19 @@ def commit_account_operation(*, ctx: Any, operation_id: str, confirmation_token:
                 metadata={"action": row["action"], "reason": "expired"},
             )
             conn.execute("COMMIT")
-            return _safe_result("failed", operation_id=operation_id, code="expired")
+            expired_row = conn.execute(
+                "SELECT * FROM operations WHERE operation_id = ?", (operation_id,)
+            ).fetchone()
+            return _operation_result(expired_row)
         if row["expected_auth_revision"] != _value(ctx, "auth_revision"):
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _denied("stale_auth_revision")
         confirmation_digest = hashlib.sha256(confirmation_token.encode("utf-8")).hexdigest()
         if not row["confirmation_digest"]:
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _safe_result("verification_required", operation_id=operation_id, code="confirmation_required")
         if not secrets.compare_digest(row["confirmation_digest"], confirmation_digest):
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _denied("invalid_confirmation")
 
         intent = json.loads(row["payload_json"])
@@ -660,7 +706,7 @@ def commit_account_operation(*, ctx: Any, operation_id: str, confirmation_token:
             ).fetchone()
             if page is not None:
                 if page["account_id"] != row["account_id"] or page["payload_digest"] != row["payload_digest"]:
-                    conn.execute("ROLLBACK")
+                    _rollback_safely(conn)
                     return _safe_result("failed", operation_id=operation_id, code="page_conflict")
                 receipt.update(page_id=page["page_id"], slug=page["slug"], public_status=200)
             else:
@@ -687,12 +733,12 @@ def commit_account_operation(*, ctx: Any, operation_id: str, confirmation_token:
                 "SELECT * FROM client_pages WHERE page_id = ?", (row["page_id"],)
             ).fetchone()
             if page is None or page["account_id"] != row["account_id"]:
-                conn.execute("ROLLBACK")
+                _rollback_safely(conn)
                 return _safe_result("failed", operation_id=operation_id, code="page_not_found")
             if page["state"] == "tombstoned":
                 receipt.update(page_id=page["page_id"], slug=page["slug"], public_status=410)
             elif page["state"] != "published" or page["page_version"] != row["expected_page_version"]:
-                conn.execute("ROLLBACK")
+                _rollback_safely(conn)
                 return _safe_result("failed", operation_id=operation_id, code="page_changed")
             else:
                 conn.execute(
@@ -701,7 +747,7 @@ def commit_account_operation(*, ctx: Any, operation_id: str, confirmation_token:
                 )
                 receipt.update(page_id=page["page_id"], slug=page["slug"], public_status=410, page_version=page["page_version"] + 1)
         else:
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _safe_result("failed", operation_id=operation_id, code="unsupported_commit_action")
 
         conn.execute(
@@ -718,19 +764,22 @@ def commit_account_operation(*, ctx: Any, operation_id: str, confirmation_token:
             metadata={"action": row["action"], "state": "verified_success"},
         )
         conn.execute("COMMIT")
+        committed_row = conn.execute(
+            "SELECT * FROM operations WHERE operation_id = ?", (operation_id,)
+        ).fetchone()
     except (sqlite3.Error, KeyError, json.JSONDecodeError):
         try:
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
         except sqlite3.Error:
             pass
         return _safe_result("failed", operation_id=operation_id, code="storage_unavailable")
     finally:
         conn.close()
 
-    return _safe_result("verified_success", **receipt)
+    return _operation_result(committed_row)
 
 
-def get_lifecycle_status(*, ctx: Any, operation_id: str | None = None) -> dict[str, Any]:
+def get_lifecycle_status(*, ctx: AuthContext, operation_id: str | None = None) -> dict[str, Any]:
     """Return only safe status metadata for one account's operation."""
 
     if not _enabled():
@@ -742,7 +791,9 @@ def get_lifecycle_status(*, ctx: Any, operation_id: str | None = None) -> dict[s
     }
     if context_action not in allowed_status_actions or _invalid_context(ctx, context_action):
         return _denied("invalid_context")
-    conn = _open_store()
+    conn = _try_open_store()
+    if conn is None:
+        return _safe_result("failed", code="storage_unavailable")
     try:
         if operation_id:
             row = conn.execute(
@@ -754,19 +805,25 @@ def get_lifecycle_status(*, ctx: Any, operation_id: str | None = None) -> dict[s
                 "SELECT * FROM operations WHERE account_id = ? ORDER BY created_at DESC LIMIT 1",
                 (_value(ctx, "account_id"),),
             ).fetchone()
+    except sqlite3.Error:
+        return _safe_result("failed", code="storage_unavailable")
     finally:
         conn.close()
     return _operation_result(row) if row else _denied("not_found")
 
 
-def cancel_account_operation(*, ctx: Any, operation_id: str) -> dict[str, Any]:
+def cancel_account_operation(*, ctx: AuthContext, operation_id: str) -> dict[str, Any]:
     """Cancel an uncommitted operation; cancellation is idempotent."""
 
     if not _enabled():
         return _denied("feature_disabled")
+    if not is_auth_context(ctx):
+        return _denied("invalid_context")
     if not _validate_ref(operation_id):
         return _denied("not_found")
-    conn = _open_store()
+    conn = _try_open_store()
+    if conn is None:
+        return _safe_result("failed", code="storage_unavailable")
     try:
         conn.execute("BEGIN IMMEDIATE")
         row = conn.execute(
@@ -774,13 +831,13 @@ def cancel_account_operation(*, ctx: Any, operation_id: str) -> dict[str, Any]:
             (operation_id, _value(ctx, "account_id")),
         ).fetchone()
         if row is None:
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _denied("not_found")
         if row["state"] in FINAL_OPERATION_STATES:
             conn.execute("COMMIT")
             return _operation_result(row)
         if _invalid_context(ctx, row["action"]):
-            conn.execute("ROLLBACK")
+            _rollback_safely(conn)
             return _denied("invalid_context")
         conn.execute(
             "UPDATE operations SET state = 'cancelled', updated_at = ? WHERE operation_id = ?",
@@ -797,7 +854,7 @@ def cancel_account_operation(*, ctx: Any, operation_id: str) -> dict[str, Any]:
         )
         conn.execute("COMMIT")
     except sqlite3.Error:
-        conn.execute("ROLLBACK")
+        _rollback_safely(conn)
         return _safe_result("failed", code="storage_unavailable")
     finally:
         conn.close()
@@ -814,12 +871,16 @@ def get_public_page(slug: str) -> tuple[int, dict[str, Any], str]:
     cache_control = "no-store"
     if not isinstance(slug, str) or not _SLUG_RE.fullmatch(slug):
         return 404, {}, cache_control
-    conn = _open_store()
+    conn = _try_open_store()
+    if conn is None:
+        return 404, {}, cache_control
     try:
         row = conn.execute(
             "SELECT page_id, slug, title, body, state FROM client_pages WHERE slug = ?",
             (slug,),
         ).fetchone()
+    except sqlite3.Error:
+        return 404, {}, cache_control
     finally:
         conn.close()
     if row is None or row["state"] not in {"published", "tombstoned"}:
@@ -838,11 +899,15 @@ def verify_client_page_publication(page_id: str, expected_state: str) -> dict[st
 
     if not _validate_ref(page_id) or expected_state not in {"published", "tombstoned"}:
         return _safe_result("failed", code="invalid_reference")
-    conn = _open_store()
+    conn = _try_open_store()
+    if conn is None:
+        return _safe_result("failed", code="storage_unavailable")
     try:
         row = conn.execute(
             "SELECT state, page_version FROM client_pages WHERE page_id = ?", (page_id,)
         ).fetchone()
+    except sqlite3.Error:
+        return _safe_result("failed", code="storage_unavailable")
     finally:
         conn.close()
     if row is None:
@@ -859,6 +924,8 @@ def verify_client_page_publication(page_id: str, expected_state: str) -> dict[st
 
 
 __all__ = [
+    "AuthContext",
+    "TrustedInputEvent",
     "LifecycleContext",
     "SAFE_STATES",
     "_connect",
