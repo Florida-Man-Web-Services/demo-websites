@@ -30,6 +30,7 @@ COPY gainesville-no-website/gainesville_no_website.json gainesville-no-website/
 # URL is sha256(page)[:12], so the pages themselves must be readable.
 COPY generated-sites generated-sites/
 COPY mcp-server/*.py mcp-server/
+COPY mcp-server/activities_allowlist.json mcp-server/
 COPY mcp-server/entrypoint.sh /entrypoint.sh
 RUN chmod 0755 /entrypoint.sh \
     && git --version \
@@ -40,7 +41,8 @@ RUN chmod 0755 /entrypoint.sh \
 # survive restarts. Shallow site-PR clone lives under /data/demo-websites.
 ENV CALL_LOG=/data/call-log.csv \
     CALL_DB=/data/call-log.db \
-    SITE_PR_REPO_ROOT=/data/demo-websites
+    SITE_PR_REPO_ROOT=/data/demo-websites \
+    ACTIVITIES_PATH=/data/activities.json
 RUN mkdir /data
 
 EXPOSE 8036
