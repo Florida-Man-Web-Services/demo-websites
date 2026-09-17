@@ -49,6 +49,20 @@ OWNER_OUTCOMES = [
 ]
 ALL_CALL_OUTCOMES = SALES_OUTCOMES + OWNER_OUTCOMES
 
+# Task 3 intentionally exposes no lifecycle tools to the model.  If a stale
+# model or caller attempts one anyway, return a safe denial rather than mapping
+# any secret, account, session, destination, or confirmation field.
+_MODEL_LIFECYCLE_NAMES = frozenset(
+    {
+        "request_account_step_up",
+        "capture_account_phone",
+        "request_destination_verification",
+        "verify_destination_challenge",
+        "get_confirmation_readback",
+        "capture_lifecycle_confirmation",
+    }
+)
+
 
 def _log_call_outcome_tool(
     *,
@@ -729,6 +743,10 @@ class CallState:
     auth_anomaly_reasons: dict = field(default_factory=dict)
     auth_require_step_up: bool = False
     voice_pcm_hashes: list = field(default_factory=list)
+    # Task 3 lifecycle records are server-owned and never model arguments.
+    lifecycle_auth: object | None = None
+    lifecycle_action: str = ""
+    lifecycle_step_up_ok: bool = False
     # grok-realtime TTFA stamps (monotonic seconds / derived ms). No audio.
     ttfa: dict = field(default_factory=dict)
 
@@ -1276,6 +1294,11 @@ def _run_onboarding_tool(state: CallState, name: str, args: dict) -> str:
 
 
 def _run_tool(state: CallState, name: str, args: dict) -> str:
+    if name in _MODEL_LIFECYCLE_NAMES:
+        return json.dumps(
+            {"ok": False, "state": "denied", "code": "lifecycle_boundary_not_model_exposed"},
+            ensure_ascii=False,
+        )
     if name == "end_call":
         state.ended = True
         return "The call will end after your current reply is spoken."

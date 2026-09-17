@@ -952,5 +952,32 @@ def note_speech_activity(state: Any, *, force: bool = False, pcm: bytes | None =
     return on_speech_window(state, pcm=pcm)
 
 
+def lifecycle_auth_context(state: Any, *, action: str):
+    """Create the separate server-owned lifecycle context.
+
+    Existing voice-auth levels remain unchanged; caller ID and spoken consent
+    are not promoted to lifecycle authorization by this helper.
+    """
+    from lifecycle_voice import create_auth_context
+
+    return create_auth_context(state, action=action)
+
+
+def lifecycle_private_input(state: Any, secret_input: str, *, purpose: str, challenge_id: str | None = None):
+    """Pass a telephony-private input into the lifecycle boundary as a ref."""
+    from lifecycle_voice import capture_private_secret_input
+
+    return capture_private_secret_input(
+        state, secret_input, purpose=purpose, challenge_id=challenge_id
+    )
+
+
+def lifecycle_keypad_event(state: Any, *, digit: str):
+    """Create a typed DTMF event; ordinary speech is not an equivalent."""
+    from lifecycle_voice import make_keypad_event
+
+    return make_keypad_event(state, digit=digit)
+
+
 def deny_json(deny: dict[str, Any]) -> str:
     return json.dumps(deny, ensure_ascii=False)
