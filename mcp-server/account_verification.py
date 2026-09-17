@@ -53,6 +53,19 @@ class AuthContext:
 
 
 @dataclass(frozen=True, slots=True)
+class TransportSessionBinding:
+    """Server-issued binding for one authenticated voice transport session."""
+
+    session_id: str
+    transport_id: str
+    account_id: str
+    auth_revision: int
+    account_status: str
+    expires_at: datetime | str
+    _issuance_id: str | None = field(default=None, init=False, repr=False, compare=False)
+
+
+@dataclass(frozen=True, slots=True)
 class TrustedInputEvent:
     """Server-created event for private keypad/consent input."""
 
@@ -79,6 +92,7 @@ class TrustedInputEvent:
 
 
 _AUTH_PROVENANCE: dict[str, tuple[int, tuple[Any, ...]]] = {}
+_TRANSPORT_PROVENANCE: dict[str, tuple[int, tuple[Any, ...]]] = {}
 _EVENT_PROVENANCE: dict[str, tuple[int, tuple[Any, ...]]] = {}
 
 
@@ -97,6 +111,17 @@ def _auth_provenance_binding(value: AuthContext) -> tuple[Any, ...]:
         value.auth_level,
         value.legacy_auth,
         value.forced_mode,
+    )
+
+
+def _transport_provenance_binding(value: TransportSessionBinding) -> tuple[Any, ...]:
+    return (
+        value.session_id,
+        value.transport_id,
+        value.account_id,
+        value.auth_revision,
+        value.account_status,
+        value.expires_at,
     )
 
 
@@ -121,6 +146,30 @@ def _register_auth(auth: AuthContext) -> AuthContext:
     object.__setattr__(auth, "_issuance_id", issuance_id)
     _AUTH_PROVENANCE[issuance_id] = (id(auth), _auth_provenance_binding(auth))
     return auth
+
+
+def _issue_transport_session_binding(
+    *,
+    session_id: str,
+    transport_id: str,
+    account_id: str,
+    auth_revision: int,
+    account_status: str,
+    expires_at: datetime | str,
+) -> TransportSessionBinding:
+    """Issue a binding only at the trusted telephony state-construction boundary."""
+    binding = TransportSessionBinding(
+        session_id=session_id,
+        transport_id=transport_id,
+        account_id=account_id,
+        auth_revision=auth_revision,
+        account_status=account_status,
+        expires_at=expires_at,
+    )
+    issuance_id = "issuance_" + secrets.token_urlsafe(32)
+    object.__setattr__(binding, "_issuance_id", issuance_id)
+    _TRANSPORT_PROVENANCE[issuance_id] = (id(binding), _transport_provenance_binding(binding))
+    return binding
 
 
 def _issue_auth_context(
@@ -195,6 +244,11 @@ def issue_auth_context(*_args: Any, **_kwargs: Any) -> NoReturn:
     raise TypeError("server issuance required")
 
 
+def issue_transport_session_binding(*_args: Any, **_kwargs: Any) -> NoReturn:
+    """Reject public attempts to mint a transport/session binding."""
+    raise TypeError("server issuance required")
+
+
 def issue_trusted_input_event(*_args: Any, **_kwargs: Any) -> NoReturn:
     """Reject public attempts to mint a trusted input event."""
     raise TypeError("server issuance required")
@@ -205,6 +259,13 @@ def is_auth_context(value: Any) -> bool:
         return False
     registered = _AUTH_PROVENANCE.get(value._issuance_id)
     return registered is not None and registered[0] == id(value) and registered[1] == _auth_provenance_binding(value)
+
+
+def is_transport_session_binding(value: Any) -> bool:
+    if type(value) is not TransportSessionBinding or not value._issuance_id:
+        return False
+    registered = _TRANSPORT_PROVENANCE.get(value._issuance_id)
+    return registered is not None and registered[0] == id(value) and registered[1] == _transport_provenance_binding(value)
 
 
 def is_trusted_input_event(value: Any) -> bool:
@@ -437,6 +498,37 @@ def _current_auth_revision(account_id: str) -> int | None:
         return None
 
 
+def validate_transport_session_binding(binding: Any) -> bool:
+    """Validate provenance, expiry, and the authoritative registry snapshot."""
+    if not is_transport_session_binding(binding):
+        return False
+    if (
+        not isinstance(binding.session_id, str)
+        or not binding.session_id
+        or not isinstance(binding.transport_id, str)
+        or not binding.transport_id
+        or not isinstance(binding.account_id, str)
+        or not binding.account_id
+        or binding.account_status not in _ELIGIBLE
+        or type(binding.auth_revision) is not int
+        or binding.auth_revision < 0
+    ):
+        return False
+    expires_at = _parse_time(binding.expires_at)
+    if expires_at is None or expires_at <= _now():
+        return False
+    try:
+        customers = _customers()
+        with customers._lock:  # noqa: SLF001
+            data = customers._read()  # noqa: SLF001
+            rows = customers._lifecycle_account_rows(data, binding.account_id)  # noqa: SLF001
+            if len(rows) != 1 or rows[0][1].get("status") != binding.account_status:
+                return False
+            return rows[0][1].get("auth_revision") == binding.auth_revision
+    except Exception:  # fail closed on registry/storage errors
+        return False
+
+
 def _trusted_destination(account_id: str) -> str | None:
     try:
         customers = _customers()
@@ -655,14 +747,24 @@ def _issue_challenge(
     expiry = _now() + __import__("datetime").timedelta(seconds=_ttl("ACCOUNT_LIFECYCLE_OTP_TTL_S", 300))
     conn = None
     try:
+        # Establish the fail-closed boundary before contacting the provider.
+        # Older challenges are no longer usable once a resend attempt starts;
+        # the new row remains delivery_pending until the provider call and its
+        # final database transition both succeed.
         conn = _store()
         conn.execute("BEGIN IMMEDIATE")
+        conn.execute(
+            """UPDATE verification_challenges SET state='superseded'
+               WHERE account_id=? AND session_id=? AND purpose=?
+                 AND state IN ('pending', 'delivery_pending')""",
+            (auth.account_id, auth.session_id, purpose),
+        )
         conn.execute(
             """INSERT INTO verification_challenges
             (challenge_id, operation_id, account_id, session_id, caller_transport_binding,
              auth_revision, action, purpose, destination_ref, verifier_digest, expires_at,
              resend_after, max_attempts, state, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)""",
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'delivery_pending', ?)""",
             (
                 challenge_id, operation_id, auth.account_id, auth.session_id,
                 auth.caller_transport_binding, auth.auth_revision, auth.action, purpose,
@@ -671,18 +773,49 @@ def _issue_challenge(
                 _ttl("ACCOUNT_LIFECYCLE_MAX_ATTEMPTS", 5), _iso(_now()),
             ),
         )
-        if not _send(phone, code, purpose=purpose, challenge_id=challenge_id):
-            conn.execute("UPDATE verification_challenges SET state='failed' WHERE challenge_id=?", (challenge_id,))
-            conn.execute("COMMIT")
-            return _result("failed", code="sender_unavailable")
-        # A successful resend supersedes every older pending challenge for the
-        # same account/session/purpose, so an earlier OTP cannot be replayed.
-        conn.execute(
-            """UPDATE verification_challenges SET state='superseded'
-               WHERE account_id=? AND session_id=? AND purpose=?
-                 AND state='pending' AND challenge_id<>?""",
-            (auth.account_id, auth.session_id, purpose, challenge_id),
-        )
+        conn.execute("COMMIT")
+    except Exception:
+        if conn is not None:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        return _result("failed", code="storage_unavailable")
+    finally:
+        if conn is not None:
+            conn.close()
+
+    if not _send(phone, code, purpose=purpose, challenge_id=challenge_id):
+        # Failure to record this transition is still safe: delivery_pending
+        # is never accepted by _complete_challenge.
+        conn = None
+        try:
+            conn = _store()
+            conn.execute(
+                "UPDATE verification_challenges SET state='failed' WHERE challenge_id=? AND state='delivery_pending'",
+                (challenge_id,),
+            )
+            conn.commit()
+        except Exception:
+            pass
+        finally:
+            if conn is not None:
+                conn.close()
+        return _result("failed", code="sender_unavailable")
+
+    # A provider success is ambiguous until this transition is durable.  If
+    # it fails, the row stays delivery_pending and no OTP (old or new) works.
+    conn = None
+    try:
+        conn = _store()
+        conn.execute("BEGIN IMMEDIATE")
+        changed = conn.execute(
+            "UPDATE verification_challenges SET state='pending' WHERE challenge_id=? AND state='delivery_pending'",
+            (challenge_id,),
+        ).rowcount
+        if changed != 1:
+            conn.rollback()
+            return _result("failed", code="storage_unavailable")
         conn.execute("COMMIT")
     except Exception:
         if conn is not None:
@@ -993,6 +1126,55 @@ def get_confirmation_readback(*, auth: AuthContext, operation_id: str) -> dict[s
         return _result("failed", code="storage_unavailable")
 
 
+def cancel_lifecycle_operation(*, auth: AuthContext, operation_id: str) -> dict[str, Any]:
+    """Cancel an operation and revoke its in-memory/SQLite confirmation state."""
+    if not _enabled():
+        return _deny("feature_disabled")
+    if not isinstance(operation_id, str) or not operation_id:
+        return _deny("invalid_operation")
+    if not _valid_auth(auth, auth.action, owner=True):
+        return _deny("verification_required")
+    try:
+        import account_lifecycle
+
+        cancelled = account_lifecycle.cancel_account_operation(
+            ctx=auth, operation_id=operation_id
+        )
+        if not (
+            cancelled.get("state") == "verified_noop"
+            and cancelled.get("code") == "cancelled"
+        ):
+            return cancelled if cancelled.get("state") != "verified_success" else _deny("operation_terminal")
+
+        key = auth.session_id + "\0" + operation_id
+        with _PRIVATE_LOCK:
+            _READBACKS.pop(key, None)
+        conn = None
+        try:
+            conn = _store()
+            conn.execute("BEGIN IMMEDIATE")
+            conn.execute(
+                "UPDATE confirmation_tokens SET state='cancelled' WHERE operation_id=? AND state='pending'",
+                (operation_id,),
+            )
+            conn.execute("COMMIT")
+        except Exception:
+            if conn is not None:
+                try:
+                    conn.rollback()
+                except Exception:
+                    pass
+            # The operation is already durably cancelled.  Returning a failure
+            # is safer than suggesting a usable confirmation remains.
+            return _result("failed", operation_id=operation_id, code="storage_unavailable")
+        finally:
+            if conn is not None:
+                conn.close()
+        return _result("verified_noop", operation_id=operation_id, code="cancelled")
+    except Exception:
+        return _result("failed", operation_id=operation_id, code="storage_unavailable")
+
+
 def capture_lifecycle_confirmation(*, auth: AuthContext, operation_id: str, readback_digest: str, event: TrustedInputEvent) -> str | dict[str, Any]:
     if not _enabled():
         return _deny("feature_disabled")
@@ -1069,10 +1251,13 @@ def capture_lifecycle_confirmation(*, auth: AuthContext, operation_id: str, read
 
 __all__ = [
     "AuthContext",
+    "TransportSessionBinding",
     "TrustedInputEvent",
     "FakeOTPAdapter",
     "is_auth_context",
+    "is_transport_session_binding",
     "is_trusted_input_event",
+    "validate_transport_session_binding",
     "lifecycle_enabled",
     "set_otp_adapter",
     "set_verification_sender",
@@ -1085,5 +1270,6 @@ __all__ = [
     "request_destination_verification",
     "verify_destination_challenge",
     "get_confirmation_readback",
+    "cancel_lifecycle_operation",
     "capture_lifecycle_confirmation",
 ]

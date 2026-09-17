@@ -744,6 +744,7 @@ class CallState:
     auth_require_step_up: bool = False
     voice_pcm_hashes: list = field(default_factory=list)
     # Task 3 lifecycle records are server-owned and never model arguments.
+    lifecycle_transport_binding: object | None = None
     lifecycle_auth: object | None = None
     lifecycle_action: str = ""
     lifecycle_step_up_ok: bool = False

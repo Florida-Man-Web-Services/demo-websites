@@ -38,7 +38,16 @@ def _expiry() -> datetime:
 
 def _state_auth(state: Any, action: str | None = None) -> verification.AuthContext | dict[str, Any]:
     auth = getattr(state, "lifecycle_auth", None)
-    if verification.is_auth_context(auth) and (action is None or auth.action == action):
+    binding = getattr(state, "lifecycle_transport_binding", None)
+    if (
+        verification.is_auth_context(auth)
+        and verification.validate_transport_session_binding(binding)
+        and isinstance(binding, verification.TransportSessionBinding)
+        and auth.session_id == binding.session_id
+        and auth.caller_transport_binding == binding.transport_id
+        and auth.account_id == binding.account_id
+        and (action is None or auth.action == action)
+    ):
         return auth
     return create_auth_context(state, action=action or getattr(state, "lifecycle_action", ""))
 
@@ -50,24 +59,21 @@ def create_auth_context(state: Any, *, action: str) -> verification.AuthContext 
         return {"ok": False, "state": "denied", "code": "feature_disabled"}
     if action not in LIFECYCLE_ACTIONS:
         return {"ok": False, "state": "denied", "code": "invalid_action"}
-    customer = getattr(state, "customer", None)
-    account_id = customer.get("account_id") if isinstance(customer, dict) else None
-    revision = customer.get("auth_revision") if isinstance(customer, dict) else None
-    status = customer.get("status") if isinstance(customer, dict) else None
-    if not isinstance(account_id, str) or not account_id or type(revision) is not int or status not in {"paid", "active_owner"}:
-        return {"ok": False, "state": "denied", "code": "account_unavailable"}
-    call_sid = getattr(state, "call_sid", "")
-    if not isinstance(call_sid, str) or not call_sid:
+    binding = getattr(state, "lifecycle_transport_binding", None)
+    if not (
+        verification.validate_transport_session_binding(binding)
+        and isinstance(binding, verification.TransportSessionBinding)
+    ):
         return {"ok": False, "state": "denied", "code": "transport_unavailable"}
     auth = verification._issue_auth_context(
-        session_id=f"voice:{call_sid}",
-        account_id=account_id,
-        caller_transport_binding=call_sid,
-        auth_revision=revision,
+        session_id=binding.session_id,
+        account_id=binding.account_id,
+        caller_transport_binding=binding.transport_id,
+        auth_revision=binding.auth_revision,
         action=action,
         expires_at=_expiry(),
         capability_id="cap_" + secrets.token_urlsafe(20),
-        account_status=status,
+        account_status=binding.account_status,
         owner_authenticated=False,
         proof_fresh=False,
         auth_level="server_pending",
@@ -181,8 +187,22 @@ def make_keypad_event(
     auth = _state_auth(state)
     if not verification.is_auth_context(auth) or not auth.owner_authenticated:
         return {"ok": False, "state": "denied", "code": "verification_required"}
+    if digit == "2":
+        if not isinstance(operation_id, str) or not operation_id:
+            return {"ok": False, "state": "denied", "code": "confirmation_cancelled"}
+        cancelled = verification.cancel_lifecycle_operation(
+            auth=auth, operation_id=operation_id
+        )
+        if cancelled.get("state") == "verified_noop" and cancelled.get("code") == "cancelled":
+            return {
+                "ok": False,
+                "state": "denied",
+                "code": "confirmation_cancelled",
+                "operation_id": operation_id,
+            }
+        return cancelled
     if digit != "1":
-        return {"ok": False, "state": "denied", "code": "confirmation_cancelled" if digit == "2" else "invalid_keypad"}
+        return {"ok": False, "state": "denied", "code": "invalid_keypad"}
     try:
         return verification._issue_trusted_input_event(
             auth=auth, event_type="keypad_confirm", operation_id=operation_id,

@@ -88,8 +88,8 @@ def test_fake_owner_step_up_is_single_use_and_redacted(tmp_path, monkeypatch):
     )
 
     (tmp_path / "customers.json").write_text(
-        '{"+15550000000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15550000000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import importlib
@@ -110,7 +110,7 @@ def test_fake_owner_step_up_is_single_use_and_redacted(tmp_path, monkeypatch):
         assert verified["state"] == "verified_success"
         assert verified["auth"].owner_authenticated is True
         assert code not in str(verified)
-        assert "+15550000000" not in str(verified)
+        assert "+13555550000" not in str(verified)
         replay = complete_step_up(
             challenge_id=started["challenge_id"],
             secret_input_ref=secret_ref,
@@ -126,8 +126,8 @@ def test_owner_step_up_wrong_code_expiry_purpose_and_session_are_denied(tmp_path
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15550000000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15550000000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -174,8 +174,8 @@ def test_destination_requires_private_capture_and_explicit_consent(tmp_path, mon
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15550000000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15550000000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -200,10 +200,10 @@ def test_destination_requires_private_capture_and_explicit_consent(tmp_path, mon
         owner_challenge = request_owner_verification(auth=base, purpose="owner_step_up")
         owner_ref = capture_secret_input(adapter.last_code_for_test(), auth=base, purpose="owner_step_up")
         auth = complete_step_up(challenge_id=owner_challenge["challenge_id"], secret_input_ref=owner_ref, ctx=base)["auth"]
-        destination_ref = capture_secret_input("+15550009999", auth=auth, purpose="destination_phone")
+        destination_ref = capture_secret_input("+13555559999", auth=auth, purpose="destination_phone")
         captured = capture_account_phone(auth=auth, secret_input_ref=destination_ref)
         assert captured["state"] == "verified_success"
-        assert "39999" not in str(captured)
+        assert "59999" not in str(captured)
         no_consent = request_destination_verification(auth=auth, operation_id="op_test", send_consent_event=None)
         assert no_consent["code"] == "consent_required"
 
@@ -218,7 +218,7 @@ def test_destination_requires_private_capture_and_explicit_consent(tmp_path, mon
             auth=auth, operation_id="op_test", challenge_id=sent["challenge_id"], secret_input_ref=code_ref
         )
         assert proof["state"] == "verified_success"
-        assert "39999" not in str(proof)
+        assert "59999" not in str(proof)
     finally:
         set_otp_adapter(None)
 
@@ -228,8 +228,8 @@ def test_keypad_confirmation_is_bound_to_readback_and_single_use(tmp_path, monke
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15550000000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15550000000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -276,8 +276,8 @@ def test_missing_sender_fails_closed_and_resend_is_throttled(tmp_path, monkeypat
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15550000000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15550000000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -308,8 +308,8 @@ def test_expired_code_is_rejected_without_returning_secret(tmp_path, monkeypatch
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15550000000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15550000000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -373,8 +373,8 @@ def test_otp_consumption_is_atomic_under_concurrent_replay(tmp_path, monkeypatch
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15555550000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15555550000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -409,8 +409,8 @@ def test_resend_supersedes_previous_challenge_and_revision_is_authoritative(tmp_
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15555550000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15555550000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -430,7 +430,7 @@ def test_resend_supersedes_previous_challenge_and_revision_is_authoritative(tmp_
         old = complete_step_up(challenge_id=first["challenge_id"], secret_input_ref=first_ref, ctx=ctx)
         assert old == {"ok": False, "state": "denied", "code": "replayed_challenge"}
         second_ref = capture_secret_input(adapter.last_code_for_test(), auth=ctx, purpose="owner_step_up", challenge_id=second["challenge_id"])
-        customers.upsert("+15555550000", patch={"auth_revision": 1})
+        customers.upsert("+13555550000", patch={"auth_revision": 1})
         stale = complete_step_up(challenge_id=second["challenge_id"], secret_input_ref=second_ref, ctx=ctx)
         assert stale == {"ok": False, "state": "denied", "code": "stale_auth_revision"}
     finally:
@@ -442,8 +442,8 @@ def test_sender_false_none_and_storage_errors_fail_closed(tmp_path, monkeypatch)
     monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
     monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
     (tmp_path / "customers.json").write_text(
-        '{"+15555550000":{"status":"active_owner","account_id":"acct-1",'
-        '"auth_revision":0,"phone":"+15555550000","trusted_phones":[]}}\n',
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
         encoding="utf-8",
     )
     import customers
@@ -474,4 +474,69 @@ def test_sender_false_none_and_storage_errors_fail_closed(tmp_path, monkeypatch)
         assert failed["state"] == "failed"
         assert failed["code"] == "storage_unavailable"
     finally:
+        set_otp_adapter(None)
+
+
+def test_resend_database_failure_leaves_old_and_ambiguous_codes_unusable(tmp_path, monkeypatch):
+    monkeypatch.setenv("ACCOUNT_LIFECYCLE_ENABLED", "true")
+    monkeypatch.setenv("ACCOUNT_LIFECYCLE_DB", str(tmp_path / "lifecycle.sqlite3"))
+    monkeypatch.setenv("CUSTOMERS_PATH", str(tmp_path / "customers.json"))
+    (tmp_path / "customers.json").write_text(
+        '{"+13555550000":{"status":"active_owner","account_id":"acct-1",'
+        '"auth_revision":0,"phone":"+13555550000","trusted_phones":[]}}\n',
+        encoding="utf-8",
+    )
+    import customers
+    import importlib
+    importlib.reload(customers)
+    from account_verification import (
+        FakeOTPAdapter,
+        begin_step_up,
+        capture_secret_input,
+        complete_step_up,
+        set_otp_adapter,
+    )
+
+    adapter = FakeOTPAdapter()
+    set_otp_adapter(adapter)
+    original_store = verification._store
+    calls = 0
+
+    def fail_after_send():
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return original_store()
+        raise sqlite3.DatabaseError("finalize unavailable")
+
+    try:
+        ctx = _ctx()
+        first = begin_step_up(action="trusted_phone_add", ctx=ctx)
+        old_ref = capture_secret_input(
+            adapter.last_code_for_test(),
+            auth=ctx,
+            purpose="owner_step_up",
+            challenge_id=first["challenge_id"],
+        )
+        with verification._PRIVATE_LOCK:
+            verification._SEND_HISTORY.clear()
+        monkeypatch.setattr(verification, "_store", fail_after_send)
+        second = begin_step_up(action="trusted_phone_add", ctx=ctx)
+        assert second["state"] == "failed"
+        assert second["code"] == "storage_unavailable"
+
+        monkeypatch.setattr(verification, "_store", original_store)
+        old_result = complete_step_up(
+            challenge_id=first["challenge_id"], secret_input_ref=old_ref, ctx=ctx
+        )
+        assert old_result["state"] == "denied"
+        assert old_result["code"] == "replayed_challenge"
+        with sqlite3.connect(tmp_path / "lifecycle.sqlite3") as conn:
+            states = dict(conn.execute(
+                "SELECT challenge_id, state FROM verification_challenges"
+            ).fetchall())
+        assert states[first["challenge_id"]] == "superseded"
+        assert not any(state == "pending" for state in states.values())
+    finally:
+        monkeypatch.setattr(verification, "_store", original_store)
         set_otp_adapter(None)

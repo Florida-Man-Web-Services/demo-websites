@@ -312,6 +312,8 @@ def compute_initial_auth(
 
 def apply_auth_to_state(state: Any, snapshot: dict[str, Any] | None = None) -> None:
     """Write auth fields onto CallState (duck-typed)."""
+    if getattr(state, "lifecycle_transport_binding", None) is None:
+        state.lifecycle_transport_binding = issue_lifecycle_transport_binding(state)
     snap = snapshot or compute_initial_auth(
         getattr(state, "caller_number", "") or "",
         getattr(state, "customer", None) or None,
@@ -961,6 +963,43 @@ def lifecycle_auth_context(state: Any, *, action: str):
     from lifecycle_voice import create_auth_context
 
     return create_auth_context(state, action=action)
+
+
+def issue_lifecycle_transport_binding(state: Any):
+    """Issue the lifecycle transport binding during trusted call-state setup.
+
+    This is intentionally separate from lifecycle_auth_context: that later
+    boundary accepts only this server-issued record and never mints authority
+    from caller-provided state fields.
+    """
+    from datetime import datetime, timedelta, timezone
+
+    customer = getattr(state, "customer", None)
+    call_sid = getattr(state, "call_sid", None)
+    if not isinstance(customer, dict) or not isinstance(call_sid, str) or not call_sid:
+        return None
+    account_id = customer.get("account_id")
+    revision = customer.get("auth_revision")
+    if (
+        not isinstance(account_id, str)
+        or not account_id
+        or type(revision) is not int
+        or revision < 0
+    ):
+        return None
+    try:
+        from lifecycle_voice import verification
+
+        return verification._issue_transport_session_binding(
+            session_id=f"voice:{call_sid}",
+            transport_id=call_sid,
+            account_id=account_id,
+            auth_revision=revision,
+            account_status=customer.get("status") or "",
+            expires_at=datetime.now(timezone.utc) + timedelta(seconds=600),
+        )
+    except Exception:  # fail closed; lifecycle_auth_context will deny
+        return None
 
 
 def lifecycle_private_input(state: Any, secret_input: str, *, purpose: str, challenge_id: str | None = None):
