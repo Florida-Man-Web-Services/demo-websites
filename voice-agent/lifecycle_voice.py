@@ -39,8 +39,11 @@ def _expiry() -> datetime:
 def _state_auth(state: Any, action: str | None = None) -> verification.AuthContext | dict[str, Any]:
     auth = getattr(state, "lifecycle_auth", None)
     binding = getattr(state, "lifecycle_transport_binding", None)
+    import voice_auth
+
     if (
-        verification.is_auth_context(auth)
+        voice_auth.is_server_owned_lifecycle_state(state)
+        and verification.is_auth_context(auth)
         and verification.validate_transport_session_binding(binding)
         and isinstance(binding, verification.TransportSessionBinding)
         and auth.session_id == binding.session_id
@@ -60,8 +63,11 @@ def create_auth_context(state: Any, *, action: str) -> verification.AuthContext 
     if action not in LIFECYCLE_ACTIONS:
         return {"ok": False, "state": "denied", "code": "invalid_action"}
     binding = getattr(state, "lifecycle_transport_binding", None)
+    import voice_auth
+
     if not (
-        verification.validate_transport_session_binding(binding)
+        voice_auth.is_server_owned_lifecycle_state(state)
+        and verification.validate_transport_session_binding(binding)
         and isinstance(binding, verification.TransportSessionBinding)
     ):
         return {"ok": False, "state": "denied", "code": "transport_unavailable"}

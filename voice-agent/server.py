@@ -62,6 +62,7 @@ def _make_state(
     number: str,
     *,
     outbound_slug: str | None = None,
+    register_transport: bool = True,
 ) -> CallState:
     """Build CallState with per-phone mode routing (AGENT_MODE=auto)."""
     from agent import resolve_call_mode
@@ -90,6 +91,10 @@ def _make_state(
         mode=mode,
         customer=customer or {},
     )
+    if register_transport and isinstance(call_sid, str) and call_sid:
+        # Register before lifecycle setup so issuance can prove this is the
+        # authoritative server-owned call state, not a fabricated namespace.
+        CALLS[call_sid] = state
     try:
         import voice_auth
 
@@ -592,6 +597,7 @@ def _get_sms_session(from_number: str, message_sid: str) -> CallState:
         business,
         "sms",
         from_number,
+        register_transport=False,
     )
     SMS_SESSIONS[from_number] = (state, now)
     log.info(

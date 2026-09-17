@@ -26,19 +26,24 @@ def _state(tmp_path, monkeypatch):
     import importlib
     import customers
     importlib.reload(customers)
-    return SimpleNamespace(
-        call_sid="CA-VOICE-1",
-        caller_number="+13555550000",
-        customer={"account_id": "acct-1", "auth_revision": 0, "status": "active_owner"},
-        lifecycle_transport_binding=lv.verification._issue_transport_session_binding(
-            session_id="voice:CA-VOICE-1",
-            transport_id="CA-VOICE-1",
-            account_id="acct-1",
-            auth_revision=0,
-            account_status="active_owner",
-            expires_at=lv._expiry(),
-        ),
-        lifecycle_auth=None,
+    for name in (
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN",
+        "TWILIO_PHONE_NUMBER",
+        "PUBLIC_BASE_URL",
+        "DEEPINFRA_API_KEY",
+        "ANTHROPIC_API_KEY",
+    ):
+        monkeypatch.setenv(name, "test")
+    import server
+    from businesses import Business
+
+    server.CALLS.clear()
+    return server._make_state(
+        "CA-VOICE-1",
+        Business(name="Test", category="", phone="+13555550000"),
+        "inbound",
+        "+13555550000",
     )
 
 
@@ -66,19 +71,50 @@ def test_voice_context_requires_server_issued_validated_transport_binding(tmp_pa
         call_sid="CA-fabricated",
         customer={"account_id": "acct-1", "auth_revision": 0, "status": "active_owner"},
     )
+    import voice_auth
+
+    assert voice_auth.issue_lifecycle_transport_binding(fabricated) is None
+    voice_auth.apply_auth_to_state(fabricated)
+    assert getattr(fabricated, "lifecycle_transport_binding", None) is None
     denied = lv.create_auth_context(fabricated, action="trusted_phone_add")
     assert denied == {"ok": False, "state": "denied", "code": "transport_unavailable"}
 
-    fabricated.lifecycle_transport_binding = SimpleNamespace(
-        session_id="voice:CA-fabricated",
-        transport_id="CA-fabricated",
-        account_id="acct-1",
-        auth_revision=0,
-        account_status="active_owner",
-        expires_at=lv._expiry(),
-    )
-    denied_again = lv.create_auth_context(fabricated, action="trusted_phone_add")
-    assert denied_again == denied
+    for name in (
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN",
+        "TWILIO_PHONE_NUMBER",
+        "PUBLIC_BASE_URL",
+        "DEEPINFRA_API_KEY",
+        "ANTHROPIC_API_KEY",
+    ):
+        monkeypatch.setenv(name, "test")
+    import server
+    from businesses import Business
+
+    server.CALLS.clear()
+    try:
+        state = server._make_state(
+            "CA-server-issued",
+            Business(name="Test", category="", phone="+13555550000"),
+            "inbound",
+            "+13555550000",
+        )
+        assert server.CALLS.get(state.call_sid) is state
+        assert lv.verification.validate_transport_session_binding(
+            state.lifecycle_transport_binding
+        )
+        auth = voice_auth.lifecycle_auth_context(state, action="trusted_phone_add")
+        assert lv.verification.is_auth_context(auth)
+        assert auth.session_id == "voice:CA-server-issued"
+        forged = SimpleNamespace(
+            call_sid=state.call_sid,
+            customer=dict(state.customer),
+            lifecycle_transport_binding=state.lifecycle_transport_binding,
+        )
+        assert voice_auth.issue_lifecycle_transport_binding(forged) is None
+        assert lv.create_auth_context(forged, action="trusted_phone_add")["code"] == "transport_unavailable"
+    finally:
+        server.CALLS.clear()
 
 
 def test_voice_happy_path_keeps_private_values_out_of_results(tmp_path, monkeypatch):

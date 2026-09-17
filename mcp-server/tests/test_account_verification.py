@@ -427,6 +427,13 @@ def test_resend_supersedes_previous_challenge_and_revision_is_authoritative(tmp_
         with verification._PRIVATE_LOCK:
             verification._SEND_HISTORY.clear()
         second = begin_step_up(action="trusted_phone_add", ctx=ctx)
+        assert len(adapter.sent) == 2
+        assert adapter.sent[-1]["challenge_id"] == second["challenge_id"]
+        with sqlite3.connect(tmp_path / "lifecycle.sqlite3") as conn:
+            delivery_states = dict(conn.execute(
+                "SELECT challenge_id, state FROM verification_challenges"
+            ).fetchall())
+        assert delivery_states[second["challenge_id"]] == "pending"
         old = complete_step_up(challenge_id=first["challenge_id"], secret_input_ref=first_ref, ctx=ctx)
         assert old == {"ok": False, "state": "denied", "code": "replayed_challenge"}
         second_ref = capture_secret_input(adapter.last_code_for_test(), auth=ctx, purpose="owner_step_up", challenge_id=second["challenge_id"])

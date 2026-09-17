@@ -965,6 +965,23 @@ def lifecycle_auth_context(state: Any, *, action: str):
     return create_auth_context(state, action=action)
 
 
+def is_server_owned_lifecycle_state(state: Any) -> bool:
+    """Return whether the live voice server registered this exact state object."""
+    try:
+        import sys
+
+        call_sid = getattr(state, "call_sid", None)
+        server = sys.modules.get("server")
+        return (
+            isinstance(call_sid, str)
+            and bool(call_sid)
+            and server is not None
+            and getattr(server, "CALLS", {}).get(call_sid) is state
+        )
+    except Exception:
+        return False
+
+
 def issue_lifecycle_transport_binding(state: Any):
     """Issue the lifecycle transport binding during trusted call-state setup.
 
@@ -976,7 +993,9 @@ def issue_lifecycle_transport_binding(state: Any):
 
     customer = getattr(state, "customer", None)
     call_sid = getattr(state, "call_sid", None)
-    if not isinstance(customer, dict) or not isinstance(call_sid, str) or not call_sid:
+    if not is_server_owned_lifecycle_state(state):
+        return None
+    if not isinstance(customer, dict):
         return None
     account_id = customer.get("account_id")
     revision = customer.get("auth_revision")
