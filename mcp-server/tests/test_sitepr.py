@@ -241,6 +241,14 @@ def test_github_repo_defaults_to_fmws(monkeypatch):
     assert sitepr._github_repo() == "Florida-Man-Web-Services/demo-websites"
 
 
+def test_git_process_env_copies_gh_token(monkeypatch):
+    monkeypatch.setenv("GH_TOKEN", "unit-test-token")
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    env = sitepr._git_process_env()
+    assert env["GITHUB_TOKEN"] == "unit-test-token"
+    assert env["GIT_AUTHOR_EMAIL"].endswith("@floridamanweb.online")
+
+
 def test_already_open_idempotent(shipped_request, monkeypatch):
     backend = RecordingBackend()
     sitepr.set_git_backend(backend)
