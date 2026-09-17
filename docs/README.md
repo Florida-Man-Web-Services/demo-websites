@@ -3,6 +3,8 @@
 | Document | Description |
 |----------|-------------|
 | [AI411_VOICE_UX_2026-08-29.md](./AI411_VOICE_UX_2026-08-29.md) | AI411 NL/voice: latency, off-script, Sesame spike, events |
+| [fmws-account-lifecycle.md](./fmws-account-lifecycle.md) | AI411 client pages + trusted phones; flags; `/clients/{slug}` |
+| [superpowers/reviews/2026-09-16-ai411-account-lifecycle-review.md](./superpowers/reviews/2026-09-16-ai411-account-lifecycle-review.md) | Lifecycle privacy/bypass scan + remaining live gates |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | System context, components, data, security |
 | [PRODUCT_LOOP.md](./PRODUCT_LOOP.md) | Funnel operator guide (signup → owner) |
 | [OPS_CLUSTER.md](./OPS_CLUSTER.md) | DNS, Authentik, Flux, secrets, runbooks |
