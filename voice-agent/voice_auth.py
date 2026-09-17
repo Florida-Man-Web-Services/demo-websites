@@ -312,6 +312,8 @@ def compute_initial_auth(
 
 def apply_auth_to_state(state: Any, snapshot: dict[str, Any] | None = None) -> None:
     """Write auth fields onto CallState (duck-typed)."""
+    if getattr(state, "lifecycle_transport_binding", None) is None:
+        state.lifecycle_transport_binding = issue_lifecycle_transport_binding(state)
     snap = snapshot or compute_initial_auth(
         getattr(state, "caller_number", "") or "",
         getattr(state, "customer", None) or None,
@@ -950,6 +952,89 @@ def note_speech_activity(state: Any, *, force: bool = False, pcm: bytes | None =
 
     state.voice_auth_last_window_at = now
     return on_speech_window(state, pcm=pcm)
+
+
+def lifecycle_auth_context(state: Any, *, action: str):
+    """Create the separate server-owned lifecycle context.
+
+    Existing voice-auth levels remain unchanged; caller ID and spoken consent
+    are not promoted to lifecycle authorization by this helper.
+    """
+    from lifecycle_voice import create_auth_context
+
+    return create_auth_context(state, action=action)
+
+
+def is_server_owned_lifecycle_state(state: Any) -> bool:
+    """Return whether the live voice server registered this exact state object."""
+    try:
+        import sys
+
+        call_sid = getattr(state, "call_sid", None)
+        server = sys.modules.get("server")
+        return (
+            isinstance(call_sid, str)
+            and bool(call_sid)
+            and server is not None
+            and getattr(server, "CALLS", {}).get(call_sid) is state
+        )
+    except Exception:
+        return False
+
+
+def issue_lifecycle_transport_binding(state: Any):
+    """Issue the lifecycle transport binding during trusted call-state setup.
+
+    This is intentionally separate from lifecycle_auth_context: that later
+    boundary accepts only this server-issued record and never mints authority
+    from caller-provided state fields.
+    """
+    from datetime import datetime, timedelta, timezone
+
+    customer = getattr(state, "customer", None)
+    call_sid = getattr(state, "call_sid", None)
+    if not is_server_owned_lifecycle_state(state):
+        return None
+    if not isinstance(customer, dict):
+        return None
+    account_id = customer.get("account_id")
+    revision = customer.get("auth_revision")
+    if (
+        not isinstance(account_id, str)
+        or not account_id
+        or type(revision) is not int
+        or revision < 0
+    ):
+        return None
+    try:
+        from lifecycle_voice import verification
+
+        return verification._issue_transport_session_binding(
+            session_id=f"voice:{call_sid}",
+            transport_id=call_sid,
+            account_id=account_id,
+            auth_revision=revision,
+            account_status=customer.get("status") or "",
+            expires_at=datetime.now(timezone.utc) + timedelta(seconds=600),
+        )
+    except Exception:  # fail closed; lifecycle_auth_context will deny
+        return None
+
+
+def lifecycle_private_input(state: Any, secret_input: str, *, purpose: str, challenge_id: str | None = None):
+    """Pass a telephony-private input into the lifecycle boundary as a ref."""
+    from lifecycle_voice import capture_private_secret_input
+
+    return capture_private_secret_input(
+        state, secret_input, purpose=purpose, challenge_id=challenge_id
+    )
+
+
+def lifecycle_keypad_event(state: Any, *, digit: str, operation_id: str):
+    """Create an exact operation-bound DTMF event; speech is not equivalent."""
+    from lifecycle_voice import make_keypad_event
+
+    return make_keypad_event(state, digit=digit, operation_id=operation_id)
 
 
 def deny_json(deny: dict[str, Any]) -> str:

@@ -44,6 +44,8 @@ from changerequests import (
     mark_request_shipped as mark_request_shipped_sync,
 )
 from sitepr import open_site_update_pr as open_site_update_pr_sync
+import account_lifecycle as account_lifecycle_mod
+from lifecycle_service import context_from_capability, denied
 from events import (
     get_event as get_event_sync,
     list_event_sources as list_event_sources_sync,
@@ -95,6 +97,117 @@ mcp = FastMCP(
     json_response=True,
     transport_security=_build_transport_security(),
 )
+
+
+_LIFECYCLE_AUDIENCE = "fmws-account-lifecycle"
+_LIFECYCLE_MUTATIONS = {
+    "client_page_create",
+    "client_page_remove",
+    "trusted_phone_add",
+    "trusted_phone_remove",
+}
+
+
+def _lifecycle_context(service_capability: str, actions: set[str]):
+    return context_from_capability(
+        service_capability,
+        audience=_LIFECYCLE_AUDIENCE,
+        actions=actions,
+    )
+
+
+@mcp.tool()
+async def get_account_lifecycle_status(
+    operation_id: str = "", service_capability: str = ""
+) -> dict:
+    """Authenticated service readback for one owner-bound lifecycle operation."""
+    ctx = _lifecycle_context(service_capability, _LIFECYCLE_MUTATIONS)
+    if ctx is None:
+        return denied()
+    try:
+        return await anyio.to_thread.run_sync(
+            lambda: account_lifecycle_mod.get_lifecycle_status(
+                ctx=ctx, operation_id=operation_id or None
+            )
+        )
+    except Exception as exc:
+        logger.exception("lifecycle status failed")
+        return {"ok": False, "state": "error", "code": "service_unavailable"}
+
+
+@mcp.tool()
+async def prepare_client_page(
+    title: str, body: str, idempotency_key: str, service_capability: str = ""
+) -> dict:
+    """Prepare an owner-authorized client page; publication is a separate commit."""
+    ctx = _lifecycle_context(service_capability, {"client_page_create"})
+    if ctx is None:
+        return denied()
+    return await anyio.to_thread.run_sync(
+        lambda: account_lifecycle_mod.prepare_client_page_create(
+            ctx=ctx, title=title, body=body, idempotency_key=idempotency_key
+        )
+    )
+
+
+@mcp.tool()
+async def prepare_client_page_removal(
+    page_id: str, idempotency_key: str, service_capability: str = ""
+) -> dict:
+    """Prepare an owner-authorized tombstone; it does not delete immediately."""
+    ctx = _lifecycle_context(service_capability, {"client_page_remove"})
+    if ctx is None:
+        return denied()
+    return await anyio.to_thread.run_sync(
+        lambda: account_lifecycle_mod.prepare_client_page_remove(
+            ctx=ctx, page_id=page_id, idempotency_key=idempotency_key
+        )
+    )
+
+
+@mcp.tool()
+async def prepare_trusted_phone_add(
+    idempotency_key: str, service_capability: str = ""
+) -> dict:
+    """Prepare a verified destination-phone addition without accepting raw phone input."""
+    ctx = _lifecycle_context(service_capability, {"trusted_phone_add"})
+    if ctx is None:
+        return denied()
+    return await anyio.to_thread.run_sync(
+        lambda: account_lifecycle_mod.prepare_trusted_phone_add(
+            ctx=ctx, idempotency_key=idempotency_key
+        )
+    )
+
+
+@mcp.tool()
+async def prepare_trusted_phone_removal(
+    phone_ref: str, idempotency_key: str, service_capability: str = ""
+) -> dict:
+    """Prepare removal using only an opaque server-created phone reference."""
+    ctx = _lifecycle_context(service_capability, {"trusted_phone_remove"})
+    if ctx is None:
+        return denied()
+    return await anyio.to_thread.run_sync(
+        lambda: account_lifecycle_mod.prepare_trusted_phone_remove(
+            ctx=ctx, phone_ref=phone_ref, idempotency_key=idempotency_key
+        )
+    )
+
+
+@mcp.tool()
+async def cancel_account_operation(
+    operation_id: str, service_capability: str = ""
+) -> dict:
+    """Cancel an uncommitted lifecycle operation; cancellation is idempotent."""
+    ctx = _lifecycle_context(service_capability, _LIFECYCLE_MUTATIONS)
+    if ctx is None:
+        return denied()
+    return await anyio.to_thread.run_sync(
+        lambda: account_lifecycle_mod.cancel_account_operation(
+            ctx=ctx, operation_id=operation_id
+        )
+    )
 
 
 def _lookup_business_sync(query: str) -> dict:

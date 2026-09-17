@@ -8,6 +8,8 @@ mcp_bridge (knowledge / events / callers / broadcasts / lookup).
 
 from __future__ import annotations
 
+from lifecycle_tools import LIFECYCLE_TOOLS
+
 # Instant first-audio openers (same prewarm pattern as sales OPENERS).
 # No filler — “sure thing / absolutely / good question / one moment” are banned.
 OPENERS = [
@@ -668,6 +670,10 @@ TOOLS = [
         },
     },
 ]
+
+# Lifecycle tools are deliberately additive and are still fail-closed by the
+# server-side dispatch and ACCOUNT_LIFECYCLE_ENABLED flag.
+TOOLS.extend(LIFECYCLE_TOOLS)
 
 
 def _opener_rule(openers: bool) -> str:
