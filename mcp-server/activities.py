@@ -10,6 +10,7 @@ import json
 import os
 import re
 import threading
+import urllib.request
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Callable
@@ -313,19 +314,21 @@ def map_wp_page(raw: dict[str, Any], *, allow: dict[str, Any], now: datetime) ->
     return _normalize(row)
 
 
+def _default_http_get_json(url: str, timeout: float = 30.0) -> Any:
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "FMWS-ai411-activities/1.0"}
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode())
+
+
 def ingest_visitgainesville_pages(
     http_get_json: Callable[[str], dict[str, Any] | list[Any]] | None = None,
 ) -> dict[str, Any]:
     """Fetch allowlisted WP pages. No-op when ingest flag is off."""
     if not ingest_enabled():
         return {"ok": True, "ingested": 0, "disabled": True}
-    getter = http_get_json
-    if getter is None:
-        return {
-            "ok": False,
-            "ingested": 0,
-            "error": "http getter required (no implicit live fetch in library call)",
-        }
+    getter = http_get_json or _default_http_get_json
     allow = load_allowlist()
     pages = [p for p in allow.get("pages") or [] if p.get("publish") is True]
     if not pages:

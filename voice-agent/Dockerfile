@@ -40,6 +40,7 @@ COPY mcp-server/customers.py \
      mcp-server/
 # Cron/CLI Visit Gainesville ingest (AI 411 events store)
 COPY scripts/ingest_visitgainesville_events.py scripts/
+COPY scripts/ingest_visitgainesville_activities.py scripts/
 
 # Call log and synthesized-audio cache live on a mounted volume so outcomes
 # (including the permanent do-not-call list) survive restarts.
