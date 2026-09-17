@@ -149,6 +149,44 @@ def test_completed_add_retry_returns_receipt_at_post_mutation_revision_and_prese
     assert revoked_retry == {"ok": False, "state": "denied", "code": "account_unavailable"}
 
 
+def test_cancelled_add_retry_returns_stable_cancelled_result_without_success_receipt_fields(registry):
+    primary = "+13525550100"
+    destination = "+13525550102"
+    owner = customers.upsert(primary, status="active_owner")["customer"]
+    prepared = prepare(owner["account_id"], key="cancelled-retry")
+
+    cancelled = lifecycle.cancel_account_operation(
+        ctx=ctx(owner["account_id"]), operation_id=prepared["operation_id"]
+    )
+    assert cancelled == {
+        "ok": True,
+        "state": "verified_noop",
+        "operation_id": prepared["operation_id"],
+        "code": "cancelled",
+    }
+
+    retry = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=0,
+    )
+    retry_again = lifecycle.apply_trusted_phone_operation(
+        operation_id=prepared["operation_id"], account_id=owner["account_id"],
+        action="trusted_phone_add", phone_e164=destination, expected_auth_revision=0,
+    )
+    status = lifecycle.get_lifecycle_status(
+        ctx=ctx(owner["account_id"]), operation_id=prepared["operation_id"]
+    )
+
+    assert retry == retry_again == status
+    assert retry["state"] == "verified_noop"
+    assert retry["code"] == "cancelled"
+    assert "receipt_id" not in retry
+    assert "new_auth_revision" not in retry
+    customer = customers.get(primary)
+    assert customer is not None
+    assert destination not in customer.get("trusted_phones", [])
+
+
 def test_concurrent_same_account_add_serializes_and_rejects_stale_second_prepare(registry):
     primary = "+13525550100"
     destination = "+13525550102"

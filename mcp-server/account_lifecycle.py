@@ -1052,6 +1052,48 @@ def _phone_receipt(
     return receipt
 
 
+def _validate_cancelled_phone_retry(
+    row: sqlite3.Row,
+    intent: Mapping[str, Any],
+    *,
+    phone_e164: str,
+    expected_auth_revision: int,
+) -> dict[str, Any]:
+    """Return the stable cancellation result after rechecking its binding."""
+
+    if expected_auth_revision != row["expected_auth_revision"]:
+        return _denied("stale_auth_revision")
+
+    if row["action"] == "trusted_phone_add":
+        retry_phone = _validate_e164(phone_e164)
+        if retry_phone is None:
+            return _denied("invalid_phone")
+        prepared_phone = intent.get("phone_e164")
+        if prepared_phone is not None:
+            if not isinstance(prepared_phone, str) or _validate_e164(prepared_phone) != prepared_phone:
+                return _denied("operation_integrity_error")
+            if retry_phone != prepared_phone:
+                return _denied("operation_integrity_error")
+    elif phone_e164 != "":
+        return _denied("operation_integrity_error")
+
+    with customers._lock:  # noqa: SLF001 - revalidate ownership at retry
+        data = customers._read()  # noqa: SLF001
+        registry_check = customers.validate_lifecycle_registry(data)
+        if not registry_check.get("ok"):
+            return _denied("account_unavailable")
+        account_rows = customers._lifecycle_account_rows(data, row["account_id"])  # noqa: SLF001
+        if len(account_rows) != 1 or not customers.is_owner_write_status(account_rows[0][1].get("status")):
+            return _denied("account_unavailable")
+        current_revision = account_rows[0][1].get("auth_revision")
+        if type(current_revision) is not int:
+            return _denied("account_unavailable")
+        if current_revision != row["expected_auth_revision"]:
+            return _denied("stale_auth_revision")
+
+    return _operation_result(row)
+
+
 def _validate_terminal_phone_retry(
     row: sqlite3.Row,
     intent: Mapping[str, Any],
@@ -1407,6 +1449,13 @@ def _apply_trusted_phone_operation(
         row["phone_ref"] != prepared_ref or not _validate_phone_ref(prepared_ref)
     ):
         return _denied("operation_integrity_error")
+    if row["state"] == "cancelled":
+        return _validate_cancelled_phone_retry(
+            row,
+            intent,
+            phone_e164=phone_e164,
+            expected_auth_revision=expected_auth_revision,
+        )
     if row["state"] in FINAL_OPERATION_STATES:
         return _validate_terminal_phone_retry(
             row,
