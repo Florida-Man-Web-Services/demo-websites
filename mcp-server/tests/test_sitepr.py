@@ -165,7 +165,7 @@ def test_disabled_by_default_does_not_push(shipped_request, monkeypatch):
 
 
 def test_git_backend_called_when_enabled(shipped_request, tiny_site, monkeypatch):
-    backend = RecordingBackend(pr_url="https://github.com/Florida-Man-Bioscience/demo-websites/pull/42")
+    backend = RecordingBackend(pr_url="https://github.com/Florida-Man-Web-Services/demo-websites/pull/42")
     sitepr.set_git_backend(backend)
     monkeypatch.setenv("SITE_PR_ENABLED", "1")
 
@@ -233,6 +233,12 @@ def test_automerge_flag_defaults_off(monkeypatch):
     assert sitepr.site_pr_automerge() is False
     monkeypatch.setenv("SITE_PR_AUTOMERGE", "true")
     assert sitepr.site_pr_automerge() is True
+
+
+def test_github_repo_defaults_to_fmws(monkeypatch):
+    monkeypatch.delenv("SITE_PR_GITHUB_REPO", raising=False)
+    monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
+    assert sitepr._github_repo() == "Florida-Man-Web-Services/demo-websites"
 
 
 def test_already_open_idempotent(shipped_request, monkeypatch):

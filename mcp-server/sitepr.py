@@ -34,7 +34,7 @@ SITE_REL_DIR = "generated-sites"
 ENV_ENABLED = "SITE_PR_ENABLED"
 ENV_AUTO = "SITE_PR_AUTO"
 ENV_AUTOMERGE = "SITE_PR_AUTOMERGE"
-ENV_REPO = "SITE_PR_GITHUB_REPO"  # e.g. Florida-Man-Bioscience/demo-websites
+ENV_REPO = "SITE_PR_GITHUB_REPO"  # e.g. Florida-Man-Web-Services/demo-websites
 ENV_BASE = "SITE_PR_BASE_BRANCH"  # default main
 
 
@@ -76,7 +76,7 @@ def _github_repo() -> str:
     return (
         os.getenv(ENV_REPO)
         or os.getenv("GITHUB_REPOSITORY")
-        or "Florida-Man-Bioscience/demo-websites"
+        or "Florida-Man-Web-Services/demo-websites"
     ).strip()
 
 
