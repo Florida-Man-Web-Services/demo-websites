@@ -7,7 +7,7 @@ import pytest
 
 import account_lifecycle as lifecycle
 import customers
-from account_verification import AuthContext
+from account_verification import _issue_auth_context
 
 
 @pytest.fixture
@@ -27,7 +27,7 @@ def setup(tmp_path, monkeypatch):
 
 
 def context(account_id, revision=0):
-    return AuthContext(
+    return _issue_auth_context(
         session_id="session-1", account_id=account_id,
         caller_transport_binding="transport-1", auth_revision=revision,
         action="trusted_phone_add",

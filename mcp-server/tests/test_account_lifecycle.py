@@ -12,6 +12,7 @@ import pytest
 
 import account_lifecycle as lifecycle
 import customers
+from account_verification import _issue_auth_context
 
 
 @pytest.fixture
@@ -24,7 +25,7 @@ def store(tmp_path, monkeypatch):
 
 
 def context(*, action: str, account_id: str = "acct-1", auth_revision: int = 7):
-    return lifecycle.LifecycleContext(
+    return _issue_auth_context(
         session_id="session-1",
         account_id=account_id,
         caller_transport_binding="call-1",

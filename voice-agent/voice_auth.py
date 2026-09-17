@@ -972,11 +972,11 @@ def lifecycle_private_input(state: Any, secret_input: str, *, purpose: str, chal
     )
 
 
-def lifecycle_keypad_event(state: Any, *, digit: str):
-    """Create a typed DTMF event; ordinary speech is not an equivalent."""
+def lifecycle_keypad_event(state: Any, *, digit: str, operation_id: str):
+    """Create an exact operation-bound DTMF event; speech is not equivalent."""
     from lifecycle_voice import make_keypad_event
 
-    return make_keypad_event(state, digit=digit)
+    return make_keypad_event(state, digit=digit, operation_id=operation_id)
 
 
 def deny_json(deny: dict[str, Any]) -> str:

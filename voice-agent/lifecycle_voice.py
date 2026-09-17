@@ -8,7 +8,6 @@ confirmation tokens.
 
 from __future__ import annotations
 
-import hashlib
 import secrets
 import sys
 from dataclasses import replace
@@ -60,7 +59,7 @@ def create_auth_context(state: Any, *, action: str) -> verification.AuthContext 
     call_sid = getattr(state, "call_sid", "")
     if not isinstance(call_sid, str) or not call_sid:
         return {"ok": False, "state": "denied", "code": "transport_unavailable"}
-    auth = verification.AuthContext(
+    auth = verification._issue_auth_context(
         session_id=f"voice:{call_sid}",
         account_id=account_id,
         caller_transport_binding=call_sid,
@@ -128,23 +127,19 @@ def capture_account_phone(state: Any, *, secret_input_ref: str) -> dict[str, Any
     return verification.capture_account_phone(auth=auth, secret_input_ref=secret_input_ref)
 
 
-def make_send_consent_event(state: Any) -> verification.TrustedInputEvent | dict[str, Any]:
-    """Create an event only from a separate server consent/DTMF boundary."""
-
+def make_send_consent_event(
+    state: Any, *, operation_id: str
+) -> verification.TrustedInputEvent | dict[str, Any]:
+    """Create an operation-bound event only from a separate DTMF boundary."""
     auth = _state_auth(state, "trusted_phone_add")
     if not verification.is_auth_context(auth) or not auth.owner_authenticated:
         return {"ok": False, "state": "denied", "code": "verification_required"}
-    return verification.TrustedInputEvent(
-        event_id="event_" + secrets.token_urlsafe(20),
-        session_id=auth.session_id,
-        account_id=auth.account_id,
-        caller_transport_binding=auth.caller_transport_binding,
-        auth_revision=auth.auth_revision,
-        action=auth.action,
-        expires_at=auth.expires_at,
-        capability_id=auth.capability_id,
-        event_type="send_consent",
-    )
+    try:
+        return verification._issue_trusted_input_event(
+            auth=auth, event_type="send_consent", operation_id=operation_id,
+        )
+    except ValueError:
+        return {"ok": False, "state": "denied", "code": "invalid_consent_event"}
 
 
 def request_destination_verification(
@@ -179,26 +174,21 @@ def get_readback(state: Any, *, operation_id: str) -> dict[str, Any]:
     return verification.get_confirmation_readback(auth=auth, operation_id=operation_id)
 
 
-def make_keypad_event(state: Any, *, digit: str) -> verification.TrustedInputEvent | dict[str, Any]:
-    """Convert validated DTMF into a typed event; speech is never accepted."""
-
+def make_keypad_event(
+    state: Any, *, digit: str, operation_id: str | None = None
+) -> verification.TrustedInputEvent | dict[str, Any]:
+    """Convert validated DTMF into an exact operation-bound event."""
     auth = _state_auth(state)
     if not verification.is_auth_context(auth) or not auth.owner_authenticated:
         return {"ok": False, "state": "denied", "code": "verification_required"}
     if digit != "1":
         return {"ok": False, "state": "denied", "code": "confirmation_cancelled" if digit == "2" else "invalid_keypad"}
-    return verification.TrustedInputEvent(
-        event_id="event_" + secrets.token_urlsafe(20),
-        session_id=auth.session_id,
-        account_id=auth.account_id,
-        caller_transport_binding=auth.caller_transport_binding,
-        auth_revision=auth.auth_revision,
-        action=auth.action,
-        expires_at=auth.expires_at,
-        capability_id=auth.capability_id,
-        event_type="keypad_confirm",
-        value_digest=hashlib.sha256(b"1").hexdigest(),
-    )
+    try:
+        return verification._issue_trusted_input_event(
+            auth=auth, event_type="keypad_confirm", operation_id=operation_id,
+        )
+    except ValueError:
+        return {"ok": False, "state": "denied", "code": "invalid_keypad"}
 
 
 def capture_keypad_confirmation(

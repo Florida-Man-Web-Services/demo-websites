@@ -11,16 +11,15 @@ from __future__ import annotations
 
 import hashlib
 import hmac
-import json
 import logging
 import os
 import re
 import secrets
 import threading
 import time
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Protocol
+from typing import Any, NoReturn, Protocol
 
 log = logging.getLogger("mcp-server.account_verification")
 
@@ -42,6 +41,8 @@ class AuthContext:
     auth_level: str | None = None
     legacy_auth: bool = False
     forced_mode: bool = False
+    # Set only by _issue_auth_context; direct public construction is invalid.
+    _issuance_id: str | None = field(default=None, init=False, repr=False, compare=False)
 
     def has_capability(self, action: str) -> bool:
         return (
@@ -65,6 +66,9 @@ class TrustedInputEvent:
     capability_id: str
     event_type: str
     value_digest: str | None = None
+    operation_id: str | None = None
+    # Set only by _issue_trusted_input_event; direct construction is invalid.
+    _issuance_id: str | None = field(default=None, init=False, repr=False, compare=False)
 
     def has_capability(self, action: str) -> bool:
         return (
@@ -74,12 +78,140 @@ class TrustedInputEvent:
         )
 
 
+_AUTH_PROVENANCE: dict[str, tuple[int, tuple[Any, ...]]] = {}
+_EVENT_PROVENANCE: dict[str, tuple[int, tuple[Any, ...]]] = {}
+
+
+def _auth_provenance_binding(value: AuthContext) -> tuple[Any, ...]:
+    return (
+        value.session_id,
+        value.account_id,
+        value.caller_transport_binding,
+        value.auth_revision,
+        value.action,
+        value.expires_at,
+        value.capability_id,
+        value.account_status,
+        value.owner_authenticated,
+        value.proof_fresh,
+        value.auth_level,
+        value.legacy_auth,
+        value.forced_mode,
+    )
+
+
+def _event_provenance_binding(value: TrustedInputEvent) -> tuple[Any, ...]:
+    return (
+        value.event_id,
+        value.session_id,
+        value.account_id,
+        value.caller_transport_binding,
+        value.auth_revision,
+        value.action,
+        value.expires_at,
+        value.capability_id,
+        value.event_type,
+        value.value_digest,
+        value.operation_id,
+    )
+
+
+def _register_auth(auth: AuthContext) -> AuthContext:
+    issuance_id = "issuance_" + secrets.token_urlsafe(32)
+    object.__setattr__(auth, "_issuance_id", issuance_id)
+    _AUTH_PROVENANCE[issuance_id] = (id(auth), _auth_provenance_binding(auth))
+    return auth
+
+
+def _issue_auth_context(
+    *,
+    session_id: str,
+    account_id: str,
+    caller_transport_binding: str,
+    auth_revision: int,
+    action: str,
+    expires_at: datetime | str,
+    capability_id: str,
+    account_status: str,
+    owner_authenticated: bool = False,
+    proof_fresh: bool = False,
+    auth_level: str | None = None,
+    legacy_auth: bool = False,
+    forced_mode: bool = False,
+) -> AuthContext:
+    """Mint a context only inside this module's server boundary."""
+    auth = AuthContext(
+        session_id=session_id,
+        account_id=account_id,
+        caller_transport_binding=caller_transport_binding,
+        auth_revision=auth_revision,
+        action=action,
+        expires_at=expires_at,
+        capability_id=capability_id,
+        account_status=account_status,
+        owner_authenticated=owner_authenticated,
+        proof_fresh=proof_fresh,
+        auth_level=auth_level,
+        legacy_auth=legacy_auth,
+        forced_mode=forced_mode,
+    )
+    return _register_auth(auth)
+
+
+def _register_event(event: TrustedInputEvent, auth: AuthContext) -> TrustedInputEvent:
+    issuance_id = "issuance_" + secrets.token_urlsafe(32)
+    object.__setattr__(event, "_issuance_id", issuance_id)
+    _EVENT_PROVENANCE[issuance_id] = (id(event), _event_provenance_binding(event))
+    return event
+
+
+def _issue_trusted_input_event(
+    *, auth: AuthContext, event_type: str, operation_id: str,
+) -> TrustedInputEvent:
+    """Mint an operation-bound event inside this module's server boundary."""
+    if not _valid_auth(auth, auth.action, owner=True):
+        raise ValueError("trusted input unavailable")
+    if event_type not in {"send_consent", "keypad_confirm"} or not isinstance(operation_id, str) or not operation_id:
+        raise ValueError("trusted input unavailable")
+    value_digest = hashlib.sha256(b"1").hexdigest() if event_type == "keypad_confirm" else None
+    event = TrustedInputEvent(
+        event_id="event_" + secrets.token_urlsafe(20),
+        session_id=auth.session_id,
+        account_id=auth.account_id,
+        caller_transport_binding=auth.caller_transport_binding,
+        auth_revision=auth.auth_revision,
+        action=auth.action,
+        expires_at=auth.expires_at,
+        capability_id=auth.capability_id,
+        event_type=event_type,
+        value_digest=value_digest,
+        operation_id=operation_id,
+    )
+    return _register_event(event, auth)
+
+
+def issue_auth_context(*_args: Any, **_kwargs: Any) -> NoReturn:
+    """Reject public attempts to mint a server-owned context."""
+    raise TypeError("server issuance required")
+
+
+def issue_trusted_input_event(*_args: Any, **_kwargs: Any) -> NoReturn:
+    """Reject public attempts to mint a trusted input event."""
+    raise TypeError("server issuance required")
+
+
 def is_auth_context(value: Any) -> bool:
-    return type(value) is AuthContext
+    if type(value) is not AuthContext or not value._issuance_id:
+        return False
+    registered = _AUTH_PROVENANCE.get(value._issuance_id)
+    return registered is not None and registered[0] == id(value) and registered[1] == _auth_provenance_binding(value)
 
 
 def is_trusted_input_event(value: Any) -> bool:
-    return type(value) is TrustedInputEvent
+    if type(value) is not TrustedInputEvent or not value._issuance_id:
+        return False
+    registered = _EVENT_PROVENANCE.get(value._issuance_id)
+    return registered is not None and registered[0] == id(value) and registered[1][1] == value.session_id and registered[1] == _event_provenance_binding(value)
 
 
 class OTPSender(Protocol):
@@ -195,6 +327,7 @@ def _result(state: str, **fields: Any) -> dict[str, Any]:
         "action",
         "purpose",
         "attempts",
+        "readback",
     }
     out: dict[str, Any] = {"ok": state in {"verification_required", "awaiting_confirmation", "verified_success"}, "state": state}
     for key, value in fields.items():
@@ -218,6 +351,24 @@ def _auth_binding(value: AuthContext) -> tuple[str, str, str, int, str, str]:
     )
 
 
+def _refresh_auth_context(ctx: AuthContext, *, owner_authenticated: bool, proof_fresh: bool, auth_level: str | None) -> AuthContext:
+    return _issue_auth_context(
+        session_id=ctx.session_id,
+        account_id=ctx.account_id,
+        caller_transport_binding=ctx.caller_transport_binding,
+        auth_revision=ctx.auth_revision,
+        action=ctx.action,
+        expires_at=ctx.expires_at,
+        capability_id=ctx.capability_id,
+        account_status=ctx.account_status,
+        owner_authenticated=owner_authenticated,
+        proof_fresh=proof_fresh,
+        auth_level=auth_level,
+        legacy_auth=ctx.legacy_auth,
+        forced_mode=ctx.forced_mode,
+    )
+
+
 def _valid_auth(ctx: Any, action: str | None = None, *, owner: bool = False) -> bool:
     if not is_auth_context(ctx):
         return False
@@ -237,19 +388,29 @@ def _valid_auth(ctx: Any, action: str | None = None, *, owner: bool = False) -> 
     return expiry is not None and expiry > _now()
 
 
-def _validate_event(event: Any, auth: AuthContext, event_type: str) -> bool:
+def _validate_event(
+    event: Any,
+    auth: AuthContext,
+    event_type: str,
+    operation_id: str | None = None,
+) -> bool:
     if not is_trusted_input_event(event) or not _valid_auth(auth, auth.action):
         return False
     if event.event_type != event_type or event.has_capability(auth.action) is not True:
         return False
-    if _auth_binding(auth) != _auth_binding(
-        AuthContext(
-            event.session_id, event.account_id, event.caller_transport_binding,
-            event.auth_revision, event.action, event.expires_at, event.capability_id,
-            auth.account_status, auth.owner_authenticated, auth.proof_fresh,
-            auth.auth_level, auth.legacy_auth, auth.forced_mode,
-        )
-    ):
+    provenance = _EVENT_PROVENANCE.get(event._issuance_id or "")
+    if provenance is None or (
+        event.session_id,
+        event.account_id,
+        event.caller_transport_binding,
+        event.auth_revision,
+        event.action,
+        event.capability_id,
+    ) != _auth_binding(auth):
+        return False
+    if operation_id is not None and event.operation_id != operation_id:
+        return False
+    if event_type == "keypad_confirm" and event.value_digest != hashlib.sha256(b"1").hexdigest():
         return False
     expiry = _parse_time(event.expires_at)
     return expiry is not None and expiry > _now()
@@ -261,24 +422,42 @@ def _customers():
     return customers
 
 
+def _current_auth_revision(account_id: str) -> int | None:
+    """Re-read the authoritative registry at every proof-completion boundary."""
+    try:
+        customers = _customers()
+        with customers._lock:  # noqa: SLF001
+            data = customers._read()  # noqa: SLF001
+            rows = customers._lifecycle_account_rows(data, account_id)  # noqa: SLF001
+            if len(rows) != 1 or rows[0][1].get("status") not in _ELIGIBLE:
+                return None
+            revision = rows[0][1].get("auth_revision")
+            return revision if type(revision) is int and revision >= 0 else None
+    except Exception:  # fail closed on registry/storage errors
+        return None
+
+
 def _trusted_destination(account_id: str) -> str | None:
-    customers = _customers()
-    with customers._lock:  # noqa: SLF001 - same registry boundary as lifecycle writes
-        data = customers._read()  # noqa: SLF001
-        rows = customers._lifecycle_account_rows(data, account_id)  # noqa: SLF001
-        if len(rows) != 1 or rows[0][1].get("status") not in _ELIGIBLE:
-            return None
-        map_key, row = rows[0]
-        candidates = [
-            row.get("current_verification_phone"),
-            row.get("verification_phone"),
-            map_key,
-            row.get("phone"),
-        ]
-        for candidate in candidates:
-            normalized = customers.normalize_phone(candidate)
-            if normalized and _E164_RE.fullmatch(normalized):
-                return normalized
+    try:
+        customers = _customers()
+        with customers._lock:  # noqa: SLF001 - same registry boundary as lifecycle writes
+            data = customers._read()  # noqa: SLF001
+            rows = customers._lifecycle_account_rows(data, account_id)  # noqa: SLF001
+            if len(rows) != 1 or rows[0][1].get("status") not in _ELIGIBLE:
+                return None
+            map_key, row = rows[0]
+            candidates = [
+                row.get("current_verification_phone"),
+                row.get("verification_phone"),
+                map_key,
+                row.get("phone"),
+            ]
+            for candidate in candidates:
+                normalized = customers.normalize_phone(candidate)
+                if normalized and _E164_RE.fullmatch(normalized):
+                    return normalized
+    except Exception:
+        return None
     return None
 
 
@@ -292,7 +471,6 @@ def set_otp_adapter(adapter: OTPSender | None) -> None:
     if isinstance(adapter, FakeOTPAdapter) or adapter is None:
         with _PRIVATE_LOCK:
             _SEND_HISTORY.clear()
-            _USED_EVENTS.clear()
 
 
 # Friendly aliases used by integration tests and callers.
@@ -305,48 +483,54 @@ def _store():
     import account_lifecycle
 
     conn = account_lifecycle._open_store()  # noqa: SLF001
-    conn.executescript(
-        """
-        CREATE TABLE IF NOT EXISTS verification_challenges (
-            challenge_id TEXT PRIMARY KEY,
-            operation_id TEXT,
-            account_id TEXT NOT NULL,
-            session_id TEXT NOT NULL,
-            caller_transport_binding TEXT NOT NULL,
-            auth_revision INTEGER NOT NULL,
-            action TEXT NOT NULL,
-            purpose TEXT NOT NULL,
-            destination_ref TEXT,
-            verifier_digest TEXT NOT NULL,
-            expires_at TEXT NOT NULL,
-            resend_after TEXT NOT NULL,
-            attempts INTEGER NOT NULL DEFAULT 0,
-            max_attempts INTEGER NOT NULL,
-            send_count INTEGER NOT NULL DEFAULT 1,
-            state TEXT NOT NULL,
-            created_at TEXT NOT NULL,
-            consumed_at TEXT
-        );
-        CREATE INDEX IF NOT EXISTS idx_verification_challenge_binding
-            ON verification_challenges(account_id, session_id, purpose, state);
-        CREATE TABLE IF NOT EXISTS confirmation_tokens (
-            token_digest TEXT PRIMARY KEY,
-            operation_id TEXT NOT NULL,
-            account_id TEXT NOT NULL,
-            session_id TEXT NOT NULL,
-            action TEXT NOT NULL,
-            payload_digest TEXT NOT NULL,
-            page_version TEXT,
-            phone_ref TEXT,
-            auth_revision INTEGER NOT NULL,
-            expires_at TEXT NOT NULL,
-            state TEXT NOT NULL,
-            event_id TEXT NOT NULL UNIQUE,
-            created_at TEXT NOT NULL,
-            consumed_at TEXT
-        );
-        """
-    )
+    try:
+        conn.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS verification_challenges (
+                challenge_id TEXT PRIMARY KEY,
+                operation_id TEXT,
+                account_id TEXT NOT NULL,
+                session_id TEXT NOT NULL,
+                caller_transport_binding TEXT NOT NULL,
+                auth_revision INTEGER NOT NULL,
+                action TEXT NOT NULL,
+                purpose TEXT NOT NULL,
+                destination_ref TEXT,
+                verifier_digest TEXT NOT NULL,
+                expires_at TEXT NOT NULL,
+                resend_after TEXT NOT NULL,
+                attempts INTEGER NOT NULL DEFAULT 0,
+                max_attempts INTEGER NOT NULL,
+                send_count INTEGER NOT NULL DEFAULT 1,
+                state TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                consumed_at TEXT
+            );
+            CREATE INDEX IF NOT EXISTS idx_verification_challenge_binding
+                ON verification_challenges(account_id, session_id, purpose, state);
+            CREATE TABLE IF NOT EXISTS confirmation_tokens (
+                token_digest TEXT PRIMARY KEY,
+                operation_id TEXT NOT NULL,
+                account_id TEXT NOT NULL,
+                session_id TEXT NOT NULL,
+                action TEXT NOT NULL,
+                payload_digest TEXT NOT NULL,
+                page_version TEXT,
+                phone_ref TEXT,
+                auth_revision INTEGER NOT NULL,
+                expires_at TEXT NOT NULL,
+                state TEXT NOT NULL,
+                event_id TEXT NOT NULL UNIQUE,
+                created_at TEXT NOT NULL,
+                consumed_at TEXT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_confirmation_pending_operation
+                ON confirmation_tokens(operation_id) WHERE state = 'pending';
+            """
+        )
+    except Exception:
+        conn.close()
+        raise
     return conn
 
 
@@ -363,6 +547,8 @@ def capture_secret_input(secret: str, *, auth: AuthContext, purpose: str, challe
     """Capture private telephony input and return only an opaque server ref."""
 
     if not _enabled() or not _valid_auth(auth):
+        raise ValueError("private input unavailable")
+    if _current_auth_revision(auth.account_id) != auth.auth_revision:
         raise ValueError("private input unavailable")
     if not isinstance(secret, str) or not secret or purpose not in _PURPOSES:
         raise ValueError("private input unavailable")
@@ -404,10 +590,11 @@ def _send(phone: str, code: str, *, purpose: str, challenge_id: str) -> bool:
         return False
     try:
         if isinstance(adapter, FakeOTPAdapter):
-            adapter.send(phone, "verification code", code=code, purpose=purpose, challenge_id=challenge_id)
+            outcome = adapter.send(phone, "verification code", code=code, purpose=purpose, challenge_id=challenge_id)
         else:
-            adapter.send(phone, "Your verification code is valid for a short time.", purpose=purpose, challenge_id=challenge_id)
-        return True
+            outcome = adapter.send(phone, "Your verification code is valid for a short time.", purpose=purpose, challenge_id=challenge_id)
+        # A provider that returns False/None did not issue a challenge.
+        return outcome is not False and outcome is not None
     except Exception:  # do not expose provider error or secret input
         log.warning("verification sender unavailable purpose=%s", purpose)
         return False
@@ -458,14 +645,18 @@ def _issue_challenge(
         phone = destination["phone"]
     if not phone:
         return _deny("account_unavailable")
+    if _current_auth_revision(auth.account_id) != auth.auth_revision:
+        return _deny("stale_auth_revision")
     limited, retry = _throttled(auth.account_id, auth.session_id, purpose)
     if limited:
         return _result("denied", code="throttled", retry_after_s=retry)
     challenge_id = "challenge_" + secrets.token_urlsafe(24)
     code = f"{secrets.randbelow(1_000_000):06d}"
     expiry = _now() + __import__("datetime").timedelta(seconds=_ttl("ACCOUNT_LIFECYCLE_OTP_TTL_S", 300))
-    conn = _store()
+    conn = None
     try:
+        conn = _store()
+        conn.execute("BEGIN IMMEDIATE")
         conn.execute(
             """INSERT INTO verification_challenges
             (challenge_id, operation_id, account_id, session_id, caller_transport_binding,
@@ -482,17 +673,27 @@ def _issue_challenge(
         )
         if not _send(phone, code, purpose=purpose, challenge_id=challenge_id):
             conn.execute("UPDATE verification_challenges SET state='failed' WHERE challenge_id=?", (challenge_id,))
-            conn.commit()
+            conn.execute("COMMIT")
             return _result("failed", code="sender_unavailable")
-        conn.commit()
+        # A successful resend supersedes every older pending challenge for the
+        # same account/session/purpose, so an earlier OTP cannot be replayed.
+        conn.execute(
+            """UPDATE verification_challenges SET state='superseded'
+               WHERE account_id=? AND session_id=? AND purpose=?
+                 AND state='pending' AND challenge_id<>?""",
+            (auth.account_id, auth.session_id, purpose, challenge_id),
+        )
+        conn.execute("COMMIT")
     except Exception:
-        try:
-            conn.rollback()
-        except Exception:
-            pass
+        if conn is not None:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
         return _result("failed", code="storage_unavailable")
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
     return _result(
         "verification_required", challenge_id=challenge_id, purpose=purpose,
         action=auth.action, expires_at=_iso(expiry),
@@ -518,52 +719,105 @@ def _complete_challenge(
     *, challenge_id: str, secret_input_ref: str, ctx: AuthContext,
     purpose: str, operation_id: str | None = None,
 ) -> dict[str, Any]:
+    """Verify and consume one OTP under one SQLite write transaction."""
     if not _enabled():
         return _deny("feature_disabled")
     if not isinstance(challenge_id, str) or not challenge_id.startswith("challenge_"):
         return _deny("invalid_challenge")
-    conn = _store()
+    conn = None
     try:
-        row = conn.execute("SELECT * FROM verification_challenges WHERE challenge_id=?", (challenge_id,)).fetchone()
+        conn = _store()
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            "SELECT * FROM verification_challenges WHERE challenge_id=?", (challenge_id,)
+        ).fetchone()
         if row is None:
+            conn.rollback()
             return _deny("invalid_challenge")
         if not _valid_auth(ctx, row["action"]) or row["purpose"] != purpose:
+            conn.rollback()
             return _deny("invalid_context")
-        if row["account_id"] != ctx.account_id or row["session_id"] != ctx.session_id or row["caller_transport_binding"] != ctx.caller_transport_binding:
+        if (
+            row["account_id"] != ctx.account_id
+            or row["session_id"] != ctx.session_id
+            or row["caller_transport_binding"] != ctx.caller_transport_binding
+        ):
+            conn.rollback()
             return _deny("invalid_context")
-        if row["operation_id"] != operation_id and (operation_id is not None or row["operation_id"] is not None):
+        if row["operation_id"] != operation_id and (
+            operation_id is not None or row["operation_id"] is not None
+        ):
+            conn.rollback()
             return _deny("wrong_operation")
+        current_revision = _current_auth_revision(ctx.account_id)
+        if current_revision is None or current_revision != row["auth_revision"] or current_revision != ctx.auth_revision:
+            conn.rollback()
+            return _deny("stale_auth_revision")
         with _PRIVATE_LOCK:
             private_item = _PRIVATE_INPUTS.get(secret_input_ref)
         if private_item is not None and private_item.get("binding") == _auth_binding(ctx) and private_item.get("purpose") != purpose:
+            conn.rollback()
             return _deny("wrong_purpose")
         if row["state"] != "pending":
+            conn.rollback()
             return _deny("replayed_challenge")
-        if _parse_time(row["expires_at"]) is None or _parse_time(row["expires_at"]) <= _now():
-            conn.execute("UPDATE verification_challenges SET state='expired' WHERE challenge_id=?", (challenge_id,))
+        expires_at = _parse_time(row["expires_at"])
+        if expires_at is None or expires_at <= _now():
+            conn.execute(
+                "UPDATE verification_challenges SET state='expired' WHERE challenge_id=? AND state='pending'",
+                (challenge_id,),
+            )
             conn.commit()
             return _deny("expired")
         secret = _take_secret(secret_input_ref, ctx, purpose, challenge_id)
         if secret is None:
+            conn.rollback()
             return _deny("secret_unavailable")
         normalized = "".join(ch for ch in secret if ch.isdigit())
         attempts = int(row["attempts"]) + 1
         if attempts > int(row["max_attempts"]):
-            conn.execute("UPDATE verification_challenges SET state='exhausted', attempts=? WHERE challenge_id=?", (attempts, challenge_id))
+            conn.execute(
+                "UPDATE verification_challenges SET state='exhausted', attempts=? WHERE challenge_id=? AND state='pending'",
+                (attempts, challenge_id),
+            )
             conn.commit()
             return _deny("attempts_exhausted")
         expected = _keyed_verifier(challenge_id, purpose, ctx.session_id, normalized)
         if not hmac.compare_digest(row["verifier_digest"], expected):
             state = "exhausted" if attempts >= int(row["max_attempts"]) else "pending"
-            conn.execute("UPDATE verification_challenges SET attempts=?, state=? WHERE challenge_id=?", (attempts, state, challenge_id))
+            changed = conn.execute(
+                "UPDATE verification_challenges SET attempts=?, state=? WHERE challenge_id=? AND state='pending'",
+                (attempts, state, challenge_id),
+            ).rowcount
+            if changed != 1:
+                conn.rollback()
+                return _deny("replayed_challenge")
             conn.commit()
             return _deny("attempts_exhausted" if state == "exhausted" else "invalid_code")
-        conn.execute("UPDATE verification_challenges SET attempts=?, state='consumed', consumed_at=? WHERE challenge_id=?", (attempts, _iso(_now()), challenge_id))
+        changed = conn.execute(
+            """UPDATE verification_challenges
+               SET attempts=?, state='consumed', consumed_at=?
+               WHERE challenge_id=? AND state='pending' AND auth_revision=?""",
+            (attempts, _iso(_now()), challenge_id, ctx.auth_revision),
+        ).rowcount
+        if changed != 1:
+            conn.rollback()
+            return _deny("replayed_challenge")
         conn.commit()
+    except Exception:
+        if conn is not None:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        return _result("failed", code="storage_unavailable")
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
     if purpose == "owner_step_up":
-        fresh = replace(ctx, owner_authenticated=True, proof_fresh=True, auth_level="step_up")
+        fresh = _refresh_auth_context(
+            ctx, owner_authenticated=True, proof_fresh=True, auth_level="step_up"
+        )
         return _result("verified_success", challenge_id=challenge_id, auth=fresh)
     return _result("verified_success", challenge_id=challenge_id, operation_id=operation_id)
 
@@ -600,6 +854,17 @@ def capture_account_phone(*, auth: AuthContext, secret_input_ref: str) -> dict[s
     return _result("verified_success", destination_ref=ref)
 
 
+def _consume_event_once(event: TrustedInputEvent, auth: AuthContext, operation_id: str) -> dict[str, Any] | None:
+    """Consume consent atomically at the session/action/operation boundary."""
+    if not _validate_event(event, auth, "send_consent", operation_id):
+        return _deny("consent_required")
+    with _PRIVATE_LOCK:
+        if event.event_id in _USED_EVENTS:
+            return _deny("event_replayed")
+        _USED_EVENTS.add(event.event_id)
+    return None
+
+
 def request_destination_verification(*, auth: AuthContext, operation_id: str, send_consent_event: TrustedInputEvent | None) -> dict[str, Any]:
     if not _enabled():
         return _deny("feature_disabled")
@@ -607,12 +872,15 @@ def request_destination_verification(*, auth: AuthContext, operation_id: str, se
         return _deny("verification_required")
     if not isinstance(operation_id, str) or not operation_id:
         return _deny("invalid_operation")
-    if send_consent_event is None or not _validate_event(send_consent_event, auth, "send_consent"):
+    if send_consent_event is None:
         return _deny("consent_required")
     with _PRIVATE_LOCK:
         refs = [ref for ref, item in _DESTINATIONS.items() if item["binding"] == _auth_binding(auth) and item["expires_at"] > _now().timestamp()]
     if not refs:
         return _deny("destination_required")
+    consumed = _consume_event_once(send_consent_event, auth, operation_id)
+    if consumed is not None:
+        return consumed
     return _issue_challenge(auth=auth, purpose="destination_phone", operation_id=operation_id, destination_ref=refs[-1])
 
 
@@ -626,12 +894,16 @@ def verify_destination_challenge(*, auth: AuthContext, operation_id: str, challe
         ctx=auth, purpose="destination_phone", operation_id=operation_id,
     )
     if result.get("state") == "verified_success":
-        conn = _store()
+        conn = None
         try:
+            conn = _store()
             row = conn.execute("SELECT destination_ref FROM verification_challenges WHERE challenge_id=?", (challenge_id,)).fetchone()
+            destination_ref = row["destination_ref"] if row else None
+        except Exception:
+            return _result("failed", code="storage_unavailable")
         finally:
-            conn.close()
-        destination_ref = row["destination_ref"] if row else None
+            if conn is not None:
+                conn.close()
         with _PRIVATE_LOCK:
             item = _DESTINATIONS.get(destination_ref or "")
             if item is not None:
@@ -643,10 +915,11 @@ def verify_destination_challenge(*, auth: AuthContext, operation_id: str, challe
 def _operation_binding(auth: AuthContext, operation_id: str) -> dict[str, Any] | None:
     import account_lifecycle
 
-    conn = account_lifecycle._try_open_store()  # noqa: SLF001
-    if conn is None:
-        return None
+    conn = None
     try:
+        conn = account_lifecycle._try_open_store()  # noqa: SLF001
+        if conn is None:
+            return None
         row = conn.execute(
             "SELECT operation_id, account_id, action, payload_digest, expected_auth_revision, expected_page_version, phone_ref, state, expires_at FROM operations WHERE operation_id=? AND account_id=?",
             (operation_id, auth.account_id),
@@ -655,9 +928,17 @@ def _operation_binding(auth: AuthContext, operation_id: str) -> dict[str, Any] |
             return None
         if row["expected_auth_revision"] != auth.auth_revision or row["state"] not in {"awaiting_confirmation", "pending"}:
             return None
+        if _current_auth_revision(auth.account_id) != auth.auth_revision:
+            return None
+        expires_at = _parse_time(row["expires_at"])
+        if expires_at is None or expires_at <= _now():
+            return None
         return {key: row[key] for key in row.keys()}
+    except Exception:
+        return None
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
 
 
 def get_confirmation_readback(*, auth: AuthContext, operation_id: str) -> dict[str, Any]:
@@ -665,39 +946,65 @@ def get_confirmation_readback(*, auth: AuthContext, operation_id: str) -> dict[s
         return _deny("feature_disabled")
     if not isinstance(operation_id, str):
         return _deny("invalid_operation")
-    binding = _operation_binding(auth, operation_id)
-    if binding is None:
-        return _deny("invalid_context")
-    canonical = json.dumps(
-        {
-            "operation_id": binding["operation_id"],
-            "action": binding["action"],
-            "payload_digest": binding["payload_digest"],
-            "page_version": binding["expected_page_version"],
-            "phone_ref": binding["phone_ref"],
-            "account_id": auth.account_id,
-            "auth_revision": auth.auth_revision,
-        }, sort_keys=True, separators=(",", ":"),
-    ).encode()
-    digest = hashlib.sha256(canonical).hexdigest()
-    with _PRIVATE_LOCK:
-        _READBACKS[(auth.session_id + "\0" + operation_id)] = {
-            "digest": digest,
-            "binding": binding,
-            "expires_at": min(_parse_time(auth.expires_at).timestamp(), _now().timestamp() + _ttl("ACCOUNT_LIFECYCLE_CONFIRMATION_TTL_S", 120)),
+    try:
+        binding = _operation_binding(auth, operation_id)
+        if binding is None:
+            return _deny("invalid_context")
+        labels = {
+            "client_page_create": "create the client page",
+            "client_page_remove": "remove the client page",
+            "trusted_phone_add": "add a trusted phone",
+            "trusted_phone_remove": "remove a trusted phone",
         }
-    return _result("awaiting_confirmation", operation_id=operation_id, action=binding["action"], readback_digest=digest, expires_at=_iso(datetime.fromtimestamp(_READBACKS[(auth.session_id + "\0" + operation_id)]["expires_at"], timezone.utc)))
+        label = labels.get(binding["action"], "perform the requested account action")
+        # Only opaque identifiers/digests are read back; no title, body, or
+        # phone value is reconstructed here.
+        readback = (
+            f"Confirm {label}. Operation {binding['operation_id']}. "
+            f"Payload {binding['payload_digest']}. "
+            f"Page version {binding['expected_page_version'] or 'none'}. "
+            f"Phone reference {binding['phone_ref'] or 'none'}. "
+            f"Account revision {auth.auth_revision}."
+        )
+        digest = hashlib.sha256(readback.encode("utf-8")).hexdigest()
+        auth_expiry = _parse_time(auth.expires_at)
+        if auth_expiry is None:
+            return _deny("invalid_context")
+        expires_at = min(
+            auth_expiry.timestamp(),
+            _now().timestamp() + _ttl("ACCOUNT_LIFECYCLE_CONFIRMATION_TTL_S", 120),
+        )
+        with _PRIVATE_LOCK:
+            _READBACKS[(auth.session_id + "\0" + operation_id)] = {
+                "digest": digest,
+                "readback": readback,
+                "binding": binding,
+                "expires_at": expires_at,
+            }
+        return _result(
+            "awaiting_confirmation",
+            operation_id=operation_id,
+            action=binding["action"],
+            readback=readback,
+            readback_digest=digest,
+            expires_at=_iso(datetime.fromtimestamp(expires_at, timezone.utc)),
+        )
+    except Exception:
+        return _result("failed", code="storage_unavailable")
 
 
 def capture_lifecycle_confirmation(*, auth: AuthContext, operation_id: str, readback_digest: str, event: TrustedInputEvent) -> str | dict[str, Any]:
     if not _enabled():
         return _deny("feature_disabled")
-    if not _valid_auth(auth, auth.action, owner=True) or not _validate_event(event, auth, "keypad_confirm"):
+    if not _valid_auth(auth, auth.action, owner=True) or not _validate_event(event, auth, "keypad_confirm", operation_id):
         return _deny("invalid_confirmation_event")
     if not isinstance(readback_digest, str) or not re.fullmatch(r"[a-f0-9]{64}", readback_digest):
         return _deny("invalid_readback")
-    if event.value_digest is None or not re.fullmatch(r"[a-f0-9]{64}", event.value_digest):
+    if event.value_digest != hashlib.sha256(b"1").hexdigest():
         return _deny("invalid_keypad_event")
+    current_revision = _current_auth_revision(auth.account_id)
+    if current_revision is None or current_revision != auth.auth_revision:
+        return _deny("stale_auth_revision")
     key = auth.session_id + "\0" + operation_id
     with _PRIVATE_LOCK:
         readback = _READBACKS.get(key)
@@ -708,12 +1015,20 @@ def capture_lifecycle_confirmation(*, auth: AuthContext, operation_id: str, read
             return _deny("readback_mismatch")
         if event.event_id in _USED_EVENTS:
             return _deny("event_replayed")
-        _USED_EVENTS.add(event.event_id)
     binding = readback["binding"]
     token = "confirmation_" + secrets.token_urlsafe(32)
     token_digest = hashlib.sha256(token.encode()).hexdigest()
-    conn = _store()
+    conn = None
     try:
+        conn = _store()
+        conn.execute("BEGIN IMMEDIATE")
+        existing = conn.execute(
+            "SELECT 1 FROM confirmation_tokens WHERE operation_id=? AND state='pending'",
+            (operation_id,),
+        ).fetchone()
+        if existing is not None:
+            conn.rollback()
+            return _deny("confirmation_already_issued")
         conn.execute(
             """INSERT INTO confirmation_tokens
             (token_digest, operation_id, account_id, session_id, action, payload_digest,
@@ -726,20 +1041,24 @@ def capture_lifecycle_confirmation(*, auth: AuthContext, operation_id: str, read
                 _iso(datetime.fromtimestamp(readback["expires_at"], timezone.utc)), event.event_id, _iso(_now()),
             ),
         )
-        conn.commit()
+        conn.execute("COMMIT")
     except Exception:
-        try:
-            conn.rollback()
-        except Exception:
-            pass
+        if conn is not None:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
         return _deny("confirmation_unavailable")
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
+    with _PRIVATE_LOCK:
+        _USED_EVENTS.add(event.event_id)
     try:
         import account_lifecycle
 
         bound = account_lifecycle.bind_operation_confirmation(
-            ctx=auth, operation_id=operation_id, confirmation_digest=hashlib.sha256(token.encode()).hexdigest()
+            ctx=auth, operation_id=operation_id, confirmation_digest=token_digest
         )
         if bound.get("state") != "awaiting_confirmation":
             return _deny("confirmation_unavailable")
