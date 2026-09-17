@@ -111,6 +111,21 @@ def capture_private_secret_input(
 capture_secret_input = capture_private_secret_input
 
 
+def mint_service_capability_for_state(
+    state: Any, *, audience: str = "fmws-account-lifecycle"
+) -> str | dict[str, Any]:
+    """Export a short-lived service capability from verified server call state."""
+    auth = _state_auth(state)
+    if not verification.is_auth_context(auth):
+        return auth
+    from lifecycle_service import mint_service_capability
+
+    try:
+        return mint_service_capability(auth, audience=audience)
+    except (TypeError, ValueError):
+        return {"ok": False, "state": "denied", "code": "service_capability_unavailable"}
+
+
 def request_owner_step_up(state: Any, *, action: str) -> dict[str, Any]:
     auth = _state_auth(state, action)
     if not verification.is_auth_context(auth):
