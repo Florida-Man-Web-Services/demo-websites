@@ -20,6 +20,7 @@ import asyncio
 import os
 import time
 import json
+import re
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
@@ -553,6 +554,29 @@ def voice_status(CallSid: str = Form(...), CallStatus: str = Form("")):
                 log.exception("call %s: transcript flush on status failed", CallSid)
         log.info("call %s finished: %s", CallSid, CallStatus)
     return PlainTextResponse("ok")
+
+
+@app.get("/clients/{slug}")
+def public_client_page(slug: str):
+    """Read-only client page route; lifecycle mutations never use HTTP."""
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", slug or ""):
+        return PlainTextResponse("", status_code=404, headers={"Cache-Control": "no-store"})
+    import sys
+    from pathlib import Path
+    mcp_dir = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp_dir) not in sys.path:
+        sys.path.insert(0, str(mcp_dir))
+    try:
+        import account_lifecycle
+        status, payload, cache_control = account_lifecycle.get_public_page(slug)
+    except Exception:
+        return PlainTextResponse("", status_code=404, headers={"Cache-Control": "no-store"})
+    headers = {"Cache-Control": cache_control}
+    if status == 200:
+        return HTMLResponse(payload.get("html", ""), status_code=200, headers=headers)
+    if status == 410:
+        return Response(content=b"", status_code=410, headers=headers, media_type="text/plain")
+    return PlainTextResponse("", status_code=404, headers=headers)
 
 
 @app.get("/audio/{key}.wav")
