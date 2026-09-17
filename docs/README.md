@@ -12,6 +12,7 @@
 | [BUILDER.md](./BUILDER.md) | Coding agent: customers path + briefs |
 | [site-generation/](./site-generation/) | Demo HTML generate/improve |
 | [superpowers/specs/2026-08-14-owner-voice-auth-design.md](./superpowers/specs/2026-08-14-owner-voice-auth-design.md) | Owner phone + passive voice 2FA |
+| [superpowers/specs/2026-09-17-ai411-evergreen-activities-design.md](./superpowers/specs/2026-09-17-ai411-evergreen-activities-design.md) | Evergreen things-to-do store (default-off) |
 | [superpowers/](./superpowers/) | Historical specs/plans |
 
 **Monorepo root:** [../README.md](../README.md)  

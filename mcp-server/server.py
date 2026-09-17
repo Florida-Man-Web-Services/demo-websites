@@ -52,6 +52,7 @@ from events import (
     search_events as search_events_sync,
     summarize_event_categories as summarize_event_categories_sync,
 )
+from activities import search_activities as search_activities_sync
 import broadcasts as broadcasts_mod
 from lookup import find_business
 from pitch import get_pitch
@@ -1128,6 +1129,69 @@ def _list_event_sources_tool_sync() -> dict:
 async def list_event_sources() -> dict:
     """List event sources in the local store with counts (e.g. community, visitgainesville)."""
     return await anyio.to_thread.run_sync(_list_event_sources_tool_sync)
+
+
+def _search_activities_sync(
+    query: str = "",
+    tags: str = "",
+    free_only: bool = False,
+    limit: int = 10,
+    category: str = "",
+    source: str = "",
+) -> dict:
+    try:
+        tag_list = None
+        if tags:
+            s = tags.strip()
+            if s.startswith("["):
+                import json as _json
+
+                try:
+                    parsed = _json.loads(s)
+                    tag_list = parsed if isinstance(parsed, list) else [str(parsed)]
+                except _json.JSONDecodeError:
+                    tag_list = [t.strip() for t in s.split(",") if t.strip()]
+            else:
+                tag_list = [t.strip() for t in s.split(",") if t.strip()]
+        return search_activities_sync(
+            query=query,
+            tags=tag_list,
+            free_only=free_only,
+            limit=limit,
+            category=category,
+            source=source,
+        )
+    except Exception as e:
+        logger.exception("tool %s failed", "search_activities")
+        return {"ok": False, "count": 0, "activities": [], "error": _unavailable(e)}
+
+
+@mcp.tool()
+async def search_activities(
+    query: str = "",
+    tags: str = "",
+    free_only: bool = False,
+    limit: int = 10,
+    category: str = "",
+    source: str = "",
+) -> dict:
+    """Search evergreen Gainesville activities (not dated events).
+
+    Default-off: when AI411_EVERGREEN_SEARCH_ENABLED is unset, returns
+    disabled=true and an empty list. No time window — do not treat hits
+    as open right now. Unknown address/hours/price are omitted, not invented.
+    """
+    return await anyio.to_thread.run_sync(
+        functools.partial(
+            _search_activities_sync,
+            query,
+            tags,
+            free_only,
+            limit,
+            category,
+            source,
+        )
+    )
 
 
 def _submit_event_broadcast_sync(

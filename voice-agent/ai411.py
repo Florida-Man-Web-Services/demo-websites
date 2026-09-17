@@ -189,6 +189,35 @@ TOOLS = [
         },
     },
     {
+        "name": "search_activities",
+        "description": (
+            "Evergreen Gainesville things to do (parks, pickleball, museums). "
+            "Use only when the caller did NOT name tonight/tomorrow/weekend/"
+            "a showtime. Hits are not proof the place is open now. If disabled "
+            "or empty, do not invent activities."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Topic or empty."},
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional tags.",
+                },
+                "category": {
+                    "type": "string",
+                    "description": "sports, outdoors, arts, …",
+                },
+                "free_only": {"type": "boolean"},
+                "limit": {"type": "integer"},
+                "source": {"type": "string"},
+            },
+            "required": [],
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "get_caller_profile",
         "description": (
             "Load this caller's remembered profile by phone (when they have "
@@ -825,11 +854,15 @@ Explicit request beats ceremony. If the caller already named a time window,
 venue (Hipp, Hippodrome, Regal), "date", "movies", or a specific show, call
 search_events IMMEDIATELY. Do NOT block that search on QOTD. After you have
 spoken 1–2 options (or an honest miss), offer today's QOTD once.
-Empty browse ("what's going on?") only:
+Empty browse ("what's going on?" / "things to do") only:
 1. Interests if MEMORY SNAPSHOT already has them — use as the topic. Prefer
    match_events_for_profile when they want people/like-minded matches. If no
    interests yet, call summarize_event_categories immediately and speak totals
    plus 2 titles. Do NOT run QUESTION OF THE DAY instead of that list.
+   If they did not name a time window, you may ALSO call search_activities
+   once. If it returns disabled=true or count=0, skip it — never invent
+   parks/hours. Speak activities separately from dated events and never as
+   "open tonight."
 2. Time window: map words to when= tonight | tomorrow | this_weekend | empty,
    OR start_at/end_at ISO for an exact date (e.g. this Friday). Ambiguous
    "Friday" → say the resolved date once.
@@ -907,6 +940,7 @@ for these; never add them to generated-sites)
 TOOLS (in-process MCP store names)
 - search_business_knowledge, lookup_business
 - summarize_event_categories, search_events (when; start_at; end_at; category; tags; free_only; source; kind), get_event
+- search_activities (untimed evergreen only; ignore if disabled)
 - get_caller_profile, update_caller_profile, forget_caller
 - get_question_of_the_day, answer_question_of_the_day, suggest_question_of_the_day
 - get_caller_people_profile, match_events_for_profile

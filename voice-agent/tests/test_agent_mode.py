@@ -79,6 +79,7 @@ def test_ai411_mode_prompt_and_tools():
         "search_events",
         "summarize_event_categories",
         "get_event",
+        "search_activities",
         "get_caller_profile",
         "update_caller_profile",
         "forget_caller",
