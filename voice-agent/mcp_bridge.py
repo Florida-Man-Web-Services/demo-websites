@@ -44,6 +44,21 @@ _backend_note: str | None = None
 # MCP protocol version accepted by current FastMCP servers.
 _MCP_PROTOCOL = "2024-11-05"
 _HTTP_TIMEOUT = 20.0
+_SHIP_HTTP_TIMEOUT = 120.0
+
+# Owner site mutations must run on demo-mcp so SITE_PR_AUTO can git-push.
+# lookup_business stays in-process (voice PVC customer registry).
+_OWNER_SHIP_TOOLS = frozenset(
+    {
+        "get_site_outline",
+        "create_change_request",
+        "list_open_change_requests",
+        "cancel_change_request",
+        "apply_change_request",
+        "get_change_request",
+        "open_site_update_pr",
+    }
+)
 
 
 def _ensure_import_paths() -> None:
@@ -711,6 +726,7 @@ def call_mcp_tool_http(
     url: str | None = None,
     token: str | None = None,
     client: httpx.Client | None = None,
+    timeout: float | None = None,
 ) -> Any:
     """Call a remote MCP tool via Streamable HTTP (initialize + tools/call).
 
@@ -734,7 +750,9 @@ def call_mcp_tool_http(
     }
 
     owns_client = client is None
-    http = client if client is not None else httpx.Client(timeout=_HTTP_TIMEOUT)
+    http = client if client is not None else httpx.Client(
+        timeout=timeout if timeout is not None else _HTTP_TIMEOUT
+    )
 
     try:
         session_id: str | None = None
@@ -865,6 +883,69 @@ def reset_for_tests() -> None:
 
 
 
+def _owner_http_ready() -> bool:
+    url = (getattr(config, "MCP_URL", None) or "").strip()
+    token = (getattr(config, "MCP_AUTH_TOKEN", None) or "").strip()
+    return bool(url and token)
+
+
+def _map_owner_ship_call(
+    name: str, args: dict, *, caller_number: str, call_sid: str = ""
+) -> tuple[str, dict]:
+    args = dict(args or {})
+    if name == "get_site_outline":
+        return name, {"slug": str(args.get("slug") or args.get("business_slug") or "")}
+    if name == "create_change_request":
+        conf = args.get("confirmation_spoken", True)
+        if isinstance(conf, str):
+            conf = conf.strip().lower() in ("1", "true", "yes", "on")
+        items = _parse_items(args.get("items"))
+        if not isinstance(items, str):
+            items = json.dumps(items or [])
+        sid = str(args.get("call_sid") or call_sid or "")
+        tref = str(args.get("transcript_ref") or "").strip()
+        if not tref and sid:
+            tref = f"calldb:call:{sid}"
+        return name, {
+            "business_slug": str(args.get("business_slug") or args.get("slug") or ""),
+            "summary": str(args.get("summary") or ""),
+            "items": items,
+            "caller_phone": _phone(args, caller_number),
+            "source": str(args.get("source") or "voice"),
+            "confirmation_spoken": bool(conf),
+            "priority": str(args.get("priority") or "normal"),
+            "call_sid": sid,
+            "transcript_ref": tref,
+        }
+    if name == "list_open_change_requests":
+        slug = args.get("slug") or args.get("business_slug") or ""
+        return name, {"slug": str(slug).strip()}
+    if name == "cancel_change_request":
+        return name, {
+            "request_id": str(args.get("request_id") or args.get("id") or ""),
+        }
+    if name == "apply_change_request":
+        return name, {
+            "request_id": str(args.get("request_id") or args.get("id") or ""),
+        }
+    if name == "get_change_request":
+        return name, {
+            "request_id": str(args.get("request_id") or args.get("id") or ""),
+        }
+    if name == "open_site_update_pr":
+        dry_run = args.get("dry_run", False)
+        if isinstance(dry_run, str):
+            dry_run = dry_run.strip().lower() in ("1", "true", "yes", "on")
+        mapped = {
+            "request_id": str(args.get("request_id") or args.get("id") or ""),
+            "dry_run": bool(dry_run),
+        }
+        if args.get("base_branch"):
+            mapped["base_branch"] = str(args.get("base_branch"))
+        return name, mapped
+    return name, args
+
+
 def _dispatch_owner(
     name: str,
     args: dict,
@@ -872,6 +953,13 @@ def _dispatch_owner(
     caller_number: str,
     call_sid: str = "",
 ) -> Any:
+    if name in _OWNER_SHIP_TOOLS and _owner_http_ready():
+        mcp_name, mapped = _map_owner_ship_call(
+            name, args, caller_number=caller_number, call_sid=call_sid
+        )
+        log.info("owner ship tool %s → MCP HTTP", mcp_name)
+        return call_mcp_tool_http(mcp_name, mapped, timeout=_SHIP_HTTP_TIMEOUT)
+
     err = _load_owner_modules()
     if err:
         return owner_updates.stub_tool_result(name, args)

@@ -441,9 +441,10 @@ CONVERSATION FLOW
    Filing auto-logs outcome owner_update_filed to the call database.
 7. list_open_change_requests / cancel_change_request when they ask about pending
    work or want to cancel (cancel also auto-logs).
-8. apply_change_request is optional. If they want apply now, warn that it only
-   updates the local demo HTML and that a live PR/ship is a separate step
-   (apply auto-logs owner_update_applied).
+8. apply_change_request is optional. If they want apply now, say it writes the
+   demo HTML and, when shipping is enabled, opens/merges the site PR. Do not
+   claim floridamanweb.online is live until the tool result includes a PR/merge
+   receipt. Apply auto-logs owner_update_applied.
 9. Offer send_sms_links for the demo URL if useful.
 10. Always call log_call_outcome once before end_call — overall disposition
    (owner_update_filed if you filed, no_change if nothing filed, voicemail,
