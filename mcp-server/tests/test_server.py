@@ -92,6 +92,10 @@ def test_tools_registered(monkeypatch):
         "get_change_request", "apply_change_request", "mark_request_shipped",
         "open_site_update_pr",
         "search_events", "summarize_event_categories", "get_event", "list_event_sources",
+        "search_activities",
+        "get_account_lifecycle_status", "prepare_client_page",
+        "prepare_client_page_removal", "prepare_trusted_phone_add",
+        "prepare_trusted_phone_removal", "cancel_account_operation",
         "submit_event_broadcast", "submit_notice_broadcast",
         "list_recent_broadcasts", "report_broadcast", "delete_own_broadcast",
     }

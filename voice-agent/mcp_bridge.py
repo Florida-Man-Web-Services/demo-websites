@@ -82,6 +82,7 @@ def _load_modules() -> str | None:
         import broadcasts as broadcasts_mod
         import callers as callers_mod
         import events as events_mod
+        import activities as activities_mod
         import fomo as fomo_mod
         import knowledge as knowledge_mod
         import personal_pages as personal_pages_mod
@@ -91,6 +92,7 @@ def _load_modules() -> str | None:
         _mods["broadcasts"] = broadcasts_mod
         _mods["callers"] = callers_mod
         _mods["events"] = events_mod
+        _mods["activities"] = activities_mod
         _mods["fomo"] = fomo_mod
         _mods["knowledge"] = knowledge_mod
         _mods["personal_pages"] = personal_pages_mod
@@ -207,6 +209,22 @@ def _map_tool_call(name: str, args: dict, *, caller_number: str) -> tuple[str, d
             out["source"] = str(args.get("source") or "")
         if args.get("kind"):
             out["kind"] = str(args.get("kind") or "")
+        if tags is not None:
+            out["tags"] = tags
+        return name, out
+
+    if name == "search_activities":
+        tags = args.get("tags")
+        free_only = args.get("free_only", False)
+        if isinstance(free_only, str):
+            free_only = free_only.strip().lower() in ("1", "true", "yes", "on")
+        out: dict[str, Any] = {
+            "query": str(args.get("query") or ""),
+            "free_only": bool(free_only),
+            "limit": int(args.get("limit") or 10),
+            "category": str(args.get("category") or ""),
+            "source": str(args.get("source") or ""),
+        }
         if tags is not None:
             out["tags"] = tags
         return name, out
@@ -401,6 +419,12 @@ def _dispatch_inproc(name: str, args: dict, *, caller_number: str) -> Any:
 
     if mcp_name == "search_events":
         return events.search_events(**mapped)
+
+    if mcp_name == "search_activities":
+        acts = _mods.get("activities")
+        if acts is None:
+            return {"ok": False, "count": 0, "activities": [], "error": "activities unavailable"}
+        return acts.search_activities(**mapped)
 
     if mcp_name == "summarize_event_categories":
         return events.summarize_event_categories(**mapped)
@@ -782,6 +806,7 @@ def _dispatch_http(name: str, args: dict, *, caller_number: str) -> Any:
         "get_business_snapshot",
         "lookup_business",
         "search_events",
+        "search_activities",
         "summarize_event_categories",
         "get_event",
         "get_caller_profile",

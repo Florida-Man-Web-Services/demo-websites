@@ -385,6 +385,10 @@ AI 411 `search_events` reads `EVENTS_PATH` (default `/data/events.json`). **No f
 
 Cron monitor: exit 0 + one stable `DIGEST …` stdout line. Optional manifest: [cronjob-visitgainesville-events.yaml](./cronjob-visitgainesville-events.yaml). After merge, one-shot PVC: purge seed rows then run ingest against the voice volume.
 
+### Evergreen activities (default off)
+
+Separate store `ACTIVITIES_PATH` (`/data/activities.json`). Tool `search_activities`. Flags `AI411_EVERGREEN_SEARCH_ENABLED` and `AI411_EVERGREEN_INGEST_ENABLED` default off. Allowlist `mcp-server/activities_allowlist.json` (`publish: false` until operator). Do not invent hours. Timed questions stay on `search_events`.
+
 ---
 
 ## 11. Tests
