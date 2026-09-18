@@ -179,6 +179,20 @@ class GitBackend(Protocol):
         ...
 
 
+def _git_process_env(override: dict[str, str] | None = None) -> dict[str, str]:
+    """Env for git/gh/curl. Never log this dict — it may contain GH_TOKEN."""
+    env = os.environ.copy()
+    if override:
+        env.update(override)
+    env.setdefault("GIT_AUTHOR_NAME", "FMWS sitepr")
+    env.setdefault("GIT_AUTHOR_EMAIL", "sitepr@floridamanweb.online")
+    env.setdefault("GIT_COMMITTER_NAME", env["GIT_AUTHOR_NAME"])
+    env.setdefault("GIT_COMMITTER_EMAIL", env["GIT_AUTHOR_EMAIL"])
+    if env.get("GH_TOKEN") and not env.get("GITHUB_TOKEN"):
+        env["GITHUB_TOKEN"] = env["GH_TOKEN"]
+    return env
+
+
 class SubprocessGitBackend:
     """Git + gh (or REST) via subprocess, isolated in a temporary worktree."""
 
@@ -199,7 +213,7 @@ class SubprocessGitBackend:
             argv,
             cwd=str(cwd) if cwd else None,
             check=check,
-            env=env,
+            env=_git_process_env(env),
             input=input_text,
             text=True,
             capture_output=True,

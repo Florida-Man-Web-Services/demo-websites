@@ -48,8 +48,10 @@ Removes the **human merge/review gate only**. It does not remove owner authoriza
 
 Default GitHub repo is `Florida-Man-Web-Services/demo-websites` (`SITE_PR_GITHUB_REPO` / `GITHUB_REPOSITORY` override).
 
+The demo-mcp image must include `git`, `gh`, and `curl`. On start, if `SITE_PR_ENABLED` is on, entrypoint clones `SITE_PR_GITHUB_REPO` into `SITE_PR_REPO_ROOT` (`/data/demo-websites` on the PVC). `GH_TOKEN` is read from env only; do not log it. `gh auth setup-git` is the credential helper — do not write the token into a remote URL.
+
 ## Live note (operator, 2026-09-17)
 
-`theswamp` voice-agent and demo-mcp were enabled with all four flags true, Flux reconcile disabled on those two Deployments, and a 64-byte `ACCOUNT_LIFECYCLE_SERVICE_KEY` mounted. That does **not** mean GitHub publishing works: demo-mcp had no `GH_TOKEN` / `GITHUB_TOKEN` at enablement. Mount a token secret before expecting a live site PR.
+`theswamp` voice-agent and demo-mcp were enabled with all four flags true, Flux reconcile disabled on those two Deployments, and a 64-byte `ACCOUNT_LIFECYCLE_SERVICE_KEY` mounted. `GH_TOKEN` is mounted from Secret `demo-mcp-github` (host `gh` login; rotate to a repo-only PAT when convenient). Publishing still needs a demo-mcp image that contains git/gh/curl and a successful clone into `/data/demo-websites`.
 
 Do not re-enable Flux on voice-agent without preserving `GROK_VOICE`. IAC diffs go to `jonesnoaht/iac` for Noah review first.
