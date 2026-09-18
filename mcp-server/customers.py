@@ -18,6 +18,7 @@ Storage: JSON map phone_e164 → Customer, path CUSTOMERS_PATH
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import threading
@@ -25,6 +26,8 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from account_verification import is_auth_context
 
 _REPO = Path(__file__).resolve().parent.parent
 _DEFAULT = (
@@ -60,6 +63,20 @@ MODE_OWNER = "owner_updates"
 
 # Statuses allowed to mutate sites (owner_updates write path).
 OWNER_WRITE_STATUSES = frozenset({"paid", "active_owner"})
+_E164_RE = re.compile(r"\A\+[1-9][0-9]{9,14}\Z")
+
+LIFECYCLE_ACTIONS = frozenset(
+    {
+        "client_page_create",
+        "client_page_remove",
+        "trusted_phone_add",
+        "trusted_phone_remove",
+        "lifecycle_status",
+        "get_lifecycle_status",
+        "lifecycle_phone_refs",
+    }
+)
+_FORBIDDEN_LIFECYCLE_AUTH_LEVELS = frozenset({"cid_legacy", "soft", "cid_only"})
 
 # OWNER_CR_AUTH: soft (default) | strict | off
 # soft  — paid slug owners are protected; unknown/unclaimed slugs stay legacy-open
@@ -92,6 +109,12 @@ def normalize_phone(phone: str | None) -> str | None:
     return "+" + digits
 
 
+def is_valid_e164(phone: str | None) -> bool:
+    """Return whether a value is already a valid canonical E.164 number."""
+
+    return isinstance(phone, str) and bool(_E164_RE.fullmatch(phone))
+
+
 def _path() -> Path:
     return Path(os.getenv("CUSTOMERS_PATH", str(CUSTOMERS_PATH)))
 
@@ -105,6 +128,53 @@ def _read() -> dict[str, dict[str, Any]]:
     except (OSError, json.JSONDecodeError):
         return {}
     return data if isinstance(data, dict) else {}
+
+
+def _migrate_lifecycle_identity(data: dict[str, dict[str, Any]]) -> bool:
+    """Add lifecycle identity fields without changing registry map keys.
+
+    Only eligible rows receive new identity fields.  Existing account IDs and
+    revisions are preserved, and rows are never merged even if their contact
+    information happens to collide.
+    """
+
+    changed = False
+    for row in data.values():
+        if not isinstance(row, dict) or not is_owner_write_status(row.get("status")):
+            continue
+        account_id = row.get("account_id")
+        if not isinstance(account_id, str) or not account_id.strip():
+            row["account_id"] = f"acct_{uuid.uuid4().hex}"
+            changed = True
+        revision = row.get("auth_revision")
+        if isinstance(revision, bool) or not isinstance(revision, int) or revision < 0:
+            row["auth_revision"] = 0
+            changed = True
+    return changed
+
+
+def _read_with_lifecycle_migration() -> dict[str, dict[str, Any]]:
+    """Read the registry and persist eligible identity defaults atomically."""
+
+    data = _read()
+    if _migrate_lifecycle_identity(data):
+        _write(data)
+    return data
+
+
+def migrate_lifecycle_registry() -> dict[str, Any]:
+    """Run the idempotent lifecycle identity migration explicitly."""
+
+    with _lock:
+        data = _read()
+        changed = _migrate_lifecycle_identity(data)
+        if changed:
+            _write(data)
+    eligible = sum(
+        1 for row in data.values()
+        if isinstance(row, dict) and is_owner_write_status(row.get("status"))
+    )
+    return {"ok": True, "migrated": changed, "eligible_count": eligible}
 
 
 def _write(data: dict[str, dict[str, Any]]) -> None:
@@ -123,7 +193,7 @@ def get(phone: str) -> dict[str, Any] | None:
     if not key:
         return None
     with _lock:
-        row = _read().get(key)
+        row = _read_with_lifecycle_migration().get(key)
         return dict(row) if row else None
 
 
@@ -174,8 +244,230 @@ def find_customers_for_phone(phone: str | None) -> list[dict[str, Any]]:
     if not key:
         return []
     with _lock:
-        rows = list(_read().values())
+        rows = list(_read_with_lifecycle_migration().values())
     return [dict(r) for r in rows if phone_is_trusted(r, key)]
+
+
+def _lifecycle_phone_memberships(
+    data: dict[str, dict[str, Any]],
+) -> list[tuple[str, dict[str, Any], str, bool]]:
+    """Return primary/trusted memberships as (map key, row, phone, primary)."""
+
+    memberships: list[tuple[str, dict[str, Any], str, bool]] = []
+    for map_key, row in data.items():
+        if not isinstance(row, dict):
+            continue
+        primary = normalize_phone(map_key) or normalize_phone(row.get("phone"))
+        if primary:
+            memberships.append((map_key, row, primary, True))
+        trusted = row.get("trusted_phones") or []
+        if isinstance(trusted, str):
+            trusted = [trusted]
+        if isinstance(trusted, list):
+            for value in trusted:
+                normalized = normalize_phone(value)
+                if normalized:
+                    memberships.append((map_key, row, normalized, False))
+    return memberships
+
+
+def _lifecycle_account_rows(
+    data: dict[str, dict[str, Any]], account_id: str,
+) -> list[tuple[str, dict[str, Any]]]:
+    return [
+        (key, row)
+        for key, row in data.items()
+        if isinstance(row, dict) and row.get("account_id") == account_id
+    ]
+
+
+def validate_lifecycle_registry(data: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Validate every phone membership before any lifecycle decision.
+
+    Lifecycle authorization is fail-closed: an unrelated malformed or
+    duplicate membership is enough to stop the requested account operation.
+    """
+
+    if not isinstance(data, dict):
+        return {"ok": False, "code": "account_unavailable"}
+    memberships: list[tuple[str, dict[str, Any], str, bool]] = []
+    account_ids: set[str] = set()
+    for map_key, row in data.items():
+        if not isinstance(row, dict):
+            return {"ok": False, "code": "account_unavailable"}
+        if is_owner_write_status(row.get("status")):
+            account_id = row.get("account_id")
+            if not isinstance(account_id, str) or not account_id.strip() or account_id in account_ids:
+                return {"ok": False, "code": "account_unavailable"}
+            account_ids.add(account_id)
+        primary = normalize_phone(map_key)
+        row_phone = normalize_phone(row.get("phone"))
+        if primary is None and row_phone is None:
+            return {"ok": False, "code": "ambiguous_phone_membership"}
+        if primary is not None and not is_valid_e164(primary):
+            return {"ok": False, "code": "ambiguous_phone_membership"}
+        if row_phone is not None and not is_valid_e164(row_phone):
+            return {"ok": False, "code": "ambiguous_phone_membership"}
+        if primary is not None and row_phone is not None and primary != row_phone:
+            return {"ok": False, "code": "ambiguous_phone_membership"}
+        primary = primary or row_phone
+        assert primary is not None
+        memberships.append((map_key, row, primary, True))
+        trusted_raw = row.get("trusted_phones", [])
+        if trusted_raw is None:
+            trusted_raw = []
+        if not isinstance(trusted_raw, list):
+            return {"ok": False, "code": "ambiguous_phone_membership"}
+        trusted_seen: set[str] = set()
+        for value in trusted_raw:
+            normalized = normalize_phone(value) if isinstance(value, str) else None
+            if not is_valid_e164(normalized) or normalized in trusted_seen:
+                return {"ok": False, "code": "ambiguous_phone_membership"}
+            assert normalized is not None
+            trusted_seen.add(normalized)
+            memberships.append((map_key, row, normalized, False))
+    counts: dict[str, int] = {}
+    for _, _, phone, _ in memberships:
+        counts[phone] = counts.get(phone, 0) + 1
+    if any(count > 1 for count in counts.values()):
+        return {"ok": False, "code": "ambiguous_phone_membership"}
+    return {"ok": True}
+
+
+def _lifecycle_phone_ref(account_id: str, phone: str) -> str:
+    """Derive a stable opaque reference; never embed the phone in the ref."""
+
+    digest = hashlib.sha256(f"{account_id}\0{phone}".encode("utf-8")).hexdigest()
+    return f"phone_{digest[:32]}"
+
+
+def _mask_phone(phone: str) -> str:
+    digits = re.sub(r"\D", "", phone)
+    return f"••••{digits[-4:]}" if len(digits) >= 4 else "••••"
+
+
+def resolve_lifecycle_account(caller_phone: str | None) -> dict[str, Any]:
+    """Resolve one and only one eligible account using a caller hint.
+
+    The caller number is a lookup hint, not authorization.  None and
+    ambiguous matches deliberately return the same generic denial.
+    """
+
+    key = normalize_phone(caller_phone)
+    if not key:
+        return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+    with _lock:
+        data = _read_with_lifecycle_migration()
+        registry_check = validate_lifecycle_registry(data)
+        if not registry_check["ok"]:
+            return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+        matched_rows: dict[int, dict[str, Any]] = {}
+        for _, row, member_phone, _ in _lifecycle_phone_memberships(data):
+            if is_owner_write_status(row.get("status")) and member_phone == key:
+                matched_rows[id(row)] = row
+        matches = list(matched_rows.values())
+    if len(matches) != 1:
+        return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+    row = matches[0]
+    return {
+        "ok": True,
+        "account_id": row["account_id"],
+        "auth_revision": row["auth_revision"],
+        "account_status": row.get("status"),
+    }
+
+
+def authorize_account_lifecycle(
+    *,
+    account_id: str,
+    action: str,
+    ctx: Any,
+    expected_auth_revision: int | None = None,
+) -> dict[str, Any]:
+    """Authorize lifecycle access against the current registry row."""
+
+    if not is_auth_context(ctx):
+        return {"ok": False, "code": "invalid_context", "error": "lifecycle access denied"}
+    if action not in LIFECYCLE_ACTIONS or not ctx.has_capability(action):
+        return {"ok": False, "code": "invalid_context", "error": "lifecycle access denied"}
+    if not isinstance(account_id, str) or not account_id.strip() or ctx.account_id != account_id:
+        return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+    if ctx.owner_authenticated is not True or ctx.proof_fresh is not True:
+        return {"ok": False, "code": "verification_required", "error": "lifecycle access denied"}
+    if ctx.auth_level in _FORBIDDEN_LIFECYCLE_AUTH_LEVELS or ctx.legacy_auth:
+        return {"ok": False, "code": "invalid_context", "error": "lifecycle access denied"}
+    if getattr(ctx, "forced_mode", False):
+        return {"ok": False, "code": "invalid_context", "error": "lifecycle access denied"}
+    with _lock:
+        data = _read_with_lifecycle_migration()
+        registry_check = validate_lifecycle_registry(data)
+        if not registry_check["ok"]:
+            return {"ok": False, "code": registry_check["code"], "error": "lifecycle access denied"}
+        rows = _lifecycle_account_rows(data, account_id)
+        if len(rows) != 1 or not is_owner_write_status(rows[0][1].get("status")):
+            return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+        row = rows[0][1]
+        if ctx.account_status != row.get("status"):
+            return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+        current_revision = row.get("auth_revision")
+        if not isinstance(current_revision, int) or current_revision < 0:
+            return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+    if expected_auth_revision is not None and current_revision != expected_auth_revision:
+        return {"ok": False, "code": "stale_auth_revision", "error": "authorization is stale"}
+    if current_revision != ctx.auth_revision:
+        return {"ok": False, "code": "stale_auth_revision", "error": "authorization is stale"}
+    return {
+        "ok": True,
+        "account_id": account_id,
+        "auth_revision": current_revision,
+        "account_status": row.get("status"),
+    }
+
+
+def lifecycle_phone_refs(account_id: str, *, ctx: Any) -> dict[str, Any]:
+    """List only stable opaque phone refs and masked labels for one account."""
+
+    action = getattr(ctx, "action", None)
+    if action not in {"trusted_phone_add", "trusted_phone_remove", "lifecycle_phone_refs"}:
+        return {"ok": False, "code": "invalid_context", "error": "lifecycle access denied"}
+    auth = authorize_account_lifecycle(account_id=account_id, action=action, ctx=ctx)
+    if not auth.get("ok"):
+        return auth
+    with _lock:
+        data = _read_with_lifecycle_migration()
+        registry_check = validate_lifecycle_registry(data)
+        if not registry_check["ok"]:
+            return {"ok": False, "code": registry_check["code"], "error": "lifecycle access denied"}
+        rows = _lifecycle_account_rows(data, account_id)
+        if len(rows) != 1:
+            return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+        map_key, row = rows[0]
+        all_memberships = _lifecycle_phone_memberships(data)
+        counts: dict[str, int] = {}
+        for _, _, phone, _ in all_memberships:
+            counts[phone] = counts.get(phone, 0) + 1
+        if any(count > 1 for count in counts.values()):
+            return {"ok": False, "code": "ambiguous_phone_membership", "error": "lifecycle access denied"}
+        primary = normalize_phone(map_key) or normalize_phone(row.get("phone"))
+        if not primary:
+            return {"ok": False, "code": "account_unavailable", "error": "account unavailable"}
+        refs = [{
+            "phone_ref": _lifecycle_phone_ref(account_id, primary),
+            "label": f"primary {_mask_phone(primary)}",
+            "is_primary": True,
+        }]
+        trusted = row.get("trusted_phones") or []
+        if isinstance(trusted, str):
+            trusted = [trusted]
+        for value in trusted if isinstance(trusted, list) else []:
+            phone = normalize_phone(value)
+            if phone:
+                refs.append({
+                    "phone_ref": _lifecycle_phone_ref(account_id, phone),
+                    "label": f"trusted {_mask_phone(phone)}",
+                    "is_primary": False,
+                })
+    return {"ok": True, "account_id": account_id, "auth_revision": auth["auth_revision"], "phones": refs}
 
 
 def slugs_owned(customer: dict[str, Any] | None) -> list[str]:
@@ -522,6 +814,7 @@ def upsert(
 
     with _lock:
         data = _read()
+        _migrate_lifecycle_identity(data)
         row = dict(data.get(key) or {})
         if not row:
             row = {
@@ -574,6 +867,12 @@ def upsert(
                 if k in ("id", "phone", "created_at"):
                     continue
                 row[k] = v
+        if is_owner_write_status(row.get("status")):
+            if not isinstance(row.get("account_id"), str) or not row.get("account_id", "").strip():
+                row["account_id"] = f"acct_{uuid.uuid4().hex}"
+            revision = row.get("auth_revision")
+            if isinstance(revision, bool) or not isinstance(revision, int) or revision < 0:
+                row["auth_revision"] = 0
         row["updated_at"] = _now()
         data[key] = row
         _write(data)

@@ -33,6 +33,7 @@ SITE_REL_DIR = "generated-sites"
 # Env knobs (read each call so tests can monkeypatch os.environ).
 ENV_ENABLED = "SITE_PR_ENABLED"
 ENV_AUTO = "SITE_PR_AUTO"
+ENV_AUTOMERGE = "SITE_PR_AUTOMERGE"
 ENV_REPO = "SITE_PR_GITHUB_REPO"  # e.g. Florida-Man-Bioscience/demo-websites
 ENV_BASE = "SITE_PR_BASE_BRANCH"  # default main
 
@@ -47,6 +48,21 @@ def site_pr_auto() -> bool:
     """True only when SITE_PR_AUTO is explicitly truthy — optional apply hook."""
     v = (os.getenv(ENV_AUTO) or "").strip().lower()
     return v in ("1", "true", "yes", "on")
+
+
+def site_pr_automerge() -> bool:
+    """True only when autonomous PR merge is explicitly enabled."""
+    v = (os.getenv(ENV_AUTOMERGE) or "").strip().lower()
+    return v in ("1", "true", "yes", "on")
+
+
+def _merge_requested_pr(pr_url: str, *, branch: str, repo: str) -> dict[str, Any]:
+    """Merge a just-opened PR through the configured backend/CLI."""
+    backend = get_git_backend()
+    merge = getattr(backend, "merge_pr", None)
+    if callable(merge):
+        return merge(pr_url=pr_url, branch=branch, github_repo=repo)
+    return {"ok": False, "error": "git backend does not support merge_pr"}
 
 
 def _repo_root() -> Path:
@@ -154,6 +170,12 @@ class GitBackend(Protocol):
           pr_url: str | None
           error: optional
         """
+        ...
+
+    def merge_pr(
+        self, *, pr_url: str, branch: str, github_repo: str
+    ) -> dict[str, Any]:
+        """Merge an existing PR only when autonomous merge is explicitly enabled."""
         ...
 
 
@@ -341,6 +363,38 @@ class SubprocessGitBackend:
                 except Exception:
                     pass
 
+    def merge_pr(
+        self, *, pr_url: str, branch: str, github_repo: str
+    ) -> dict[str, Any]:
+        if not pr_url:
+            return {"ok": False, "error": "PR URL is required"}
+        if not shutil.which("gh"):
+            return {"ok": False, "error": "gh CLI is unavailable"}
+        result = self._run(
+            [
+                "gh",
+                "pr",
+                "merge",
+                pr_url,
+                "--squash",
+                "--delete-branch",
+                "--auto",
+            ],
+            check=False,
+        )
+        if result.returncode != 0:
+            return {
+                "ok": False,
+                "error": (result.stderr or result.stdout or "merge failed")[:400],
+            }
+        return {
+            "ok": True,
+            "merged": True,
+            "pr_url": pr_url,
+            "branch": branch,
+            "output": (result.stdout or "").strip()[:400],
+        }
+
     def _open_pr(
         self,
         *,
@@ -494,7 +548,7 @@ def open_site_update_pr(
     existing_url = (req.get("pr_url") or "").strip()
     existing_branch = (req.get("pr_branch") or req.get("branch") or "").strip()
     if existing_url:
-        return {
+        response = {
             "ok": True,
             "opened": True,
             "already_open": True,
@@ -504,6 +558,12 @@ def open_site_update_pr(
             "business_slug": req.get("business_slug"),
             "status": "shipped",
         }
+        if site_pr_automerge() and existing_branch:
+            merge_result = _merge_requested_pr(
+                existing_url, branch=existing_branch, repo=_github_repo()
+            )
+            response["merge"] = merge_result
+        return response
 
     slug = str(req.get("business_slug") or "").strip()
     site_path, path_err = cr._site_path_for_slug(slug)
@@ -603,6 +663,9 @@ def open_site_update_pr(
         }
 
     pr_url = result.get("pr_url") or ""
+    merge_result: dict[str, Any] | None = None
+    if site_pr_automerge() and pr_url:
+        merge_result = _merge_requested_pr(pr_url, branch=branch, repo=github_repo)
     # Persist on ChangeRequest record.
     fields: dict[str, Any] = {
         "pr_branch": branch,
@@ -611,6 +674,11 @@ def open_site_update_pr(
     if pr_url:
         fields["pr_url"] = pr_url
         fields["pr_opened_at"] = cr._now_iso()
+    if merge_result is not None:
+        fields["pr_merge_status"] = "merged" if merge_result.get("ok") else "merge_failed"
+        fields["pr_merge_result"] = merge_result
+        if merge_result.get("ok"):
+            fields["pr_merged_at"] = cr._now_iso()
     updated = cr._update_request_fields(rid, fields)
 
     return {
@@ -626,5 +694,10 @@ def open_site_update_pr(
         "rel_path": rel,
         "github_repo": github_repo,
         "request": updated,
-        "note": f"Opened PR for site update: {pr_url}" if pr_url else "Branch pushed.",
+        "merge": merge_result,
+        "note": (
+            f"Opened PR and requested autonomous merge: {pr_url}"
+            if merge_result is not None and merge_result.get("ok")
+            else f"Opened PR for site update: {pr_url}" if pr_url else "Branch pushed."
+        ),
     }

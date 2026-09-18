@@ -31,6 +31,10 @@ COPY mcp-server/customers.py \
      mcp-server/qotd.py \
      mcp-server/fomo.py \
      mcp-server/personal_pages.py \
+     mcp-server/account_pages.py \
+     mcp-server/account_verification.py \
+     mcp-server/account_lifecycle.py \
+     mcp-server/lifecycle_service.py \
      mcp-server/
 # Cron/CLI Visit Gainesville ingest (AI 411 events store)
 COPY scripts/ingest_visitgainesville_events.py scripts/

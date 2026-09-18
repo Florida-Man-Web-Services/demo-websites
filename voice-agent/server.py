@@ -20,6 +20,7 @@ import asyncio
 import os
 import time
 import json
+import re
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
@@ -62,6 +63,7 @@ def _make_state(
     number: str,
     *,
     outbound_slug: str | None = None,
+    register_transport: bool = True,
 ) -> CallState:
     """Build CallState with per-phone mode routing (AGENT_MODE=auto)."""
     from agent import resolve_call_mode
@@ -90,6 +92,10 @@ def _make_state(
         mode=mode,
         customer=customer or {},
     )
+    if register_transport and isinstance(call_sid, str) and call_sid:
+        # Register before lifecycle setup so issuance can prove this is the
+        # authoritative server-owned call state, not a fabricated namespace.
+        CALLS[call_sid] = state
     try:
         import voice_auth
 
@@ -550,6 +556,29 @@ def voice_status(CallSid: str = Form(...), CallStatus: str = Form("")):
     return PlainTextResponse("ok")
 
 
+@app.get("/clients/{slug}")
+def public_client_page(slug: str):
+    """Read-only client page route; lifecycle mutations never use HTTP."""
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", slug or ""):
+        return PlainTextResponse("", status_code=404, headers={"Cache-Control": "no-store"})
+    import sys
+    from pathlib import Path
+    mcp_dir = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp_dir) not in sys.path:
+        sys.path.insert(0, str(mcp_dir))
+    try:
+        import account_lifecycle
+        status, payload, cache_control = account_lifecycle.get_public_page(slug)
+    except Exception:
+        return PlainTextResponse("", status_code=404, headers={"Cache-Control": "no-store"})
+    headers = {"Cache-Control": cache_control}
+    if status == 200:
+        return HTMLResponse(payload.get("html", ""), status_code=200, headers=headers)
+    if status == 410:
+        return Response(content=b"", status_code=410, headers=headers, media_type="text/plain")
+    return PlainTextResponse("", status_code=404, headers=headers)
+
+
 @app.get("/audio/{key}.wav")
 def audio(key: str):
     path = tts.audio_path("".join(c for c in key if c.isalnum()))
@@ -592,6 +621,7 @@ def _get_sms_session(from_number: str, message_sid: str) -> CallState:
         business,
         "sms",
         from_number,
+        register_transport=False,
     )
     SMS_SESSIONS[from_number] = (state, now)
     log.info(

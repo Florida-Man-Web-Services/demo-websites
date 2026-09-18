@@ -49,6 +49,20 @@ OWNER_OUTCOMES = [
 ]
 ALL_CALL_OUTCOMES = SALES_OUTCOMES + OWNER_OUTCOMES
 
+# Lifecycle account mutation tools are exposed with safe request schemas, but
+# every call still requires server-bound voice state and the feature flag.
+_MODEL_LIFECYCLE_NAMES = frozenset(
+    {
+        "request_account_step_up",
+        "get_account_lifecycle_status",
+        "prepare_client_page",
+        "prepare_trusted_phone_add",
+        "prepare_trusted_phone_removal",
+        "prepare_client_page_removal",
+        "cancel_account_operation",
+    }
+)
+
 
 def _log_call_outcome_tool(
     *,
@@ -729,6 +743,11 @@ class CallState:
     auth_anomaly_reasons: dict = field(default_factory=dict)
     auth_require_step_up: bool = False
     voice_pcm_hashes: list = field(default_factory=list)
+    # Task 3 lifecycle records are server-owned and never model arguments.
+    lifecycle_transport_binding: object | None = None
+    lifecycle_auth: object | None = None
+    lifecycle_action: str = ""
+    lifecycle_step_up_ok: bool = False
     # grok-realtime TTFA stamps (monotonic seconds / derived ms). No audio.
     ttfa: dict = field(default_factory=dict)
 
@@ -1275,7 +1294,67 @@ def _run_onboarding_tool(state: CallState, name: str, args: dict) -> str:
         return onboarding.stub_tool_result(name, args)
 
 
+def _run_lifecycle_tool(state: CallState, name: str, args: dict) -> str:
+    """Dispatch only safe lifecycle requests through server-owned call state."""
+    import json as _json
+    import sys
+    from pathlib import Path
+
+    mcp_dir = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp_dir) not in sys.path:
+        sys.path.insert(0, str(mcp_dir))
+    import account_lifecycle
+    import lifecycle_voice
+
+    action_by_name = {
+        "prepare_client_page": "client_page_create",
+        "prepare_trusted_phone_add": "trusted_phone_add",
+        "prepare_trusted_phone_removal": "trusted_phone_remove",
+        "prepare_client_page_removal": "client_page_remove",
+    }
+    action = str(args.get("action") or action_by_name.get(name) or getattr(state, "lifecycle_action", "") or "")
+    auth = lifecycle_voice._state_auth(state, action or None)
+    if not account_lifecycle.is_auth_context(auth):
+        return _json.dumps(auth, ensure_ascii=False, default=str)
+
+    if name == "request_account_step_up":
+        result = lifecycle_voice.request_owner_step_up(state, action=action)
+    elif name == "get_account_lifecycle_status":
+        result = account_lifecycle.get_lifecycle_status(
+            ctx=auth, operation_id=args.get("operation_id") or None
+        )
+    elif name == "prepare_client_page":
+        result = account_lifecycle.prepare_client_page_create(
+            ctx=auth, title=str(args.get("title") or ""), body=str(args.get("body") or ""),
+            idempotency_key=str(args.get("idempotency_key") or ""),
+        )
+    elif name == "prepare_trusted_phone_add":
+        result = account_lifecycle.prepare_trusted_phone_add(
+            ctx=auth, idempotency_key=str(args.get("idempotency_key") or ""),
+        )
+    elif name == "prepare_trusted_phone_removal":
+        result = account_lifecycle.prepare_trusted_phone_remove(
+            ctx=auth, phone_ref=str(args.get("phone_ref") or ""),
+            idempotency_key=str(args.get("idempotency_key") or ""),
+        )
+    elif name == "prepare_client_page_removal":
+        result = account_lifecycle.prepare_client_page_remove(
+            ctx=auth, page_id=str(args.get("page_id") or ""),
+            idempotency_key=str(args.get("idempotency_key") or ""),
+        )
+    elif name == "cancel_account_operation":
+        result = account_lifecycle.cancel_account_operation(
+            ctx=auth, operation_id=str(args.get("operation_id") or ""),
+        )
+    else:
+        result = {"ok": False, "state": "denied", "code": "unknown_lifecycle_tool"}
+    return _json.dumps(result, ensure_ascii=False, default=str)
+
+
+
 def _run_tool(state: CallState, name: str, args: dict) -> str:
+    if name in _MODEL_LIFECYCLE_NAMES:
+        return _run_lifecycle_tool(state, name, args)
     if name == "end_call":
         state.ended = True
         return "The call will end after your current reply is spoken."

@@ -9,6 +9,8 @@ via mcp_bridge.
 
 from __future__ import annotations
 
+from lifecycle_tools import LIFECYCLE_TOOLS
+
 # Instant first-audio openers (same prewarm pattern as sales / AI 411).
 OPENERS = [
     "Owner updates desk.",
@@ -317,6 +319,9 @@ TOOLS = [
         },
     },
 ]
+
+# Same safe lifecycle surface as AI411; server dispatch supplies authority.
+TOOLS.extend(LIFECYCLE_TOOLS)
 
 
 def _opener_rule(openers: bool) -> str:

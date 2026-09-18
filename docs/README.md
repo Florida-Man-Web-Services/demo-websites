@@ -2,6 +2,7 @@
 
 | Document | Description |
 |----------|-------------|
+| [AI411_VOICE_UX_2026-08-29.md](./AI411_VOICE_UX_2026-08-29.md) | AI411 NL/voice: latency, off-script, Sesame spike, events |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | System context, components, data, security |
 | [PRODUCT_LOOP.md](./PRODUCT_LOOP.md) | Funnel operator guide (signup → owner) |
 | [OPS_CLUSTER.md](./OPS_CLUSTER.md) | DNS, Authentik, Flux, secrets, runbooks |

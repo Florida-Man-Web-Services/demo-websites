@@ -66,6 +66,7 @@ def _reset_backend(monkeypatch):
     sitepr.set_git_backend(None)
     monkeypatch.delenv("SITE_PR_ENABLED", raising=False)
     monkeypatch.delenv("SITE_PR_AUTO", raising=False)
+    monkeypatch.delenv("SITE_PR_AUTOMERGE", raising=False)
     yield
     sitepr.set_git_backend(None)
 
@@ -78,6 +79,18 @@ class RecordingBackend:
         self.pr_url = pr_url
         self.should_fail = False
         self.fail_error = "mock failure"
+        self.merge_calls: list[dict[str, Any]] = []
+        self.merge_should_fail = False
+
+    def merge_pr(
+        self, *, pr_url: str, branch: str, github_repo: str
+    ) -> dict[str, Any]:
+        self.merge_calls.append(
+            {"pr_url": pr_url, "branch": branch, "github_repo": github_repo}
+        )
+        if self.merge_should_fail:
+            return {"ok": False, "error": "mock merge failure"}
+        return {"ok": True, "merged": True, "pr_url": pr_url, "branch": branch}
 
     def create_branch_commit_pr(
         self,
@@ -181,6 +194,47 @@ def test_git_backend_called_when_enabled(shipped_request, tiny_site, monkeypatch
     assert loaded["request"]["pr_branch"] == result["branch"]
 
 
+def test_automerge_is_explicit_and_persisted(shipped_request, monkeypatch):
+    backend = RecordingBackend(
+        pr_url="https://github.com/org/repo/pull/43"
+    )
+    sitepr.set_git_backend(backend)
+    monkeypatch.setenv("SITE_PR_ENABLED", "1")
+    monkeypatch.setenv("SITE_PR_AUTOMERGE", "1")
+
+    result = sitepr.open_site_update_pr(shipped_request, dry_run=False)
+
+    assert result["merge"]["ok"] is True
+    assert result["merge"]["merged"] is True
+    assert len(backend.merge_calls) == 1
+    loaded = cr.get_change_request(shipped_request)
+    assert loaded["request"]["pr_merge_status"] == "merged"
+    assert "pr_merged_at" in loaded["request"]
+
+
+def test_automerge_failure_does_not_claim_published(shipped_request, monkeypatch):
+    backend = RecordingBackend()
+    backend.merge_should_fail = True
+    sitepr.set_git_backend(backend)
+    monkeypatch.setenv("SITE_PR_ENABLED", "1")
+    monkeypatch.setenv("SITE_PR_AUTOMERGE", "1")
+
+    result = sitepr.open_site_update_pr(shipped_request, dry_run=False)
+
+    assert result["ok"] is True
+    assert result["merge"]["ok"] is False
+    loaded = cr.get_change_request(shipped_request)
+    assert loaded["request"]["pr_merge_status"] == "merge_failed"
+    assert "pr_merged_at" not in loaded["request"]
+
+
+def test_automerge_flag_defaults_off(monkeypatch):
+    monkeypatch.delenv("SITE_PR_AUTOMERGE", raising=False)
+    assert sitepr.site_pr_automerge() is False
+    monkeypatch.setenv("SITE_PR_AUTOMERGE", "true")
+    assert sitepr.site_pr_automerge() is True
+
+
 def test_already_open_idempotent(shipped_request, monkeypatch):
     backend = RecordingBackend()
     sitepr.set_git_backend(backend)
@@ -194,7 +248,6 @@ def test_already_open_idempotent(shipped_request, monkeypatch):
     assert second["ok"] is True
     assert second.get("already_open") is True
     assert second["pr_url"] == first["pr_url"]
-    # Backend not called again
     assert len(backend.calls) == 1
 
 

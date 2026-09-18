@@ -98,7 +98,14 @@ def test_ai411_mode_prompt_and_tools():
         "get_personal_page_status",
         "log_connect",
         "end_call",
-    }
+        "request_account_step_up",
+        "get_account_lifecycle_status",
+        "prepare_client_page",
+        "prepare_trusted_phone_add",
+        "prepare_trusted_phone_removal",
+        "prepare_client_page_removal",
+        "cancel_account_operation",
+        }
     assert names == expected
     assert agent.get_openers() == ai411.OPENERS
     assert "EVENT DISCOVERY" in prompt
