@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 411 — Ad campaign review (v2)</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #121a2b; --ink: #e8eefc; --muted: #9aabc8;
+      --accent: #3dd6c6; --gold: #f5b942; --line: rgba(255,255,255,.1);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--ink);
+      background: radial-gradient(900px 400px at 0% 0%, #1a3a4a, transparent),
+                  radial-gradient(700px 360px at 100% 10%, #3a2a10, transparent), var(--bg);
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    h1 { font-size: 1.75rem; margin: 0 0 .35rem; }
+    .lead { color: var(--muted); margin: 0 0 1.5rem; line-height: 1.5; }
+    .badge {
+      display: inline-block; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid rgba(61,214,198,.4); padding: .3rem .55rem;
+      border-radius: 999px; margin-bottom: .75rem;
+    }
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 1rem 1.05rem 1.15rem; display: flex; flex-direction: column; gap: .55rem;
+    }
+    .card h2 { font-size: .95rem; margin: 0; color: var(--gold); }
+    .meta { font-size: .72rem; color: var(--muted); }
+    .primary {
+      white-space: pre-wrap; font-size: .92rem; line-height: 1.45;
+      background: rgba(0,0,0,.25); border-radius: 10px; padding: .75rem .8rem;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .chip {
+      font-size: .75rem; background: rgba(61,214,198,.12); color: var(--accent);
+      border-radius: 8px; padding: .25rem .5rem;
+    }
+    .hl { font-weight: 600; }
+    a { color: var(--accent); }
+    ul.hooks { margin: .25rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: .9rem; }
+    section { margin-top: 2rem; }
+    h3 { margin: 0 0 .75rem; font-size: 1.05rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="badge">Review pack · not live ads</div>
+    <h1>Gainesville AI 411 — campaign v2</h1>
+    <p class="lead">
+      Built with installed Hermes marketing skills (ad-copy, ad-creative, DR frameworks).
+      Landing: <a href="https://ai411.floridamanweb.online">ai411.floridamanweb.online</a>
+      · Full copy: <code>CAMPAIGN.md</code> · Features: <code>FEATURES.md</code>
+      · Meme PNGs: <a href="../ai411-meme-ads/">ai411-meme-ads</a>
+    </p>
+
+    <section>
+      <h3>Meta ad set (pick 3–4 to test)</h3>
+      <div class="grid" id="ads"></div>
+    </section>
+
+    <section>
+      <h3>Scroll-stop hooks</h3>
+      <ul class="hooks" id="hooks"></ul>
+    </section>
+
+    <section>
+      <h3>Landing bridge</h3>
+      <div class="card">
+        <div class="hl" id="h1"></div>
+        <div class="primary" id="sub" style="background:transparent;padding:0"></div>
+        <div class="row">
+          <span class="chip" id="cta1"></span>
+          <span class="chip" id="cta2"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    fetch('campaign-pack.json').then(r => r.json()).then(data => {
+      const root = document.getElementById('ads');
+      data.meta_ads.forEach(ad => {
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <h2>${ad.id} · ${ad.angle}</h2>
+          <div class="meta">${ad.awareness} awareness</div>
+          <div class="primary">${ad.primary_text}</div>
+          <div><span class="hl">Headline:</span> ${ad.headline}</div>
+          <div><span class="hl">Desc:</span> ${ad.description}</div>`;
+        root.appendChild(el);
+      });
+      const ul = document.getElementById('hooks');
+      data.hooks.forEach(h => {
+        const li = document.createElement('li');
+        li.textContent = h;
+        ul.appendChild(li);
+      });
+      document.getElementById('h1').textContent = data.landing_bridge.h1;
+      document.getElementById('sub').textContent = data.landing_bridge.sub;
+      document.getElementById('cta1').textContent = data.landing_bridge.cta_primary;
+      document.getElementById('cta2').textContent = data.landing_bridge.cta_secondary;
+    });
+  </script>
+</body>
+</html>
