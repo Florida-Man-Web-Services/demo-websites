@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AI 411 — 12 one-job statics</title>
+<style>
+  @font-face {
+    font-family: LS;
+    src: url("file:///nix/store/0hh3qjia9jxgw8lfayf503lwkiqa274c-liberation-fonts-2.1.5/share/fonts/truetype/LiberationSans-Regular.ttf");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: LS;
+    src: url("file:///nix/store/0hh3qjia9jxgw8lfayf503lwkiqa274c-liberation-fonts-2.1.5/share/fonts/truetype/LiberationSans-Bold.ttf");
+    font-weight: 700;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; }
+  .ad {
+    width: 1080px; height: 1350px; overflow: hidden; position: relative;
+    font-family: LS, "Liberation Sans", sans-serif;
+    color: #f4f1ea;
+  }
+  .top {
+    position: absolute; top: 48px; left: 56px; right: 56px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 22px; letter-spacing: .18em; text-transform: uppercase; font-weight: 700;
+  }
+  .bot {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 220px;
+    padding: 0 48px 0 56px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .bot .cta {
+    font-size: 34px; font-weight: 700; letter-spacing: -.02em;
+  }
+  .bot .cta-col { display: flex; flex-direction: column; gap: 6px; }
+  .bot .num { font-size: 28px; letter-spacing: .06em; color: #3dd6c6; font-weight: 700; }
+  .qrbox { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .qrbox img { width: 132px; height: 132px; background: #fff; padding: 8px; border-radius: 10px; }
+  .qrlab { font-size: 14px; letter-spacing: .16em; font-weight: 700; opacity: .85; }
+  h1 {
+    font-weight: 700; letter-spacing: -.045em; line-height: .92;
+  }
+
+  /* 01 us vs them */
+  #ad-01 { background: #0c1016; }
+  #ad-01 .split { position: absolute; inset: 140px 0 430px; display: grid; grid-template-columns: 1fr 1fr; }
+  #ad-01 .col { padding: 48px 40px; }
+  #ad-01 .them { background: #1a1d24; color: #8b919c; }
+  #ad-01 .us { background: #102822; color: #3dd6c6; }
+  #ad-01 .lab { font-size: 20px; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; margin-bottom: 28px; }
+  #ad-01 .bub { background: #2a2e36; color: #c5c8ce; border-radius: 22px; padding: 18px 22px; margin: 14px 0; font-size: 28px; max-width: 86%; }
+  #ad-01 .bub.r { margin-left: auto; background: #23262c; }
+  #ad-01 .phone {
+    margin-top: 40px; border: 3px solid #3dd6c6; border-radius: 36px; padding: 28px 24px 36px;
+    background: #0b1a16;
+  }
+  #ad-01 .phone .greet { font-size: 42px; font-weight: 700; color: #f4f1ea; }
+  #ad-01 h1 { position: absolute; left: 56px; right: 56px; bottom: 248px; font-size: 72px; color: #f4f1ea; text-shadow: 0 8px 28px #000; z-index: 2; }
+  #ad-01 .bot { background: #0c1016; }
+
+  /* 02 saturday */
+  #ad-02 { background: radial-gradient(1200px 700px at 50% 20%, #2a2418, #0b0c10 62%); }
+  #ad-02 .clock { position: absolute; top: 280px; left: 56px; right: 56px; font-size: 220px; font-weight: 700; letter-spacing: -.06em; line-height: .85; color: #f5b942; }
+  #ad-02 h1 { position: absolute; left: 56px; right: 56px; top: 620px; font-size: 92px; }
+  #ad-02 .sub { position: absolute; left: 56px; top: 860px; font-size: 32px; color: #c9b89a; }
+  #ad-02 .bot { background: linear-gradient(transparent, #0b0c10 30%); }
+
+  /* 03 tabs */
+  #ad-03 { background: #e8e4dc; color: #16150f; }
+  #ad-03 .top { color: #5c584f; }
+  #ad-03 .tabs { position: absolute; top: 150px; left: 0; right: 0; display: flex; gap: 6px; padding: 0 20px; }
+  #ad-03 .tab { flex: 1; height: 64px; background: #cfc9bc; border-radius: 12px 12px 0 0; font-size: 18px; display: flex; align-items: center; justify-content: center; color: #5a564c; font-weight: 700; }
+  #ad-03 .tab.on { background: #fff; color: #16150f; }
+  #ad-03 .win { position: absolute; top: 214px; left: 20px; right: 20px; bottom: 220px; background: #fff; border-radius: 0 0 8px 8px; }
+  #ad-03 h1 { position: absolute; left: 64px; right: 64px; top: 430px; font-size: 110px; color: #16150f; }
+  #ad-03 .x { position: absolute; left: 64px; top: 720px; font-size: 34px; color: #6b665c; font-weight: 700; }
+  #ad-03 .bot { background: #16150f; color: #f4f1ea; }
+
+  /* 04 411 */
+  #ad-04 { background: #0b1220; }
+  #ad-04 .giant { position: absolute; top: 180px; left: -20px; right: -20px; text-align: center; font-size: 420px; font-weight: 700; letter-spacing: -.08em; line-height: .8; color: #3dd6c6; }
+  #ad-04 h1 { position: absolute; left: 56px; right: 56px; bottom: 280px; font-size: 120px; text-align: center; }
+  #ad-04 .bot { background: #0b1220; border-top: 1px solid rgba(61,214,198,.25); }
+
+  /* 05 new in town */
+  #ad-05 { background: #12352c; }
+  #ad-05 .box {
+    position: absolute; top: 220px; left: 90px; width: 420px; height: 300px;
+    background: #c9a66b; border: 8px solid #8a6a38; transform: rotate(-8deg);
+    box-shadow: 18px 22px 0 #0b1f1a;
+  }
+  #ad-05 .box:after { content: "THIS SIDE UP"; position: absolute; inset: 0; display: grid; place-items: center; color: #5a4018; font-weight: 700; letter-spacing: .2em; font-size: 22px; }
+  #ad-05 .box2 {
+    position: absolute; top: 280px; right: 80px; width: 300px; height: 220px;
+    background: #e8d7b0; border: 8px solid #8a6a38; transform: rotate(11deg);
+  }
+  #ad-05 h1 { position: absolute; left: 56px; right: 56px; top: 620px; font-size: 120px; }
+  #ad-05 .sub { position: absolute; left: 56px; top: 880px; font-size: 34px; color: #b7d4cc; max-width: 80%; }
+  #ad-05 .bot { background: #0c241e; }
+
+  /* 06 you pick */
+  #ad-06 { background: #1a1420; }
+  #ad-06 .stack { position: absolute; left: 56px; right: 56px; top: 240px; }
+  #ad-06 .line { font-size: 108px; font-weight: 700; letter-spacing: -.05em; line-height: 1.02; }
+  #ad-06 .muted { color: #6d6578; }
+  #ad-06 .gold { color: #f5b942; }
+  #ad-06 .bot { background: #1a1420; }
+
+  /* 07 no app */
+  #ad-07 { background: #071018; }
+  #ad-07 .get {
+    position: absolute; top: 280px; left: 50%; transform: translateX(-50%);
+    width: 420px; height: 150px; border-radius: 36px; background: #3dd6c6; color: #071018;
+    font-size: 72px; font-weight: 700; display: grid; place-items: center; letter-spacing: .04em;
+  }
+  #ad-07 .slash {
+    position: absolute; top: 250px; left: 160px; width: 760px; height: 18px; background: #ff4d4d;
+    transform: rotate(-18deg); box-shadow: 0 0 0 8px #071018;
+  }
+  #ad-07 h1 { position: absolute; left: 56px; right: 56px; top: 560px; font-size: 96px; text-align: center; }
+  #ad-07 .bot { background: #071018; }
+
+  /* 08 categories */
+  #ad-08 { background: #10140f; }
+  #ad-08 .chips { position: absolute; left: 56px; right: 56px; top: 240px; display: flex; flex-direction: column; gap: 22px; }
+  #ad-08 .chip {
+    display: flex; justify-content: space-between; align-items: center;
+    background: #1c2418; border: 3px solid #3dd6c6; border-radius: 28px; padding: 28px 36px;
+    font-size: 42px; font-weight: 700;
+  }
+  #ad-08 .n { font-size: 64px; color: #3dd6c6; }
+  #ad-08 h1 { position: absolute; left: 56px; right: 56px; top: 780px; font-size: 80px; }
+  #ad-08 .bot { background: #10140f; }
+
+  /* 09 sms */
+  #ad-09 { background: #0e1620; }
+  #ad-09 .phone {
+    position: absolute; top: 170px; left: 210px; width: 660px; height: 620px;
+    background: #111; border: 10px solid #2a3340; border-radius: 56px; overflow: hidden;
+  }
+  #ad-09 .notch { height: 36px; background: #000; }
+  #ad-09 .imsg { padding: 36px 28px; }
+  #ad-09 .who { font-size: 24px; color: #9aabc8; margin-bottom: 28px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  #ad-09 .in { background: #2c2c2e; border-radius: 22px; padding: 18px 20px; font-size: 28px; max-width: 86%; margin-bottom: 16px; }
+  #ad-09 .out { background: #0b84fe; border-radius: 22px; padding: 18px 20px; font-size: 28px; max-width: 86%; margin-left: auto; }
+  #ad-09 .link { color: #cfe4ff; text-decoration: underline; }
+  #ad-09 h1 { position: absolute; left: 40px; right: 40px; bottom: 252px; font-size: 56px; z-index: 2; text-shadow: 0 6px 20px #000; }
+  #ad-09 .bot { background: #0e1620; }
+
+  /* 10 qotd */
+  #ad-10 { background: #1b1024; }
+  #ad-10 .card {
+    position: absolute; top: 220px; left: 80px; right: 80px; height: 420px;
+    background: #f4f1ea; color: #1b1024; border-radius: 32px; padding: 48px 44px;
+    box-shadow: 0 30px 0 #3dd6c6;
+  }
+  #ad-10 .qey { font-size: 22px; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; color: #6b4a7a; margin-bottom: 20px; }
+  #ad-10 .q { font-size: 48px; font-weight: 700; letter-spacing: -.03em; line-height: 1.15; }
+  #ad-10 h1 { position: absolute; left: 56px; right: 56px; top: 760px; font-size: 88px; }
+  #ad-10 .bot { background: #140b1b; }
+
+  /* 11 shop */
+  #ad-11 { background: #20160e; }
+  #ad-11 .pair { position: absolute; left: 48px; right: 48px; top: 180px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  #ad-11 .pane { height: 420px; border-radius: 20px; padding: 28px; }
+  #ad-11 .good { background: #3a2a18; border: 3px solid #f5b942; }
+  #ad-11 .bad { background: #2a2a2a; border: 3px dashed #777; color: #9a9a9a; }
+  #ad-11 .pl { font-size: 20px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; margin-bottom: 24px; }
+  #ad-11 .pt { font-size: 44px; font-weight: 700; line-height: 1.1; }
+  #ad-11 h1 { position: absolute; left: 56px; right: 56px; top: 680px; font-size: 92px; }
+  #ad-11 .bot { background: #140e09; }
+
+  /* 12 faq */
+  #ad-12 { background: #101418; }
+  #ad-12 .faq {
+    position: absolute; left: 64px; right: 64px; top: 260px;
+    background: #f4f1ea; color: #101418; border-radius: 28px; padding: 56px 48px;
+  }
+  #ad-12 .qq { font-size: 28px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #6b665c; margin-bottom: 16px; }
+  #ad-12 .qa { font-size: 92px; font-weight: 700; letter-spacing: -.04em; line-height: .95; }
+  #ad-12 .ans { margin-top: 28px; font-size: 40px; font-weight: 700; color: #0b5; }
+  #ad-12 h1 { position: absolute; left: 56px; right: 56px; top: 860px; font-size: 72px; }
+  #ad-12 .bot { background: #101418; }
+</style>
+</head>
+<body>
+
+<section class="ad" id="ad-01">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="split">
+    <div class="col them">
+      <div class="lab">Them</div>
+      <div class="bub">what’s going on</div>
+      <div class="bub r">idk</div>
+      <div class="bub">later?</div>
+      <div class="bub r">47 unread</div>
+    </div>
+    <div class="col us">
+      <div class="lab">Us</div>
+      <div class="phone">
+        <div class="greet">A411 here.</div>
+        <div style="margin-top:18px;font-size:28px;color:#9ee8de">What’s going on?</div>
+      </div>
+    </div>
+  </div>
+  <h1>The group chat<br>is not a plan</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-02">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="clock">9:14</div>
+  <h1>Another Saturday<br>on the couch</h1>
+  <div class="sub">The town is open. You just didn’t call.</div>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-03">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="tabs">
+    <div class="tab">Eventbrite</div><div class="tab on">FB Events</div><div class="tab">IG</div>
+    <div class="tab">maps</div><div class="tab">reddit</div><div class="tab">+</div>
+  </div>
+  <div class="win"></div>
+  <h1>14 tabs.<br>Zero plan.</h1>
+  <div class="x">Close the laptop. Call.</div>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-04">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="giant">411</div>
+  <h1>is back</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-05">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="box"></div>
+  <div class="box2"></div>
+  <h1>New in<br>town?</h1>
+  <div class="sub">The group chat is other people’s friends.</div>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-06">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="stack">
+    <div class="line muted">You pick.</div>
+    <div class="line muted">You pick.</div>
+    <div class="line gold">Or call.</div>
+  </div>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-07">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="get">GET</div>
+  <div class="slash"></div>
+  <h1>Don’t download it.<br>Call it.</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">No app. Just call.</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-08">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="chips">
+    <div class="chip"><span>Food</span><span class="n">3</span></div>
+    <div class="chip"><span>Music</span><span class="n">2</span></div>
+    <div class="chip"><span>Outdoors</span><span class="n">4</span></div>
+  </div>
+  <h1>Pick a bucket.<br>Skip the dump.</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-09">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="imsg">
+      <div class="who">Messages · AI 411</div>
+      <div class="in">Saturday market. 9am.</div>
+      <div class="in link">link to the event</div>
+      <div class="out">on my way</div>
+    </div>
+  </div>
+  <h1>It can text<br>you the link</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-10">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="card">
+    <div class="qey">Question of the day</div>
+    <div class="q">What kind of night actually sounds good to you?</div>
+  </div>
+  <h1>One question.<br>Then a night out.</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">Call AI 411</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-11">
+  <div class="top"><span>Local shops</span><span>FMWS</span></div>
+  <div class="pair">
+    <div class="pane good">
+      <div class="pl">The shop</div>
+      <div class="pt">Packed.<br>Real.<br>Yours.</div>
+    </div>
+    <div class="pane bad">
+      <div class="pl">The website</div>
+      <div class="pt">Coming soon.<br>Since 2014.</div>
+    </div>
+  </div>
+  <h1>Your website<br>is a rumor</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">Request a callback</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+<section class="ad" id="ad-12">
+  <div class="top"><span>Gainesville</span><span>AI 411</span></div>
+  <div class="faq">
+    <div class="qq">FAQ</div>
+    <div class="qa">Is this spam?</div>
+    <div class="ans">No. You start the call.</div>
+  </div>
+  <h1>You call it.<br>It does not call you.</h1>
+  <div class="bot"><div class="cta-col"><div class="cta">You start the call</div><div class="num">(844) 903-0365</div></div><div class="qrbox"><img src="qr-call.png" alt=""/><div class="qrlab">SCAN TO CALL</div></div></div>
+</section>
+
+</body>
+</html>
