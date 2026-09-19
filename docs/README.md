@@ -2,6 +2,9 @@
 
 | Document | Description |
 |----------|-------------|
+| [ai411/](./ai411/) | **Start here for AI 411:** directory, demo request, owner updates, CMS, front desk, reference |
+| [hosted-business-cms.md](./hosted-business-cms.md) | Hosted CMS contract (flags, local enablement) |
+| [front-desk.md](./front-desk.md) | Front-desk runtime contract |
 | [AI411_VOICE_UX_2026-08-29.md](./AI411_VOICE_UX_2026-08-29.md) | AI411 NL/voice: latency, off-script, Sesame spike, events |
 | [fmws-account-lifecycle.md](./fmws-account-lifecycle.md) | AI411 client pages + trusted phones; flags; `/clients/{slug}` |
 | [superpowers/reviews/2026-09-16-ai411-account-lifecycle-review.md](./superpowers/reviews/2026-09-16-ai411-account-lifecycle-review.md) | Lifecycle privacy/bypass scan + remaining live gates |

@@ -13,6 +13,7 @@ Monorepo for **Gainesville demo landing pages**, the **AI 411 / owner-updates vo
 | MCP server | `mcp-server/` | **Live** — lookup, knowledge, ChangeRequests, events, broadcasts |
 | Voice agent | `voice-agent/` | **Live** — `AGENT_MODE=auto` routes AI411 / onboarding / sales / owner |
 | Product loop | [`docs/PRODUCT_LOOP.md`](docs/PRODUCT_LOOP.md) | AI411 web → interview → build → Stripe → owner |
+| AI 411 how-tos | [`docs/ai411/`](docs/ai411/) | Directory, demo request, owner updates, CMS, front desk |
 | AI 411 landing | `hosting/ai411/` | Phone callback form → `/api/onboarding/register` |
 | Site tracker | `site-tracker/` | Supporting UI/gen helper |
 | Website vector store | `website-vector-store/` | Crawl/index of *existing* GNV sites + prospects |
