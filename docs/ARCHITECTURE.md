@@ -113,6 +113,10 @@ TLS: `*.floridamanweb.online` via cert-manager secret `cf-floridamanweb-wildcard
 Pure stores + FastMCP tools: lookup, knowledge, events, callers, broadcasts,
 changerequests, siteedit/sitepr, **customers**.
 
+Hosted-business CMS (default off): `business_cms_*` modules + `GET /businesses/{slug}/`
+on the voice HTTP service. See `docs/hosted-business-cms.md` and `docs/front-desk.md`.
+Not the Authentik site-tracker CRM. Not `generated-sites/` hash URLs.
+
 ### 3.4 Site tracker (`site-tracker/`)
 
 Authentik-guarded CRM. Lists demos + **customers funnel** via:

@@ -44,7 +44,7 @@ app = FastAPI(title="demo-websites voice agent")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=os.getenv("CORS_ALLOW_ORIGINS", "*").split(","),
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -92,6 +92,35 @@ def _make_state(
         mode=mode,
         customer=customer or {},
     )
+    if mode == "front_desk":
+        slug = (getattr(config, "FRONT_DESK_TENANT_SLUG", "") or "").strip()
+        state.cms_slug = slug
+        if number:
+            import hashlib
+
+            state.callback_ref = hashlib.sha256(number.encode("utf-8")).hexdigest()[:24]
+        if slug:
+            try:
+                import sys
+                from pathlib import Path
+
+                mcp_dir = Path(__file__).resolve().parent.parent / "mcp-server"
+                if str(mcp_dir) not in sys.path:
+                    sys.path.insert(0, str(mcp_dir))
+                import business_cms_store as cms_store
+
+                live = cms_store.current_release(slug)
+                if live:
+                    state.cms_release_id = live["release_id"]
+                    customer = dict(customer or {})
+                    customer["slug"] = slug
+                    customer["cms_release_id"] = live["release_id"]
+                    ident = (live.get("public") or {}).get("identity") or {}
+                    if ident.get("name"):
+                        customer["business_name"] = ident["name"]
+                    state.customer = customer
+            except Exception:
+                log.warning("front_desk publication lookup failed")
     if register_transport and isinstance(call_sid, str) and call_sid:
         # Register before lifecycle setup so issuance can prove this is the
         # authoritative server-owned call state, not a fabricated namespace.
@@ -577,6 +606,58 @@ def public_client_page(slug: str):
     if status == 410:
         return Response(content=b"", status_code=410, headers=headers, media_type="text/plain")
     return PlainTextResponse("", status_code=404, headers=headers)
+
+
+async def _cms_dispatch(request: Request):
+    import sys
+    from pathlib import Path
+
+    from fastapi.responses import Response as FastResponse
+
+    mcp_dir = Path(__file__).resolve().parent.parent / "mcp-server"
+    if str(mcp_dir) not in sys.path:
+        sys.path.insert(0, str(mcp_dir))
+    import business_cms_http as cms_http
+
+    body = await request.body()
+    resp = cms_http.dispatch(
+        request.method,
+        request.url.path,
+        headers={k: v for k, v in request.headers.items()},
+        body=body,
+        cookie_header=request.headers.get("cookie"),
+    )
+    out = FastResponse(content=resp.body, status_code=resp.status, headers=resp.headers)
+    for key, value in resp.cookies.items():
+        out.set_cookie(key, value, httponly=True, samesite="lax", path="/")
+    return out
+
+
+@app.get("/businesses/{slug}/")
+@app.get("/businesses/{slug}")
+async def public_business_page(request: Request, slug: str):
+    return await _cms_dispatch(request)
+
+
+@app.post("/businesses/{slug}/requests")
+async def public_business_request(request: Request, slug: str):
+    return await _cms_dispatch(request)
+
+
+@app.get("/cms/businesses/{slug}/")
+@app.get("/cms/businesses/{slug}")
+async def owner_cms_page(request: Request, slug: str):
+    return await _cms_dispatch(request)
+
+
+@app.api_route("/api/business-cms/{slug}/{action}", methods=["GET", "POST", "PUT", "DELETE"])
+async def owner_cms_api(request: Request, slug: str, action: str):
+    return await _cms_dispatch(request)
+
+
+@app.api_route("/api/business-cms/{slug}/inbox/{request_id}", methods=["GET", "PATCH", "DELETE"])
+async def owner_cms_inbox_item(request: Request, slug: str, request_id: str):
+    return await _cms_dispatch(request)
 
 
 @app.get("/audio/{key}.wav")

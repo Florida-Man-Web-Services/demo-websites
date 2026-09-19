@@ -20,6 +20,8 @@ import owner_updates
 import onboarding
 import site_content
 import unified
+import front_desk
+import front_desk_privacy
 from businesses import Business
 from tts import split_sentences
 
@@ -187,6 +189,8 @@ def get_tools(mode: str | None = None) -> list:
         return unified.TOOLS
     if m == "onboarding":
         return onboarding.TOOLS
+    if m == "front_desk":
+        return front_desk.TOOLS
     return SALES_TOOLS
 
 
@@ -201,6 +205,8 @@ def get_openers(mode: str | None = None) -> list:
         return unified.OPENERS
     if m == "onboarding":
         return onboarding.OPENERS
+    if m == "front_desk":
+        return front_desk.OPENERS
     return SALES_OPENERS
 
 
@@ -295,6 +301,13 @@ def system_prompt(
             caller_number=caller_number,
             openers=openers,
             customer=cust,
+        )
+    if m == "front_desk":
+        return front_desk.system_prompt(
+            business_name=str(cust.get("business_name") or getattr(business, "name", "") or ""),
+            slug=str(cust.get("slug") or getattr(business, "slug", "") or ""),
+            release_id=str(cust.get("cms_release_id") or "none"),
+            openers=openers,
         )
     return _sales_system_prompt(
         business, direction, caller_number, openers=openers, customer=cust
@@ -720,8 +733,11 @@ class CallState:
     transcript_turns: list = field(default_factory=list)
     transcript_flushed: bool = False
     outcome_logged: bool = False
-    # Per-call product mode when AGENT_MODE=auto (ai411|onboarding|sales|owner_updates).
+    # Per-call product mode when AGENT_MODE=auto (ai411|onboarding|sales|owner_updates|front_desk).
     mode: str = ""
+    cms_slug: str = ""
+    cms_release_id: str = ""
+    callback_ref: str = ""
     customer: dict = field(default_factory=dict)
     # Owner F1/F2 auth (see voice_auth.py). Defaults safe for non-owner modes.
     auth_level: str = "anonymous"
@@ -1382,6 +1398,20 @@ def _run_tool(state: CallState, name: str, args: dict) -> str:
 
     if mode == "owner_updates":
         return _run_owner_tool(state, name, args)
+
+    if mode == "front_desk":
+        import mcp_bridge
+        import uuid
+
+        result = mcp_bridge.run_front_desk_tool(
+            name,
+            args,
+            slug=state.cms_slug,
+            release_id=state.cms_release_id,
+            contact_ref=state.callback_ref or None,
+            idempotency_key=str(uuid.uuid4()),
+        )
+        return json.dumps(front_desk_privacy.filter_tool_response(result)) if not isinstance(result, str) else front_desk_privacy.sanitize_for_llm(result)
 
     if mode == "unified" or config.is_unified():
         if name == "send_sms_links":

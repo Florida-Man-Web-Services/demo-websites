@@ -1107,3 +1107,56 @@ def run_owner_updates_tool(
     except Exception as e:  # noqa: BLE001
         log.warning("owner_updates tool %s raised: %s", name, e, exc_info=True)
         return owner_updates.stub_tool_result(name, args)
+
+
+def run_front_desk_tool(
+    name: str,
+    args: dict | None,
+    *,
+    slug: str,
+    release_id: str = "",
+    contact_ref: str | None = None,
+    idempotency_key: str = "",
+) -> str:
+    """Trusted-runtime front-desk tools. Slug/contact are never taken from the model."""
+    args = dict(args or {})
+    try:
+        _ensure_import_paths()
+        import business_front_desk as desk
+
+        if name == "front_desk_get_business":
+            result = desk.get_business(
+                slug, str(args.get("section") or "all"), release_id=release_id or None
+            )
+        elif name == "front_desk_leave_message":
+            result = desk.leave_message(
+                slug,
+                str(args.get("message") or ""),
+                use_caller_callback=bool(args.get("use_caller_callback")),
+                contact_ref=contact_ref,
+                idempotency_key=idempotency_key or str(uuid.uuid4()),
+            )
+        elif name == "front_desk_request_appointment":
+            result = desk.request_appointment(
+                slug,
+                service_id=str(args.get("service_id") or "") or None,
+                requested_time_text=str(args.get("requested_time_text") or ""),
+                notes=str(args.get("notes") or ""),
+                use_caller_callback=bool(args.get("use_caller_callback")),
+                contact_ref=contact_ref,
+                idempotency_key=idempotency_key or str(uuid.uuid4()),
+            )
+        elif name == "front_desk_request_owner_callback":
+            result = desk.request_owner_callback(
+                slug,
+                reason=str(args.get("reason") or ""),
+                use_caller_callback=bool(args.get("use_caller_callback")),
+                contact_ref=contact_ref,
+                idempotency_key=idempotency_key or str(uuid.uuid4()),
+            )
+        else:
+            result = {"ok": False, "error": "unknown_tool"}
+        return _json(result)
+    except Exception as e:  # noqa: BLE001
+        log.warning("front_desk tool %s failed: %s", name, type(e).__name__)
+        return _json({"ok": False, "error": "unavailable"})

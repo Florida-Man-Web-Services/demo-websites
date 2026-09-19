@@ -93,12 +93,25 @@ if _raw_agent_mode not in (
     "unified",
     "onboarding",
     "auto",
+    "front_desk",
 ):
     raise SystemExit(
         f"Unknown AGENT_MODE {_raw_agent_mode!r}; "
-        "use 'sales', 'ai411', 'owner_updates', 'unified', 'onboarding', or 'auto'."
+        "use 'sales', 'ai411', 'owner_updates', 'unified', 'onboarding', 'auto', or 'front_desk'."
     )
 AGENT_MODE = _raw_agent_mode
+FRONT_DESK_ENABLED = (os.getenv("FRONT_DESK_ENABLED") or "").strip().lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
+FRONT_DESK_TENANT_SLUG = (os.getenv("FRONT_DESK_TENANT_SLUG") or "").strip().lower()
+if AGENT_MODE == "front_desk":
+    if not FRONT_DESK_ENABLED or not FRONT_DESK_TENANT_SLUG:
+        raise SystemExit(
+            "AGENT_MODE=front_desk requires FRONT_DESK_ENABLED and FRONT_DESK_TENANT_SLUG."
+        )
 # Production public line: AGENT_MODE=auto routes per phone via customers registry.
 # Default remains sales for local/dev unless set. Deploy voice with AGENT_MODE=auto.
 
@@ -121,6 +134,10 @@ def is_onboarding() -> bool:
 
 def is_auto() -> bool:
     return AGENT_MODE == "auto"
+
+
+def is_front_desk() -> bool:
+    return AGENT_MODE == "front_desk"
 
 
 # --- AI 411 MCP bridge ------------------------------------------------------

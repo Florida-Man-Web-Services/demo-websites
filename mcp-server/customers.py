@@ -1009,6 +1009,14 @@ def resolve_mode(
     return MODE_AI411
 
 
+def front_desk_tenant_eligible(slug: str | None) -> bool:
+    """Paid/active_owner claim on a slug. Does not change resolve_mode."""
+    s = (slug or "").strip()
+    if not s:
+        return False
+    return bool(owners_of_slug(s))
+
+
 def write_builder_brief(
     phone: str,
     *,

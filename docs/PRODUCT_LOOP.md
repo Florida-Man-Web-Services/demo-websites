@@ -42,6 +42,7 @@ Companion docs: [ARCHITECTURE.md](./ARCHITECTURE.md) · [OPS_CLUSTER.md](./OPS_C
 | `prospect`, `callback_queued`, `onboarding` | **onboarding** |
 | `requirements_ready`, `building`, `demo_ready`, `sales_ready` | **sales** |
 | `paid`, `active_owner` | **owner_updates** |
+| Explicit `AGENT_MODE=front_desk` + slug | **front_desk** (hosted-business receptionist; flags default off) |
 | Outbound dialer with business `slug` | **sales** (always) |
 
 Implementation: `mcp-server/customers.py` → `resolve_mode()`  
