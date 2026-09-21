@@ -608,6 +608,20 @@ def open_site_update_pr(
             "error": f"could not read site file ({e.__class__.__name__})",
         }
 
+    # Fail-closed asset-graph audit: the HTML we are about to ship must
+    # reference only JS files that exist in the repo's clone assets dir.
+    # A stale-generation HTML from the voice pod would otherwise ship a
+    # dead import graph (immutable CF cache -> permanent 404 cascade).
+    graph_audit: dict[str, Any] | None = None
+    try:
+        from assetgraph import audit_closure
+
+        graph_audit = audit_closure(
+            file_content, _repo_root() / "generated-sites" / slug / "assets", slug
+        )
+    except Exception as e:  # audit must never crash the ship path silently
+        graph_audit = {"ok": False, "error": f"audit failure: {e.__class__.__name__}"}
+
     base = (base_branch or _default_base_branch()).strip() or "main"
     branch = branch_name_for(slug, rid)
     rel = site_rel_path(slug)
@@ -631,6 +645,7 @@ def open_site_update_pr(
         "github_repo": github_repo,
         "site_file": site_path.name,
         "diff_stat": stats,
+        "asset_graph": graph_audit,
         "note": (
             "Dry-run plan only — set SITE_PR_ENABLED=1 and call with dry_run=false "
             "to push branch and open PR."
@@ -650,6 +665,22 @@ def open_site_update_pr(
             plan["site_pr_enabled"] = enabled
         plan["dry_run"] = True
         return plan
+
+    if graph_audit and not graph_audit.get("ok"):
+        return {
+            "ok": False,
+            "opened": False,
+            "id": rid,
+            "business_slug": slug,
+            "asset_graph": graph_audit,
+            "error": (
+                "asset-graph audit failed — HTML references JS files missing from "
+                "generated-sites/"
+                + slug
+                + "/assets (stale-generation HTML?); ship blocked. "
+                "Resync the voice pod's generated-sites HTML or bump the generation."
+            ),
+        }
 
     backend = get_git_backend()
     result = backend.create_branch_commit_pr(
