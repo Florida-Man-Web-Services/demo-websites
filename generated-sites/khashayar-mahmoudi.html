@@ -487,11 +487,81 @@
       <h2 id="connect-title">Keep it direct.</h2>
       <p>For a conversation, call <a href="tel:+13528883741">(352) 888-3741</a>.</p>
     </section>
+    <section id="lexicon" class="lexicon" aria-labelledby="lexicon-title">
+      <h2 id="lexicon-title">Word of the moment</h2>
+      <p class="lexicon-lede">Type a word and look it up in the Oxford dictionary.</p>
+      <form id="lexicon-form" autocomplete="off">
+        <label class="visually-hidden" for="lexicon-input">Word to look up</label>
+        <input id="lexicon-input" type="text" maxlength="60" placeholder="e.g. serendipity" />
+        <button type="submit">Look it up</button>
+      </form>
+      <div id="lexicon-result" class="lexicon-result" role="status" aria-live="polite"></div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <p>Khashayar Mahmoudi</p>
     <p>Personal website · Call to connect</p>
   </footer>
+  <script>
+    (function () {
+      var API_BASE = location.origin.indexOf("voice.flmanbiosci.net") !== -1
+        ? ""
+        : "https://voice.flmanbiosci.net";
+      var form = document.getElementById("lexicon-form");
+      var input = document.getElementById("lexicon-input");
+      var out = document.getElementById("lexicon-result");
+      if (!form || !input || !out) return;
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var word = (input.value || "").trim();
+        if (!word) return;
+        out.textContent = "Looking up \u201C" + word + "\u201D\u2026";
+        fetch(API_BASE + "/api/oxford/entries/" + encodeURIComponent(word))
+          .then(function (r) { return r.json().then(function (b) { return { s: r.status, b: b }; }); })
+          .then(function (res) {
+            if (res.s === 503) {
+              out.textContent = "The dictionary is not connected yet. Check back soon.";
+              return;
+            }
+            if (!res.b || res.b.ok !== true) {
+              out.textContent = res.b && res.b.error === "word not found"
+                ? "No entry for \u201C" + word + "\u201D \u2014 try another word."
+                : "Lookup failed \u2014 try again in a moment.";
+              return;
+            }
+            var html = "<p class='lexicon-word'>" + res.b.word;
+            if (res.b.phonetic) html += " <span class='lexicon-phon'>/" + res.b.phonetic + "/</span>";
+            html += "</p><ol class='lexicon-senses'>";
+            (res.b.senses || []).slice(0, 3).forEach(function (s) {
+              html += "<li>" + s.definition;
+              if (s.example) html += " <em>\u201C" + s.example + "\u201D</em>";
+              html += "</li>";
+            });
+            html += "</ol>";
+            out.innerHTML = html;
+          })
+          .catch(function () {
+            out.textContent = "Lookup failed \u2014 try again in a moment.";
+          });
+      });
+    })();
+  </script>
+
+  <style>
+    .lexicon { padding: 2.5rem 0; border-top: 1px solid var(--line); }
+    .lexicon h2 { font-family: var(--display); color: var(--ink); margin-bottom: .25rem; }
+    .lexicon-lede { color: var(--muted); margin-bottom: 1rem; }
+    #lexicon-form { display: flex; gap: .5rem; max-width: 28rem; }
+    #lexicon-input { flex: 1; padding: .6rem .8rem; border: 1px solid var(--line); border-radius: .375rem; background: var(--white); font: inherit; }
+    #lexicon-form button { padding: .6rem 1rem; border: 0; border-radius: .375rem; background: var(--cobalt); color: var(--white); font: inherit; cursor: pointer; }
+    #lexicon-form button:hover { background: var(--cobalt-dark); }
+    .lexicon-result { margin-top: 1rem; color: var(--ink); }
+    .lexicon-word { font-family: var(--display); font-size: 1.4rem; margin: 0 0 .5rem; }
+    .lexicon-phon { color: var(--muted); font-size: 1rem; font-family: var(--body); }
+    .lexicon-senses { margin: 0; padding-left: 1.25rem; }
+    .lexicon-senses em { color: var(--muted); }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  </style>
 </body>
 </html>

@@ -1053,6 +1053,24 @@ def public_personal_page(slug: str):
     return HTMLResponse(content=doc, headers={"Cache-Control": "public, max-age=300"})
 
 
+@app.get("/api/oxford/entries/{word}")
+def api_oxford_entries(word: str, lang: str = "en-gb"):
+    """Oxford dictionary lookup proxy. Key-safe: creds live in env only.
+
+    503 while OXFORD_APP_ID/OXFORD_APP_KEY are unset (default-off). Cached to
+    protect the Oxford call budget.
+    """
+    import oxford
+
+    if not oxford.enabled():
+        raise HTTPException(status_code=503, detail="dictionary not configured")
+    result = oxford.lookup(word, lang)
+    if not result.get("ok"):
+        code = 503 if result.get("disabled") else 404
+        raise HTTPException(status_code=code, detail=result.get("error") or "lookup failed")
+    return result
+
+
 @app.get("/health")
 def health():
     customers_ok = False
