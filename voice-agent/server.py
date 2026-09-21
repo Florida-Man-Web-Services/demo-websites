@@ -912,6 +912,36 @@ def api_mark_paid(body: StripeMarkPaidIn):
     return result
 
 
+@app.post("/api/billing/stripe-webhook")
+async def api_stripe_webhook(request: Request):
+    """Stripe webhook receiver. DEFAULT-OFF until STRIPE_WEBHOOK_SECRET is set.
+
+    Never behind Twilio signature validation — Stripe signs its own way.
+    Identity is resolved server-side from the event payload only.
+    """
+    from billing import handle_stripe_event, verify_stripe_signature, webhook_secret
+
+    secret = webhook_secret()
+    if not secret:
+        raise HTTPException(status_code=503, detail="billing webhooks disabled")
+
+    payload = await request.body()
+    ok, reason = verify_stripe_signature(
+        payload, request.headers.get("Stripe-Signature", ""), secret
+    )
+    if not ok:
+        log.warning("stripe webhook rejected: %s", reason)
+        raise HTTPException(status_code=400, detail="invalid signature")
+
+    try:
+        event = json.loads(payload)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=400, detail="bad payload")
+
+    result = handle_stripe_event(event, _customers_mod())
+    return {"received": True, **result}
+
+
 class VoiceEnrollIn(BaseModel):
     phone: str
     consent_version: str = "2026-08-14"
