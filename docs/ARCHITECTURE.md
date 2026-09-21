@@ -76,6 +76,10 @@ TLS: `*.floridamanweb.online` via cert-manager secret `cf-floridamanweb-wildcard
 - Production URL: `https://floridamanweb.online/<sha256(file)[:12]>/`
 - Hash lockstep: `hosting/Dockerfile` ↔ `voice-agent/businesses.py` `demo_site_hash()`.
 - AI 411 landing baked at `/ai411/index.html` in the same image.
+- CI ships an **asset-graph closure audit** (`scripts/audit_asset_graphs.py`,
+  backed by `mcp-server/assetgraph.py`) — broken or cache-poisoned JS graphs
+  fail the build; `sitepr` re-audits at PR time (fail-closed). See
+  [ai411-audit/](./ai411-audit/) (G06).
 
 ### 3.2 Voice agent (`voice-agent/`)
 
@@ -100,7 +104,7 @@ TLS: `*.floridamanweb.online` via cert-manager secret `cf-floridamanweb-wildcard
 |-----|--------|
 | `PUBLIC_BASE_URL` | `https://voice.flmanbiosci.net` |
 | `VOICE_BACKEND` | `grok-realtime` |
-| `AGENT_MODE` | `ai411` *(until image supports `auto`)* |
+| `AGENT_MODE` | `auto` *(live, verified 2026-09-21 via /health)* |
 | `CUSTOMERS_PATH` | `/data/customers.json` |
 | `BUILDER_BRIEFS_DIR` | `/data/builder-briefs` |
 | `MEMORY_DIR` | `/data/customer-memory` |
@@ -143,7 +147,7 @@ JSON map `phone_e164 → Customer` on voice PVC (source of truth).
 | **sales** | Demo ready or outbound slug dial | Demo SMS/email, outcome log, Stripe link in prompt |
 | **owner_updates** | Paid / active_owner | ChangeRequests, outline, apply local HTML; **auth_level** gates writes |
 | **unified** | Pinned env | AI411 + owner if caller ID matches business phone |
-| **auto** | Desired prod | Per-call `customers.resolve_mode` (needs new image) |
+| **auto** | **Live production** | Per-call `customers.resolve_mode` |
 
 **Owner identity (phased):** F1 Twilio CID ∈ `trusted_phones`; F2 passive speaker
 verify after enrollment; step-up OTP for high-risk. Spec:
@@ -254,6 +258,8 @@ PR track: `hwcopeland/iac` **#96** branch `feat/theswamp-authentik-flmanbiosci`.
 | Doc | Audience |
 |-----|----------|
 | [PRODUCT_LOOP.md](./PRODUCT_LOOP.md) | Funnel steps, APIs, builder |
+| [OPERATIONS_AI411.md](./OPERATIONS_AI411.md) | Operator runbook (health, surgery, ships) |
+| [PROMISES.md](./PROMISES.md) | Public promises ledger (G01) |
 | [OPS_CLUSTER.md](./OPS_CLUSTER.md) | DNS, Authentik, Flux, secrets, runbooks |
 | [API.md](./API.md) | HTTP API reference |
 | [superpowers/specs/2026-08-14-owner-voice-auth-design.md](./superpowers/specs/2026-08-14-owner-voice-auth-design.md) | Owner phone + voice 2FA |

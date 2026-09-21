@@ -48,18 +48,10 @@ Companion docs: [ARCHITECTURE.md](./ARCHITECTURE.md) · [OPS_CLUSTER.md](./OPS_C
 Implementation: `mcp-server/customers.py` → `resolve_mode()`  
 Wired at call start: `voice-agent/agent.py` `resolve_call_mode` + `server._make_state`.
 
-### 3.2 Current production image (2026-08-11)
+### 3.2 Current production (2026-09-21)
 
-Cluster image only accepts `sales` | `ai411`.  
-**Live:** `AGENT_MODE=ai411` so the public line is directory-first.  
-After shipping a voice image that includes `auto` + onboarding modules, set:
-
-```yaml
-- name: AGENT_MODE
-  value: auto
-```
-
-in `deployment-voice.yaml` and re-roll.
+**Live:** `AGENT_MODE=auto` — per-call resolution via `customers.resolve_mode`
+(verified via `/health`: `agent_mode: auto`). The image supports all modes.
 
 ### 3.3 Pinning a single mode (dev)
 
