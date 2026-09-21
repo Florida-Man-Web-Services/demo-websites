@@ -121,11 +121,12 @@ python3 scripts/audit_asset_graphs.py             # from repo root
 ## 8. Known gaps (Astra audit, 2026-09-21)
 
 Full list: [ai411-audit/2026-09-21-astra-audit-G01-G48.md](./ai411-audit/2026-09-21-astra-audit-G01-G48.md).
-Headline P0s: payment activation is manual (G11); no automated backups of the
-voice PVC (G09); authority matrix not yet formally verified (G03); Stripe
-webhooks not yet implemented (G18); abuse/moderation loop is primitives-only
-(G10). No production-sensitive enablement (voice biometrics, A2P bulk SMS)
-without explicit Noah approval.
+Headline P0s: payment activation is manual with webhook receiver now
+implemented default-off (G11/G18 — enable by setting `STRIPE_WEBHOOK_SECRET`
+and registering the endpoint in Stripe); no automated backups of the
+voice PVC (G09); authority matrix not yet formally verified (G03);
+abuse/moderation loop is primitives-only (G10). No production-sensitive
+enablement (voice biometrics, A2P bulk SMS) without explicit Noah approval.
 
 ## 9. Escalation
 
