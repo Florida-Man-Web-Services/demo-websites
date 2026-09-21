@@ -217,14 +217,19 @@ def _new_id(prefix: str = "bc") -> str:
 
 
 def _public_broadcast(rec: dict[str, Any]) -> dict[str, Any]:
-    """Copy safe for list/read responses (no internal-only fields required)."""
+    """Copy safe for list/read responses.
+
+    Never exposes author contact details: these projections feed voice tool
+    results that can be spoken to any caller (Astra audit G05 — personal
+    phone numbers of submitters must not be readable or hearable by others).
+    Ownership checks use the raw record, not this projection.
+    """
     out = {
         "id": rec.get("id"),
         "type": rec.get("type"),
         "status": rec.get("status"),
         "created_at": rec.get("created_at"),
         "updated_at": rec.get("updated_at"),
-        "author_phone_e164": rec.get("author_phone_e164"),
     }
     if rec.get("type") == "event":
         out.update(

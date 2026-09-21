@@ -24,7 +24,7 @@ business/legal enablement decision). Evidence = code/test/URL. Audited
 | # | Public promise | Where made | Delivered by | Status | Evidence |
 |---|----------------|-----------|--------------|--------|----------|
 | 9 | "A simple public page from interests you've shared — not your phone number" | Landing | opt-in (voice tool or `POST /api/personal-pages/opt-in`) → `/me/{slug}` render | partial — published fields are the approved subset; full removal-propagation audit pending (G05/G25) | voice-agent/server.py:1015 |
-| 10 | "Rebuilds about once a day. Take it down anytime: call AI 411 and say 'take it down'" | Landing | rebuild cadence + opt-out (`opt_out_personal_page`, `POST /api/personal-pages/opt-out`) | delivered | mcp-server/personal_pages.py |
+| 10 | "Rebuilds about once a day. Take it down anytime: call AI 411 and say 'take it down'" | Landing | rebuild via `scripts/regen_personal_pages.py` (**manual — not scheduled**, G25) + opt-out (`opt_out_personal_page`, `POST /api/personal-pages/opt-out`) | partial — take-down is delivered; the daily cadence is not automated | mcp-server/personal_pages.py |
 | 11 | "Requires memory consent (enabled when you opt in here)" | Landing | memory consent gate before profile build | delivered | customer_memory.py |
 | 12 | "Will not show your phone number" | Landing | phone excluded from rendered page | delivered | server.py `/me/{slug}` |
 

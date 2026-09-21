@@ -64,6 +64,10 @@ def test_submit_notice_defaults_expiry(tmp_store):
     assert listed["ok"] is True
     assert listed["count"] == 1
     assert "taco" in listed["broadcasts"][0]["text"]
+    # Author phone must never appear in public projections (G05): these
+    # results can be spoken to any caller.
+    assert "author_phone_e164" not in listed["broadcasts"][0]
+    assert "author_phone_e164" not in result["broadcast"]
 
 
 def test_submit_notice_rejects_long_text(tmp_store):
