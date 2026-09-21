@@ -113,6 +113,14 @@ def test_owner_updates_mode_prompt_and_tools():
         "log_call_outcome",
         "send_sms_links",
         "end_call",
+        # Account-lifecycle tools ship with owner_updates (mirrors ai411 mode).
+        "request_account_step_up",
+        "get_account_lifecycle_status",
+        "prepare_client_page",
+        "prepare_trusted_phone_add",
+        "prepare_trusted_phone_removal",
+        "prepare_client_page_removal",
+        "cancel_account_operation",
     }
     assert names == expected
     assert "log_call_outcome" in agent.system_prompt(_Biz(), "inbound", "+13555550100")

@@ -680,13 +680,18 @@ def _http_post_rpc(
         }, new_sid
 
     if resp.status_code >= 400:
-        snippet = (resp.text or "")[:300]
+        # Never echo the response body into tool results — error bodies can
+        # carry private backend details that could reach caller speech.
+        # Keep the body in the operator log only.
+        log.warning(
+            "MCP HTTP %s from %s: %.300s", resp.status_code, url, resp.text or ""
+        )
         return {
             "jsonrpc": "2.0",
             "id": req_id,
             "error": {
                 "code": resp.status_code,
-                "message": f"HTTP {resp.status_code}: {snippet}",
+                "message": f"HTTP {resp.status_code}: backend rejected request",
             },
         }, new_sid
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from typing import Any
 
 import config
@@ -62,6 +63,23 @@ def place_onboarding_callback(phone: str, *, twilio=None) -> dict[str, Any]:
     if st not in DIALABLE_STATUSES:
         return {"ok": False, "error": f"status {st} is not a queued callback"}
 
+    # Idempotency: never double-dial a phone that already has a recent
+    # in-flight/recent callback. The marker is stored on the customer row so
+    # it survives process restarts (durable dedupe, not in-process memory).
+    recent = row.get("callback_last_call") or {}
+    try:
+        placed_at = float(recent.get("placed_at") or 0)
+    except (TypeError, ValueError):
+        placed_at = 0.0
+    window = float(
+        os.getenv("CALLBACK_DEDUPE_WINDOW_S")
+        or getattr(config, "CALLBACK_DEDUPE_WINDOW_S", 24 * 3600)
+    )
+    if placed_at and (time.time() - placed_at) < window:
+        prior_sid = str(recent.get("sid") or "")
+        log.info("callback to %s already placed recently sid=%s", key, prior_sid)
+        return {"ok": True, "already_placed": True, "sid": prior_sid, "to": key}
+
     url = callback_twiml_url()
     public = (
         os.getenv("PUBLIC_BASE_URL")
@@ -84,7 +102,14 @@ def place_onboarding_callback(phone: str, *, twilio=None) -> dict[str, Any]:
     sid = getattr(call, "sid", "") or ""
     log.info("onboarding callback placed to %s sid=%s", key, sid)
     try:
-        customers.upsert(key, notes=f"Outbound callback placed {sid}")
+        customers.upsert(
+            key,
+            notes=f"Outbound callback placed {sid}",
+            patch={
+                "callback_sid": sid,
+                "callback_last_call": {"sid": sid, "placed_at": time.time()},
+            },
+        )
     except Exception as e:  # noqa: BLE001
         log.warning("callback note failed: %s", e)
     return {"ok": True, "sid": sid, "to": key, "url": url}

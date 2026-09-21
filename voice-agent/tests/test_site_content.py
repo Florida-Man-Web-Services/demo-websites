@@ -2,9 +2,27 @@
 
 import json
 
+import pytest
+
 import config
 import site_content
 from site_content import site_text
+
+
+@pytest.fixture(autouse=True)
+def _sales_mode(monkeypatch):
+    # The business-site prompt section is a sales-mode behavior; pin the mode
+    # so these tests don't depend on the process default or earlier test files.
+    # system_prompt() reads config.AGENT_MODE (module attr) at call time, so
+    # reload the mode-carrying modules under the pinned env.
+    monkeypatch.setenv("AGENT_MODE", "sales")
+    import importlib
+
+    import agent
+    import config as cfg
+
+    importlib.reload(cfg)
+    importlib.reload(agent)
 
 PAGE = """<!DOCTYPE html>
 <html><head>

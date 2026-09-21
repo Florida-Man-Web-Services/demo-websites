@@ -11,13 +11,22 @@ sys.path.insert(0, str(ROOT))
 
 
 def _reload():
+    saved_mode = os.environ.get("AGENT_MODE")
     os.environ["AGENT_MODE"] = "ai411"
-    import config
-    import ai411
+    try:
+        import config
+        import ai411
 
-    importlib.reload(config)
-    importlib.reload(ai411)
-    return ai411
+        importlib.reload(config)
+        importlib.reload(ai411)
+        return ai411
+    finally:
+        # Never leak the pinned mode into later test files (site-content and
+        # others rely on the process default).
+        if saved_mode is None:
+            os.environ.pop("AGENT_MODE", None)
+        else:
+            os.environ["AGENT_MODE"] = saved_mode
 
 
 def test_greeting_is_an_invite():

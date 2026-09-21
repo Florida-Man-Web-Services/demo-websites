@@ -17,6 +17,8 @@ AGENT_DIR = Path(__file__).resolve().parent.parent
 MCP_DIR = AGENT_DIR.parent / "mcp-server"
 if str(AGENT_DIR) not in sys.path:
     sys.path.insert(0, str(AGENT_DIR))
+if str(MCP_DIR) not in sys.path:
+    sys.path.insert(0, str(MCP_DIR))
 
 
 class _Biz:
@@ -224,7 +226,7 @@ def test_garbled_transcription_is_repeated_instead_of_guessed(ai411_modules):
 
 
 def test_tool_failure_stays_speakable_and_does_not_raise(ai411_modules, monkeypatch):
-    _, _, bridge, _, _ = ai411_modules
+    _, ai411_mod, bridge, _, _ = ai411_modules
 
     def broken_dispatch(*args, **kwargs):
         raise RuntimeError("private backend detail")
@@ -233,7 +235,9 @@ def test_tool_failure_stays_speakable_and_does_not_raise(ai411_modules, monkeypa
     raw = bridge.run_ai411_tool("lookup_business", {"query": "Cool Cafe"})
 
     assert isinstance(raw, str)
-    assert "not available" in raw.lower()
+    # The speakable failure copy is the canonical recovery line, whatever the
+    # current wording is (assert the contract, not a frozen string).
+    assert ai411_mod.FAILURE_RECOVERY.lower() in raw.lower()
     assert "traceback" not in raw.lower()
     assert "private backend detail" not in raw
 
