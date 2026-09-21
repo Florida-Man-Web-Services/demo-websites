@@ -47,4 +47,10 @@ COPY generated-sites/fmb-neurocreatine.html /usr/share/nginx/html/vanity/florida
 COPY generated-sites/florida-man-bioscience/ /usr/share/nginx/html/vanity/florida-man-bioscience/florida-man-bioscience/
 COPY hosting/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY generated-sites/florida-man-bioscience-site/ /usr/share/nginx/html/vanity/florida-man-bioscience/
+# Sarah Garrigues-Jones realtor demo (sarahgjrealtor.com → this vanity).
+# Root agent site + single-property page at the /3926sw69thavegainesvillefl32608/ pretty path.
+COPY generated-sites/sarah-gj-realtor.html /usr/share/nginx/html/vanity/sarah-gj-realtor/index.html
+COPY generated-sites/sarah-gj-realtor/ /usr/share/nginx/html/vanity/sarah-gj-realtor/sarah-gj-realtor/
+COPY generated-sites/3926sw69thavegainesvillefl32608.html /usr/share/nginx/html/vanity/sarah-gj-realtor/3926sw69thavegainesvillefl32608/index.html
+COPY generated-sites/3926sw69thavegainesvillefl32608/ /usr/share/nginx/html/vanity/sarah-gj-realtor/3926sw69thavegainesvillefl32608/3926sw69thavegainesvillefl32608/
 EXPOSE 80
