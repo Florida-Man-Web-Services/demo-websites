@@ -47,6 +47,9 @@ COPY generated-sites/fmb-neurocreatine.html /usr/share/nginx/html/vanity/florida
 COPY generated-sites/florida-man-bioscience/ /usr/share/nginx/html/vanity/florida-man-bioscience/florida-man-bioscience/
 COPY hosting/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY generated-sites/florida-man-bioscience-site/ /usr/share/nginx/html/vanity/florida-man-bioscience/
+# Khashayar Mahmoudi personal site (xerxesofgainesville.com → this vanity).
+# xerxes-vanity Worker proxies apex/www → this stable path; hash path stays live.
+COPY generated-sites/khashayar-mahmoudi.html /usr/share/nginx/html/vanity/khashayar-mahmoudi/index.html
 # Sarah Garrigues-Jones realtor demo (sarahgjrealtor.com → this vanity).
 # Root agent site + single-property page at the /3926sw69thavegainesvillefl32608/ pretty path.
 COPY generated-sites/sarah-gj-realtor.html /usr/share/nginx/html/vanity/sarah-gj-realtor/index.html
