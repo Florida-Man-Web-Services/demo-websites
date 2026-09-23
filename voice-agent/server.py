@@ -26,7 +26,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, Response, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
 from twilio.request_validator import RequestValidator
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.twiml.voice_response import Connect, Gather, VoiceResponse
@@ -1067,7 +1067,7 @@ def api_oxford_entries(word: str, lang: str = "en-gb"):
     result = oxford.lookup(word, lang)
     if not result.get("ok"):
         code = 503 if result.get("disabled") else 404
-        raise HTTPException(status_code=code, detail=result.get("error") or "lookup failed")
+        return JSONResponse(result, status_code=code)
     return result
 
 

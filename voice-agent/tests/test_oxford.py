@@ -104,3 +104,67 @@ def test_upstream_errors_never_echo_body(oxford, monkeypatch):
         result = oxford.lookup("word")
         assert result["ok"] is False
         assert "internal-secret-detail" not in json.dumps(result)
+
+
+def test_oxford_404_falls_back_to_public_dictionary(oxford, monkeypatch):
+    class OxResp:
+        status_code = 404
+        text = '{"error":"No entry matches. Note: Sandbox environment."}'
+
+        def json(self):
+            return {"error": "No entry matches"}
+
+    class FallbackResp:
+        status_code = 200
+        text = ""
+
+        def json(self):
+            return [
+                {
+                    "word": "serendipity",
+                    "phonetic": "ˌsɛrənˈdɪpɪti",
+                    "meanings": [
+                        {
+                            "definitions": [
+                                {
+                                    "definition": "The occurrence of events by chance.",
+                                    "example": "a fortunate stroke of serendipity",
+                                }
+                            ]
+                        }
+                    ],
+                }
+            ]
+
+    calls = []
+
+    def fake_get(url, headers=None, params=None, timeout=None):
+        calls.append(url)
+        if "oxforddictionaries.com" in url:
+            return OxResp()
+        return FallbackResp()
+
+    monkeypatch.setattr(oxford.httpx, "get", fake_get)
+    result = oxford.lookup("serendipity")
+    assert result["ok"] is True
+    assert result["word"] == "serendipity"
+    assert "chance" in result["senses"][0]["definition"]
+    assert any("oxforddictionaries.com" in u for u in calls)
+    assert any("dictionaryapi.dev" in u for u in calls)
+    cached = oxford.lookup("serendipity")
+    assert cached["cached"] is True
+    assert len(calls) == 2  # oxford miss + one fallback; cache skips both
+
+
+def test_fallback_404_is_word_not_found(oxford, monkeypatch):
+    class Miss:
+        status_code = 404
+        text = "not found"
+
+        def json(self):
+            return {}
+
+    monkeypatch.setattr(oxford.httpx, "get", lambda *a, **k: Miss())
+    result = oxford.lookup("xyzzyplugh")
+    assert result["ok"] is False
+    assert result["error"] == "word not found"

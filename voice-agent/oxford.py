@@ -19,6 +19,9 @@ import httpx
 log = logging.getLogger("oxford")
 
 OD_BASE = (os.getenv("OXFORD_BASE_URL") or "https://od-api.oxforddictionaries.com/api/v2").rstrip("/")
+FALLBACK_BASE = (
+    os.getenv("OXFORD_FALLBACK_URL") or "https://api.dictionaryapi.dev/api/v2/entries/en"
+).rstrip("/")
 DEFAULT_LANG = "en-gb"
 _CACHE_TTL_S = 3600
 _CACHE_MAX = 500
@@ -52,6 +55,52 @@ def _cache_put(key: tuple[str, str], value: dict[str, Any]) -> None:
         oldest = min(_cache, key=lambda k: _cache[k][0])
         _cache.pop(oldest, None)
     _cache[key] = (time.time(), value)
+
+
+def _lean_fallback(payload: Any) -> dict[str, Any] | None:
+    """Project dictionaryapi.dev JSON into the widget's lean shape."""
+    if not isinstance(payload, list) or not payload:
+        return None
+    first = payload[0] if isinstance(payload[0], dict) else {}
+    out: dict[str, Any] = {
+        "word": first.get("word"),
+        "phonetic": first.get("phonetic"),
+        "senses": [],
+    }
+    for meaning in first.get("meanings") or []:
+        for d in (meaning.get("definitions") or [])[:3]:
+            if not isinstance(d, dict):
+                continue
+            definition = d.get("definition") or ""
+            if not definition:
+                continue
+            out["senses"].append(
+                {"definition": definition, "example": d.get("example") or ""}
+            )
+            if len(out["senses"]) >= 5:
+                break
+        if len(out["senses"]) >= 5:
+            break
+    if not out["word"] or not out["senses"]:
+        return None
+    return out
+
+
+def _fallback_lookup(word: str) -> dict[str, Any] | None:
+    try:
+        resp = httpx.get(f"{FALLBACK_BASE}/{word}", timeout=10.0)
+    except httpx.HTTPError as e:
+        log.warning("fallback dictionary failed for %r: %s", word, e.__class__.__name__)
+        return None
+    if resp.status_code == 404:
+        return None
+    if resp.status_code >= 400:
+        log.warning("fallback dictionary HTTP %s for %r", resp.status_code, word)
+        return None
+    try:
+        return _lean_fallback(resp.json())
+    except ValueError:
+        return None
 
 
 def _lean_entry(payload: dict[str, Any]) -> dict[str, Any]:
@@ -108,6 +157,10 @@ def lookup(word: str, lang: str = DEFAULT_LANG) -> dict[str, Any]:
         return {"ok": False, "error": "dictionary unavailable"}
 
     if resp.status_code == 404:
+        lean = _fallback_lookup(word)
+        if lean:
+            _cache_put(key, lean)
+            return {"ok": True, "cached": False, **lean}
         return {"ok": False, "error": "word not found"}
     if resp.status_code in (401, 403):
         log.error("oxford credentials rejected (HTTP %s)", resp.status_code)
