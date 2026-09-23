@@ -18,7 +18,7 @@ import httpx
 
 log = logging.getLogger("oxford")
 
-OD_BASE = "https://od-api.oxforddictionaries.com/api/v2"
+OD_BASE = (os.getenv("OXFORD_BASE_URL") or "https://od-api.oxforddictionaries.com/api/v2").rstrip("/")
 DEFAULT_LANG = "en-gb"
 _CACHE_TTL_S = 3600
 _CACHE_MAX = 500
