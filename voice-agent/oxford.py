@@ -9,8 +9,10 @@ bounded cache size.
 
 from __future__ import annotations
 
+import html
 import logging
 import os
+import re
 import time
 from typing import Any
 
@@ -20,8 +22,9 @@ log = logging.getLogger("oxford")
 
 OD_BASE = (os.getenv("OXFORD_BASE_URL") or "https://od-api.oxforddictionaries.com/api/v2").rstrip("/")
 FALLBACK_BASE = (
-    os.getenv("OXFORD_FALLBACK_URL") or "https://api.dictionaryapi.dev/api/v2/entries/en"
+    os.getenv("OXFORD_FALLBACK_URL") or "https://en.wiktionary.org/api/rest_v1/page/definition"
 ).rstrip("/")
+_FALLBACK_UA = "fmws-voice-agent/1.0 (https://floridamanweb.online)"
 DEFAULT_LANG = "en-gb"
 _CACHE_TTL_S = 3600
 _CACHE_MAX = 500
@@ -57,38 +60,44 @@ def _cache_put(key: tuple[str, str], value: dict[str, Any]) -> None:
     _cache[key] = (time.time(), value)
 
 
-def _lean_fallback(payload: Any) -> dict[str, Any] | None:
-    """Project dictionaryapi.dev JSON into the widget's lean shape."""
-    if not isinstance(payload, list) or not payload:
+def _strip_markup(text: str) -> str:
+    return html.unescape(re.sub(r"<[^>]+>", "", text or "")).strip()
+
+
+def _lean_fallback(payload: Any, word: str) -> dict[str, Any] | None:
+    """Project Wiktionary REST JSON into the widget's lean shape."""
+    entries = payload.get("en") if isinstance(payload, dict) else None
+    if not isinstance(entries, list) or not entries:
         return None
-    first = payload[0] if isinstance(payload[0], dict) else {}
-    out: dict[str, Any] = {
-        "word": first.get("word"),
-        "phonetic": first.get("phonetic"),
-        "senses": [],
-    }
-    for meaning in first.get("meanings") or []:
-        for d in (meaning.get("definitions") or [])[:3]:
+    out: dict[str, Any] = {"word": word, "phonetic": None, "senses": []}
+    for lex in entries[:3]:
+        if not isinstance(lex, dict):
+            continue
+        for d in (lex.get("definitions") or [])[:5]:
             if not isinstance(d, dict):
                 continue
-            definition = d.get("definition") or ""
+            definition = _strip_markup(d.get("definition") or "")
             if not definition:
                 continue
-            out["senses"].append(
-                {"definition": definition, "example": d.get("example") or ""}
-            )
+            examples = d.get("examples") or []
+            example = _strip_markup(examples[0]) if examples and isinstance(examples[0], str) else ""
+            out["senses"].append({"definition": definition, "example": example})
             if len(out["senses"]) >= 5:
                 break
         if len(out["senses"]) >= 5:
             break
-    if not out["word"] or not out["senses"]:
+    if not out["senses"]:
         return None
     return out
 
 
 def _fallback_lookup(word: str) -> dict[str, Any] | None:
     try:
-        resp = httpx.get(f"{FALLBACK_BASE}/{word}", timeout=10.0)
+        resp = httpx.get(
+            f"{FALLBACK_BASE}/{word}",
+            timeout=10.0,
+            headers={"User-Agent": _FALLBACK_UA},
+        )
     except httpx.HTTPError as e:
         log.warning("fallback dictionary failed for %r: %s", word, e.__class__.__name__)
         return None
@@ -98,7 +107,7 @@ def _fallback_lookup(word: str) -> dict[str, Any] | None:
         log.warning("fallback dictionary HTTP %s for %r", resp.status_code, word)
         return None
     try:
-        return _lean_fallback(resp.json())
+        return _lean_fallback(resp.json(), word)
     except ValueError:
         return None
 

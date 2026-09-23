@@ -119,22 +119,19 @@ def test_oxford_404_falls_back_to_public_dictionary(oxford, monkeypatch):
         text = ""
 
         def json(self):
-            return [
-                {
-                    "word": "serendipity",
-                    "phonetic": "ˌsɛrənˈdɪpɪti",
-                    "meanings": [
-                        {
-                            "definitions": [
-                                {
-                                    "definition": "The occurrence of events by chance.",
-                                    "example": "a fortunate stroke of serendipity",
-                                }
-                            ]
-                        }
-                    ],
-                }
-            ]
+            return {
+                "en": [
+                    {
+                        "partOfSpeech": "Noun",
+                        "definitions": [
+                            {
+                                "definition": "The <a>occurrence</a> of events by chance.",
+                                "examples": ["a fortunate stroke of serendipity"],
+                            }
+                        ],
+                    }
+                ]
+            }
 
     calls = []
 
@@ -149,8 +146,9 @@ def test_oxford_404_falls_back_to_public_dictionary(oxford, monkeypatch):
     assert result["ok"] is True
     assert result["word"] == "serendipity"
     assert "chance" in result["senses"][0]["definition"]
+    assert "<a>" not in result["senses"][0]["definition"]
     assert any("oxforddictionaries.com" in u for u in calls)
-    assert any("dictionaryapi.dev" in u for u in calls)
+    assert any("wiktionary.org" in u for u in calls)
     cached = oxford.lookup("serendipity")
     assert cached["cached"] is True
     assert len(calls) == 2  # oxford miss + one fallback; cache skips both
