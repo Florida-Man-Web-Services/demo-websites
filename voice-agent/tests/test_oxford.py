@@ -154,6 +154,45 @@ def test_oxford_404_falls_back_to_public_dictionary(oxford, monkeypatch):
     assert len(calls) == 2  # oxford miss + one fallback; cache skips both
 
 
+def test_entry_pronunciation_and_junk_senses_skipped(oxford, monkeypatch):
+    class OxResp:
+        status_code = 200
+        text = ""
+
+        def json(self):
+            return {
+                "results": [
+                    {
+                        "word": "apple",
+                        "lexicalEntries": [
+                            {
+                                "entries": [
+                                    {
+                                        "pronunciations": [{"phoneticSpelling": "ˈap(ə)l"}],
+                                        "senses": [
+                                            {"definitions": ["ISO 639 language code for Apple."]},
+                                            {
+                                                "definitions": [
+                                                    "the round fruit of a tree of the rose family"
+                                                ]
+                                            },
+                                        ],
+                                    }
+                                ]
+                            }
+                        ],
+                    }
+                ]
+            }
+
+    monkeypatch.setattr(oxford.httpx, "get", lambda *a, **k: OxResp())
+    result = oxford.lookup("apple")
+    assert result["phonetic"] == "ˈap(ə)l"
+    assert result["source"] == "oxford"
+    assert len(result["senses"]) == 1
+    assert "fruit" in result["senses"][0]["definition"]
+
+
 def test_fallback_404_is_word_not_found(oxford, monkeypatch):
     class Miss:
         status_code = 404

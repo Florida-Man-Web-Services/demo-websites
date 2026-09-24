@@ -41,6 +41,26 @@ function forwardHeaders(src) {
 
 export default {
   async fetch(request, env) {
+    const incoming = new URL(request.url);
+    if ((incoming.pathname || "").startsWith("/api/oxford/")) {
+      const voice = new URL("https://voice.flmanbiosci.net");
+      voice.pathname = incoming.pathname;
+      voice.search = incoming.search;
+      const upstream = await fetch(voice.toString(), {
+        method: request.method,
+        headers: forwardHeaders(request.headers),
+        redirect: "follow",
+      });
+      const out = new Headers(upstream.headers);
+      out.set("x-fmws-vanity", "khashayar-mahmoudi");
+      out.set("access-control-allow-origin", incoming.origin || "*");
+      return new Response(upstream.body, {
+        status: upstream.status,
+        statusText: upstream.statusText,
+        headers: out,
+      });
+    }
+
     const dest = originUrl(request, env.ORIGIN_BASE);
     const init = {
       method: request.method,

@@ -69,15 +69,22 @@ def _lean_fallback(payload: Any, word: str) -> dict[str, Any] | None:
     entries = payload.get("en") if isinstance(payload, dict) else None
     if not isinstance(entries, list) or not entries:
         return None
-    out: dict[str, Any] = {"word": word, "phonetic": None, "senses": []}
-    for lex in entries[:3]:
+    out: dict[str, Any] = {"word": word, "phonetic": None, "senses": [], "source": "wiktionary"}
+    ranked = sorted(
+        entries[:8],
+        key=lambda lex: 0
+        if str((lex or {}).get("partOfSpeech") or "").lower()
+        in {"noun", "verb", "adjective", "adverb"}
+        else 1,
+    )
+    for lex in ranked:
         if not isinstance(lex, dict):
             continue
         for d in (lex.get("definitions") or [])[:5]:
             if not isinstance(d, dict):
                 continue
             definition = _strip_markup(d.get("definition") or "")
-            if not definition:
+            if not _usable_sense(definition):
                 continue
             examples = d.get("examples") or []
             example = _strip_markup(examples[0]) if examples and isinstance(examples[0], str) else ""
@@ -112,27 +119,51 @@ def _fallback_lookup(word: str) -> dict[str, Any] | None:
         return None
 
 
+def _phonetic(lex: dict[str, Any], entry: dict[str, Any]) -> str | None:
+    for bucket in (lex.get("pronunciations"), entry.get("pronunciations")):
+        if not bucket:
+            continue
+        spelling = (bucket[0] or {}).get("phoneticSpelling")
+        if spelling:
+            return spelling
+    return None
+
+
+_JUNK_SENSE = re.compile(
+    r"ISO 639|language code|letter-case form|abbreviation of",
+    re.I,
+)
+
+
+def _usable_sense(definition: str) -> bool:
+    text = (definition or "").strip()
+    return len(text) >= 8 and _JUNK_SENSE.search(text) is None
+
+
 def _lean_entry(payload: dict[str, Any]) -> dict[str, Any]:
     """Project the OD response down to what a lookup widget needs."""
-    out: dict[str, Any] = {"word": None, "phonetic": None, "senses": []}
+    out: dict[str, Any] = {"word": None, "phonetic": None, "senses": [], "source": "oxford"}
     for result in payload.get("results", [])[:1]:
         out["word"] = result.get("word")
         lexical = result.get("lexicalEntries") or []
-        for lex in lexical[:2]:
-            pron = ((lex.get("pronunciations") or [{}])[0].get("phoneticSpelling"))
-            if pron and not out["phonetic"]:
-                out["phonetic"] = pron
+        for lex in lexical[:3]:
             for entry in lex.get("entries", [])[:1]:
-                for sense in entry.get("senses", [])[:5]:
-                    defs = sense.get("definitions") or []
+                pron = _phonetic(lex, entry)
+                if pron and not out["phonetic"]:
+                    out["phonetic"] = pron
+                for sense in entry.get("senses", [])[:8]:
+                    defs = sense.get("definitions") or sense.get("shortDefinitions") or []
+                    definition = defs[0] if defs else ""
+                    if not _usable_sense(definition):
+                        continue
                     out["senses"].append(
                         {
-                            "definition": defs[0] if defs else "",
-                            "example": (
-                                (sense.get("examples") or [{}])[0].get("text", "")
-                            ),
+                            "definition": definition,
+                            "example": ((sense.get("examples") or [{}])[0].get("text", "")),
                         }
                     )
+                    if len(out["senses"]) >= 5:
+                        return out
     return out
 
 
@@ -163,6 +194,10 @@ def lookup(word: str, lang: str = DEFAULT_LANG) -> dict[str, Any]:
         )
     except httpx.HTTPError as e:
         log.warning("oxford lookup failed for %r: %s", word, e.__class__.__name__)
+        lean = _fallback_lookup(word)
+        if lean:
+            _cache_put(key, lean)
+            return {"ok": True, "cached": False, **lean}
         return {"ok": False, "error": "dictionary unavailable"}
 
     if resp.status_code == 404:
@@ -182,7 +217,16 @@ def lookup(word: str, lang: str = DEFAULT_LANG) -> dict[str, Any]:
         log.warning("oxford HTTP %s for %r: %.300s", resp.status_code, word, resp.text)
         return {"ok": False, "error": "dictionary unavailable"}
 
-    lean = _lean_entry(resp.json())
+    try:
+        lean = _lean_entry(resp.json())
+    except ValueError:
+        lean = {"word": word, "phonetic": None, "senses": [], "source": "oxford"}
+    if not lean.get("senses"):
+        fallback = _fallback_lookup(word)
+        if fallback:
+            lean = fallback
+    if not lean.get("senses"):
+        return {"ok": False, "error": "word not found"}
     _cache_put(key, lean)
     return {"ok": True, "cached": False, **lean}
 

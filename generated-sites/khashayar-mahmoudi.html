@@ -505,42 +505,61 @@
   </footer>
   <script>
     (function () {
-      var API_BASE = location.origin.indexOf("voice.flmanbiosci.net") !== -1
-        ? ""
-        : "https://voice.flmanbiosci.net";
       var form = document.getElementById("lexicon-form");
       var input = document.getElementById("lexicon-input");
       var out = document.getElementById("lexicon-result");
       if (!form || !input || !out) return;
+      function esc(s) {
+        return String(s || "").replace(/[&<>"']/g, function (c) {
+          return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+        });
+      }
+      function paint(res, word) {
+        if (res.s === 503 || (res.b && res.b.disabled)) {
+          out.textContent = "The dictionary is not connected yet. Check back soon.";
+          return;
+        }
+        if (!res.b || res.b.ok !== true) {
+          out.textContent = res.b && res.b.error === "word not found"
+            ? "No entry for \u201C" + word + "\u201D \u2014 try another word."
+            : "Lookup failed \u2014 try again in a moment.";
+          return;
+        }
+        var html = "<p class='lexicon-word'>" + esc(res.b.word);
+        if (res.b.phonetic) html += " <span class='lexicon-phon'>/" + esc(res.b.phonetic) + "/</span>";
+        html += "</p>";
+        if (res.b.source && res.b.source !== "oxford") {
+          html += "<p class='lexicon-note'>Oxford\u2019s connected plan has no entry for this word. Showing a public dictionary definition.</p>";
+        }
+        html += "<ol class='lexicon-senses'>";
+        (res.b.senses || []).slice(0, 3).forEach(function (s) {
+          html += "<li>" + esc(s.definition);
+          if (s.example) html += " <em>\u201C" + esc(s.example) + "\u201D</em>";
+          html += "</li>";
+        });
+        html += "</ol>";
+        out.innerHTML = html;
+      }
+      function read(r) {
+        return r.text().then(function (t) {
+          var b = null;
+          try { b = JSON.parse(t); } catch (e) { b = null; }
+          return { s: r.status, b: b, json: !!b };
+        });
+      }
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var word = (input.value || "").trim();
         if (!word) return;
         out.textContent = "Looking up \u201C" + word + "\u201D\u2026";
-        fetch(API_BASE + "/api/oxford/entries/" + encodeURIComponent(word))
-          .then(function (r) { return r.json().then(function (b) { return { s: r.status, b: b }; }); })
+        var path = "/api/oxford/entries/" + encodeURIComponent(word);
+        fetch(path)
+          .then(read)
           .then(function (res) {
-            if (res.s === 503) {
-              out.textContent = "The dictionary is not connected yet. Check back soon.";
-              return;
-            }
-            if (!res.b || res.b.ok !== true) {
-              out.textContent = res.b && res.b.error === "word not found"
-                ? "No entry for \u201C" + word + "\u201D \u2014 try another word."
-                : "Lookup failed \u2014 try again in a moment.";
-              return;
-            }
-            var html = "<p class='lexicon-word'>" + res.b.word;
-            if (res.b.phonetic) html += " <span class='lexicon-phon'>/" + res.b.phonetic + "/</span>";
-            html += "</p><ol class='lexicon-senses'>";
-            (res.b.senses || []).slice(0, 3).forEach(function (s) {
-              html += "<li>" + s.definition;
-              if (s.example) html += " <em>\u201C" + s.example + "\u201D</em>";
-              html += "</li>";
-            });
-            html += "</ol>";
-            out.innerHTML = html;
+            if (res.json) return res;
+            return fetch("https://voice.flmanbiosci.net" + path).then(read);
           })
+          .then(function (res) { paint(res, word); })
           .catch(function () {
             out.textContent = "Lookup failed \u2014 try again in a moment.";
           });
