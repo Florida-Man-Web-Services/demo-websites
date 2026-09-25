@@ -514,6 +514,30 @@
           return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
         });
       }
+      function chips(items, cls) {
+        if (!items || !items.length) return "";
+        return "<p class='lexicon-" + cls + "'>" + items.map(function (item) {
+          return "<span>" + esc(item) + "</span>";
+        }).join("") + "</p>";
+      }
+      function senseHtml(s) {
+        var html = "<li><p class='lexicon-def'>" + esc(s.definition) + "</p>";
+        html += chips(s.style, "style");
+        if (s.usage && s.usage.length) {
+          html += "<p class='lexicon-usage'>Usage: " + s.usage.map(esc).join("; ") + "</p>";
+        }
+        var meta = [].concat(s.domains || [], s.regions || [], s.topics || []);
+        if (meta.length) html += "<p class='lexicon-meta'>" + meta.map(esc).join(" · ") + "</p>";
+        (s.examples || (s.example ? [s.example] : [])).forEach(function (ex) {
+          if (ex) html += "<p class='lexicon-ex'>\u201C" + esc(ex) + "\u201D</p>";
+        });
+        if (s.subsenses && s.subsenses.length) {
+          html += "<ol class='lexicon-subs'>";
+          s.subsenses.forEach(function (sub) { html += senseHtml(sub); });
+          html += "</ol>";
+        }
+        return html + "</li>";
+      }
       function paint(res, word) {
         if (res.s === 503 || (res.b && res.b.disabled)) {
           out.textContent = "The dictionary is not connected yet. Check back soon.";
@@ -525,19 +549,45 @@
             : "Lookup failed \u2014 try again in a moment.";
           return;
         }
-        var html = "<p class='lexicon-word'>" + esc(res.b.word);
-        if (res.b.phonetic) html += " <span class='lexicon-phon'>/" + esc(res.b.phonetic) + "/</span>";
+        var b = res.b;
+        var html = "<p class='lexicon-word'>" + esc(b.word);
+        var phon = (b.phonetics && b.phonetics.length) ? b.phonetics : (b.phonetic ? [{spelling: b.phonetic}] : []);
+        phon.forEach(function (p) {
+          if (p.spelling) html += " <span class='lexicon-phon'>/" + esc(p.spelling) + "/</span>";
+          if (p.dialects && p.dialects.length) html += " <span class='lexicon-meta'>" + esc(p.dialects.join(", ")) + "</span>";
+        });
         html += "</p>";
-        if (res.b.source && res.b.source !== "oxford") {
+        if (b.source && b.source !== "oxford") {
           html += "<p class='lexicon-note'>Oxford\u2019s connected plan has no entry for this word. Showing a public dictionary definition.</p>";
         }
-        html += "<ol class='lexicon-senses'>";
-        (res.b.senses || []).slice(0, 3).forEach(function (s) {
-          html += "<li>" + esc(s.definition);
-          if (s.example) html += " <em>\u201C" + esc(s.example) + "\u201D</em>";
-          html += "</li>";
+        if (b.etymology && b.etymology.length) {
+          html += "<p class='lexicon-usage'>Origin: " + b.etymology.map(esc).join(" ") + "</p>";
+        }
+        var groups = b.entries && b.entries.length ? b.entries : [{partOfSpeech: "", senses: b.senses || []}];
+        groups.forEach(function (group) {
+          if (group.partOfSpeech) html += "<p class='lexicon-pos'>" + esc(group.partOfSpeech) + "</p>";
+          html += "<ol class='lexicon-senses'>";
+          (group.senses || []).forEach(function (s) { html += senseHtml(s); });
+          html += "</ol>";
         });
-        html += "</ol>";
+        if (b.phrases && b.phrases.length) {
+          html += "<p class='lexicon-pos'>Phrases</p><ul class='lexicon-senses'>";
+          b.phrases.forEach(function (p) {
+            html += "<li>" + esc(p.text);
+            if (p.definition) html += " \u2014 " + esc(p.definition);
+            html += "</li>";
+          });
+          html += "</ul>";
+        }
+        if (b.synonyms && b.synonyms.length) html += "<p class='lexicon-meta'>Synonyms: " + b.synonyms.map(esc).join(", ") + "</p>";
+        if (b.antonyms && b.antonyms.length) html += "<p class='lexicon-meta'>Antonyms: " + b.antonyms.map(esc).join(", ") + "</p>";
+        if (b.sentences && b.sentences.length) {
+          html += "<p class='lexicon-pos'>Sentences</p>";
+          b.sentences.forEach(function (line) { html += "<p class='lexicon-ex'>\u201C" + esc(line) + "\u201D</p>"; });
+        }
+        if (b.inflections && b.inflections.length) {
+          html += "<p class='lexicon-meta'>Forms: " + b.inflections.map(esc).join(", ") + "</p>";
+        }
         out.innerHTML = html;
       }
       function read(r) {
@@ -578,8 +628,13 @@
     .lexicon-result { margin-top: 1rem; color: var(--ink); }
     .lexicon-word { font-family: var(--display); font-size: 1.4rem; margin: 0 0 .5rem; }
     .lexicon-phon { color: var(--muted); font-size: 1rem; font-family: var(--body); }
-    .lexicon-senses { margin: 0; padding-left: 1.25rem; }
-    .lexicon-senses em { color: var(--muted); }
+    .lexicon-senses { margin: 0 0 1rem; padding-left: 1.25rem; }
+    .lexicon-senses em, .lexicon-ex { color: var(--muted); display: block; margin: .2rem 0 0; }
+    .lexicon-def { margin: 0; }
+    .lexicon-pos { margin: .8rem 0 .25rem; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--cobalt); }
+    .lexicon-style span, .lexicon-usage, .lexicon-meta, .lexicon-note { color: var(--muted); font-size: .92rem; }
+    .lexicon-style span { display: inline-block; margin: .25rem .35rem 0 0; padding: .1rem .45rem; border: 1px solid var(--line); border-radius: 999px; }
+    .lexicon-subs { margin: .35rem 0 0; }
     .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   </style>
 </body>

@@ -83,9 +83,12 @@ def test_lookup_shapes_and_caches(oxford, monkeypatch):
     assert first["phonetic"] == "sɛrənˈdɪpɪti"
     assert "chance" in first["senses"][0]["definition"]
     assert first["cached"] is False
+    entry_calls = [u for u in calls if "/entries/" in u]
+    assert len(entry_calls) == 1
+    n_calls = len(calls)
     second = oxford.lookup("serendipity")
     assert second["cached"] is True
-    assert len(calls) == 1  # one upstream call only
+    assert len(calls) == n_calls  # cache skips entries and extras
 
 
 def test_upstream_errors_never_echo_body(oxford, monkeypatch):
@@ -191,6 +194,82 @@ def test_entry_pronunciation_and_junk_senses_skipped(oxford, monkeypatch):
     assert result["source"] == "oxford"
     assert len(result["senses"]) == 1
     assert "fruit" in result["senses"][0]["definition"]
+
+
+def test_keeps_style_usage_etymology_and_extras(oxford, monkeypatch):
+    entry = {
+        "results": [
+            {
+                "word": "ace",
+                "lexicalEntries": [
+                    {
+                        "lexicalCategory": {"text": "Noun"},
+                        "entries": [
+                            {
+                                "etymologies": ["Middle English, from Old French as."],
+                                "pronunciations": [{"phoneticSpelling": "eɪs", "dialects": ["British English"]}],
+                                "senses": [
+                                    {
+                                        "definitions": ["a person who excels at a particular sport"],
+                                        "registers": [{"text": "informal"}],
+                                        "domains": [{"text": "Sport"}],
+                                        "notes": [{"type": "usage", "text": "Usually used before a noun."}],
+                                        "examples": [
+                                            {"text": "a motorcycle ace"},
+                                            {"text": "an ace swimmer"},
+                                        ],
+                                        "subsenses": [
+                                            {"definitions": ["a service that an opponent cannot return"]}
+                                        ],
+                                    }
+                                ],
+                            }
+                        ],
+                        "phrases": [{"text": "ace in the hole", "senses": [{"definitions": ["a hidden advantage"]}]}],
+                    }
+                ],
+            }
+        ]
+    }
+    thesaurus = {
+        "results": [
+            {
+                "lexicalEntries": [
+                    {"entries": [{"senses": [{"synonyms": [{"text": "expert"}], "antonyms": [{"text": "novice"}]}]}]}
+                ]
+            }
+        ]
+    }
+
+    class Resp:
+        def __init__(self, code, body):
+            self.status_code = code
+            self.text = ""
+            self._body = body
+
+        def json(self):
+            return self._body
+
+    def fake_get(url, headers=None, params=None, timeout=None):
+        if "/thesaurus/" in url:
+            return Resp(200, thesaurus)
+        if "/sentences/" in url or "/inflections/" in url:
+            return Resp(404, {})
+        return Resp(200, entry)
+
+    monkeypatch.setattr(oxford.httpx, "get", fake_get)
+    result = oxford.lookup("ace")
+    sense = result["senses"][0]
+    assert sense["style"] == ["informal"]
+    assert sense["usage"] == ["Usually used before a noun."]
+    assert "Sport" in sense["domains"]
+    assert len(sense["examples"]) == 2
+    assert sense["subsenses"][0]["definition"].startswith("a service")
+    assert result["etymology"][0].startswith("Middle English")
+    assert result["phrases"][0]["text"] == "ace in the hole"
+    assert result["synonyms"] == ["expert"]
+    assert result["antonyms"] == ["novice"]
+    assert result["entries"][0]["partOfSpeech"] == "Noun"
 
 
 def test_fallback_404_is_word_not_found(oxford, monkeypatch):
